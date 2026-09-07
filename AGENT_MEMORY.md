@@ -5,6 +5,100 @@ release state, completed work, release status, and safe next steps. Do not add
 OAuth client secrets, GitHub tokens, signing certificates, provisioning
 profiles, keystore passwords, or private keys to this file.
 
+## 2026-09-07 Mobile Release Asset Refresh
+
+- 사용자 요청으로 기존 `v3.4.0`의 iOS unsigned IPA와 Android Release APK만
+  분류 순서 수정본으로 교체했다. 아래 이전 배포 기록의 Apple 파일 재생성
+  금지는 이 사용자 요청 범위에서 해제됐다. macOS 공개 DMG/제출 PKG는 유지했다.
+- GitHub 업로드 성공 및 서버/로컬 SHA-256 일치:
+  - `daily-ios-3.4.0-unsigned.ipa`: asset `548216818`, 13,250,233 bytes,
+    `d5fefe407787f0ab460e471f0ead966e86b953aeaf860a6b89057149663c0029`.
+  - `daily-android-3.4.0.apk`: asset `548216819`, 72,488,559 bytes,
+    `81035f67cef64841ffc1a9fcbbe274fc8c3546063a99263b99311861409bc739`.
+  - macOS asset `547856408` 및 기존 digest/크기는 변하지 않았다.
+- Android는 기존 새 배포키를 그대로 재사용했다. 인증서 SHA-256
+  `424c0bb7eeccbb1da6b2d33e1e748596af6e8d0f419830f9c366d10dfa947029`,
+  v2 서명, package `com.littlebit0.dailycalendar`, 3.4.0/code 340,
+  세 ABI 및 운영 분석/버그 제보 URL을 확인했다. debug APK를 공개하지 않았다.
+- iOS App Store archive/export 성공. 기존 업로드 이력은 확인하지 못해
+  제출용만 앱·위젯 빌드번호를 3.4.1로 높였으며 앱 버전은 3.4.0이다.
+  Xcode 명령행 override로 적용했고 플랫폼 소스 버전을 수정하지 않았다.
+  공개 unsigned IPA는 기존 앱·위젯 3.4.0 (3.4.0)을 유지한다.
+- 기존 제출용 `Daily-iOS-AppStore-3.4.0-build-3.4.0.ipa`는 삭제했다.
+  새 파일 전체 경로:
+  `/Users/kimhwi/Documents/Codex/2026-05-26/littlebit0-daily-https-github-com-littlebit0/dist/transporter-upload/3.4.0/Daily-iOS-AppStore-3.4.0-build-3.4.1.ipa`.
+  27,603,492 bytes, SHA-256
+  `0e49865d50e3c64ab873513f4ec4e4f19cde60efbaf8bc1a0db9cbc884d27ad8`.
+  앱/위젯 Apple Distribution, 팀/기존 번들 ID, 프로파일 인증서 일치,
+  get-task-allow=false, 모든 framework strict/deep codesign, 운영 URL 확인.
+  최신 아카이브는 `dist/appstore-archives/3.4.0/Daily-iOS-3.4.0-build-3.4.1.xcarchive`.
+- macOS 제출 PKG SHA-256은 기존
+  `3f1cb0b963c9a6b29b5c3811bfa3ed28b4f8f70c5a7fe18cf2861f7eafdf55f7`
+  그대로다. 서명 IPA/PKG는 GitHub에 공개하지 않았다.
+- 이 작업에서 정적 분석과 전체 Flutter 테스트 372개 통과(건너뜀 1개)를
+  다시 확인했다. 앱 설치/실행/실사용 테스트/사용자 데이터 변경은 하지 않았다.
+  Transporter 업로드 및 App Store Connect 처리/심사 확인도 하지 않았다.
+- 산출물 생성 당시 HEAD `b4894a98165460cfce56d0484c0389690adfdd87`에
+  커밋 전 분류 순서 수정이 포함된 빌드다. 후속 사용자 요청에 따라 해당 수정,
+  테스트, OAuth 등록 결과와 배포 문서를 함께 커밋한다. 태그는 이동하지 않는다.
+  재현용 diff와 빌드/검증 자료는 Git 제외 `work/release-3.4.0-refresh`에
+  보관한다. 원격 반영 여부는 `origin/main`과 로컬 HEAD의 일치로 확인한다.
+- 아래 동일 날짜의 배포 수치/파일명은 교체 전 기록이며 최신 파일은 이 절과
+  `docs/STORE_SUBMISSION.md`, `docs/RELEASE_NOTES_3.4.0.md`를 따른다.
+
+## 2026-09-07 Mobile Category Reordering Fix
+
+- iOS/Android 설정의 분류 손잡이에서 터치 드래그가 시작되지 않는 현상을
+  위젯 테스트로 재현했다. 손잡이 안의 `Tooltip` 기본 long-press 인식기가
+  `ReorderableDelayedDragStartListener`와 경쟁했다. 해당 툴팁만
+  `TooltipTriggerMode.manual`로 바꿔 터치 길게 누르기를 드래그에 사용한다.
+  데스크톱 마우스 hover 툴팁은 유지한다. 점 6개 아이콘은 20 그대로 두고
+  투명한 입력 영역만 44 x 44로 넓혔다.
+- `onReorderItem`은 원본 삭제 후의 인덱스를 전달하는데 앱이 아래 방향의
+  인덱스를 다시 1 감소시키고 있었다. 중복 보정을 제거해 바로 아래/맨 아래로
+  이동할 때 원래 자리로 남거나 다른 자리에 저장되지 않도록 수정했다.
+- 기존 테스트의 직접 콜백 호출을 실제 계약 `(0, 1)`로 바로잡고, iOS/Android
+  터치 및 macOS/Windows 마우스의 실제 포인터 위젯 테스트 4개를 추가했다.
+  손잡이 아이콘 바깥 입력 영역, 맨 위/인접/맨 아래 이동, 단순 탭,
+  설정 재진입, 화면/로컬 저장 순서, 분류 이름/색상/잠금/숨김/정렬 우선순위
+  보존을 확인한다. 실제 기기 UI 테스트를 대신하지 않는다.
+- 검증: 관련 테스트 5개, 전체 Flutter 테스트 372개 통과(기존 건너뜀 1개),
+  `./tool/flutter.sh analyze --no-pub`, 포맷 및 `git diff --check` 통과.
+- 공유 Flutter 설정 화면과 테스트만 변경했다. 네이티브 플랫폼 코드,
+  DB/동기화 형식, 사용자 데이터, 앱 버전은 변경하지 않았다. 수정 단계에서는
+  빌드/설치를 하지 않았으며, 후속 사용자 요청의 모바일 설치 결과는 아래와 같다.
+  Windows 배포/기능 미적용 상태는 그대로다. 커밋/푸시는 하지 않았다.
+
+## 2026-09-07 Mobile Category Fix Test-App Update
+
+- 사용자 요청으로 iPhone 17 Simulator와 기존 Android Pixel 9 에뮬레이터의
+  테스트 앱만 업데이트 설치했다. 앱 삭제/데이터 초기화/자동 실행/실사용 UI
+  조작은 하지 않았다. macOS 테스트 앱, App Store 설치본, 공개 릴리스 APK와
+  Transporter 제출 파일은 변경하지 않았다.
+- iOS: `BF524643-403E-4212-ACB7-621E11279532`, `com.littlebit0.daily`,
+  표시 이름 `Daily Test`, 3.4.0 (3.4.0).
+  `./tool/flutter.sh build ios --simulator --debug --no-pub --build-name=3.4.0 --build-number=3.4.0`
+  및 codesign strict/deep 검증, `simctl install` 성공. 설치본:
+  `/Users/kimhwi/Library/Developer/CoreSimulator/Devices/BF524643-403E-4212-ACB7-621E11279532/data/Containers/Bundle/Application/AEBF28B8-0FC3-44D8-8D04-4E5E8F31B5D9/Runner.app`.
+  설치본/빌드 kernel SHA-256 일치:
+  `44477af0703e6f61017a5e620f9812cb00e6fe07a7571252fa60a66a3a5975b3`.
+  새 데이터 컨테이너에서도 `daily.sqlite`와 설정 plist 해시가 설치 전후 같다.
+- Android: `Daily_Pixel_9_API_36`, `emulator-5554`,
+  `com.littlebit0.dailycalendar`, debug 3.4.0 / versionCode 340.
+  기존 debug 인증서와 새 APK의 SHA-256 인증서 지문 일치를 확인한 뒤
+  `adb install -r -t`로 덮어썼다. 새 배포용 키로 테스트 앱을 교체하지 않았다.
+  설치 lastUpdateTime 2026-09-07 14:11:41, stopped=true.
+  설치본/빌드 APK SHA-256 일치:
+  `fd18d0d8d49a130b4ade83293a1a8867664abe34a6e0a224b67d503b554b9c89`.
+  DB/설정 등 10개 파일 해시가 설치 전후 모두 동일하다.
+- 설치 전 데이터 사본과 이전 Android 테스트 APK는 Git 제외 경로
+  `/Users/kimhwi/Documents/Codex/2026-05-26/littlebit0-daily-https-github-com-littlebit0/work/test-updates/20260907-category-order`
+  에 보관한다. 디렉터리 접근 권한 0700, Android 데이터 tar는 0600.
+  개인 데이터가 있으므로 공개하거나 커밋하지 않는다.
+- Kotlin Gradle 플러그인 향후 전환 및 Android SDK XML 버전 경고는 남아 있으나
+  현재 빌드는 성공했다. git diff --check 통과. 커밋/푸시/릴리스 갱신과
+  실제 기기 로그인/분류 순서 실사용 검증은 하지 않았다.
+
 ## Current Platform Status: 3.4.0 (2026-09-07)
 
 - Android APK 후속: 사용자가 기존 배포 키가 없음을 확인하고 새 키 생성을
@@ -19,9 +113,15 @@ profiles, keystore passwords, or private keys to this file.
 - 새 공개 인증서 SHA-1:
   `3A:B4:4A:04:82:7C:B2:18:65:4F:34:C6:77:79:29:1B:25:6D:29:50`.
   package `com.littlebit0.dailycalendar`와 Web OAuth client는 유지한다.
-  새 Android OAuth client 등록은 아직 대기 중이다. 브라우저/CUA가
-  `No browser is available` 및 native pipe startup failure로 연결되지 않아
-  사용자에게 프로젝트 `234127810480`의 새 SHA-1 등록을 요청했다.
+  2026-09-07 브라우저/CUA 연결 복구 후 사용자 승인으로 프로젝트
+  `234127810480` (`daily-496913`)에 새 Android OAuth client를 등록했다.
+  이름 `Daily Android GitHub APK 20260907`, 공개 client ID
+  `234127810480-j8ahr3o9ks7sju3eqdu9q7gt30gdkheo.apps.googleusercontent.com`.
+  콘솔의 생성 완료 메시지를 확인했다. 기존 GitHub APK client의 SHA-1은
+  `04:97:A8:86:73:A5:53:43:D3:13:47:BB:C3:B2:EC:26:65:73:BC:0E`로
+  새 APK 서명과 달랐다. Web client/Drive 권한 범위는 변경하지 않았다.
+  콘솔 안내상 반영에 5분~몇 시간이 걸릴 수 있다. 기존 새 키 3.4.0 APK의
+  재설치/재빌드는 필요 없으며, 실제 스마트폰 로그인/Drive 승인은 미검증이다.
   기존 3.3.1/디버그 OAuth client를 삭제하거나 변경하지 않는다.
 - 이전 공개 3.3.1 APK와 서명키가 달라 덮어쓰기 설치가 불가능하다. 백업 확인
   없이 제거하도록 안내하면 로컬 데이터가 유실될 수 있다. 앱/데이터 삭제 및
@@ -38,8 +138,9 @@ profiles, keystore passwords, or private keys to this file.
   추가하라고 명시적으로 지시했다. `daily-android-3.4.0.apk` 게시 완료
   (GitHub asset `547981607`, state `uploaded`). 서버의 크기/SHA-256이 로컬
   APK와 일치하며 기존 Apple 자산 ID/크기/해시는 그대로 유지된다.
-  README/릴리스 노트에 다운로드 링크, 새 서명키의 덮어쓰기 제한 및
-  Google OAuth 등록 확인 대기 안내를 유지한다. APK 게시와 Google 로그인
+  로컬 README/릴리스 노트에 다운로드 링크, 새 서명키의 덮어쓰기 제한 및
+  Google OAuth 등록 완료/실기기 검증 대기를 반영했다. 이 문서 갱신의
+  커밋/푸시 및 공개 릴리스 본문 갱신은 아직 하지 않았다. APK 게시와 Google 로그인
   검증 완료를 혼동하지 않는다. 서명키를 새로 만들거나 Apple IPA/PKG,
   기존 공개 Apple 파일을 다시 만들거나 덮어쓰지 않는다.
   상세 보관 및 전환 기준은 `docs/ANDROID_SIGNING.md`를 참고한다.

@@ -27,11 +27,19 @@ SHA-1   3A:B4:4A:04:82:7C:B2:18:65:4F:34:C6:77:79:29:1B:25:6D:29:50
 SHA-256 42:4C:0B:B7:EE:CC:BB:1D:A6:B2:D3:3E:1E:74:85:96:AF:6E:8D:0F:41:98:30:F9:C3:66:D1:0D:FA:94:70:29
 ```
 
-Register a separate Android OAuth client in project `234127810480` using the
-package and SHA-1 above. Keep all existing clients for older installations.
-The existing Web client ID and Drive AppData scopes must remain unchanged.
-OAuth registration is currently pending; signing verification alone is not
-proof of successful Google login.
+A separate Android OAuth client was created in project `234127810480`
+(`daily-496913`) on 2026-09-07 using the package and SHA-1 above:
+
+- Name: `Daily Android GitHub APK 20260907`
+- Public client ID:
+  `234127810480-j8ahr3o9ks7sju3eqdu9q7gt30gdkheo.apps.googleusercontent.com`
+
+Google Cloud confirmed creation. All existing clients for older installations,
+the Web client ID, and Drive AppData scopes were left unchanged. This
+console-only registration does not require rebuilding or reinstalling the
+3.4.0 APK. Google notes that propagation can take five minutes to several
+hours. Physical-device Google login and Drive authorization remain unverified;
+registration success alone is not proof of successful login.
 
 ## Upgrade Limitation
 

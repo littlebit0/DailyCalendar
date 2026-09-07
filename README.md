@@ -24,6 +24,7 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 - 일정 드래그로 날짜·순서를 변경하고, 주·일간 스케줄에서는 30분 단위로 시간을 이동합니다.
 - 드래그 중 원래 자리 비우기, 대상 화면에 맞는 일정 크기 전환과 저장 시 깜빡임을 개선했습니다.
 - 모바일 하루보기 팝업 밖으로 일정을 옮기면 월간 달력 전체를 확인할 수 있습니다.
+- iOS/Android 설정에서 분류 손잡이의 길게 누르기와 위·아래 순서 변경 오류를 수정했습니다.
 - 일정 더블클릭·더블탭으로 완료/미완료를 전환하며, 완료 후에도 분류 색상을 유지합니다.
 - 첫 화면을 빠른 보기/주/월/일 중 선택하고, 빠른 보기는 항상 좌우로 월을 이동합니다.
 - 날짜·요일·공휴일 표시, macOS 휠 이동, 좁은 화면의 설정 문구와 Android 로그인·알람·위젯을 개선했습니다.
@@ -42,7 +43,7 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 | iPhone / iPad | App Store 무료 배포 중 | App Store의 `DailyCalendar` |
 | iOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-ios-3.4.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-ios-3.4.0-unsigned.ipa) |
 | macOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-macos-3.4.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-macos-3.4.0-unsigned.dmg) |
-| Android | 3.4.0 새 서명 APK, Google OAuth 등록 확인 대기 | [daily-android-3.4.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-android-3.4.0.apk) |
+| Android | 3.4.0 새 서명 APK, Google OAuth 등록 완료 · 실기기 로그인 검증 대기 | [daily-android-3.4.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-android-3.4.0.apk) |
 | Windows | 최신 변경 미적용, 기존 공개 버전 3.3.1 | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1.zip) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
@@ -53,8 +54,9 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 > **Android 3.4.0 서명키 변경:** 이전 키를 사용할 수 없어 새 배포 키를
 > 생성했습니다. 기존 3.3.1 APK 위에 덮어쓰기 설치할 수 없습니다. 앱 삭제는
 > 로컬 데이터를 지우므로, 삭제 전에 데이터 백업과 복원 가능 여부를 반드시
-> 확인하세요. 새 키의 Google 로그인 등록은 확인 대기 중이며, 등록 전에는
-> Google 로그인에 실패할 수 있습니다. 로컬 모드는 계정 없이 사용할 수 있습니다.
+> 확인하세요. 새 키의 Google OAuth 등록은 2026-09-07 완료했으며, 실제
+> 스마트폰 로그인은 검증 대기 중입니다. 설정 반영에 시간이 걸릴 수 있습니다.
+> 로컬 모드는 계정 없이 사용할 수 있습니다.
 > [서명 및 전환 안내](docs/ANDROID_SIGNING.md)
 
 Windows는 `setup.exe` 설치를 권장합니다. 설치형 Release 앱은 시작할 때 최신
@@ -212,7 +214,7 @@ Google OAuth 및 Apple 서명 값은 저장소에 포함하지 않습니다. 로
 3.4.0 소스 기준 검증 결과:
 
 - Flutter 정적 분석 통과
-- 전체 Flutter 자동화 테스트 368개 통과, 기존 건너뜀 1개
+- 전체 Flutter 자동화 테스트 372개 통과, 기존 건너뜀 1개
 - 플랫폼 구성 테스트 12개 및 앱·위젯 버전 `3.4.0 (3.4.0)` 설정 검사 통과
 - 직전 테스트 빌드의 macOS/iOS/Android 업데이트 시 일정·설정 데이터 보존 확인
 - Windows 최신 변경 미적용: Windows 빌드·실사용 검증·업데이트는 별도 진행 필요

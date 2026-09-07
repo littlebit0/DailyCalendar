@@ -5309,6 +5309,141 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  for (final platform in [
+    TargetPlatform.iOS,
+    TargetPlatform.android,
+    TargetPlatform.macOS,
+    TargetPlatform.windows,
+  ]) {
+    testWidgets('category handle reorders both directions on $platform', (
+      tester,
+    ) async {
+      debugDefaultTargetPlatformOverride = platform;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      FlutterSecureStorage.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      final categories = [
+        EventCategory.basic,
+        EventCategory.holiday,
+        EventCategory.custom(label: 'Study', colorValue: 0xff10b981),
+        EventCategory.custom(label: 'Exercise', colorValue: 0xffef4444),
+      ];
+      await settingsRepository.save(
+        settingsRepository.load().copyWith(
+          categories: categories,
+          hiddenCategoryIds: [categories[2].id],
+          calendarEventSortPriority: CalendarEventSortPriority.category,
+        ),
+      );
+      final authService = _FakeGoogleDriveAuthService(account: null);
+      final notificationService = _FakeNotification();
+      final eventRepository = _FakeEventRepository();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(notificationService),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+            googleDriveSyncServiceProvider.overrideWithValue(
+              _FakeGoogleDriveSyncService(
+                authService: authService,
+                eventRepository: eventRepository,
+                notificationService: notificationService,
+                settingsRepository: settingsRepository,
+              ),
+            ),
+          ],
+          child: const MaterialApp(home: SettingsPage()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(const ValueKey('category-settings-navigation')),
+      );
+      await tester.pumpAndSettle();
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(SettingsPage).last),
+      );
+      final pointerKind =
+          platform == TargetPlatform.iOS || platform == TargetPlatform.android
+          ? PointerDeviceKind.touch
+          : PointerDeviceKind.mouse;
+
+      Future<void> dragCategory(int from, int to) async {
+        final handles = find.byIcon(Icons.drag_indicator);
+        final start = tester.getCenter(handles.at(from)) - const Offset(18, 0);
+        final target = tester.getCenter(handles.at(to));
+        final gesture = await tester.startGesture(start, kind: pointerKind);
+        await tester.pump(kLongPressTimeout + const Duration(milliseconds: 50));
+        final end = target + Offset(0, from < to ? 2 : -2);
+        for (var step = 1; step <= 10; step++) {
+          await gesture.moveTo(Offset.lerp(start, end, step / 10)!);
+          await tester.pump(const Duration(milliseconds: 30));
+        }
+        await tester.pump(const Duration(milliseconds: 300));
+        await gesture.up();
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      }
+
+      void expectOrder(List<EventCategory> expected) {
+        final ids = expected.map((category) => category.id).toList();
+        expect(
+          container.read(appSettingsProvider).categories.map((item) => item.id),
+          ids,
+        );
+        expect(
+          settingsRepository.load().categories.map((item) => item.id),
+          ids,
+        );
+        expect(settingsRepository.load().hiddenCategoryIds, [categories[2].id]);
+        expect(
+          settingsRepository.load().calendarEventSortPriority,
+          CalendarEventSortPriority.category,
+        );
+        expect(
+          settingsRepository.load().categories.map((item) => item.toJson()),
+          expected.map((item) => item.toJson()),
+        );
+        final positions = expected.map(
+          (category) => tester
+              .getTopLeft(find.byKey(ValueKey('category-${category.id}')))
+              .dy,
+        );
+        expect(positions, orderedEquals(positions.toList()..sort()));
+      }
+
+      await dragCategory(3, 0);
+      expectOrder([categories[3], ...categories.take(3)]);
+      await dragCategory(0, 1);
+      expectOrder([categories[0], categories[3], categories[1], categories[2]]);
+      await dragCategory(1, 3);
+      expectOrder(categories);
+      await tester.tap(find.byIcon(Icons.drag_indicator).first);
+      await tester.pumpAndSettle();
+      expectOrder(categories);
+
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(const ValueKey('category-settings-navigation')),
+      );
+      await tester.pumpAndSettle();
+      expectOrder(categories);
+
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    });
+  }
+
   testWidgets('category RGB picker renders above the category editor', (
     tester,
   ) async {
@@ -5361,9 +5496,8 @@ void main() {
     final reorderable = tester.widget<ReorderableListView>(
       find.byKey(const ValueKey('category-reorder-list')),
     );
-    // ReorderableListView reports the insertion point before removing the
-    // original item, so moving the first item below the second yields 2.
-    reorderable.onReorderItem!(0, 2);
+    // onReorderItem reports the destination after removing the source item.
+    reorderable.onReorderItem!(0, 1);
     expect(
       container
           .read(appSettingsProvider)

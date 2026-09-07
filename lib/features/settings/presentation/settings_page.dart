@@ -1811,9 +1811,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     if (oldIndex < 0 || oldIndex >= categories.length) {
       return;
     }
-    if (newIndex > oldIndex) {
-      newIndex -= 1;
-    }
+    // onReorderItem already adjusts the destination after removing the source.
     newIndex = newIndex.clamp(0, categories.length - 1);
     if (oldIndex == newIndex) {
       return;
@@ -3913,7 +3911,15 @@ class _CategoryTile extends StatelessWidget {
             index: reorderIndex,
             child: Tooltip(
               message: context.tr('길게 눌러 순서 변경'),
-              child: const Icon(Icons.drag_indicator, size: 20),
+              // Let touch long presses start reordering; mouse hover still works.
+              triggerMode: TooltipTriggerMode.manual,
+              child: Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                color: Colors.transparent,
+                child: const Icon(Icons.drag_indicator, size: 20),
+              ),
             ),
           ),
           const SizedBox(width: 2),

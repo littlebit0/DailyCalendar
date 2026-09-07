@@ -3,7 +3,8 @@
 ## 릴리스 기준
 
 - 비교 기준: 3.3.1
-- iOS/macOS 앱·위젯 버전 및 빌드: `3.4.0 (3.4.0)`
+- 공개 iOS/macOS 앱·위젯 버전 및 빌드: `3.4.0 (3.4.0)`
+- 새 iOS Transporter 제출용만 `3.4.0 (3.4.1)`이며 macOS 제출 파일은 유지합니다.
 - Android Release APK 버전/코드: `3.4.0 (340)`
 - **Windows에는 지금까지의 최신 변경사항이 미적용 상태입니다.** 공유 Flutter
   코드나 버전 설정이 변경되었어도 Windows 반영·빌드·검증·업데이트 완료를
@@ -12,6 +13,9 @@
 ## 일정 이동과 순서
 
 - 월간·주간·일간 및 하루보기에서 일정 날짜 이동과 날짜별 수동 순서를 개선했습니다.
+- 2026-09-07 iOS/Android 교체 파일에는 설정의 분류 손잡이를 길게 눌러도
+  순서 변경이 시작되지 않거나 아래 방향 이동이 잘못 저장되던 문제를 수정했습니다.
+  macOS 공개 파일은 이번 교체 대상이 아닙니다.
 - 완료된 일정도 직접 이동할 수 있고, 드래그한 일정의 제목·분류색이 유지됩니다.
 - 기존 자리와 삽입 위치를 비워 주는 애니메이션, 대상 화면 크기에 맞는 드래그
   UI 전환을 적용했습니다. 이동 저장 시 깜빡임과 원래 위치로 잠시 돌아가는
@@ -61,14 +65,16 @@
 - 기존 배포 개인키를 사용할 수 없어 새 배포키로 APK를 만들었습니다.
 - 기존 공개 3.3.1 APK에는 덮어쓰기 설치할 수 없습니다. 삭제 시 로컬 데이터가
   제거되므로 먼저 백업과 복원 가능 여부를 확인해야 합니다.
-- 새 키의 Google Android OAuth 등록은 확인 대기 중이며, 등록 전에는 Google
-  로그인에 실패할 수 있습니다. 로컬 모드는 계정 없이 사용할 수 있습니다.
-  기존 OAuth 클라이언트는 유지합니다.
+- 새 키의 Google Android OAuth 등록은 2026-09-07 완료했습니다. 실제
+  스마트폰 로그인은 검증 대기 중이며, 설정 반영에 시간이 걸릴 수 있습니다.
+  로컬 모드는 계정 없이 사용할 수 있습니다. 기존 OAuth 클라이언트는 유지합니다.
 - 자세한 키 전환 기준은 [Android 서명 안내](https://github.com/littlebit0/DailyCalendar/blob/main/docs/ANDROID_SIGNING.md)를 확인하세요.
 
 ## 검증 및 배포 범위
 
-- Flutter 전체 자동 테스트 368개 통과(기존 건너뜀 1개), 정적 분석 통과.
+- Flutter 전체 자동 테스트 372개 통과(기존 건너뜀 1개), 정적 분석 통과.
+- 분류 손잡이의 실제 포인터 위젯 테스트로 양방향 이동, 인접 순서 변경,
+  설정 재진입 및 분류 속성 보존을 확인했습니다.
 - 플랫폼 구성 테스트 12개 및 버전 설정 검사 통과.
 - 직전 macOS/iPhone 17/Android 테스트 앱 업데이트에서 데이터 보존 확인.
 - Windows는 최신 변경 미적용이며 실제 OS 빌드·검증과 설치가 남아 있습니다.
@@ -91,14 +97,16 @@
 Android 설치용 APK:
 
 - [daily-android-3.4.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-android-3.4.0.apk)
-- 새 키의 Google OAuth 등록은 확인 대기 중입니다. APK 게시가 Google 로그인
-  검증 완료를 의미하지 않습니다. 기존 공개 3.3.1 APK는 이전 릴리스에 유지합니다.
+- 새 키의 Google OAuth 등록은 완료했습니다. APK 게시와 OAuth 등록이 실기기
+  로그인 검증 완료를 의미하지 않습니다. 기존 공개 3.3.1 APK는 이전 릴리스에 유지합니다.
 
 - APK 크기: 72,488,559 bytes
-- APK SHA-256: `5eeccb44095c07dd1f9625def351f01e1e0ece8cb57cc0a471c1b9de0c9b0a68`
+- APK SHA-256: `81035f67cef64841ffc1a9fcbbe274fc8c3546063a99263b99311861409bc739`
+- 공개 IPA 크기: 13,250,233 bytes
+- 공개 IPA SHA-256: `d5fefe407787f0ab460e471f0ead966e86b953aeaf860a6b89057149663c0029`
 
 Transporter용 서명 파일은 GitHub에 올리지 않고 로컬
 `dist/transporter-upload/3.4.0` 폴더 하나에 보관합니다.
 
-- `Daily-iOS-AppStore-3.4.0-build-3.4.0.ipa`
+- `Daily-iOS-AppStore-3.4.0-build-3.4.1.ipa`
 - `Daily-macOS-AppStore-3.4.0-build-3.4.0.pkg`
