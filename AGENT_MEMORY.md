@@ -34,9 +34,13 @@ profiles, keystore passwords, or private keys to this file.
   arm64-v8a/armeabi-v7a/x86_64, 운영 분석/버그 제보 주소 포함을 확인했다.
   새 서명 지문 검사와 운영 URL을 Android 배포 워크플로에도 반영했다.
   관련 플랫폼 테스트 2개, 정적 분석, YAML 구문 검사 통과.
-  **OAuth 등록 확인 전이므로 APK 공개 업로드는 보류 상태다.** 등록 완료 후
-  이 파일을 기존 `v3.4.0`에 `daily-android-3.4.0.apk`로 추가하고 README와
-  릴리스 노트의 대기 문구를 갱신한다. 서명키를 새로 만들거나 Apple IPA/PKG,
+  후속 사용자가 OAuth 등록 확인 전이라도 기존 `v3.4.0` 릴리스에 APK를
+  추가하라고 명시적으로 지시했다. `daily-android-3.4.0.apk` 게시 완료
+  (GitHub asset `547981607`, state `uploaded`). 서버의 크기/SHA-256이 로컬
+  APK와 일치하며 기존 Apple 자산 ID/크기/해시는 그대로 유지된다.
+  README/릴리스 노트에 다운로드 링크, 새 서명키의 덮어쓰기 제한 및
+  Google OAuth 등록 확인 대기 안내를 유지한다. APK 게시와 Google 로그인
+  검증 완료를 혼동하지 않는다. 서명키를 새로 만들거나 Apple IPA/PKG,
   기존 공개 Apple 파일을 다시 만들거나 덮어쓰지 않는다.
   상세 보관 및 전환 기준은 `docs/ANDROID_SIGNING.md`를 참고한다.
 - 배포 진행 결과: 소스/README/릴리스 노트를 `d481642`로 커밋·푸시했고

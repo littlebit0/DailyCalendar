@@ -61,8 +61,9 @@
 - 기존 배포 개인키를 사용할 수 없어 새 배포키로 APK를 만들었습니다.
 - 기존 공개 3.3.1 APK에는 덮어쓰기 설치할 수 없습니다. 삭제 시 로컬 데이터가
   제거되므로 먼저 백업과 복원 가능 여부를 확인해야 합니다.
-- 새 키의 Google Android OAuth 등록은 확인 대기 중입니다. 등록 확인 전에는
-  새 APK를 공개 첨부하지 않습니다. 기존 OAuth 클라이언트는 유지합니다.
+- 새 키의 Google Android OAuth 등록은 확인 대기 중이며, 등록 전에는 Google
+  로그인에 실패할 수 있습니다. 로컬 모드는 계정 없이 사용할 수 있습니다.
+  기존 OAuth 클라이언트는 유지합니다.
 - 자세한 키 전환 기준은 [Android 서명 안내](https://github.com/littlebit0/DailyCalendar/blob/main/docs/ANDROID_SIGNING.md)를 확인하세요.
 
 ## 검증 및 배포 범위
@@ -87,9 +88,11 @@
 공개 파일은 App Store 제출용이 아닙니다. Windows의 기존 공개 3.3.1 설치
 파일은 이전 릴리스에 유지합니다. App Store 승인·출시 완료를 의미하지 않습니다.
 
-Android `daily-android-3.4.0.apk`는 빌드 완료 후 Google OAuth 등록 확인 대기
-상태이며 아직 공개 첨부하지 않았습니다. 기존 공개 3.3.1 APK는 이전 릴리스에
-유지합니다.
+Android 설치용 APK:
+
+- [daily-android-3.4.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-android-3.4.0.apk)
+- 새 키의 Google OAuth 등록은 확인 대기 중입니다. APK 게시가 Google 로그인
+  검증 완료를 의미하지 않습니다. 기존 공개 3.3.1 APK는 이전 릴리스에 유지합니다.
 
 - APK 크기: 72,488,559 bytes
 - APK SHA-256: `5eeccb44095c07dd1f9625def351f01e1e0ece8cb57cc0a471c1b9de0c9b0a68`
