@@ -76,9 +76,8 @@ OAuth clients currently checked in or referenced by the app:
 
 - Google Drive AppData target project for iPhone/iOS, Android, and Windows sync:
   `234127810480`
-- Legacy Firebase metadata project still present in checked-in
-  `android/app/google-services.json`:
-  `424765276744`
+- Legacy Firebase metadata project: `424765276744`. Android no longer includes
+  `google-services.json`; the app supplies the Web client ID directly.
 - Android package name: `com.littlebit0.dailycalendar`
 - OAuth scope: `https://www.googleapis.com/auth/drive.appdata`
 - Web OAuth client for Android Google Drive connection:
@@ -87,6 +86,10 @@ OAuth clients currently checked in or referenced by the app:
   `234127810480-mst5c3lojau02lbdov924j8o7vaohonl.apps.googleusercontent.com`
 - Android release OAuth client:
   `234127810480-otvrdan5a1q6gbqejulbp4e7tueebr4n.apps.googleusercontent.com`
+- Android GitHub release APK OAuth client:
+  `234127810480-os12mgge72im7ijpcs5c9riqnv75kqti.apps.googleusercontent.com`
+- Android current macOS development machine debug OAuth client:
+  `234127810480-duu31lqoedfl6fv9tn9gcdfs7dtka7ic.apps.googleusercontent.com`
 - Windows Desktop OAuth client:
   `234127810480-caigb6e78fj43lv268t78sam64c3aivb.apps.googleusercontent.com`
 - iOS bundle ID: `com.littlebit0.daily`
@@ -98,7 +101,7 @@ OAuth clients currently checked in or referenced by the app:
 - macOS OAuth client:
   `424765276744-rjfs830agtj0i0mrrlc1pci4sbh1ifpq.apps.googleusercontent.com`
 
-Known configuration gaps:
+Known configuration notes:
 
 - iOS Google Drive connection now has a checked-in iOS OAuth client for
   `com.littlebit0.daily`; keep `GIDServerClientID`/`SERVER_CLIENT_ID` absent
@@ -110,9 +113,12 @@ Known configuration gaps:
   entitlement disabled so the app can still run in local mode.
 - Android runtime now uses package `com.littlebit0.dailycalendar` and the
   project `234127810480` Web client so Android reads/writes the same Drive
-  AppData v2 file set as the working iPhone build. The checked-in
-  `google-services.json` still references legacy project `424765276744`; do not
-  use it as the source of truth for Google Drive AppData sync.
+  AppData v2 file set as the working iPhone build. Do not restore the removed
+  legacy `google-services.json` as the source of the Android Web client ID.
+- Google Cloud has separate Android clients for the GitHub release APK signing
+  key and the current macOS development machine debug key. The release workflow
+  verifies the built APK certificate against the registered GitHub APK SHA-1 so
+  a signing-key mismatch fails before publication.
 - Windows must have the Desktop OAuth client secret available locally. Without
   it Google rejects the token exchange and the app shows a Google Drive token
   request failure.
@@ -130,14 +136,25 @@ Still required before public release:
 3. Publish the OAuth app to production when the app is ready for external users.
 4. Re-test Google Drive connection/sync from a fresh Google account.
 
-Android debug signing certificate:
+Android debug signing certificates:
 
 ```text
+Existing registered debug key
 SHA-1   D0:5F:5F:28:C7:A1:9C:92:8A:F4:80:B0:B5:81:97:19:6F:EC:21:E2
-SHA-256 84:CF:29:C5:6F:5B:67:39:9D:14:FE:C2:35:D4:6D:B8:61:96:66:0B:26:8F:9E:08:AF:21:7B:48:9A:93:BC:D1
+
+Current macOS development machine debug key
+SHA-1   69:A6:8E:1C:3F:53:1D:43:2D:81:9B:3E:B2:67:78:06:3C:71:6B:18
+SHA-256 65:94:60:F3:8F:F5:81:23:30:9D:2D:1E:17:9A:65:D9:2A:22:E1:96:E0:D4:55:5F:A3:EE:2F:AF:D3:DB:1E:1D
 ```
 
-Android upload/release signing certificate:
+Android GitHub release APK signing certificate:
+
+```text
+SHA-1   04:97:A8:86:73:A5:53:43:D3:13:47:BB:C3:B2:EC:26:65:73:BC:0E
+SHA-256 94:03:AB:FD:50:E3:00:75:29:0D:0F:B7:AC:3D:EC:15:08:4C:C7:97:CD:36:85:1F:43:59:2B:5E:42:74:0B:29
+```
+
+Android upload/alternate release signing certificate:
 
 ```text
 SHA-1   2F:0D:16:3A:FB:B9:E8:DE:97:A5:41:04:43:90:0E:AC:6A:51:76:72
@@ -149,6 +166,53 @@ scope for an app's own configuration data:
 
 - https://developers.google.com/workspace/drive/api/guides/api-specific-auth
 - https://developers.google.com/workspace/drive/api/guides/about-files
+
+### Android authorization recovery
+
+Credential Manager sign-in and Google Drive authorization are separate steps.
+The message `Authorization failed: 16: [28433] Cannot find a matching credential`
+comes from the second step, not from Drive file synchronization.
+
+- First request authorization for the authenticated account as usual.
+- Only for this missing-credential error, retry using Google's default-account
+  authorization client. Interactive consent is permitted only for an explicit
+  user action; automatic sync must keep `promptIfNecessary: false`.
+- Include `openid` in the recovery request and verify the token's userinfo `sub`
+  against the signed-in Google account ID before returning any API headers.
+  An account mismatch or failed verification must never access Drive/Calendar.
+- After verification, the current session can use this recovery path silently.
+  Changing/signing out the account clears that session choice.
+- Cancellation, unrelated errors, and invalid OAuth configuration do not enter
+  an automatic retry loop. Native SDK exceptions are converted to app messages.
+
+Google documents this default-account authorization flow at
+https://developer.android.com/identity/authorization#get-user-information.
+
+### Android automatic authentication must never show UI
+
+- Do not call `attemptLightweightAuthentication` on Android from startup, resume,
+  settings initialization, or token refresh. "Lightweight" allows One Tap/account
+  selection UI; it does not mean silent authentication.
+- `signIn` is the only Android entry point that calls `authenticate`. Backup,
+  restore, and cloud-backup deletion do not initiate login or consent dialogs.
+- To restore an existing linked account after an app restart, request its
+  previously granted scopes through `authorizationForScopes` only. Include
+  `openid` and `email`, verify userinfo's verified email against the linked Daily
+  account, and pin the verified `sub` for the restored session. Local account
+  metadata alone never proves authentication and cannot authorize API requests.
+- Missing grants, expired tokens, another account, cancellation, or an offline
+  device must not fall back to interactive authentication. Keep local data and
+  pending sync changes; the user can explicitly reconnect from account settings.
+- An explicit Google Calendar import can still request additional Calendar
+  consent after silently verifying the existing Drive session. It must not
+  implicitly call `signIn` when no usable session is available.
+- Signing out or switching the linked account invalidates in-flight restoration.
+  Android debug APK build and automated auth/settings tests cover these paths;
+  real-device Google UI verification is performed only when the user requests it.
+
+API contracts:
+https://pub.dev/documentation/google_sign_in/latest/google_sign_in/GoogleSignIn/attemptLightweightAuthentication.html
+https://pub.dev/documentation/google_sign_in/latest/google_sign_in/GoogleSignInAuthorizationClient/authorizationForScopes.html
 
 ## Stage 3: Platform rollout
 

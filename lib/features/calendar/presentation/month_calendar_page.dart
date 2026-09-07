@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui' as ui show TextDirection;
+import 'dart:ui' as ui show ImageFilter, TextDirection;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +21,11 @@ import '../../../core/siri/signal_voice_service.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/event_completion_style.dart';
 import '../../../core/widgets/smooth_mouse_wheel_scroll_controller.dart';
+import '../../../core/theme/calendar_date_color.dart';
+import '../../chat/presentation/chat_input_bar.dart';
 import '../../events/application/event_command_service.dart';
 import '../../events/domain/calendar_event.dart';
+import '../../events/presentation/event_completion_action.dart';
 import '../../events/domain/event_category.dart';
 import '../../events/domain/event_draft.dart';
 import '../../events/domain/recurrence_rule.dart';
@@ -34,6 +37,8 @@ import '../widgets/calendar_month_grid.dart';
 import '../widgets/schedule_timeline_view.dart';
 
 enum _BottomCenterAction { quickAccess, calendar, ai }
+
+enum _BottomNavigationItem { quickAccess, week, month, day, siri }
 
 enum _RecurringDragScope { onlyThis, future, all }
 
@@ -54,6 +59,12 @@ int quickTodoColumnCountForPlatform(TargetPlatform platform, double width) {
   }
   if (platform == TargetPlatform.macOS || platform == TargetPlatform.windows) {
     return ((width + 12) / 292).floor().clamp(1, 4).toInt();
+  }
+  if (platform == TargetPlatform.android) {
+    return switch (width) {
+      >= 1000 => 3,
+      _ => 2,
+    };
   }
   return width >= 720 ? 2 : 1;
 }
@@ -83,21 +94,37 @@ class MonthCalendarPage extends ConsumerStatefulWidget {
 }
 
 class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _searchController = TextEditingController();
   final _searchFocusNode = FocusNode();
   final _bottomBarKey = GlobalKey();
+  final _daySheetSurfaceKey = GlobalKey();
+  final _calendarDragSurfaceKey = GlobalKey();
+  final _eventSidebarSurfaceKey = GlobalKey();
+  final _daySheetScrollController = DraggableScrollableController();
+  final _daySheetRevealsCalendar = ValueNotifier(false);
   final _aiOpen = ValueNotifier(false);
   final _bottomBarUiState = ValueNotifier(const _BottomBarUiState());
   Timer? _searchDebounce;
+  Timer? _eventDragEdgeTimer;
   Future<List<CalendarEvent>>? _searchResults;
   var _searchOpen = false;
   var _quickAccessSelected = false;
   var _showAllDayScheduleEvents = true;
-  var _dayPanelEventDragActive = false;
+  var _eventDragActive = false;
+  var _eventDragVisualActive = false;
+  int? _eventDragEdgeDirection;
+  PersistentBottomSheetController? _daySheetController;
+  var _daySheetOpen = false;
+  Rect? _daySheetDragBounds;
+  Rect? _daySheetDragReturnBounds;
+  var _daySheetRevision = 0;
 
   @override
   void initState() {
     super.initState();
+    _quickAccessSelected =
+        ref.read(appSettingsProvider).appStartView == AppStartView.quickView;
     Future.microtask(() {
       if (!mounted) return;
       _recordAnalytics(AnalyticsRecord.screenView(AnalyticsScreen.calendar));
@@ -113,8 +140,11 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   @override
   void dispose() {
     _searchDebounce?.cancel();
+    _eventDragEdgeTimer?.cancel();
     _searchController.dispose();
     _searchFocusNode.dispose();
+    _daySheetScrollController.dispose();
+    _daySheetRevealsCalendar.dispose();
     _aiOpen.dispose();
     _bottomBarUiState.dispose();
     super.dispose();
@@ -140,22 +170,43 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       CalendarViewMode.day => _dayRangeFor(selectedDate),
     };
     final eventsAsync = ref.watch(eventsInRangeProvider(range));
-    final wide = MediaQuery.sizeOf(context).width >= 880;
+    final windowSize = MediaQuery.sizeOf(context);
     final platform = Theme.of(context).platform;
-    final desktop = _usesDesktopCalendarLayout(platform);
-    final showAndroidHorizontalMonthIndicator =
+    final windowClass = dailyWindowClassFor(windowSize);
+    final androidMedium =
         platform == TargetPlatform.android &&
-        viewMode == CalendarViewMode.month &&
-        settings.monthNavigationMode == MonthNavigationMode.horizontal &&
-        MediaQuery.sizeOf(context).width < 680;
+        windowClass == DailyWindowClass.medium;
+    final androidExpanded =
+        platform == TargetPlatform.android &&
+        windowClass == DailyWindowClass.expanded;
+    final wide = platform == TargetPlatform.android
+        ? androidExpanded
+        : windowSize.width >= 880;
+    final desktop = _usesDesktopCalendarLayout(platform);
     final inlineAi =
-        platform == TargetPlatform.iOS &&
+        (platform == TargetPlatform.iOS ||
+            platform == TargetPlatform.android) &&
         settings.monthNavigationMode == MonthNavigationMode.horizontal;
+    final showScheduleDaySidebar =
+        (platform == TargetPlatform.macOS || androidExpanded) &&
+        windowSize.width >= 720 &&
+        viewMode == CalendarViewMode.day &&
+        settings.weekDayLayoutMode == WeekDayLayoutMode.schedule;
+    final showEventSidebar = wide || showScheduleDaySidebar;
+    final showStableEventSidebar =
+        !_quickAccessSelected &&
+        showEventSidebar &&
+        !(viewMode == CalendarViewMode.day && !showScheduleDaySidebar);
 
     return Scaffold(
+      key: _scaffoldKey,
       body: Listener(
+        key: const ValueKey('calendar-page-pointer-listener'),
         behavior: HitTestBehavior.translucent,
         onPointerDown: _handlePagePointerDown,
+        onPointerMove: _handleEventDragPointerMove,
+        onPointerUp: (_) => _finishEventDragPointer(),
+        onPointerCancel: (_) => _finishEventDragPointer(),
         child: SafeArea(
           bottom: desktop,
           child: Stack(
@@ -178,181 +229,157 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                     onCalendarViewSelected: _selectCalendarView,
                     onLlmPressed: _toggleAiPanel,
                   ),
-                  if (showAndroidHorizontalMonthIndicator)
-                    _MonthBoundaryLabel(
-                      key: const ValueKey('android-horizontal-month-indicator'),
-                      month: month,
-                    ),
                   Expanded(
-                    child: _OrderedCalendarSwitcher(
-                      order: _calendarContentOrder(
-                        _quickAccessSelected,
-                        viewMode,
-                      ),
-                      child: Column(
-                        key: ValueKey<int>(
-                          _calendarContentOrder(_quickAccessSelected, viewMode),
-                        ),
-                        children: [
-                          if (_quickAccessSelected)
-                            Expanded(
-                              child: _buildQuickAccessPage(
-                                context,
-                                ref,
-                                settings,
-                                searchQuery,
-                                month,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          key: _calendarDragSurfaceKey,
+                          child: _AndroidTabletCalendarFrame(
+                            enabled: androidMedium,
+                            child: _OrderedCalendarSwitcher(
+                              order: _calendarContentOrder(
+                                _quickAccessSelected,
+                                viewMode,
                               ),
-                            )
-                          else ...[
-                            Expanded(
-                              child: _PaintOnlySearchLayout(
-                                searchOpen: _searchOpen,
-                                searchPanel: _InlineSearchPanel(
-                                  controller: _searchController,
-                                  focusNode: _searchFocusNode,
-                                  results: _searchResults,
-                                  onChanged: _handleSearchChanged,
-                                  onSubmitted: _runSearch,
-                                  onClose: _closeSearch,
-                                  onEventSelected: _selectSearchResult,
-                                ),
-                                child: RepaintBoundary(
-                                  key: const ValueKey(
-                                    'calendar-content-repaint-boundary',
+                              child: Column(
+                                key: ValueKey<int>(
+                                  _calendarContentOrder(
+                                    _quickAccessSelected,
+                                    viewMode,
                                   ),
-                                  child: viewMode == CalendarViewMode.day
-                                      ? _CalendarMainContent(
-                                          month: month,
-                                          selectedDate: selectedDate,
-                                          viewMode: viewMode,
-                                          settings: settings,
-                                          searchQuery: searchQuery,
-                                          showAllDayScheduleEvents:
-                                              _showAllDayScheduleEvents,
-                                          onShowAllDayScheduleEventsChanged:
-                                              _setShowAllDayScheduleEvents,
-                                          onMonthDelta: (delta) =>
-                                              _moveVisibleRange(
-                                                ref,
-                                                viewMode,
-                                                month,
-                                                selectedDate,
-                                                delta,
-                                              ),
-                                          onDateSelected: (date, events) {
-                                            ref
-                                                    .read(
-                                                      selectedDateProvider
-                                                          .notifier,
-                                                    )
-                                                    .state =
-                                                date;
-                                          },
-                                          externalEventDragActive:
-                                              _dayPanelEventDragActive,
-                                        )
-                                      : wide
-                                      ? Row(
-                                          children: [
-                                            Expanded(
-                                              child: _CalendarMainContent(
-                                                month: month,
-                                                selectedDate: selectedDate,
-                                                viewMode: viewMode,
-                                                settings: settings,
-                                                searchQuery: searchQuery,
-                                                showAllDayScheduleEvents:
-                                                    _showAllDayScheduleEvents,
-                                                onShowAllDayScheduleEventsChanged:
-                                                    _setShowAllDayScheduleEvents,
-                                                onMonthDelta: (delta) =>
-                                                    _moveVisibleRange(
-                                                      ref,
-                                                      viewMode,
-                                                      month,
-                                                      selectedDate,
-                                                      delta,
-                                                    ),
-                                                onDateSelected: (date, events) {
-                                                  ref
-                                                          .read(
-                                                            selectedDateProvider
-                                                                .notifier,
-                                                          )
-                                                          .state =
-                                                      date;
-                                                },
-                                                externalEventDragActive:
-                                                    _dayPanelEventDragActive,
-                                              ),
-                                            ),
-                                            Container(
-                                              width: 360,
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(
-                                                  context,
-                                                ).colorScheme.surface,
-                                                border: Border(
-                                                  left: BorderSide(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .outlineVariant,
-                                                  ),
-                                                ),
-                                              ),
-                                              child: _MonthDetailsPanel(
-                                                eventsAsync: eventsAsync,
-                                                settings: settings,
-                                                searchQuery: searchQuery,
-                                                selectedDate: selectedDate,
-                                                onEventDragStateChanged:
-                                                    _setDayPanelEventDragActive,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : _CalendarMainContent(
-                                          month: month,
-                                          selectedDate: selectedDate,
-                                          viewMode: viewMode,
-                                          settings: settings,
-                                          searchQuery: searchQuery,
-                                          showAllDayScheduleEvents:
-                                              _showAllDayScheduleEvents,
-                                          onShowAllDayScheduleEventsChanged:
-                                              _setShowAllDayScheduleEvents,
-                                          onMonthDelta: (delta) =>
-                                              _moveVisibleRange(
-                                                ref,
-                                                viewMode,
-                                                month,
-                                                selectedDate,
-                                                delta,
-                                              ),
-                                          onDateSelected: (date, events) {
-                                            ref
-                                                    .read(
-                                                      selectedDateProvider
-                                                          .notifier,
-                                                    )
-                                                    .state =
-                                                date;
-                                            _showDaySheet(
-                                              context,
-                                              date,
-                                              _eventsForDay(events, date),
-                                            );
-                                          },
-                                          externalEventDragActive:
-                                              _dayPanelEventDragActive,
-                                        ),
                                 ),
+                                children: [
+                                  if (_quickAccessSelected)
+                                    Expanded(
+                                      child: _QuickMonthPageView(
+                                        month: month,
+                                        onMonthChanged: (target) =>
+                                            _setVisibleMonth(
+                                              ref,
+                                              target,
+                                              ref.read(selectedDateProvider),
+                                            ),
+                                        pageBuilder: (context, pageMonth) =>
+                                            Consumer(
+                                              builder: (context, pageRef, _) =>
+                                                  _buildQuickAccessPage(
+                                                    context,
+                                                    pageRef,
+                                                    settings,
+                                                    searchQuery,
+                                                    pageMonth,
+                                                  ),
+                                            ),
+                                      ),
+                                    )
+                                  else
+                                    Expanded(
+                                      child: _PaintOnlySearchLayout(
+                                        searchOpen: _searchOpen,
+                                        searchPanel: _InlineSearchPanel(
+                                          controller: _searchController,
+                                          focusNode: _searchFocusNode,
+                                          results: _searchResults,
+                                          onChanged: _handleSearchChanged,
+                                          onSubmitted: _runSearch,
+                                          onClose: _closeSearch,
+                                          onEventSelected: _selectSearchResult,
+                                        ),
+                                        child: RepaintBoundary(
+                                          key: const ValueKey(
+                                            'calendar-content-repaint-boundary',
+                                          ),
+                                          child: _CalendarMainContent(
+                                            month: month,
+                                            selectedDate: selectedDate,
+                                            viewMode: viewMode,
+                                            settings: settings,
+                                            searchQuery: searchQuery,
+                                            showAllDayScheduleEvents:
+                                                _showAllDayScheduleEvents,
+                                            onShowAllDayScheduleEventsChanged:
+                                                _setShowAllDayScheduleEvents,
+                                            onMonthDelta: (delta) =>
+                                                _moveVisibleRange(
+                                                  ref,
+                                                  viewMode,
+                                                  month,
+                                                  selectedDate,
+                                                  delta,
+                                                ),
+                                            onDateSelected: (date, events) {
+                                              ref
+                                                      .read(
+                                                        selectedDateProvider
+                                                            .notifier,
+                                                      )
+                                                      .state =
+                                                  date;
+                                              if (viewMode !=
+                                                      CalendarViewMode.day &&
+                                                  !showStableEventSidebar) {
+                                                _showDaySheet(
+                                                  context,
+                                                  date,
+                                                  _eventsForDay(events, date),
+                                                );
+                                              }
+                                            },
+                                            externalEventDragActive:
+                                                _eventDragVisualActive,
+                                            externalEventDragInteractionActive:
+                                                _eventDragActive,
+                                            onEventDragStateChanged:
+                                                _setEventDragVisualActive,
+                                            onEventDragInteractionStateChanged:
+                                                _setEventDragActive,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
                               ),
                             ),
-                          ],
-                        ],
-                      ),
+                          ),
+                        ),
+                        _AnimatedCalendarSidebar(
+                          key: const ValueKey(
+                            'calendar-event-sidebar-transition',
+                          ),
+                          visible: showStableEventSidebar,
+                          surfaceKey: _eventSidebarSurfaceKey,
+                          child: KeyedSubtree(
+                            key: const ValueKey('calendar-event-sidebar'),
+                            child: Container(
+                              width: 360,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.surface,
+                                border: Border(
+                                  left: BorderSide(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.outlineVariant,
+                                  ),
+                                ),
+                              ),
+                              child: _MonthDetailsPanel(
+                                eventsAsync: eventsAsync,
+                                settings: settings,
+                                searchQuery: searchQuery,
+                                selectedDate: selectedDate,
+                                onEventDragStateChanged:
+                                    _setEventDragVisualActive,
+                                onEventDragInteractionStateChanged:
+                                    _setEventDragActive,
+                                onEventDragGlobalPositionChanged:
+                                    _handleAdaptiveEventDragPosition,
+                                dragFeedbackSpecListenable:
+                                    activeCalendarEventDragFeedbackSpec,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   if (inlineAi) _buildInlineAiPanel(),
@@ -390,6 +417,14 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                 ],
               ),
               _buildAiOverlay(context, desktop: desktop, inline: inlineAi),
+              if (_daySheetOpen && !_eventDragActive)
+                Positioned.fill(
+                  child: GestureDetector(
+                    key: const ValueKey('day-sheet-outside-dismiss'),
+                    behavior: HitTestBehavior.opaque,
+                    onTap: _dismissDaySheet,
+                  ),
+                ),
             ],
           ),
         ),
@@ -426,9 +461,265 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     setState(() => _showAllDayScheduleEvents = value);
   }
 
-  void _setDayPanelEventDragActive(bool value) {
-    if (_dayPanelEventDragActive == value || !mounted) return;
-    setState(() => _dayPanelEventDragActive = value);
+  void _setEventDragActive(bool value) {
+    if (!mounted) return;
+    if (!value) {
+      _cancelEventDragEdgeNavigation();
+      _daySheetRevealsCalendar.value = false;
+      _daySheetDragBounds = null;
+      _daySheetDragReturnBounds = null;
+      activeCalendarEventDragFeedbackSpec.value =
+          const CalendarEventDragFeedbackSpec.source();
+    } else if (!_eventDragActive && _daySheetOpen) {
+      final bounds = _daySheetBounds;
+      final panel = _daySheetSurfaceKey.currentContext?.findRenderObject();
+      if (bounds != null && panel is RenderBox && panel.hasSize) {
+        _daySheetDragBounds = bounds;
+        // The unchanged handle and safe area remain below the calendar.
+        _daySheetDragReturnBounds = Rect.fromLTRB(
+          bounds.left,
+          bounds.bottom - (bounds.height - panel.size.height),
+          bounds.right,
+          bounds.bottom,
+        );
+      }
+    }
+    if (_eventDragActive == value) return;
+    setState(() => _eventDragActive = value);
+  }
+
+  void _setEventDragVisualActive(bool value) {
+    if (!mounted) return;
+    if (!value) {
+      activeCalendarEventDragFeedbackSpec.value =
+          const CalendarEventDragFeedbackSpec.source();
+    }
+    if (_eventDragVisualActive == value) return;
+    setState(() => _eventDragVisualActive = value);
+  }
+
+  void _handleEventDragPointerMove(PointerMoveEvent event) {
+    _handleAdaptiveEventDragPosition(event.position);
+  }
+
+  void _handleEventDragGlobalPosition(Offset globalPosition) {
+    if (!_eventDragActive) {
+      return;
+    }
+    final renderObject = context.findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) {
+      return;
+    }
+    final position = renderObject.globalToLocal(globalPosition);
+    final viewMode = ref.read(calendarViewModeProvider);
+    final settings = ref.read(appSettingsProvider);
+    final vertical =
+        viewMode == CalendarViewMode.month &&
+        settings.monthNavigationMode == MonthNavigationMode.vertical;
+    final threshold = _usesDesktopCalendarLayout(Theme.of(context).platform)
+        ? 64.0
+        : 52.0;
+    final direction = vertical
+        ? position.dy <= threshold
+              ? -1
+              : position.dy >= renderObject.size.height - threshold
+              ? 1
+              : null
+        : position.dx <= threshold
+        ? -1
+        : position.dx >= renderObject.size.width - threshold
+        ? 1
+        : null;
+    _setEventDragEdgeDirection(direction);
+  }
+
+  void _handleDaySheetEventDragPosition(Offset globalPosition) {
+    _handleAdaptiveEventDragPosition(globalPosition);
+    if (_eventDragActive &&
+        _daySheetDragBounds != null &&
+        activeCalendarEventDragFeedbackSpec.value.style ==
+            CalendarEventDragFeedbackStyle.month) {
+      _daySheetRevealsCalendar.value = true;
+    }
+  }
+
+  Rect? get _daySheetBounds {
+    if (!_daySheetOpen) return null;
+    final sheetContext = _daySheetSurfaceKey.currentContext;
+    // Include the drag handle and safe area, not just the event list.
+    final renderObject = sheetContext
+        ?.findAncestorStateOfType<State<BottomSheet>>()
+        ?.context
+        .findRenderObject();
+    if (renderObject is! RenderBox || !renderObject.hasSize) return null;
+    return renderObject.localToGlobal(Offset.zero) & renderObject.size;
+  }
+
+  bool _isInsideDaySheet(Offset globalPosition) {
+    if (!_daySheetOpen) return false;
+    // Use the destination bounds during the animation to avoid re-opening the
+    // sheet when crossing a date that its disappearing body used to cover.
+    final bounds = _daySheetRevealsCalendar.value
+        ? _daySheetDragReturnBounds
+        : _daySheetDragBounds ?? _daySheetBounds;
+    return bounds?.contains(globalPosition) ?? false;
+  }
+
+  void _handleAdaptiveEventDragPosition(Offset globalPosition) {
+    if (!_eventDragActive) {
+      return;
+    }
+    // The sheet overlays the calendar, so its visible bounds take precedence.
+    if (_isInsideDaySheet(globalPosition)) {
+      _cancelEventDragEdgeNavigation();
+      _daySheetRevealsCalendar.value = false;
+      _setActiveDragFeedbackSpec(const CalendarEventDragFeedbackSpec.source());
+      return;
+    }
+    _handleEventDragGlobalPosition(globalPosition);
+
+    final sidebarRenderObject = _eventSidebarSurfaceKey.currentContext
+        ?.findRenderObject();
+    if (sidebarRenderObject is RenderBox && sidebarRenderObject.hasSize) {
+      final sidebarBounds =
+          sidebarRenderObject.localToGlobal(Offset.zero) &
+          sidebarRenderObject.size;
+      if (sidebarBounds.contains(globalPosition)) {
+        _setActiveDragFeedbackSpec(
+          CalendarEventDragFeedbackSpec.target(
+            style: CalendarEventDragFeedbackStyle.sidebar,
+            width: math.max(160, sidebarRenderObject.size.width - 32),
+            height: 76,
+          ),
+        );
+        return;
+      }
+    }
+
+    final renderObject = _calendarDragSurfaceKey.currentContext
+        ?.findRenderObject();
+    var nextSpec = const CalendarEventDragFeedbackSpec.source();
+    if (renderObject is RenderBox && renderObject.hasSize) {
+      final bounds =
+          renderObject.localToGlobal(Offset.zero) & renderObject.size;
+      if (bounds.contains(globalPosition)) {
+        final viewMode = ref.read(calendarViewModeProvider);
+        final settings = ref.read(appSettingsProvider);
+        final event = activeCalendarEventDrag.value?.event;
+        switch (viewMode) {
+          case CalendarViewMode.month:
+            final compactMonth = MediaQuery.sizeOf(context).width < 720;
+            final horizontalChrome = compactMonth ? 14.0 : 40.0;
+            final cellWidth = math.max(
+              1,
+              (renderObject.size.width - horizontalChrome) / 7,
+            );
+            nextSpec = CalendarEventDragFeedbackSpec.target(
+              style: CalendarEventDragFeedbackStyle.month,
+              width: math.max(24, cellWidth - (compactMonth ? 2 : 10)),
+              height: compactMonth ? 13 : 19,
+            );
+            break;
+          case CalendarViewMode.week:
+            if (settings.weekDayLayoutMode == WeekDayLayoutMode.schedule) {
+              nextSpec = _scheduleDragFeedbackSpec(
+                renderObject.size,
+                dayCount: 7,
+                event: event,
+              );
+            } else {
+              nextSpec = CalendarEventDragFeedbackSpec.target(
+                style: CalendarEventDragFeedbackStyle.week,
+                width: math.max(56, (renderObject.size.width - 24) / 7 - 6),
+                height: 32,
+              );
+            }
+            break;
+          case CalendarViewMode.day:
+            if (settings.weekDayLayoutMode == WeekDayLayoutMode.schedule) {
+              nextSpec = _scheduleDragFeedbackSpec(
+                renderObject.size,
+                dayCount: 1,
+                event: event,
+              );
+            } else {
+              nextSpec = CalendarEventDragFeedbackSpec.target(
+                style: CalendarEventDragFeedbackStyle.day,
+                width: math.max(120, renderObject.size.width - 32),
+                height: 64,
+              );
+            }
+            break;
+        }
+      }
+    }
+    _setActiveDragFeedbackSpec(nextSpec);
+  }
+
+  void _setActiveDragFeedbackSpec(CalendarEventDragFeedbackSpec nextSpec) {
+    if (activeCalendarEventDragFeedbackSpec.value != nextSpec) {
+      activeCalendarEventDragFeedbackSpec.value = nextSpec;
+    }
+  }
+
+  CalendarEventDragFeedbackSpec _scheduleDragFeedbackSpec(
+    Size surfaceSize, {
+    required int dayCount,
+    required CalendarEvent? event,
+  }) {
+    final gutter = dayCount > 1 ? 42.0 : 54.0;
+    final dayWidth = math.max(1, (surfaceSize.width - gutter) / dayCount);
+    final durationMinutes = event?.duration.inMinutes ?? 30;
+    return CalendarEventDragFeedbackSpec.target(
+      style: CalendarEventDragFeedbackStyle.schedule,
+      width: math.max(44, dayWidth - 4),
+      height: math.max(24, durationMinutes / 60 * 64 - 2),
+    );
+  }
+
+  void _dismissDaySheet() {
+    _daySheetController?.close();
+  }
+
+  void _setEventDragEdgeDirection(int? direction) {
+    if (_eventDragEdgeDirection == direction &&
+        (_eventDragEdgeTimer?.isActive ?? false)) {
+      return;
+    }
+    _eventDragEdgeTimer?.cancel();
+    _eventDragEdgeTimer = null;
+    _eventDragEdgeDirection = direction;
+    if (direction == null || !_eventDragActive) {
+      return;
+    }
+    _eventDragEdgeTimer = Timer.periodic(
+      const Duration(milliseconds: 700),
+      (_) => _moveDraggedEventViewport(direction),
+    );
+  }
+
+  void _moveDraggedEventViewport(int direction) {
+    if (!mounted || !_eventDragActive) {
+      _cancelEventDragEdgeNavigation();
+      return;
+    }
+    _moveVisibleRange(
+      ref,
+      ref.read(calendarViewModeProvider),
+      ref.read(visibleMonthProvider),
+      ref.read(selectedDateProvider),
+      direction,
+    );
+  }
+
+  void _cancelEventDragEdgeNavigation() {
+    _eventDragEdgeTimer?.cancel();
+    _eventDragEdgeTimer = null;
+    _eventDragEdgeDirection = null;
+  }
+
+  void _finishEventDragPointer() {
+    _cancelEventDragEdgeNavigation();
   }
 
   void _closeSearch() {
@@ -599,13 +890,21 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         curve: Curves.easeOutCubic,
         alignment: Alignment.bottomCenter,
         child: aiOpen
-            ? _SignalVoicePanel(
-                key: const ValueKey('inline-ai-input'),
-                onClose: _closeAiPanel,
-              )
+            ? _assistantInput(const ValueKey('inline-ai-input'))
             : const SizedBox(width: double.infinity, height: 0),
       ),
     );
+  }
+
+  Widget _assistantInput(Key key) {
+    if (Theme.of(context).platform == TargetPlatform.android) {
+      return ChatInputBar(
+        key: key,
+        onClose: _closeAiPanel,
+        includeBottomSafeArea: false,
+      );
+    }
+    return _SignalVoicePanel(key: key, onClose: _closeAiPanel);
   }
 
   AnalyticsCalendarView _analyticsCalendarView(CalendarViewMode viewMode) {
@@ -656,10 +955,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                   curve: Curves.easeOutCubic,
                   offset: aiOpen ? Offset.zero : const Offset(0, 1.15),
                   child: aiOpen
-                      ? _SignalVoicePanel(
-                          key: const ValueKey('overlay-ai-input'),
-                          onClose: _closeAiPanel,
-                        )
+                      ? _assistantInput(const ValueKey('overlay-ai-input'))
                       : const SizedBox.shrink(),
                 ),
               ),
@@ -705,6 +1001,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                 ).format(currentMonth);
                 return ListView(
                   key: const ValueKey('quick-view-list'),
+                  primary: false,
                   children: [
                     DailyPageTitle(
                       title: context.tr('빠른 보기'),
@@ -821,38 +1118,97 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     );
   }
 
-  void _showDaySheet(
+  Future<void> _showDaySheet(
     BuildContext context,
     DateTime date,
     List<CalendarEvent> events,
-  ) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      showDragHandle: true,
-      builder: (_) => DraggableScrollableSheet(
-        expand: false,
-        initialChildSize: 0.68,
-        minChildSize: 0.4,
-        maxChildSize: 0.96,
-        snap: true,
-        snapSizes: const [0.68],
-        builder: (context, scrollController) => EventDetailsPanel(
-          date: date,
-          events: events,
-          scrollController: scrollController,
-          onEventDropped: (event, targetDate, targetIndex) =>
-              _handleCalendarEventDrop(
-                context,
-                ref,
-                event,
-                targetDate,
-                targetIndex,
+  ) async {
+    final revision = ++_daySheetRevision;
+    final previousController = _daySheetController;
+    if (previousController != null) {
+      if (mounted) {
+        setState(() {
+          _daySheetController = null;
+          _daySheetOpen = false;
+        });
+      }
+      previousController.close();
+      await previousController.closed;
+    }
+    if (!mounted || revision != _daySheetRevision) {
+      return;
+    }
+    final scaffold = _scaffoldKey.currentState;
+    if (scaffold == null) {
+      return;
+    }
+    final controller = scaffold.showBottomSheet(
+      (_) => SafeArea(
+        top: false,
+        child: ValueListenableBuilder<bool>(
+          valueListenable: _daySheetRevealsCalendar,
+          builder: (context, revealed, child) => IgnorePointer(
+            ignoring: revealed,
+            child: ClipRect(
+              child: TweenAnimationBuilder<double>(
+                key: const ValueKey('day-sheet-drag-reveal'),
+                tween: Tween(end: revealed ? 0 : 1),
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOutCubic,
+                child: child,
+                builder: (context, factor, child) => Align(
+                  alignment: Alignment.topCenter,
+                  heightFactor: factor,
+                  child: child,
+                ),
               ),
+            ),
+          ),
+          child: DraggableScrollableSheet(
+            controller: _daySheetScrollController,
+            expand: false,
+            initialChildSize: 0.68,
+            minChildSize: 0.4,
+            maxChildSize: 0.96,
+            snap: true,
+            snapSizes: const [0.68],
+            shouldCloseOnMinExtent: false,
+            builder: (context, scrollController) => EventDetailsPanel(
+              key: _daySheetSurfaceKey,
+              date: date,
+              events: events,
+              scrollController: scrollController,
+              onEventDropped: (event, targetDate, targetIndex) =>
+                  _handleCalendarEventDrop(
+                    context,
+                    ref,
+                    event,
+                    targetDate,
+                    targetIndex,
+                  ),
+              onEventDragStateChanged: _setEventDragVisualActive,
+              onEventDragInteractionStateChanged: _setEventDragActive,
+              onEventDragGlobalPositionChanged:
+                  _handleDaySheetEventDragPosition,
+            ),
+          ),
         ),
       ),
+      showDragHandle: true,
     );
+    setState(() {
+      _daySheetController = controller;
+      _daySheetOpen = true;
+      _daySheetRevealsCalendar.value = false;
+    });
+    await controller.closed;
+    if (mounted && identical(_daySheetController, controller)) {
+      setState(() {
+        _daySheetController = null;
+        _daySheetOpen = false;
+      });
+      _setEventDragActive(false);
+    }
   }
 
   void _moveVisibleRange(
@@ -935,6 +1291,128 @@ class _OrderedCalendarSwitcherState extends State<_OrderedCalendarSwitcher> {
           );
         },
         child: widget.child,
+      ),
+    );
+  }
+}
+
+class _AndroidTabletCalendarFrame extends StatelessWidget {
+  const _AndroidTabletCalendarFrame({
+    required this.enabled,
+    required this.child,
+  });
+
+  final bool enabled;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!enabled) {
+      return child;
+    }
+    return ColoredBox(
+      color: DailyUi.pageBackground(context),
+      child: Padding(
+        key: const ValueKey('android-tablet-content-frame'),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Center(
+          child: ConstrainedBox(
+            key: const ValueKey('android-tablet-content-constraint'),
+            constraints: const BoxConstraints(maxWidth: 1120),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AnimatedCalendarSidebar extends StatefulWidget {
+  const _AnimatedCalendarSidebar({
+    super.key,
+    required this.visible,
+    required this.surfaceKey,
+    required this.child,
+  });
+
+  final bool visible;
+  final GlobalKey surfaceKey;
+  final Widget child;
+
+  @override
+  State<_AnimatedCalendarSidebar> createState() =>
+      _AnimatedCalendarSidebarState();
+}
+
+class _AnimatedCalendarSidebarState extends State<_AnimatedCalendarSidebar>
+    with SingleTickerProviderStateMixin {
+  static const _width = 360.0;
+  late final AnimationController _controller;
+  late final Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 240),
+      reverseDuration: const Duration(milliseconds: 210),
+      value: widget.visible ? 1 : 0,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant _AnimatedCalendarSidebar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.visible == oldWidget.visible) return;
+    if (widget.visible) {
+      _controller.forward();
+    } else {
+      _controller.reverse();
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) => AnimatedBuilder(
+        animation: _animation,
+        child: widget.child,
+        builder: (context, child) {
+          final factor = _animation.value;
+          return SizedBox(
+            key: widget.surfaceKey,
+            width: _width * factor,
+            height: constraints.maxHeight,
+            child: ClipRect(
+              child: OverflowBox(
+                alignment: AlignmentDirectional.centerEnd,
+                minWidth: _width,
+                maxWidth: _width,
+                minHeight: constraints.maxHeight,
+                maxHeight: constraints.maxHeight,
+                child: Offstage(
+                  offstage: !widget.visible && _controller.isDismissed,
+                  child: IgnorePointer(
+                    ignoring: !widget.visible,
+                    child: Opacity(opacity: factor, child: child),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }
@@ -1629,6 +2107,7 @@ class _InlineSearchPanel extends StatelessWidget {
                   itemBuilder: (context, index) => _InlineSearchResultTile(
                     event: events[index],
                     onTap: () => onEventSelected(events[index]),
+                    onCompletedChanged: onSubmitted,
                   ),
                   separatorBuilder: (context, index) =>
                       const SizedBox(height: 8),
@@ -1644,10 +2123,15 @@ class _InlineSearchPanel extends StatelessWidget {
 }
 
 class _InlineSearchResultTile extends StatelessWidget {
-  const _InlineSearchResultTile({required this.event, required this.onTap});
+  const _InlineSearchResultTile({
+    required this.event,
+    required this.onTap,
+    required this.onCompletedChanged,
+  });
 
   final CalendarEvent event;
   final VoidCallback onTap;
+  final VoidCallback onCompletedChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1664,35 +2148,46 @@ class _InlineSearchResultTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         side: BorderSide(color: DailyUi.separator(context)),
       ),
-      child: ListTile(
-        dense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        onTap: onTap,
-        leading: Container(
-          width: 34,
-          height: 34,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.14),
-            borderRadius: BorderRadius.circular(9),
+      child: EventCompletionAction(
+        event: event,
+        onCompletedChanged: (_) => onCompletedChanged(),
+        builder: (onDoubleTap) => InkWell(
+          onTap: onTap,
+          onDoubleTap: onDoubleTap,
+          child: ListTile(
+            dense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 12,
+              vertical: 2,
+            ),
+            leading: Container(
+              width: 34,
+              height: 34,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(9),
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.event_outlined, color: color, size: 19),
+            ),
+            title: Text(
+              context.l10n.eventTitle(event.title, holiday: event.holiday),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: calendarEventCompletionStyle(
+                context,
+                Theme.of(context).textTheme.titleMedium,
+                completed: event.completed,
+                eventColor: color,
+              ),
+            ),
+            subtitle: Text('$date  $time'),
+            trailing: Icon(
+              Icons.chevron_right_rounded,
+              color: DailyUi.tertiaryText(context),
+              size: 20,
+            ),
           ),
-          alignment: Alignment.center,
-          child: Icon(Icons.event_outlined, color: color, size: 19),
-        ),
-        title: Text(
-          context.l10n.eventTitle(event.title, holiday: event.holiday),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: calendarEventCompletionStyle(
-            context,
-            Theme.of(context).textTheme.titleMedium,
-            completed: event.completed,
-          ),
-        ),
-        subtitle: Text('$date  $time'),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: DailyUi.tertiaryText(context),
-          size: 20,
         ),
       ),
     );
@@ -1706,6 +2201,9 @@ class _MonthDetailsPanel extends ConsumerWidget {
     required this.searchQuery,
     required this.selectedDate,
     required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
+    required this.onEventDragGlobalPositionChanged,
+    required this.dragFeedbackSpecListenable,
   });
 
   final AsyncValue<List<CalendarEvent>> eventsAsync;
@@ -1713,6 +2211,10 @@ class _MonthDetailsPanel extends ConsumerWidget {
   final String searchQuery;
   final DateTime selectedDate;
   final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
+  final ValueChanged<Offset> onEventDragGlobalPositionChanged;
+  final ValueListenable<CalendarEventDragFeedbackSpec>
+  dragFeedbackSpecListenable;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -1746,6 +2248,10 @@ class _MonthDetailsPanel extends ConsumerWidget {
             targetIndex,
           ),
       onEventDragStateChanged: onEventDragStateChanged,
+      onEventDragInteractionStateChanged: onEventDragInteractionStateChanged,
+      onEventDragGlobalPositionChanged: onEventDragGlobalPositionChanged,
+      dragFeedbackSpecListenable: dragFeedbackSpecListenable,
+      dragOrigin: CalendarEventDragOrigin.sidebar,
     );
   }
 }
@@ -1762,6 +2268,9 @@ class _CalendarMainContent extends StatelessWidget {
     required this.onMonthDelta,
     required this.onDateSelected,
     required this.externalEventDragActive,
+    required this.externalEventDragInteractionActive,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
   });
 
   final DateTime month;
@@ -1774,6 +2283,9 @@ class _CalendarMainContent extends StatelessWidget {
   final ValueChanged<int> onMonthDelta;
   final void Function(DateTime date, List<CalendarEvent> events) onDateSelected;
   final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
+  final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -1786,6 +2298,9 @@ class _CalendarMainContent extends StatelessWidget {
         onMonthDelta: onMonthDelta,
         onDateSelected: onDateSelected,
         externalEventDragActive: externalEventDragActive,
+        externalEventDragInteractionActive: externalEventDragInteractionActive,
+        onEventDragStateChanged: onEventDragStateChanged,
+        onEventDragInteractionStateChanged: onEventDragInteractionStateChanged,
       ),
       CalendarViewMode.week => _WeekPageView(
         selectedDate: selectedDate,
@@ -1795,6 +2310,10 @@ class _CalendarMainContent extends StatelessWidget {
         onShowAllDayScheduleEventsChanged: onShowAllDayScheduleEventsChanged,
         onWeekDelta: onMonthDelta,
         onDateSelected: onDateSelected,
+        externalEventDragActive: externalEventDragActive,
+        externalEventDragInteractionActive: externalEventDragInteractionActive,
+        onEventDragStateChanged: onEventDragStateChanged,
+        onEventDragInteractionStateChanged: onEventDragInteractionStateChanged,
       ),
       CalendarViewMode.day => _DayPageView(
         selectedDate: selectedDate,
@@ -1804,6 +2323,10 @@ class _CalendarMainContent extends StatelessWidget {
         onShowAllDayScheduleEventsChanged: onShowAllDayScheduleEventsChanged,
         onDayDelta: onMonthDelta,
         onDateSelected: (date) => onDateSelected(date, const []),
+        externalEventDragActive: externalEventDragActive,
+        externalEventDragInteractionActive: externalEventDragInteractionActive,
+        onEventDragStateChanged: onEventDragStateChanged,
+        onEventDragInteractionStateChanged: onEventDragInteractionStateChanged,
       ),
     };
   }
@@ -1818,6 +2341,10 @@ class _WeekPageView extends StatefulWidget {
     required this.onShowAllDayScheduleEventsChanged,
     required this.onWeekDelta,
     required this.onDateSelected,
+    required this.externalEventDragActive,
+    required this.externalEventDragInteractionActive,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
   });
 
   final DateTime selectedDate;
@@ -1827,6 +2354,10 @@ class _WeekPageView extends StatefulWidget {
   final ValueChanged<bool> onShowAllDayScheduleEventsChanged;
   final ValueChanged<int> onWeekDelta;
   final void Function(DateTime date, List<CalendarEvent> events) onDateSelected;
+  final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
+  final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
 
   @override
   State<_WeekPageView> createState() => _WeekPageViewState();
@@ -1901,7 +2432,7 @@ class _WeekPageViewState extends State<_WeekPageView> {
             final pageDate = _anchorDate.add(
               Duration(days: (index - _initialPage) * 7),
             );
-            return _windowsMouseWheelSignalRegion(
+            return _desktopMouseWheelSignalRegion(
               context,
               onPointerSignal: _handlePointerSignal,
               child: _CalendarWeekPage(
@@ -1912,6 +2443,12 @@ class _WeekPageViewState extends State<_WeekPageView> {
                 onShowAllDayScheduleEventsChanged:
                     widget.onShowAllDayScheduleEventsChanged,
                 onDateSelected: widget.onDateSelected,
+                externalEventDragActive: widget.externalEventDragActive,
+                externalEventDragInteractionActive:
+                    widget.externalEventDragInteractionActive,
+                onEventDragStateChanged: widget.onEventDragStateChanged,
+                onEventDragInteractionStateChanged:
+                    widget.onEventDragInteractionStateChanged,
               ),
             );
           },
@@ -1961,27 +2498,27 @@ class _WeekPageViewState extends State<_WeekPageView> {
     }
     final scroll = event as PointerScrollEvent;
     final direction = navigationDelta > 0 ? 1 : -1;
-    if (_isWindowsMouseWheel(context, scroll)) {
+    if (scroll.kind == PointerDeviceKind.mouse) {
       GestureBinding.instance.pointerSignalResolver.register(event, (_) {
         if (!mounted || !_controller.hasClients) {
           return;
         }
         event.respond(allowPlatformDefault: false);
-        _mouseWheelNavigation.scheduleWindowsBurst(
-          controller: _controller,
-          currentPage: _currentPage,
-          axis: _primaryMouseWheelAxis(scroll),
-          direction: direction,
-        );
+        if (_isWindowsMouseWheel(context, scroll)) {
+          _mouseWheelNavigation.scheduleWindowsBurst(
+            controller: _controller,
+            currentPage: _currentPage,
+            axis: _primaryMouseWheelAxis(scroll),
+            direction: direction,
+          );
+        } else {
+          _mouseWheelNavigation.animateUncoalesced(
+            controller: _controller,
+            currentPage: _currentPage,
+            direction: direction,
+          );
+        }
       });
-      return;
-    }
-    if (scroll.kind == PointerDeviceKind.mouse) {
-      _mouseWheelNavigation.animateUncoalesced(
-        controller: _controller,
-        currentPage: _currentPage,
-        direction: direction,
-      );
       return;
     }
     _navigateFromTrackpad(direction);
@@ -2045,6 +2582,10 @@ class _CalendarWeekPage extends ConsumerWidget {
     required this.showAllDayScheduleEvents,
     required this.onShowAllDayScheduleEventsChanged,
     required this.onDateSelected,
+    required this.externalEventDragActive,
+    required this.externalEventDragInteractionActive,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
   });
 
   final DateTime selectedDate;
@@ -2053,6 +2594,10 @@ class _CalendarWeekPage extends ConsumerWidget {
   final bool showAllDayScheduleEvents;
   final ValueChanged<bool> onShowAllDayScheduleEventsChanged;
   final void Function(DateTime date, List<CalendarEvent> events) onDateSelected;
+  final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
+  final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -2072,6 +2617,12 @@ class _CalendarWeekPage extends ConsumerWidget {
           );
           return ScheduleTimelineView(
             days: days,
+            holidayDates: {
+              for (final day in days)
+                if (settings.calendarShowHolidays &&
+                    ref.read(koreanHolidayServiceProvider).isPublicHoliday(day))
+                  _dateOnly(day),
+            },
             events: visibleEvents,
             selectedDate: selectedDate,
             use24HourTime: settings.use24HourTime,
@@ -2094,6 +2645,14 @@ class _CalendarWeekPage extends ConsumerWidget {
                   targetDate,
                   targetIndex,
                 ),
+            onEventTimeDropped: (event, targetStart) =>
+                _handleCalendarEventTimeDrop(context, ref, event, targetStart),
+            onEventDragStateChanged: onEventDragStateChanged,
+            onEventDragInteractionStateChanged:
+                onEventDragInteractionStateChanged,
+            externalEventDragActive: externalEventDragActive,
+            externalEventDragInteractionActive:
+                externalEventDragInteractionActive,
             onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
             onDateSelected: (date) =>
                 onDateSelected(date, _eventsForDay(visibleEvents, date)),
@@ -2106,7 +2665,13 @@ class _CalendarWeekPage extends ConsumerWidget {
           centerEventTitles:
               settings.calendarEventTitleAlignment ==
               CalendarEventTitleAlignment.center,
+          eventSortPriority: settings.calendarEventSortPriority,
+          categoryOrder: settings.categories
+              .map((category) => category.id)
+              .toList(),
+          manualEventOrders: settings.calendarManualEventOrders,
           events: visibleEvents,
+          externalEventDragActive: externalEventDragActive,
           onEventDropped: (event, targetDate, targetIndex) =>
               _handleCalendarEventDrop(
                 context,
@@ -2115,6 +2680,9 @@ class _CalendarWeekPage extends ConsumerWidget {
                 targetDate,
                 targetIndex,
               ),
+          onEventDragStateChanged: onEventDragStateChanged,
+          onEventDragInteractionStateChanged:
+              onEventDragInteractionStateChanged,
           onDateSelected: onDateSelected,
         );
       },
@@ -2133,6 +2701,10 @@ class _DayPageView extends StatefulWidget {
     required this.onShowAllDayScheduleEventsChanged,
     required this.onDayDelta,
     required this.onDateSelected,
+    required this.externalEventDragActive,
+    required this.externalEventDragInteractionActive,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
   });
 
   final DateTime selectedDate;
@@ -2142,6 +2714,10 @@ class _DayPageView extends StatefulWidget {
   final ValueChanged<bool> onShowAllDayScheduleEventsChanged;
   final ValueChanged<int> onDayDelta;
   final ValueChanged<DateTime> onDateSelected;
+  final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
+  final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
 
   @override
   State<_DayPageView> createState() => _DayPageViewState();
@@ -2216,7 +2792,7 @@ class _DayPageViewState extends State<_DayPageView> {
             final pageDate = _anchorDate.add(
               Duration(days: index - _initialPage),
             );
-            return _windowsMouseWheelSignalRegion(
+            return _desktopMouseWheelSignalRegion(
               context,
               onPointerSignal: _handlePointerSignal,
               child: _CalendarDayPage(
@@ -2227,6 +2803,12 @@ class _DayPageViewState extends State<_DayPageView> {
                 onShowAllDayScheduleEventsChanged:
                     widget.onShowAllDayScheduleEventsChanged,
                 onDateSelected: widget.onDateSelected,
+                externalEventDragActive: widget.externalEventDragActive,
+                externalEventDragInteractionActive:
+                    widget.externalEventDragInteractionActive,
+                onEventDragStateChanged: widget.onEventDragStateChanged,
+                onEventDragInteractionStateChanged:
+                    widget.onEventDragInteractionStateChanged,
               ),
             );
           },
@@ -2276,27 +2858,27 @@ class _DayPageViewState extends State<_DayPageView> {
     }
     final scroll = event as PointerScrollEvent;
     final direction = navigationDelta > 0 ? 1 : -1;
-    if (_isWindowsMouseWheel(context, scroll)) {
+    if (scroll.kind == PointerDeviceKind.mouse) {
       GestureBinding.instance.pointerSignalResolver.register(event, (_) {
         if (!mounted || !_controller.hasClients) {
           return;
         }
         event.respond(allowPlatformDefault: false);
-        _mouseWheelNavigation.scheduleWindowsBurst(
-          controller: _controller,
-          currentPage: _currentPage,
-          axis: _primaryMouseWheelAxis(scroll),
-          direction: direction,
-        );
+        if (_isWindowsMouseWheel(context, scroll)) {
+          _mouseWheelNavigation.scheduleWindowsBurst(
+            controller: _controller,
+            currentPage: _currentPage,
+            axis: _primaryMouseWheelAxis(scroll),
+            direction: direction,
+          );
+        } else {
+          _mouseWheelNavigation.animateUncoalesced(
+            controller: _controller,
+            currentPage: _currentPage,
+            direction: direction,
+          );
+        }
       });
-      return;
-    }
-    if (scroll.kind == PointerDeviceKind.mouse) {
-      _mouseWheelNavigation.animateUncoalesced(
-        controller: _controller,
-        currentPage: _currentPage,
-        direction: direction,
-      );
       return;
     }
     _navigateFromTrackpad(direction);
@@ -2355,6 +2937,10 @@ class _CalendarDayPage extends ConsumerWidget {
     required this.showAllDayScheduleEvents,
     required this.onShowAllDayScheduleEventsChanged,
     required this.onDateSelected,
+    required this.externalEventDragActive,
+    required this.externalEventDragInteractionActive,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
   });
 
   final DateTime date;
@@ -2363,6 +2949,10 @@ class _CalendarDayPage extends ConsumerWidget {
   final bool showAllDayScheduleEvents;
   final ValueChanged<bool> onShowAllDayScheduleEventsChanged;
   final ValueChanged<DateTime> onDateSelected;
+  final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
+  final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -2376,6 +2966,7 @@ class _CalendarDayPage extends ConsumerWidget {
         if (settings.weekDayLayoutMode == WeekDayLayoutMode.schedule) {
           return ScheduleTimelineView(
             days: [date],
+            showDateHeader: false,
             events: visibleEvents,
             selectedDate: date,
             use24HourTime: settings.use24HourTime,
@@ -2398,13 +2989,30 @@ class _CalendarDayPage extends ConsumerWidget {
                   targetDate,
                   targetIndex,
                 ),
+            onEventTimeDropped: (event, targetStart) =>
+                _handleCalendarEventTimeDrop(context, ref, event, targetStart),
+            onEventDragStateChanged: onEventDragStateChanged,
+            onEventDragInteractionStateChanged:
+                onEventDragInteractionStateChanged,
+            externalEventDragActive: externalEventDragActive,
+            externalEventDragInteractionActive:
+                externalEventDragInteractionActive,
             onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
             onDateSelected: onDateSelected,
           );
         }
         return EventDetailsPanel(
           date: date,
-          events: visibleEvents,
+          colorWeekdayOnly: true,
+          events: _orderedEventsForDay(
+            visibleEvents,
+            date,
+            priority: settings.calendarEventSortPriority,
+            categoryOrder: settings.categories
+                .map((category) => category.id)
+                .toList(),
+            manualEventOrders: settings.calendarManualEventOrders,
+          ),
           onEventDropped: (event, targetDate, targetIndex) =>
               _handleCalendarEventDrop(
                 context,
@@ -2413,12 +3021,149 @@ class _CalendarDayPage extends ConsumerWidget {
                 targetDate,
                 targetIndex,
               ),
+          onEventDragStateChanged: onEventDragStateChanged,
+          onEventDragInteractionStateChanged:
+              onEventDragInteractionStateChanged,
         );
       },
       error: (error, stackTrace) => Center(child: Text('$error')),
       loading: () => const Center(child: CircularProgressIndicator()),
     );
   }
+}
+
+class _QuickMonthPageView extends StatefulWidget {
+  const _QuickMonthPageView({
+    required this.month,
+    required this.onMonthChanged,
+    required this.pageBuilder,
+  });
+
+  final DateTime month;
+  final ValueChanged<DateTime> onMonthChanged;
+  final Widget Function(BuildContext, DateTime) pageBuilder;
+
+  @override
+  State<_QuickMonthPageView> createState() => _QuickMonthPageViewState();
+}
+
+class _QuickMonthPageViewState extends State<_QuickMonthPageView> {
+  static const _initialPage = 12000;
+  late final DateTime _anchorMonth;
+  late final PageController _controller;
+  final _wheelNavigation = _MouseWheelPageNavigation();
+  int _currentPage = _initialPage;
+  bool _applyingExternalMonth = false;
+  int _externalRevision = 0;
+  DateTime? _lastTrackpadMove;
+
+  @override
+  void initState() {
+    super.initState();
+    _anchorMonth = DateTime(widget.month.year, widget.month.month);
+    _controller = PageController(initialPage: _initialPage);
+  }
+
+  DateTime _monthForPage(int page) =>
+      DateTime(_anchorMonth.year, _anchorMonth.month + page - _initialPage);
+
+  @override
+  void didUpdateWidget(covariant _QuickMonthPageView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final target =
+        _initialPage +
+        (widget.month.year - _anchorMonth.year) * 12 +
+        widget.month.month -
+        _anchorMonth.month;
+    if (target == _currentPage || !_controller.hasClients) return;
+    _wheelNavigation.reset();
+    _currentPage = target;
+    _applyingExternalMonth = true;
+    final revision = ++_externalRevision;
+    unawaited(
+      _controller
+          .animateToPage(
+            target,
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOutCubic,
+          )
+          .whenComplete(() {
+            if (mounted && revision == _externalRevision) {
+              _applyingExternalMonth = false;
+            }
+          }),
+    );
+  }
+
+  @override
+  void dispose() {
+    _wheelNavigation.reset();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handlePointerSignal(PointerSignalEvent event) {
+    if (event is! PointerScrollEvent ||
+        !supportsCalendarPointerNavigation(Theme.of(context).platform) ||
+        !_controller.hasClients) {
+      return;
+    }
+    final delta = event.scrollDelta.dx.abs() >= event.scrollDelta.dy.abs()
+        ? event.scrollDelta.dx
+        : event.scrollDelta.dy;
+    if (delta.abs() <= (event.kind == PointerDeviceKind.mouse ? 0 : 18)) return;
+    GestureBinding.instance.pointerSignalResolver.register(event, (_) {
+      if (!mounted || !_controller.hasClients) return;
+      event.respond(allowPlatformDefault: false);
+      if (_isWindowsMouseWheel(context, event)) {
+        _wheelNavigation.scheduleWindowsBurst(
+          controller: _controller,
+          currentPage: _currentPage,
+          axis: _primaryMouseWheelAxis(event),
+          direction: delta.sign.toInt(),
+        );
+      } else {
+        if (event.kind != PointerDeviceKind.mouse) {
+          final now = DateTime.now();
+          if (_lastTrackpadMove != null &&
+              now.difference(_lastTrackpadMove!) <
+                  const Duration(milliseconds: 280)) {
+            return;
+          }
+          _lastTrackpadMove = now;
+        }
+        _wheelNavigation.animateUncoalesced(
+          controller: _controller,
+          currentPage: _currentPage,
+          direction: delta.sign.toInt(),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) => Listener(
+    key: const ValueKey('quick-view-pointer-navigation'),
+    behavior: HitTestBehavior.opaque,
+    onPointerSignal: _handlePointerSignal,
+    onPointerPanZoomStart: (_) => _wheelNavigation.reset(),
+    child: PageView.builder(
+      key: const ValueKey('quick-view-month-pages'),
+      controller: _controller,
+      scrollDirection: Axis.horizontal,
+      physics: _calendarPagePhysics(context),
+      onPageChanged: (index) {
+        if (_applyingExternalMonth || index == _currentPage) return;
+        _currentPage = index;
+        widget.onMonthChanged(_monthForPage(index));
+      },
+      itemBuilder: (context, index) => Listener(
+        behavior: HitTestBehavior.opaque,
+        onPointerSignal: _handlePointerSignal,
+        child: widget.pageBuilder(context, _monthForPage(index)),
+      ),
+    ),
+  );
 }
 
 class _MonthPageView extends ConsumerStatefulWidget {
@@ -2430,6 +3175,9 @@ class _MonthPageView extends ConsumerStatefulWidget {
     required this.onMonthDelta,
     required this.onDateSelected,
     required this.externalEventDragActive,
+    required this.externalEventDragInteractionActive,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
   });
 
   final DateTime month;
@@ -2439,6 +3187,9 @@ class _MonthPageView extends ConsumerStatefulWidget {
   final ValueChanged<int> onMonthDelta;
   final void Function(DateTime date, List<CalendarEvent> events) onDateSelected;
   final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
+  final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
 
   @override
   ConsumerState<_MonthPageView> createState() => _MonthPageViewState();
@@ -2584,40 +3335,37 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
                             children: [
                               _MonthBoundaryLabel(month: pageMonth),
                               Expanded(
-                                child:
-                                    ValueListenableBuilder<
-                                      (DateTime?, DateTime?)
-                                    >(
-                                      valueListenable: _continuousRangeNotifier,
-                                      builder: (context, range, _) =>
-                                          _CalendarMonthPage(
-                                            month: pageMonth,
-                                            selectedDate: widget.selectedDate,
-                                            settings: widget.settings,
-                                            searchQuery: widget.searchQuery,
-                                            continuous: true,
-                                            showWeekdayHeader: false,
-                                            onRangeHitTestBoxChanged: (box) {
-                                              if (box == null) {
-                                                _continuousGridBoxes.remove(
-                                                  index,
-                                                );
-                                              } else {
-                                                _continuousGridBoxes[index] =
-                                                    box;
-                                              }
-                                            },
-                                            externalRangeStart: range.$1,
-                                            externalRangeEnd: range.$2,
-                                            enableRangeGestures: false,
-                                            onEventDragStateChanged:
-                                                _setContinuousEventDragActive,
-                                            externalEventDragActive:
-                                                widget.externalEventDragActive,
-                                            onDateSelected:
-                                                widget.onDateSelected,
-                                          ),
-                                    ),
+                                child: ValueListenableBuilder<(DateTime?, DateTime?)>(
+                                  valueListenable: _continuousRangeNotifier,
+                                  builder: (context, range, _) =>
+                                      _CalendarMonthPage(
+                                        month: pageMonth,
+                                        selectedDate: widget.selectedDate,
+                                        settings: widget.settings,
+                                        searchQuery: widget.searchQuery,
+                                        continuous: true,
+                                        showWeekdayHeader: false,
+                                        onRangeHitTestBoxChanged: (box) {
+                                          if (box == null) {
+                                            _continuousGridBoxes.remove(index);
+                                          } else {
+                                            _continuousGridBoxes[index] = box;
+                                          }
+                                        },
+                                        externalRangeStart: range.$1,
+                                        externalRangeEnd: range.$2,
+                                        enableRangeGestures: false,
+                                        onEventDragStateChanged:
+                                            widget.onEventDragStateChanged,
+                                        onEventDragInteractionStateChanged:
+                                            _setContinuousEventDragActive,
+                                        externalEventDragActive:
+                                            widget.externalEventDragActive,
+                                        externalEventDragInteractionActive: widget
+                                            .externalEventDragInteractionActive,
+                                        onDateSelected: widget.onDateSelected,
+                                      ),
+                                ),
                               ),
                             ],
                           );
@@ -2656,7 +3404,7 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
           },
           itemBuilder: (context, index) {
             final pageMonth = _monthForPage(index);
-            return _windowsMouseWheelSignalRegion(
+            return _desktopMouseWheelSignalRegion(
               context,
               onPointerSignal: _handlePointerSignal,
               child: _CalendarMonthPage(
@@ -2665,6 +3413,11 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
                 settings: widget.settings,
                 searchQuery: widget.searchQuery,
                 externalEventDragActive: widget.externalEventDragActive,
+                externalEventDragInteractionActive:
+                    widget.externalEventDragInteractionActive,
+                onEventDragStateChanged: widget.onEventDragStateChanged,
+                onEventDragInteractionStateChanged:
+                    widget.onEventDragInteractionStateChanged,
                 onDateSelected: widget.onDateSelected,
               ),
             );
@@ -2861,6 +3614,7 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
       return;
     }
     _continuousEventDragActive = active;
+    widget.onEventDragInteractionStateChanged(active);
     if (active) {
       _continuousMouseRangeActive = false;
       _cancelContinuousRange();
@@ -2882,27 +3636,27 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
       return;
     }
     final direction = primaryDelta > 0 ? 1 : -1;
-    if (_isWindowsMouseWheel(context, event)) {
+    if (event.kind == PointerDeviceKind.mouse) {
       GestureBinding.instance.pointerSignalResolver.register(event, (_) {
         if (!mounted || !_controller.hasClients) {
           return;
         }
         event.respond(allowPlatformDefault: false);
-        _mouseWheelNavigation.scheduleWindowsBurst(
-          controller: _controller,
-          currentPage: _currentPage,
-          axis: _primaryMouseWheelAxis(event),
-          direction: direction,
-        );
+        if (_isWindowsMouseWheel(context, event)) {
+          _mouseWheelNavigation.scheduleWindowsBurst(
+            controller: _controller,
+            currentPage: _currentPage,
+            axis: _primaryMouseWheelAxis(event),
+            direction: direction,
+          );
+        } else {
+          _mouseWheelNavigation.animateUncoalesced(
+            controller: _controller,
+            currentPage: _currentPage,
+            direction: direction,
+          );
+        }
       });
-      return;
-    }
-    if (event.kind == PointerDeviceKind.mouse) {
-      _mouseWheelNavigation.animateUncoalesced(
-        controller: _controller,
-        currentPage: _currentPage,
-        direction: direction,
-      );
       return;
     }
     _navigateFromTrackpad(direction);
@@ -3155,6 +3909,9 @@ class _MouseWheelPageNavigation {
             }
           }),
     );
+    // Driven paging normally hides its children from pointer hit testing.
+    // Keep the inner wheel receiver reachable for the next physical detent.
+    controller.position.context.setIgnorePointer(false);
   }
 
   void reset() {
@@ -3191,7 +3948,7 @@ class _ResponsiveMonthPagePhysics extends PageScrollPhysics {
 }
 
 class _MonthBoundaryLabel extends StatelessWidget {
-  const _MonthBoundaryLabel({super.key, required this.month});
+  const _MonthBoundaryLabel({required this.month});
 
   final DateTime month;
 
@@ -3220,12 +3977,13 @@ class _MonthBoundaryLabel extends StatelessWidget {
   }
 }
 
-Widget _windowsMouseWheelSignalRegion(
+Widget _desktopMouseWheelSignalRegion(
   BuildContext context, {
   required void Function(PointerSignalEvent) onPointerSignal,
   required Widget child,
 }) {
-  if (Theme.of(context).platform != TargetPlatform.windows) {
+  final platform = Theme.of(context).platform;
+  if (platform != TargetPlatform.windows && platform != TargetPlatform.macOS) {
     return child;
   }
   // This Listener is inside PageView's Scrollable, so it wins pointer-signal
@@ -3298,7 +4056,9 @@ class _CalendarMonthPage extends ConsumerWidget {
     this.externalRangeEnd,
     this.enableRangeGestures = true,
     this.onEventDragStateChanged,
+    this.onEventDragInteractionStateChanged,
     this.externalEventDragActive = false,
+    this.externalEventDragInteractionActive = false,
   });
 
   final DateTime month;
@@ -3313,7 +4073,9 @@ class _CalendarMonthPage extends ConsumerWidget {
   final DateTime? externalRangeEnd;
   final bool enableRangeGestures;
   final ValueChanged<bool>? onEventDragStateChanged;
+  final ValueChanged<bool>? onEventDragInteractionStateChanged;
   final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -3321,98 +4083,119 @@ class _CalendarMonthPage extends ConsumerWidget {
       eventsInRangeProvider(_monthRangeFor(month, settings.weekStartsOnMonday)),
     );
 
-    return eventsAsync.when(
-      data: (events) {
-        final visibleEvents = _filterVisibleEvents(
-          events,
-          settings,
-          searchQuery,
-        );
-        return CalendarMonthGrid(
-          month: month,
-          selectedDate: selectedDate,
-          events: visibleEvents,
-          weekStartsOnMonday: settings.weekStartsOnMonday,
-          showLunarDates: settings.showLunarDates,
-          holidayBackgroundEnabled: settings.calendarHolidayBackgroundEnabled,
-          holidayColorValue: settings.holidayCategory.colorValue,
-          centerEventTitles:
-              settings.calendarEventTitleAlignment ==
-              CalendarEventTitleAlignment.center,
-          eventSortPriority: settings.calendarEventSortPriority,
-          categoryOrder: settings.categories
-              .map((category) => category.id)
-              .toList(),
-          manualEventOrders: settings.calendarManualEventOrders,
-          showAdjacentMonthDates:
-              !continuous && settings.showAdjacentMonthDates,
-          continuous: continuous,
-          showWeekdayHeader: showWeekdayHeader,
-          onRangeHitTestBoxChanged: onRangeHitTestBoxChanged,
-          externalRangeStart: externalRangeStart,
-          externalRangeEnd: externalRangeEnd,
-          enableRangeGestures: enableRangeGestures,
-          onEventDragStateChanged: onEventDragStateChanged,
-          externalEventDragActive: externalEventDragActive,
-          onDateSelected: (date) {
-            onDateSelected(date, _eventsForDay(visibleEvents, date));
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.hasBoundedWidth
+            ? constraints.maxWidth
+            : null;
+        return eventsAsync.when(
+          data: (events) {
+            final visibleEvents = _filterVisibleEvents(
+              events,
+              settings,
+              searchQuery,
+            );
+            return CalendarMonthGrid(
+              availableWidth: availableWidth,
+              month: month,
+              selectedDate: selectedDate,
+              events: visibleEvents,
+              weekStartsOnMonday: settings.weekStartsOnMonday,
+              showLunarDates: settings.showLunarDates,
+              holidayBackgroundEnabled:
+                  settings.calendarHolidayBackgroundEnabled,
+              holidayColorValue: settings.holidayCategory.colorValue,
+              centerEventTitles:
+                  settings.calendarEventTitleAlignment ==
+                  CalendarEventTitleAlignment.center,
+              eventSortPriority: settings.calendarEventSortPriority,
+              categoryOrder: settings.categories
+                  .map((category) => category.id)
+                  .toList(),
+              manualEventOrders: settings.calendarManualEventOrders,
+              showAdjacentMonthDates:
+                  !continuous && settings.showAdjacentMonthDates,
+              continuous: continuous,
+              showWeekdayHeader: showWeekdayHeader,
+              onRangeHitTestBoxChanged: onRangeHitTestBoxChanged,
+              externalRangeStart: externalRangeStart,
+              externalRangeEnd: externalRangeEnd,
+              enableRangeGestures: enableRangeGestures,
+              onEventDragStateChanged: onEventDragStateChanged,
+              onEventDragInteractionStateChanged:
+                  onEventDragInteractionStateChanged,
+              externalEventDragActive: externalEventDragActive,
+              externalEventDragInteractionActive:
+                  externalEventDragInteractionActive,
+              onDateSelected: (date) {
+                onDateSelected(date, _eventsForDay(visibleEvents, date));
+              },
+              onDateRangeSelected: (start, end) => _addEventForRange(
+                context,
+                ref,
+                start,
+                end,
+                settings.categories,
+                settings.defaultReminderMinutesList,
+              ),
+              onEventDropped: (event, targetDate, targetIndex) =>
+                  _handleEventDrop(
+                    context,
+                    ref,
+                    event,
+                    targetDate,
+                    targetIndex,
+                    visibleEvents,
+                    settings,
+                  ),
+            );
           },
-          onDateRangeSelected: (start, end) => _addEventForRange(
-            context,
-            ref,
-            start,
-            end,
-            settings.categories,
-            settings.defaultReminderMinutesList,
-          ),
-          onEventDropped: (event, targetDate, targetIndex) => _handleEventDrop(
-            context,
-            ref,
-            event,
-            targetDate,
-            targetIndex,
-            visibleEvents,
-            settings,
+          error: (error, stackTrace) => Center(child: Text('$error')),
+          loading: () => CalendarMonthGrid(
+            availableWidth: availableWidth,
+            month: month,
+            selectedDate: selectedDate,
+            events: const [],
+            weekStartsOnMonday: settings.weekStartsOnMonday,
+            showLunarDates: settings.showLunarDates,
+            holidayBackgroundEnabled: settings.calendarHolidayBackgroundEnabled,
+            holidayColorValue: settings.holidayCategory.colorValue,
+            centerEventTitles:
+                settings.calendarEventTitleAlignment ==
+                CalendarEventTitleAlignment.center,
+            eventSortPriority: settings.calendarEventSortPriority,
+            categoryOrder: settings.categories
+                .map((category) => category.id)
+                .toList(),
+            manualEventOrders: settings.calendarManualEventOrders,
+            showAdjacentMonthDates:
+                !continuous && settings.showAdjacentMonthDates,
+            continuous: continuous,
+            showWeekdayHeader: showWeekdayHeader,
+            onRangeHitTestBoxChanged: onRangeHitTestBoxChanged,
+            externalRangeStart: externalRangeStart,
+            externalRangeEnd: externalRangeEnd,
+            enableRangeGestures: enableRangeGestures,
+            externalEventDragActive: externalEventDragActive,
+            externalEventDragInteractionActive:
+                externalEventDragInteractionActive,
+            onEventDragStateChanged: onEventDragStateChanged,
+            onEventDragInteractionStateChanged:
+                onEventDragInteractionStateChanged,
+            onDateSelected: (date) {
+              onDateSelected(date, const <CalendarEvent>[]);
+            },
+            onDateRangeSelected: (start, end) => _addEventForRange(
+              context,
+              ref,
+              start,
+              end,
+              settings.categories,
+              settings.defaultReminderMinutesList,
+            ),
           ),
         );
       },
-      error: (error, stackTrace) => Center(child: Text('$error')),
-      loading: () => CalendarMonthGrid(
-        month: month,
-        selectedDate: selectedDate,
-        events: const [],
-        weekStartsOnMonday: settings.weekStartsOnMonday,
-        showLunarDates: settings.showLunarDates,
-        holidayBackgroundEnabled: settings.calendarHolidayBackgroundEnabled,
-        holidayColorValue: settings.holidayCategory.colorValue,
-        centerEventTitles:
-            settings.calendarEventTitleAlignment ==
-            CalendarEventTitleAlignment.center,
-        eventSortPriority: settings.calendarEventSortPriority,
-        categoryOrder: settings.categories
-            .map((category) => category.id)
-            .toList(),
-        manualEventOrders: settings.calendarManualEventOrders,
-        showAdjacentMonthDates: !continuous && settings.showAdjacentMonthDates,
-        continuous: continuous,
-        showWeekdayHeader: showWeekdayHeader,
-        onRangeHitTestBoxChanged: onRangeHitTestBoxChanged,
-        externalRangeStart: externalRangeStart,
-        externalRangeEnd: externalRangeEnd,
-        enableRangeGestures: enableRangeGestures,
-        externalEventDragActive: externalEventDragActive,
-        onDateSelected: (date) {
-          onDateSelected(date, const <CalendarEvent>[]);
-        },
-        onDateRangeSelected: (start, end) => _addEventForRange(
-          context,
-          ref,
-          start,
-          end,
-          settings.categories,
-          settings.defaultReminderMinutesList,
-        ),
-      ),
     );
   }
 
@@ -3605,10 +4388,11 @@ class _CalendarMonthPage extends ConsumerWidget {
     final updatedSettings = settings.copyWith(
       calendarManualEventOrders: manualOrders,
     );
-    final settingsRepository = ref.read(settingsRepositoryProvider);
-    await settingsRepository.save(updatedSettings, changedFrom: settings);
-    ref.read(appSettingsProvider.notifier).state = settingsRepository.load();
-    await ref.read(syncServiceProvider).queueSettingsBackup();
+    await _persistCalendarManualOrder(
+      ref,
+      previous: settings,
+      updated: updatedSettings,
+    );
   }
 
   EventDraft _eventDraftFrom(
@@ -3760,6 +4544,90 @@ Future<void> _handleCalendarEventDrop(
   );
 }
 
+Future<void> _handleCalendarEventTimeDrop(
+  BuildContext context,
+  WidgetRef ref,
+  CalendarEvent event,
+  DateTime targetStart,
+) async {
+  if (!calendarEventCanMove(event) || event.allDay) {
+    return;
+  }
+  final sourceDate = _dateOnly(event.startAt);
+  final targetDate = _dateOnly(targetStart);
+  final rangeStart = sourceDate.isBefore(targetDate) ? sourceDate : targetDate;
+  final rangeLastDate = sourceDate.isAfter(targetDate)
+      ? sourceDate
+      : targetDate;
+  final rangeEnd = rangeLastDate.add(const Duration(days: 1));
+  final settings = ref.read(appSettingsProvider);
+  final repository = ref.read(eventRepositoryProvider);
+  final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
+  final holidayEvents = ref
+      .read(koreanHolidayServiceProvider)
+      .holidayEventsInRange(
+        rangeStart,
+        rangeEnd,
+        category: settings.holidayCategory,
+      );
+  final visibleEvents = _filterVisibleEvents(
+    [...storedEvents, ...holidayEvents],
+    settings,
+    '',
+  );
+  if (!context.mounted) {
+    return;
+  }
+
+  var movedEvent = event;
+  if (event.startAt != targetStart) {
+    if (event.isRecurring) {
+      final scope = await _showCalendarRecurringDragScopeDialog(context);
+      if (scope == null || !context.mounted) {
+        return;
+      }
+      final result = await _moveRecurringCalendarEventToStart(
+        ref,
+        event,
+        targetStart,
+        scope,
+      );
+      if (result == null) {
+        return;
+      }
+      movedEvent = result;
+    } else {
+      movedEvent = shiftCalendarEventToStart(event, targetStart);
+      await ref.read(eventCommandServiceProvider).save(movedEvent);
+    }
+  }
+
+  final existingTarget =
+      _eventsForDay(
+          visibleEvents,
+          targetDate,
+        ).where((candidate) => !_isSameCalendarEvent(candidate, event)).toList()
+        ..add(movedEvent);
+  final sortedTarget = sortedCalendarEvents(
+    existingTarget,
+    priority: settings.calendarEventSortPriority,
+    categoryOrder: settings.categories.map((category) => category.id).toList(),
+  );
+  final targetIndex = sortedTarget.indexWhere(
+    (candidate) => _isSameCalendarEvent(candidate, movedEvent),
+  );
+  await _saveCalendarManualOrderAfterDrop(
+    ref,
+    sourceDate: sourceDate,
+    targetDate: targetDate,
+    targetIndex: targetIndex < 0 ? sortedTarget.length : targetIndex,
+    originalEvent: event,
+    movedEvent: movedEvent,
+    visibleEvents: visibleEvents,
+    settings: settings,
+  );
+}
+
 Future<CalendarEvent?> _moveRecurringCalendarEvent(
   WidgetRef ref,
   CalendarEvent occurrence,
@@ -3819,6 +4687,74 @@ Future<CalendarEvent?> _moveRecurringCalendarEvent(
         occurrenceId: '${base.id}@${shiftedStart.toIso8601String()}',
         startAt: shiftedStart,
         endAt: shiftedStart.add(occurrence.duration),
+      );
+  }
+}
+
+Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
+  WidgetRef ref,
+  CalendarEvent occurrence,
+  DateTime targetStart,
+  _RecurringDragScope scope,
+) async {
+  final repository = ref.read(eventRepositoryProvider);
+  final commandService = ref.read(eventCommandServiceProvider);
+  final base = await repository.findById(occurrence.id);
+  if (base == null) {
+    return null;
+  }
+  final shiftedOccurrence = shiftCalendarEventToStart(occurrence, targetStart);
+
+  switch (scope) {
+    case _RecurringDragScope.onlyThis:
+      await commandService.save(
+        _excludeCalendarOccurrence(base, occurrence.startAt),
+      );
+      return _createMovedCalendarOccurrence(
+        commandService,
+        shiftedOccurrence,
+        const RecurrenceRule(),
+      );
+    case _RecurringDragScope.future:
+      await commandService.save(
+        _endCalendarRecurrenceBefore(base, occurrence.startAt),
+      );
+      final futureRule = recurrenceRuleForMovedFuture(
+        base: base,
+        occurrence: occurrence,
+        targetDate: targetStart,
+      );
+      final created = await _createMovedCalendarOccurrence(
+        commandService,
+        shiftedOccurrence,
+        futureRule,
+      );
+      return created.copyWith(
+        occurrenceId: '${created.id}@${created.startAt.toIso8601String()}',
+      );
+    case _RecurringDragScope.all:
+      final dayDelta = calendarDayDifference(targetStart, occurrence.startAt);
+      final shiftedBaseDate = shiftCalendarDateByDays(base.startAt, dayDelta);
+      final shiftedBaseStart = DateTime(
+        shiftedBaseDate.year,
+        shiftedBaseDate.month,
+        shiftedBaseDate.day,
+        targetStart.hour,
+        targetStart.minute,
+        targetStart.second,
+        targetStart.millisecond,
+        targetStart.microsecond,
+      );
+      final shiftedBase = base.copyWith(
+        startAt: shiftedBaseStart,
+        endAt: shiftedBaseStart.add(base.duration),
+        recurrence: shiftRecurrenceRuleByDays(base.recurrence, dayDelta),
+      );
+      await commandService.save(shiftedBase);
+      return occurrence.copyWith(
+        occurrenceId: '${base.id}@${targetStart.toIso8601String()}',
+        startAt: targetStart,
+        endAt: targetStart.add(occurrence.duration),
       );
   }
 }
@@ -3904,10 +4840,34 @@ Future<void> _saveCalendarManualOrderAfterDrop(
   final updatedSettings = settings.copyWith(
     calendarManualEventOrders: manualOrders,
   );
-  final settingsRepository = ref.read(settingsRepositoryProvider);
-  await settingsRepository.save(updatedSettings, changedFrom: settings);
-  ref.read(appSettingsProvider.notifier).state = settingsRepository.load();
-  await ref.read(syncServiceProvider).queueSettingsBackup();
+  await _persistCalendarManualOrder(
+    ref,
+    previous: settings,
+    updated: updatedSettings,
+  );
+}
+
+Future<void> _persistCalendarManualOrder(
+  WidgetRef ref, {
+  required AppSettings previous,
+  required AppSettings updated,
+}) async {
+  ref.read(appSettingsProvider.notifier).state = updated;
+  try {
+    await ref
+        .read(settingsRepositoryProvider)
+        .save(updated, changedFrom: previous);
+    await ref.read(syncServiceProvider).queueSettingsBackup();
+  } on Object {
+    final current = ref.read(appSettingsProvider);
+    if (identical(
+      current.calendarManualEventOrders,
+      updated.calendarManualEventOrders,
+    )) {
+      ref.read(appSettingsProvider.notifier).state = previous;
+    }
+    rethrow;
+  }
 }
 
 EventDraft _calendarEventDraftFrom(
@@ -4069,58 +5029,117 @@ class _CalendarHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final compact = MediaQuery.sizeOf(context).width < 680;
+    final windowSize = MediaQuery.sizeOf(context);
+    final compact = windowSize.width < 680;
     final platform = Theme.of(context).platform;
     final ios = platform == TargetPlatform.iOS;
+    final mobile = ios || platform == TargetPlatform.android;
     final desktop = _usesDesktopCalendarLayout(platform);
+    final androidTablet =
+        platform == TargetPlatform.android &&
+        dailyWindowClassFor(windowSize) != DailyWindowClass.compact;
+    final actionSize = androidTablet ? 48.0 : 40.0;
     final locale = Localizations.localeOf(context).toLanguageTag();
     final settings = ref.watch(appSettingsProvider);
+    final fullDayLabel =
+        viewMode == CalendarViewMode.day &&
+        settings.weekDayLayoutMode == WeekDayLayoutMode.schedule &&
+        !quickAccessSelected;
     final label = calendarPeriodLabel(
       visibleMonth: month,
       selectedDate: selectedDate,
-      viewMode: viewMode,
-      navigationMode: monthNavigationMode,
+      viewMode: quickAccessSelected ? CalendarViewMode.month : viewMode,
+      navigationMode: quickAccessSelected
+          ? MonthNavigationMode.horizontal
+          : monthNavigationMode,
       locale: locale,
       weekStartsOnMonday: settings.weekStartsOnMonday,
-      // Android's compact toolbar reserves fixed-width navigation and utility
-      // actions, so horizontal navigation keeps its existing year-only label.
-      compactHorizontalYearOnly: compact && !ios,
+      compactHorizontalYearOnly: compact && !mobile,
+      showFullDay: fullDayLabel,
     );
-    final periodLabelMaxWidth =
-        ios &&
-            monthNavigationMode == MonthNavigationMode.vertical &&
-            viewMode == CalendarViewMode.week
+    final periodLabelMaxWidth = fullDayLabel && mobile
+        ? math.max(40.0, windowSize.width - 20 - actionSize * 4 - 44)
+        : mobile &&
+              monthNavigationMode == MonthNavigationMode.vertical &&
+              viewMode == CalendarViewMode.week
         ? 164.0
         : 126.0;
     final colorScheme = Theme.of(context).colorScheme;
+    final periodColor = fullDayLabel
+        ? calendarDateAccent(
+            selectedDate,
+            isHoliday:
+                settings.calendarShowHolidays &&
+                ref
+                    .read(koreanHolidayServiceProvider)
+                    .isPublicHoliday(selectedDate),
+            holidayColorValue: settings.holidayCategory.colorValue,
+          )
+        : null;
+    final weekday = DateFormat.EEEE(locale).format(selectedDate);
+    final weekdayIndex = fullDayLabel ? label.indexOf(weekday) : -1;
     final monthButton = TextButton.icon(
       key: const ValueKey('calendar-period-button'),
       onPressed: () => _showMonthPicker(context, ref),
-      icon: const Icon(Icons.date_range_rounded, size: 20),
+      icon: Icon(
+        Icons.date_range_rounded,
+        size: 20,
+        color: colorScheme.onSurface,
+      ),
       label: ConstrainedBox(
         constraints: BoxConstraints(
-          maxWidth: ios ? periodLabelMaxWidth : double.infinity,
+          maxWidth: mobile
+              ? (compact
+                    ? (windowSize.width - 20 - actionSize * 4 - 44).clamp(
+                        40.0,
+                        periodLabelMaxWidth,
+                      )
+                    : periodLabelMaxWidth)
+              : double.infinity,
         ),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           alignment: Alignment.centerLeft,
-          child: Text(
-            label,
+          child: Text.rich(
+            TextSpan(
+              children: [
+                if (weekdayIndex >= 0 && periodColor != null) ...[
+                  TextSpan(text: label.substring(0, weekdayIndex)),
+                  TextSpan(
+                    text: weekday,
+                    style: TextStyle(color: periodColor),
+                  ),
+                  TextSpan(
+                    text: label.substring(weekdayIndex + weekday.length),
+                  ),
+                ] else
+                  TextSpan(text: label),
+              ],
+            ),
             maxLines: 1,
             style: compact
-                ? Theme.of(
-                    context,
-                  ).textTheme.titleMedium?.copyWith(fontSize: 18)
-                : Theme.of(context).textTheme.headlineMedium,
+                ? Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontSize: 18,
+                    color: colorScheme.onSurface,
+                  )
+                : Theme.of(context).textTheme.headlineMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                  ),
           ),
         ),
       ),
       style: TextButton.styleFrom(
         foregroundColor: colorScheme.onSurface,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-        minimumSize: ios ? const Size(0, 44) : null,
-        maximumSize: ios ? Size(periodLabelMaxWidth + 44, 44) : null,
-        tapTargetSize: ios
+        minimumSize: mobile && !androidTablet
+            ? const Size(0, 44)
+            : androidTablet
+            ? const Size(0, 48)
+            : null,
+        maximumSize: mobile && !androidTablet
+            ? Size(periodLabelMaxWidth + 44, 44)
+            : null,
+        tapTargetSize: mobile
             ? MaterialTapTargetSize.shrinkWrap
             : MaterialTapTargetSize.padded,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -4131,18 +5150,21 @@ class _CalendarHeader extends ConsumerWidget {
         tooltip: context.tr('이전'),
         onPressed: () => _moveVisibleRange(ref, -1),
         icon: Icons.arrow_back_ios_new_rounded,
+        size: actionSize,
         borderless: true,
       ),
       DailyIconAction(
         tooltip: context.tr('다음'),
         onPressed: () => _moveVisibleRange(ref, 1),
         icon: Icons.arrow_forward_ios_rounded,
+        size: actionSize,
         borderless: true,
       ),
       DailyIconAction(
         tooltip: context.tr('오늘'),
         onPressed: () => _goToday(ref),
         icon: Icons.calendar_today_rounded,
+        size: actionSize,
         borderless: true,
       ),
     ];
@@ -4152,6 +5174,7 @@ class _CalendarHeader extends ConsumerWidget {
         onPressed: onSearchPressed,
         selected: searchOpen,
         icon: Icons.search_rounded,
+        size: actionSize,
         borderless: true,
       ),
       DailyIconAction(
@@ -4159,6 +5182,7 @@ class _CalendarHeader extends ConsumerWidget {
         onPressed: () => _showFilterSheet(context, ref),
         selected: searchQuery.isNotEmpty,
         icon: Icons.tune_rounded,
+        size: actionSize,
         borderless: true,
       ),
       DailyIconAction(
@@ -4167,11 +5191,13 @@ class _CalendarHeader extends ConsumerWidget {
           context,
         ).push(MaterialPageRoute(builder: (_) => const SettingsPage())),
         icon: Icons.settings_rounded,
+        size: actionSize,
         borderless: true,
       ),
     ];
 
     if (desktop) {
+      final assistantLabel = platform == TargetPlatform.macOS ? 'Siri' : 'LLM';
       final viewSwitch = SegmentedButton<CalendarViewMode>(
         selected: quickAccessSelected ? const {} : {viewMode},
         emptySelectionAllowed: quickAccessSelected,
@@ -4229,7 +5255,7 @@ class _CalendarHeader extends ConsumerWidget {
         borderless: true,
       );
       final llmButton = DailyIconAction(
-        tooltip: 'LLM',
+        tooltip: assistantLabel,
         onPressed: onLlmPressed,
         icon: Icons.stars_rounded,
         accentColor: DailyUi.purple,
@@ -4257,16 +5283,20 @@ class _CalendarHeader extends ConsumerWidget {
 
     if (compact) {
       return Padding(
-        key: ios ? const ValueKey('ios-calendar-toolbar') : null,
+        key: mobile
+            ? ValueKey('${ios ? 'ios' : 'android'}-calendar-toolbar')
+            : null,
         padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (ios) ...[
+            if (mobile) ...[
               monthButton,
-              const Expanded(
+              Expanded(
                 child: SizedBox(
-                  key: ValueKey('ios-calendar-header-reserved-space'),
+                  key: ValueKey(
+                    '${ios ? 'ios' : 'android'}-calendar-header-reserved-space',
+                  ),
                 ),
               ),
             ] else ...[
@@ -4283,13 +5313,15 @@ class _CalendarHeader extends ConsumerWidget {
     }
 
     return Padding(
-      key: ios ? const ValueKey('ios-calendar-toolbar') : null,
+      key: mobile
+          ? ValueKey('${ios ? 'ios' : 'android'}-calendar-toolbar')
+          : null,
       padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
       child: Row(
         children: [
           monthButton,
           const Spacer(),
-          if (!ios) ...navigationActions.take(2),
+          if (!mobile) ...navigationActions.take(2),
           navigationActions[2],
           const SizedBox(width: 6),
           ...utilityActions,
@@ -4315,7 +5347,7 @@ class _CalendarHeader extends ConsumerWidget {
   }
 
   void _moveVisibleRange(WidgetRef ref, int delta) {
-    switch (viewMode) {
+    switch (quickAccessSelected ? CalendarViewMode.month : viewMode) {
       case CalendarViewMode.month:
         _setVisibleMonth(
           ref,
@@ -4632,9 +5664,327 @@ class _CalendarHeader extends ConsumerWidget {
   }
 }
 
-class _CalendarBottomBar extends StatelessWidget {
+class _CalendarBottomBar extends StatefulWidget {
   const _CalendarBottomBar({
     super.key,
+    required this.viewMode,
+    required this.calendarActive,
+    required this.activeAction,
+    required this.selectedAction,
+    required this.calendarViewControlSelected,
+    required this.onCalendarViewInteractionStarted,
+    required this.onCalendarViewSelected,
+    required this.onCenterActionSelected,
+  });
+
+  final CalendarViewMode viewMode;
+  final bool calendarActive;
+  final _BottomCenterAction activeAction;
+  final _BottomCenterAction? selectedAction;
+  final bool calendarViewControlSelected;
+  final VoidCallback onCalendarViewInteractionStarted;
+  final ValueChanged<CalendarViewMode> onCalendarViewSelected;
+  final ValueChanged<_BottomCenterAction> onCenterActionSelected;
+
+  @override
+  State<_CalendarBottomBar> createState() => _CalendarBottomBarState();
+}
+
+class _CalendarBottomBarState extends State<_CalendarBottomBar> {
+  _BottomNavigationItem? _dragItem;
+  _BottomNavigationItem? _pressedItem;
+
+  _BottomNavigationItem get _activeItem {
+    final selectedAction = widget.selectedAction;
+    if (selectedAction == _BottomCenterAction.ai) {
+      return _BottomNavigationItem.siri;
+    }
+    if (selectedAction == _BottomCenterAction.quickAccess) {
+      return _BottomNavigationItem.quickAccess;
+    }
+    if (!widget.calendarActive ||
+        widget.activeAction == _BottomCenterAction.quickAccess) {
+      return _BottomNavigationItem.quickAccess;
+    }
+    if (widget.activeAction == _BottomCenterAction.ai) {
+      return _BottomNavigationItem.siri;
+    }
+    return switch (widget.viewMode) {
+      CalendarViewMode.week => _BottomNavigationItem.week,
+      CalendarViewMode.month => _BottomNavigationItem.month,
+      CalendarViewMode.day => _BottomNavigationItem.day,
+    };
+  }
+
+  _BottomNavigationItem get _visibleItem =>
+      _dragItem ?? _pressedItem ?? _activeItem;
+
+  @override
+  Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
+    if (platform != TargetPlatform.iOS && platform != TargetPlatform.android) {
+      return _LegacyCalendarBottomBar(
+        viewMode: widget.viewMode,
+        calendarActive: widget.calendarActive,
+        activeAction: widget.activeAction,
+        selectedAction: widget.selectedAction,
+        calendarViewControlSelected: widget.calendarViewControlSelected,
+        onCalendarViewInteractionStarted:
+            widget.onCalendarViewInteractionStarted,
+        onCalendarViewSelected: widget.onCalendarViewSelected,
+        onCenterActionSelected: widget.onCenterActionSelected,
+      );
+    }
+    final scheme = Theme.of(context).colorScheme;
+    final emphasized =
+        widget.selectedAction != null || widget.calendarViewControlSelected;
+    return SafeArea(
+      top: false,
+      minimum: const EdgeInsets.only(bottom: 6),
+      child: SizedBox(
+        key: const ValueKey('calendar-bottom-bar'),
+        height: 62,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final expandedWidth = (constraints.maxWidth - 32).clamp(
+              260.0,
+              320.0,
+            );
+            final width = emphasized
+                ? expandedWidth
+                : (expandedWidth * 0.88).clamp(228.0, 282.0);
+            final height = emphasized ? 50.0 : 42.0;
+            return Center(
+              child: GestureDetector(
+                key: const ValueKey('bottom-mode-switcher'),
+                behavior: HitTestBehavior.opaque,
+                onHorizontalDragStart: (details) {
+                  setState(() => _pressedItem = null);
+                  _updateDrag(details.localPosition.dx, width);
+                },
+                onHorizontalDragUpdate: (details) =>
+                    _updateDrag(details.localPosition.dx, width),
+                onHorizontalDragEnd: (_) {
+                  final item = _dragItem;
+                  setState(() => _dragItem = null);
+                  if (item != null) {
+                    _select(item);
+                  }
+                },
+                onHorizontalDragCancel: () => setState(() => _dragItem = null),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(25),
+                  child: BackdropFilter(
+                    filter: ui.ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                    child: AnimatedContainer(
+                      key: const ValueKey('bottom-mode-track'),
+                      duration: const Duration(milliseconds: 220),
+                      curve: Curves.easeOutCubic,
+                      width: width,
+                      height: height,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: DailyUi.elevatedSurface(
+                          context,
+                        ).withValues(alpha: 0.88),
+                        borderRadius: BorderRadius.circular(25),
+                        border: Border.all(
+                          color: scheme.onSurface.withValues(alpha: 0.1),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.16),
+                            blurRadius: 16,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
+                      ),
+                      child: LayoutBuilder(
+                        builder: (context, innerConstraints) {
+                          final segmentWidth = innerConstraints.maxWidth / 5;
+                          final visibleItem = _visibleItem;
+                          return Stack(
+                            key: const ValueKey('bottom-mode-thumb-layer'),
+                            children: [
+                              AnimatedPositioned(
+                                key: const ValueKey('bottom-mode-thumb'),
+                                duration: const Duration(milliseconds: 220),
+                                curve: Curves.easeOutBack,
+                                left:
+                                    _BottomNavigationItem.values.indexOf(
+                                          visibleItem,
+                                        ) *
+                                        segmentWidth +
+                                    2,
+                                top: 2,
+                                width: segmentWidth - 4,
+                                height: innerConstraints.maxHeight - 4,
+                                child: AnimatedScale(
+                                  duration: const Duration(milliseconds: 110),
+                                  curve: Curves.easeOutCubic,
+                                  scale: _pressedItem == null ? 1 : 0.92,
+                                  child: DecoratedBox(
+                                    key: const ValueKey(
+                                      'bottom-mode-thumb-circle',
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: DailyUi.primary.withValues(
+                                        alpha: 0.94,
+                                      ),
+                                      borderRadius: BorderRadius.circular(21),
+                                      border: Border.all(
+                                        color: Colors.white.withValues(
+                                          alpha: 0.2,
+                                        ),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: DailyUi.primary.withValues(
+                                            alpha: 0.28,
+                                          ),
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  for (final item
+                                      in _BottomNavigationItem.values)
+                                    _UnifiedBottomNavigationButton(
+                                      item: item,
+                                      selected: item == visibleItem,
+                                      onTapDown: () =>
+                                          setState(() => _pressedItem = item),
+                                      onPressed: () {
+                                        final selected = _pressedItem ?? item;
+                                        setState(() => _pressedItem = null);
+                                        _select(selected);
+                                      },
+                                      onTapCancel: () =>
+                                          setState(() => _pressedItem = null),
+                                    ),
+                                ],
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  void _updateDrag(double dx, double width) {
+    final index = (dx / (width / 5)).floor().clamp(0, 4);
+    final item = _BottomNavigationItem.values[index];
+    if (_dragItem != item) {
+      setState(() => _dragItem = item);
+    }
+  }
+
+  void _select(_BottomNavigationItem item) {
+    switch (item) {
+      case _BottomNavigationItem.quickAccess:
+        widget.onCenterActionSelected(_BottomCenterAction.quickAccess);
+      case _BottomNavigationItem.week:
+        widget.onCalendarViewInteractionStarted();
+        widget.onCalendarViewSelected(CalendarViewMode.week);
+      case _BottomNavigationItem.month:
+        widget.onCalendarViewInteractionStarted();
+        widget.onCalendarViewSelected(CalendarViewMode.month);
+      case _BottomNavigationItem.day:
+        widget.onCalendarViewInteractionStarted();
+        widget.onCalendarViewSelected(CalendarViewMode.day);
+      case _BottomNavigationItem.siri:
+        widget.onCenterActionSelected(_BottomCenterAction.ai);
+    }
+  }
+}
+
+class _UnifiedBottomNavigationButton extends StatelessWidget {
+  const _UnifiedBottomNavigationButton({
+    required this.item,
+    required this.selected,
+    required this.onTapDown,
+    required this.onPressed,
+    required this.onTapCancel,
+  });
+
+  final _BottomNavigationItem item;
+  final bool selected;
+  final VoidCallback onTapDown;
+  final VoidCallback onPressed;
+  final VoidCallback onTapCancel;
+
+  @override
+  Widget build(BuildContext context) {
+    final tooltip = switch (item) {
+      _BottomNavigationItem.quickAccess => context.tr('빠른 보기'),
+      _BottomNavigationItem.week => context.l10n.calendarViewName(
+        CalendarViewMode.week,
+      ),
+      _BottomNavigationItem.month => context.l10n.calendarViewName(
+        CalendarViewMode.month,
+      ),
+      _BottomNavigationItem.day => context.l10n.calendarViewName(
+        CalendarViewMode.day,
+      ),
+      _BottomNavigationItem.siri =>
+        Theme.of(context).platform == TargetPlatform.android ? 'LLM' : 'Siri',
+    };
+    return Expanded(
+      child: Tooltip(
+        message: tooltip,
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTapDown: (_) => onTapDown(),
+          onTap: onPressed,
+          onTapCancel: onTapCancel,
+          child: Center(child: _content(context)),
+        ),
+      ),
+    );
+  }
+
+  Widget _content(BuildContext context) {
+    final color = selected ? Colors.white : DailyUi.secondaryText(context);
+    if (item == _BottomNavigationItem.quickAccess) {
+      return Icon(Icons.view_agenda_outlined, size: 20, color: color);
+    }
+    if (item == _BottomNavigationItem.siri) {
+      return Icon(Icons.graphic_eq_rounded, size: 21, color: color);
+    }
+    final mode = switch (item) {
+      _BottomNavigationItem.week => CalendarViewMode.week,
+      _BottomNavigationItem.month => CalendarViewMode.month,
+      _BottomNavigationItem.day => CalendarViewMode.day,
+      _ => throw StateError('Unsupported calendar navigation item: $item'),
+    };
+    return Text(
+      context.l10n.compactCalendarViewName(mode),
+      maxLines: 1,
+      overflow: TextOverflow.fade,
+      style: TextStyle(
+        color: color,
+        fontSize: 12,
+        fontWeight: selected ? FontWeight.w800 : FontWeight.w600,
+      ),
+    );
+  }
+}
+
+class _LegacyCalendarBottomBar extends StatelessWidget {
+  const _LegacyCalendarBottomBar({
     required this.viewMode,
     required this.calendarActive,
     required this.activeAction,
@@ -4666,21 +6016,14 @@ class _CalendarBottomBar extends StatelessWidget {
           builder: (context, constraints) {
             const horizontalInset = 16.0;
             const gap = 8.0;
-            const expandedViewHeight = 48.0;
-            const collapsedViewHeight = 40.0;
-            const minimumViewWidth = 60.0;
             final centerExpanded = selectedAction != null;
             final centerWidth = centerExpanded ? 152.0 : 124.0;
+            final centerHeight = centerExpanded ? 48.0 : 40.0;
             final centerLeft = (constraints.maxWidth - centerWidth) / 2;
-            final desiredViewWidth = _preferredCalendarViewWidth(
-              context,
-              expanded: calendarViewControlSelected,
-            );
-            final desiredViewHeight = calendarViewControlSelected
-                ? expandedViewHeight
-                : collapsedViewHeight;
+            final desiredViewWidth = calendarViewControlSelected ? 96.0 : 76.0;
+            final desiredViewHeight = calendarViewControlSelected ? 48.0 : 40.0;
             final viewWidth = (centerLeft - horizontalInset - gap).clamp(
-              minimumViewWidth,
+              60.0,
               desiredViewWidth,
             );
             final viewHeight =
@@ -4693,19 +6036,68 @@ class _CalendarBottomBar extends StatelessWidget {
                   Positioned(
                     left: horizontalInset,
                     top: (62 - viewHeight) / 2,
-                    child: _CalendarViewButton(
+                    child: _LegacyThreeSegmentSlider<CalendarViewMode>(
+                      gestureKey: const ValueKey('calendar-view-button'),
+                      trackKey: const ValueKey('calendar-view-track'),
+                      thumbLayerKey: const ValueKey(
+                        'calendar-view-thumb-layer',
+                      ),
+                      thumbKey: const ValueKey('calendar-view-thumb'),
+                      thumbShapeKey: const ValueKey(
+                        'calendar-view-thumb-circle',
+                      ),
+                      values: CalendarViewMode.values,
+                      value: viewMode,
                       width: viewWidth,
-                      expanded: calendarViewControlSelected,
-                      viewMode: viewMode,
+                      height: viewHeight,
+                      tooltipBuilder: (mode) =>
+                          context.l10n.calendarViewName(mode),
+                      itemBuilder: (context, mode, selected) => Text(
+                        context.l10n.compactCalendarViewName(mode),
+                        style: TextStyle(
+                          color: selected
+                              ? Colors.white
+                              : DailyUi.secondaryText(context),
+                          fontSize: calendarViewControlSelected ? 13 : 11,
+                          fontWeight: selected
+                              ? FontWeight.w800
+                              : FontWeight.w600,
+                        ),
+                      ),
                       onInteractionStarted: onCalendarViewInteractionStarted,
                       onChanged: onCalendarViewSelected,
                     ),
                   ),
                 Align(
                   alignment: Alignment.center,
-                  child: _BottomModeSwitcher(
-                    activeAction: activeAction,
-                    selectedAction: selectedAction,
+                  child: _LegacyThreeSegmentSlider<_BottomCenterAction>(
+                    gestureKey: const ValueKey('bottom-mode-switcher'),
+                    trackKey: const ValueKey('bottom-mode-track'),
+                    thumbLayerKey: const ValueKey('bottom-mode-thumb-layer'),
+                    thumbKey: const ValueKey('bottom-mode-thumb'),
+                    thumbShapeKey: const ValueKey('bottom-mode-thumb-circle'),
+                    values: _BottomCenterAction.values,
+                    value: selectedAction ?? activeAction,
+                    width: centerWidth,
+                    height: centerHeight,
+                    tooltipBuilder: (action) => switch (action) {
+                      _BottomCenterAction.quickAccess => context.tr('빠른 보기'),
+                      _BottomCenterAction.calendar => context.tr('달력'),
+                      _BottomCenterAction.ai => 'AI',
+                    },
+                    itemBuilder: (context, action, selected) => Icon(
+                      switch (action) {
+                        _BottomCenterAction.quickAccess =>
+                          Icons.view_agenda_outlined,
+                        _BottomCenterAction.calendar =>
+                          Icons.date_range_rounded,
+                        _BottomCenterAction.ai => Icons.stars_rounded,
+                      },
+                      size: 20,
+                      color: selected
+                          ? Colors.white
+                          : DailyUi.secondaryText(context),
+                    ),
                     onChanged: onCenterActionSelected,
                   ),
                 ),
@@ -4718,130 +6110,113 @@ class _CalendarBottomBar extends StatelessWidget {
   }
 }
 
-double _preferredCalendarViewWidth(
-  BuildContext context, {
-  required bool expanded,
-}) {
-  final fontSize = expanded ? 13.0 : 11.0;
-  final fontWeight = expanded ? FontWeight.w800 : FontWeight.w600;
-  final textScaler = MediaQuery.textScalerOf(context);
-  final textDirection = Directionality.of(context);
-  var labelsWidth = 0.0;
-  for (final mode in CalendarViewMode.values) {
-    final painter = TextPainter(
-      text: TextSpan(
-        text: context.l10n.compactCalendarViewName(mode),
-        style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
-      ),
-      textDirection: textDirection,
-      textScaler: textScaler,
-      maxLines: 1,
-    )..layout();
-    labelsWidth += painter.width;
-  }
-  final baseWidth = expanded ? 96.0 : 76.0;
-  const horizontalPaddingPerLabel = 8.0;
-  return math.max(
-    baseWidth,
-    labelsWidth + horizontalPaddingPerLabel * CalendarViewMode.values.length,
-  );
-}
-
-class _CalendarViewButton extends StatefulWidget {
-  const _CalendarViewButton({
+class _LegacyThreeSegmentSlider<T> extends StatefulWidget {
+  const _LegacyThreeSegmentSlider({
+    required this.gestureKey,
+    required this.trackKey,
+    required this.thumbLayerKey,
+    required this.thumbKey,
+    required this.thumbShapeKey,
+    required this.values,
+    required this.value,
     required this.width,
-    required this.expanded,
-    required this.viewMode,
-    required this.onInteractionStarted,
+    required this.height,
+    required this.tooltipBuilder,
+    required this.itemBuilder,
+    this.onInteractionStarted,
     required this.onChanged,
   });
 
+  final Key gestureKey;
+  final Key trackKey;
+  final Key thumbLayerKey;
+  final Key thumbKey;
+  final Key thumbShapeKey;
+  final List<T> values;
+  final T value;
   final double width;
-  final bool expanded;
-  final CalendarViewMode viewMode;
-  final VoidCallback onInteractionStarted;
-  final ValueChanged<CalendarViewMode> onChanged;
+  final double height;
+  final String Function(T value) tooltipBuilder;
+  final Widget Function(BuildContext context, T value, bool selected)
+  itemBuilder;
+  final VoidCallback? onInteractionStarted;
+  final ValueChanged<T> onChanged;
 
   @override
-  State<_CalendarViewButton> createState() => _CalendarViewButtonState();
+  State<_LegacyThreeSegmentSlider<T>> createState() =>
+      _LegacyThreeSegmentSliderState<T>();
 }
 
-class _CalendarViewButtonState extends State<_CalendarViewButton> {
-  CalendarViewMode? _dragMode;
-  CalendarViewMode? _pressedMode;
+class _LegacyThreeSegmentSliderState<T>
+    extends State<_LegacyThreeSegmentSlider<T>> {
+  T? _dragValue;
+  T? _pressedValue;
 
-  CalendarViewMode get _visibleMode =>
-      _dragMode ?? _pressedMode ?? widget.viewMode;
+  T get _visibleValue => _dragValue ?? _pressedValue ?? widget.value;
 
   @override
   Widget build(BuildContext context) {
-    final preferredWidth = widget.expanded ? 96.0 : 76.0;
-    final preferredHeight = widget.expanded ? 48.0 : 40.0;
-    final preferredFontSize = widget.expanded ? 13.0 : 11.0;
-    final scale = (widget.width / preferredWidth).clamp(0.625, 1.0);
-    final height = preferredHeight * scale;
-    final fontSize = (preferredFontSize * scale).clamp(9.0, 13.0);
     return GestureDetector(
-      key: const ValueKey('calendar-view-button'),
+      key: widget.gestureKey,
       behavior: HitTestBehavior.opaque,
       onHorizontalDragStart: (details) {
-        setState(() => _pressedMode = null);
-        widget.onInteractionStarted();
-        _preview(details.localPosition.dx);
+        setState(() => _pressedValue = null);
+        widget.onInteractionStarted?.call();
+        _updateDrag(details.localPosition.dx);
       },
-      onHorizontalDragUpdate: (details) => _preview(details.localPosition.dx),
+      onHorizontalDragUpdate: (details) =>
+          _updateDrag(details.localPosition.dx),
       onHorizontalDragEnd: (_) {
-        final mode = _dragMode;
-        setState(() => _dragMode = null);
-        if (mode != null) {
-          widget.onChanged(mode);
+        final selected = _dragValue;
+        setState(() => _dragValue = null);
+        if (selected != null) {
+          widget.onChanged(selected);
         }
       },
-      onHorizontalDragCancel: () => setState(() => _dragMode = null),
+      onHorizontalDragCancel: () => setState(() => _dragValue = null),
       child: AnimatedContainer(
-        key: const ValueKey('calendar-view-track'),
         duration: const Duration(milliseconds: 180),
         curve: Curves.easeOutCubic,
         width: widget.width,
-        height: height,
-        decoration: ShapeDecoration(
-          color: DailyUi.elevatedSurface(context),
-          shape: const StadiumBorder(),
-        ),
-        clipBehavior: Clip.none,
-        child: Material(
-          color: Colors.transparent,
+        height: widget.height,
+        child: Container(
+          key: widget.trackKey,
+          decoration: ShapeDecoration(
+            color: DailyUi.elevatedSurface(context),
+            shape: const StadiumBorder(),
+          ),
+          clipBehavior: Clip.none,
           child: Padding(
             padding: const EdgeInsets.all(4),
             child: LayoutBuilder(
-              builder: (context, innerConstraints) {
-                final thumbSize = innerConstraints.maxHeight;
-                final segmentWidth = innerConstraints.maxWidth / 3;
-                final thumbLeft =
-                    _indexFor(_visibleMode) * segmentWidth +
-                    (segmentWidth - thumbSize) / 2;
+              builder: (context, constraints) {
+                final segmentWidth =
+                    constraints.maxWidth / widget.values.length;
+                final thumbSize = constraints.maxHeight;
+                final selectedIndex = widget.values.indexOf(_visibleValue);
                 return Stack(
-                  key: const ValueKey('calendar-view-thumb-layer'),
+                  key: widget.thumbLayerKey,
                   clipBehavior: Clip.none,
                   children: [
                     AnimatedPositioned(
-                      key: const ValueKey('calendar-view-thumb'),
+                      key: widget.thumbKey,
                       duration: const Duration(milliseconds: 170),
                       curve: Curves.easeOutCubic,
-                      left: thumbLeft,
+                      left:
+                          selectedIndex * segmentWidth +
+                          (segmentWidth - thumbSize) / 2,
                       top: 0,
                       child: AnimatedScale(
                         duration: const Duration(milliseconds: 110),
-                        curve: Curves.easeOutCubic,
-                        scale: _pressedMode == null ? 1 : 0.90,
+                        scale: _pressedValue == null ? 1 : 0.9,
                         child: SizedBox.square(
-                          key: const ValueKey('calendar-view-thumb-circle'),
+                          key: widget.thumbShapeKey,
                           dimension: thumbSize,
-                          child: DecoratedBox(
+                          child: const DecoratedBox(
                             decoration: BoxDecoration(
                               color: DailyUi.primary,
                               shape: BoxShape.circle,
-                              boxShadow: const [
+                              boxShadow: [
                                 BoxShadow(
                                   color: Color(0x1a0f172a),
                                   blurRadius: 6,
@@ -4855,34 +6230,28 @@ class _CalendarViewButtonState extends State<_CalendarViewButton> {
                     ),
                     Row(
                       children: [
-                        for (final mode in CalendarViewMode.values)
+                        for (final value in widget.values)
                           Expanded(
                             child: Tooltip(
-                              message: context.l10n.calendarViewName(mode),
+                              message: widget.tooltipBuilder(value),
                               child: GestureDetector(
                                 behavior: HitTestBehavior.opaque,
                                 onTapDown: (_) {
-                                  widget.onInteractionStarted();
-                                  setState(() => _pressedMode = mode);
+                                  widget.onInteractionStarted?.call();
+                                  setState(() => _pressedValue = value);
                                 },
                                 onTap: () {
-                                  setState(() => _pressedMode = null);
-                                  widget.onChanged(mode);
+                                  final selected = _pressedValue ?? value;
+                                  setState(() => _pressedValue = null);
+                                  widget.onChanged(selected);
                                 },
                                 onTapCancel: () =>
-                                    setState(() => _pressedMode = null),
+                                    setState(() => _pressedValue = null),
                                 child: Center(
-                                  child: Text(
-                                    context.l10n.compactCalendarViewName(mode),
-                                    style: TextStyle(
-                                      color: mode == _visibleMode
-                                          ? Colors.white
-                                          : DailyUi.secondaryText(context),
-                                      fontSize: fontSize,
-                                      fontWeight: mode == _visibleMode
-                                          ? FontWeight.w800
-                                          : FontWeight.w600,
-                                    ),
+                                  child: widget.itemBuilder(
+                                    context,
+                                    value,
+                                    value == _visibleValue,
                                   ),
                                 ),
                               ),
@@ -4900,244 +6269,15 @@ class _CalendarViewButtonState extends State<_CalendarViewButton> {
     );
   }
 
-  void _preview(double dx) {
-    final index = (dx / (widget.width / 3)).floor().clamp(0, 2);
-    final mode = CalendarViewMode.values[index];
-    if (_dragMode != mode) {
-      setState(() => _dragMode = mode);
-    }
-  }
-
-  int _indexFor(CalendarViewMode mode) => switch (mode) {
-    CalendarViewMode.week => 0,
-    CalendarViewMode.month => 1,
-    CalendarViewMode.day => 2,
-  };
-}
-
-class _BottomModeSwitcher extends StatefulWidget {
-  const _BottomModeSwitcher({
-    required this.activeAction,
-    required this.selectedAction,
-    required this.onChanged,
-  });
-
-  final _BottomCenterAction activeAction;
-  final _BottomCenterAction? selectedAction;
-  final ValueChanged<_BottomCenterAction> onChanged;
-
-  @override
-  State<_BottomModeSwitcher> createState() => _BottomModeSwitcherState();
-}
-
-class _BottomModeSwitcherState extends State<_BottomModeSwitcher> {
-  _BottomCenterAction? _dragAction;
-  _BottomCenterAction? _pressedAction;
-
-  _BottomCenterAction get _visibleAction =>
-      _dragAction ??
-      _pressedAction ??
-      widget.selectedAction ??
-      widget.activeAction;
-
-  @override
-  Widget build(BuildContext context) {
-    const expandedWidth = 152.0;
-    const collapsedWidth = 124.0;
-    const expandedHeight = 48.0;
-    const collapsedHeight = 40.0;
-    final action = _visibleAction;
-    final expanded =
-        _dragAction != null ||
-        _pressedAction != null ||
-        widget.selectedAction != null;
-    final width = expanded ? expandedWidth : collapsedWidth;
-    final height = expanded ? expandedHeight : collapsedHeight;
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
-      curve: Curves.easeOutCubic,
-      width: width,
-      height: height,
-      child: GestureDetector(
-        key: const ValueKey('bottom-mode-switcher'),
-        behavior: HitTestBehavior.opaque,
-        onHorizontalDragStart: (details) {
-          setState(() => _pressedAction = null);
-          _updateDrag(details.localPosition.dx, width);
-        },
-        onHorizontalDragUpdate: (details) =>
-            _updateDrag(details.localPosition.dx, width),
-        onHorizontalDragEnd: (_) {
-          final selected = _dragAction;
-          setState(() => _dragAction = null);
-          if (selected != null) {
-            widget.onChanged(selected);
-          }
-        },
-        onHorizontalDragCancel: () => setState(() => _dragAction = null),
-        child: Container(
-          key: const ValueKey('bottom-mode-track'),
-          decoration: ShapeDecoration(
-            color: DailyUi.elevatedSurface(context),
-            shape: const StadiumBorder(),
-          ),
-          clipBehavior: Clip.none,
-          child: Material(
-            color: Colors.transparent,
-            child: Padding(
-              padding: const EdgeInsets.all(4),
-              child: LayoutBuilder(
-                builder: (context, innerConstraints) {
-                  final thumbSize = innerConstraints.maxHeight;
-                  final segmentWidth = innerConstraints.maxWidth / 3;
-                  final thumbLeft =
-                      _indexFor(action) * segmentWidth +
-                      (segmentWidth - thumbSize) / 2;
-                  return Stack(
-                    key: const ValueKey('bottom-mode-thumb-layer'),
-                    clipBehavior: Clip.none,
-                    children: [
-                      AnimatedPositioned(
-                        key: const ValueKey('bottom-mode-thumb'),
-                        duration: const Duration(milliseconds: 170),
-                        curve: Curves.easeOutCubic,
-                        left: thumbLeft,
-                        top: 0,
-                        child: AnimatedScale(
-                          duration: const Duration(milliseconds: 110),
-                          curve: Curves.easeOutCubic,
-                          scale: _pressedAction == null ? 1 : 0.90,
-                          child: SizedBox.square(
-                            key: const ValueKey('bottom-mode-thumb-circle'),
-                            dimension: thumbSize,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                color: DailyUi.primary,
-                                shape: BoxShape.circle,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    color: Color(0x1a0f172a),
-                                    blurRadius: 6,
-                                    offset: Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Row(
-                        children: [
-                          _BottomModeButton(
-                            tooltip: context.tr('빠른 보기'),
-                            icon: Icons.view_agenda_outlined,
-                            selected: action == _BottomCenterAction.quickAccess,
-                            onTapDown: () =>
-                                _press(_BottomCenterAction.quickAccess),
-                            onPressed: () =>
-                                _selectPressed(_BottomCenterAction.quickAccess),
-                            onTapCancel: _cancelPress,
-                          ),
-                          _BottomModeButton(
-                            tooltip: context.tr('달력'),
-                            icon: Icons.date_range_rounded,
-                            selected: action == _BottomCenterAction.calendar,
-                            onTapDown: () =>
-                                _press(_BottomCenterAction.calendar),
-                            onPressed: () =>
-                                _selectPressed(_BottomCenterAction.calendar),
-                            onTapCancel: _cancelPress,
-                          ),
-                          _BottomModeButton(
-                            tooltip: 'AI',
-                            icon: Icons.stars_rounded,
-                            selected: action == _BottomCenterAction.ai,
-                            onTapDown: () => _press(_BottomCenterAction.ai),
-                            onPressed: () =>
-                                _selectPressed(_BottomCenterAction.ai),
-                            onTapCancel: _cancelPress,
-                          ),
-                        ],
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
-        ),
-      ),
+  void _updateDrag(double dx) {
+    final index = (dx / (widget.width / widget.values.length)).floor().clamp(
+      0,
+      widget.values.length - 1,
     );
-  }
-
-  void _updateDrag(double dx, double width) {
-    final index = (dx / (width / 3)).floor().clamp(0, 2);
-    final action = _BottomCenterAction.values[index];
-    if (_dragAction != action) {
-      setState(() => _dragAction = action);
+    final value = widget.values[index];
+    if (_dragValue != value) {
+      setState(() => _dragValue = value);
     }
-  }
-
-  void _press(_BottomCenterAction action) {
-    setState(() => _pressedAction = action);
-  }
-
-  void _selectPressed(_BottomCenterAction fallback) {
-    final action = _pressedAction ?? fallback;
-    setState(() => _pressedAction = null);
-    widget.onChanged(action);
-  }
-
-  void _cancelPress() {
-    if (_pressedAction != null) {
-      setState(() => _pressedAction = null);
-    }
-  }
-
-  int _indexFor(_BottomCenterAction action) => switch (action) {
-    _BottomCenterAction.quickAccess => 0,
-    _BottomCenterAction.calendar => 1,
-    _BottomCenterAction.ai => 2,
-  };
-}
-
-class _BottomModeButton extends StatelessWidget {
-  const _BottomModeButton({
-    required this.tooltip,
-    required this.icon,
-    required this.selected,
-    required this.onTapDown,
-    required this.onPressed,
-    required this.onTapCancel,
-  });
-
-  final String tooltip;
-  final IconData icon;
-  final bool selected;
-  final VoidCallback onTapDown;
-  final VoidCallback onPressed;
-  final VoidCallback onTapCancel;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Tooltip(
-        message: tooltip,
-        child: GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTapDown: (_) => onTapDown(),
-          onTap: onPressed,
-          onTapCancel: onTapCancel,
-          child: Center(
-            child: Icon(
-              icon,
-              size: 20,
-              color: selected ? Colors.white : DailyUi.secondaryText(context),
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 
@@ -5312,6 +6452,7 @@ class _QuickTodoRow extends StatelessWidget {
         context,
       ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w700),
       completed: event.completed,
+      eventColor: Color(event.colorValue),
     );
     final eventKey = event.occurrenceId ?? event.id;
     return Row(
@@ -5329,46 +6470,50 @@ class _QuickTodoRow extends StatelessWidget {
           },
         ),
         Expanded(
-          child: InkWell(
-            key: ValueKey('quick-todo-open-$eventKey'),
-            onTap: () => onOpen(event),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 11, 11, 11),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      context.l10n.eventTitle(
-                        event.title,
-                        holiday: event.holiday,
-                      ),
-                      textAlign: TextAlign.start,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: titleStyle.copyWith(
-                        fontSize: 14,
-                        height: 1.25,
-                        letterSpacing: 0,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      '$dateLabel · $timeLabel',
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: DailyUi.secondaryText(context),
-                        fontSize: 11,
-                        height: 1.25,
-                        letterSpacing: 0,
+          child: EventCompletionAction(
+            event: event,
+            builder: (onDoubleTap) => InkWell(
+              key: ValueKey('quick-todo-open-$eventKey'),
+              onTap: () => onOpen(event),
+              onDoubleTap: onDoubleTap,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 11, 11, 11),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        context.l10n.eventTitle(
+                          event.title,
+                          holiday: event.holiday,
+                        ),
+                        textAlign: TextAlign.start,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: titleStyle.copyWith(
+                          fontSize: 14,
+                          height: 1.25,
+                          letterSpacing: 0,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        '$dateLabel · $timeLabel',
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          color: DailyUi.secondaryText(context),
+                          fontSize: 11,
+                          height: 1.25,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -5420,7 +6565,13 @@ class _YearOverviewPageState extends State<_YearOverviewPage> {
   @override
   Widget build(BuildContext context) {
     final vertical = widget.navigationMode == MonthNavigationMode.vertical;
-    final desktop = _usesDesktopCalendarLayout(Theme.of(context).platform);
+    final platform = Theme.of(context).platform;
+    final desktop = _usesDesktopCalendarLayout(platform);
+    final androidExpanded =
+        platform == TargetPlatform.android &&
+        dailyWindowClassFor(MediaQuery.sizeOf(context)) ==
+            DailyWindowClass.expanded;
+    final spacious = desktop || androidExpanded;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -5431,14 +6582,14 @@ class _YearOverviewPageState extends State<_YearOverviewPage> {
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          final columns = desktop && constraints.maxWidth >= 1000 ? 2 : 1;
-          final horizontalRows = desktop && constraints.maxHeight >= 1040
+          final columns = spacious && constraints.maxWidth >= 1000 ? 2 : 1;
+          final horizontalRows = spacious && constraints.maxHeight >= 1040
               ? 2
               : 1;
           return vertical
               ? _buildVerticalYears(
                   columns: columns,
-                  desktop: desktop,
+                  desktop: spacious,
                   viewportHeight: constraints.maxHeight,
                 )
               : _buildHorizontalYears(columns: columns, rows: horizontalRows);
@@ -5882,14 +7033,20 @@ List<String> _localizedWeekdayLabels(
   );
 }
 
-class _CalendarWeekView extends StatelessWidget {
+class _CalendarWeekView extends StatefulWidget {
   const _CalendarWeekView({
     required this.selectedDate,
     required this.weekStartsOnMonday,
     required this.showLunarDates,
     required this.centerEventTitles,
+    required this.eventSortPriority,
+    required this.categoryOrder,
+    required this.manualEventOrders,
     required this.events,
+    required this.externalEventDragActive,
     required this.onEventDropped,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
     required this.onDateSelected,
   });
 
@@ -5897,13 +7054,57 @@ class _CalendarWeekView extends StatelessWidget {
   final bool weekStartsOnMonday;
   final bool showLunarDates;
   final bool centerEventTitles;
+  final CalendarEventSortPriority eventSortPriority;
+  final List<String> categoryOrder;
+  final Map<String, CalendarManualEventOrder> manualEventOrders;
   final List<CalendarEvent> events;
+  final bool externalEventDragActive;
   final CalendarEventDropCallback onEventDropped;
+  final ValueChanged<bool> onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
   final void Function(DateTime date, List<CalendarEvent> events) onDateSelected;
 
   @override
+  State<_CalendarWeekView> createState() => _CalendarWeekViewState();
+}
+
+class _CalendarWeekViewState extends State<_CalendarWeekView> {
+  static const _fallbackDraggedExtent = 42.0;
+
+  final Map<String, GlobalKey> _itemMeasureKeys = {};
+  CalendarEvent? _draggingEvent;
+  DateTime? _hoverDate;
+  int? _hoverIndex;
+  double _draggedExtent = _fallbackDraggedExtent;
+  bool _eventDropAccepted = false;
+  bool _settlingAcceptedDrop = false;
+
+  @override
+  void didUpdateWidget(covariant _CalendarWeekView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.externalEventDragActive &&
+        !widget.externalEventDragActive &&
+        _draggingEvent == null &&
+        (_hoverDate != null || _hoverIndex != null || _eventDropAccepted)) {
+      final settleAcceptedDrop = _eventDropAccepted;
+      _hoverDate = null;
+      _hoverIndex = null;
+      _eventDropAccepted = false;
+      _draggedExtent = _fallbackDraggedExtent;
+      _settlingAcceptedDrop = settleAcceptedDrop;
+      if (settleAcceptedDrop) {
+        _finishAcceptedDropSettlement();
+      }
+    }
+    if (_draggingEvent == null && !identical(oldWidget.events, widget.events)) {
+      _itemMeasureKeys.clear();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final range = _weekRangeFor(selectedDate, weekStartsOnMonday);
+    final draggingEvent = _effectiveDraggingEvent;
+    final range = _weekRangeFor(widget.selectedDate, widget.weekStartsOnMonday);
     final days = List.generate(
       7,
       (index) => range.start.add(Duration(days: index)),
@@ -5915,14 +7116,33 @@ class _CalendarWeekView extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
         itemBuilder: (context, index) {
           final day = days[index];
+          final dayEvents = _orderedEventsForDay(
+            widget.events,
+            day,
+            priority: widget.eventSortPriority,
+            categoryOrder: widget.categoryOrder,
+            manualEventOrders: widget.manualEventOrders,
+          );
           return _WeekDayPanel(
             day: day,
-            selected: _sameDay(day, selectedDate),
-            events: _eventsForDay(events, day),
-            centerEventTitles: centerEventTitles,
+            selected: _sameDay(day, widget.selectedDate),
+            events: dayEvents,
+            centerEventTitles: widget.centerEventTitles,
             compact: true,
-            onEventDropped: onEventDropped,
-            onTap: () => onDateSelected(day, _eventsForDay(events, day)),
+            draggingEvent: draggingEvent,
+            hoverDate: _hoverDate,
+            hoverIndex: _hoverIndex,
+            draggedExtent: _draggedExtent,
+            itemMeasureKeys: _itemMeasureKeys,
+            onEventDropped: widget.onEventDropped,
+            onEventDragStateChanged: _setEventDragging,
+            onEventDragInteractionStateChanged:
+                widget.onEventDragInteractionStateChanged,
+            eventDropAccepted: _eventDropAccepted,
+            settlingAcceptedDrop: _settlingAcceptedDrop,
+            onEventDropAccepted: _setEventDropAccepted,
+            onDropHoverChanged: _setDropHover,
+            onTap: () => widget.onDateSelected(day, dayEvents),
           );
         },
         separatorBuilder: (context, index) => const SizedBox(height: 8),
@@ -5939,14 +7159,37 @@ class _CalendarWeekView extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 3),
-                child: _WeekDayPanel(
-                  day: day,
-                  selected: _sameDay(day, selectedDate),
-                  events: _eventsForDay(events, day),
-                  centerEventTitles: centerEventTitles,
-                  compact: false,
-                  onEventDropped: onEventDropped,
-                  onTap: () => onDateSelected(day, _eventsForDay(events, day)),
+                child: Builder(
+                  builder: (context) {
+                    final dayEvents = _orderedEventsForDay(
+                      widget.events,
+                      day,
+                      priority: widget.eventSortPriority,
+                      categoryOrder: widget.categoryOrder,
+                      manualEventOrders: widget.manualEventOrders,
+                    );
+                    return _WeekDayPanel(
+                      day: day,
+                      selected: _sameDay(day, widget.selectedDate),
+                      events: dayEvents,
+                      centerEventTitles: widget.centerEventTitles,
+                      compact: false,
+                      draggingEvent: draggingEvent,
+                      hoverDate: _hoverDate,
+                      hoverIndex: _hoverIndex,
+                      draggedExtent: _draggedExtent,
+                      itemMeasureKeys: _itemMeasureKeys,
+                      onEventDropped: widget.onEventDropped,
+                      onEventDragStateChanged: _setEventDragging,
+                      onEventDragInteractionStateChanged:
+                          widget.onEventDragInteractionStateChanged,
+                      eventDropAccepted: _eventDropAccepted,
+                      settlingAcceptedDrop: _settlingAcceptedDrop,
+                      onEventDropAccepted: _setEventDropAccepted,
+                      onDropHoverChanged: _setDropHover,
+                      onTap: () => widget.onDateSelected(day, dayEvents),
+                    );
+                  },
                 ),
               ),
             ),
@@ -5954,16 +7197,132 @@ class _CalendarWeekView extends StatelessWidget {
       ),
     );
   }
+
+  CalendarEvent? get _effectiveDraggingEvent {
+    if (_draggingEvent != null) {
+      return _draggingEvent;
+    }
+    if (!widget.externalEventDragActive) {
+      return null;
+    }
+    return activeCalendarEventDrag.value?.event;
+  }
+
+  void _setEventDragging(
+    CalendarEvent event,
+    DateTime sourceDate,
+    bool dragging,
+  ) {
+    if (dragging) {
+      final measureKey = _weekEventMeasureKey(event, sourceDate);
+      final renderObject = _itemMeasureKeys[measureKey]?.currentContext
+          ?.findRenderObject();
+      final measuredHeight = renderObject is RenderBox
+          ? renderObject.size.height
+          : _fallbackDraggedExtent;
+      final sourceEvents = _orderedEventsForDay(
+        widget.events,
+        sourceDate,
+        priority: widget.eventSortPriority,
+        categoryOrder: widget.categoryOrder,
+        manualEventOrders: widget.manualEventOrders,
+      );
+      final sourceIndex = sourceEvents.indexWhere(
+        (candidate) => _isSameCalendarEvent(candidate, event),
+      );
+      setState(() {
+        _draggingEvent = event;
+        _hoverDate = _dateOnly(sourceDate);
+        _hoverIndex = sourceIndex < 0 ? sourceEvents.length : sourceIndex;
+        _draggedExtent = measuredHeight + 6;
+        _eventDropAccepted = false;
+        _settlingAcceptedDrop = false;
+      });
+      widget.onEventDragStateChanged(true);
+      return;
+    }
+    if (!_isSameCalendarEventOrNull(_draggingEvent, event)) {
+      return;
+    }
+    final settleAcceptedDrop = _eventDropAccepted;
+    setState(() {
+      _draggingEvent = null;
+      _hoverDate = null;
+      _hoverIndex = null;
+      _draggedExtent = _fallbackDraggedExtent;
+      _eventDropAccepted = false;
+      _settlingAcceptedDrop = settleAcceptedDrop;
+    });
+    if (settleAcceptedDrop) {
+      _finishAcceptedDropSettlement();
+    }
+    widget.onEventDragStateChanged(false);
+  }
+
+  void _finishAcceptedDropSettlement() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && _settlingAcceptedDrop) {
+        setState(() => _settlingAcceptedDrop = false);
+      }
+    });
+  }
+
+  void _setDropHover(DateTime? date, int? index) {
+    if (date == null || index == null) {
+      if (_hoverDate == null && _hoverIndex == null) return;
+      setState(() {
+        _hoverDate = null;
+        _hoverIndex = null;
+      });
+      return;
+    }
+    if (_hoverDate != null &&
+        _sameDay(_hoverDate!, date) &&
+        _hoverIndex == index) {
+      return;
+    }
+    setState(() {
+      _hoverDate = date;
+      _hoverIndex = index;
+    });
+  }
+
+  void _setEventDropAccepted(CalendarEvent event) {
+    final draggingEvent = _effectiveDraggingEvent;
+    if (_eventDropAccepted) {
+      return;
+    }
+    if (draggingEvent == null) {
+      setState(() {
+        _hoverDate = null;
+        _hoverIndex = null;
+      });
+      return;
+    }
+    if (!_isSameCalendarEventOrNull(draggingEvent, event)) return;
+    setState(() => _eventDropAccepted = true);
+  }
 }
 
-class _WeekDayPanel extends StatelessWidget {
+class _WeekDayPanel extends ConsumerWidget {
   const _WeekDayPanel({
     required this.day,
     required this.selected,
     required this.events,
     required this.centerEventTitles,
     required this.compact,
+    required this.draggingEvent,
+    required this.hoverDate,
+    required this.hoverIndex,
+    required this.draggedExtent,
+    required this.itemMeasureKeys,
     required this.onEventDropped,
+    required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
+    required this.eventDropAccepted,
+    required this.settlingAcceptedDrop,
+    required this.onEventDropAccepted,
+    required this.onDropHoverChanged,
     required this.onTap,
   });
 
@@ -5972,17 +7331,44 @@ class _WeekDayPanel extends StatelessWidget {
   final List<CalendarEvent> events;
   final bool centerEventTitles;
   final bool compact;
+  final CalendarEvent? draggingEvent;
+  final DateTime? hoverDate;
+  final int? hoverIndex;
+  final double draggedExtent;
+  final Map<String, GlobalKey> itemMeasureKeys;
   final CalendarEventDropCallback onEventDropped;
+  final void Function(CalendarEvent event, DateTime sourceDate, bool dragging)
+  onEventDragStateChanged;
+  final ValueChanged<bool> onEventDragInteractionStateChanged;
+  final bool eventDropAccepted;
+  final bool settlingAcceptedDrop;
+  final ValueChanged<CalendarEvent> onEventDropAccepted;
+  final void Function(DateTime? date, int? index) onDropHoverChanged;
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = Theme.of(context).colorScheme;
-    final color = _weekdayColor(day, colorScheme);
-    return CalendarEventDateDropTarget(
+    final settings = ref.watch(appSettingsProvider);
+    final color =
+        calendarDateAccent(
+          day,
+          isHoliday:
+              settings.calendarShowHolidays &&
+              ref.read(koreanHolidayServiceProvider).isPublicHoliday(day),
+          holidayColorValue: settings.holidayCategory.colorValue,
+        ) ??
+        colorScheme.onSurface;
+    final visibleEvents = compact ? events.take(4).toList() : events;
+    final eventChildren = _eventChildren(context, visibleEvents);
+    return _WeekDayDropTarget(
       date: day,
+      events: visibleEvents,
+      draggingEvent: draggingEvent,
+      itemMeasureKeys: itemMeasureKeys,
       onEventDropped: onEventDropped,
-      borderRadius: BorderRadius.circular(10),
+      onEventDropAccepted: onEventDropAccepted,
+      onDropHoverChanged: onDropHoverChanged,
       child: Material(
         key: ValueKey('week-day-panel-${day.year}-${day.month}-${day.day}'),
         color: colorScheme.surface,
@@ -6007,6 +7393,9 @@ class _WeekDayPanel extends StatelessWidget {
                 Row(
                   children: [
                     Text(
+                      key: ValueKey(
+                        'week-list-weekday-${day.year}-${day.month}-${day.day}',
+                      ),
                       DateFormat.E(
                         Localizations.localeOf(context).toLanguageTag(),
                       ).format(day),
@@ -6026,7 +7415,8 @@ class _WeekDayPanel extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                if (events.isEmpty)
+                if (events.isEmpty &&
+                    !(hoverDate != null && _sameDay(hoverDate!, day)))
                   Text(
                     context.tr('일정 없음'),
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -6036,21 +7426,12 @@ class _WeekDayPanel extends StatelessWidget {
                 else if (compact)
                   Column(
                     children: [
-                      for (final event in events.take(4)) ...[
-                        CalendarEventDraggable(
-                          event: event,
-                          child: _WeekEventFlag(
-                            event: event,
-                            centerTitle: centerEventTitles,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                      ],
-                      if (events.length > 4)
+                      ...eventChildren,
+                      if (events.length > visibleEvents.length)
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            '+${events.length - 4}',
+                            '+${events.length - visibleEvents.length}',
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
                         ),
@@ -6058,18 +7439,9 @@ class _WeekDayPanel extends StatelessWidget {
                   )
                 else
                   Expanded(
-                    child: ListView.separated(
+                    child: ListView(
                       physics: const AlwaysScrollableScrollPhysics(),
-                      itemBuilder: (context, index) => CalendarEventDraggable(
-                        event: events[index],
-                        child: _WeekEventFlag(
-                          event: events[index],
-                          centerTitle: centerEventTitles,
-                        ),
-                      ),
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 6),
-                      itemCount: events.length,
+                      children: eventChildren,
                     ),
                   ),
               ],
@@ -6080,14 +7452,238 @@ class _WeekDayPanel extends StatelessWidget {
     );
   }
 
-  Color _weekdayColor(DateTime day, ColorScheme colorScheme) {
-    if (day.weekday == DateTime.sunday) {
-      return const Color(0xffef4444);
+  List<Widget> _eventChildren(
+    BuildContext context,
+    List<CalendarEvent> visibleEvents,
+  ) {
+    final draggedKey = draggingEvent == null
+        ? null
+        : calendarEventOrderKey(draggingEvent!);
+    final targetActive = hoverDate != null && _sameDay(hoverDate!, day);
+    final remainingCount = visibleEvents
+        .where((event) => calendarEventOrderKey(event) != draggedKey)
+        .length;
+    final insertionIndex = targetActive
+        ? (hoverIndex ?? remainingCount).clamp(0, remainingCount).toInt()
+        : null;
+    final children = <Widget>[];
+    var remainingIndex = 0;
+    for (final event in visibleEvents) {
+      final eventKey = calendarEventOrderKey(event);
+      final dragged = eventKey == draggedKey;
+      if (!dragged) {
+        children.add(
+          _WeekEventInsertionGap(
+            key: ValueKey(
+              'week-event-gap-${day.toIso8601String()}-$remainingIndex',
+            ),
+            active: insertionIndex == remainingIndex,
+            extent: draggedExtent,
+            animate: !settlingAcceptedDrop,
+            child:
+                eventDropAccepted &&
+                    insertionIndex == remainingIndex &&
+                    draggingEvent != null
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: 6),
+                    child: IgnorePointer(
+                      child: KeyedSubtree(
+                        key: ValueKey(
+                          'week-event-accepted-preview-${calendarEventOrderKey(draggingEvent!)}',
+                        ),
+                        child: _WeekEventFlag(
+                          event: draggingEvent!,
+                          centerTitle: centerEventTitles,
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+        );
+      }
+      final segmentKey = _weekEventMeasureKey(event, day);
+      final measureKey = itemMeasureKeys.putIfAbsent(segmentKey, GlobalKey.new);
+      final entry = Padding(
+        padding: const EdgeInsets.only(bottom: 6),
+        child: SizedBox(
+          key: measureKey,
+          child: CalendarEventDraggable(
+            key: ValueKey('week-event-drag-$segmentKey'),
+            event: event,
+            onDragStateChanged: (active) =>
+                onEventDragStateChanged(event, day, active),
+            onDragInteractionStateChanged: onEventDragInteractionStateChanged,
+            child: EventCompletionAction(
+              event: event,
+              builder: (onDoubleTap) => GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: onTap,
+                onDoubleTap: onDoubleTap,
+                child: _WeekEventFlag(
+                  event: event,
+                  centerTitle: centerEventTitles,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      children.add(
+        settlingAcceptedDrop
+            ? entry
+            : TweenAnimationBuilder<double>(
+                key: ValueKey('week-event-entry-$eventKey'),
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOutCubic,
+                tween: Tween<double>(end: dragged ? 0 : 1),
+                child: entry,
+                builder: (context, factor, child) => ClipRect(
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    heightFactor: factor,
+                    child: child,
+                  ),
+                ),
+              ),
+      );
+      if (!dragged) {
+        remainingIndex += 1;
+      }
     }
-    if (day.weekday == DateTime.saturday) {
-      return const Color(0xff2563eb);
+    children.add(
+      _WeekEventInsertionGap(
+        key: ValueKey(
+          'week-event-gap-${day.toIso8601String()}-$remainingIndex',
+        ),
+        active: insertionIndex == remainingIndex,
+        extent: draggedExtent,
+        animate: !settlingAcceptedDrop,
+        child:
+            eventDropAccepted &&
+                insertionIndex == remainingIndex &&
+                draggingEvent != null
+            ? Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: IgnorePointer(
+                  child: KeyedSubtree(
+                    key: ValueKey(
+                      'week-event-accepted-preview-${calendarEventOrderKey(draggingEvent!)}',
+                    ),
+                    child: _WeekEventFlag(
+                      event: draggingEvent!,
+                      centerTitle: centerEventTitles,
+                    ),
+                  ),
+                ),
+              )
+            : null,
+      ),
+    );
+    return children;
+  }
+}
+
+class _WeekDayDropTarget extends StatelessWidget {
+  const _WeekDayDropTarget({
+    required this.date,
+    required this.events,
+    required this.draggingEvent,
+    required this.itemMeasureKeys,
+    required this.onEventDropped,
+    required this.onEventDropAccepted,
+    required this.onDropHoverChanged,
+    required this.child,
+  });
+
+  final DateTime date;
+  final List<CalendarEvent> events;
+  final CalendarEvent? draggingEvent;
+  final Map<String, GlobalKey> itemMeasureKeys;
+  final CalendarEventDropCallback onEventDropped;
+  final ValueChanged<CalendarEvent> onEventDropAccepted;
+  final void Function(DateTime? date, int? index) onDropHoverChanged;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return DragTarget<CalendarEventDragPayload>(
+      onWillAcceptWithDetails: (details) {
+        if (!calendarEventCanMove(details.data.event)) return false;
+        onDropHoverChanged(date, _targetIndex(details.offset));
+        return true;
+      },
+      onMove: (details) {
+        onDropHoverChanged(date, _targetIndex(details.offset));
+      },
+      onLeave: (_) => onDropHoverChanged(null, null),
+      onAcceptWithDetails: (details) {
+        final targetIndex = _targetIndex(details.offset);
+        onDropHoverChanged(date, targetIndex);
+        onEventDropAccepted(details.data.event);
+        unawaited(
+          performCalendarEventDrop(
+            details.data.event,
+            () => onEventDropped(details.data.event, date, targetIndex),
+          ),
+        );
+      },
+      builder: (context, candidateData, rejectedData) => child,
+    );
+  }
+
+  int _targetIndex(Offset globalOffset) {
+    final draggedKey = draggingEvent == null
+        ? null
+        : calendarEventOrderKey(draggingEvent!);
+    var index = 0;
+    for (final event in events) {
+      final eventKey = calendarEventOrderKey(event);
+      if (eventKey == draggedKey) continue;
+      final renderObject = itemMeasureKeys[_weekEventMeasureKey(event, date)]
+          ?.currentContext
+          ?.findRenderObject();
+      if (renderObject is RenderBox && renderObject.hasSize) {
+        final bounds =
+            renderObject.localToGlobal(Offset.zero) & renderObject.size;
+        if (globalOffset.dy < bounds.center.dy) {
+          return index;
+        }
+      }
+      index += 1;
     }
-    return colorScheme.onSurface;
+    return index;
+  }
+}
+
+class _WeekEventInsertionGap extends StatelessWidget {
+  const _WeekEventInsertionGap({
+    super.key,
+    required this.active,
+    required this.extent,
+    required this.animate,
+    this.child,
+  });
+
+  final bool active;
+  final double extent;
+  final bool animate;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final content = active
+        ? SizedBox(height: extent, child: child)
+        : const SizedBox.shrink();
+    if (!animate) {
+      return content;
+    }
+    return AnimatedSize(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+      alignment: Alignment.topCenter,
+      child: content,
+    );
   }
 }
 
@@ -6136,6 +7732,7 @@ class _WeekEventFlag extends StatelessWidget {
                   fontWeight: FontWeight.w800,
                 ),
                 completed: event.completed,
+                eventColor: categoryColor,
               ),
             ),
           ),
@@ -6230,8 +7827,36 @@ List<CalendarEvent> _eventsForDay(List<CalendarEvent> events, DateTime date) {
       .toList();
 }
 
+List<CalendarEvent> _orderedEventsForDay(
+  List<CalendarEvent> events,
+  DateTime date, {
+  required CalendarEventSortPriority priority,
+  required List<String> categoryOrder,
+  required Map<String, CalendarManualEventOrder> manualEventOrders,
+}) {
+  return sortedCalendarEvents(
+    _eventsForDay(events, date),
+    priority: priority,
+    categoryOrder: categoryOrder,
+    manualOrder:
+        manualEventOrders[calendarDateKey(date)]?.eventKeys ?? const <String>[],
+  );
+}
+
 bool _sameDay(DateTime a, DateTime b) {
   return a.year == b.year && a.month == b.month && a.day == b.day;
+}
+
+bool _isSameCalendarEvent(CalendarEvent first, CalendarEvent second) {
+  return calendarEventOrderKey(first) == calendarEventOrderKey(second);
+}
+
+bool _isSameCalendarEventOrNull(CalendarEvent? first, CalendarEvent? second) {
+  return first != null && second != null && _isSameCalendarEvent(first, second);
+}
+
+String _weekEventMeasureKey(CalendarEvent event, DateTime date) {
+  return '${calendarEventOrderKey(event)}@${calendarDateKey(date)}';
 }
 
 DateTime _dateOnly(DateTime date) {

@@ -14,7 +14,6 @@ import android.os.Build
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StrikethroughSpan
-import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import org.json.JSONArray
@@ -134,11 +133,12 @@ object DailyWidgetUpdater {
         palette: DailyWidgetPalette,
     ): RemoteViews {
         val views = RemoteViews(context.packageName, R.layout.widget_month)
+        val weekly = isWeeklyWidget(context, widgetId)
         applyRoot(views, palette)
         views.setTextViewText(R.id.widget_title, context.getString(R.string.app_name))
         views.setTextViewText(
             R.id.widget_subtitle,
-            snapshot?.optString("monthTitle")?.takeIf(String::isNotBlank)
+            snapshot?.optString(if (weekly) "weekTitle" else "monthTitle")?.takeIf(String::isNotBlank)
                 ?: localizedString(context, snapshot, R.string.widget_open_app),
         )
         views.setTextColor(R.id.widget_subtitle, palette.primaryText)
@@ -309,7 +309,7 @@ private data class DailyWidgetPalette(
         fun resolve(context: Context, requestedMode: String?): DailyWidgetPalette {
             val systemDark = context.resources.configuration.uiMode and
                 Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
-            val dark = requestedMode == "dark" || (requestedMode == "system" && systemDark)
+            val dark = requestedMode == "dark" || (requestedMode != "light" && systemDark)
             return if (dark) {
                 DailyWidgetPalette(
                     backgroundResource = R.drawable.widget_background_dark,
@@ -341,7 +341,10 @@ abstract class DailyWidgetRemoteViewsService : RemoteViewsService() {
     protected abstract val kind: DailyWidgetKind
 
     override fun onGetViewFactory(intent: Intent): RemoteViewsFactory = when (kind) {
-        DailyWidgetKind.MONTH -> DailyMonthWidgetFactory(applicationContext)
+        DailyWidgetKind.MONTH -> DailyMonthWidgetFactory(
+            applicationContext,
+            intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID),
+        )
         DailyWidgetKind.TODAY -> DailyEventWidgetFactory(
             applicationContext,
             "todayEvents",
@@ -369,6 +372,7 @@ class DailyDdayWidgetService : DailyWidgetRemoteViewsService() {
 
 private class DailyMonthWidgetFactory(
     private val context: Context,
+    private val widgetId: Int,
 ) : RemoteViewsService.RemoteViewsFactory {
     private var days = JSONArray()
     private var palette = DailyWidgetPalette.resolve(context, null)
@@ -380,54 +384,28 @@ private class DailyMonthWidgetFactory(
 
     override fun onDestroy() = Unit
 
-    override fun getCount(): Int = days.length()
+    override fun getCount(): Int = (days.length() + 6) / 7
 
     override fun getViewAt(position: Int): RemoteViews? {
-        val day = days.optJSONObject(position) ?: return null
-        val views = RemoteViews(context.packageName, R.layout.widget_month_day)
-        val isToday = day.optBoolean("isToday")
-        val inMonth = day.optBoolean("inMonth", true)
-        views.setTextViewText(R.id.widget_day_number, day.optInt("day").toString())
-        views.setTextColor(
-            R.id.widget_day_number,
-            when {
-                isToday -> Color.WHITE
-                !inMonth -> palette.mutedText
-                else -> palette.primaryText
-            },
-        )
-        views.setInt(
-            R.id.widget_day_number,
-            "setBackgroundResource",
-            if (isToday) R.drawable.widget_today_badge else android.R.color.transparent,
-        )
-
-        val events = day.optJSONArray("events") ?: JSONArray()
-        val firstEvent = events.optJSONObject(0)
-        if (firstEvent == null) {
-            views.setViewVisibility(R.id.widget_day_event, View.INVISIBLE)
-        } else {
-            views.setViewVisibility(R.id.widget_day_event, View.VISIBLE)
-            val title = firstEvent.optString("title")
-            val remaining = events.length() - 1
-            val label = if (remaining > 0) {
-                "$title ${localizedString(context, snapshot, R.string.widget_more_count, remaining)}"
-            } else {
-                title
-            }
-            views.setTextViewText(
-                R.id.widget_day_event,
-                completedTitle(label, firstEvent.optBoolean("completed")),
-            )
-            views.setTextColor(
-                R.id.widget_day_event,
-                eventColor(firstEvent, palette.accent),
-            )
+        val views = RemoteViews(context.packageName, R.layout.widget_calendar_week)
+        val week = (0..6).mapNotNull { days.optJSONObject(position * 7 + it) }
+        if (week.isEmpty()) return null
+        val options = AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)
+        val width = (options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 300) - 24).coerceIn(140, 700)
+        val height = (options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 300) - 70)
+            .div(getCount().coerceAtLeast(1)).coerceIn(32, 260)
+        views.setImageViewBitmap(R.id.widget_week_image, DailyWidgetCalendarRenderer.render(
+            context, week, width, height, palette.primaryText, palette.mutedText,
+            palette.accent, palette.sundayText, palette.saturdayText,
+        ))
+        week.forEachIndexed { index, day ->
+            val id = WEEK_DAY_IDS[index]
+            views.setOnClickFillInIntent(id, DailyWidgetActionReceiver.openFillInIntent(day.optString("date")))
+            views.setContentDescription(id, day.optString("date") + " " +
+                (day.optJSONArray("events") ?: JSONArray()).let { events ->
+                    (0 until events.length()).joinToString(", ") { events.optJSONObject(it)?.optString("title").orEmpty() }
+                })
         }
-        views.setOnClickFillInIntent(
-            R.id.widget_item_root,
-            DailyWidgetActionReceiver.openFillInIntent(day.optString("date")),
-        )
         return views
     }
 
@@ -436,7 +414,7 @@ private class DailyMonthWidgetFactory(
     override fun getViewTypeCount(): Int = 1
 
     override fun getItemId(position: Int): Long =
-        days.optJSONObject(position)?.optString("date")?.hashCode()?.toLong()
+        days.optJSONObject(position * 7)?.optString("date")?.hashCode()?.toLong()
             ?: position.toLong()
 
     override fun hasStableIds(): Boolean = true
@@ -444,6 +422,15 @@ private class DailyMonthWidgetFactory(
     private fun reload() {
         snapshot = DailyAndroidWidgetStore.snapshot(context)
         days = snapshot?.optJSONArray("monthDays") ?: JSONArray()
+        if (isWeeklyWidget(context, widgetId)) {
+            val todayIndex = (0 until days.length()).firstOrNull {
+                days.optJSONObject(it)?.optBoolean("isToday") == true
+            } ?: 0
+            val start = todayIndex / 7 * 7
+            days = JSONArray().also { week ->
+                for (index in start until minOf(start + 7, days.length())) week.put(days.get(index))
+            }
+        }
         palette = DailyWidgetPalette.resolve(context, snapshot?.optString("themeMode"))
     }
 }
@@ -477,7 +464,7 @@ private class DailyEventWidgetFactory(
         )
         views.setTextColor(
             R.id.widget_event_title,
-            if (completed) palette.secondaryText else palette.primaryText,
+            eventColor(event, palette.accent),
         )
         views.setTextViewText(
             R.id.widget_event_detail,
@@ -629,6 +616,16 @@ private fun completedTitle(title: String, completed: Boolean): CharSequence {
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
     }
+}
+
+private val WEEK_DAY_IDS = intArrayOf(
+    R.id.widget_hit_1, R.id.widget_hit_2, R.id.widget_hit_3, R.id.widget_hit_4,
+    R.id.widget_hit_5, R.id.widget_hit_6, R.id.widget_hit_7,
+)
+
+private fun isWeeklyWidget(context: Context, widgetId: Int): Boolean {
+    val options = AppWidgetManager.getInstance(context).getAppWidgetOptions(widgetId)
+    return options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT, 350) < 320
 }
 
 private fun eventColor(event: JSONObject, fallback: Int): Int {

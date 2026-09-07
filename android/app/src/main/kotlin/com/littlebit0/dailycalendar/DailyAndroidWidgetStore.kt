@@ -18,6 +18,12 @@ object DailyAndroidWidgetStore {
     fun updateSnapshot(context: Context, rawSnapshot: Map<*, *>): Boolean {
         val snapshot = mapToJson(rawSnapshot)
         requireValidSnapshot(snapshot)
+        // Flutter may publish a snapshot before acknowledging an in-flight tap.
+        val pending = loadTodoActions(context)
+        for (index in 0 until pending.length()) {
+            val action = pending.optJSONObject(index) ?: continue
+            updateCompletion(snapshot, action.optString("eventId"), action.optBoolean("completed"))
+        }
         return preferences(context)
             .edit()
             .putString(SNAPSHOT_KEY, snapshot.toString())

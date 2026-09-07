@@ -30,6 +30,21 @@ void main() {
     );
   });
 
+  test('defaults to calendar start screen and persists quick view', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final repository = SettingsRepository(preferences: preferences);
+
+    expect(repository.load().appStartView, AppStartView.calendar);
+
+    await repository.save(
+      repository.load().copyWith(appStartView: AppStartView.quickView),
+      markSyncPending: false,
+    );
+
+    expect(repository.load().appStartView, AppStartView.quickView);
+  });
+
   test('persists category order and event sort priority', () async {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();

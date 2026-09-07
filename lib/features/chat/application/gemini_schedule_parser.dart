@@ -11,9 +11,13 @@ import '../domain/event_parse_result.dart';
 import '../domain/schedule_parser.dart';
 
 class GeminiScheduleParser implements ScheduleParser {
-  GeminiScheduleParser(this._settingsRepository);
+  GeminiScheduleParser(
+    this._settingsRepository, {
+    this.modelName = 'gemini-2.0-flash',
+  });
 
   final SettingsRepository _settingsRepository;
+  final String modelName;
 
   @override
   Future<EventParseResult> parse(
@@ -29,7 +33,7 @@ class GeminiScheduleParser implements ScheduleParser {
     }
 
     final model = GenerativeModel(
-      model: 'gemini-2.0-flash',
+      model: modelName,
       apiKey: apiKey,
       generationConfig: GenerationConfig(responseMimeType: 'application/json'),
     );

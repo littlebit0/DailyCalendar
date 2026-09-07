@@ -2,14 +2,16 @@
 
 Daily는 이미 Flutter iOS/macOS 타깃을 포함하고 있습니다. 다만 Apple 플랫폼 산출물을 만들려면 소스에 커밋할 수 없는 로컬 도구, OAuth, 서명 설정이 필요합니다.
 
-현재 App Store 제출 기준은 iOS/macOS 모두 `3.3.1 (3.3.1)`입니다.
+현재 App Store 제출 준비 기준은 iOS/macOS 모두 `3.4.0 (3.4.0)`입니다.
+서명된 IPA/PKG는 `dist/transporter-upload/3.4.0` 폴더 하나에 모으며,
+GitHub의 unsigned IPA/DMG와 구분합니다. 생성만으로 업로드·심사 승인을 의미하지 않습니다.
 
 ## 현재 앱 ID
 
 - iOS 번들 ID: `com.littlebit0.daily`
 - macOS 번들 ID: `com.littlebit0.daily`
 - iOS/macOS 위젯 번들 ID: `com.littlebit0.daily.widgets`
-- 앱 버전 및 빌드: `3.3.1 (3.3.1)`
+- 앱 버전 및 빌드: `3.4.0 (3.4.0)`
 - 최소 iOS 버전: `15.0`
 
 ## 필요한 로컬 도구

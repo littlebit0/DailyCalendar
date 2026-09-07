@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+    <ImageView android:id="@+id/widget_week_image"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:adjustViewBounds="true" android:scaleType="fitXY"
+        android:contentDescription="@null" />
+    <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <TextView android:id="@+id/widget_hit_1" style="@style/DailyWidgetDayHit" />
+        <TextView android:id="@+id/widget_hit_2" style="@style/DailyWidgetDayHit" />
+        <TextView android:id="@+id/widget_hit_3" style="@style/DailyWidgetDayHit" />
+        <TextView android:id="@+id/widget_hit_4" style="@style/DailyWidgetDayHit" />
+        <TextView android:id="@+id/widget_hit_5" style="@style/DailyWidgetDayHit" />
+        <TextView android:id="@+id/widget_hit_6" style="@style/DailyWidgetDayHit" />
+        <TextView android:id="@+id/widget_hit_7" style="@style/DailyWidgetDayHit" />
+    </LinearLayout>
+</FrameLayout>

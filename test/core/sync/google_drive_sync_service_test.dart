@@ -1220,6 +1220,7 @@ void main() {
     () async {
       SharedPreferences.setMockInitialValues({
         'appTextSize': AppTextSize.large.name,
+        'appStartView': AppStartView.quickView.name,
         'weekDayLayoutMode': WeekDayLayoutMode.schedule.name,
         'categories': jsonEncode([
           {
@@ -1332,6 +1333,7 @@ void main() {
       );
       expect(restored.defaultReminderMinutesList, [0, 10, 60]);
       expect(restored.appTextSize, AppTextSize.large);
+      expect(restored.appStartView, AppStartView.quickView);
       expect(restored.weekDayLayoutMode, WeekDayLayoutMode.schedule);
       expect(service.settingsRevisionNotifier.value, 1);
     },
@@ -1340,6 +1342,7 @@ void main() {
   test('restore settings applies an explicitly synced app text size', () async {
     SharedPreferences.setMockInitialValues({
       'appTextSize': AppTextSize.large.name,
+      'appStartView': AppStartView.quickView.name,
       'weekDayLayoutMode': WeekDayLayoutMode.list.name,
       'calendarHolidayBackgroundEnabled': false,
       'calendarEventTitleAlignment': CalendarEventTitleAlignment.center.name,
@@ -1367,6 +1370,7 @@ void main() {
           'type': 'settings',
           'settings': {
             'appTextSize': AppTextSize.basic.name,
+            'appStartView': AppStartView.calendar.name,
             'weekDayLayoutMode': WeekDayLayoutMode.schedule.name,
           },
         });
@@ -1386,6 +1390,7 @@ void main() {
 
     final restored = SettingsRepository(preferences: preferences).load();
     expect(restored.appTextSize, AppTextSize.basic);
+    expect(restored.appStartView, AppStartView.calendar);
     expect(restored.weekDayLayoutMode, WeekDayLayoutMode.schedule);
     expect(restored.calendarHolidayBackgroundEnabled, isFalse);
     expect(

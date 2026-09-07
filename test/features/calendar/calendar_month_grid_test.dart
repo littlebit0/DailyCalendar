@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:daily/features/calendar/widgets/calendar_month_grid.dart';
 import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -186,6 +189,7 @@ void main() {
     );
     expect(flag, findsOneWidget);
     expect(tester.getSize(flag).width, inInclusiveRange(170, 190));
+    await tester.pump(kDoubleTapTimeout);
   });
 
   testWidgets('shows adjacent-month dates when enabled', (tester) async {
@@ -425,6 +429,82 @@ void main() {
     expect(
       tester.getTopLeft(find.byKey(personalFlag)).dy,
       lessThan(tester.getTopLeft(find.byKey(workFlag)).dy),
+    );
+  });
+
+  testWidgets('month event lanes update to the date-specific manual order', (
+    tester,
+  ) async {
+    final first = CalendarEvent(
+      id: 'first',
+      title: '첫 번째',
+      startAt: DateTime(2026, 5, 5, 9),
+      endAt: DateTime(2026, 5, 5, 10),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 5, 1),
+      updatedAt: DateTime(2026, 5, 1),
+    );
+    final second = CalendarEvent(
+      id: 'second',
+      title: '두 번째',
+      startAt: DateTime(2026, 5, 5, 18),
+      endAt: DateTime(2026, 5, 5, 19),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 5, 1),
+      updatedAt: DateTime(2026, 5, 1),
+    );
+
+    Future<void> pump(List<String> manualOrder) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 700,
+              height: 420,
+              child: CalendarMonthGrid(
+                month: DateTime(2026, 5),
+                selectedDate: DateTime(2026, 5, 5),
+                events: [first, second],
+                weekStartsOnMonday: true,
+                showLunarDates: false,
+                manualEventOrders: {
+                  '2026-05-05': CalendarManualEventOrder(
+                    eventKeys: manualOrder,
+                    updatedAt: DateTime(
+                      2026,
+                      5,
+                      1,
+                      manualOrder.first == 'first' ? 1 : 2,
+                    ),
+                    deviceId: 'test-device',
+                  ),
+                },
+                onDateSelected: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+    }
+
+    const firstFlag = ValueKey('event-span-first-2026-5-4');
+    const secondFlag = ValueKey('event-span-second-2026-5-4');
+
+    await pump(const ['first', 'second']);
+    expect(
+      tester.getTopLeft(find.byKey(firstFlag)).dy,
+      lessThan(tester.getTopLeft(find.byKey(secondFlag)).dy),
+    );
+
+    await pump(const ['second', 'first']);
+    expect(
+      tester.getTopLeft(find.byKey(secondFlag)).dy,
+      lessThan(tester.getTopLeft(find.byKey(firstFlag)).dy),
     );
   });
 
@@ -698,7 +778,7 @@ void main() {
     final flag = find.byKey(const ValueKey('event-span-tap-event-2026-5-4'));
     final rect = tester.getRect(flag);
     await tester.tapAt(Offset(rect.left + rect.width * 5 / 6, rect.center.dy));
-    await tester.pump();
+    await tester.pump(kDoubleTapTimeout);
 
     expect(selectedDate, DateTime(2026, 5, 6));
   });
@@ -720,6 +800,7 @@ void main() {
     CalendarEvent? droppedEvent;
     DateTime? droppedDate;
     int? droppedIndex;
+    final dragStates = <bool>[];
 
     await tester.pumpWidget(
       MaterialApp(
@@ -739,6 +820,7 @@ void main() {
                 droppedDate = date;
                 droppedIndex = index;
               },
+              onEventDragStateChanged: dragStates.add,
             ),
           ),
         ),
@@ -753,6 +835,25 @@ void main() {
       buttons: kPrimaryMouseButton,
     );
     await tester.pump(const Duration(milliseconds: 360));
+
+    final feedback = find.byKey(
+      const ValueKey('calendar-event-drag-feedback-drag-event'),
+    );
+    expect(feedback, findsOneWidget);
+    final feedbackTitle = find.descendant(
+      of: feedback,
+      matching: find.textContaining('이동할 일정'),
+    );
+    expect(feedbackTitle, findsOneWidget);
+    expect(
+      tester.widget<Material>(feedback).color,
+      isNot(Color(event.colorValue)),
+    );
+    expect(
+      tester.widget<Text>(feedbackTitle).style?.color,
+      Color(event.colorValue),
+    );
+
     await gesture.moveTo(tester.getCenter(target) + const Offset(0, 35));
     await tester.pump(const Duration(milliseconds: 150));
     await gesture.up();
@@ -761,6 +862,84 @@ void main() {
     expect(droppedEvent?.id, 'drag-event');
     expect(droppedDate, DateTime(2026, 5, 6));
     expect(droppedIndex, isNotNull);
+    expect(dragStates, containsAllInOrder([true, false]));
+  });
+
+  testWidgets('month drag opens an insertion lane before the drop', (
+    tester,
+  ) async {
+    CalendarEvent event(String id, int hour) => CalendarEvent(
+      id: id,
+      title: id,
+      startAt: DateTime(2026, 5, 4, hour),
+      endAt: DateTime(2026, 5, 4, hour + 1),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 5, 1),
+      updatedAt: DateTime(2026, 5, 1),
+    );
+    final first = event('first-lane', 9);
+    final second = event('second-lane', 10);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SizedBox(
+            width: 700,
+            height: 420,
+            child: CalendarMonthGrid(
+              month: DateTime(2026, 5),
+              selectedDate: DateTime(2026, 5, 4),
+              events: [first, second],
+              weekStartsOnMonday: true,
+              showLunarDates: false,
+              onDateSelected: (_) {},
+              onEventDropped: (_, _, _) async {},
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    const firstFlag = ValueKey('event-span-first-lane-2026-5-4');
+    const secondFlag = ValueKey('event-span-second-lane-2026-5-4');
+    final firstTop = tester.getTopLeft(find.byKey(firstFlag)).dy;
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.byKey(secondFlag)),
+      kind: PointerDeviceKind.mouse,
+      buttons: kPrimaryMouseButton,
+    );
+    await tester.pump(const Duration(milliseconds: 360));
+    await gesture.moveTo(tester.getCenter(find.byKey(firstFlag)));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 220));
+
+    expect(
+      find.byKey(const ValueKey('event-span-second-lane-2026-5-4-preview')),
+      findsOneWidget,
+    );
+    final previewOpacity = tester.widget<AnimatedOpacity>(
+      find.descendant(
+        of: find.byKey(
+          const ValueKey('event-span-second-lane-2026-5-4-preview'),
+        ),
+        matching: find.byType(AnimatedOpacity),
+      ),
+    );
+    expect(previewOpacity.opacity, 0);
+    final previewTop = tester
+        .getTopLeft(
+          find.byKey(const ValueKey('event-span-second-lane-2026-5-4-preview')),
+        )
+        .dy;
+    expect(
+      tester.getTopLeft(find.byKey(firstFlag)).dy,
+      allOf(greaterThan(firstTop + 10), greaterThan(previewTop)),
+    );
+
+    await gesture.up();
+    await tester.pumpAndSettle();
   });
 
   testWidgets('external event drag enables the month date drop targets', (
@@ -779,6 +958,7 @@ void main() {
               weekStartsOnMonday: true,
               showLunarDates: false,
               externalEventDragActive: true,
+              externalEventDragInteractionActive: true,
               onDateSelected: (_) {},
               onEventDropped: (_, _, _) async {},
             ),
@@ -792,6 +972,93 @@ void main() {
       findsOneWidget,
     );
   });
+
+  testWidgets(
+    'accepted iOS month drag releases input while its save is pending',
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      final event = CalendarEvent(
+        id: 'pending-month-drag',
+        title: '저장 중 일정',
+        startAt: DateTime(2026, 5, 4, 9),
+        endAt: DateTime(2026, 5, 4, 10),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: DateTime(2026, 5, 1),
+        updatedAt: DateTime(2026, 5, 1),
+      );
+      final saveCompleter = Completer<void>();
+      final visualStates = <bool>[];
+      final interactionStates = <bool>[];
+      DateTime? selectedDate;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 390,
+              height: 720,
+              child: CalendarMonthGrid(
+                month: DateTime(2026, 5),
+                selectedDate: DateTime(2026, 5, 4),
+                events: [event],
+                weekStartsOnMonday: true,
+                showLunarDates: false,
+                onDateSelected: (date) => selectedDate = date,
+                onEventDropped: (_, _, _) => saveCompleter.future,
+                onEventDragStateChanged: visualStates.add,
+                onEventDragInteractionStateChanged: interactionStates.add,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      final source = find.byKey(
+        const ValueKey('event-span-pending-month-drag-2026-5-4'),
+      );
+      final target = _dayNumberKey(DateTime(2026, 5, 6));
+      final gesture = await tester.startGesture(tester.getCenter(source));
+      await tester.pump(const Duration(milliseconds: 360));
+      await gesture.moveTo(tester.getCenter(target) + const Offset(0, 35));
+      await tester.pump();
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 220));
+
+      expect(interactionStates, [true, false]);
+      expect(visualStates, [true]);
+      expect(
+        find.byKey(const ValueKey('event-drop-target-2026-5-6')),
+        findsNothing,
+      );
+      final acceptedPreview = find.byKey(
+        const ValueKey('event-span-pending-month-drag-2026-5-4-preview'),
+      );
+      expect(acceptedPreview, findsOneWidget);
+      expect(
+        tester
+            .widget<AnimatedOpacity>(
+              find.descendant(
+                of: acceptedPreview,
+                matching: find.byType(AnimatedOpacity),
+              ),
+            )
+            .opacity,
+        1,
+      );
+
+      await tester.tap(target);
+      await tester.pump();
+      expect(selectedDate, DateTime(2026, 5, 6));
+
+      saveCompleter.complete();
+      await tester.pumpAndSettle();
+      expect(visualStates, [true, false]);
+      expect(acceptedPreview, findsNothing);
+      debugDefaultTargetPlatformOverride = null;
+    },
+  );
 
   test('defines the requested full-app text scale choices', () {
     expect(AppTextSize.basic.scale, 0.8);

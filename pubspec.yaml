@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 3.3.1
+version: 3.4.0
 
 environment:
   sdk: ^3.11.5
@@ -65,6 +65,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  google_sign_in_platform_interface: ^3.1.0
   build_runner: ^2.15.0
   drift_dev: ^2.33.0
   msix: ^3.16.13
@@ -73,11 +74,11 @@ msix_config:
   display_name: DailyCalendar
   publisher_display_name: littlebit0
   identity_name: littlebit0.DailyCalendar
-  msix_version: 3.0.1.0
+  msix_version: 3.4.0.0
   logo_path: ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png
   capabilities: internetClient
   output_path: dist
-  output_name: daily-windows-3.0.1
+  output_name: daily-windows-3.4.0
   architecture: x64
   install_certificate: false
 

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -13,12 +14,14 @@ import '../../../core/maps/map_launcher.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
 import '../../../core/theme/event_completion_style.dart';
+import '../../../core/theme/calendar_date_color.dart';
 import '../../calendar/widgets/calendar_event_drag_layer.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
 import '../domain/recurrence_rule.dart';
 import 'event_editor_dialog.dart';
+import 'event_completion_action.dart';
 
 enum _RecurringChangeScope { onlyThis, future, all }
 
@@ -31,6 +34,12 @@ class EventDetailsPanel extends ConsumerWidget {
     this.initialEvent,
     this.onEventDropped,
     this.onEventDragStateChanged,
+    this.onEventDragInteractionStateChanged,
+    this.onEventDragGlobalPositionChanged,
+    this.compactDragFeedbackListenable,
+    this.dragFeedbackSpecListenable,
+    this.dragOrigin = CalendarEventDragOrigin.calendar,
+    this.colorWeekdayOnly = false,
   });
 
   final DateTime date;
@@ -39,6 +48,13 @@ class EventDetailsPanel extends ConsumerWidget {
   final CalendarEvent? initialEvent;
   final CalendarEventDropCallback? onEventDropped;
   final ValueChanged<bool>? onEventDragStateChanged;
+  final ValueChanged<bool>? onEventDragInteractionStateChanged;
+  final ValueChanged<Offset>? onEventDragGlobalPositionChanged;
+  final ValueListenable<bool>? compactDragFeedbackListenable;
+  final ValueListenable<CalendarEventDragFeedbackSpec>?
+  dragFeedbackSpecListenable;
+  final CalendarEventDragOrigin dragOrigin;
+  final bool colorWeekdayOnly;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,6 +80,19 @@ class EventDetailsPanel extends ConsumerWidget {
       );
     }
     final dateLabel = _formatDateLabel(context, date);
+    final weekday = DateFormat.EEEE(
+      Localizations.localeOf(context).toLanguageTag(),
+    ).format(date);
+    final weekdayIndex = dateLabel.indexOf(weekday);
+    final weekdayColor = colorWeekdayOnly
+        ? calendarDateAccent(
+            date,
+            isHoliday:
+                settings.calendarShowHolidays &&
+                ref.read(koreanHolidayServiceProvider).isPublicHoliday(date),
+            holidayColorValue: settings.holidayCategory.colorValue,
+          )
+        : null;
     final liveEventsAsync = ref.watch(eventsInRangeProvider(_dayRange(date)));
     final dayEvents = liveEventsAsync.maybeWhen(
       data: (items) => _eventsForDay(items, date, settings),
@@ -80,7 +109,7 @@ class EventDetailsPanel extends ConsumerWidget {
             const <String>[],
       ),
     );
-    return Material(
+    final panel = Material(
       color: Theme.of(context).colorScheme.surface,
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -92,8 +121,26 @@ class EventDetailsPanel extends ConsumerWidget {
                 Expanded(
                   child: Align(
                     alignment: AlignmentDirectional.centerStart,
-                    child: Text(
-                      dateLabel,
+                    child: Text.rich(
+                      key: const ValueKey('event-details-date-label'),
+                      TextSpan(
+                        children: weekdayColor != null && weekdayIndex >= 0
+                            ? [
+                                TextSpan(
+                                  text: dateLabel.substring(0, weekdayIndex),
+                                ),
+                                TextSpan(
+                                  text: weekday,
+                                  style: TextStyle(color: weekdayColor),
+                                ),
+                                TextSpan(
+                                  text: dateLabel.substring(
+                                    weekdayIndex + weekday.length,
+                                  ),
+                                ),
+                              ]
+                            : [TextSpan(text: dateLabel)],
+                      ),
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
@@ -129,6 +176,14 @@ class EventDetailsPanel extends ConsumerWidget {
                       scrollController: scrollController,
                       onEventDropped: onEventDropped,
                       onEventDragStateChanged: onEventDragStateChanged,
+                      onEventDragInteractionStateChanged:
+                          onEventDragInteractionStateChanged,
+                      onEventDragGlobalPositionChanged:
+                          onEventDragGlobalPositionChanged,
+                      compactDragFeedbackListenable:
+                          compactDragFeedbackListenable,
+                      dragFeedbackSpecListenable: dragFeedbackSpecListenable,
+                      dragOrigin: dragOrigin,
                       itemBuilder: (context, event) => _EventTile(
                         event: event,
                         onOpen: () => _openEventDetails(
@@ -156,6 +211,16 @@ class EventDetailsPanel extends ConsumerWidget {
           ],
         ),
       ),
+    );
+    if (onEventDropped == null) {
+      return panel;
+    }
+    return CalendarEventDateDropTarget(
+      key: const ValueKey('event-details-date-drop-target'),
+      date: date,
+      onEventDropped: onEventDropped,
+      borderRadius: BorderRadius.zero,
+      child: panel,
     );
   }
 
@@ -498,6 +563,11 @@ class _DraggableEventList extends StatefulWidget {
     required this.scrollController,
     required this.onEventDropped,
     required this.onEventDragStateChanged,
+    required this.onEventDragInteractionStateChanged,
+    required this.onEventDragGlobalPositionChanged,
+    required this.compactDragFeedbackListenable,
+    required this.dragFeedbackSpecListenable,
+    required this.dragOrigin,
     required this.itemBuilder,
   });
 
@@ -506,6 +576,12 @@ class _DraggableEventList extends StatefulWidget {
   final ScrollController? scrollController;
   final CalendarEventDropCallback? onEventDropped;
   final ValueChanged<bool>? onEventDragStateChanged;
+  final ValueChanged<bool>? onEventDragInteractionStateChanged;
+  final ValueChanged<Offset>? onEventDragGlobalPositionChanged;
+  final ValueListenable<bool>? compactDragFeedbackListenable;
+  final ValueListenable<CalendarEventDragFeedbackSpec>?
+  dragFeedbackSpecListenable;
+  final CalendarEventDragOrigin dragOrigin;
   final Widget Function(BuildContext context, CalendarEvent event) itemBuilder;
 
   @override
@@ -513,31 +589,228 @@ class _DraggableEventList extends StatefulWidget {
 }
 
 class _DraggableEventListState extends State<_DraggableEventList> {
+  static const _itemSpacing = 8.0;
+  static const _reorderAnimationDuration = Duration(milliseconds: 180);
+
+  final Map<String, GlobalKey> _itemMeasureKeys = {};
+  String? _draggedEventKey;
+  CalendarEvent? _draggedEvent;
+  int? _hoverInsertionIndex;
+  double _draggedExtent = 0;
+  bool _eventDropAccepted = false;
+  bool _settlingAcceptedDrop = false;
+
+  @override
+  void didUpdateWidget(covariant _DraggableEventList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final currentKeys = widget.events.map(calendarEventOrderKey).toSet();
+    _itemMeasureKeys.removeWhere((key, value) => !currentKeys.contains(key));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
+    final draggedKey = _draggedEventKey;
+    final sourceIndex = draggedKey == null
+        ? -1
+        : widget.events.indexWhere(
+            (event) => calendarEventOrderKey(event) == draggedKey,
+          );
+    final remainingCount = widget.events.length - (sourceIndex >= 0 ? 1 : 0);
+    final activeInsertionIndex = draggedKey == null
+        ? null
+        : (_hoverInsertionIndex ?? sourceIndex.clamp(0, remainingCount))
+              .clamp(0, remainingCount)
+              .toInt();
+    final children = <Widget>[];
+    var remainingIndex = 0;
+
+    for (var index = 0; index < widget.events.length; index += 1) {
+      final event = widget.events[index];
+      final eventKey = calendarEventOrderKey(event);
+      final isDraggedEvent = eventKey == draggedKey;
+      if (!isDraggedEvent) {
+        children.add(
+          _EventInsertionGap(
+            key: ValueKey('event-reorder-gap-$remainingIndex'),
+            date: widget.date,
+            insertionIndex: remainingIndex,
+            extent: _draggedExtent,
+            active: activeInsertionIndex == remainingIndex,
+            duration: _reorderAnimationDuration,
+            animate: !_settlingAcceptedDrop,
+            onEventDropped: widget.onEventDropped,
+            onEventDropAccepted: _setEventDropAccepted,
+            child:
+                _eventDropAccepted &&
+                    activeInsertionIndex == remainingIndex &&
+                    _draggedEvent != null
+                ? IgnorePointer(
+                    child: KeyedSubtree(
+                      key: ValueKey(
+                        'event-accepted-preview-${calendarEventOrderKey(_draggedEvent!)}',
+                      ),
+                      child: widget.itemBuilder(context, _draggedEvent!),
+                    ),
+                  )
+                : null,
+          ),
+        );
+      }
+      children.add(_buildEventEntry(event, index, isDraggedEvent));
+      if (!isDraggedEvent) {
+        remainingIndex += 1;
+      }
+    }
+    children.add(
+      _EventInsertionGap(
+        key: ValueKey('event-reorder-gap-$remainingIndex'),
+        date: widget.date,
+        insertionIndex: remainingIndex,
+        extent: _draggedExtent,
+        active: activeInsertionIndex == remainingIndex,
+        duration: _reorderAnimationDuration,
+        animate: !_settlingAcceptedDrop,
+        onEventDropped: widget.onEventDropped,
+        onEventDropAccepted: _setEventDropAccepted,
+        child:
+            _eventDropAccepted &&
+                activeInsertionIndex == remainingIndex &&
+                _draggedEvent != null
+            ? IgnorePointer(
+                child: KeyedSubtree(
+                  key: ValueKey(
+                    'event-accepted-preview-${calendarEventOrderKey(_draggedEvent!)}',
+                  ),
+                  child: widget.itemBuilder(context, _draggedEvent!),
+                ),
+              )
+            : null,
+      ),
+    );
+
+    return ListView(
       controller: widget.scrollController,
       physics: const AlwaysScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        final event = widget.events[index];
-        return _EventOrderDropTarget(
-          key: ValueKey('event-order-drop-${event.occurrenceId ?? event.id}'),
-          date: widget.date,
-          events: widget.events,
-          itemIndex: index,
-          onEventDropped: widget.onEventDropped,
+      children: children,
+    );
+  }
+
+  Widget _buildEventEntry(
+    CalendarEvent event,
+    int itemIndex,
+    bool isDraggedEvent,
+  ) {
+    final eventKey = calendarEventOrderKey(event);
+    final measureKey = _itemMeasureKeys.putIfAbsent(eventKey, GlobalKey.new);
+    final entry = Padding(
+      padding: const EdgeInsets.only(bottom: _itemSpacing),
+      child: _EventOrderDropTarget(
+        key: ValueKey('event-order-drop-${event.occurrenceId ?? event.id}'),
+        date: widget.date,
+        events: widget.events,
+        itemIndex: itemIndex,
+        onInsertionIndexChanged: _setHoverInsertionIndex,
+        onEventDropped: widget.onEventDropped,
+        onEventDropAccepted: _setEventDropAccepted,
+        child: SizedBox(
+          key: measureKey,
           child: CalendarEventDraggable(
             key: ValueKey('event-drag-${event.occurrenceId ?? event.id}'),
             event: event,
             enabled: widget.onEventDropped != null,
-            onDragStateChanged: widget.onEventDragStateChanged,
+            onDragStateChanged: (dragging) =>
+                _setEventDragging(event, dragging),
+            onDragInteractionStateChanged:
+                widget.onEventDragInteractionStateChanged,
+            onDragGlobalPositionChanged:
+                widget.onEventDragGlobalPositionChanged,
+            compactFeedbackListenable: widget.compactDragFeedbackListenable,
+            feedbackSpecListenable: widget.dragFeedbackSpecListenable,
+            origin: widget.dragOrigin,
             child: widget.itemBuilder(context, event),
           ),
-        );
-      },
-      separatorBuilder: (context, index) => const SizedBox(height: 8),
-      itemCount: widget.events.length,
+        ),
+      ),
     );
+    if (_settlingAcceptedDrop) {
+      return entry;
+    }
+    return TweenAnimationBuilder<double>(
+      key: ValueKey('event-reorder-entry-$eventKey'),
+      duration: _reorderAnimationDuration,
+      curve: Curves.easeOutCubic,
+      tween: Tween<double>(end: isDraggedEvent ? 0 : 1),
+      child: entry,
+      builder: (context, factor, child) => ClipRect(
+        child: Align(
+          alignment: Alignment.topCenter,
+          heightFactor: factor,
+          child: child,
+        ),
+      ),
+    );
+  }
+
+  void _setEventDragging(CalendarEvent event, bool dragging) {
+    final eventKey = calendarEventOrderKey(event);
+    if (dragging) {
+      final sourceIndex = widget.events.indexWhere(
+        (candidate) => calendarEventOrderKey(candidate) == eventKey,
+      );
+      final renderObject = _itemMeasureKeys[eventKey]?.currentContext
+          ?.findRenderObject();
+      final measuredHeight = renderObject is RenderBox
+          ? renderObject.size.height
+          : 0.0;
+      if (mounted) {
+        setState(() {
+          _draggedEventKey = eventKey;
+          _draggedEvent = event;
+          _draggedExtent = measuredHeight + _itemSpacing;
+          _hoverInsertionIndex = sourceIndex.clamp(0, widget.events.length - 1);
+          _eventDropAccepted = false;
+        });
+      }
+      widget.onEventDragStateChanged?.call(true);
+      return;
+    }
+    if (_draggedEventKey != eventKey) {
+      return;
+    }
+    if (mounted) {
+      final settleAcceptedDrop = _eventDropAccepted;
+      setState(() {
+        _draggedEventKey = null;
+        _draggedEvent = null;
+        _hoverInsertionIndex = null;
+        _draggedExtent = 0;
+        _eventDropAccepted = false;
+        _settlingAcceptedDrop = settleAcceptedDrop;
+      });
+      if (settleAcceptedDrop) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted && _settlingAcceptedDrop) {
+            setState(() => _settlingAcceptedDrop = false);
+          }
+        });
+      }
+    }
+    widget.onEventDragStateChanged?.call(false);
+  }
+
+  void _setHoverInsertionIndex(int index) {
+    if (_draggedEventKey == null || _hoverInsertionIndex == index) {
+      return;
+    }
+    setState(() => _hoverInsertionIndex = index);
+  }
+
+  void _setEventDropAccepted(CalendarEvent event) {
+    if (_draggedEventKey != calendarEventOrderKey(event) ||
+        _eventDropAccepted) {
+      return;
+    }
+    setState(() => _eventDropAccepted = true);
   }
 }
 
@@ -547,14 +820,18 @@ class _EventOrderDropTarget extends StatefulWidget {
     required this.date,
     required this.events,
     required this.itemIndex,
+    required this.onInsertionIndexChanged,
     required this.onEventDropped,
+    required this.onEventDropAccepted,
     required this.child,
   });
 
   final DateTime date;
   final List<CalendarEvent> events;
   final int itemIndex;
+  final ValueChanged<int> onInsertionIndexChanged;
   final CalendarEventDropCallback? onEventDropped;
+  final ValueChanged<CalendarEvent> onEventDropAccepted;
   final Widget child;
 
   @override
@@ -562,7 +839,6 @@ class _EventOrderDropTarget extends StatefulWidget {
 }
 
 class _EventOrderDropTargetState extends State<_EventOrderDropTarget> {
-  var _hovering = false;
   var _insertAfter = false;
 
   @override
@@ -571,54 +847,38 @@ class _EventOrderDropTargetState extends State<_EventOrderDropTarget> {
     if (onEventDropped == null) {
       return widget.child;
     }
-    final colorScheme = Theme.of(context).colorScheme;
     return DragTarget<CalendarEventDragPayload>(
       onWillAcceptWithDetails: (details) {
         if (!calendarEventCanMove(details.data.event)) return false;
-        _updateHover(details.offset);
+        _updateHover(details.data.event, details.offset);
         return true;
       },
-      onMove: (details) => _updateHover(details.offset),
-      onLeave: (_) {
-        if (_hovering) setState(() => _hovering = false);
-      },
+      onMove: (details) => _updateHover(details.data.event, details.offset),
       onAcceptWithDetails: (details) {
         final targetIndex = _resolvedTargetIndex(details.data.event);
-        if (_hovering) setState(() => _hovering = false);
-        unawaited(onEventDropped(details.data.event, widget.date, targetIndex));
+        widget.onInsertionIndexChanged(targetIndex);
+        widget.onEventDropAccepted(details.data.event);
+        unawaited(
+          performCalendarEventDrop(
+            details.data.event,
+            () => onEventDropped(details.data.event, widget.date, targetIndex),
+          ),
+        );
       },
-      builder: (context, candidateData, rejectedData) => AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: _hovering
-              ? Border(
-                  top: !_insertAfter
-                      ? BorderSide(color: colorScheme.primary, width: 2)
-                      : BorderSide.none,
-                  bottom: _insertAfter
-                      ? BorderSide(color: colorScheme.primary, width: 2)
-                      : BorderSide.none,
-                )
-              : null,
-        ),
-        child: widget.child,
-      ),
+      builder: (context, candidateData, rejectedData) => widget.child,
     );
   }
 
-  void _updateHover(Offset globalOffset) {
+  void _updateHover(CalendarEvent draggedEvent, Offset globalOffset) {
     final renderObject = context.findRenderObject();
     final nextInsertAfter = renderObject is RenderBox
         ? renderObject.globalToLocal(globalOffset).dy >=
               renderObject.size.height / 2
         : false;
-    if (!_hovering || _insertAfter != nextInsertAfter) {
-      setState(() {
-        _hovering = true;
-        _insertAfter = nextInsertAfter;
-      });
+    if (_insertAfter != nextInsertAfter) {
+      _insertAfter = nextInsertAfter;
     }
+    widget.onInsertionIndexChanged(_resolvedTargetIndex(draggedEvent));
   }
 
   int _resolvedTargetIndex(CalendarEvent draggedEvent) {
@@ -638,6 +898,70 @@ class _EventOrderDropTargetState extends State<_EventOrderDropTarget> {
       targetIndex -= 1;
     }
     return targetIndex.clamp(0, widget.events.length).toInt();
+  }
+}
+
+class _EventInsertionGap extends StatelessWidget {
+  const _EventInsertionGap({
+    super.key,
+    required this.date,
+    required this.insertionIndex,
+    required this.extent,
+    required this.active,
+    required this.duration,
+    required this.animate,
+    required this.onEventDropped,
+    required this.onEventDropAccepted,
+    this.child,
+  });
+
+  final DateTime date;
+  final int insertionIndex;
+  final double extent;
+  final bool active;
+  final Duration duration;
+  final bool animate;
+  final CalendarEventDropCallback? onEventDropped;
+  final ValueChanged<CalendarEvent> onEventDropAccepted;
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    final onDropped = onEventDropped;
+    final visible = active && extent > 0 && onDropped != null;
+    final content = visible
+        ? SizedBox(
+            height: extent,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: DragTarget<CalendarEventDragPayload>(
+                onWillAcceptWithDetails: (details) =>
+                    calendarEventCanMove(details.data.event),
+                onAcceptWithDetails: (details) {
+                  onEventDropAccepted(details.data.event);
+                  unawaited(
+                    performCalendarEventDrop(
+                      details.data.event,
+                      () => onDropped(details.data.event, date, insertionIndex),
+                    ),
+                  );
+                },
+                builder: (context, candidateData, rejectedData) {
+                  return child ?? const SizedBox.expand();
+                },
+              ),
+            ),
+          )
+        : const SizedBox.shrink();
+    if (!animate) {
+      return content;
+    }
+    return AnimatedSize(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      alignment: Alignment.topCenter,
+      child: content,
+    );
   }
 }
 
@@ -681,111 +1005,118 @@ class _EventTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: InkWell(
-              key: ValueKey('event-open-${event.id}'),
-              onTap: onOpen,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: 4,
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: BorderRadius.circular(4),
+            child: EventCompletionAction(
+              event: event,
+              builder: (onDoubleTap) => InkWell(
+                key: ValueKey('event-open-${event.id}'),
+                onTap: onOpen,
+                onDoubleTap: onDoubleTap,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 52,
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        title,
-                                        textAlign: TextAlign.start,
-                                        style: calendarEventCompletionStyle(
-                                          context,
-                                          const TextStyle(
-                                            fontWeight: FontWeight.w800,
-                                            fontSize: 14,
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          title,
+                                          textAlign: TextAlign.start,
+                                          style: calendarEventCompletionStyle(
+                                            context,
+                                            const TextStyle(
+                                              fontWeight: FontWeight.w800,
+                                              fontSize: 14,
+                                            ),
+                                            completed: event.completed,
+                                            eventColor: categoryColor,
                                           ),
-                                          completed: event.completed,
                                         ),
                                       ),
+                                    ],
+                                  ),
+                                ),
+                                if (event.readOnly)
+                                  const Icon(Icons.lock_outline, size: 16),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              timeLabel,
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                            if (event.showDday)
+                              Text(
+                                _formatDday(event),
+                                style: Theme.of(context).textTheme.labelMedium
+                                    ?.copyWith(
+                                      color: color,
+                                      fontWeight: FontWeight.w800,
                                     ),
-                                  ],
+                              ),
+                            if (event.location != null &&
+                                event.location!.isNotEmpty)
+                              Text(
+                                event.location!,
+                                style: Theme.of(context).textTheme.labelMedium,
+                              ),
+                            if (event.location != null &&
+                                event.location!.isNotEmpty)
+                              TextButton.icon(
+                                onPressed: () =>
+                                    MapLauncher().openLocation(event.location!),
+                                icon: const Icon(Icons.map_outlined, size: 16),
+                                label: Text(context.tr('지도 바로가기')),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: const Size(0, 28),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
                                 ),
                               ),
-                              if (event.readOnly)
-                                const Icon(Icons.lock_outline, size: 16),
-                            ],
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            timeLabel,
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
-                          if (event.showDday)
-                            Text(
-                              _formatDday(event),
-                              style: Theme.of(context).textTheme.labelMedium
-                                  ?.copyWith(
-                                    color: color,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                            ),
-                          if (event.location != null &&
-                              event.location!.isNotEmpty)
-                            Text(
-                              event.location!,
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          if (event.location != null &&
-                              event.location!.isNotEmpty)
-                            TextButton.icon(
-                              onPressed: () =>
-                                  MapLauncher().openLocation(event.location!),
-                              icon: const Icon(Icons.map_outlined, size: 16),
-                              label: Text(context.tr('지도 바로가기')),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(0, 28),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            if (event.weather != null &&
+                                event.weather!.isNotEmpty)
+                              Text(
+                                '날씨: ${event.weather!}',
+                                style: Theme.of(context).textTheme.labelMedium,
                               ),
-                            ),
-                          if (event.weather != null &&
-                              event.weather!.isNotEmpty)
-                            Text(
-                              '날씨: ${event.weather!}',
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          if (event.url != null && event.url!.isNotEmpty)
-                            TextButton.icon(
-                              onPressed: () => _openUrl(event.url!),
-                              icon: const Icon(Icons.link, size: 16),
-                              label: Text(
-                                event.url!,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                            if (event.url != null && event.url!.isNotEmpty)
+                              TextButton.icon(
+                                onPressed: () => _openUrl(event.url!),
+                                icon: const Icon(Icons.link, size: 16),
+                                label: Text(
+                                  event.url!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: const Size(0, 28),
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap,
+                                ),
                               ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.zero,
-                                minimumSize: const Size(0, 28),
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -954,6 +1285,7 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
                               fontWeight: FontWeight.w800,
                             ),
                             completed: event.completed,
+                            eventColor: color,
                           ),
                         ),
                         const SizedBox(height: 4),

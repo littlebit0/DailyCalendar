@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   for (final brightness in Brightness.values) {
     testWidgets(
-      'completed event remains legible with a strong double strike in ${brightness.name} mode',
+      'completed event remains legible with a single strike in ${brightness.name} mode',
       (tester) async {
         late TextStyle completedStyle;
         late Color completedAccent;
@@ -24,6 +24,7 @@ void main() {
                   context,
                   Theme.of(context).textTheme.bodyMedium,
                   completed: true,
+                  eventColor: categoryColor,
                 );
                 completedAccent = calendarEventAccentColor(
                   context,
@@ -42,20 +43,14 @@ void main() {
         );
 
         expect(completedStyle.decoration, TextDecoration.lineThrough);
-        expect(completedStyle.decorationStyle, TextDecorationStyle.double);
-        expect(completedStyle.decorationThickness, greaterThanOrEqualTo(2));
-        expect(completedStyle.color, isNotNull);
+        expect(completedStyle.decorationStyle, TextDecorationStyle.solid);
+        expect(completedStyle.decorationThickness, lessThan(2));
+        expect(completedStyle.color, categoryColor);
         expect(completedStyle.decorationColor, isNotNull);
         expect(completedStyle.color!.a, greaterThanOrEqualTo(0.7));
         expect(completedStyle.decorationColor!.a, greaterThanOrEqualTo(0.9));
-        expect(completedAccent, isNot(categoryColor));
-        expect(completedBackground, isNot(categoryColor));
-        expect(
-          completedBackground,
-          calendarCompletedEventBackgroundColor(
-            tester.element(find.text('완료 일정')),
-          ),
-        );
+        expect(completedAccent, categoryColor);
+        expect(completedBackground, categoryColor.withValues(alpha: 0.12));
       },
     );
   }

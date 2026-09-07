@@ -279,7 +279,10 @@ private struct DailyWidgetEventLabel: View {
   var body: some View {
     Text(event.title)
       .font(.system(size: fontSize, weight: .medium))
-      .dailyTodoCompletion(event.completed == true)
+      .dailyTodoCompletion(
+        event.completed == true,
+        eventColor: Color.daily(argb: event.color)
+      )
       .lineLimit(1)
       .minimumScaleFactor(0.7)
       .padding(.horizontal, 2)
@@ -466,7 +469,10 @@ struct DailyTodayWidgetView: View {
               .frame(width: 38, alignment: .leading)
             Text(event.title)
               .font(.subheadline)
-              .dailyTodoCompletion(event.completed == true)
+              .dailyTodoCompletion(
+                event.completed == true,
+                eventColor: Color.daily(argb: event.color)
+              )
               .lineLimit(1)
             Spacer(minLength: 0)
           }
@@ -514,7 +520,10 @@ struct DailyLockScreenTodayView: View {
           Image(systemName: "calendar")
           Text(timeLabel(for: next))
           Text(next.title)
-            .dailyTodoCompletion(next.completed == true)
+            .dailyTodoCompletion(
+              next.completed == true,
+              eventColor: Color.daily(argb: next.color)
+            )
             .privacySensitive()
         }
       } else {
@@ -550,7 +559,10 @@ struct DailyLockScreenTodayView: View {
                 .frame(width: 36, alignment: .leading)
               Text(event.title)
                 .font(.caption)
-                .dailyTodoCompletion(event.completed == true)
+                .dailyTodoCompletion(
+                  event.completed == true,
+                  eventColor: Color.daily(argb: event.color)
+                )
                 .lineLimit(1)
                 .privacySensitive()
             }
@@ -777,7 +789,10 @@ struct DailyDdayWidgetView: View {
             VStack(alignment: .leading, spacing: 1) {
               Text(item.title)
                 .font(.subheadline)
-                .dailyTodoCompletion(item.completed == true)
+                .dailyTodoCompletion(
+                  item.completed == true,
+                  eventColor: Color.daily(argb: item.color)
+                )
                 .lineLimit(1)
               Text(item.dateLabel)
                 .font(.caption2)
@@ -828,19 +843,13 @@ private struct DailyWidgetBackgroundModifier: ViewModifier {
 
 private extension View {
   @ViewBuilder
-  func dailyTodoCompletion(_ completed: Bool) -> some View {
+  func dailyTodoCompletion(_ completed: Bool, eventColor: Color) -> some View {
     if completed {
       self
-        .foregroundStyle(Color.dailySecondary)
-        .overlay(alignment: .center) {
-          VStack(spacing: 1.5) {
-            Rectangle().frame(height: 0.9)
-            Rectangle().frame(height: 0.9)
-          }
-          .foregroundStyle(Color.primary.opacity(0.78))
-        }
+        .foregroundStyle(eventColor)
+        .strikethrough(true, color: Color.primary.opacity(0.78))
     } else {
-      self.foregroundStyle(Color.dailyText)
+      self.foregroundStyle(eventColor)
     }
   }
 

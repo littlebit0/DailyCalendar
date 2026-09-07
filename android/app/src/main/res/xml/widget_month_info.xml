@@ -3,9 +3,9 @@
     android:description="@string/widget_month_description"
     android:initialLayout="@layout/widget_month"
     android:minWidth="250dp"
-    android:minHeight="250dp"
+    android:minHeight="350dp"
     android:minResizeWidth="180dp"
-    android:minResizeHeight="180dp"
+    android:minResizeHeight="110dp"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />

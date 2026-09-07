@@ -1,24 +1,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--
-      The initial Google Play release targets handset form factors only.
-      Tablet-specific adaptive layouts are tracked separately and will be
-      enabled in a later release after device validation is complete.
-    -->
-    <supports-screens
-        android:smallScreens="true"
-        android:normalScreens="true"
-        android:largeScreens="false"
-        android:xlargeScreens="false" />
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:label="@string/app_name"
-        android:name="${applicationName}"
+        android:name=".DailyApplication"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round">
         <activity
@@ -27,6 +21,7 @@
             android:launchMode="singleTop"
             android:taskAffinity=""
             android:theme="@style/LaunchTheme"
+            android:resizeableActivity="true"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustResize">
@@ -48,6 +43,20 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <activity android:name=".DailyAlarmActivity" android:exported="false"
+            android:theme="@android:style/Theme.DeviceDefault.DayNight"
+            android:launchMode="singleTop" android:showWhenLocked="true" android:turnScreenOn="true" />
+        <service android:name=".DailyAlarmService" android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+        <receiver android:name=".DailyAlarmReceiver" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
         <receiver
             android:name=".DailyMonthWidgetProvider"
             android:exported="true">

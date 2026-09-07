@@ -91,7 +91,7 @@ def configure_project(
     settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
     settings['CODE_SIGN_ENTITLEMENTS'] = "../apple_widgets/#{File.basename(entitlements)}"
     settings['CODE_SIGN_STYLE'] = 'Automatic'
-    settings['CURRENT_PROJECT_VERSION'] = '3.3.1'
+    settings['CURRENT_PROJECT_VERSION'] = '3.4.0'
     settings['DEVELOPMENT_TEAM'] = TEAM_ID
     settings['GENERATE_INFOPLIST_FILE'] = 'NO'
     settings['INFOPLIST_FILE'] = '../apple_widgets/Info.plist'
@@ -100,7 +100,7 @@ def configure_project(
       '@executable_path/Frameworks',
       '@executable_path/../../Frameworks'
     ]
-    settings['MARKETING_VERSION'] = '3.3.1'
+    settings['MARKETING_VERSION'] = '3.4.0'
     settings['PRODUCT_BUNDLE_IDENTIFIER'] = bundle_identifier
     settings['PRODUCT_NAME'] = '$(TARGET_NAME)'
     settings['PROVISIONING_PROFILE_SPECIFIER'] = ''

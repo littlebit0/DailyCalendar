@@ -6,13 +6,20 @@ import 'alarm_service.dart';
 
 class NativeAlarmService implements AlarmService {
   NativeAlarmService({MethodChannel? channel})
-    : _channel = channel ?? const MethodChannel('daily/alarm_kit');
+    : _channel =
+          channel ??
+          MethodChannel(
+            defaultTargetPlatform == TargetPlatform.android
+                ? 'daily/android_alarms'
+                : 'daily/alarm_kit',
+          );
 
   final MethodChannel _channel;
 
   bool get _isSupportedPlatform =>
       defaultTargetPlatform == TargetPlatform.iOS ||
-      defaultTargetPlatform == TargetPlatform.macOS;
+      defaultTargetPlatform == TargetPlatform.macOS ||
+      defaultTargetPlatform == TargetPlatform.android;
 
   @override
   Future<AlarmAuthorizationState> authorizationState() async {

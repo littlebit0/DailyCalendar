@@ -1,6 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+enum DailyWindowClass { compact, medium, expanded }
+
+DailyWindowClass dailyWindowClassFor(Size size) {
+  return switch (size.shortestSide) {
+    < 600 => DailyWindowClass.compact,
+    < 840 => DailyWindowClass.medium,
+    _ => DailyWindowClass.expanded,
+  };
+}
+
 abstract final class DailyUi {
   static const primary = Color(0xff0a63d8);
   static const success = Color(0xff2aa65a);

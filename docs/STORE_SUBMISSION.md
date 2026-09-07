@@ -1,5 +1,29 @@
 # Daily Apple App Store Submission
 
+## Current Preparation: 3.4.0
+
+최종 갱신: 2026-09-07
+준비 버전: `3.4.0 (3.4.0)`
+대상: iOS/iPadOS 및 macOS
+
+- 앱 번들 ID: 두 플랫폼 모두 기존 `com.littlebit0.daily` 유지
+- 위젯 번들 ID: 기존 `com.littlebit0.daily.widgets` 유지
+- 서명 팀: `A6Y73X2ZLS`
+- 제출용 파일은 아래 한 폴더에 모으며 GitHub 공개 릴리스에는 올리지 않는다.
+  `dist/transporter-upload/3.4.0`
+- iOS: `Daily-iOS-AppStore-3.4.0-build-3.4.0.ipa`
+- macOS: `Daily-macOS-AppStore-3.4.0-build-3.4.0.pkg`
+- 이번 작업은 파일 생성까지이며 Transporter 업로드·App Store Connect 빌드
+  선택·심사 제출·승인 완료를 의미하지 않는다.
+- 현재 App Store 공개 버전과 제출 상태는 이번 작업에서 확인하지 않았다.
+- 최신 변경사항은 [3.4.0 릴리스 노트](RELEASE_NOTES_3.4.0.md)를 기준으로 한다.
+- Windows에는 최신 변경사항이 미적용 상태이며 이번 제출 대상이 아니다.
+
+## Historical Record: 3.0.1
+
+아래 내용은 2026-08-03의 과거 제출 기록이다. 현재 출시 상태나 3.4.0의
+개인정보·권한 답변으로 그대로 사용하지 않는다.
+
 최종 갱신: 2026-08-03
 제출 버전: `3.0.1 (3.0.1)`
 대상: iOS/iPadOS 및 macOS

@@ -7,6 +7,7 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/event_completion_style.dart';
 import '../../events/domain/calendar_event.dart';
+import '../../events/presentation/event_completion_action.dart';
 
 class SearchPage extends ConsumerStatefulWidget {
   const SearchPage({super.key});
@@ -98,6 +99,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   return ListView.separated(
                     itemBuilder: (context, index) => _SearchResultTile(
                       event: events[index],
+                      onCompletedChanged: _search,
                       onTap: () {
                         final event = events[index];
                         ref.read(visibleMonthProvider.notifier).state =
@@ -135,10 +137,15 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 }
 
 class _SearchResultTile extends StatelessWidget {
-  const _SearchResultTile({required this.event, required this.onTap});
+  const _SearchResultTile({
+    required this.event,
+    required this.onTap,
+    required this.onCompletedChanged,
+  });
 
   final CalendarEvent event;
   final VoidCallback onTap;
+  final VoidCallback onCompletedChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -155,31 +162,42 @@ class _SearchResultTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         side: BorderSide(color: DailyUi.separator(context)),
       ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 5),
-        onTap: onTap,
-        leading: Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            color: color.withValues(alpha: 0.14),
-            borderRadius: BorderRadius.circular(10),
+      child: EventCompletionAction(
+        event: event,
+        onCompletedChanged: (_) => onCompletedChanged(),
+        builder: (onDoubleTap) => InkWell(
+          onTap: onTap,
+          onDoubleTap: onDoubleTap,
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 5,
+            ),
+            leading: Container(
+              width: 38,
+              height: 38,
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.14),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              alignment: Alignment.center,
+              child: Icon(Icons.event_outlined, color: color, size: 21),
+            ),
+            title: Text(
+              context.l10n.eventTitle(event.title, holiday: event.holiday),
+              style: calendarEventCompletionStyle(
+                context,
+                Theme.of(context).textTheme.titleMedium,
+                completed: event.completed,
+                eventColor: color,
+              ),
+            ),
+            subtitle: Text('$date  $time'),
+            trailing: Icon(
+              Icons.chevron_right_rounded,
+              color: DailyUi.tertiaryText(context),
+            ),
           ),
-          alignment: Alignment.center,
-          child: Icon(Icons.event_outlined, color: color, size: 21),
-        ),
-        title: Text(
-          context.l10n.eventTitle(event.title, holiday: event.holiday),
-          style: calendarEventCompletionStyle(
-            context,
-            Theme.of(context).textTheme.titleMedium,
-            completed: event.completed,
-          ),
-        ),
-        subtitle: Text('$date  $time'),
-        trailing: Icon(
-          Icons.chevron_right_rounded,
-          color: DailyUi.tertiaryText(context),
         ),
       ),
     );

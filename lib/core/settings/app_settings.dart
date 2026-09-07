@@ -84,6 +84,18 @@ enum CalendarViewMode {
   }
 }
 
+enum AppStartView {
+  calendar,
+  quickView;
+
+  static AppStartView fromName(String? name) {
+    return AppStartView.values.firstWhere(
+      (view) => view.name == name,
+      orElse: () => AppStartView.calendar,
+    );
+  }
+}
+
 enum WeekDayLayoutMode {
   list,
   schedule;
@@ -223,6 +235,7 @@ class AppSettings {
     this.categories = _defaultCategories,
     this.dDayReminderOffsets = const [-7, -3, -1, 0],
     this.appTextSize = AppTextSize.basic,
+    this.appStartView = AppStartView.calendar,
     this.defaultCalendarView = CalendarViewMode.week,
     this.weekDayLayoutMode = WeekDayLayoutMode.list,
     this.calendarEventTitleAlignment = CalendarEventTitleAlignment.leading,
@@ -270,6 +283,7 @@ class AppSettings {
   final List<EventCategory> categories;
   final List<int> dDayReminderOffsets;
   final AppTextSize appTextSize;
+  final AppStartView appStartView;
   final CalendarViewMode defaultCalendarView;
   final WeekDayLayoutMode weekDayLayoutMode;
   final CalendarEventTitleAlignment calendarEventTitleAlignment;
@@ -305,6 +319,7 @@ class AppSettings {
     List<EventCategory>? categories,
     List<int>? dDayReminderOffsets,
     AppTextSize? appTextSize,
+    AppStartView? appStartView,
     CalendarViewMode? defaultCalendarView,
     WeekDayLayoutMode? weekDayLayoutMode,
     CalendarEventTitleAlignment? calendarEventTitleAlignment,
@@ -347,6 +362,7 @@ class AppSettings {
       categories: categories ?? this.categories,
       dDayReminderOffsets: dDayReminderOffsets ?? this.dDayReminderOffsets,
       appTextSize: appTextSize ?? this.appTextSize,
+      appStartView: appStartView ?? this.appStartView,
       defaultCalendarView: defaultCalendarView ?? this.defaultCalendarView,
       weekDayLayoutMode: weekDayLayoutMode ?? this.weekDayLayoutMode,
       calendarEventTitleAlignment:

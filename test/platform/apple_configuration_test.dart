@@ -81,7 +81,14 @@ void main() {
         contains('Button(\n        intent: DailyToggleTodoIntent'),
       );
       expect(source, contains('DailyTodoToggle(event: event)'));
-      expect(source, contains('.dailyTodoCompletion(event.completed == true)'));
+      expect(source, contains('.dailyTodoCompletion('));
+      expect(source, contains('eventColor: Color.daily(argb: event.color)'));
+      expect(source, contains('.foregroundStyle(eventColor)'));
+      expect(
+        source,
+        contains('.strikethrough(true, color: Color.primary.opacity(0.78))'),
+      );
+      expect(source, isNot(contains('VStack(spacing: 1.5)')));
       expect(source, contains('snapshot["generatedAt"]'));
       expect(source, contains('notifyApp()'));
     },

@@ -10,8 +10,11 @@ import '../../../core/calendar/korean_lunar_calendar.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/event_completion_style.dart';
 import '../../events/domain/calendar_event.dart';
+import '../../events/presentation/event_completion_action.dart';
+import 'calendar_event_drag_layer.dart';
 
 class CalendarMonthGrid extends StatefulWidget {
   const CalendarMonthGrid({
@@ -22,6 +25,7 @@ class CalendarMonthGrid extends StatefulWidget {
     required this.weekStartsOnMonday,
     required this.showLunarDates,
     this.showAdjacentMonthDates = true,
+    this.availableWidth,
     this.holidayBackgroundEnabled = true,
     this.holidayColorValue = 0xffef4444,
     this.centerEventTitles = false,
@@ -38,7 +42,9 @@ class CalendarMonthGrid extends StatefulWidget {
     this.onDateRangeSelected,
     this.onEventDropped,
     this.onEventDragStateChanged,
+    this.onEventDragInteractionStateChanged,
     this.externalEventDragActive = false,
+    this.externalEventDragInteractionActive = false,
   });
 
   final DateTime month;
@@ -47,6 +53,7 @@ class CalendarMonthGrid extends StatefulWidget {
   final bool weekStartsOnMonday;
   final bool showLunarDates;
   final bool showAdjacentMonthDates;
+  final double? availableWidth;
   final bool holidayBackgroundEnabled;
   final int holidayColorValue;
   final bool centerEventTitles;
@@ -64,7 +71,9 @@ class CalendarMonthGrid extends StatefulWidget {
   onDateRangeSelected;
   final CalendarEventDropCallback? onEventDropped;
   final ValueChanged<bool>? onEventDragStateChanged;
+  final ValueChanged<bool>? onEventDragInteractionStateChanged;
   final bool externalEventDragActive;
+  final bool externalEventDragInteractionActive;
 
   @override
   State<CalendarMonthGrid> createState() => _CalendarMonthGridState();
@@ -81,6 +90,11 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   late Set<DateTime> _holidayDays;
   RenderBox? _reportedRangeHitTestBox;
   bool _eventDragActive = false;
+  bool _eventDragInteractionActive = false;
+  CalendarEvent? _draggingEvent;
+  DateTime? _dragHoverDate;
+  int? _dragHoverIndex;
+  bool _eventDropAccepted = false;
 
   @override
   void initState() {
@@ -92,6 +106,9 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   void dispose() {
     if (_eventDragActive) {
       widget.onEventDragStateChanged?.call(false);
+    }
+    if (_eventDragInteractionActive) {
+      widget.onEventDragInteractionStateChanged?.call(false);
     }
     widget.onRangeHitTestBoxChanged?.call(null);
     super.dispose();
@@ -107,12 +124,24 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
     if (!identical(oldWidget.events, widget.events)) {
       _holidayDays = _holidayDaysFor(widget.events);
     }
+    if (oldWidget.externalEventDragActive &&
+        !widget.externalEventDragActive &&
+        !_eventDragActive) {
+      _draggingEvent = null;
+      _dragHoverDate = null;
+      _dragHoverIndex = null;
+      _eventDropAccepted = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final compact = width < 720;
+    final width = widget.availableWidth ?? MediaQuery.sizeOf(context).width;
+    final windowClass = dailyWindowClassFor(MediaQuery.sizeOf(context));
+    final androidTablet =
+        Theme.of(context).platform == TargetPlatform.android &&
+        windowClass != DailyWindowClass.compact;
+    final compact = width < 720 && !androidTablet;
     final maxFlags = _standardMaxFlagsForWidth(width);
     final colorScheme = Theme.of(context).colorScheme;
 
@@ -163,8 +192,8 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
                         if (!widget.enableRangeGestures) {
                           return;
                         }
-                        if (_eventDragActive ||
-                            widget.externalEventDragActive) {
+                        if (_eventDragInteractionActive ||
+                            widget.externalEventDragInteractionActive) {
                           return;
                         }
                         if (!_isDesktopRangePointer(event.kind)) {
@@ -323,10 +352,19 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
                                     compact: compact,
                                     onDateSelected: widget.onDateSelected,
                                     onEventDropped: widget.onEventDropped,
-                                    onEventDragStateChanged:
-                                        _setEventDragActive,
-                                    externalEventDragActive:
-                                        widget.externalEventDragActive,
+                                    draggedEvent: _draggingEvent,
+                                    dragHoverDate: _dragHoverDate,
+                                    dragHoverIndex: _dragHoverIndex,
+                                    eventDropAccepted: _eventDropAccepted,
+                                    onEventDragStateChanged: _setEventDragging,
+                                    onEventDragInteractionStateChanged:
+                                        _setEventDragInteraction,
+                                    onEventDropAccepted: _setEventDropAccepted,
+                                    onEventDropHoverChanged: _setEventDropHover,
+                                    eventDragInteractionActive:
+                                        _eventDragInteractionActive ||
+                                        widget
+                                            .externalEventDragInteractionActive,
                                   ),
                                 ),
                               ),
@@ -344,11 +382,20 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
     );
   }
 
-  void _setEventDragActive(bool active) {
+  void _setEventDragging(CalendarEvent event, bool active) {
     if (_eventDragActive == active) {
+      if (active && !_sameDraggedEvent(_draggingEvent, event)) {
+        setState(() => _draggingEvent = event);
+      }
       return;
     }
-    _eventDragActive = active;
+    setState(() {
+      _eventDragActive = active;
+      _draggingEvent = active ? event : null;
+      _dragHoverDate = null;
+      _dragHoverIndex = null;
+      _eventDropAccepted = false;
+    });
     widget.onEventDragStateChanged?.call(active);
     if (active) {
       _mouseDownPosition = null;
@@ -356,6 +403,43 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
       _longPressRangeActive = false;
       _clearRangeSelection();
     }
+  }
+
+  void _setEventDragInteraction(CalendarEvent event, bool active) {
+    if (_eventDragInteractionActive == active) {
+      return;
+    }
+    setState(() => _eventDragInteractionActive = active);
+    widget.onEventDragInteractionStateChanged?.call(active);
+  }
+
+  void _setEventDropHover(CalendarEvent? event, DateTime? date, int? index) {
+    if (event == null || date == null || index == null) {
+      if (_dragHoverDate == null && _dragHoverIndex == null) return;
+      setState(() {
+        _dragHoverDate = null;
+        _dragHoverIndex = null;
+      });
+      return;
+    }
+    if (_sameDraggedEvent(_draggingEvent, event) &&
+        _sameDay(date, _dragHoverDate) &&
+        _dragHoverIndex == index) {
+      return;
+    }
+    setState(() {
+      _draggingEvent = event;
+      _dragHoverDate = date;
+      _dragHoverIndex = index;
+    });
+  }
+
+  void _setEventDropAccepted(CalendarEvent event) {
+    if (_eventDropAccepted) return;
+    setState(() {
+      _draggingEvent = event;
+      _eventDropAccepted = true;
+    });
   }
 
   void _rebuildCalendarCache() {
@@ -619,8 +703,15 @@ class _WeekRow extends StatefulWidget {
     required this.compact,
     required this.onDateSelected,
     required this.onEventDropped,
+    required this.draggedEvent,
+    required this.dragHoverDate,
+    required this.dragHoverIndex,
+    required this.eventDropAccepted,
     required this.onEventDragStateChanged,
-    required this.externalEventDragActive,
+    required this.onEventDragInteractionStateChanged,
+    required this.onEventDropAccepted,
+    required this.onEventDropHoverChanged,
+    required this.eventDragInteractionActive,
   });
 
   final DateTime month;
@@ -643,8 +734,17 @@ class _WeekRow extends StatefulWidget {
   final bool compact;
   final ValueChanged<DateTime> onDateSelected;
   final CalendarEventDropCallback? onEventDropped;
-  final ValueChanged<bool> onEventDragStateChanged;
-  final bool externalEventDragActive;
+  final CalendarEvent? draggedEvent;
+  final DateTime? dragHoverDate;
+  final int? dragHoverIndex;
+  final bool eventDropAccepted;
+  final void Function(CalendarEvent event, bool active) onEventDragStateChanged;
+  final void Function(CalendarEvent event, bool active)
+  onEventDragInteractionStateChanged;
+  final ValueChanged<CalendarEvent> onEventDropAccepted;
+  final void Function(CalendarEvent? event, DateTime? date, int? index)
+  onEventDropHoverChanged;
+  final bool eventDragInteractionActive;
 
   @override
   State<_WeekRow> createState() => _WeekRowState();
@@ -652,7 +752,6 @@ class _WeekRow extends StatefulWidget {
 
 class _WeekRowState extends State<_WeekRow> {
   late List<_EventSegment> _segments;
-  bool _eventDragActive = false;
 
   @override
   void initState() {
@@ -756,7 +855,10 @@ class _WeekRowState extends State<_WeekRow> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final weekStart = widget.weekDays.first;
-    final segments = _segments;
+    final originalSegments = _segments;
+    final segments = widget.draggedEvent == null
+        ? originalSegments
+        : _projectedSegments();
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -785,6 +887,15 @@ class _WeekRowState extends State<_WeekRow> {
         final visibleSegments = segments
             .where((segment) => segment.lane < visibleLanes)
             .toList();
+        final sourceSegments = widget.draggedEvent == null
+            ? const <_EventSegment>[]
+            : originalSegments
+                  .where(
+                    (segment) =>
+                        segment.lane < visibleLanes &&
+                        _sameDraggedEvent(segment.event, widget.draggedEvent),
+                  )
+                  .toList();
         final overflowTop = math.min(
           metrics.top +
               visibleLanes * (metrics.height + metrics.gap) +
@@ -864,7 +975,14 @@ class _WeekRowState extends State<_WeekRow> {
               Stack(
                 children: [
                   for (final segment in visibleSegments)
-                    Positioned(
+                    AnimatedPositioned(
+                      key: ValueKey(
+                        'event-span-${segment.event.occurrenceId ?? segment.event.id}-${weekStart.year}-${weekStart.month}-${weekStart.day}${_sameDraggedEvent(segment.event, widget.draggedEvent) ? '-preview' : ''}',
+                      ),
+                      duration: widget.draggedEvent == null
+                          ? Duration.zero
+                          : const Duration(milliseconds: 180),
+                      curve: Curves.easeOutCubic,
                       left: segment.startCol * cellWidth + flagInset,
                       top:
                           metrics.top +
@@ -874,9 +992,6 @@ class _WeekRowState extends State<_WeekRow> {
                           flagInset * 2,
                       height: metrics.height,
                       child: _EventSpanFlag(
-                        key: ValueKey(
-                          'event-span-${segment.event.id}-${weekStart.year}-${weekStart.month}-${weekStart.day}',
-                        ),
                         event: segment.event,
                         segmentStart: weekStart.add(
                           Duration(days: segment.startCol),
@@ -889,15 +1004,67 @@ class _WeekRowState extends State<_WeekRow> {
                         dense: metrics.denseText,
                         centerTitle: widget.centerEventTitles,
                         draggable:
+                            !_sameDraggedEvent(
+                              segment.event,
+                              widget.draggedEvent,
+                            ) &&
                             widget.onEventDropped != null &&
                             !segment.event.readOnly &&
                             !segment.event.systemEvent &&
                             !segment.event.holiday,
-                        onDragStateChanged: _setEventDragActive,
+                        preview: _sameDraggedEvent(
+                          segment.event,
+                          widget.draggedEvent,
+                        ),
+                        previewVisible: widget.eventDropAccepted,
+                        onDragStateChanged: (active) => widget
+                            .onEventDragStateChanged(segment.event, active),
+                        onDragInteractionStateChanged: (active) =>
+                            widget.onEventDragInteractionStateChanged(
+                              segment.event,
+                              active,
+                            ),
                         onDateSelected: widget.onDateSelected,
                       ),
                     ),
-                  if (_eventDragActive || widget.externalEventDragActive)
+                  for (final segment in sourceSegments)
+                    Positioned(
+                      key: ValueKey(
+                        'event-span-${segment.event.occurrenceId ?? segment.event.id}-${weekStart.year}-${weekStart.month}-${weekStart.day}',
+                      ),
+                      left: segment.startCol * cellWidth + flagInset,
+                      top:
+                          metrics.top +
+                          segment.lane * (metrics.height + metrics.gap),
+                      width:
+                          (segment.endCol - segment.startCol + 1) * cellWidth -
+                          flagInset * 2,
+                      height: metrics.height,
+                      child: _EventSpanFlag(
+                        event: segment.event,
+                        segmentStart: weekStart.add(
+                          Duration(days: segment.startCol),
+                        ),
+                        segmentEnd: weekStart.add(
+                          Duration(days: segment.endCol),
+                        ),
+                        showTime: widget.showEventTimes,
+                        compact: widget.compact,
+                        dense: metrics.denseText,
+                        centerTitle: widget.centerEventTitles,
+                        draggable: true,
+                        hidden: true,
+                        onDragStateChanged: (active) => widget
+                            .onEventDragStateChanged(segment.event, active),
+                        onDragInteractionStateChanged: (active) =>
+                            widget.onEventDragInteractionStateChanged(
+                              segment.event,
+                              active,
+                            ),
+                        onDateSelected: widget.onDateSelected,
+                      ),
+                    ),
+                  if (widget.eventDragInteractionActive)
                     Positioned.fill(
                       child: Row(
                         children: [
@@ -913,11 +1080,20 @@ class _WeekRowState extends State<_WeekRow> {
                                         (day.year == widget.month.year &&
                                             day.month == widget.month.month)) &&
                                     widget.onEventDropped != null,
-                                eventCount: _eventsForDay(day).length,
+                                eventCount: _eventsForDay(day)
+                                    .where(
+                                      (event) => !_sameDraggedEvent(
+                                        event,
+                                        widget.draggedEvent,
+                                      ),
+                                    )
+                                    .length,
                                 flagTop: metrics.top,
                                 flagHeight: metrics.height,
                                 flagGap: metrics.gap,
                                 onDropped: widget.onEventDropped,
+                                onDropAccepted: widget.onEventDropAccepted,
+                                onHoverChanged: widget.onEventDropHoverChanged,
                                 child: const SizedBox.expand(),
                               ),
                             ),
@@ -969,11 +1145,29 @@ class _WeekRowState extends State<_WeekRow> {
     );
   }
 
-  void _setEventDragActive(bool active) {
-    if (_eventDragActive != active) {
-      setState(() => _eventDragActive = active);
+  List<_EventSegment> _projectedSegments() {
+    final draggedEvent = widget.draggedEvent;
+    if (draggedEvent == null) {
+      return _segments;
     }
-    widget.onEventDragStateChanged(active);
+    final projectedEvents = widget.events
+        .where((event) => !_sameDraggedEvent(event, draggedEvent))
+        .toList();
+    final hoverDate = widget.dragHoverDate;
+    CalendarEvent? previewEvent;
+    if (hoverDate != null) {
+      previewEvent = shiftCalendarEventToDate(draggedEvent, hoverDate);
+      projectedEvents.add(previewEvent);
+    }
+    final weekStart = widget.weekDays.first;
+    return _layoutSegments(
+      weekStart,
+      weekStart.add(const Duration(days: 7)),
+      events: projectedEvents,
+      previewEvent: previewEvent,
+      previewDate: hoverDate,
+      previewIndex: widget.dragHoverIndex,
+    );
   }
 
   _RangeHighlightSegment? _rangeHighlightSegment(DateTime weekStart) {
@@ -1016,9 +1210,40 @@ class _WeekRowState extends State<_WeekRow> {
     );
   }
 
-  List<_EventSegment> _layoutSegments(DateTime weekStart, DateTime weekEnd) {
+  List<_EventSegment> _layoutSegments(
+    DateTime weekStart,
+    DateTime weekEnd, {
+    List<CalendarEvent>? events,
+    CalendarEvent? previewEvent,
+    DateTime? previewDate,
+    int? previewIndex,
+  }) {
+    final sourceEvents = events ?? widget.events;
+    List<String>? previewManualOrder;
+    if (previewEvent != null && previewDate != null) {
+      final dayStart = _dayStart(previewDate);
+      final dayEnd = dayStart.add(const Duration(days: 1));
+      final targetEvents = sortedCalendarEvents(
+        sourceEvents.where(
+          (event) =>
+              !_sameDraggedEvent(event, previewEvent) &&
+              event.startAt.isBefore(dayEnd) &&
+              event.endAt.isAfter(dayStart),
+        ),
+        priority: widget.eventSortPriority,
+        categoryOrder: widget.categoryOrder,
+        manualOrder:
+            widget.manualEventOrders[calendarDateKey(previewDate)]?.eventKeys ??
+            const <String>[],
+      );
+      final insertionIndex = (previewIndex ?? targetEvents.length)
+          .clamp(0, targetEvents.length)
+          .toInt();
+      targetEvents.insert(insertionIndex, previewEvent);
+      previewManualOrder = targetEvents.map(calendarEventOrderKey).toList();
+    }
     final rawSegments =
-        widget.events
+        sourceEvents
             .where((event) => event.overlaps(weekStart, weekEnd))
             .map((event) => _EventSegment.fromEvent(event, weekStart))
             .where((segment) => segment != null)
@@ -1037,10 +1262,14 @@ class _WeekRowState extends State<_WeekRow> {
               priority: widget.eventSortPriority,
               categoryOrder: widget.categoryOrder,
               manualOrder:
-                  widget
-                      .manualEventOrders[calendarDateKey(comparisonDate)]
-                      ?.eventKeys ??
-                  const <String>[],
+                  previewManualOrder != null &&
+                      previewDate != null &&
+                      _sameDay(comparisonDate, previewDate)
+                  ? previewManualOrder
+                  : widget
+                            .manualEventOrders[calendarDateKey(comparisonDate)]
+                            ?.eventKeys ??
+                        const <String>[],
             );
             if (eventCompare != 0) {
               return eventCompare;
@@ -1335,6 +1564,8 @@ class _CalendarEventDropTarget extends StatefulWidget {
     required this.flagHeight,
     required this.flagGap,
     required this.onDropped,
+    required this.onDropAccepted,
+    required this.onHoverChanged,
     required this.child,
   });
 
@@ -1345,6 +1576,9 @@ class _CalendarEventDropTarget extends StatefulWidget {
   final double flagHeight;
   final double flagGap;
   final CalendarEventDropCallback? onDropped;
+  final ValueChanged<CalendarEvent> onDropAccepted;
+  final void Function(CalendarEvent? event, DateTime? date, int? index)
+  onHoverChanged;
   final Widget child;
 
   @override
@@ -1353,66 +1587,62 @@ class _CalendarEventDropTarget extends StatefulWidget {
 }
 
 class _CalendarEventDropTargetState extends State<_CalendarEventDropTarget> {
-  bool _hovering = false;
-
   @override
   Widget build(BuildContext context) {
     if (!widget.enabled) {
       return widget.child;
     }
     return DragTarget<CalendarEventDragPayload>(
-      onWillAcceptWithDetails: (_) {
-        setState(() => _hovering = true);
+      onWillAcceptWithDetails: (details) {
+        if (!calendarEventCanMove(details.data.event)) {
+          return false;
+        }
+        _updateHover(details.data.event, details.offset);
         return true;
       },
-      onMove: (_) {
-        if (!_hovering) {
-          setState(() => _hovering = true);
-        }
+      onMove: (details) {
+        _updateHover(details.data.event, details.offset);
       },
       onLeave: (_) {
-        if (_hovering) {
-          setState(() => _hovering = false);
-        }
+        widget.onHoverChanged(null, null, null);
       },
       onAcceptWithDetails: (details) {
-        if (_hovering) {
-          setState(() => _hovering = false);
-        }
-        final box = context.findRenderObject();
-        final localOffset = box is RenderBox
-            ? box.globalToLocal(details.offset)
-            : Offset.zero;
-        final rowExtent = widget.flagHeight + widget.flagGap;
-        final rawIndex = rowExtent <= 0
-            ? widget.eventCount
-            : ((localOffset.dy - widget.flagTop + widget.flagHeight / 2) /
-                      rowExtent)
-                  .floor();
-        final targetIndex = rawIndex.clamp(0, widget.eventCount);
+        final targetIndex = _targetIndex(details.offset);
+        widget.onHoverChanged(details.data.event, widget.day, targetIndex);
+        widget.onDropAccepted(details.data.event);
         unawaited(
-          widget.onDropped!(details.data.event, widget.day, targetIndex),
+          performCalendarEventDrop(
+            details.data.event,
+            () =>
+                widget.onDropped!(details.data.event, widget.day, targetIndex),
+          ),
         );
       },
-      builder: (context, candidateData, rejectedData) => AnimatedContainer(
-        duration: const Duration(milliseconds: 120),
-        decoration: BoxDecoration(
-          color: _hovering
-              ? Theme.of(
-                  context,
-                ).colorScheme.primaryContainer.withValues(alpha: 0.32)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(7),
-        ),
-        child: widget.child,
-      ),
+      builder: (context, candidateData, rejectedData) => widget.child,
     );
+  }
+
+  void _updateHover(CalendarEvent event, Offset globalOffset) {
+    widget.onHoverChanged(event, widget.day, _targetIndex(globalOffset));
+  }
+
+  int _targetIndex(Offset globalOffset) {
+    final box = context.findRenderObject();
+    final localOffset = box is RenderBox
+        ? box.globalToLocal(globalOffset)
+        : Offset.zero;
+    final rowExtent = widget.flagHeight + widget.flagGap;
+    final rawIndex = rowExtent <= 0
+        ? widget.eventCount
+        : ((localOffset.dy - widget.flagTop + widget.flagHeight / 2) /
+                  rowExtent)
+              .floor();
+    return rawIndex.clamp(0, widget.eventCount).toInt();
   }
 }
 
 class _EventSpanFlag extends StatelessWidget {
   const _EventSpanFlag({
-    super.key,
     required this.event,
     required this.segmentStart,
     required this.segmentEnd,
@@ -1422,7 +1652,11 @@ class _EventSpanFlag extends StatelessWidget {
     required this.centerTitle,
     required this.draggable,
     required this.onDragStateChanged,
+    required this.onDragInteractionStateChanged,
     required this.onDateSelected,
+    this.hidden = false,
+    this.preview = false,
+    this.previewVisible = false,
   });
 
   final CalendarEvent event;
@@ -1434,7 +1668,11 @@ class _EventSpanFlag extends StatelessWidget {
   final bool centerTitle;
   final bool draggable;
   final ValueChanged<bool> onDragStateChanged;
+  final ValueChanged<bool> onDragInteractionStateChanged;
   final ValueChanged<DateTime> onDateSelected;
+  final bool hidden;
+  final bool preview;
+  final bool previewVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -1486,6 +1724,7 @@ class _EventSpanFlag extends StatelessWidget {
                     color: color,
                   ),
                   completed: event.completed,
+                  eventColor: color,
                 ),
               ),
             ),
@@ -1495,38 +1734,41 @@ class _EventSpanFlag extends StatelessWidget {
     );
     return LayoutBuilder(
       builder: (context, constraints) {
-        final tappableFlag = GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTapUp: (details) => onDateSelected(
-            _dateAtLocalPosition(details.localPosition, constraints.maxWidth),
+        final tappableFlag = EventCompletionAction(
+          event: event,
+          builder: (onDoubleTap) => GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onDoubleTap: onDoubleTap,
+            onTapUp: (details) => onDateSelected(
+              _dateAtLocalPosition(details.localPosition, constraints.maxWidth),
+            ),
+            child: flag,
           ),
-          child: flag,
         );
         if (!draggable) {
-          return tappableFlag;
-        }
-        return MouseRegion(
-          cursor: SystemMouseCursors.grab,
-          child: LongPressDraggable<CalendarEventDragPayload>(
-            data: CalendarEventDragPayload(event),
-            delay: const Duration(milliseconds: 320),
-            allowedButtonsFilter: (buttons) =>
-                (buttons & kPrimaryMouseButton) != 0,
-            dragAnchorStrategy: pointerDragAnchorStrategy,
-            onDragStarted: () => onDragStateChanged(true),
-            onDragCompleted: () => onDragStateChanged(false),
-            onDraggableCanceled: (_, _) => onDragStateChanged(false),
-            onDragEnd: (_) => onDragStateChanged(false),
-            feedback: Material(
-              color: Colors.transparent,
-              child: SizedBox(
-                width: constraints.maxWidth,
-                height: constraints.maxHeight,
-                child: _dragFeedback(context, color, color, title),
-              ),
+          return IgnorePointer(
+            ignoring: preview || hidden,
+            child: AnimatedOpacity(
+              duration: const Duration(milliseconds: 120),
+              opacity: hidden || (preview && !previewVisible) ? 0 : 1,
+              child: tappableFlag,
             ),
-            childWhenDragging: Opacity(opacity: 0.24, child: tappableFlag),
-            child: tappableFlag,
+          );
+        }
+        return IgnorePointer(
+          ignoring: hidden,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 120),
+            opacity: hidden ? 0 : 1,
+            child: CalendarEventDraggable(
+              key: ValueKey(
+                'calendar-month-event-drag-${event.occurrenceId ?? event.id}',
+              ),
+              event: event,
+              onDragStateChanged: onDragStateChanged,
+              onDragInteractionStateChanged: onDragInteractionStateChanged,
+              child: tappableFlag,
+            ),
           ),
         );
       },
@@ -1541,43 +1783,6 @@ class _EventSpanFlag extends StatelessWidget {
     final dayWidth = width / dayCount;
     final dayIndex = (position.dx / dayWidth).floor().clamp(0, dayCount - 1);
     return segmentStart.add(Duration(days: dayIndex));
-  }
-
-  Widget _dragFeedback(
-    BuildContext context,
-    Color sourceColor,
-    Color foregroundColor,
-    String title,
-  ) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: sourceColor.withValues(alpha: 0.92),
-        borderRadius: BorderRadius.circular(5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.24),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 7),
-        child: Align(
-          alignment: Alignment.centerLeft,
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: foregroundColor,
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ),
-      ),
-    );
   }
 
   String _formatDday(CalendarEvent event) {
@@ -1734,4 +1939,10 @@ class _EventSegment {
     final adjusted = value.subtract(const Duration(microseconds: 1));
     return DateTime(adjusted.year, adjusted.month, adjusted.day);
   }
+}
+
+bool _sameDraggedEvent(CalendarEvent? first, CalendarEvent? second) {
+  return first != null &&
+      second != null &&
+      calendarEventOrderKey(first) == calendarEventOrderKey(second);
 }

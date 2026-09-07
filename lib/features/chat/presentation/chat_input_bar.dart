@@ -132,8 +132,18 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
         builder: (_) => _DraftConfirmationSheet(draft: result.draft!),
       );
       if (confirmed == true) {
+        if (!mounted) return;
         await ref.read(eventCommandServiceProvider).create(result.draft!);
+        if (!mounted) return;
         _controller.clear();
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.tr('요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.')),
+          ),
+        );
       }
     } finally {
       if (mounted) {

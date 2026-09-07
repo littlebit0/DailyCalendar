@@ -66,16 +66,14 @@
         <TextView android:id="@+id/widget_weekday_7" style="@style/DailyWidgetWeekday" />
     </LinearLayout>
 
-    <GridView
+    <ListView
         android:id="@+id/widget_collection"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="2dp"
         android:layout_weight="1"
-        android:gravity="fill"
-        android:horizontalSpacing="1dp"
-        android:numColumns="7"
+        android:divider="@null"
+        android:dividerHeight="0dp"
         android:scrollbars="none"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="1dp" />
+        android:padding="0dp" />
 </LinearLayout>

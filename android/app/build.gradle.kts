@@ -33,7 +33,7 @@ android {
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         // Android requires a monotonically increasing integer versionCode.
-        versionCode = 331
+        versionCode = 340
         versionName = flutter.versionName
     }
 
@@ -53,6 +53,10 @@ android {
             signingConfig = signingConfigs.getByName("release")
         }
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
 }
 
 flutter {
@@ -66,6 +70,8 @@ kotlin {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.robolectric:robolectric:4.16.1")
     implementation("androidx.appcompat:appcompat:1.7.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }

@@ -46,6 +46,7 @@ class SettingsRepository {
   static const _appTextSizeKey = 'appTextSize';
   static const _legacyCalendarEventTextSizeKey = 'calendarEventTextSize';
   static const _legacyCalendarDensityKey = 'calendarDensity';
+  static const _appStartViewKey = 'appStartView';
   static const _defaultCalendarViewKey = 'defaultCalendarView';
   static const _weekDayLayoutModeKey = 'weekDayLayoutMode';
   static const _calendarEventTitleAlignmentKey = 'calendarEventTitleAlignment';
@@ -99,6 +100,9 @@ class SettingsRepository {
       appTextSize: AppTextSize.fromName(
         _preferences.getString(_appTextSizeKey) ??
             _preferences.getString(_legacyCalendarEventTextSizeKey),
+      ),
+      appStartView: AppStartView.fromName(
+        _preferences.getString(_appStartViewKey),
       ),
       defaultCalendarView: CalendarViewMode.fromName(
         _preferences.getString(_defaultCalendarViewKey),
@@ -298,6 +302,13 @@ class SettingsRepository {
     }
     if (_preferences.containsKey(_legacyCalendarDensityKey)) {
       await _preferences.remove(_legacyCalendarDensityKey);
+    }
+    if (baseline.appStartView != settings.appStartView &&
+        previous.appStartView != settings.appStartView) {
+      await _preferences.setString(
+        _appStartViewKey,
+        settings.appStartView.name,
+      );
     }
     if (baseline.defaultCalendarView != settings.defaultCalendarView &&
         previous.defaultCalendarView != settings.defaultCalendarView) {
@@ -665,6 +676,7 @@ class SettingsRepository {
     await _preferences.remove(_appTextSizeKey);
     await _preferences.remove(_legacyCalendarEventTextSizeKey);
     await _preferences.remove(_legacyCalendarDensityKey);
+    await _preferences.remove(_appStartViewKey);
     await _preferences.remove(_defaultCalendarViewKey);
     await _preferences.remove(_weekDayLayoutModeKey);
     await _preferences.remove(_calendarEventTitleAlignmentKey);

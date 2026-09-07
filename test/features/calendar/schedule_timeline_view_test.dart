@@ -1,6 +1,9 @@
+import 'dart:async';
+
+import 'package:daily/core/calendar/calendar_event_movement.dart';
 import 'package:daily/features/calendar/widgets/schedule_timeline_view.dart';
+import 'package:daily/features/calendar/widgets/calendar_event_drag_layer.dart';
 import 'package:daily/core/settings/app_settings.dart';
-import 'package:daily/core/theme/event_completion_style.dart';
 import 'package:daily/core/widgets/smooth_mouse_wheel_scroll_controller.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
@@ -253,43 +256,42 @@ void main() {
     );
   });
 
-  testWidgets(
-    'monday-start week keeps calendar weekdays and selected weekend priority',
-    (tester) async {
-      final theme = ThemeData.dark();
-      final days = List.generate(7, (index) => DateTime(2026, 8, 24 + index));
+  testWidgets('monday-start week retains the selected weekend color', (
+    tester,
+  ) async {
+    final theme = ThemeData.dark();
+    final days = List.generate(7, (index) => DateTime(2026, 8, 24 + index));
 
-      await tester.pumpWidget(
-        MaterialApp(
-          darkTheme: theme,
-          themeMode: ThemeMode.dark,
-          home: Scaffold(
-            body: ScheduleTimelineView(
-              days: days,
-              events: const [],
-              selectedDate: DateTime(2026, 8, 29),
-              use24HourTime: true,
-              showAllDayEvents: true,
-              holidayBackgroundEnabled: true,
-              holidayColorValue: 0xffef4444,
-              onShowAllDayEventsChanged: (_) {},
-              onDateSelected: (_) {},
-            ),
+    await tester.pumpWidget(
+      MaterialApp(
+        darkTheme: theme,
+        themeMode: ThemeMode.dark,
+        home: Scaffold(
+          body: ScheduleTimelineView(
+            days: days,
+            events: const [],
+            selectedDate: DateTime(2026, 8, 29),
+            use24HourTime: true,
+            showAllDayEvents: true,
+            holidayBackgroundEnabled: true,
+            holidayColorValue: 0xffef4444,
+            onShowAllDayEventsChanged: (_) {},
+            onDateSelected: (_) {},
           ),
         ),
-      );
-      await tester.pumpAndSettle();
+      ),
+    );
+    await tester.pumpAndSettle();
 
-      expect(
-        _headerColor(tester, DateTime(2026, 8, 29)),
-        theme.colorScheme.onPrimaryContainer,
-      );
-      expect(
-        _headerColor(tester, DateTime(2026, 8, 30)),
-        const Color(0xffef4444),
-      );
-    },
-  );
+    expect(
+      _headerColor(tester, DateTime(2026, 8, 29)),
+      const Color(0xff2563eb),
+    );
+    expect(
+      _headerColor(tester, DateTime(2026, 8, 30)),
+      const Color(0xffef4444),
+    );
+  });
 
   testWidgets('schedule holiday keeps weekend text without a red background', (
     tester,
@@ -339,11 +341,54 @@ void main() {
     );
 
     await pump(enabled: false);
+    expect(_headerColor(tester, DateTime(2026, 8, 27)), holidayColor);
     expect(
       _headerBackgroundColor(tester, DateTime(2026, 8, 27)),
       Colors.transparent,
     );
   });
+
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'today retains its holiday color and selected background in $brightness',
+      (tester) async {
+        final now = DateTime.now();
+        final today = DateTime(now.year, now.month, now.day);
+        final theme = ThemeData(
+          brightness: brightness,
+          platform: TargetPlatform.macOS,
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Scaffold(
+              body: ScheduleTimelineView(
+                days: List.generate(
+                  7,
+                  (index) => today.add(Duration(days: index)),
+                ),
+                events: const [],
+                selectedDate: today,
+                holidayDates: {today},
+                holidayColorValue: 0xff10b981,
+                holidayBackgroundEnabled: false,
+                use24HourTime: true,
+                showAllDayEvents: false,
+                onShowAllDayEventsChanged: (_) {},
+                onDateSelected: (_) {},
+              ),
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(_headerColor(tester, today), const Color(0xff10b981));
+        expect(
+          _headerBackgroundColor(tester, today),
+          theme.colorScheme.primaryContainer,
+        );
+      },
+    );
+  }
 
   testWidgets('schedule all-day titles honor center alignment', (tester) async {
     final event = CalendarEvent(
@@ -384,7 +429,7 @@ void main() {
     );
   });
 
-  testWidgets('completed schedule event uses a visible double strike', (
+  testWidgets('completed schedule event uses a visible single strike', (
     tester,
   ) async {
     final event = CalendarEvent(
@@ -423,8 +468,9 @@ void main() {
 
     final style = tester.widget<Text>(find.text('완료 일정')).style!;
     expect(style.decoration, TextDecoration.lineThrough);
-    expect(style.decorationStyle, TextDecorationStyle.double);
-    expect(style.decorationThickness, greaterThanOrEqualTo(2));
+    expect(style.decorationStyle, TextDecorationStyle.solid);
+    expect(style.decorationThickness, lessThan(2));
+    expect(style.color, Color(EventCategory.basic.colorValue));
     final eventContainer = tester.widget<Container>(
       find
           .ancestor(of: find.text('완료 일정'), matching: find.byType(Container))
@@ -432,7 +478,7 @@ void main() {
     );
     expect(
       (eventContainer.decoration! as BoxDecoration).color,
-      calendarCompletedEventBackgroundColor(tester.element(find.text('완료 일정'))),
+      Color(EventCategory.basic.colorValue).withValues(alpha: 0.17),
     );
   });
 
@@ -451,6 +497,7 @@ void main() {
       updatedAt: DateTime(2026, 8, 1),
     );
     DateTime? droppedDate;
+    final dragStates = <bool>[];
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
@@ -465,6 +512,7 @@ void main() {
             onEventDropped: (event, date, index) async {
               droppedDate = date;
             },
+            onEventDragStateChanged: dragStates.add,
             onShowAllDayEventsChanged: (_) {},
             onDateSelected: (_) {},
           ),
@@ -486,6 +534,183 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(droppedDate, DateTime(2026, 8, 28));
+    expect(dragStates, containsAllInOrder([true, false]));
+  });
+
+  testWidgets('timed schedule drop keeps its center aligned to 30 minutes', (
+    tester,
+  ) async {
+    final day = DateTime(2026, 8, 27);
+    final event = CalendarEvent(
+      id: 'move-timed-schedule',
+      title: '시간 이동 일정',
+      startAt: DateTime(2026, 8, 27, 9),
+      endAt: DateTime(2026, 8, 27, 10),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 8, 1),
+      updatedAt: DateTime(2026, 8, 1),
+    );
+    DateTime? droppedStart;
+    final saveCompleter = Completer<void>();
+    final dragStates = <bool>[];
+    final interactionStates = <bool>[];
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ScheduleTimelineView(
+            days: [day],
+            events: [event],
+            selectedDate: day,
+            use24HourTime: true,
+            showAllDayEvents: true,
+            holidayBackgroundEnabled: true,
+            holidayColorValue: EventCategory.holiday.colorValue,
+            onEventTimeDropped: (event, targetStart) async {
+              droppedStart = targetStart;
+              await saveCompleter.future;
+            },
+            onEventDragStateChanged: dragStates.add,
+            onEventDragInteractionStateChanged: interactionStates.add,
+            onShowAllDayEventsChanged: (_) {},
+            onDateSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final eventBlock = find.byKey(
+      ValueKey('schedule-event-${event.id}-${day.toIso8601String()}'),
+    );
+    final gesture = await tester.startGesture(tester.getCenter(eventBlock));
+    await tester.pump(const Duration(milliseconds: 400));
+    await gesture.moveBy(const Offset(0, 4.5 * 64));
+    await tester.pump(const Duration(milliseconds: 220));
+    final movingPreview = find.byKey(
+      ValueKey('schedule-event-${event.id}-${day.toIso8601String()}-preview'),
+    );
+    expect(movingPreview, findsOneWidget);
+    expect(
+      tester
+          .widget<AnimatedOpacity>(
+            find.descendant(
+              of: movingPreview,
+              matching: find.byType(AnimatedOpacity),
+            ),
+          )
+          .opacity,
+      0.48,
+    );
+    await gesture.up();
+    await tester.pump(const Duration(milliseconds: 220));
+
+    expect(droppedStart, DateTime(2026, 8, 27, 13, 30));
+    expect(dragStates, [true]);
+    expect(interactionStates, [true, false]);
+    final acceptedPreview = find.byKey(
+      ValueKey('schedule-event-${event.id}-${day.toIso8601String()}-preview'),
+    );
+    expect(acceptedPreview, findsOneWidget);
+    expect(
+      tester
+          .widget<AnimatedOpacity>(
+            find.descendant(
+              of: acceptedPreview,
+              matching: find.byType(AnimatedOpacity),
+            ),
+          )
+          .opacity,
+      1,
+    );
+    expect(
+      find.byKey(const ValueKey('schedule-time-drop-target')),
+      findsNothing,
+    );
+
+    saveCompleter.complete();
+    await tester.pumpAndSettle();
+    expect(dragStates, [true, false]);
+    expect(acceptedPreview, findsNothing);
+  });
+
+  testWidgets('sidebar schedule drop changes only the date', (tester) async {
+    final event = CalendarEvent(
+      id: 'sidebar-schedule',
+      title: '사이드바 일정',
+      startAt: DateTime(2026, 8, 27, 9, 20),
+      endAt: DateTime(2026, 8, 27, 11, 20),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 8, 1),
+      updatedAt: DateTime(2026, 8, 1),
+    );
+    DateTime? droppedStart;
+    var dragActive = false;
+    var interactionActive = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: StatefulBuilder(
+            builder: (context, setState) => Row(
+              children: [
+                SizedBox(
+                  width: 150,
+                  child: CalendarEventDraggable(
+                    event: event,
+                    origin: CalendarEventDragOrigin.sidebar,
+                    onDragStateChanged: (active) =>
+                        setState(() => dragActive = active),
+                    onDragInteractionStateChanged: (active) =>
+                        setState(() => interactionActive = active),
+                    child: const SizedBox(
+                      key: ValueKey('sidebar-schedule-source'),
+                      height: 64,
+                      child: Text('사이드바 일정'),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: ScheduleTimelineView(
+                    days: [DateTime(2026, 8, 28)],
+                    events: [event],
+                    selectedDate: DateTime(2026, 8, 28),
+                    use24HourTime: true,
+                    showAllDayEvents: true,
+                    holidayBackgroundEnabled: true,
+                    holidayColorValue: EventCategory.holiday.colorValue,
+                    externalEventDragActive: dragActive,
+                    externalEventDragInteractionActive: interactionActive,
+                    onEventTimeDropped: (event, targetStart) async {
+                      droppedStart = targetStart;
+                    },
+                    onShowAllDayEventsChanged: (_) {},
+                    onDateSelected: (_) {},
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.byKey(const ValueKey('sidebar-schedule-source'))),
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    final target = find.byKey(const ValueKey('schedule-time-drop-target'));
+    expect(target, findsOneWidget);
+    await gesture.moveTo(tester.getCenter(target));
+    await tester.pump(const Duration(milliseconds: 180));
+    await gesture.up();
+    await tester.pumpAndSettle();
+
+    expect(droppedStart, DateTime(2026, 8, 28, 9, 20));
   });
 
   testWidgets('overlapping schedule lanes follow category order', (

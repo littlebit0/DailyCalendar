@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 
@@ -10,6 +11,7 @@ import '../../features/events/application/event_command_service.dart';
 import '../../features/events/data/app_database.dart';
 import '../../features/events/data/drift_event_repository.dart';
 import '../../features/events/domain/calendar_event.dart';
+import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../analytics/product_analytics.dart';
 import '../support/bug_report_service.dart';
@@ -96,7 +98,10 @@ final koreanHolidayServiceProvider = Provider<KoreanHolidayService>((ref) {
 });
 
 final googleDriveAuthServiceProvider = Provider<GoogleDriveAuthService>((ref) {
-  return GoogleDriveAuthService();
+  final settings = ref.watch(settingsRepositoryProvider);
+  return GoogleDriveAuthService(
+    linkedGoogleEmail: () => settings.dailyAccount()?.googleAccount?.email,
+  );
 });
 
 final appleSignInServiceProvider = Provider<AppleSignInService>((ref) {
@@ -173,7 +178,12 @@ final scheduleParserProvider = Provider<ScheduleParser>((ref) {
   final settingsRepository = ref.watch(settingsRepositoryProvider);
   return HybridScheduleParser(
     ruleBasedParser: RuleBasedScheduleParser(),
-    aiParser: GeminiScheduleParser(settingsRepository),
+    aiParser: GeminiScheduleParser(
+      settingsRepository,
+      modelName: defaultTargetPlatform == TargetPlatform.android
+          ? 'gemini-3.6-flash'
+          : 'gemini-2.0-flash',
+    ),
     settingsRepository: settingsRepository,
   );
 });
@@ -194,15 +204,30 @@ final calendarViewModeProvider = StateProvider<CalendarViewMode>((ref) {
 
 final calendarSearchQueryProvider = StateProvider<String>((ref) => '');
 
-final eventsInRangeProvider = StreamProvider.autoDispose
-    .family<List<CalendarEvent>, CalendarRange>((ref, range) {
-      final settings = ref.watch(appSettingsProvider);
+final eventsInRangeProvider =
+    StreamProvider.family<List<CalendarEvent>, CalendarRange>((ref, range) {
+      final holidayConfiguration = ref.watch(
+        appSettingsProvider.select(
+          (settings) => (
+            id: settings.holidayCategory.id,
+            label: settings.holidayCategory.label,
+            colorValue: settings.holidayCategory.colorValue,
+            locked: settings.holidayCategory.locked,
+          ),
+        ),
+      );
+      final holidayCategory = EventCategory(
+        id: holidayConfiguration.id,
+        label: holidayConfiguration.label,
+        colorValue: holidayConfiguration.colorValue,
+        locked: holidayConfiguration.locked,
+      );
       final holidays = ref
           .watch(koreanHolidayServiceProvider)
           .holidayEventsInRange(
             range.start,
             range.end,
-            category: settings.holidayCategory,
+            category: holidayCategory,
           );
       return ref
           .watch(eventRepositoryProvider)

@@ -18,6 +18,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterFragmentActivity() {
     private var pendingCalendarOperation: (() -> Unit)? = null
     private var pendingCalendarResult: MethodChannel.Result? = null
+    private val alarmBridge = DailyAlarmBridge(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        alarmBridge.register(flutterEngine.dartExecutor.binaryMessenger)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "daily/map_launcher")
             .setMethodCallHandler { call, result ->
                 if (call.method != "openLocation") {
@@ -85,6 +87,7 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     override fun onDestroy() {
+        alarmBridge.dispose()
         DailyAndroidWidgetBridge.unregister()
         super.onDestroy()
     }

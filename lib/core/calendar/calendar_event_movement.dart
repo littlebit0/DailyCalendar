@@ -8,10 +8,19 @@ typedef CalendarEventDropCallback =
       int targetIndex,
     );
 
+typedef CalendarEventTimeDropCallback =
+    Future<void> Function(CalendarEvent event, DateTime targetStart);
+
+enum CalendarEventDragOrigin { calendar, sidebar }
+
 class CalendarEventDragPayload {
-  const CalendarEventDragPayload(this.event);
+  const CalendarEventDragPayload(
+    this.event, {
+    this.origin = CalendarEventDragOrigin.calendar,
+  });
 
   final CalendarEvent event;
+  final CalendarEventDragOrigin origin;
 }
 
 const calendarEventAppendIndex = 1 << 30;
@@ -45,6 +54,19 @@ CalendarEvent shiftCalendarEventToDate(
   return event.copyWith(
     startAt: shiftedStart,
     endAt: shiftedStart.add(event.duration),
+  );
+}
+
+CalendarEvent shiftCalendarEventToStart(
+  CalendarEvent event,
+  DateTime targetStart,
+) {
+  if (event.allDay) {
+    return shiftCalendarEventToDate(event, targetStart);
+  }
+  return event.copyWith(
+    startAt: targetStart,
+    endAt: targetStart.add(event.duration),
   );
 }
 

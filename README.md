@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/littlebit0/DailyCalendar/releases/latest"><img src="https://img.shields.io/github/v/release/littlebit0/DailyCalendar?label=release" alt="Latest release"></a>
-  <img src="https://img.shields.io/badge/version-3.3.1-2f6feb" alt="Version 3.3.1">
+  <img src="https://img.shields.io/badge/version-3.4.0-2f6feb" alt="Version 3.4.0">
   <img src="https://img.shields.io/badge/Flutter-iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows-02569B?logo=flutter" alt="Flutter platforms">
 </p>
 
@@ -18,6 +18,19 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 크로스 플랫폼 캘린더입니다. 계정 없이 로컬로 사용할 수 있으며, Google 계정을
 연결하면 Google Drive AppData를 통해 일정과 설정을 백업하고 동기화할 수
 있습니다.
+
+## 3.4.0 주요 변경
+
+- 일정 드래그로 날짜·순서를 변경하고, 주·일간 스케줄에서는 30분 단위로 시간을 이동합니다.
+- 드래그 중 원래 자리 비우기, 대상 화면에 맞는 일정 크기 전환과 저장 시 깜빡임을 개선했습니다.
+- 모바일 하루보기 팝업 밖으로 일정을 옮기면 월간 달력 전체를 확인할 수 있습니다.
+- 일정 더블클릭·더블탭으로 완료/미완료를 전환하며, 완료 후에도 분류 색상을 유지합니다.
+- 첫 화면을 빠른 보기/주/월/일 중 선택하고, 빠른 보기는 항상 좌우로 월을 이동합니다.
+- 날짜·요일·공휴일 표시, macOS 휠 이동, 좁은 화면의 설정 문구와 Android 로그인·알람·위젯을 개선했습니다.
+
+> **Windows에는 이번 최신 변경사항이 미적용 상태입니다.** Windows 전용 반영과
+> 실제 OS 검증·업데이트는 후속 작업이며, 공유 코드나 버전 번호 변경만으로
+> 적용 완료를 의미하지 않습니다. 변경 내용은 [3.4.0 릴리스 노트](docs/RELEASE_NOTES_3.4.0.md)를 확인하세요.
 
 ## 다운로드
 
@@ -27,10 +40,10 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 | 플랫폼 | 배포 상태 | 파일 |
 | --- | --- | --- |
 | iPhone / iPad | App Store 무료 배포 중 | App Store의 `DailyCalendar` |
-| iOS 테스트 | GitHub 공개 검증용 미서명 파일 | [daily-ios-3.3.1-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-ios-3.3.1-unsigned.ipa) |
-| macOS 테스트 | GitHub 공개 검증용 미서명 파일 | [daily-macos-3.3.1-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-macos-3.3.1-unsigned.dmg) |
-| Android | GitHub 설치용 APK | [daily-android-3.3.1.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-android-3.3.1.apk) |
-| Windows | 설치 프로그램 및 휴대용 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1.zip) |
+| iOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-ios-3.4.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-ios-3.4.0-unsigned.ipa) |
+| macOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-macos-3.4.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-macos-3.4.0-unsigned.dmg) |
+| Android | 기존 공개 APK 3.3.1, 최신 변경은 소스·테스트 앱에 반영 | [daily-android-3.3.1.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-android-3.3.1.apk) |
+| Windows | 최신 변경 미적용, 기존 공개 버전 3.3.1 | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1.zip) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
 > 서명 없이는 iPhone에 직접 설치할 수 없으며, 재서명 과정에서 Sign in with
@@ -102,10 +115,9 @@ GitHub 릴리스를 확인하며 새 Windows 설치 프로그램이 있으면 �
 | 홈 화면 위젯·미니 캘린더 | O | O | O | O |
 | 앱 잠금 | O | O | O | O |
 
-공유 Flutter 코드가 네 플랫폼의 사용자 경험을 유지합니다. Android와 Windows의
-3.3.1 배포 파일은 GitHub Releases에서 받을 수 있으며 Android는 홈 화면 위젯,
-고주사율·터치 입력과 생체 인증을, Windows는 트레이 미니 캘린더, 마우스 이동,
-설정 애니메이션과 자동 업데이트 설치 흐름을 함께 지원합니다.
+위 표는 기존 기본 기능 지원 범위입니다. 3.4.0의 최신 변경사항은 iOS/macOS/Android
+기준이며 Windows에는 미적용 상태입니다. Windows 3.3.1의 기존 트레이 미니
+캘린더와 자동 업데이트 기능은 유지되지만, 이번 변경의 적용 완료로 해석하지 않습니다.
 
 ## 데이터와 개인정보 보호
 
@@ -190,18 +202,18 @@ Google OAuth 및 Apple 서명 값은 저장소에 포함하지 않습니다. 로
 ./tool/flutter.sh test --no-pub
 ```
 
-3.3.1 기준 검증 결과:
+3.4.0 소스 기준 검증 결과:
 
 - Flutter 정적 분석 통과
-- 전체 Flutter 자동화 테스트 288개 통과
-- 분석·버그 제보 서버 자동화 테스트 4개 통과
-- Android Release APK 및 Windows Release 설치 프로그램·ZIP 빌드 통과
-- Windows Profile/AOT 테스트판 실제 실행 및 설정 프레임 측정 통과
-- iOS/macOS 앱과 위젯 버전 `3.3.1 (3.3.1)` 확인
+- 전체 Flutter 자동화 테스트 368개 통과, 기존 건너뜀 1개
+- 플랫폼 구성 테스트 12개 및 앱·위젯 버전 `3.4.0 (3.4.0)` 설정 검사 통과
+- 직전 테스트 빌드의 macOS/iOS/Android 업데이트 시 일정·설정 데이터 보존 확인
+- Windows 최신 변경 미적용: Windows 빌드·실사용 검증·업데이트는 별도 진행 필요
+- 자동 테스트와 빌드 검증은 실제 사용자 기기의 로그인·알람·위젯 동작 보장을 의미하지 않습니다.
 
 ## 문서
 
-- [3.3.1 릴리스 노트](docs/RELEASE_NOTES_3.3.1.md)
+- [3.4.0 릴리스 노트](docs/RELEASE_NOTES_3.4.0.md)
 - [기능 로드맵](docs/FEATURE_ROADMAP.md)
 - [프로젝트 분석](PROJECT_ANALYSIS.md)
 - [Google Drive 동기화 설정](docs/GOOGLE_DRIVE_SYNC_SETUP.md)

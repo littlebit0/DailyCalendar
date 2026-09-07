@@ -18,7 +18,13 @@ String calendarPeriodLabel({
   required String locale,
   required bool weekStartsOnMonday,
   required bool compactHorizontalYearOnly,
+  bool showFullDay = false,
 }) {
+  if (showFullDay && viewMode == CalendarViewMode.day) {
+    return locale.toLowerCase().startsWith('ko')
+        ? DateFormat('yyyy년 MM월 dd일 EEEE', locale).format(selectedDate)
+        : DateFormat.yMMMMEEEEd(locale).format(selectedDate);
+  }
   if (navigationMode != MonthNavigationMode.vertical) {
     return compactHorizontalYearOnly
         ? DateFormat.y(locale).format(visibleMonth)

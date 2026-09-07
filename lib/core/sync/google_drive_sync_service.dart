@@ -998,6 +998,9 @@ class GoogleDriveSyncService implements SyncService {
       appTextSize: remoteSettings.hasAppTextSize
           ? remoteSettings.settings.appTextSize
           : localSettings.appTextSize,
+      appStartView: remoteSettings.hasAppStartView
+          ? remoteSettings.settings.appStartView
+          : localSettings.appStartView,
       weekDayLayoutMode: remoteSettings.hasWeekDayLayoutMode
           ? remoteSettings.settings.weekDayLayoutMode
           : localSettings.weekDayLayoutMode,
@@ -1396,6 +1399,7 @@ class GoogleDriveSyncService implements SyncService {
       hasAppTextSize:
           settingsJson.containsKey('appTextSize') ||
           settingsJson.containsKey('calendarEventTextSize'),
+      hasAppStartView: settingsJson.containsKey('appStartView'),
       hasWeekDayLayoutMode: settingsJson.containsKey('weekDayLayoutMode'),
       hasCalendarEventTitleAlignment: settingsJson.containsKey(
         'calendarEventTitleAlignment',
@@ -1742,6 +1746,7 @@ class GoogleDriveSyncService implements SyncService {
           .toList(),
       'dDayReminderOffsets': settings.dDayReminderOffsets,
       'appTextSize': settings.appTextSize.name,
+      'appStartView': settings.appStartView.name,
       'defaultCalendarView': settings.defaultCalendarView.name,
       'weekDayLayoutMode': settings.weekDayLayoutMode.name,
       'calendarEventTitleAlignment': settings.calendarEventTitleAlignment.name,
@@ -1791,6 +1796,7 @@ class GoogleDriveSyncService implements SyncService {
         json['appTextSize'] as String? ??
             json['calendarEventTextSize'] as String?,
       ),
+      appStartView: AppStartView.fromName(json['appStartView'] as String?),
       defaultCalendarView: CalendarViewMode.fromName(
         json['defaultCalendarView'] as String?,
       ),
@@ -1942,6 +1948,7 @@ class _DownloadedSettings {
   const _DownloadedSettings({
     required this.settings,
     required this.hasAppTextSize,
+    required this.hasAppStartView,
     required this.hasWeekDayLayoutMode,
     required this.hasCalendarEventTitleAlignment,
     required this.hasCalendarEventSortPriority,
@@ -1952,6 +1959,7 @@ class _DownloadedSettings {
 
   final AppSettings settings;
   final bool hasAppTextSize;
+  final bool hasAppStartView;
   final bool hasWeekDayLayoutMode;
   final bool hasCalendarEventTitleAlignment;
   final bool hasCalendarEventSortPriority;

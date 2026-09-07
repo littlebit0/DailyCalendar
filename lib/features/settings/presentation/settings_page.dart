@@ -42,6 +42,30 @@ enum _SettingsDestination {
   about,
 }
 
+enum _AppStartDestination { quickView, week, month, day }
+
+_AppStartDestination _appStartDestinationFor(AppSettings settings) {
+  if (settings.appStartView == AppStartView.quickView) {
+    return _AppStartDestination.quickView;
+  }
+  return switch (settings.defaultCalendarView) {
+    CalendarViewMode.week => _AppStartDestination.week,
+    CalendarViewMode.month => _AppStartDestination.month,
+    CalendarViewMode.day => _AppStartDestination.day,
+  };
+}
+
+CalendarViewMode? _calendarViewForStartDestination(
+  _AppStartDestination destination,
+) {
+  return switch (destination) {
+    _AppStartDestination.quickView => null,
+    _AppStartDestination.week => CalendarViewMode.week,
+    _AppStartDestination.month => CalendarViewMode.month,
+    _AppStartDestination.day => CalendarViewMode.day,
+  };
+}
+
 bool supportsAdjacentMonthDateSetting(TargetPlatform platform) {
   return platform == TargetPlatform.android ||
       platform == TargetPlatform.iOS ||
@@ -84,6 +108,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   DailyAccount? _dailyAccount;
   var _googleDriveConnectAttempt = 0;
   int? _activeGoogleDriveConnectAttempt;
+  Future<void> _categoryReorderSaveQueue = Future<void>.value();
+  var _categoryReorderRevision = 0;
 
   static const _categoryColors = [
     0xff2563eb,
@@ -191,6 +217,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    final windowSize = MediaQuery.sizeOf(context);
+    final androidTablet =
+        Theme.of(context).platform == TargetPlatform.android &&
+        dailyWindowClassFor(windowSize) != DailyWindowClass.compact;
     final storedSettings = ref.watch(appSettingsProvider);
     final settings = defaultTargetPlatform == TargetPlatform.windows
         ? _pendingWindowsSettings ?? storedSettings
@@ -222,9 +252,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             constraints: const BoxConstraints(maxWidth: 900),
             child: ListView(
               padding: EdgeInsets.fromLTRB(
-                DailyUi.isDesktop ? 24 : 16,
+                DailyUi.isDesktop || androidTablet ? 24 : 16,
                 10,
-                DailyUi.isDesktop ? 24 : 16,
+                DailyUi.isDesktop || androidTablet ? 24 : 16,
                 28,
               ),
               children: [
@@ -566,34 +596,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                       ),
                       const Divider(height: 1),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: Row(
-                          children: [
-                            const _SettingsRowLeading(Icons.palette_outlined),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              flex: 2,
-                              child: Text(
-                                context.tr('테마'),
-                                style: Theme.of(context).textTheme.titleSmall,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Expanded(
-                              flex: 5,
-                              child: _ThreeWayCapsule<AppThemeMode>(
-                                key: const ValueKey('app-theme-mode-slider'),
-                                values: AppThemeMode.values,
-                                selected: settings.themeMode,
-                                labelFor: context.l10n.themeName,
-                                onChanged: (mode) => _save(
-                                  settings.copyWith(themeMode: mode),
-                                  changedFrom: settings,
-                                ),
-                              ),
-                            ),
-                          ],
+                      _ResponsiveSettingsControlRow(
+                        icon: Icons.palette_outlined,
+                        title: context.tr('테마'),
+                        optionCount: AppThemeMode.values.length,
+                        wideLabelFlex: 2,
+                        wideControlFlex: 5,
+                        control: _ThreeWayCapsule<AppThemeMode>(
+                          key: const ValueKey('app-theme-mode-slider'),
+                          values: AppThemeMode.values,
+                          selected: settings.themeMode,
+                          labelFor: context.l10n.themeName,
+                          onChanged: (mode) => _save(
+                            settings.copyWith(themeMode: mode),
+                            changedFrom: settings,
+                          ),
                         ),
                       ),
                     ],
@@ -626,24 +643,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                         const Divider(height: 1),
                       ],
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _SettingsLeadingIcon(
-                          Icons.calendar_view_week_outlined,
-                        ),
-                        title: Text(context.tr('주 시작 요일')),
-                        trailing: SizedBox(
-                          width: 132,
-                          child: _ThreeWayCapsule<bool>(
-                            key: const ValueKey('week-start-toggle'),
-                            values: const [false, true],
-                            selected: settings.weekStartsOnMonday,
-                            labelFor: (startsOnMonday) =>
-                                context.tr(startsOnMonday ? '월' : '일'),
-                            onChanged: (value) => _save(
-                              settings.copyWith(weekStartsOnMonday: value),
-                              changedFrom: settings,
-                            ),
+                      _ResponsiveSettingsControlRow(
+                        icon: Icons.calendar_view_week_outlined,
+                        title: context.tr('주 시작 요일'),
+                        controlWidth: 132,
+                        optionCount: 2,
+                        control: _ThreeWayCapsule<bool>(
+                          key: const ValueKey('week-start-toggle'),
+                          values: const [false, true],
+                          selected: settings.weekStartsOnMonday,
+                          labelFor: (startsOnMonday) =>
+                              context.tr(startsOnMonday ? '월' : '일'),
+                          onChanged: (value) => _save(
+                            settings.copyWith(weekStartsOnMonday: value),
+                            changedFrom: settings,
                           ),
                         ),
                       ),
@@ -705,109 +718,118 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                       ],
                       const Divider(height: 1),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _SettingsLeadingIcon(
-                          Icons.swipe_outlined,
-                        ),
-                        title: Text(context.tr('월간 이동 방식')),
-                        trailing: SizedBox(
-                          width: 224,
-                          child: _ThreeWayCapsule<MonthNavigationMode>(
-                            key: const ValueKey('month-navigation-mode-slider'),
-                            values: MonthNavigationMode.values,
-                            selected: settings.monthNavigationMode,
-                            labelFor: context.l10n.navigationName,
-                            onChanged: (value) => _save(
-                              settings.copyWith(
-                                monthNavigationMode: value,
-                                showAdjacentMonthDates:
-                                    value == MonthNavigationMode.vertical
-                                    ? false
-                                    : settings.showAdjacentMonthDates,
-                              ),
-                              changedFrom: settings,
+                      _ResponsiveSettingsControlRow(
+                        icon: Icons.swipe_outlined,
+                        title: context.tr('월간 이동 방식'),
+                        controlWidth: 224,
+                        optionCount: MonthNavigationMode.values.length,
+                        control: _ThreeWayCapsule<MonthNavigationMode>(
+                          key: const ValueKey('month-navigation-mode-slider'),
+                          values: MonthNavigationMode.values,
+                          selected: settings.monthNavigationMode,
+                          labelFor: context.l10n.navigationName,
+                          onChanged: (value) => _save(
+                            settings.copyWith(
+                              monthNavigationMode: value,
+                              showAdjacentMonthDates:
+                                  value == MonthNavigationMode.vertical
+                                  ? false
+                                  : settings.showAdjacentMonthDates,
                             ),
+                            changedFrom: settings,
                           ),
                         ),
                       ),
                       const Divider(height: 1),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _SettingsLeadingIcon(
-                          Icons.calendar_view_month_outlined,
-                        ),
-                        title: Text(context.tr('기본 보기')),
-                        subtitle: _SettingsDescription(
-                          context.tr('앱을 열었을 때 먼저 보여줄 달력 보기'),
-                        ),
-                        trailing: SizedBox(
-                          width: 188,
-                          child: _ThreeWayCapsule<CalendarViewMode>(
-                            key: const ValueKey('default-calendar-view-slider'),
-                            values: CalendarViewMode.values,
-                            selected: settings.defaultCalendarView,
-                            labelFor: context.l10n.calendarViewName,
-                            onChanged: (value) {
-                              _save(
-                                settings.copyWith(defaultCalendarView: value),
-                                changedFrom: settings,
-                              );
+                      _ResponsiveSettingsControlRow(
+                        icon: Icons.home_outlined,
+                        title: context.tr('첫 화면'),
+                        description: context.tr('앱을 열었을 때 먼저 보여줄 화면'),
+                        controlWidth: 248,
+                        optionCount: _AppStartDestination.values.length,
+                        control: _ThreeWayCapsule<_AppStartDestination>(
+                          key: const ValueKey('app-start-view-slider'),
+                          values: _AppStartDestination.values,
+                          selected: _appStartDestinationFor(settings),
+                          labelFor: (destination) => switch (destination) {
+                            _AppStartDestination.quickView => context.tr(
+                              '빠른 보기',
+                            ),
+                            _AppStartDestination.week =>
+                              context.l10n.compactCalendarViewName(
+                                CalendarViewMode.week,
+                              ),
+                            _AppStartDestination.month =>
+                              context.l10n.compactCalendarViewName(
+                                CalendarViewMode.month,
+                              ),
+                            _AppStartDestination.day =>
+                              context.l10n.compactCalendarViewName(
+                                CalendarViewMode.day,
+                              ),
+                          },
+                          onChanged: (destination) {
+                            final calendarView =
+                                _calendarViewForStartDestination(destination);
+                            _save(
+                              settings.copyWith(
+                                appStartView: calendarView == null
+                                    ? AppStartView.quickView
+                                    : AppStartView.calendar,
+                                defaultCalendarView:
+                                    calendarView ??
+                                    settings.defaultCalendarView,
+                              ),
+                              changedFrom: settings,
+                            );
+                            if (calendarView != null) {
                               ref
                                       .read(calendarViewModeProvider.notifier)
                                       .state =
-                                  value;
-                            },
+                                  calendarView;
+                            }
+                          },
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      _ResponsiveSettingsControlRow(
+                        icon: Icons.view_agenda_outlined,
+                        title: context.tr('주간·일간 표시 방식'),
+                        controlWidth: 168,
+                        optionCount: WeekDayLayoutMode.values.length,
+                        control: _ThreeWayCapsule<WeekDayLayoutMode>(
+                          key: const ValueKey('week-day-layout-mode-slider'),
+                          values: WeekDayLayoutMode.values,
+                          selected: settings.weekDayLayoutMode,
+                          labelFor: (mode) => context.tr(
+                            mode == WeekDayLayoutMode.list ? '목록' : '스케줄',
+                          ),
+                          onChanged: (value) => _save(
+                            settings.copyWith(weekDayLayoutMode: value),
+                            changedFrom: settings,
                           ),
                         ),
                       ),
                       const Divider(height: 1),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _SettingsLeadingIcon(
-                          Icons.view_agenda_outlined,
-                        ),
-                        title: Text(context.tr('주간·일간 표시 방식')),
-                        trailing: SizedBox(
-                          width: 168,
-                          child: _ThreeWayCapsule<WeekDayLayoutMode>(
-                            key: const ValueKey('week-day-layout-mode-slider'),
-                            values: WeekDayLayoutMode.values,
-                            selected: settings.weekDayLayoutMode,
-                            labelFor: (mode) => context.tr(
-                              mode == WeekDayLayoutMode.list ? '목록' : '스케줄',
-                            ),
-                            onChanged: (value) => _save(
-                              settings.copyWith(weekDayLayoutMode: value),
-                              changedFrom: settings,
-                            ),
+                      _ResponsiveSettingsControlRow(
+                        icon: Icons.format_align_center_outlined,
+                        title: context.tr('일정 제목 정렬'),
+                        controlWidth: 168,
+                        optionCount: CalendarEventTitleAlignment.values.length,
+                        control: _ThreeWayCapsule<CalendarEventTitleAlignment>(
+                          key: const ValueKey('event-title-alignment-slider'),
+                          values: CalendarEventTitleAlignment.values,
+                          selected: settings.calendarEventTitleAlignment,
+                          labelFor: (alignment) => context.tr(
+                            alignment == CalendarEventTitleAlignment.leading
+                                ? '기본'
+                                : '가운데',
                           ),
-                        ),
-                      ),
-                      const Divider(height: 1),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _SettingsLeadingIcon(
-                          Icons.format_align_center_outlined,
-                        ),
-                        title: Text(context.tr('일정 제목 정렬')),
-                        trailing: SizedBox(
-                          width: 168,
-                          child: _ThreeWayCapsule<CalendarEventTitleAlignment>(
-                            key: const ValueKey('event-title-alignment-slider'),
-                            values: CalendarEventTitleAlignment.values,
-                            selected: settings.calendarEventTitleAlignment,
-                            labelFor: (alignment) => context.tr(
-                              alignment == CalendarEventTitleAlignment.leading
-                                  ? '기본'
-                                  : '가운데',
+                          onChanged: (value) => _save(
+                            settings.copyWith(
+                              calendarEventTitleAlignment: value,
                             ),
-                            onChanged: (value) => _save(
-                              settings.copyWith(
-                                calendarEventTitleAlignment: value,
-                              ),
-                              changedFrom: settings,
-                            ),
+                            changedFrom: settings,
                           ),
                         ),
                       ),
@@ -950,29 +972,23 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         },
                       ),
                       const Divider(height: 1),
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _SettingsLeadingIcon(
-                          Icons.sort_outlined,
-                        ),
-                        title: Text(context.tr('일정 정렬 우선순위')),
-                        trailing: SizedBox(
-                          width: 188,
-                          child: _ThreeWayCapsule<CalendarEventSortPriority>(
-                            key: const ValueKey('event-sort-priority-slider'),
-                            values: CalendarEventSortPriority.values,
-                            selected: settings.calendarEventSortPriority,
-                            labelFor: (priority) => context.tr(
-                              priority == CalendarEventSortPriority.category
-                                  ? '분류 우선'
-                                  : '시간 우선',
-                            ),
-                            onChanged: (value) => _save(
-                              settings.copyWith(
-                                calendarEventSortPriority: value,
-                              ),
-                              changedFrom: settings,
-                            ),
+                      _ResponsiveSettingsControlRow(
+                        icon: Icons.sort_outlined,
+                        title: context.tr('일정 정렬 우선순위'),
+                        controlWidth: 188,
+                        optionCount: CalendarEventSortPriority.values.length,
+                        control: _ThreeWayCapsule<CalendarEventSortPriority>(
+                          key: const ValueKey('event-sort-priority-slider'),
+                          values: CalendarEventSortPriority.values,
+                          selected: settings.calendarEventSortPriority,
+                          labelFor: (priority) => context.tr(
+                            priority == CalendarEventSortPriority.category
+                                ? '분류 우선'
+                                : '시간 우선',
+                          ),
+                          onChanged: (value) => _save(
+                            settings.copyWith(calendarEventSortPriority: value),
+                            changedFrom: settings,
                           ),
                         ),
                       ),
@@ -1790,18 +1806,42 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     await ref.read(calendarWidgetServiceProvider).refresh();
   }
 
-  Future<void> _reorderCategories(
-    AppSettings settings,
-    int oldIndex,
-    int newIndex,
-  ) async {
+  void _reorderCategories(AppSettings settings, int oldIndex, int newIndex) {
     final categories = [...settings.categories];
+    if (oldIndex < 0 || oldIndex >= categories.length) {
+      return;
+    }
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
+    newIndex = newIndex.clamp(0, categories.length - 1);
+    if (oldIndex == newIndex) {
+      return;
+    }
     final category = categories.removeAt(oldIndex);
     categories.insert(newIndex, category);
-    await _save(
-      settings.copyWith(categories: categories),
-      changedFrom: settings,
-    );
+    final updated = settings.copyWith(categories: categories);
+    ref.read(appSettingsProvider.notifier).state = updated;
+
+    final revision = ++_categoryReorderRevision;
+    _categoryReorderSaveQueue = _categoryReorderSaveQueue.then((_) async {
+      try {
+        await ref
+            .read(settingsRepositoryProvider)
+            .save(updated, changedFrom: settings);
+        if (revision == _categoryReorderRevision) {
+          _queueCategoryBackup();
+        }
+      } on Object {
+        if (!mounted || revision != _categoryReorderRevision) {
+          return;
+        }
+        ref.read(appSettingsProvider.notifier).state = settings;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
+        );
+      }
+    });
   }
 
   Future<void> _editCategory(
@@ -2057,7 +2097,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     try {
       await ref
           .read(googleDriveSyncServiceProvider)
-          .syncPendingChangesNow(promptIfNecessary: true);
+          .syncPendingChangesNow(
+            promptIfNecessary: defaultTargetPlatform != TargetPlatform.android,
+          );
       if (mounted) {
         final status = ref
             .read(googleDriveSyncServiceProvider)
@@ -2113,7 +2155,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     try {
       await ref
           .read(googleDriveSyncServiceProvider)
-          .restoreNow(promptIfNecessary: true);
+          .restoreNow(
+            promptIfNecessary: defaultTargetPlatform != TargetPlatform.android,
+          );
       if (mounted) {
         ref.read(appSettingsProvider.notifier).state = ref
             .read(settingsRepositoryProvider)
@@ -2170,7 +2214,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       if (deleteBackup) {
         await ref
             .read(googleDriveSyncServiceProvider)
-            .deleteCloudBackup(promptIfNecessary: true);
+            .deleteCloudBackup(
+              promptIfNecessary:
+                  defaultTargetPlatform != TargetPlatform.android,
+            );
       }
       try {
         await ref.read(googleDriveAuthServiceProvider).signOut();
@@ -2345,7 +2392,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       if (hasGoogleAccount) {
         await ref
             .read(googleDriveSyncServiceProvider)
-            .deleteCloudBackup(promptIfNecessary: true);
+            .deleteCloudBackup(
+              promptIfNecessary:
+                  defaultTargetPlatform != TargetPlatform.android,
+            );
       }
       await ref.read(eventRepositoryProvider).clearAll();
       await ref.read(settingsRepositoryProvider).resetAll();
@@ -2456,6 +2506,141 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 }
 
+class _ResponsiveSettingsControlRow extends StatelessWidget {
+  const _ResponsiveSettingsControlRow({
+    required this.icon,
+    required this.title,
+    required this.optionCount,
+    required this.control,
+    this.description,
+    this.controlWidth,
+    this.wideLabelFlex = 1,
+    this.wideControlFlex = 1,
+    this.padding = const EdgeInsets.symmetric(vertical: 10),
+  });
+
+  static const _compactMaxWidth = 520.0;
+  static const _leadingWidth = 40.0;
+  static const _leadingGap = 16.0;
+  static const _controlGap = 12.0;
+
+  final IconData icon;
+  final String title;
+  final String? description;
+  final int optionCount;
+  final Widget control;
+  final double? controlWidth;
+  final int wideLabelFlex;
+  final int wideControlFlex;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final theme = Theme.of(context);
+        final titleStyle = theme.textTheme.bodyLarge;
+        final availableWidth = constraints.maxWidth;
+        final measuredTitleWidth = _measureTitleWidth(context, titleStyle);
+        final reservedControlWidth =
+            controlWidth ??
+            (availableWidth - _leadingWidth - _leadingGap - _controlGap) *
+                wideControlFlex /
+                (wideLabelFlex + wideControlFlex);
+        final availableInlineLabelWidth =
+            availableWidth -
+            _leadingWidth -
+            _leadingGap -
+            _controlGap -
+            reservedControlWidth;
+        final compactPlatform =
+            theme.platform == TargetPlatform.iOS ||
+            theme.platform == TargetPlatform.android;
+        final compactLayout =
+            compactPlatform && availableWidth <= _compactMaxWidth;
+        final stackControl =
+            compactLayout &&
+            (optionCount >= 3 ||
+                availableInlineLabelWidth < measuredTitleWidth);
+        final label = _label(context, titleStyle);
+
+        return Padding(
+          padding: padding,
+          child: stackControl
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _SettingsRowLeading(icon),
+                        const SizedBox(width: _leadingGap),
+                        Expanded(child: label),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Padding(
+                      padding: const EdgeInsetsDirectional.only(
+                        start: _leadingWidth + _leadingGap,
+                      ),
+                      child: SizedBox(width: double.infinity, child: control),
+                    ),
+                  ],
+                )
+              : Row(
+                  children: [
+                    _SettingsRowLeading(icon),
+                    const SizedBox(width: _leadingGap),
+                    Expanded(flex: wideLabelFlex, child: label),
+                    const SizedBox(width: _controlGap),
+                    if (controlWidth case final width?)
+                      SizedBox(width: width, child: control)
+                    else
+                      Expanded(flex: wideControlFlex, child: control),
+                  ],
+                ),
+        );
+      },
+    );
+  }
+
+  Widget _label(BuildContext context, TextStyle? titleStyle) {
+    final description = this.description;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          title,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: titleStyle,
+        ),
+        if (description != null) ...[
+          const SizedBox(height: 2),
+          DefaultTextStyle.merge(
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            child: _SettingsDescription(description),
+          ),
+        ],
+      ],
+    );
+  }
+
+  double _measureTitleWidth(BuildContext context, TextStyle? titleStyle) {
+    final painter = TextPainter(
+      text: TextSpan(text: title, style: titleStyle),
+      maxLines: 1,
+      textScaler: MediaQuery.textScalerOf(context),
+      textDirection: Directionality.of(context),
+      locale: Localizations.maybeLocaleOf(context),
+    )..layout();
+    return painter.width + 4;
+  }
+}
+
 class _AppTextSizeSlider extends StatelessWidget {
   const _AppTextSizeSlider({required this.textSize, required this.onChanged});
 
@@ -2464,31 +2649,18 @@ class _AppTextSizeSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          const _SettingsRowLeading(Icons.text_fields_outlined),
-          const SizedBox(width: 16),
-          Expanded(
-            flex: 3,
-            child: Text(
-              context.tr('전체 UI 글자 크기'),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            flex: 5,
-            child: _ThreeWayCapsule<AppTextSize>(
-              key: const ValueKey('app-text-size-slider'),
-              values: AppTextSize.values,
-              selected: textSize,
-              labelFor: context.l10n.textSizeName,
-              onChanged: onChanged,
-            ),
-          ),
-        ],
+    return _ResponsiveSettingsControlRow(
+      icon: Icons.text_fields_outlined,
+      title: context.tr('전체 UI 글자 크기'),
+      optionCount: AppTextSize.values.length,
+      wideLabelFlex: 3,
+      wideControlFlex: 5,
+      control: _ThreeWayCapsule<AppTextSize>(
+        key: const ValueKey('app-text-size-slider'),
+        values: AppTextSize.values,
+        selected: textSize,
+        labelFor: context.l10n.textSizeName,
+        onChanged: onChanged,
       ),
     );
   }
@@ -2507,38 +2679,25 @@ class _AppLockMethodSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return _ResponsiveSettingsControlRow(
+      icon: Icons.admin_panel_settings_outlined,
+      title: context.tr('잠금 방식'),
+      optionCount: AppLockMethod.values.length,
+      wideLabelFlex: 2,
+      wideControlFlex: 5,
       padding: const EdgeInsets.fromLTRB(0, 12, 0, 8),
-      child: Row(
-        children: [
-          const _SettingsRowLeading(Icons.admin_panel_settings_outlined),
-          const SizedBox(width: 16),
-          Expanded(
-            flex: 2,
-            child: Text(
-              context.tr('잠금 방식'),
-              style: Theme.of(context).textTheme.titleSmall,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            flex: 5,
-            child: _ThreeWayCapsule<AppLockMethod>(
-              key: const ValueKey('app-lock-method-slider'),
-              values: AppLockMethod.values,
-              selected: method,
-              labelFor: (method) => switch (method) {
-                AppLockMethod.noPin => context.tr('PIN 없음'),
-                AppLockMethod.appPin => context.tr('PIN 잠금'),
-                AppLockMethod.system => context.tr('시스템'),
-              },
-              enabledFor: (method) =>
-                  method != AppLockMethod.system ||
-                  systemAuthenticationAvailable,
-              onChanged: onChanged,
-            ),
-          ),
-        ],
+      control: _ThreeWayCapsule<AppLockMethod>(
+        key: const ValueKey('app-lock-method-slider'),
+        values: AppLockMethod.values,
+        selected: method,
+        labelFor: (method) => switch (method) {
+          AppLockMethod.noPin => context.tr('PIN 없음'),
+          AppLockMethod.appPin => context.tr('PIN 잠금'),
+          AppLockMethod.system => context.tr('시스템'),
+        },
+        enabledFor: (method) =>
+            method != AppLockMethod.system || systemAuthenticationAvailable,
+        onChanged: onChanged,
       ),
     );
   }
@@ -2893,28 +3052,39 @@ class _ThreeWayCapsuleState<T> extends State<_ThreeWayCapsule<T>> {
                               onTap: _isEnabled(value)
                                   ? () => _commitValue(value)
                                   : null,
-                              child: Center(
-                                child: AnimatedDefaultTextStyle(
-                                  duration: const Duration(milliseconds: 180),
-                                  curve: Curves.easeOutCubic,
-                                  style:
-                                      (Theme.of(context).textTheme.labelSmall ??
-                                              const TextStyle())
-                                          .copyWith(
-                                            color: !_isEnabled(value)
-                                                ? Theme.of(
-                                                    context,
-                                                  ).disabledColor
-                                                : value == _visibleValue
-                                                ? colorScheme.primary
-                                                : colorScheme.onSurfaceVariant,
-                                            fontWeight: value == _visibleValue
-                                                ? FontWeight.w700
-                                                : FontWeight.w500,
-                                          ),
-                                  child: Text(
-                                    widget.labelFor(value),
-                                    maxLines: 1,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                ),
+                                child: Center(
+                                  child: AnimatedDefaultTextStyle(
+                                    duration: const Duration(milliseconds: 180),
+                                    curve: Curves.easeOutCubic,
+                                    style:
+                                        (Theme.of(
+                                                  context,
+                                                ).textTheme.labelSmall ??
+                                                const TextStyle())
+                                            .copyWith(
+                                              color: !_isEnabled(value)
+                                                  ? Theme.of(
+                                                      context,
+                                                    ).disabledColor
+                                                  : value == _visibleValue
+                                                  ? colorScheme.primary
+                                                  : colorScheme
+                                                        .onSurfaceVariant,
+                                              fontWeight: value == _visibleValue
+                                                  ? FontWeight.w700
+                                                  : FontWeight.w500,
+                                            ),
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        widget.labelFor(value),
+                                        maxLines: 1,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -3025,13 +3195,9 @@ class _ThreeWayCapsuleState<T> extends State<_ThreeWayCapsule<T>> {
 
   Alignment _alignmentFor(T value) {
     final index = widget.values.indexOf(value);
-    if (index == 0) {
-      return Alignment.centerLeft;
-    }
-    if (index == widget.values.length - 1) {
-      return Alignment.centerRight;
-    }
-    return Alignment.center;
+    if (widget.values.length <= 1) return Alignment.center;
+    final x = -1 + (2 * index / (widget.values.length - 1));
+    return Alignment(x, 0);
   }
 }
 
@@ -3140,7 +3306,8 @@ class _SettingsDescription extends StatelessWidget {
       builder: (context, constraints) {
         final platform = Theme.of(context).platform;
         final maxWidth = constraints.maxWidth;
-        if (platform != TargetPlatform.iOS ||
+        if ((platform != TargetPlatform.iOS &&
+                platform != TargetPlatform.android) ||
             !maxWidth.isFinite ||
             maxWidth <= 0) {
           return Text(text, softWrap: true);
@@ -3629,36 +3796,18 @@ class _TimeFormatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: [
-          const _SettingsRowLeading(Icons.access_time_outlined),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(context.tr('시간 표시 방식')),
-                const SizedBox(height: 2),
-                const Text(
-                  '시간 선택 화면의 기본 표시 방식을 정합니다.',
-                  style: TextStyle(fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 116,
-            child: _ThreeWayCapsule<bool>(
-              key: const ValueKey('time-format-slider'),
-              values: const [false, true],
-              selected: use24HourTime,
-              labelFor: (value) => value ? '24h' : '12h',
-              onChanged: onChanged,
-            ),
-          ),
-        ],
+    return _ResponsiveSettingsControlRow(
+      icon: Icons.access_time_outlined,
+      title: context.tr('시간 표시 방식'),
+      description: context.tr('시간 선택 화면의 기본 표시 방식을 정합니다.'),
+      controlWidth: 116,
+      optionCount: 2,
+      control: _ThreeWayCapsule<bool>(
+        key: const ValueKey('time-format-slider'),
+        values: const [false, true],
+        selected: use24HourTime,
+        labelFor: (value) => value ? '24h' : '12h',
+        onChanged: onChanged,
       ),
     );
   }

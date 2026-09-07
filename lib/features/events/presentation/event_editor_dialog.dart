@@ -153,6 +153,16 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final windowSize = MediaQuery.sizeOf(context);
+    final windowClass = dailyWindowClassFor(windowSize);
+    final androidTablet =
+        Theme.of(context).platform == TargetPlatform.android &&
+        windowClass != DailyWindowClass.compact;
+    final editorWidth = switch (windowClass) {
+      DailyWindowClass.expanded when androidTablet => 520.0,
+      DailyWindowClass.medium when androidTablet => 460.0,
+      _ => 430.0,
+    };
     final startDateLabel = _formatDate(_startDate);
     final endDateLabel = _formatDate(_endDate);
     final startTimeLabel = _startTime.format(context);
@@ -183,7 +193,11 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: EdgeInsets.symmetric(
-        horizontal: DailyUi.isDesktop ? 40 : 14,
+        horizontal: DailyUi.isDesktop
+            ? 40
+            : androidTablet
+            ? 28
+            : 14,
         vertical: DailyUi.isDesktop ? 32 : 18,
       ),
       titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
@@ -206,7 +220,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       content: Theme(
         data: editorTheme,
         child: SizedBox(
-          width: 430,
+          width: editorWidth,
           child: ConstrainedBox(
             constraints: BoxConstraints(maxHeight: contentMaxHeight),
             child: Column(

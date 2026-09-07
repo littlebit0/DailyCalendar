@@ -11,91 +11,93 @@ void main() {
 
   const channel = MethodChannel('daily/alarm_kit_test');
 
-  setUp(() {
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-  });
-
   tearDown(() {
     debugDefaultTargetPlatformOverride = null;
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, null);
   });
 
-  test(
-    'schedules a single event with its title, memo, and fire time',
-    () async {
-      MethodCall? call;
-      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-          .setMockMethodCallHandler(channel, (methodCall) async {
-            if (methodCall.method == 'authorizationState') {
-              return 'authorized';
-            }
-            call = methodCall;
-            return null;
+  for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+    group('$platform', () {
+      setUp(() => debugDefaultTargetPlatformOverride = platform);
+      test(
+        'schedules a single event with its title, memo, and fire time',
+        () async {
+          MethodCall? call;
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, (methodCall) async {
+                if (methodCall.method == 'authorizationState') {
+                  return 'authorized';
+                }
+                call = methodCall;
+                return null;
+              });
+          final start = DateTime.now().add(const Duration(hours: 2));
+          final event = _event(startAt: start, alarmEnabled: true);
+
+          await NativeAlarmService(channel: channel).scheduleEventAlarm(event);
+
+          expect(call?.method, 'schedule');
+          expect(call?.arguments, {
+            'eventId': event.id,
+            'title': '회의',
+            'memo': '자료 지참',
+            'fireAtMilliseconds': start.millisecondsSinceEpoch,
+            'snoozeMinutes': 10,
           });
-      final start = DateTime.now().add(const Duration(hours: 2));
-      final event = _event(startAt: start, alarmEnabled: true);
+        },
+      );
 
-      await NativeAlarmService(channel: channel).scheduleEventAlarm(event);
+      test('does not schedule an alarm for a recurring event', () async {
+        var called = false;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (methodCall) async {
+              called = true;
+              return null;
+            });
 
-      expect(call?.method, 'schedule');
-      expect(call?.arguments, {
-        'eventId': event.id,
-        'title': '회의',
-        'memo': '자료 지참',
-        'fireAtMilliseconds': start.millisecondsSinceEpoch,
-        'snoozeMinutes': 10,
+        await NativeAlarmService(channel: channel).scheduleEventAlarm(
+          _event(
+            startAt: DateTime.now().add(const Duration(hours: 2)),
+            alarmEnabled: true,
+            recurring: true,
+          ),
+        );
+
+        expect(called, isFalse);
       });
-    },
-  );
 
-  test('does not schedule an alarm for a recurring event', () async {
-    var called = false;
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, (methodCall) async {
-          called = true;
-          return null;
-        });
+      test('uses the selected alarm time for an all-day event', () async {
+        MethodCall? scheduleCall;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, (methodCall) async {
+              if (methodCall.method == 'authorizationState') {
+                return 'authorized';
+              }
+              scheduleCall = methodCall;
+              return null;
+            });
+        final tomorrow = DateTime.now().add(const Duration(days: 1));
+        final start = DateTime(tomorrow.year, tomorrow.month, tomorrow.day);
 
-    await NativeAlarmService(channel: channel).scheduleEventAlarm(
-      _event(
-        startAt: DateTime.now().add(const Duration(hours: 2)),
-        alarmEnabled: true,
-        recurring: true,
-      ),
-    );
+        await NativeAlarmService(channel: channel).scheduleEventAlarm(
+          _event(
+            startAt: start,
+            alarmEnabled: true,
+            allDay: true,
+            allDayAlarmMinutes: 7 * 60 + 30,
+          ),
+        );
 
-    expect(called, isFalse);
-  });
-
-  test('uses the selected alarm time for an all-day event', () async {
-    MethodCall? scheduleCall;
-    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-        .setMockMethodCallHandler(channel, (methodCall) async {
-          if (methodCall.method == 'authorizationState') {
-            return 'authorized';
-          }
-          scheduleCall = methodCall;
-          return null;
-        });
-    final tomorrow = DateTime.now().add(const Duration(days: 1));
-    final start = DateTime(tomorrow.year, tomorrow.month, tomorrow.day);
-
-    await NativeAlarmService(channel: channel).scheduleEventAlarm(
-      _event(
-        startAt: start,
-        alarmEnabled: true,
-        allDay: true,
-        allDayAlarmMinutes: 7 * 60 + 30,
-      ),
-    );
-
-    final expected = DateTime(start.year, start.month, start.day, 7, 30);
-    expect(
-      (scheduleCall?.arguments as Map<Object?, Object?>)['fireAtMilliseconds'],
-      expected.millisecondsSinceEpoch,
-    );
-  });
+        final expected = DateTime(start.year, start.month, start.day, 7, 30);
+        expect(
+          (scheduleCall?.arguments
+              as Map<Object?, Object?>)['fireAtMilliseconds'],
+          expected.millisecondsSinceEpoch,
+        );
+      });
+    });
+  }
 
   test('uses the native alarm channel on macOS', () async {
     debugDefaultTargetPlatformOverride = TargetPlatform.macOS;

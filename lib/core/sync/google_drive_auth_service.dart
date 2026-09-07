@@ -21,10 +21,14 @@ class GoogleDriveAuthService {
   GoogleDriveAuthService({
     FlutterSecureStorage? secureStorage,
     http.Client? httpClient,
+    String? Function()? linkedGoogleEmail,
     @visibleForTesting bool? useDesktopOAuth,
+    @visibleForTesting bool? useAndroidAuthorizationRecovery,
   }) : _secureStorage = secureStorage ?? const FlutterSecureStorage(),
        _httpClient = httpClient ?? http.Client(),
-       _desktopOAuthOverride = useDesktopOAuth;
+       _linkedGoogleEmail = linkedGoogleEmail,
+       _desktopOAuthOverride = useDesktopOAuth,
+       _androidAuthorizationRecoveryOverride = useAndroidAuthorizationRecovery;
 
   static const driveAppDataScope =
       'https://www.googleapis.com/auth/drive.appdata';
@@ -86,10 +90,17 @@ class GoogleDriveAuthService {
 
   final FlutterSecureStorage _secureStorage;
   final http.Client _httpClient;
+  final String? Function()? _linkedGoogleEmail;
   final bool? _desktopOAuthOverride;
+  final bool? _androidAuthorizationRecoveryOverride;
+  String? _defaultAuthorizationAccountId;
   final _accountController = StreamController<GoogleDriveAccount?>.broadcast();
   Future<void>? _initializeFuture;
   GoogleSignInAccount? _currentUser;
+  GoogleDriveAccount? _restoredAndroidAccount;
+  String? _restoredAndroidSubject;
+  var _mobileSessionGeneration = 0;
+  var _androidRestorationBlocked = false;
   GoogleDriveAccount? _desktopAccount;
   _DesktopTokens? _desktopTokens;
   Completer<void>? _desktopSignInCancelCompleter;
@@ -99,8 +110,12 @@ class GoogleDriveAuthService {
 
   Stream<GoogleDriveAccount?> get accountChanges => _accountController.stream;
 
-  GoogleDriveAccount? get currentAccount =>
-      _usesDesktopOAuth ? _desktopAccount : _toDriveAccount(_currentUser);
+  GoogleDriveAccount? get currentAccount => _usesDesktopOAuth
+      ? _desktopAccount
+      : _toDriveAccount(_currentUser) ?? _restoredAndroidAccount;
+
+  bool get _usesAndroidAuthorization =>
+      _androidAuthorizationRecoveryOverride ?? Platform.isAndroid;
 
   bool get isAvailable => _isAvailable;
 
@@ -385,8 +400,13 @@ class GoogleDriveAuthService {
     }
 
     return _runSerializedMobileSignIn(() async {
+      _mobileSessionGeneration++;
+      _restoredAndroidAccount = null;
+      _restoredAndroidSubject = null;
       try {
-        if (forceAccountSelection && _currentUser != null) {
+        if (forceAccountSelection &&
+            (_currentUser != null || _usesAndroidAuthorization)) {
+          _androidRestorationBlocked = true;
           await _clearMobileAccountForSelection();
           _setCurrentUser(null);
         }
@@ -400,6 +420,7 @@ class GoogleDriveAuthService {
             .authenticate(scopeHint: scopes)
             .timeout(_mobileUserApprovalTimeout);
         _setCurrentUser(user);
+        _androidRestorationBlocked = false;
         return _toDriveAccount(user);
       } on GoogleSignInException catch (error) {
         _setCurrentUser(null);
@@ -453,10 +474,18 @@ class GoogleDriveAuthService {
     }
 
     try {
+      if (_usesAndroidAuthorization) {
+        if (_currentUser != null) return currentAccount;
+        final headers = await _restoredAndroidAuthorizationHeaders(
+          scopes,
+        ).timeout(_mobileSilentAuthorizationTimeout);
+        return headers == null ? null : currentAccount;
+      }
       final user = _currentUser ?? await _attemptLightweightAuthentication();
       _setCurrentUser(user);
       return _toDriveAccount(user);
     } on Object {
+      if (_usesAndroidAuthorization) return null;
       _setCurrentUser(null);
       return null;
     }
@@ -475,6 +504,9 @@ class GoogleDriveAuthService {
       await _clearDesktopSession();
       return;
     }
+    _mobileSessionGeneration++;
+    _androidRestorationBlocked = true;
+    _setCurrentUser(null);
     if (!_isAvailable) {
       _setCurrentUser(null);
       return;
@@ -538,6 +570,32 @@ class GoogleDriveAuthService {
       return null;
     }
     var user = _currentUser;
+    if (user == null && _usesAndroidAuthorization) {
+      try {
+        // A scope request is not a login request. Only signIn may authenticate.
+        // New permissions may be requested by an explicit Calendar import, but
+        // only after the existing Drive session has been verified without UI.
+        if (promptIfNecessary && await restorePreviousSignIn() == null) {
+          return null;
+        }
+        return await _restoredAndroidAuthorizationHeaders(
+          normalizedScopes,
+          promptIfNecessary: promptIfNecessary,
+        ).timeout(
+          promptIfNecessary
+              ? _mobileUserApprovalTimeout
+              : _mobileSilentAuthorizationTimeout,
+        );
+      } on GoogleSignInException catch (error) {
+        throw GoogleDriveAuthException(_googleSignInMessage(error));
+      } on PlatformException catch (error) {
+        throw GoogleDriveAuthException(_platformAuthMessage(error));
+      } on TimeoutException {
+        throw const GoogleDriveAuthException(
+          'Google Drive 연결 응답 시간이 초과되었습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.',
+        );
+      }
+    }
     if (user == null) {
       try {
         user = await _attemptLightweightAuthentication();
@@ -558,12 +616,15 @@ class GoogleDriveAuthService {
       final timeout = promptIfNecessary
           ? _mobileUserApprovalTimeout
           : _mobileSilentAuthorizationTimeout;
-      final headers = await user?.authorizationClient
-          .authorizationHeaders(
-            normalizedScopes,
-            promptIfNecessary: promptIfNecessary,
-          )
-          .timeout(timeout);
+      final headers = user == null
+          ? null
+          : await _mobileAuthorizationHeaders(
+              user,
+              _usesAndroidAuthorization
+                  ? {...normalizedScopes, 'openid', 'email'}.toList()
+                  : normalizedScopes,
+              promptIfNecessary: promptIfNecessary,
+            ).timeout(timeout);
       if (headers == null && promptIfNecessary) {
         _setCurrentUser(null);
         throw const GoogleDriveAuthException(
@@ -571,6 +632,8 @@ class GoogleDriveAuthService {
         );
       }
       return headers;
+    } on GoogleSignInException catch (error) {
+      throw GoogleDriveAuthException(_googleSignInMessage(error));
     } on PlatformException catch (error) {
       throw GoogleDriveAuthException(_platformAuthMessage(error));
     } on TimeoutException {
@@ -578,6 +641,164 @@ class GoogleDriveAuthService {
         'Google Drive 권한 승인이 완료되지 않았습니다. 승인 창을 닫았다면 다시 연결해 주세요.',
       );
     }
+  }
+
+  Future<Map<String, String>?> _restoredAndroidAuthorizationHeaders(
+    List<String> requestedScopes, {
+    bool promptIfNecessary = false,
+  }) async {
+    final email = _linkedGoogleEmail?.call()?.trim().toLowerCase();
+    if (_androidRestorationBlocked ||
+        _mobileSignInOperation != null ||
+        email == null ||
+        email.isEmpty) {
+      return null;
+    }
+    final generation = _mobileSessionGeneration;
+    final expectedSubject = _restoredAndroidSubject;
+    final client = GoogleSignIn.instance.authorizationClient;
+    final authorizationScopes = {
+      ...requestedScopes,
+      'openid',
+      'email',
+    }.toList();
+    GoogleSignInClientAuthorization? authorization;
+    try {
+      authorization = promptIfNecessary
+          ? await client.authorizeScopes(authorizationScopes)
+          : await client.authorizationForScopes(authorizationScopes);
+    } on GoogleSignInException catch (error) {
+      if (!promptIfNecessary && _isMissingAuthorizationCredential(error)) {
+        return null;
+      }
+      rethrow;
+    }
+    if (authorization == null) return null;
+
+    // Local account metadata is only a hint, never proof of authentication.
+    // Verify Google's token identity before exposing either the account or token.
+    final headers = {'Authorization': 'Bearer ${authorization.accessToken}'};
+    final response = await _httpClient
+        .get(
+          Uri.https('www.googleapis.com', '/oauth2/v3/userinfo'),
+          headers: headers,
+        )
+        .timeout(_desktopNetworkTimeout);
+    if (response.statusCode != HttpStatus.ok) return null;
+    final Object? identity;
+    try {
+      identity = jsonDecode(response.body);
+    } on FormatException {
+      return null;
+    }
+    if (identity is! Map ||
+        identity['sub'] is! String ||
+        (identity['sub'] as String).isEmpty ||
+        identity['email'] is! String ||
+        (identity['email'] as String).trim().toLowerCase() != email ||
+        identity['email_verified'] != true ||
+        (expectedSubject != null && identity['sub'] != expectedSubject)) {
+      return null;
+    }
+    if (generation != _mobileSessionGeneration ||
+        _androidRestorationBlocked ||
+        _linkedGoogleEmail?.call()?.trim().toLowerCase() != email) {
+      return null;
+    }
+    final account = GoogleDriveAccount(
+      email: identity['email'] as String,
+      displayName: identity['name'] is String
+          ? identity['name'] as String
+          : null,
+    );
+    final changed =
+        _restoredAndroidAccount?.email != account.email ||
+        _restoredAndroidAccount?.displayName != account.displayName;
+    _restoredAndroidSubject = identity['sub'] as String;
+    _restoredAndroidAccount = account;
+    if (changed) _accountController.add(account);
+    return headers;
+  }
+
+  Future<Map<String, String>?> _mobileAuthorizationHeaders(
+    GoogleSignInAccount user,
+    List<String> requestedScopes, {
+    required bool promptIfNecessary,
+  }) async {
+    final canRecover = _usesAndroidAuthorization;
+    if (!canRecover || _defaultAuthorizationAccountId != user.id) {
+      try {
+        return await user.authorizationClient.authorizationHeaders(
+          requestedScopes,
+          promptIfNecessary: promptIfNecessary,
+        );
+      } on GoogleSignInException catch (error) {
+        if (!canRecover || !_isMissingAuthorizationCredential(error)) {
+          rethrow;
+        }
+      }
+    }
+
+    // Credential Manager can sign in while AuthorizationClient cannot resolve
+    // the explicit Android Account. Use its default account, then verify sub
+    // before allowing any Drive/Calendar request with the recovered token.
+    final recoveryScopes = {
+      ...requestedScopes,
+      'openid',
+    }.toList(growable: false);
+    final client = GoogleSignIn.instance.authorizationClient;
+    GoogleSignInClientAuthorization? authorization;
+    try {
+      authorization = promptIfNecessary
+          ? await client.authorizeScopes(recoveryScopes)
+          : await client.authorizationForScopes(recoveryScopes);
+    } on GoogleSignInException catch (error) {
+      if (!promptIfNecessary && _isMissingAuthorizationCredential(error)) {
+        return null;
+      }
+      rethrow;
+    }
+    if (authorization == null) {
+      return null;
+    }
+    final headers = {'Authorization': 'Bearer ${authorization.accessToken}'};
+    final response = await _httpClient
+        .get(
+          Uri.https('www.googleapis.com', '/oauth2/v3/userinfo'),
+          headers: headers,
+        )
+        .timeout(_desktopNetworkTimeout);
+    if (response.statusCode != HttpStatus.ok) {
+      throw const GoogleDriveAuthException(
+        'Google Drive 권한을 확인하지 못했습니다. 다시 연결해 주세요.',
+      );
+    }
+    Object? identity;
+    try {
+      identity = jsonDecode(response.body);
+    } on FormatException {
+      throw const GoogleDriveAuthException(
+        'Google Drive 계정 확인 응답이 올바르지 않습니다. 다시 연결해 주세요.',
+      );
+    }
+    if (user.id.isEmpty || identity is! Map || identity['sub'] != user.id) {
+      throw const GoogleDriveAuthException(
+        '로그인한 Google 계정과 Drive 권한을 승인한 계정이 다릅니다. 같은 계정으로 다시 연결해 주세요.',
+      );
+    }
+    if (_currentUser?.id != user.id) {
+      return null;
+    }
+    _defaultAuthorizationAccountId = user.id;
+    return headers;
+  }
+
+  bool _isMissingAuthorizationCredential(GoogleSignInException error) {
+    return error.code == GoogleSignInExceptionCode.unknownError &&
+        (error.description?.toLowerCase().contains(
+              'cannot find a matching credential',
+            ) ??
+            false);
   }
 
   Future<void> _initialize() async {
@@ -624,6 +845,8 @@ class GoogleDriveAuthService {
   }
 
   Future<GoogleSignInAccount?> _attemptLightweightAuthentication() async {
+    // Android's "lightweight" authentication can display One Tap/account UI.
+    if (_usesAndroidAuthorization) return null;
     final attempt = GoogleSignIn.instance.attemptLightweightAuthentication();
     if (attempt == null) {
       return null;
@@ -1201,6 +1424,11 @@ class GoogleDriveAuthService {
   }
 
   void _setCurrentUser(GoogleSignInAccount? user) {
+    _restoredAndroidAccount = null;
+    _restoredAndroidSubject = null;
+    if (_currentUser?.id != user?.id) {
+      _defaultAuthorizationAccountId = null;
+    }
     _currentUser = user;
     _accountController.add(_toDriveAccount(user));
   }
@@ -1218,6 +1446,10 @@ class GoogleDriveAuthService {
   }
 
   String _googleSignInMessage(GoogleSignInException error) {
+    if (_isMissingAuthorizationCredential(error)) {
+      return '기기에 저장된 Google 계정의 Drive 권한을 확인하지 못했습니다. '
+          'Google 계정 상태를 확인한 뒤 다시 연결해 주세요.';
+    }
     final description = error.description;
     final details = error.details;
     final detailText = [
