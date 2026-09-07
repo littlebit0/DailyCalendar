@@ -19,6 +19,15 @@
 - 최신 변경사항은 [3.4.0 릴리스 노트](RELEASE_NOTES_3.4.0.md)를 기준으로 한다.
 - Windows에는 최신 변경사항이 미적용 상태이며 이번 제출 대상이 아니다.
 
+### Build Status
+
+- iOS/macOS Release 아카이브 생성과 앱·위젯 버전/번들 ID 검증은 완료했다.
+- 최종 서명 IPA/PKG는 아직 생성되지 않았다. 2026-09-07 App Store 내보내기에서
+  Apple 계정 세션 만료(`Your session has expired. Please log in.`)를 확인했다.
+- Xcode Apple Accounts에서 기존 계정 재로그인 후 내보내기를 재시도해야 한다.
+- 아카이브는 `dist/appstore-archives/3.4.0`에 보관한다. 개발용 서명 아카이브나
+  공개 릴리스의 unsigned 파일을 App Store 제출용으로 사용하지 않는다.
+
 ## Historical Record: 3.0.1
 
 아래 내용은 2026-08-03의 과거 제출 기록이다. 현재 출시 상태나 3.4.0의

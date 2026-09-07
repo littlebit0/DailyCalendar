@@ -7,6 +7,26 @@ profiles, keystore passwords, or private keys to this file.
 
 ## Current Platform Status: 3.4.0 (2026-09-07)
 
+- 배포 진행 결과: 소스/README/릴리스 노트를 `d481642`로 커밋·푸시했고
+  `v3.4.0` 공개 릴리스의 unsigned IPA/DMG 게시를 확인했다.
+  https://github.com/littlebit0/DailyCalendar/releases/tag/v3.4.0
+- 검증: Flutter 368개 통과(건너뜀 1), 정적 분석, 서버 테스트 4개,
+  버전 검사 통과. GitHub Platform Builds 및 Release Apple Installers 성공.
+  Windows CI 컴파일 성공은 아래 Windows 미적용 상태를 변경하지 않는다.
+- iOS/macOS Release 아카이브 생성, 앱·위젯 `3.4.0 (3.4.0)` 및 기존 번들 ID,
+  개발 서명 무결성 검증 완료. 운영 분석/버그 제보 주소도 바이너리에서 확인했다.
+- **Transporter 서명 IPA/PKG는 아직 생성되지 않았다.** 양쪽 App Store export가
+  Apple 계정 세션 만료(`DVTPortalServiceErrorDomain 1100`,
+  `Your session has expired. Please log in.`)로 실패했다. 로컬 배포 인증서의
+  개인 키도 없어 개발용 서명 파일을 제출용으로 대체하지 않았다.
+- Xcode Apple Accounts에서 기존 계정 재로그인 후 export만 재개한다.
+  아카이브: `dist/appstore-archives/3.4.0/Daily-iOS-3.4.0.xcarchive`,
+  `dist/appstore-archives/3.4.0/Daily-macOS-3.4.0.xcarchive`.
+  export 설정: `work/release-3.4.0/AppStoreExportOptions.plist`
+  (`destination=export`, `manageAppVersionAndBuildNumber=false`).
+  최종 파일은 `dist/transporter-upload/3.4.0` 하나에 모은다.
+- 이번 작업에서는 앱 설치·실행·데이터 수정·Transporter 업로드를 하지 않았다.
+
 - 사용자 명시: 지금까지의 최신 적용사항은 **Windows 미적용 상태**다.
   공유 Flutter 코드에 변경이 있거나 Windows 대상 자동 테스트가 통과했더라도
   Windows 적용 완료로 기록하지 않는다. Windows 에이전트의 별도 반영,
