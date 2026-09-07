@@ -15,16 +15,24 @@ profiles, keystore passwords, or private keys to this file.
   Windows CI 컴파일 성공은 아래 Windows 미적용 상태를 변경하지 않는다.
 - iOS/macOS Release 아카이브 생성, 앱·위젯 `3.4.0 (3.4.0)` 및 기존 번들 ID,
   개발 서명 무결성 검증 완료. 운영 분석/버그 제보 주소도 바이너리에서 확인했다.
-- **Transporter 서명 IPA/PKG는 아직 생성되지 않았다.** 양쪽 App Store export가
-  Apple 계정 세션 만료(`DVTPortalServiceErrorDomain 1100`,
-  `Your session has expired. Please log in.`)로 실패했다. 로컬 배포 인증서의
-  개인 키도 없어 개발용 서명 파일을 제출용으로 대체하지 않았다.
-- Xcode Apple Accounts에서 기존 계정 재로그인 후 export만 재개한다.
+- **Transporter 서명 IPA/PKG 생성 완료.** 최초 Apple 계정 세션 만료 오류는
+  사용자 재로그인 후 해결됐으며, 기존 아카이브에서 App Store export를 재개해
+  양쪽 모두 성공했다. 개발용 서명이나 unsigned 파일을 제출용으로 대체하지 않았다.
+  앱·위젯 및 중첩 코드의 Apple Distribution/팀 `A6Y73X2ZLS`, 버전·빌드,
+  `codesign --verify --deep --strict`를 확인했다. 포함된 프로파일의 인증서와
+  실제 서명 인증서가 일치하며, 디버깅 권한은 꺼져 있다.
+- macOS PKG의 `3rd Party Mac Developer Installer` 서명 확인. 앱과 위젯은
+  arm64/x86_64 universal이며, 실행 파일 없는 리소스 번들 16개는 미서명 유지.
+- 최종 파일은 `dist/transporter-upload/3.4.0` 폴더 하나에 나란히 보관한다.
+  - `Daily-iOS-AppStore-3.4.0-build-3.4.0.ipa` (27,602,854 bytes)
+    SHA-256: `cc4f9a77250a0f9c4f4947443fe77dc4ce932be557bacfd7cefda1157d7d0c7c`
+  - `Daily-macOS-AppStore-3.4.0-build-3.4.0.pkg` (66,601,177 bytes)
+    SHA-256: `3f1cb0b963c9a6b29b5c3811bfa3ed28b4f8f70c5a7fe18cf2861f7eafdf55f7`
+- 재현 자료:
   아카이브: `dist/appstore-archives/3.4.0/Daily-iOS-3.4.0.xcarchive`,
   `dist/appstore-archives/3.4.0/Daily-macOS-3.4.0.xcarchive`.
   export 설정: `work/release-3.4.0/AppStoreExportOptions.plist`
   (`destination=export`, `manageAppVersionAndBuildNumber=false`).
-  최종 파일은 `dist/transporter-upload/3.4.0` 하나에 모은다.
 - 이번 작업에서는 앱 설치·실행·데이터 수정·Transporter 업로드를 하지 않았다.
 
 - 사용자 명시: 지금까지의 최신 적용사항은 **Windows 미적용 상태**다.

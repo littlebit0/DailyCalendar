@@ -22,9 +22,17 @@
 ### Build Status
 
 - iOS/macOS Release 아카이브 생성과 앱·위젯 버전/번들 ID 검증은 완료했다.
-- 최종 서명 IPA/PKG는 아직 생성되지 않았다. 2026-09-07 App Store 내보내기에서
-  Apple 계정 세션 만료(`Your session has expired. Please log in.`)를 확인했다.
-- Xcode Apple Accounts에서 기존 계정 재로그인 후 내보내기를 재시도해야 한다.
+- 최종 서명 IPA/PKG 생성 완료. 최초 Apple 계정 세션 만료 오류는 2026-09-07
+  사용자 재로그인 후 해결됐으며, 두 플랫폼 모두 App Store 내보내기가 성공했다.
+- 앱·위젯 Apple Distribution 서명, 버전·빌드 `3.4.0 (3.4.0)`, 기존 번들 ID,
+  배포 프로파일과 서명 인증서 일치, `codesign --verify --deep --strict` 확인.
+- macOS PKG는 Mac App Store Installer 인증서로 서명됐으며 앱·위젯은
+  arm64/x86_64 universal이다. 실행 파일 없는 리소스 번들 16개는 미서명 상태다.
+- 최종 파일과 내보낸 원본의 SHA-256 일치 확인:
+  - IPA: `cc4f9a77250a0f9c4f4947443fe77dc4ce932be557bacfd7cefda1157d7d0c7c`
+  - PKG: `3f1cb0b963c9a6b29b5c3811bfa3ed28b4f8f70c5a7fe18cf2861f7eafdf55f7`
+- 파일만 생성했으며 Transporter 업로드, App Store Connect 처리·심사 결과는
+  아직 확인하지 않았다. 기존 설치 앱과 사용자 데이터는 변경하지 않았다.
 - 아카이브는 `dist/appstore-archives/3.4.0`에 보관한다. 개발용 서명 아카이브나
   공개 릴리스의 unsigned 파일을 App Store 제출용으로 사용하지 않는다.
 
