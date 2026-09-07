@@ -42,13 +42,19 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 | iPhone / iPad | App Store 무료 배포 중 | App Store의 `DailyCalendar` |
 | iOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-ios-3.4.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-ios-3.4.0-unsigned.ipa) |
 | macOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-macos-3.4.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-macos-3.4.0-unsigned.dmg) |
-| Android | 기존 공개 APK 3.3.1, 최신 변경은 소스·테스트 앱에 반영 | [daily-android-3.3.1.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-android-3.3.1.apk) |
+| Android | 3.4.0 새 서명 APK 빌드 완료, Google OAuth 등록 확인 후 게시 예정 | [이전 공개 APK 3.3.1](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-android-3.3.1.apk) |
 | Windows | 최신 변경 미적용, 기존 공개 버전 3.3.1 | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1.zip) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
 > 서명 없이는 iPhone에 직접 설치할 수 없으며, 재서명 과정에서 Sign in with
 > Apple 같은 entitlement가 유지되지 않을 수 있습니다. 일반 사용자는 App Store
 > 설치본을 권장합니다.
+
+> **Android 3.4.0 서명키 변경:** 이전 키를 사용할 수 없어 새 배포 키를
+> 생성했습니다. 기존 3.3.1 APK 위에 덮어쓰기 설치할 수 없습니다. 앱 삭제는
+> 로컬 데이터를 지우므로, 삭제 전에 데이터 백업과 복원 가능 여부를 반드시
+> 확인하세요. 새 키의 Google 로그인 등록은 확인 대기 중입니다.
+> [서명 및 전환 안내](docs/ANDROID_SIGNING.md)
 
 Windows는 `setup.exe` 설치를 권장합니다. 설치형 Release 앱은 시작할 때 최신
 GitHub 릴리스를 확인하며 새 Windows 설치 프로그램이 있으면 자동 업데이트를

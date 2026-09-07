@@ -7,6 +7,38 @@ profiles, keystore passwords, or private keys to this file.
 
 ## Current Platform Status: 3.4.0 (2026-09-07)
 
+- Android APK 후속: 사용자가 기존 배포 키가 없음을 확인하고 새 키 생성을
+  명시적으로 승인했다. 새 JKS(RSA 4096)는
+  `/Users/kimhwi/.local/share/daily-signing/android-release-20260907/daily-android-release.jks`에,
+  비공개 설정은 같은 폴더 `credentials.json`에 보관한다. 디렉터리 0700,
+  비공개 파일 0600이며 Git에 포함하지 않는다. 임시 `work`/`build` 안에만
+  보관하거나 다음 배포 때 다시 생성하면 안 된다.
+- GitHub `littlebit0/DailyCalendar`의 Android 서명용 암호화 secret 4개 등록을
+  확인했다: `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEYSTORE_PASSWORD`,
+  `ANDROID_KEY_PASSWORD`, `ANDROID_KEY_ALIAS`. 값은 문서/로그에 쓰지 않는다.
+- 새 공개 인증서 SHA-1:
+  `3A:B4:4A:04:82:7C:B2:18:65:4F:34:C6:77:79:29:1B:25:6D:29:50`.
+  package `com.littlebit0.dailycalendar`와 Web OAuth client는 유지한다.
+  새 Android OAuth client 등록은 아직 대기 중이다. 브라우저/CUA가
+  `No browser is available` 및 native pipe startup failure로 연결되지 않아
+  사용자에게 프로젝트 `234127810480`의 새 SHA-1 등록을 요청했다.
+  기존 3.3.1/디버그 OAuth client를 삭제하거나 변경하지 않는다.
+- 이전 공개 3.3.1 APK와 서명키가 달라 덮어쓰기 설치가 불가능하다. 백업 확인
+  없이 제거하도록 안내하면 로컬 데이터가 유실될 수 있다. 앱/데이터 삭제 및
+  테스트 설치는 하지 않는다. APK 빌드/검증과 OAuth 실제 성공은 구분한다.
+- Android Release APK 빌드/검증 완료. 최종 파일:
+  `/Users/kimhwi/Documents/Codex/2026-05-26/littlebit0-daily-https-github-com-littlebit0/dist/android/3.4.0/daily-android-3.4.0.apk`
+  (72,488,559 bytes), SHA-256
+  `5eeccb44095c07dd1f9625def351f01e1e0ece8cb57cc0a471c1b9de0c9b0a68`.
+  APK v2 서명/새 인증서, `3.4.0`/`340`, release 앱 이름 DailyCalendar,
+  arm64-v8a/armeabi-v7a/x86_64, 운영 분석/버그 제보 주소 포함을 확인했다.
+  새 서명 지문 검사와 운영 URL을 Android 배포 워크플로에도 반영했다.
+  관련 플랫폼 테스트 2개, 정적 분석, YAML 구문 검사 통과.
+  **OAuth 등록 확인 전이므로 APK 공개 업로드는 보류 상태다.** 등록 완료 후
+  이 파일을 기존 `v3.4.0`에 `daily-android-3.4.0.apk`로 추가하고 README와
+  릴리스 노트의 대기 문구를 갱신한다. 서명키를 새로 만들거나 Apple IPA/PKG,
+  기존 공개 Apple 파일을 다시 만들거나 덮어쓰지 않는다.
+  상세 보관 및 전환 기준은 `docs/ANDROID_SIGNING.md`를 참고한다.
 - 배포 진행 결과: 소스/README/릴리스 노트를 `d481642`로 커밋·푸시했고
   `v3.4.0` 공개 릴리스의 unsigned IPA/DMG 게시를 확인했다.
   https://github.com/littlebit0/DailyCalendar/releases/tag/v3.4.0

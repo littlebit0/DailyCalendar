@@ -4,7 +4,7 @@
 
 - 비교 기준: 3.3.1
 - iOS/macOS 앱·위젯 버전 및 빌드: `3.4.0 (3.4.0)`
-- Android 소스 버전/코드: `3.4.0 (340)`
+- Android Release APK 버전/코드: `3.4.0 (340)`
 - **Windows에는 지금까지의 최신 변경사항이 미적용 상태입니다.** 공유 Flutter
   코드나 버전 설정이 변경되었어도 Windows 반영·빌드·검증·업데이트 완료를
   뜻하지 않습니다. 이번 릴리스에 새 Windows 설치 파일은 포함하지 않습니다.
@@ -56,6 +56,15 @@
 - 위젯 높이에 따른 주간/월간 표시, 연속 일정 막대, Todo 및 테마 갱신을 개선했습니다.
 - Siri/Apple 로그인/AlarmKit을 Android에서 제공한다고 표시하지 않습니다.
 
+### Android 배포 서명 변경
+
+- 기존 배포 개인키를 사용할 수 없어 새 배포키로 APK를 만들었습니다.
+- 기존 공개 3.3.1 APK에는 덮어쓰기 설치할 수 없습니다. 삭제 시 로컬 데이터가
+  제거되므로 먼저 백업과 복원 가능 여부를 확인해야 합니다.
+- 새 키의 Google Android OAuth 등록은 확인 대기 중입니다. 등록 확인 전에는
+  새 APK를 공개 첨부하지 않습니다. 기존 OAuth 클라이언트는 유지합니다.
+- 자세한 키 전환 기준은 [Android 서명 안내](https://github.com/littlebit0/DailyCalendar/blob/main/docs/ANDROID_SIGNING.md)를 확인하세요.
+
 ## 검증 및 배포 범위
 
 - Flutter 전체 자동 테스트 368개 통과(기존 건너뜀 1개), 정적 분석 통과.
@@ -64,6 +73,9 @@
 - Windows는 최신 변경 미적용이며 실제 OS 빌드·검증과 설치가 남아 있습니다.
 - 자동 테스트 통과는 실제 로그인, 알람 소리·진동, 모든 위젯 호스트 검증을
   대체하지 않습니다. 이번 배포 작업에서 앱을 자동 실행하지 않습니다.
+- 새 키로 Android Release APK 빌드 및 v2 서명 검증 통과. 패키지, 버전/코드,
+  arm64-v8a/armeabi-v7a/x86_64와 운영 분석·버그 제보 주소 포함을 확인했습니다.
+- 서명 설정 테스트 2개, 정적 분석 및 배포 워크플로 YAML 구문 검사 통과.
 
 ## 파일
 
@@ -72,8 +84,15 @@
 - `daily-ios-3.4.0-unsigned.ipa`
 - `daily-macos-3.4.0-unsigned.dmg`
 
-공개 파일은 App Store 제출용이 아닙니다. Android/Windows의 기존 공개 3.3.1
-설치 파일은 이전 릴리스에 유지합니다. App Store 승인·출시 완료를 의미하지 않습니다.
+공개 파일은 App Store 제출용이 아닙니다. Windows의 기존 공개 3.3.1 설치
+파일은 이전 릴리스에 유지합니다. App Store 승인·출시 완료를 의미하지 않습니다.
+
+Android `daily-android-3.4.0.apk`는 빌드 완료 후 Google OAuth 등록 확인 대기
+상태이며 아직 공개 첨부하지 않았습니다. 기존 공개 3.3.1 APK는 이전 릴리스에
+유지합니다.
+
+- APK 크기: 72,488,559 bytes
+- APK SHA-256: `5eeccb44095c07dd1f9625def351f01e1e0ece8cb57cc0a471c1b9de0c9b0a68`
 
 Transporter용 서명 파일은 GitHub에 올리지 않고 로컬
 `dist/transporter-upload/3.4.0` 폴더 하나에 보관합니다.

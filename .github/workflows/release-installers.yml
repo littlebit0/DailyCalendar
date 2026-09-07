@@ -110,11 +110,15 @@ jobs:
           storeFile=upload-keystore.jks
           EOF
       - run: flutter pub get
-      - run: flutter build apk --release --no-pub
+      - name: Build Android release APK
+        run: >-
+          flutter build apk --release --no-pub
+          --dart-define=DAILY_ANALYTICS_ENDPOINT=https://littlebit.tail6514a4.ts.net/v1/events
+          --dart-define=DAILY_BUG_REPORT_ENDPOINT=https://littlebit.tail6514a4.ts.net/v1/bug-reports
       - name: Verify Android OAuth signing certificate
         shell: bash
         env:
-          EXPECTED_ANDROID_OAUTH_SHA1: "0497a88673a55343d31347bbc3b2ec266573bc0e"
+          EXPECTED_ANDROID_OAUTH_SHA1: "3ab44a04827cb218654f34c67779291b256d2950"
         run: |
           apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
           test -x "$apksigner"

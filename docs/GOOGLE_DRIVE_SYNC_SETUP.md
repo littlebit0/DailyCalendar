@@ -86,8 +86,11 @@ OAuth clients currently checked in or referenced by the app:
   `234127810480-mst5c3lojau02lbdov924j8o7vaohonl.apps.googleusercontent.com`
 - Android release OAuth client:
   `234127810480-otvrdan5a1q6gbqejulbp4e7tueebr4n.apps.googleusercontent.com`
-- Android GitHub release APK OAuth client:
+- Android GitHub release APK OAuth client (3.3.1 signing key; keep for existing users):
   `234127810480-os12mgge72im7ijpcs5c9riqnv75kqti.apps.googleusercontent.com`
+- Android GitHub release APK 3.4.0 replacement-key OAuth client:
+  registration pending in project `234127810480`; use the new SHA-1 below and
+  package `com.littlebit0.dailycalendar`. Do not replace or delete the 3.3.1 client.
 - Android current macOS development machine debug OAuth client:
   `234127810480-duu31lqoedfl6fv9tn9gcdfs7dtka7ic.apps.googleusercontent.com`
 - Windows Desktop OAuth client:
@@ -115,10 +118,11 @@ Known configuration notes:
   project `234127810480` Web client so Android reads/writes the same Drive
   AppData v2 file set as the working iPhone build. Do not restore the removed
   legacy `google-services.json` as the source of the Android Web client ID.
-- Google Cloud has separate Android clients for the GitHub release APK signing
-  key and the current macOS development machine debug key. The release workflow
-  verifies the built APK certificate against the registered GitHub APK SHA-1 so
-  a signing-key mismatch fails before publication.
+- Google Cloud has separate Android clients for the previous GitHub APK signing
+  key and the current macOS development machine debug key. The 3.4.0 replacement
+  signing key also needs its own Android client. The release workflow verifies
+  the built APK certificate against the expected new SHA-1; that local check
+  does not prove that Google Cloud registration or an actual login succeeded.
 - Windows must have the Desktop OAuth client secret available locally. Without
   it Google rejects the token exchange and the app shows a Google Drive token
   request failure.
@@ -147,7 +151,20 @@ SHA-1   69:A6:8E:1C:3F:53:1D:43:2D:81:9B:3E:B2:67:78:06:3C:71:6B:18
 SHA-256 65:94:60:F3:8F:F5:81:23:30:9D:2D:1E:17:9A:65:D9:2A:22:E1:96:E0:D4:55:5F:A3:EE:2F:AF:D3:DB:1E:1D
 ```
 
-Android GitHub release APK signing certificate:
+Android GitHub release APK signing certificate, from 3.4.0:
+
+```text
+SHA-1   3A:B4:4A:04:82:7C:B2:18:65:4F:34:C6:77:79:29:1B:25:6D:29:50
+SHA-256 42:4C:0B:B7:EE:CC:BB:1D:A6:B2:D3:3E:1E:74:85:96:AF:6E:8D:0F:41:98:30:F9:C3:66:D1:0D:FA:94:70:29
+```
+
+The previous private key is unavailable. The user explicitly authorized this
+replacement on 2026-09-07. The package name remains unchanged, but 3.4.0 cannot
+be installed over the old-key 3.3.1 APK. Preserve and verify a backup before any
+uninstall; uninstalling deletes local app data. No app is uninstalled by this
+signing work. See [Android signing](ANDROID_SIGNING.md) for key storage and CI.
+
+Previous Android GitHub release APK signing certificate (3.3.1):
 
 ```text
 SHA-1   04:97:A8:86:73:A5:53:43:D3:13:47:BB:C3:B2:EC:26:65:73:BC:0E
