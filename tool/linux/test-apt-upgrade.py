@@ -78,7 +78,10 @@ def main(bundle, package):
             assert run("sudo", "/usr/lib/dailycalendar/update", check=False).returncode != 0
             assert installed() == "0.0.1-1", "Invalid signatures must never update"
             manifest.write_bytes(valid)
-            with open("/run/lock/dailycalendar-runtime.lock") as lock:
+            lock_directory = pathlib.Path('/run/dailycalendar')
+            assert lock_directory.stat().st_uid == 0
+            assert lock_directory.stat().st_mode & 0o022 == 0
+            with open("/run/dailycalendar/runtime.lock") as lock:
                 fcntl.flock(lock, fcntl.LOCK_SH)
                 run("sudo", "/usr/lib/dailycalendar/update")
                 assert installed() == "0.0.1-1", "Running-app lock must defer updates"
@@ -86,10 +89,16 @@ def main(bundle, package):
             run("sudo", "/usr/lib/dailycalendar/update")
             assert installed() == "0.0.1-1", "Respect package holds"
             run("sudo", "apt-mark", "unhold", "dailycalendar")
+            run("sudo", "systemctl", "mask", "dailycalendar-update.timer")
             run("sudo", "/usr/lib/dailycalendar/update")
             assert installed() == version
             assert pathlib.Path("/opt/dailycalendar/daily").read_bytes() == (bundle / "daily").read_bytes()
             assert hashlib.sha256(marker.read_bytes()).hexdigest() == before
+            assert subprocess.run(["systemctl", "is-enabled", "dailycalendar-update.timer"]).returncode != 0
+            timer_state = subprocess.run(["systemctl", "is-enabled", "dailycalendar-update.timer"],
+                                         capture_output=True, text=True).stdout.strip()
+            assert timer_state == 'masked', 'Preserve explicit administrator masking'
+            run("sudo", "systemctl", "unmask", "dailycalendar-update.timer")
             assert subprocess.run(["systemctl", "is-enabled", "dailycalendar-update.timer"]).returncode != 0
             run("sudo", "apt-get", "remove", "-y", "dailycalendar")
             assert hashlib.sha256(marker.read_bytes()).hexdigest() == before

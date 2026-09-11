@@ -1,1 +1,2 @@
-f /run/lock/dailycalendar-runtime.lock 0644 root root -
+d /run/dailycalendar 0755 root root -
+f /run/dailycalendar/runtime.lock 0644 root root -

@@ -5,7 +5,10 @@ if [ "$1" = configure ]; then
   if [ -d /run/systemd/system ]; then
     systemctl daemon-reload
     # Respect an existing user's explicit disable choice during upgrades.
-    if [ -z "${2:-}" ]; then
+    state=$(systemctl is-enabled dailycalendar-update.timer 2>/dev/null || true)
+    if [ "$state" = masked ] || [ "$state" = masked-runtime ]; then
+      :
+    elif [ -z "${2:-}" ]; then
       systemctl enable --now dailycalendar-update.timer
     else
       systemctl try-restart dailycalendar-update.timer
