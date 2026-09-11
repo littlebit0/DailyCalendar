@@ -93,6 +93,11 @@ def main(bundle, package):
             assert subprocess.run(["systemctl", "is-enabled", "dailycalendar-update.timer"]).returncode != 0
             run("sudo", "apt-get", "remove", "-y", "dailycalendar")
             assert hashlib.sha256(marker.read_bytes()).hexdigest() == before
+            assert pathlib.Path('/usr/share/keyrings/dailycalendar-archive-keyring.asc').exists()
+            run("sudo", "apt-get", "purge", "-y", "dailycalendar")
+            assert not pathlib.Path('/etc/apt/sources.list.d/dailycalendar.sources').exists()
+            assert not pathlib.Path('/usr/share/keyrings/dailycalendar-archive-keyring.asc').exists()
+            assert hashlib.sha256(marker.read_bytes()).hexdigest() == before
             print("PASS: signed install/upgrade, bad signature rejection, active-app deferral, hold, disabled timer and user-file preservation. App not launched.")
         finally:
             server.shutdown()

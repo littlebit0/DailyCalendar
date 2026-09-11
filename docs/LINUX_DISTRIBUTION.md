@@ -44,6 +44,9 @@ sudo systemctl enable --now dailycalendar-update.timer
 
 Upgrades preserve an explicitly disabled timer, source configuration and user
 files. Package removal does not delete calendars, settings or credentials.
+`apt remove dailycalendar` keeps the source and its public key together for
+reinstallation; `apt purge dailycalendar` removes both. Active Daily reminder
+timers are disabled on removal without deleting private reminder data.
 
 Installed update configuration:
 

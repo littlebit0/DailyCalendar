@@ -88,7 +88,8 @@ def build(bundle, output, version, arch):
             " Calendar, tasks and Google Drive sync with signed automatic updates.\n")
         (root / "DEBIAN/conffiles").write_text(
             "/etc/apt/sources.list.d/dailycalendar.sources\n"
-            "/etc/apt/preferences.d/dailycalendar\n")
+            "/etc/apt/preferences.d/dailycalendar\n"
+            "/usr/share/keyrings/dailycalendar-archive-keyring.asc\n")
         shutil.rmtree(debian)
         output.mkdir(parents=True, exist_ok=True)
         destination = output / f"daily-linux-{version}-{arch}.deb"

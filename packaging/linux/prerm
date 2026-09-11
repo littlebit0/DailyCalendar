@@ -4,4 +4,15 @@ if [ "$1" = remove ] || [ "$1" = deconfigure ]; then
   if [ -d /run/systemd/system ]; then
     systemctl disable --now dailycalendar-update.timer || true
   fi
+  # Stop only Daily's user timer in currently logged-in desktop sessions.
+  for session in /run/user/*; do
+    uid=${session##*/}
+    case "$uid" in ''|*[!0-9]*) continue ;; esac
+    [ -S "$session/bus" ] || continue
+    user=$(getent passwd "$uid" | cut -d: -f1)
+    [ -n "$user" ] || continue
+    runuser -u "$user" -- env XDG_RUNTIME_DIR="$session" \
+      DBUS_SESSION_BUS_ADDRESS="unix:path=$session/bus" \
+      systemctl --user disable --now dailycalendar-reminders.timer || true
+  done
 fi
