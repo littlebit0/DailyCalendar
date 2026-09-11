@@ -8,6 +8,7 @@ import http.server
 import importlib.util
 import os
 import pathlib
+import sqlite3
 import subprocess
 import tempfile
 import threading
@@ -59,9 +60,11 @@ def main(bundle, package):
             run("sudo", "systemctl", "disable", "--now", "dailycalendar-update.timer")
             run("sudo", "systemd-analyze", "verify", "/usr/lib/systemd/system/dailycalendar-update.service")
             assert installed() == "0.0.1-1"
-            marker = pathlib.Path.home() / ".local/share/daily-ci-preservation/settings.json"
+            marker = pathlib.Path.home() / ".local/share/com.littlebit0.daily/daily.sqlite"
             marker.parent.mkdir(parents=True, exist_ok=True)
-            marker.write_text('{"keep":"calendar-data"}')
+            with sqlite3.connect(marker) as database:
+                database.execute('CREATE TABLE package_preservation_test (value TEXT)')
+                database.execute('INSERT INTO package_preservation_test VALUES (?)', ('keep-calendar-data',))
             before = hashlib.sha256(marker.read_bytes()).hexdigest()
             source = root / "dailycalendar.sources"
             source.write_text(

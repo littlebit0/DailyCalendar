@@ -56,10 +56,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libsecret-1-dev libstdc++-12-dev dpkg-dev apt-utils gpg desktop-file-utils
       - uses: subosito/flutter-action@v2
+        if: matrix.arch == 'amd64'
         with:
           channel: stable
           flutter-version: '3.44.0'
           cache: true
+      - name: Set up the same Flutter tag on ARM64
+        if: matrix.arch == 'arm64'
+        run: |
+          git clone --depth 1 --branch 3.44.0 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          "$RUNNER_TEMP/flutter/bin/flutter" --version
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
       - run: flutter pub get
       - name: Analyze and unit tests
         if: matrix.arch == 'amd64'
@@ -124,6 +131,22 @@ jobs:
         run: |
           curl --fail --location --retry 3 https://github.com/littlebit0/DailyCalendar/releases/download/linux-apt/InRelease -o "$RUNNER_TEMP/InRelease"
           gpg --batch --verify "$RUNNER_TEMP/InRelease"
+          sudo install -m 644 packaging/linux/dailycalendar-archive-keyring.asc /usr/share/keyrings/dailycalendar-archive-keyring.asc
+          sudo install -m 644 packaging/linux/dailycalendar.sources /etc/apt/sources.list.d/dailycalendar.sources
+          sudo dpkg --add-architecture arm64
+          sudo apt-get -o Dir::Etc::sourcelist=sources.list.d/dailycalendar.sources -o Dir::Etc::sourceparts=- -o APT::Get::List-Cleanup=0 -o APT::Update::Error-Mode=any update
+          cd "$RUNNER_TEMP"
+          apt-get download dailycalendar:amd64 dailycalendar:arm64
+          python3 - <<'PY'
+          import hashlib, os, pathlib, subprocess
+          root = pathlib.Path(os.environ['GITHUB_WORKSPACE']) / 'dist/linux'
+          for package in root.glob('*.deb'):
+              version = subprocess.check_output(['dpkg-deb', '-f', str(package), 'Version'], text=True).strip()
+              arch = subprocess.check_output(['dpkg-deb', '-f', str(package), 'Architecture'], text=True).strip()
+              downloaded = pathlib.Path(f'dailycalendar_{version}_{arch}.deb')
+              assert hashlib.sha256(downloaded.read_bytes()).digest() == hashlib.sha256(package.read_bytes()).digest()
+          print('Public APT downloads match both built installers.')
+          PY
       - name: Remove signing material
         if: always()
         run: rm -rf "$RUNNER_TEMP/daily-gnupg"
