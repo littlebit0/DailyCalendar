@@ -5,7 +5,7 @@ release state, completed work, release status, and safe next steps. Do not add
 OAuth client secrets, GitHub tokens, signing certificates, provisioning
 profiles, keystore passwords, or private keys to this file.
 
-## 2026-09-11 Linux Distribution In Progress
+## 2026-09-11 Linux Distribution Published
 
 - User authorized a Linux installer with automatic updates after one installation.
 - Added the Linux GTK runner, desktop layout/pointer support and existing desktop
@@ -15,14 +15,31 @@ profiles, keystore passwords, or private keys to this file.
 - Linux scheduled notifications need a per-user systemd helper because the Flutter
   Linux notification plugin cannot schedule them. Implemented private persistent
   reminder records and 30-second delivery checks during a logged-in desktop session.
-- Local analyze and 372 Flutter tests passed (1 existing skip); 11 Linux Python
-  tests passed. Real Linux builds/APT integration/publication are still pending.
+- Local/CI analyze and 372 Flutter tests passed (1 existing skip); 11 Linux Python
+  tests passed. Release workflow 34595769597 succeeded at source 46dfcb8.
+- Published v3.4.0 Linux-only additions, also in the signed linux-apt prerelease:
+  - daily-linux-3.4.0-1-amd64.deb, 11,718,576 bytes,
+    SHA256 0c6bdbcaa92fa359ec0d34245ca306fd6b967a3f4e4dcfcf961eaa9f6d1e30f1.
+  - daily-linux-3.4.0-1-arm64.deb, 10,884,868 bytes,
+    SHA256 b338d7ba3dcd3cd712e594ab5fefb6fbc2b4009f0ca92e4741a94cc73f9fe4a4.
+- Local copies: /Users/kimhwi/Documents/Codex/2026-05-26/littlebit0-daily-https-github-com-littlebit0/dist/linux/.
+- Both architectures built and downloaded through real public APT with signature
+  and hash verification. On amd64, install/upgrade/remove/purge, tampered signature
+  rejection, running-app lock, holds/masked timer and SQLite preservation passed.
+- No app launch/UI/auth/desktop notification delivery was tested. ARM64 actual
+  install/upgrade and Debian-specific execution are still unverified. Do not claim
+  package CI establishes full Linux feature parity. No developer apps were installed.
 - Windows remains unported/unvalidated for recent features. Linux support does
   not establish Windows parity. Existing installed apps/data and release assets
   must be preserved; no app launch or real UI/authentication test is authorized.
 - Archive private key is outside git in the maintainer signing directory and in
   GitHub encrypted secret LINUX_APT_SIGNING_KEY. Never print or commit it. Public
   fingerprint: 1C86509FAC07FB37DA9F0B6EE52E84ACEAE49AD4.
+- Private key location (local only): /Users/kimhwi/.local/share/daily-signing/linux-apt/archive-private.asc.
+- APT metadata signing private keys must never be uploaded as release assets.
+  Published .deb files are immutable; increment the Linux revision for rebuilds.
+  When an automated GITHUB_TOKEN product release is published, dispatch the Linux
+  workflow explicitly because that token's release event will not cascade workflows.
 
 ## 2026-09-07 Mobile Release Asset Refresh
 

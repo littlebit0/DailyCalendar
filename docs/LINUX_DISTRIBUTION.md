@@ -31,7 +31,8 @@ updates Daily and required dependencies, not the entire OS. A package hold is
 respected. Network/signature/hash failures keep the existing installation.
 Running Daily defers the update; the updater never force-closes it. The launcher
 holds a shared runtime lock and the updater takes it exclusively, protecting
-against a launch/update race. Close Daily before a manual APT upgrade.
+against a launch/update race. Starting Daily during an update waits for the
+updater to release that lock. Close Daily before a manual APT upgrade.
 
 ```sh
 systemctl status dailycalendar-update.timer
@@ -109,6 +110,25 @@ for each release; rotation requires a trust transition through the old key.
 The isolated CI test checks signed install/upgrade, tampered-signature rejection,
 running-app deferral, package holds, disabled-timer preservation, binary identity
 and user-file preservation. It does not launch Daily or touch a developer's apps.
+
+## Verification Record (2026-09-11)
+
+- Source: `46dfcb81451bb02f8612cce5e9c25aad10037526`.
+- [Release workflow](https://github.com/littlebit0/DailyCalendar/actions/runs/34595769597):
+  amd64 and arm64 Release builds, packaging and publication succeeded.
+- 372 Flutter tests passed (1 existing skip); 11 Linux Python tests passed.
+- amd64 APT integration passed: bad signature rejection, running-app lock,
+  package hold, masked/disabled timer preservation, real package upgrade,
+  installed binary equality, removal/purge and SQLite file preservation.
+- Public signed APT indices and downloads of both architectures passed; their
+  SHA-256 values matched the built installers and local downloaded copies.
+- amd64: 11,718,576 bytes;
+  `0c6bdbcaa92fa359ec0d34245ca306fd6b967a3f4e4dcfcf961eaa9f6d1e30f1`.
+- arm64: 10,884,868 bytes;
+  `b338d7ba3dcd3cd712e594ab5fefb6fbc2b4009f0ca92e4741a94cc73f9fe4a4`.
+- No app launch, real desktop UI/auth/notification test or developer-device
+  installation was performed. ARM64 installation/upgrade execution and Debian
+  distro-specific execution remain unverified (build/download checks passed).
 
 References: [Flutter Linux](https://docs.flutter.dev/platform-integration/linux/building),
 [APT sources](https://manpages.debian.org/testing/apt/sources.list.5.en.html),

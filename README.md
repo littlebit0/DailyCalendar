@@ -11,7 +11,7 @@
 <p align="center">
   <a href="https://github.com/littlebit0/DailyCalendar/releases/latest"><img src="https://img.shields.io/github/v/release/littlebit0/DailyCalendar?label=release" alt="Latest release"></a>
   <img src="https://img.shields.io/badge/version-3.4.0-2f6feb" alt="Version 3.4.0">
-  <img src="https://img.shields.io/badge/Flutter-iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows-02569B?logo=flutter" alt="Flutter platforms">
+  <img src="https://img.shields.io/badge/Flutter-iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux-02569B?logo=flutter" alt="Flutter platforms">
 </p>
 
 DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하는 Flutter 기반
@@ -28,6 +28,7 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 - 일정 더블클릭·더블탭으로 완료/미완료를 전환하며, 완료 후에도 분류 색상을 유지합니다.
 - 첫 화면을 빠른 보기/주/월/일 중 선택하고, 빠른 보기는 항상 좌우로 월을 이동합니다.
 - 날짜·요일·공휴일 표시, macOS 휠 이동, 좁은 화면의 설정 문구와 Android 로그인·알람·위젯을 개선했습니다.
+- Ubuntu/Debian용 Linux `.deb` 설치 파일과 서명된 APT 자동 업데이트를 추가했습니다.
 
 > **Windows에는 이번 최신 변경사항이 미적용 상태입니다.** Windows 전용 반영과
 > 실제 OS 검증·업데이트는 후속 작업이며, 공유 코드나 버전 번호 변경만으로
@@ -45,6 +46,7 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 | macOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-macos-3.4.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-macos-3.4.0-unsigned.dmg) |
 | Android | 3.4.0 새 서명 APK, Google OAuth 등록 완료 · 실기기 로그인 검증 대기 | [daily-android-3.4.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-android-3.4.0.apk) |
 | Windows | 최신 변경 미적용, 기존 공개 버전 3.3.1 | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1.zip) |
+| Linux | 3.4.0-1, 빌드·APT 설치/업데이트 검증 완료 · 데스크톱 실사용 검증 대기 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-linux-3.4.0-1-amd64.deb) · [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-linux-3.4.0-1-arm64.deb) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
 > 서명 없이는 iPhone에 직접 설치할 수 없으며, 재서명 과정에서 Sign in with
@@ -65,10 +67,19 @@ GitHub 릴리스를 확인하며 새 Windows 설치 프로그램이 있으면 �
 
 ### Linux
 
-Ubuntu/Debian 데스크톱용 `.deb`와 서명된 APT 자동 업데이트를 추가하고 있습니다.
-amd64/arm64 빌드 및 설치·업데이트 검증 결과는 배포 후 이 항목에 기록합니다.
-최초 설치 후에는 Daily 전용 타이머가 새 버전을 확인하며, 앱 실행 중이거나
-검증에 실패하면 업데이트를 미룹니다. 사용자 일정과 설정은 삭제하지 않습니다.
+Ubuntu/Debian 데스크톱용 `.deb`를 한 번 설치하면 Daily 전용 타이머가 약 6시간마다
+서명된 업데이트를 확인합니다. 앱 실행 중이거나 검증에 실패하면 업데이트를
+미루며, 일정과 설정은 삭제하지 않습니다. 설치 시 앱을 자동 실행하지 않습니다.
+
+```sh
+sudo apt install ./daily-linux-3.4.0-1-amd64.deb
+```
+
+Intel/AMD PC는 amd64, ARM64 PC는 arm64 파일을 사용하세요. amd64는 Ubuntu 22.04+,
+arm64는 Ubuntu 24.04+를 빌드 기준으로 사용합니다. 두 아키텍처의 Release 빌드와
+공개 APT 다운로드·해시 검증이 완료됐으며, amd64에서 설치·자동 업데이트·제거 및
+사용자 파일 보존을 검증했습니다. 실제 데스크톱 UI·Google 로그인·알림 전달은
+아직 실사용 검증 전입니다. Linux에는 Siri·Apple 위젯·AlarmKit이 제공되지 않습니다.
 [설치·업데이트 구조 및 Linux 지원 범위](docs/LINUX_DISTRIBUTION.md)를 확인하세요.
 
 ## 주요 기능

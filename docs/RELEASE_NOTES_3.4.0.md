@@ -10,6 +10,23 @@
   코드나 버전 설정이 변경되었어도 Windows 반영·빌드·검증·업데이트 완료를
   뜻하지 않습니다. 이번 릴리스에 새 Windows 설치 파일은 포함하지 않습니다.
 
+## Linux 배포 추가 (2026-09-11)
+
+- Ubuntu/Debian 데스크톱용 `daily-linux-3.4.0-1-amd64.deb`와
+  `daily-linux-3.4.0-1-arm64.deb`를 추가했습니다.
+- 한 번 설치하면 서명된 APT 저장소와 Daily 전용 업데이트 타이머가 등록됩니다.
+  약 6시간마다 확인하며, 앱 실행 중·패키지 고정·서명/네트워크 오류 시에는
+  기존 버전을 유지합니다. 사용자 일정·설정은 삭제하지 않습니다.
+- Linux GTK 실행부, 데스크톱 Google OAuth 및 사용자 세션의 예약 알림을 연결했습니다.
+  DB/동기화 스키마와 다른 플랫폼의 설치 파일은 변경하지 않았습니다.
+- amd64/arm64 Release 빌드 및 공개 APT 다운로드·해시 검증 통과.
+  amd64에서 서명 오류 거부, 실행 중 업데이트 연기, hold/mask 유지, 설치·업데이트·
+  제거·purge와 SQLite 파일 보존을 검증했습니다. 앱 실행·Google 로그인·알림 전달의
+  실제 데스크톱 검증은 하지 않았습니다.
+- [amd64 설치 파일](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-linux-3.4.0-1-amd64.deb)
+  · [arm64 설치 파일](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-linux-3.4.0-1-arm64.deb)
+- [Linux 설치 및 지원 범위](https://github.com/littlebit0/DailyCalendar/blob/main/docs/LINUX_DISTRIBUTION.md)
+
 ## 일정 이동과 순서
 
 - 월간·주간·일간 및 하루보기에서 일정 날짜 이동과 날짜별 수동 순서를 개선했습니다.
