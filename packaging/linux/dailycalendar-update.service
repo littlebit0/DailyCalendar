@@ -1,0 +1,11 @@
+[Unit]
+Description=Install verified Daily calendar updates when Daily is closed
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/dailycalendar/update
+TimeoutStartSec=30min
+Nice=10
+IOSchedulingClass=idle

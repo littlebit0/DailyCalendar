@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Daily
+Comment=Calendar and tasks
+Exec=dailycalendar
+Icon=com.littlebit0.daily
+Terminal=false
+Categories=Office;Calendar;
+StartupWMClass=com.littlebit0.daily

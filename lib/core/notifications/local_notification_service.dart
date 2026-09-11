@@ -14,6 +14,7 @@ import '../platform/windows_build_identity.dart';
 import '../settings/settings_repository.dart';
 import '../time/korea_time.dart';
 import 'notification_service.dart';
+import 'linux_notification_scheduler.dart';
 import 'reminder_delivery_plan.dart';
 
 @immutable
@@ -86,6 +87,7 @@ class LocalNotificationService implements NotificationService {
   final SettingsRepository _settingsRepository;
   final EventRepository _eventRepository;
   final FlutterLocalNotificationsPlugin _plugin;
+  final _linuxScheduler = LinuxNotificationScheduler();
   var _initialized = false;
 
   @override
@@ -121,8 +123,12 @@ class LocalNotificationService implements NotificationService {
       iOS: darwin,
       macOS: darwin,
       windows: windows,
+      linux: const LinuxInitializationSettings(defaultActionName: 'Open'),
     );
     await _plugin.initialize(settings: settings);
+    if (_usesLinuxNotifications) {
+      await _linuxScheduler.initialize();
+    }
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin
@@ -325,6 +331,9 @@ class LocalNotificationService implements NotificationService {
   @override
   Future<int> pendingNotificationCount() async {
     await initialize();
+    if (_usesLinuxNotifications) {
+      return _linuxScheduler.pendingCount();
+    }
     if (_usesNativeMacNotifications) {
       final count = await _nativeNotificationChannel.invokeMethod<int>(
         'pendingCount',
@@ -339,6 +348,9 @@ class LocalNotificationService implements NotificationService {
   Future<String> permissionSummary() async {
     await initialize();
     final summary = <String>[];
+    if (_usesLinuxNotifications) {
+      return 'Linux desktop session · ${await pendingNotificationCount()} pending';
+    }
 
     final androidPlugin = _plugin
         .resolvePlatformSpecificImplementation<
@@ -480,6 +492,16 @@ class LocalNotificationService implements NotificationService {
     required String payload,
     bool repeatsDaily = false,
   }) async {
+    if (_usesLinuxNotifications) {
+      await _linuxScheduler.schedule(
+        id: id,
+        title: title,
+        body: body,
+        scheduled: scheduled,
+        repeatsDaily: repeatsDaily,
+      );
+      return;
+    }
     if (_usesNativeMacNotifications) {
       await _nativeNotificationChannel.invokeMethod<void>('schedule', {
         'id': id,
@@ -504,6 +526,9 @@ class LocalNotificationService implements NotificationService {
   }
 
   Future<void> _cancelNotification(int id) async {
+    if (_usesLinuxNotifications) {
+      await _linuxScheduler.cancel(id);
+    }
     if (_usesNativeMacNotifications) {
       await _nativeNotificationChannel.invokeMethod<void>('cancel', {'id': id});
       return;
@@ -551,6 +576,9 @@ class LocalNotificationService implements NotificationService {
 
   bool get _usesNativeMacNotifications =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.macOS;
+
+  bool get _usesLinuxNotifications =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.linux;
 
   bool get _usesNativeDarwinNotificationControl =>
       !kIsWeb &&

@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+# Keep a shared lock for the complete app lifetime. The updater takes it
+# exclusively, so updates cannot replace assets beneath a running app.
+exec 9</run/lock/dailycalendar-runtime.lock
+flock --shared 9
+exec /opt/dailycalendar/daily "$@"

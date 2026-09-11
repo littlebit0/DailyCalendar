@@ -1,0 +1,7 @@
+Package: dailycalendar
+Pin: release o=DailyCalendar
+Pin-Priority: 600
+
+Package: *
+Pin: release o=DailyCalendar
+Pin-Priority: -1

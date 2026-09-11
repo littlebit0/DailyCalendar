@@ -1,0 +1,10 @@
+[Unit]
+Description=Deliver Daily reminders while the desktop session is active
+
+[Timer]
+OnStartupSec=15s
+OnUnitActiveSec=30s
+AccuracySec=1s
+
+[Install]
+WantedBy=timers.target

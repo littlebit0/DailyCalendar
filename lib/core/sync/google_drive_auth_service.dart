@@ -248,6 +248,18 @@ class GoogleDriveAuthService {
         );
       }
     }
+    if (Platform.isLinux) {
+      final configHome = Platform.environment['XDG_CONFIG_HOME']?.trim();
+      final home = Platform.environment['HOME']?.trim();
+      final root = configHome != null && configHome.startsWith('/')
+          ? configHome
+          : home == null
+          ? null
+          : '$home/.config';
+      if (root != null) {
+        yield File('$root/Daily/google_desktop_oauth.json');
+      }
+    }
   }
 
   Iterable<String> _desktopOAuthConfigUriListValue(String key) sync* {
@@ -804,7 +816,10 @@ class GoogleDriveAuthService {
   Future<void> _initialize() async {
     _usesDesktopOAuth =
         _desktopOAuthOverride ??
-        (Platform.isIOS || Platform.isWindows || _shouldUseMacosDesktopOAuth);
+        (Platform.isIOS ||
+            Platform.isWindows ||
+            Platform.isLinux ||
+            _shouldUseMacosDesktopOAuth);
     if (_usesDesktopOAuth) {
       _usesDesktopOAuth = true;
       if (_configuredOAuthClientId.isEmpty) {
@@ -1222,6 +1237,9 @@ class GoogleDriveAuthService {
     }
     if (Platform.isWindows) {
       return 'Windows';
+    }
+    if (Platform.isLinux) {
+      return 'Linux';
     }
     return '데스크톱';
   }

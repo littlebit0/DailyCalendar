@@ -1,0 +1,17 @@
+#!/bin/sh
+set -eu
+if [ "$1" = configure ]; then
+  systemd-tmpfiles --create /usr/lib/tmpfiles.d/dailycalendar.conf
+  if [ -d /run/systemd/system ]; then
+    systemctl daemon-reload
+    # Respect an existing user's explicit disable choice during upgrades.
+    if [ -z "${2:-}" ]; then
+      systemctl enable --now dailycalendar-update.timer
+    else
+      systemctl try-restart dailycalendar-update.timer
+    fi
+  fi
+  if command -v update-desktop-database >/dev/null 2>&1; then
+    update-desktop-database -q /usr/share/applications || true
+  fi
+fi

@@ -57,7 +57,7 @@ int quickTodoColumnCountForPlatform(TargetPlatform platform, double width) {
   if (platform == TargetPlatform.iOS) {
     return 2;
   }
-  if (platform == TargetPlatform.macOS || platform == TargetPlatform.windows) {
+  if (_usesDesktopCalendarLayout(platform)) {
     return ((width + 12) / 292).floor().clamp(1, 4).toInt();
   }
   if (platform == TargetPlatform.android) {
@@ -73,7 +73,8 @@ bool supportsCalendarPointerNavigation(TargetPlatform platform) {
   return platform == TargetPlatform.android ||
       platform == TargetPlatform.iOS ||
       platform == TargetPlatform.macOS ||
-      platform == TargetPlatform.windows;
+      platform == TargetPlatform.windows ||
+      platform == TargetPlatform.linux;
 }
 
 class _BottomBarUiState {
@@ -188,7 +189,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
             platform == TargetPlatform.android) &&
         settings.monthNavigationMode == MonthNavigationMode.horizontal;
     final showScheduleDaySidebar =
-        (platform == TargetPlatform.macOS || androidExpanded) &&
+        (platform == TargetPlatform.macOS ||
+            platform == TargetPlatform.linux ||
+            androidExpanded) &&
         windowSize.width >= 720 &&
         viewMode == CalendarViewMode.day &&
         settings.weekDayLayoutMode == WeekDayLayoutMode.schedule;
@@ -3983,7 +3986,7 @@ Widget _desktopMouseWheelSignalRegion(
   required Widget child,
 }) {
   final platform = Theme.of(context).platform;
-  if (platform != TargetPlatform.windows && platform != TargetPlatform.macOS) {
+  if (!_usesDesktopCalendarLayout(platform)) {
     return child;
   }
   // This Listener is inside PageView's Scrollable, so it wins pointer-signal
@@ -4039,7 +4042,9 @@ double? _pointerPageNavigationDelta(
 }
 
 bool _usesDesktopCalendarLayout(TargetPlatform platform) {
-  return platform == TargetPlatform.macOS || platform == TargetPlatform.windows;
+  return platform == TargetPlatform.macOS ||
+      platform == TargetPlatform.windows ||
+      platform == TargetPlatform.linux;
 }
 
 class _CalendarMonthPage extends ConsumerWidget {

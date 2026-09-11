@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+if [ -d /run/systemd/system ]; then
+  systemctl daemon-reload
+fi
+# Never remove home directories, calendars, tokens or settings.

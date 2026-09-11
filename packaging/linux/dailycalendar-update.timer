@@ -1,0 +1,10 @@
+[Unit]
+Description=Check for Daily calendar updates
+
+[Timer]
+OnBootSec=15min
+OnUnitActiveSec=6h
+RandomizedDelaySec=30min
+
+[Install]
+WantedBy=timers.target

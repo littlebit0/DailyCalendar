@@ -117,7 +117,7 @@ void main() {
       expect(supportsCalendarPointerNavigation(TargetPlatform.iOS), isTrue);
       expect(supportsCalendarPointerNavigation(TargetPlatform.macOS), isTrue);
       expect(supportsCalendarPointerNavigation(TargetPlatform.windows), isTrue);
-      expect(supportsCalendarPointerNavigation(TargetPlatform.linux), isFalse);
+      expect(supportsCalendarPointerNavigation(TargetPlatform.linux), isTrue);
       expect(
         supportsCalendarPointerNavigation(TargetPlatform.fuchsia),
         isFalse,
@@ -166,7 +166,7 @@ void main() {
   test('Android and Windows expose the adjacent-month date setting', () {
     expect(supportsAdjacentMonthDateSetting(TargetPlatform.android), isTrue);
     expect(supportsAdjacentMonthDateSetting(TargetPlatform.windows), isTrue);
-    expect(supportsAdjacentMonthDateSetting(TargetPlatform.linux), isFalse);
+    expect(supportsAdjacentMonthDateSetting(TargetPlatform.linux), isTrue);
   });
 
   testWidgets(

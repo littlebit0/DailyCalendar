@@ -70,7 +70,8 @@ bool supportsAdjacentMonthDateSetting(TargetPlatform platform) {
   return platform == TargetPlatform.android ||
       platform == TargetPlatform.iOS ||
       platform == TargetPlatform.macOS ||
-      platform == TargetPlatform.windows;
+      platform == TargetPlatform.windows ||
+      platform == TargetPlatform.linux;
 }
 
 class SettingsPage extends ConsumerStatefulWidget {

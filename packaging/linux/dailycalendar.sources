@@ -1,0 +1,4 @@
+Types: deb
+URIs: https://github.com/littlebit0/DailyCalendar/releases/download/linux-apt/
+Suites: ./
+Signed-By: /usr/share/keyrings/dailycalendar-archive-keyring.asc

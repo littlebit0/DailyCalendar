@@ -1,0 +1,7 @@
+#!/bin/sh
+set -eu
+if [ "$1" = remove ] || [ "$1" = deconfigure ]; then
+  if [ -d /run/systemd/system ]; then
+    systemctl disable --now dailycalendar-update.timer || true
+  fi
+fi

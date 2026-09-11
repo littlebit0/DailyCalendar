@@ -1,0 +1,129 @@
+name: Linux installers and signed updates
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing product release tag
+        required: true
+        default: v3.4.0
+      revision:
+        description: Monotonically increasing Linux package revision
+        required: true
+        default: '1'
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-linux-release
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || (!github.event.release.prerelease && startsWith(github.event.release.tag_name, 'v'))
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            arch: amd64
+            flutter_arch: x64
+          - runner: ubuntu-24.04-arm
+            arch: arm64
+            flutter_arch: arm64
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate release identity
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
+          REVISION: ${{ inputs.revision || '1' }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, re
+          tag = os.environ['RELEASE_TAG']
+          revision = os.environ['REVISION']
+          version = re.search(r'^version: (\S+)', pathlib.Path('pubspec.yaml').read_text(), re.M)[1]
+          assert tag == 'v' + version and re.fullmatch(r'[1-9][0-9]*', revision)
+          with open(os.environ['GITHUB_ENV'], 'a') as stream:
+              stream.write(f'DEB_VERSION={version}-{revision}\n')
+          PY
+      - name: Install Linux toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libsecret-1-dev libstdc++-12-dev dpkg-dev apt-utils gpg desktop-file-utils
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: '3.44.0'
+          cache: true
+      - run: flutter pub get
+      - name: Analyze and unit tests
+        if: matrix.arch == 'amd64'
+        run: |
+          flutter analyze --no-pub
+          flutter test --no-pub
+          python3 -m unittest discover -s test/linux -v
+      - name: Build release
+        env:
+          GOOGLE_DESKTOP_CLIENT_SECRET: ${{ secrets.GOOGLE_DESKTOP_CLIENT_SECRET }}
+        run: |
+          test -n "$GOOGLE_DESKTOP_CLIENT_SECRET"
+          flutter build linux --release --no-pub \
+            --dart-define=GOOGLE_DESKTOP_CLIENT_SECRET="$GOOGLE_DESKTOP_CLIENT_SECRET" \
+            --dart-define=DAILY_ANALYTICS_ENDPOINT=https://littlebit.tail6514a4.ts.net/v1/events \
+            --dart-define=DAILY_BUG_REPORT_ENDPOINT=https://littlebit.tail6514a4.ts.net/v1/bug-reports
+      - name: Package and validate
+        run: |
+          python3 tool/linux/build-deb.py --bundle build/linux/${{ matrix.flutter_arch }}/release/bundle --version "$DEB_VERSION" --arch ${{ matrix.arch }}
+          desktop-file-validate packaging/linux/dailycalendar.desktop
+          bash -n packaging/linux/update packaging/linux/launcher packaging/linux/postinst packaging/linux/prerm packaging/linux/postrm
+      - name: Verify signed APT install and update without launching Daily
+        if: matrix.arch == 'amd64'
+        run: python3 tool/linux/test-apt-upgrade.py --bundle build/linux/x64/release/bundle --package dist/linux/daily-linux-${{ env.DEB_VERSION }}-amd64.deb
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux-${{ matrix.arch }}
+          path: dist/linux/*.deb
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: linux-*
+          path: dist/linux
+          merge-multiple: true
+      - run: sudo apt-get update && sudo apt-get install -y apt-utils gpg
+      - name: Import archive signing key
+        env:
+          ARCHIVE_KEY: ${{ secrets.LINUX_APT_SIGNING_KEY }}
+        run: |
+          test -n "$ARCHIVE_KEY"
+          install -d -m 700 "$RUNNER_TEMP/daily-gnupg"
+          export GNUPGHOME="$RUNNER_TEMP/daily-gnupg"
+          printf '%s' "$ARCHIVE_KEY" | gpg --batch --import
+          fingerprint=$(gpg --show-keys --with-colons packaging/linux/dailycalendar-archive-keyring.asc | awk -F: '$1 == "fpr" {print $10; exit}')
+          gpg --batch --list-secret-keys "$fingerprint" >/dev/null
+          echo "GNUPGHOME=$GNUPGHOME" >> "$GITHUB_ENV"
+          echo "SIGNING_KEY=$fingerprint" >> "$GITHUB_ENV"
+      - name: Publish only Linux artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
+        run: python3 tool/linux/publish.py --packages dist/linux --tag "$RELEASE_TAG" --signing-key "$SIGNING_KEY"
+      - name: Verify public signed archive
+        run: |
+          curl --fail --location --retry 3 https://github.com/littlebit0/DailyCalendar/releases/download/linux-apt/InRelease -o "$RUNNER_TEMP/InRelease"
+          gpg --batch --verify "$RUNNER_TEMP/InRelease"
+      - name: Remove signing material
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/daily-gnupg"

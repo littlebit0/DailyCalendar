@@ -1,0 +1,8 @@
+[Unit]
+Description=Deliver due Daily calendar reminders for this desktop user
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/dailycalendar/reminders run
+NoNewPrivileges=true
+UMask=0077

@@ -5,6 +5,25 @@ release state, completed work, release status, and safe next steps. Do not add
 OAuth client secrets, GitHub tokens, signing certificates, provisioning
 profiles, keystore passwords, or private keys to this file.
 
+## 2026-09-11 Linux Distribution In Progress
+
+- User authorized a Linux installer with automatic updates after one installation.
+- Added the Linux GTK runner, desktop layout/pointer support and existing desktop
+  OAuth routing. No iOS/macOS native files, DB/sync schema or version changed.
+- `.deb` packaging includes a scoped signed APT source and a Daily-only systemd
+  update timer. Running apps, package holds and failed verification defer updates.
+- Linux scheduled notifications need a per-user systemd helper because the Flutter
+  Linux notification plugin cannot schedule them. Implemented private persistent
+  reminder records and 30-second delivery checks during a logged-in desktop session.
+- Local analyze and 372 Flutter tests passed (1 existing skip); 11 Linux Python
+  tests passed. Real Linux builds/APT integration/publication are still pending.
+- Windows remains unported/unvalidated for recent features. Linux support does
+  not establish Windows parity. Existing installed apps/data and release assets
+  must be preserved; no app launch or real UI/authentication test is authorized.
+- Archive private key is outside git in the maintainer signing directory and in
+  GitHub encrypted secret LINUX_APT_SIGNING_KEY. Never print or commit it. Public
+  fingerprint: 1C86509FAC07FB37DA9F0B6EE52E84ACEAE49AD4.
+
 ## 2026-09-07 Mobile Release Asset Refresh
 
 - 사용자 요청으로 기존 `v3.4.0`의 iOS unsigned IPA와 Android Release APK만

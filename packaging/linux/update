@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+export DEBIAN_FRONTEND=noninteractive
+export LC_ALL=C
+
+exec 9</run/lock/dailycalendar-runtime.lock
+if ! flock --exclusive --nonblock 9; then
+  printf '%s\n' 'Daily is running; keeping the installed version.'
+  exit 0
+fi
+# Also protect users who started the executable without the launcher.
+if pgrep -x daily >/dev/null; then
+  printf '%s\n' 'Daily is running; keeping the installed version.'
+  exit 0
+fi
+if apt-mark showhold | grep -qx dailycalendar; then
+  printf '%s\n' 'Daily is held; automatic update skipped.'
+  exit 0
+fi
+test -r /etc/apt/sources.list.d/dailycalendar.sources
+test -r /usr/share/keyrings/dailycalendar-archive-keyring.asc
+
+# Do not refresh unrelated repositories or allow stale/unauthenticated indices.
+apt-get -o Dir::Etc::sourcelist=sources.list.d/dailycalendar.sources \
+  -o Dir::Etc::sourceparts=- -o APT::Get::List-Cleanup=0 \
+  -o APT::Update::Error-Mode=any -o Acquire::Retries=2 \
+  -o Acquire::https::Timeout=30 update
+apt-get -o DPkg::Lock::Timeout=120 --yes --only-upgrade --no-remove \
+  -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold \
+  install dailycalendar
