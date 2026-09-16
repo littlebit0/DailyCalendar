@@ -138,10 +138,13 @@ jobs:
         env:
           EXPECTED_ANDROID_OAUTH_SHA1: "3ab44a04827cb218654f34c67779291b256d2950"
         run: |
-          apksigner="$(find "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          apksigner="$(find -L "$ANDROID_HOME/build-tools" -type f -name apksigner | sort -V | tail -n 1)"
+          echo "APK verifier: $apksigner"
           test -x "$apksigner"
-          actual_sha1="$($apksigner verify --print-certs build/app/outputs/flutter-apk/app-release.apk \
-            | sed -n 's/^Signer #1 certificate SHA-1 digest: //p' \
+          certificate_info="$($apksigner verify --print-certs build/app/outputs/flutter-apk/app-release.apk)"
+          printf '%s\n' "$certificate_info"
+          actual_sha1="$(printf '%s\n' "$certificate_info" \
+            | awk '/^Signer .*certificate SHA-1 digest: / {print $NF}' \
             | tr -d ':[:space:]' \
             | tr '[:upper:]' '[:lower:]')"
           test -n "$actual_sha1"
