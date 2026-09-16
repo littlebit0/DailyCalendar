@@ -52,8 +52,14 @@ Apple 공개 파일은 Transporter 제출용이 아닙니다. Android 3.3.1 이�
 ## 검증 범위
 
 - 공유 Flutter 코드: 정적 분석 및 자동화 테스트 548개 통과, 기존 제외 항목 1개.
-- 직전 iOS·macOS·Android 테스트 앱 업데이트에서 DB·설정 데이터 보존 확인.
-- 플랫폼별 배포 빌드는 모두 성공해야 릴리스를 공개합니다.
+- iOS·macOS·Android 테스트 앱을 3.5.0으로 업데이트하고 DB·설정 데이터 보존 확인.
+  앱은 자동 실행하지 않았습니다.
+- iOS·macOS·Android·Windows와 Linux amd64/arm64 배포 빌드 모두 통과.
+  [배포 빌드 결과](https://github.com/littlebit0/DailyCalendar/actions/runs/35096496706)
+- 공개 설치 파일 7개의 SHA-256 검증 및 내부 버전 확인 완료.
+  Android APK는 기존 배포 인증서와 일치하며 서명 검증을 통과했습니다.
+- Linux 서명된 APT 채널에 3.5.0-1 반영 및 두 아키텍처의 공개 다운로드 검증 완료.
+  [자동 업데이트 채널 검증](https://github.com/littlebit0/DailyCalendar/actions/runs/35097289398)
 - 실제 계정의 동시 동기화, 실기기 로그인·권한·알람·위젯 및 Windows/Linux
   데스크톱의 실사용 검증은 자동 테스트·빌드 성공과 별개입니다.
 

@@ -22,6 +22,45 @@ profiles, keystore passwords, or private keys to this file.
 - Public Apple assets remain unsigned verification files, not Transporter
   exports. App Store submission, physical-device use and live account sync are
   separate verification boundaries. Final workflow/install status follows below.
+- Release source commit cf96077 and annotated v3.5.0 tag were pushed. Workflow
+  follow-up f56cc71 makes Android certificate verification follow SDK symlinks
+  and accept current apksigner labels without relaxing the required SHA-1.
+- SDK 37 actually emits `V2 Signer:`; follow-up d1e99b8 handles that format and
+  deduplicates identical scheme certificates. Seven legacy/current-label,
+  missing/wrong/mixed-signer parser cases passed. The signing key did not change.
+- In-place test updates to 3.5.0 completed without launching: macOS
+  ~/Applications/Daily Test.app (com.littlebit0.daily.test), iPhone 17 simulator
+  BF524643-403E-4212-ACB7-621E11279532 (com.littlebit0.daily), and Pixel 9
+  emulator-5554 (com.littlebit0.dailycalendar, Android code 350).
+  App Store app untouched; SQLite/preferences hashes unchanged on all three.
+  Fresh and installed artifact hashes match:
+  macOS kernel 7f768f785c4e20cd393e66be1daa2af3d9c1827fff1bb28f7cdd74acc3b5ca61;
+  iOS kernel b3840756f17075c5f272a7ab44a21e109b5dcb1b586d9a3a4226acf5252d7e5a;
+  Android APK c0344580ff1d3fbf16954b265e0bc3a2c5de6d2d2b031c63e4219fa9820e2231.
+- Versioned-source verification: analyze clean; 548 Flutter tests passed with
+  one existing skip; Linux Python tests 11 passed; wallpaper tests 13 passed
+  with one environment-dependent skip. Platform Builds run 35094883201 passed
+  (analysis/tests, Android and Windows debug builds). Read-only public KMA and
+  Sangmyung source probes passed. No personal-account sync or interactive use.
+- Release Installers run 35096496706 passed all six platform/architecture builds
+  and staged a complete draft. Published v3.5.0 at 2026-09-16T12:41:21Z only
+  after downloading all seven installers, checking every SHA256SUMS entry,
+  embedded Apple app/widget, Windows EXE, Linux package and Android versions.
+  Android APK is 3.5.0/350 with arm64-v8a, armeabi-v7a and x86_64; v2 signature
+  verifies with existing OAuth SHA-1 3ab44a04827cb218654f34c67779291b256d2950.
+  Public APK SHA-256 18b9f2ed9630aa3b13447b4e33309a80b6f9af12ffa15809ae29922bc42dc460;
+  SHA256SUMS file 80b85831c2317c666a4ec596a29d896bc8fbeac2cfb3e0c3ef39dd92bd04b4e6.
+  Anonymous latest-release API confirms v3.5.0, not draft/prerelease, eight assets.
+  Local public files: dist/releases/3.5.0. No signed Transporter exports/upload
+  or App Store submission. The product tag remains on cf96077; later commits
+  only repair release verification and record completed verification.
+- Published-release Linux workflow 35097289398 passed both release builds,
+  amd64 signed install/update tests and public APT publication/verification.
+  The existing archive key verified InRelease and apt-get downloaded both
+  3.5.0-1 packages with hashes matching that workflow's build. The APT channel
+  rebuild is distinct from the immutable versioned-release installers; none
+  of the eight product release assets changed. Anonymous latest/API digest
+  comparison and public Packages confirm the completed publication.
 
 ## 2026-09-16 Latest-Mutation Sync And Deleted-Event Compaction
 

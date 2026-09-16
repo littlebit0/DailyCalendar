@@ -9,14 +9,14 @@ arm64 is built on Ubuntu 24.04 (intended for Ubuntu 24.04+/Debian 13+).
 Other distributions and headless/WSL installations are not verified targets.
 
 Download the matching architecture from the
-[3.4.0 release](https://github.com/littlebit0/DailyCalendar/releases/tag/v3.4.0),
+[3.5.0 release](https://github.com/littlebit0/DailyCalendar/releases/tag/v3.5.0),
 then install with APT so dependencies are resolved:
 
 ```sh
 dpkg --print-architecture
-sudo apt install ./daily-linux-3.4.0-1-amd64.deb
+sudo apt install ./daily-linux-3.5.0-1-amd64.deb
 # ARM64 instead:
-sudo apt install ./daily-linux-3.4.0-1-arm64.deb
+sudo apt install ./daily-linux-3.5.0-1-arm64.deb
 ```
 
 Only install the file matching the computer's architecture. App files reside
@@ -66,7 +66,10 @@ signature checks to work around errors.
 
 ## Platform Scope
 
-- Linux uses the existing calendar and v2 Google Drive schema, unchanged.
+- Linux uses the shared calendar and v2 Google Drive per-event layout. Version
+  3.5.0 adds unified conflict rules, per-field settings revisions and compact
+  deletion records. Update all clients on the same account to 3.5.0; see
+  [sync compatibility and verification](SYNC_MERGE_RULES.md).
 - Google login uses the existing desktop OAuth loopback flow and the default
   browser. Tokens use Secret Service storage. Automatic sync does not open login.
 - Apple login, Siri, Apple widgets, AlarmKit and native biometric/system unlock
@@ -89,13 +92,17 @@ dependencies and creates `.deb` packages. Both builds must succeed before it
 publishes Linux assets to the existing product release and signed archive.
 Apple, Android and Windows assets are not replaced.
 
+`release-installers.yml` first calls the Linux workflow with `stage_only: true`
+and collects all platform installers into a draft. Only after the complete
+product release is published does the Linux workflow advance the APT channel.
+
 The archive lives in the `linux-apt` **prerelease**, which does not become the
 latest product release. Published product releases trigger the workflow. For
 releases created by `GITHUB_TOKEN`, which do not trigger further release events,
 dispatch the Linux workflow explicitly with the matching tag and revision.
 The checkout's `pubspec.yaml` must match that tag.
 
-Debian versions progress as `3.4.0-1`, `3.4.0-2`, then `3.4.1-1`. The suffix is
+Debian versions progress as `3.5.0-1`, `3.5.0-2`, then `3.5.1-1`. The suffix is
 the Linux package revision, not a Daily display-version change. Published `.deb`
 files are immutable: increment the revision for a rebuild. Old packages remain
 available. GitHub asset replacement is not atomic; an in-flight APT hash mismatch
@@ -111,7 +118,25 @@ The isolated CI test checks signed install/upgrade, tampered-signature rejection
 running-app deferral, package holds, disabled-timer preservation, binary identity
 and user-file preservation. It does not launch Daily or touch a developer's apps.
 
-## Verification Record (2026-09-11)
+## Verification Record (2026-09-16)
+
+- Product tag `v3.5.0`, source `cf9607781995e87f595321f41902f85631450479`.
+- [Complete product build](https://github.com/littlebit0/DailyCalendar/actions/runs/35096496706)
+  staged both Linux installers with Apple, Android and Windows before publication.
+  All seven product installers passed downloaded SHA-256 and version checks.
+- [Signed APT publication](https://github.com/littlebit0/DailyCalendar/actions/runs/35097289398)
+  passed both builds, 548 Flutter tests (one existing skip), 11 Linux Python
+  tests and the amd64 signed installation/update test. Public InRelease signature
+  verification and APT downloads of both 3.5.0-1 packages matched their build.
+- APT is a separate rebuild of the same source; existing versioned-release
+  installers are not replaced. APT hashes:
+  amd64 `a2a1f63edaa6c9b89e45fbfe77ade5f2c9d574b38858834400a33096372c2ef5`;
+  arm64 `143fed688eb009d459f8c74aadabdf75be99398ba1e93290242208e8f8d93a6a`.
+  Product-release hashes are in its `SHA256SUMS` asset.
+- No app launch or real desktop/auth/notification test. ARM64 installation and
+  Debian-specific execution remain unverified beyond build/download checks.
+
+## Previous Verification (2026-09-11)
 
 - Source: `46dfcb81451bb02f8612cce5e9c25aad10037526`.
 - [Release workflow](https://github.com/littlebit0/DailyCalendar/actions/runs/34595769597):
