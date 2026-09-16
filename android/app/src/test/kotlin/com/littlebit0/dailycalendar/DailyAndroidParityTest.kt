@@ -21,6 +21,32 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 class DailyAndroidParityTest {
+    @Test fun completionContrastMaximizesBothSurfaces() {
+        fun luminance(color: Int): Double {
+            fun linear(c: Int): Double {
+                val v = c / 255.0
+                return if (v <= .04045) v / 12.92 else Math.pow((v + .055) / 1.055, 2.4)
+            }
+            return linear(android.graphics.Color.red(color)) * .2126 +
+                linear(android.graphics.Color.green(color)) * .7152 +
+                linear(android.graphics.Color.blue(color)) * .0722 + .05
+        }
+        fun score(c: Int, a: Int, b: Int): Double {
+            val x = luminance(c); val y = luminance(a); val z = luminance(b)
+            return minOf(maxOf(x, y) / minOf(x, y), maxOf(x, z) / minOf(x, z))
+        }
+        for (text in listOf(0xff000000.toInt(), 0xffffffff.toInt(), 0xffffff00.toInt(),
+            0xff808080.toInt(), 0xff2563eb.toInt(), 0xffff0000.toInt())) {
+            for (surface in listOf(0xff000000.toInt(), 0xffffffff.toInt())) {
+                val background = DailyCompletionContrast.blend(text, surface, .15)
+                val best = DailyCompletionContrast.strike(text, background)
+                for (c in 0..255) {
+                    assertTrue(score(best, text, background) + 1e-9 >=
+                        score(android.graphics.Color.rgb(c, c, c), text, background))
+                }
+            }
+        }
+    }
     private val context: Context get() = RuntimeEnvironment.getApplication()
 
     @Before fun reset() {
@@ -100,6 +126,9 @@ class DailyAndroidParityTest {
             factory.onDataSetChanged()
             val view = factory.getViewAt(0)!!.apply(context, LinearLayout(context))
             assertEquals(categoryColor, view.findViewById<TextView>(R.id.widget_event_title).currentTextColor)
+            assertEquals(android.view.View.VISIBLE,
+                view.findViewById<android.view.View>(R.id.widget_event_strike).visibility)
+            assertNotNull(view.findViewById<android.widget.ImageView>(R.id.widget_event_strike).drawable)
             assertEquals(context.getString(R.string.widget_toggle_todo),
                 view.findViewById<android.view.View>(R.id.widget_todo_button).contentDescription)
         }

@@ -1,0 +1,96 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Begin Daily Wallpaper Update": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Begin Daily Wallpaper Update"}},
+        "ko": {"stringUnit": {"state": "translated", "value": "Daily 배경 업데이트 시작 기록"}},
+        "ja": {"stringUnit": {"state": "translated", "value": "Daily壁紙更新の開始を記録"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "記錄 Daily 背景更新開始"}}
+      }
+    },
+    "Record Wallpaper Action Completion": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Record Wallpaper Action Completion"}},
+        "ko": {"stringUnit": {"state": "translated", "value": "배경 변경 동작 완료 기록"}},
+        "ja": {"stringUnit": {"state": "translated", "value": "壁紙変更アクションの完了を記録"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "記錄背景變更動作完成"}}
+      }
+    },
+    "Update ID": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Update ID"}},
+        "ko": {"stringUnit": {"state": "translated", "value": "업데이트 식별자"}},
+        "ja": {"stringUnit": {"state": "translated", "value": "更新ID"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "更新識別碼"}}
+      }
+    },
+    "Daily Wallpaper Setup": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Daily Wallpaper Setup"}},
+        "ko": {"stringUnit": {"state": "translated", "value": "Daily 잠금화면 설정 도우미"}},
+        "ja": {"stringUnit": {"state": "translated", "value": "Dailyの壁紙設定ヘルパー"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "Daily 背景設定輔助"}}
+      }
+    },
+    "Setup choice": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Setup choice"}},
+        "ko": {"stringUnit": {"state": "translated", "value": "설정 동작"}},
+        "ja": {"stringUnit": {"state": "translated", "value": "設定操作"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "設定動作"}}
+      }
+    },
+    "Shows setup guidance in Shortcuts and asks before testing wallpaper updates.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Shows setup guidance in Shortcuts and asks before testing wallpaper updates."}},
+        "ko": {"stringUnit": {"state": "translated", "value": "단축어 안에서 설정을 안내하고 배경 업데이트 테스트 전에 확인합니다."}},
+        "ja": {"stringUnit": {"state": "translated", "value": "ショートカット内で設定を案内し、壁紙更新のテスト前に確認します。"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "在捷徑內提供設定指南，並在測試背景更新前確認。"}}
+      }
+    },
+    "Daily Wallpaper Enabled": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Daily Wallpaper Enabled"}},
+        "ko": {"stringUnit": {"state": "translated", "value": "Daily 배경 업데이트 상태"}},
+        "ja": {"stringUnit": {"state": "translated", "value": "Dailyの壁紙更新状態"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "Daily 背景更新狀態"}}
+      }
+    },
+    "Returns whether Daily may generate a Lock Screen calendar.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Returns whether Daily may generate a Lock Screen calendar."}},
+        "ko": {"stringUnit": {"state": "translated", "value": "Daily 잠금화면 캘린더 이미지 생성 허용 여부를 확인합니다."}},
+        "ja": {"stringUnit": {"state": "translated", "value": "Dailyがロック画面のカレンダー画像を生成できるか確認します。"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "確認 Daily 是否允許產生鎖定畫面月曆圖片。"}}
+      }
+    },
+    "Generate Daily Calendar Wallpaper": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Generate Daily Calendar Wallpaper"}},
+        "ko": {"stringUnit": {"state": "translated", "value": "Daily 현재 월 캘린더 배경 생성"}},
+        "ja": {"stringUnit": {"state": "translated", "value": "Dailyの今月のカレンダー壁紙を生成"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "產生 Daily 本月月曆背景"}}
+      }
+    },
+    "Creates a current-month calendar image. Does not change wallpaper by itself.": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {"stringUnit": {"state": "translated", "value": "Creates a current-month calendar image. Does not change wallpaper by itself."}},
+        "ko": {"stringUnit": {"state": "translated", "value": "현재 월 캘린더 이미지를 생성합니다. 이 동작 자체는 배경화면을 변경하지 않습니다."}},
+        "ja": {"stringUnit": {"state": "translated", "value": "今月のカレンダー画像を生成します。このアクション自体は壁紙を変更しません。"}},
+        "zh-Hant": {"stringUnit": {"state": "translated", "value": "產生本月月曆圖片，此動作本身不會變更背景圖片。"}}
+      }
+    }
+  },
+  "version": "1.0"
+}

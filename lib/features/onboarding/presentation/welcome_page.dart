@@ -12,10 +12,19 @@ import '../../../core/siri/siri_shortcut_installer.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
 import '../../../core/theme/daily_ui.dart';
 import 'analytics_consent_page.dart';
+import '../feature_announcements.dart';
+import '../../settings/presentation/settings_page.dart';
 
 enum _WelcomeAction { apple, local, googleDrive, permissions, siri }
 
-enum _OnboardingStep { welcome, analytics, siri, permissions, account }
+enum _OnboardingStep {
+  welcome,
+  analytics,
+  siri,
+  categories,
+  permissions,
+  account,
+}
 
 class WelcomePage extends ConsumerStatefulWidget {
   const WelcomePage({super.key});
@@ -41,6 +50,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     _OnboardingStep.welcome,
     _OnboardingStep.analytics,
     if (_supportsAppleExperiences) _OnboardingStep.siri,
+    _OnboardingStep.categories,
     _OnboardingStep.permissions,
     _OnboardingStep.account,
   ];
@@ -73,6 +83,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
         onCompleted: _advance,
       ),
       _OnboardingStep.siri => _buildSiriPage(context),
+      _OnboardingStep.categories => _buildCategoriesPage(context),
       _OnboardingStep.permissions => _buildPermissionsPage(context),
       _OnboardingStep.account => _buildStartPage(
         context,
@@ -157,6 +168,34 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     );
   }
 
+  Widget _buildCategoriesPage(BuildContext context) {
+    return Scaffold(
+      body: DailyOnboardingFrame(
+        step: _stepIndex,
+        stepCount: _steps.length,
+        kicker: context.tr('분류'),
+        title: context.tr('일정 분류 설정'),
+        description: context.tr('사용할 분류를 미리 설정하거나 기본 분류로 시작하세요.'),
+        primaryLabel: context.tr('분류 설정하기'),
+        onPrimary: () async {
+          await Navigator.of(context).push<void>(
+            MaterialPageRoute(builder: (_) => const SettingsPage.categories()),
+          );
+          if (mounted) _advance();
+        },
+        secondaryLabel: context.tr('기본으로만 사용'),
+        onSecondary: _advance,
+        content: Center(
+          child: Icon(
+            Icons.category_outlined,
+            size: 80,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildSiriPage(BuildContext context) {
     return Scaffold(
       body: DailyOnboardingFrame(
@@ -195,7 +234,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
               icon: Icons.mic_none_rounded,
               color: DailyUi.purple,
               text: context.tr(
-                '예: “Siri야, Daily에서 시그널 실행.”이라고 말한 뒤 “내일 오전 9시에 헬스장 일정 추가해줘.”라고 이어서 말하세요.',
+                '예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”',
               ),
             ),
             if (_message.isNotEmpty) ...[
@@ -596,6 +635,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   Future<void> _completeOnboarding() async {
     final settingsRepository = ref.read(settingsRepositoryProvider);
     final previous = settingsRepository.load();
+    await settingsRepository.announcements.acknowledge(
+      featureAnnouncements.map((item) => item.id),
+    );
     await settingsRepository.save(
       previous.copyWith(onboardingCompleted: true),
       changedFrom: previous,

@@ -1,6 +1,13 @@
 # Daily Apple App Store Submission
 
-## Current Preparation: 3.4.0
+## Current Source Version: 3.5.0
+
+소스의 앱·위젯 버전을 `3.5.0 (3.5.0)`으로 승격했습니다.
+이번 작업은 GitHub 공개 릴리스이며, 3.5.0 Transporter 서명 파일 생성·업로드나
+App Store 심사 제출을 완료했다는 의미가 아닙니다.
+[3.5.0 릴리스 노트](RELEASE_NOTES_3.5.0.md)를 참고하세요.
+
+## Previous Preparation: 3.4.0
 
 최종 갱신: 2026-09-07
 준비 버전: iOS `3.4.0 (3.4.1)`, macOS `3.4.0 (3.4.0)`

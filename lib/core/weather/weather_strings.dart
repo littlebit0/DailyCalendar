@@ -1,0 +1,118 @@
+import 'package:flutter/widgets.dart';
+
+enum WeatherText {
+  title,
+  enabled,
+  automatic,
+  region,
+  selectRegion,
+  search,
+  noResults,
+  unavailable,
+  locationUnavailable,
+  fallback,
+  storageError,
+  forecastOnly,
+  privacy,
+  source,
+  updated,
+  cached,
+  retry,
+  low,
+  high,
+  rainProbability,
+  clear,
+  partlyCloudy,
+  cloudy,
+  rain,
+  snow,
+  sleet,
+  shower,
+  unknown,
+}
+
+String weatherText(BuildContext context, WeatherText key) {
+  final index = switch (Localizations.localeOf(context).languageCode) {
+    'ko' => 0,
+    'ja' => 2,
+    'zh' => 3,
+    _ => 1,
+  };
+  return _strings[key]![index];
+}
+
+const _strings = <WeatherText, List<String>>{
+  WeatherText.title: ['날씨 예보', 'Weather forecast', '天気予報', '天氣預報'],
+  WeatherText.enabled: ['날씨 표시', 'Show weather', '天気を表示', '顯示天氣'],
+  WeatherText.automatic: [
+    '현재 위치 사용',
+    'Use current location',
+    '現在地を使用',
+    '使用目前位置',
+  ],
+  WeatherText.region: ['선택 지역', 'Selected region', '選択地域', '選取地區'],
+  WeatherText.selectRegion: ['지역 선택', 'Select region', '地域を選択', '選擇地區'],
+  WeatherText.search: [
+    '시·군·구 또는 동 검색',
+    'Search Korean region',
+    '韓国の地域を検索',
+    '搜尋韓國地區',
+  ],
+  WeatherText.noResults: [
+    '검색 결과가 없습니다.',
+    'No regions found.',
+    '地域が見つかりません。',
+    '找不到地區。',
+  ],
+  WeatherText.unavailable: [
+    '예보를 가져오지 못했습니다.',
+    'Forecast unavailable.',
+    '予報を取得できませんでした。',
+    '無法取得預報。',
+  ],
+  WeatherText.locationUnavailable: [
+    '현재 위치를 사용할 수 없습니다. 지역을 선택해 주세요.',
+    'Location unavailable. Select a region.',
+    '現在地を取得できません。地域を選択してください。',
+    '無法取得目前位置。請選擇地區。',
+  ],
+  WeatherText.fallback: [
+    '현재 위치 대신 선택한 지역의 예보입니다.',
+    'Showing the selected region instead of current location.',
+    '現在地の代わりに選択地域の予報を表示しています。',
+    '目前顯示選取地區而非目前位置的預報。',
+  ],
+  WeatherText.storageError: [
+    '날씨 설정 또는 캐시를 저장하지 못했습니다.',
+    'Could not save weather settings or cache.',
+    '天気設定またはキャッシュを保存できませんでした。',
+    '無法儲存天氣設定或快取。',
+  ],
+  WeatherText.forecastOnly: [
+    '기상청에서 제공하는 한국 지역의 단기예보만 표시합니다. 과거 날짜나 예보가 없는 날짜에는 표시하지 않습니다.',
+    'KMA short-range forecasts for Korea. Past dates and dates without forecasts are not shown.',
+    '韓国気象庁の韓国地域の短期予報を表示します。過去の日付や予報がない日には表示しません。',
+    '顯示韓國氣象廳提供的韓國地區短期預報。過去或無預報的日期不顯示。',
+  ],
+  WeatherText.privacy: [
+    '현재 위치는 이 기기에서 가까운 예보 지역을 찾는 데만 사용합니다. 기상청에는 예보 격자만 전송하며, 위치와 예보는 Google Drive에 백업하지 않습니다.',
+    'Location is used on this device to find a nearby forecast region. Only the forecast grid is sent to KMA. Location and forecasts are not backed up to Google Drive.',
+    '現在地は端末内で近くの予報地域を探すために使用します。気象庁には予報格子のみ送信し、位置と予報はGoogle Driveにバックアップしません。',
+    '位置僅用於在此裝置尋找附近預報地區。只傳送預報網格至氣象廳，位置與預報不備份至 Google Drive。',
+  ],
+  WeatherText.source: ['출처: 기상청', 'Source: KMA', '出典：韓国気象庁', '來源：韓國氣象廳'],
+  WeatherText.updated: ['최근 수신', 'Last received', '最終取得', '最後接收'],
+  WeatherText.cached: ['저장된 예보', 'Saved forecast', '保存済みの予報', '已儲存的預報'],
+  WeatherText.retry: ['다시 시도', 'Retry', '再試行', '重試'],
+  WeatherText.low: ['최저', 'Low', '最低', '最低'],
+  WeatherText.high: ['최고', 'High', '最高', '最高'],
+  WeatherText.rainProbability: ['강수확률', 'Rain chance', '降水確率', '降雨機率'],
+  WeatherText.clear: ['맑음', 'Clear', '晴れ', '晴天'],
+  WeatherText.partlyCloudy: ['구름 많음', 'Partly cloudy', '晴れ時々曇り', '多雲'],
+  WeatherText.cloudy: ['흐림', 'Cloudy', '曇り', '陰天'],
+  WeatherText.rain: ['비', 'Rain', '雨', '雨'],
+  WeatherText.snow: ['눈', 'Snow', '雪', '雪'],
+  WeatherText.sleet: ['비·눈', 'Sleet', 'みぞれ', '雨夾雪'],
+  WeatherText.shower: ['소나기', 'Showers', 'にわか雨', '陣雨'],
+  WeatherText.unknown: ['예보 정보 없음', 'Unknown conditions', '予報情報なし', '無天氣資訊'],
+};

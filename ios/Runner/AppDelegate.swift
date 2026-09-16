@@ -902,6 +902,7 @@ private final class DailyMapLauncher {
   private let googleOAuthSession = DailyGoogleOAuthSession()
   private var siriEventChangesBridge: DailySiriEventChangesBridge?
   private var signalVoiceBridge: DailySignalVoiceBridge?
+  private var wallpaperBridge: DailyWallpaperBridge?
 
   override func application(
     _ application: UIApplication,
@@ -930,6 +931,11 @@ private final class DailyMapLauncher {
     if let registrar = registrar(forPlugin: "DailyAppleWidgets") {
       DailyAppleWidgets.register(with: registrar.messenger())
     }
+    if let registrar = registrar(forPlugin: "DailyWallpaper") {
+      let bridge = DailyWallpaperBridge(binaryMessenger: registrar.messenger())
+      wallpaperBridge = bridge
+      registrar.addSceneDelegate(bridge)
+    }
     if let registrar = registrar(forPlugin: "DailyCalendarImport") {
       DailyCalendarImport.register(with: registrar.messenger())
     }
@@ -954,5 +960,15 @@ private final class DailyMapLauncher {
       GeneratedPluginRegistrant.register(with: registry)
     }
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+  }
+
+  override func userNotificationCenter(_ center: UNUserNotificationCenter,
+    willPresent notification: UNNotification,
+    withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    if notification.request.identifier.hasPrefix(DailyWallpaperUpdateMonitor.notificationPrefix) {
+      completionHandler([.banner, .list, .sound])
+    } else {
+      super.userNotificationCenter(center, willPresent: notification, withCompletionHandler: completionHandler)
+    }
   }
 }

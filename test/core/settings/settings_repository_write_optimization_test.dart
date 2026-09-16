@@ -23,6 +23,8 @@ void main() {
         'themeMode',
         'settingsSyncRevision',
         'settingsSyncPending',
+        'settingsSyncDocument.v1',
+        'deviceId',
       });
       expect(repository.load().themeMode, AppThemeMode.dark);
       expect(repository.settingsSyncRevision, 1);
@@ -38,6 +40,8 @@ void main() {
         'weekStartsOnMonday',
         'settingsSyncRevision',
         'settingsSyncPending',
+        'settingsSyncDocument.v1',
+        'deviceId',
       });
       expect(repository.load().weekStartsOnMonday, isTrue);
       expect(repository.settingsSyncRevision, 2);
@@ -148,7 +152,8 @@ void main() {
     expect(restored.themeMode, AppThemeMode.dark);
     expect(restored.monthNavigationMode, MonthNavigationMode.vertical);
     expect(restored.language, AppLanguage.english);
-    expect(repository.settingsSyncRevision, 3);
+    // Language is device-local and must not create a cloud mutation.
+    expect(repository.settingsSyncRevision, 2);
     expect(repository.hasPendingSettingsSync, isTrue);
   });
 

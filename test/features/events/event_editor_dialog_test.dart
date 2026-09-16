@@ -8,6 +8,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  for (final platform in [
+    TargetPlatform.iOS,
+    TargetPlatform.android,
+    TargetPlatform.macOS,
+  ]) {
+    testWidgets(
+      '$platform editor opens without keyboard and picker does not restore input',
+      (tester) async {
+        debugDefaultTargetPlatformOverride = platform;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        await tester.pumpWidget(
+          _DialogHost(
+            builder: (_) =>
+                EventEditorDialog(initialDate: DateTime(2026, 5, 28)),
+            onSaved: (_) {},
+          ),
+        );
+        await tester.tap(find.text('열기'));
+        await tester.pumpAndSettle();
+        expect(tester.testTextInput.isVisible, isFalse);
+        await tester.tap(find.byType(TextField).first);
+        await tester.pump();
+        expect(tester.testTextInput.isVisible, isTrue);
+        await tester.tap(find.byIcon(Icons.calendar_today_outlined).first);
+        await tester.pumpAndSettle();
+        expect(find.byType(DatePickerDialog), findsOneWidget);
+        if (find.byType(DatePickerDialog).evaluate().isNotEmpty) {
+          await tester.tap(find.text('Cancel'));
+          await tester.pumpAndSettle();
+        }
+        expect(tester.testTextInput.isVisible, isFalse);
+        await tester.tap(find.byType(TextField).first);
+        await tester.pump();
+        expect(tester.testTextInput.isVisible, isTrue);
+        debugDefaultTargetPlatformOverride = null;
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
   testWidgets('shows missing title validation inside the event dialog', (
     tester,
   ) async {
@@ -29,6 +68,7 @@ void main() {
     expect(find.text('제목을 입력하세요.'), findsOneWidget);
     expect(find.byType(SnackBar), findsNothing);
     expect(savedDraft, isNull);
+    expect(tester.testTextInput.isVisible, isFalse);
   });
 
   testWidgets('shows invalid time validation inside the event dialog', (

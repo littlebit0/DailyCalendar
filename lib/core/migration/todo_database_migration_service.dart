@@ -7,7 +7,10 @@ import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
 
 import '../../features/events/data/app_database.dart';
+import '../../features/events/data/event_mapper.dart';
 import '../../features/events/domain/calendar_event.dart';
+import '../../features/events/domain/event_deletion.dart';
+import '../sync/sync_version.dart';
 
 enum TodoMigrationStage {
   checking,
@@ -62,15 +65,18 @@ class TodoDatabaseMigrationService {
     required bool Function() hasLinkedGoogleAccount,
     required Future<List<CalendarEvent>?> Function() loadRemoteEvents,
     required Future<void> Function() backupMigratedEvents,
+    List<EventDeletion> Function()? remoteDeletionRecords,
   }) : _databaseFile = databaseFile,
        _hasLinkedGoogleAccount = hasLinkedGoogleAccount,
        _loadRemoteEvents = loadRemoteEvents,
-       _backupMigratedEvents = backupMigratedEvents;
+       _backupMigratedEvents = backupMigratedEvents,
+       _remoteDeletionRecords = remoteDeletionRecords ?? (() => const []);
 
   final Future<File> Function() _databaseFile;
   final bool Function() _hasLinkedGoogleAccount;
   final Future<List<CalendarEvent>?> Function() _loadRemoteEvents;
   final Future<void> Function() _backupMigratedEvents;
+  final List<EventDeletion> Function() _remoteDeletionRecords;
 
   final progress = ValueNotifier<TodoMigrationProgress>(
     const TodoMigrationProgress(TodoMigrationStage.checking, '업데이트 확인 중'),
@@ -89,7 +95,7 @@ class TodoDatabaseMigrationService {
 
       final original = sqlite3.open(databaseFile.path);
       late final int originalVersion;
-      late final Map<String, _LocalEventState> localStates;
+      late final Map<String, CalendarEvent> localStates;
       try {
         originalVersion = _userVersion(original);
         if (originalVersion >= AppDatabase.currentSchemaVersion) {
@@ -124,6 +130,10 @@ class TodoDatabaseMigrationService {
         localStates,
         remoteEvents ?? const <CalendarEvent>[],
       );
+      final deletions = _hasLinkedGoogleAccount()
+          ? _remoteDeletionRecords()
+          : const <EventDeletion>[];
+      final removedIds = <String>{};
 
       stage = TodoMigrationStage.snapshotting;
       _report(stage, '안전 스냅샷을 만들고 있습니다.');
@@ -159,8 +169,33 @@ class TodoDatabaseMigrationService {
               'ADD COLUMN completed INTEGER NOT NULL DEFAULT 0',
             );
           }
+          if (!_hasColumn(working, 'event_records', 'sync_timestamp_details')) {
+            working.execute(
+              'ALTER TABLE event_records ADD COLUMN sync_timestamp_details TEXT',
+            );
+          }
           for (final event in remoteWinners) {
             _upsertRemoteWinner(working, event);
+          }
+          working.execute(AppDatabase.createDeletionTable);
+          for (final deletion in deletions) {
+            final candidates = working.select(
+              'SELECT * FROM event_records WHERE id = ?',
+              [deletion.id],
+            );
+            if (candidates.isEmpty ||
+                !eventChangedAt(
+                  _readEventRow(candidates.single),
+                ).isAfter(deletion.deletedAt)) {
+              working.execute('DELETE FROM event_records WHERE id = ?', [
+                deletion.id,
+              ]);
+              removedIds.add(deletion.id);
+            }
+            working.execute(
+              'INSERT OR REPLACE INTO sync_event_deletions (id, deleted_at, pending) VALUES (?, ?, 0)',
+              [deletion.id, deletion.deletedAt.toUtc().toIso8601String()],
+            );
           }
           // A schema-changing release backs up every event after validation.
           working.execute("UPDATE event_records SET sync_status = 'pending'");
@@ -177,8 +212,12 @@ class TodoDatabaseMigrationService {
         _report(stage, '업데이트 결과를 확인하고 있습니다.');
         _validateMigratedDatabase(
           working,
-          localIds: localStates.keys,
-          remoteIds: remoteEvents?.map((event) => event.id) ?? const [],
+          localIds: localStates.keys.where((id) => !removedIds.contains(id)),
+          remoteIds:
+              remoteEvents
+                  ?.map((event) => event.id)
+                  .where((id) => !removedIds.contains(id)) ??
+              const [],
         );
       } finally {
         working.close();
@@ -248,46 +287,58 @@ class TodoDatabaseMigrationService {
         .any((row) => row['name'] == column);
   }
 
-  Map<String, _LocalEventState> _readLocalStates(Database database) {
-    return {
-      for (final row in database.select(
-        'SELECT id, updated_at, deleted_at, sync_status FROM event_records',
-      ))
-        row['id'] as String: _LocalEventState(
-          updatedAt: _dateFromSql(row['updated_at'])!,
-          deletedAt: _dateFromSql(row['deleted_at']),
-          syncStatus: row['sync_status'] as String? ?? 'pending',
+  Map<String, CalendarEvent> _readLocalStates(Database database) => {
+    for (final row in database.select('SELECT * FROM event_records'))
+      row['id'] as String: _readEventRow(row),
+  };
+
+  CalendarEvent _readEventRow(Map<String, Object?> row) => EventRecord(
+    id: row['id'] as String,
+    title: row['title'] as String,
+    memo: row['memo'] as String?,
+    location: row['location'] as String?,
+    url: row['url'] as String?,
+    weather: row['weather'] as String?,
+    startAt: _dateFromSql(row['start_at'])!,
+    endAt: _dateFromSql(row['end_at'])!,
+    allDay: row['all_day'] == 1,
+    category: row['category'] as String? ?? 'basic',
+    colorValue: row['color_value'] as int,
+    reminderMinutesBefore: row['reminder_minutes_before'] as int?,
+    reminderMinutesBeforeList:
+        row['reminder_minutes_before_list'] as String? ??
+        jsonEncode(
+          row['reminder_minutes_before'] == null
+              ? []
+              : [row['reminder_minutes_before']],
         ),
-    };
-  }
+    recurrenceFrequency: row['recurrence_frequency'] as String? ?? 'none',
+    recurrenceInterval: row['recurrence_interval'] as int? ?? 1,
+    recurrenceUntil: _dateFromSql(row['recurrence_until']),
+    recurrenceCount: row['recurrence_count'] as int?,
+    recurrenceExcludedDates:
+        row['recurrence_excluded_dates'] as String? ?? '[]',
+    createdAt: _dateFromSql(row['created_at'])!,
+    updatedAt: _dateFromSql(row['updated_at'])!,
+    deletedAt: _dateFromSql(row['deleted_at']),
+    syncTimestampDetails: row['sync_timestamp_details'] as String?,
+    deviceId: row['device_id'] as String? ?? '',
+    syncStatus: row['sync_status'] as String? ?? 'pending',
+    showDday: row['show_dday'] == 1,
+    completed: row['completed'] == 1,
+    alarmEnabled: row['alarm_enabled'] == 1,
+    allDayAlarmMinutes: row['all_day_alarm_minutes'] as int? ?? 540,
+  ).toDomain();
 
   List<CalendarEvent> _remoteWinners(
-    Map<String, _LocalEventState> localStates,
+    Map<String, CalendarEvent> localStates,
     List<CalendarEvent> remoteEvents,
-  ) {
-    final winners = <CalendarEvent>[];
-    for (final remote in remoteEvents) {
-      final local = localStates[remote.id];
-      if (local == null) {
-        winners.add(remote);
-        continue;
-      }
-      if (local.syncStatus != 'synced') {
-        continue;
-      }
-      if (_effectiveUpdatedAt(remote).isAfter(local.effectiveUpdatedAt)) {
-        winners.add(remote);
-      }
-    }
-    return winners;
-  }
-
-  DateTime _effectiveUpdatedAt(CalendarEvent event) {
-    final deletedAt = event.deletedAt;
-    return deletedAt != null && deletedAt.isAfter(event.updatedAt)
-        ? deletedAt
-        : event.updatedAt;
-  }
+  ) => [
+    for (final remote in remoteEvents)
+      if (localStates[remote.id] == null ||
+          compareEventVersions(remote, localStates[remote.id]!) > 0)
+        remote,
+  ];
 
   Future<void> _createConsistentSnapshot(
     File sourceFile,
@@ -385,6 +436,10 @@ class TodoDatabaseMigrationService {
         normalized.allDayAlarmMinutes,
       ],
     );
+    database.execute(
+      'UPDATE event_records SET sync_timestamp_details = ? WHERE id = ?',
+      [encodeSyncTimestamps(normalized), normalized.id],
+    );
   }
 
   void _validateMigratedDatabase(
@@ -455,21 +510,4 @@ class TodoDatabaseMigrationService {
         ? event.category.id
         : event.category.label;
   }
-}
-
-class _LocalEventState {
-  const _LocalEventState({
-    required this.updatedAt,
-    required this.deletedAt,
-    required this.syncStatus,
-  });
-
-  final DateTime updatedAt;
-  final DateTime? deletedAt;
-  final String syncStatus;
-
-  DateTime get effectiveUpdatedAt =>
-      deletedAt != null && deletedAt!.isAfter(updatedAt)
-      ? deletedAt!
-      : updatedAt;
 }

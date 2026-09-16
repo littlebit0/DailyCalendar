@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../../core/sync/sync_version.dart';
+
 import 'app_database.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
@@ -13,7 +15,7 @@ extension EventRecordMapper on EventRecord {
       category,
       colorValue: colorValue,
     );
-    return CalendarEvent(
+    final event = CalendarEvent(
       id: id,
       occurrenceId: occurrenceStart == null
           ? null
@@ -50,6 +52,7 @@ extension EventRecordMapper on EventRecord {
       allDayAlarmMinutes: allDayAlarmMinutes,
       holiday: mappedCategory.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
+    return restoreSyncTimestamps(event, syncTimestampDetails);
   }
 
   List<DateTime> _excludedDatesFromJson(String raw) {

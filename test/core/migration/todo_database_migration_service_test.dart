@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:daily/core/migration/todo_database_migration_service.dart';
+import 'package:daily/core/sync/sync_version.dart';
 import 'package:daily/features/events/data/app_database.dart';
+import 'package:daily/features/events/domain/event_deletion.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
@@ -93,7 +95,67 @@ void main() {
     },
   );
 
-  test('never replaces a pending local event with a remote snapshot', () async {
+  test(
+    'migration carries compact remote deletions without resurrecting rows',
+    () async {
+      final local = _event(id: 'deleted-remotely', syncStatus: 'pending');
+      await _createSchemaSixDatabase(databaseFile, [local]);
+      final deletion = EventDeletion(
+        id: local.id,
+        deletedAt: local.updatedAt.add(const Duration(days: 1)),
+        pending: false,
+      );
+      final service = TodoDatabaseMigrationService(
+        databaseFile: () async => databaseFile,
+        hasLinkedGoogleAccount: () => true,
+        loadRemoteEvents: () async => [],
+        remoteDeletionRecords: () => [deletion],
+        backupMigratedEvents: () async {},
+      );
+      addTearDown(service.dispose);
+      final result = await service.migrateIfNeeded();
+      expect(result.migrated, isTrue);
+      final raw = sqlite3.open(databaseFile.path);
+      addTearDown(raw.close);
+      expect(raw.select('SELECT * FROM event_records'), isEmpty);
+      expect(
+        raw.select('SELECT id FROM sync_event_deletions').single['id'],
+        local.id,
+      );
+      final snapshot = sqlite3.open(result.snapshotPath!);
+      addTearDown(snapshot.close);
+      expect(
+        snapshot.select('SELECT id FROM event_records').single['id'],
+        local.id,
+      );
+    },
+  );
+
+  test(
+    'migration uses the normal deterministic rule for equal timestamps',
+    () async {
+      final local = _event(id: 'tie').copyWith(title: 'A');
+      final remote = local.copyWith(title: 'Z');
+      expect(compareEventVersions(remote, local), greaterThan(0));
+      await _createSchemaSixDatabase(databaseFile, [local]);
+      final service = TodoDatabaseMigrationService(
+        databaseFile: () async => databaseFile,
+        hasLinkedGoogleAccount: () => true,
+        loadRemoteEvents: () async => [remote],
+        backupMigratedEvents: () async {},
+      );
+      addTearDown(service.dispose);
+      await service.migrateIfNeeded();
+      final raw = sqlite3.open(databaseFile.path);
+      addTearDown(raw.close);
+      expect(
+        raw.select('SELECT title FROM event_records').single['title'],
+        'Z',
+      );
+    },
+  );
+
+  test('newer remote changes replace older pending local changes', () async {
     final local = _event(id: 'pending-local', syncStatus: 'pending');
     await _createSchemaSixDatabase(databaseFile, [local]);
     final remote = local.copyWith(
@@ -118,8 +180,8 @@ void main() {
       'SELECT title, completed FROM event_records WHERE id = ?',
       ['pending-local'],
     ).single;
-    expect(row['title'], local.title);
-    expect(row['completed'], 0);
+    expect(row['title'], remote.title);
+    expect(row['completed'], 1);
   });
 
   test(

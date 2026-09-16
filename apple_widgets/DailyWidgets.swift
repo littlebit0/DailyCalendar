@@ -281,7 +281,7 @@ private struct DailyWidgetEventLabel: View {
       .font(.system(size: fontSize, weight: .medium))
       .dailyTodoCompletion(
         event.completed == true,
-        eventColor: Color.daily(argb: event.color)
+        eventColor: Color.daily(argb: event.color), backgroundAlpha: 0.18
       )
       .lineLimit(1)
       .minimumScaleFactor(0.7)
@@ -842,19 +842,44 @@ private struct DailyWidgetBackgroundModifier: ViewModifier {
 }
 
 private extension View {
-  @ViewBuilder
-  func dailyTodoCompletion(_ completed: Bool, eventColor: Color) -> some View {
-    if completed {
-      self
-        .foregroundStyle(eventColor)
-        .strikethrough(true, color: Color.primary.opacity(0.78))
-    } else {
-      self.foregroundStyle(eventColor)
-    }
+  func dailyTodoCompletion(_ completed: Bool, eventColor: Color,
+                           backgroundAlpha: Double = 0) -> some View {
+    modifier(DailyCompletionModifier(completed: completed, eventColor: eventColor,
+                                     backgroundAlpha: backgroundAlpha))
   }
 
   func dailyWidgetBackground(themeMode: String?) -> some View {
     modifier(DailyWidgetBackgroundModifier(themeMode: themeMode))
+  }
+}
+
+private struct DailyCompletionModifier: ViewModifier {
+  @Environment(\.self) private var environment
+  let completed: Bool
+  let eventColor: Color
+  let backgroundAlpha: Double
+
+  func body(content: Content) -> some View {
+    let resolved = eventColor.resolve(in: environment)
+    let rgb = [Double(resolved.red), Double(resolved.green), Double(resolved.blue)]
+    let surface = environment.colorScheme == .dark ? 0.0 : 1.0
+    let background = rgb.map { $0 * backgroundAlpha + surface * (1 - backgroundAlpha) }
+    func luminance(_ values: [Double]) -> Double {
+      let linear = values.map { $0 <= 0.04045 ? $0 / 12.92 : pow(($0 + 0.055) / 1.055, 2.4) }
+      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722 + 0.05
+    }
+    let a = luminance(rgb), b = luminance(background)
+    let middle = sqrt(a * b) - 0.05
+    let encoded = middle <= 0.0031308 ? middle * 12.92 : 1.055 * pow(middle, 1 / 2.4) - 0.055
+    let channel = Int((encoded * 255).rounded())
+    let candidates = [0, 255, channel, max(0, channel - 1), min(255, channel + 1)]
+    func score(_ c: Int) -> Double {
+      let l = luminance(Array(repeating: Double(c) / 255, count: 3))
+      return min(max(a, l) / min(a, l), max(b, l) / min(b, l))
+    }
+    let best = candidates.max { score($0) < score($1) } ?? 0
+    return content.foregroundStyle(eventColor)
+      .strikethrough(completed, color: Color(white: Double(best) / 255))
   }
 }
 

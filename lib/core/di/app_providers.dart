@@ -31,6 +31,10 @@ import '../sync/google_drive_auth_service.dart';
 import '../sync/google_drive_sync_service.dart';
 import '../sync/sync_service.dart';
 import '../widgets/calendar_widget_service.dart';
+import '../weather/weather_controller.dart';
+import '../weather/kma_weather_service.dart';
+import '../academic/academic_calendar_service.dart';
+import '../academic/academic_source.dart';
 
 class CalendarRange {
   const CalendarRange(this.start, this.end);
@@ -49,6 +53,16 @@ class CalendarRange {
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   throw UnimplementedError('settingsRepositoryProvider must be overridden');
+});
+
+final weatherControllerProvider = Provider<WeatherController>((ref) {
+  final controller = WeatherController(
+    store: ref.watch(settingsRepositoryProvider).weatherStore,
+    service: KmaWeatherService(),
+    location: DeviceWeatherLocation(),
+  );
+  ref.onDispose(controller.dispose);
+  return controller;
 });
 
 final productAnalyticsProvider = Provider<ProductAnalytics>((ref) {
@@ -140,6 +154,7 @@ final todoDatabaseMigrationServiceProvider =
         hasLinkedGoogleAccount: () =>
             settingsRepository.dailyAccount()?.googleAccount != null,
         loadRemoteEvents: syncService.downloadEventsForMigration,
+        remoteDeletionRecords: () => syncService.migrationDeletions,
         backupMigratedEvents: syncService.syncPendingChangesNow,
       );
       ref.onDispose(service.dispose);
@@ -172,6 +187,22 @@ final calendarImportServiceProvider = Provider<CalendarImportService>((ref) {
     eventCommandService: ref.watch(eventCommandServiceProvider),
     settingsRepository: ref.watch(settingsRepositoryProvider),
   );
+});
+
+final academicCalendarServiceProvider = Provider<AcademicCalendarService>((
+  ref,
+) {
+  final settings = ref.watch(settingsRepositoryProvider);
+  final service = AcademicCalendarService(
+    sources: [SangmyungAcademicSource()],
+    store: settings.academicStore,
+    settings: settings,
+    repository: ref.watch(eventRepositoryProvider),
+    commands: ref.watch(eventCommandServiceProvider),
+    sync: ref.watch(syncServiceProvider),
+  );
+  ref.onDispose(service.dispose);
+  return service;
 });
 
 final scheduleParserProvider = Provider<ScheduleParser>((ref) {

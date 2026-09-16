@@ -83,6 +83,7 @@ def build(bundle, output, version, arch):
             "Maintainer: littlebit0 <166241069+littlebit0@users.noreply.github.com>\n"
             "Section: utils\nPriority: optional\n"
             f"Depends: {dependencies}\n"
+            "Recommends: geoclue-2.0\n"
             "Homepage: https://github.com/littlebit0/DailyCalendar\n"
             "Description: Daily calendar and tasks\n"
             " Calendar, tasks and Google Drive sync with signed automatic updates.\n")

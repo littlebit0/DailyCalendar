@@ -33,6 +33,7 @@ class EventRecords extends Table {
   DateTimeColumn get createdAt => dateTime()();
   DateTimeColumn get updatedAt => dateTime()();
   DateTimeColumn get deletedAt => dateTime().nullable()();
+  TextColumn get syncTimestampDetails => text().nullable()();
   TextColumn get deviceId => text().withDefault(const Constant(''))();
   TextColumn get syncStatus => text().withDefault(const Constant('pending'))();
   BoolColumn get showDday => boolean().withDefault(const Constant(false))();
@@ -47,7 +48,14 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 7;
+  static const currentSchemaVersion = 8;
+  static const createDeletionTable = '''
+    CREATE TABLE IF NOT EXISTS sync_event_deletions (
+      id TEXT PRIMARY KEY NOT NULL,
+      deleted_at TEXT NOT NULL,
+      pending INTEGER NOT NULL DEFAULT 1
+    )
+  ''';
 
   AppDatabase() : super(_openConnection());
 
@@ -59,6 +67,10 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
+      onCreate: (migrator) async {
+        await migrator.createAll();
+        await customStatement(createDeletionTable);
+      },
       onUpgrade: (migrator, from, to) async {
         if (from < 2) {
           await migrator.addColumn(eventRecords, eventRecords.showDday);
@@ -99,6 +111,15 @@ class AppDatabase extends _$AppDatabase {
         }
         if (from < 7 && !await _eventRecordsHasColumn('completed')) {
           await migrator.addColumn(eventRecords, eventRecords.completed);
+        }
+        if (from < 8) {
+          await customStatement(createDeletionTable);
+          if (!await _eventRecordsHasColumn('sync_timestamp_details')) {
+            await migrator.addColumn(
+              eventRecords,
+              eventRecords.syncTimestampDetails,
+            );
+          }
         }
       },
     );

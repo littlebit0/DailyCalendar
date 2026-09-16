@@ -1,0 +1,13 @@
+{
+  "WFSerializationType": "WFTextTokenString",
+  "Value": {
+    "string": "\ufffc",
+    "attachmentsByRange": {
+      "{0, 1}": {
+        "Type": "ActionOutput",
+        "OutputUUID": "STRING_OUTPUT",
+        "OutputName": "String result"
+      }
+    }
+  }
+}

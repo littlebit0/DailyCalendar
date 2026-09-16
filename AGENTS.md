@@ -70,6 +70,14 @@ memory.
 - For Android/Windows changes, rebuild and smoke-run the relevant app when the
   environment supports it.
 - Report exactly what passed and what could not be verified.
+- Unless the user explicitly says to defer updates (for example, "업데이트 보류"),
+  finish an approved implementation task by updating the verified test app on
+  the affected platform(s). Do not wait for a separate update request. Preserve
+  installed test-app data and the App Store app; do not update unrelated platforms.
+- Updating is not permission to launch the app, run personal automations or
+  perform interactive usage tests. Do those only when the user requests them.
+  If build/install verification is blocked, report the blocker instead of
+  installing an unverified or stale artifact.
 
 ## 8. Handoff
 

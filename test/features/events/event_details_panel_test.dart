@@ -26,6 +26,90 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => initializeDateFormatting('ko'));
 
+  for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+    for (final brightness in Brightness.values) {
+      testWidgets(
+        '$platform $brightness short details dismiss without content scrolling',
+        (tester) async {
+          await tester.binding.setSurfaceSize(const Size(400, 850));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
+          final event = _event().copyWith(
+            memo: '   ',
+            clearLocation: true,
+            clearUrl: true,
+            clearWeather: true,
+          );
+          await _pumpPanel(
+            tester,
+            event: event,
+            platform: platform,
+            brightness: brightness,
+          );
+          await tester.tap(find.text(event.title).first);
+          await tester.pump(kDoubleTapTimeout);
+          await tester.pumpAndSettle();
+          final scroll = find.byKey(
+            const ValueKey('event-detail-content-scroll'),
+          );
+          final position = tester
+              .widget<SingleChildScrollView>(scroll)
+              .controller!
+              .position;
+          expect(position.maxScrollExtent, 0);
+          expect(find.text('메모'), findsNothing);
+          expect(find.text('추가 상세정보가 없습니다.'), findsOneWidget);
+          await tester.drag(scroll, const Offset(0, 650));
+          await tester.pumpAndSettle();
+          expect(scroll, findsNothing);
+          expect(tester.takeException(), isNull);
+        },
+      );
+
+      testWidgets(
+        '$platform $brightness long title and memo scroll completely and dismiss at top',
+        (tester) async {
+          await tester.binding.setSurfaceSize(const Size(390, 700));
+          addTearDown(() => tester.binding.setSurfaceSize(null));
+          final event = _event().copyWith(
+            title: List.filled(30, '아주 긴 일정 제목').join(' '),
+            memo: List.generate(45, (index) => '메모 내용 $index').join('\n'),
+          );
+          await _pumpPanel(
+            tester,
+            event: event,
+            platform: platform,
+            brightness: brightness,
+          );
+          await tester.tap(find.text(event.title).first);
+          await tester.pump(kDoubleTapTimeout);
+          await tester.pumpAndSettle();
+          final scroll = find.byKey(
+            const ValueKey('event-detail-content-scroll'),
+          );
+          final controller = tester
+              .widget<SingleChildScrollView>(scroll)
+              .controller!;
+          expect(controller.position.maxScrollExtent, greaterThan(700));
+          expect(find.text(event.memo!), findsOneWidget);
+          await tester.drag(scroll, const Offset(0, -250));
+          await tester.pumpAndSettle();
+          expect(controller.offset, greaterThan(0));
+          expect(scroll, findsOneWidget);
+          controller.jumpTo(controller.position.maxScrollExtent);
+          await tester.pump();
+          expect(find.text('수정').hitTestable(), findsOneWidget);
+          expect(find.text('삭제').hitTestable(), findsOneWidget);
+          controller.jumpTo(0);
+          await tester.pump();
+          await tester.drag(scroll, const Offset(0, 600));
+          await tester.pumpAndSettle();
+          expect(scroll, findsNothing);
+          expect(tester.takeException(), isNull);
+        },
+      );
+    }
+  }
+
   testWidgets('event detail shows all fields and actions', (tester) async {
     await tester.binding.setSurfaceSize(const Size(800, 1000));
     addTearDown(() => tester.binding.setSurfaceSize(null));
@@ -359,53 +443,12 @@ void main() {
     await tester.pumpAndSettle();
   });
 
-  testWidgets('sidebar drag feedback morphs to a month flag and back', (
+  testWidgets('sidebar retains original card across every destination', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(420, 760));
     addTearDown(() => tester.binding.setSurfaceSize(null));
-    final event = _event().copyWith(title: '형태가 바뀌는 일정');
-    final compactFeedback = ValueNotifier(false);
-    addTearDown(compactFeedback.dispose);
-    await _pumpEventList(
-      tester,
-      events: [event],
-      onEventDropped: (_, _, _) async {},
-      compactDragFeedbackListenable: compactFeedback,
-    );
-
-    final draggable = find.byKey(const ValueKey('event-drag-meeting-event'));
-    final gesture = await tester.startGesture(tester.getCenter(draggable));
-    await tester.pump(const Duration(milliseconds: 400));
-
-    expect(
-      find.byKey(const ValueKey('calendar-event-source-feedback')),
-      findsOneWidget,
-    );
-    compactFeedback.value = true;
-    await tester.pump(const Duration(milliseconds: 220));
-    expect(
-      find.byKey(const ValueKey('calendar-event-compact-feedback')),
-      findsOneWidget,
-    );
-    expect(find.text('형태가 바뀌는 일정'), findsWidgets);
-
-    compactFeedback.value = false;
-    await tester.pump(const Duration(milliseconds: 220));
-    expect(
-      find.byKey(const ValueKey('calendar-event-source-feedback')),
-      findsOneWidget,
-    );
-    await gesture.up();
-    await tester.pumpAndSettle();
-  });
-
-  testWidgets('sidebar feedback adopts the target schedule geometry', (
-    tester,
-  ) async {
-    await tester.binding.setSurfaceSize(const Size(420, 760));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    final event = _event().copyWith(title: '크기가 바뀌는 일정');
+    final event = _event().copyWith(title: '원본 일정');
     final feedbackSpec = ValueNotifier(
       const CalendarEventDragFeedbackSpec.source(),
     );
@@ -416,78 +459,36 @@ void main() {
       onEventDropped: (_, _, _) async {},
       dragFeedbackSpecListenable: feedbackSpec,
     );
-
     final draggable = find.byKey(const ValueKey('event-drag-meeting-event'));
-    final gesture = await tester.startGesture(tester.getCenter(draggable));
+    final originalSize = tester.getSize(draggable);
+    final position = tester.getTopLeft(draggable) + const Offset(20, 20);
+    final gesture = await tester.startGesture(position);
     await tester.pump(const Duration(milliseconds: 400));
-    final sourceFeedback = find.byKey(
+    final feedback = find.byKey(
       const ValueKey('calendar-event-drag-feedback-meeting-event'),
     );
-    final sourceSize = tester.getSize(sourceFeedback);
-
-    feedbackSpec.value = const CalendarEventDragFeedbackSpec.target(
-      style: CalendarEventDragFeedbackStyle.schedule,
-      width: 132,
-      height: 94,
-    );
-    await tester.pump();
-    final targetFeedback = find.byKey(
-      const ValueKey('calendar-event-target-feedback-schedule'),
-    );
-    expect(targetFeedback, findsOneWidget);
-    await tester.pump(const Duration(milliseconds: 85));
-    final shrinkingSize = tester.getSize(targetFeedback);
-    expect(shrinkingSize.width, lessThan(sourceSize.width));
-    expect(shrinkingSize.width, greaterThan(132));
-    expect(shrinkingSize.height, lessThan(sourceSize.height));
-    expect(shrinkingSize.height, greaterThan(94));
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.getSize(targetFeedback), const Size(132, 94));
-    expect(
-      find.descendant(
-        of: targetFeedback,
-        matching: find.textContaining('크기가 바뀌는 일정'),
-      ),
-      findsOneWidget,
-    );
-
-    feedbackSpec.value = const CalendarEventDragFeedbackSpec.source();
-    await tester.pump();
-    expect(tester.getSize(sourceFeedback), const Size(132, 94));
-    await tester.pump(const Duration(milliseconds: 85));
-    final growingSize = tester.getSize(sourceFeedback);
-    expect(growingSize.width, inExclusiveRange(132, sourceSize.width));
-    expect(growingSize.height, inExclusiveRange(94, sourceSize.height));
-    expect(
-      find.descendant(of: sourceFeedback, matching: find.text(event.title)),
-      findsOneWidget,
-    );
-
-    feedbackSpec.value = const CalendarEventDragFeedbackSpec.target(
-      style: CalendarEventDragFeedbackStyle.schedule,
-      width: 132,
-      height: 94,
-    );
-    await tester.pump();
-    expect(tester.getSize(sourceFeedback), growingSize);
-    await tester.pump(const Duration(milliseconds: 85));
-    expect(
-      tester.getSize(sourceFeedback).width,
-      inExclusiveRange(132, growingSize.width),
-    );
-    await tester.pump(const Duration(milliseconds: 100));
-    expect(tester.getSize(sourceFeedback), const Size(132, 94));
-
-    feedbackSpec.value = const CalendarEventDragFeedbackSpec.source();
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 180));
-    expect(tester.getSize(sourceFeedback), sourceSize);
-    expect(
-      find.byKey(const ValueKey('calendar-event-source-feedback')),
-      findsOneWidget,
-    );
-    await gesture.up();
+    expect(tester.getSize(feedback), originalSize);
+    expect(tester.getTopLeft(feedback), position - const Offset(20, 20));
+    for (final style in CalendarEventDragFeedbackStyle.values) {
+      feedbackSpec.value = style == CalendarEventDragFeedbackStyle.source
+          ? const CalendarEventDragFeedbackSpec.source()
+          : CalendarEventDragFeedbackSpec.target(
+              style: style,
+              width: 132,
+              height: 26,
+            );
+      await tester.pump(const Duration(milliseconds: 220));
+      expect(tester.getSize(feedback), originalSize);
+      expect(
+        find.descendant(of: feedback, matching: find.text(event.title)),
+        findsOneWidget,
+      );
+    }
+    await gesture.cancel();
     await tester.pumpAndSettle();
+    expect(feedback, findsNothing);
+    expect(tester.getSize(draggable), originalSize);
+    expect(tester.takeException(), isNull);
   });
 
   test(
@@ -517,6 +518,8 @@ Future<_SingleEventRepository> _pumpPanel(
   required CalendarEvent event,
   CalendarEventDropCallback? onEventDropped,
   ValueChanged<bool>? onEventDragStateChanged,
+  TargetPlatform platform = TargetPlatform.android,
+  Brightness brightness = Brightness.light,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final preferences = await SharedPreferences.getInstance();
@@ -537,6 +540,7 @@ Future<_SingleEventRepository> _pumpPanel(
         eventCommandServiceProvider.overrideWithValue(commandService),
       ],
       child: MaterialApp(
+        theme: ThemeData(platform: platform, brightness: brightness),
         home: Scaffold(
           body: EventDetailsPanel(
             date: event.startAt,

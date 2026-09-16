@@ -38,6 +38,14 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>daily-wallpaper</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
 				<string>com.googleusercontent.apps.234127810480-l6i9pnoq4hpg6as12n7g1q5h0cak39oa</string>
 			</array>
 		</dict>
@@ -69,6 +77,10 @@
 			<string>데일리 캘린더</string>
 		</dict>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Use your approximate location to show the nearby KMA weather forecast. You can select a region without location access.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save a calendar image to Photos only when you tap Save Image, so you can choose it as a Lock Screen wallpaper.</string>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>Daily가 사용자가 선택한 일정 시각에 시스템 알람을 울리기 위해 사용합니다.</string>
 	<key>NSCalendarsFullAccessUsageDescription</key>

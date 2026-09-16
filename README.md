@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/littlebit0/DailyCalendar/releases/latest"><img src="https://img.shields.io/github/v/release/littlebit0/DailyCalendar?label=release" alt="Latest release"></a>
-  <img src="https://img.shields.io/badge/version-3.4.0-2f6feb" alt="Version 3.4.0">
+  <img src="https://img.shields.io/badge/version-3.5.0-2f6feb" alt="Version 3.5.0">
   <img src="https://img.shields.io/badge/Flutter-iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux-02569B?logo=flutter" alt="Flutter platforms">
 </p>
 
@@ -19,20 +19,21 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 연결하면 Google Drive AppData를 통해 일정과 설정을 백업하고 동기화할 수
 있습니다.
 
-## 3.4.0 주요 변경
+## 3.5.0 주요 변경
 
-- 일정 드래그로 날짜·순서를 변경하고, 주·일간 스케줄에서는 30분 단위로 시간을 이동합니다.
-- 드래그 중 원래 자리 비우기, 대상 화면에 맞는 일정 크기 전환과 저장 시 깜빡임을 개선했습니다.
-- 모바일 하루보기 팝업 밖으로 일정을 옮기면 월간 달력 전체를 확인할 수 있습니다.
-- iOS/Android 설정에서 분류 손잡이의 길게 누르기와 위·아래 순서 변경 오류를 수정했습니다.
-- 일정 더블클릭·더블탭으로 완료/미완료를 전환하며, 완료 후에도 분류 색상을 유지합니다.
-- 첫 화면을 빠른 보기/주/월/일 중 선택하고, 빠른 보기는 항상 좌우로 월을 이동합니다.
-- 날짜·요일·공휴일 표시, macOS 휠 이동, 좁은 화면의 설정 문구와 Android 로그인·알람·위젯을 개선했습니다.
-- Ubuntu/Debian용 Linux `.deb` 설치 파일과 서명된 APT 자동 업데이트를 추가했습니다.
+- 실제 변경 시각을 기준으로 일정 충돌을 해결하고 설정·분류 속성을 항목별로 병합합니다.
+- 삭제한 과거 일정의 본문을 정리하고, 최소 삭제 기록으로 오래된 기기의 재등장을 방지합니다.
+- 동시 업로드·실패·재시도와 시작 시 동기화, 안전한 DB 업데이트를 개선했습니다.
+- 일정 드래그의 모양·정렬·크기 전환, 연속 종일 일정과 완료 취소선 가독성을 개선했습니다.
+- 선택형 기상청 날씨 예보, 지역 설정과 상명대학교 학부 학사 일정 가져오기를 추가했습니다.
+- 학사 일정의 대학 분류를 자동 생성하고 가져오기 화면에서 색상을 지정합니다.
+- iOS 잠금화면 월간 달력과 단축어 설정, 새 기능 안내·초기 분류 설정을 추가했습니다.
+- 자주 사용하는 장소 추천·관리와 일정 편집 화면의 키보드 동작을 개선했습니다.
 
-> **Windows에는 이번 최신 변경사항이 미적용 상태입니다.** Windows 전용 반영과
-> 실제 OS 검증·업데이트는 후속 작업이며, 공유 코드나 버전 번호 변경만으로
-> 적용 완료를 의미하지 않습니다. 변경 내용은 [3.4.0 릴리스 노트](docs/RELEASE_NOTES_3.4.0.md)를 확인하세요.
+> **동기화를 사용하는 모든 기기를 3.5.0으로 함께 업데이트해 주세요.**
+> 구버전은 새로운 설정·삭제 기록을 처리하지 못하므로 같은 계정으로 혼용하지 마세요.
+> App Store 설치본의 출시 여부는 GitHub 릴리스와 별개입니다.
+> [3.5.0 릴리스 노트](docs/RELEASE_NOTES_3.5.0.md) · [동기화 변경 안내](docs/SYNC_MERGE_RULES.md)
 
 ## 다운로드
 
@@ -42,18 +43,18 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 | 플랫폼 | 배포 상태 | 파일 |
 | --- | --- | --- |
 | iPhone / iPad | App Store 무료 배포 중 | App Store의 `DailyCalendar` |
-| iOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-ios-3.4.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-ios-3.4.0-unsigned.ipa) |
-| macOS 테스트 | 3.4.0 공개 검증용 미서명 파일 | [daily-macos-3.4.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-macos-3.4.0-unsigned.dmg) |
-| Android | 3.4.0 새 서명 APK, Google OAuth 등록 완료 · 실기기 로그인 검증 대기 | [daily-android-3.4.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-android-3.4.0.apk) |
-| Windows | 최신 변경 미적용, 기존 공개 버전 3.3.1 | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.3.1/daily-windows-3.3.1.zip) |
-| Linux | 3.4.0-1, 빌드·APT 설치/업데이트 검증 완료 · 데스크톱 실사용 검증 대기 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-linux-3.4.0-1-amd64.deb) · [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.4.0/daily-linux-3.4.0-1-arm64.deb) |
+| iOS 테스트 | 3.5.0 공개 검증용 미서명 파일 | [daily-ios-3.5.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v3.5.0/daily-ios-3.5.0-unsigned.ipa) |
+| macOS 테스트 | 3.5.0 공개 검증용 미서명 파일 | [daily-macos-3.5.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.5.0/daily-macos-3.5.0-unsigned.dmg) |
+| Android | 3.5.0 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-3.5.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.5.0/daily-android-3.5.0.apk) |
+| Windows | 3.5.0 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.5.0/daily-windows-3.5.0-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.5.0/daily-windows-3.5.0.zip) |
+| Linux | 3.5.0-1, 서명된 APT 업데이트 지원 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.5.0/daily-linux-3.5.0-1-amd64.deb) · [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.5.0/daily-linux-3.5.0-1-arm64.deb) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
 > 서명 없이는 iPhone에 직접 설치할 수 없으며, 재서명 과정에서 Sign in with
 > Apple 같은 entitlement가 유지되지 않을 수 있습니다. 일반 사용자는 App Store
 > 설치본을 권장합니다.
 
-> **Android 3.4.0 서명키 변경:** 이전 키를 사용할 수 없어 새 배포 키를
+> **Android 3.4.0에서의 서명키 변경:** 이전 키를 사용할 수 없어 새 배포 키를
 > 생성했습니다. 기존 3.3.1 APK 위에 덮어쓰기 설치할 수 없습니다. 앱 삭제는
 > 로컬 데이터를 지우므로, 삭제 전에 데이터 백업과 복원 가능 여부를 반드시
 > 확인하세요. 새 키의 Google OAuth 등록은 2026-09-07 완료했으며, 실제
@@ -72,7 +73,7 @@ Ubuntu/Debian 데스크톱용 `.deb`를 한 번 설치하면 Daily 전용 타이
 미루며, 일정과 설정은 삭제하지 않습니다. 설치 시 앱을 자동 실행하지 않습니다.
 
 ```sh
-sudo apt install ./daily-linux-3.4.0-1-amd64.deb
+sudo apt install ./daily-linux-3.5.0-1-amd64.deb
 ```
 
 Intel/AMD PC는 amd64, ARM64 PC는 arm64 파일을 사용하세요. amd64는 Ubuntu 22.04+,
@@ -92,7 +93,8 @@ arm64는 Ubuntu 24.04+를 빌드 기준으로 사용합니다. 두 아키텍처�
 - 모든 사용자 일정의 Todo 완료 상태와 빠른 보기·위젯 체크
 - 반복 일정, 연속 일정, D-day, 음력과 대한민국 공휴일
 - 날짜 범위 드래그 입력과 일정 날짜 이동·날짜별 수동 순서
-- 외부 캘린더 가져오기
+- 외부 캘린더 및 상명대학교 학부 학사 일정 가져오기
+- 선택형 기상청 날씨 예보와 지역 설정
 - 위치, 지도 바로가기, 링크, 메모와 날씨 정보
 
 ### 알림과 위젯
@@ -119,7 +121,8 @@ arm64는 Ubuntu 24.04+를 빌드 기준으로 사용합니다. 두 아키텍처�
 - iOS 및 macOS Sign in with Apple
 - 선택형 Google 계정 연결
 - Google Drive AppData 기반 일정·설정 백업 및 동기화
-- 일정별 증분 동기화, 삭제 tombstone과 충돌 병합
+- 일정별 증분 동기화, 실제 UTC 변경 시각에 따른 충돌 병합
+- 설정별 병합, 삭제된 과거 일정 본문 정리와 재등장 방지
 - 통합 로그아웃 및 로컬·클라우드 데이터 삭제 흐름
 
 ### 개인 설정
@@ -143,9 +146,9 @@ arm64는 Ubuntu 24.04+를 빌드 기준으로 사용합니다. 두 아키텍처�
 | 홈 화면 위젯·미니 캘린더 | O | O | O | O |
 | 앱 잠금 | O | O | O | O |
 
-위 표는 기존 기본 기능 지원 범위입니다. 3.4.0의 최신 변경사항은 iOS/macOS/Android
-기준이며 Windows에는 미적용 상태입니다. Windows 3.3.1의 기존 트레이 미니
-캘린더와 자동 업데이트 기능은 유지되지만, 이번 변경의 적용 완료로 해석하지 않습니다.
+위 표는 플랫폼별 기본 기능 지원 범위입니다. 3.5.0의 공유 기능과 동기화 코드는
+Windows/Linux 배포 빌드에도 포함합니다. 플랫폼별 실제 로그인·알람·위젯 동작은
+빌드 및 자동 테스트와 별도로 확인해야 합니다.
 
 ## 데이터와 개인정보 보호
 
@@ -179,7 +182,9 @@ daily-sync-v2-settings.json
 
 - 일정 생성·수정·삭제 시 변경된 일정만 업로드
 - 삭제 상태는 tombstone으로 다른 기기에 전파
-- 충돌은 일정별 `updatedAt` 또는 `deletedAt` 기준으로 병합
+- 충돌은 일정별 생성·수정·삭제의 최신 UTC 변경 시각으로 병합
+- 분류 이름·색상 등 설정을 항목별로 병합하고 조건부 쓰기로 동시 변경 보호
+- 삭제하지 않은 과거 일정은 보존하고, 만료된 삭제 일정만 최소 기록으로 정리
 - 종일 일정은 날짜 전용 필드로 보존해 시간대에 따른 날짜 밀림 방지
 - 앱 시작, 로그인, 포그라운드 복귀와 수동 요청 시 필요한 동기화 수행
 
@@ -230,18 +235,19 @@ Google OAuth 및 Apple 서명 값은 저장소에 포함하지 않습니다. 로
 ./tool/flutter.sh test --no-pub
 ```
 
-3.4.0 소스 기준 검증 결과:
+3.5.0 소스 기준 검증 결과:
 
 - Flutter 정적 분석 통과
-- 전체 Flutter 자동화 테스트 372개 통과, 기존 건너뜀 1개
-- 플랫폼 구성 테스트 12개 및 앱·위젯 버전 `3.4.0 (3.4.0)` 설정 검사 통과
+- 전체 Flutter 자동화 테스트 548개 통과, 기존 건너뜀 1개
+- 앱·위젯 버전 `3.5.0 (3.5.0)`, Android 버전 코드 `350`
 - 직전 테스트 빌드의 macOS/iOS/Android 업데이트 시 일정·설정 데이터 보존 확인
-- Windows 최신 변경 미적용: Windows 빌드·실사용 검증·업데이트는 별도 진행 필요
+- 모든 플랫폼의 배포 빌드가 성공한 뒤 설치 파일을 함께 공개
+- Windows/Linux 실제 데스크톱 사용 및 실제 계정의 동시 동기화는 별도 검증 대상
 - 자동 테스트와 빌드 검증은 실제 사용자 기기의 로그인·알람·위젯 동작 보장을 의미하지 않습니다.
 
 ## 문서
 
-- [3.4.0 릴리스 노트](docs/RELEASE_NOTES_3.4.0.md)
+- [3.5.0 릴리스 노트](docs/RELEASE_NOTES_3.5.0.md)
 - [기능 로드맵](docs/FEATURE_ROADMAP.md)
 - [프로젝트 분석](PROJECT_ANALYSIS.md)
 - [Google Drive 동기화 설정](docs/GOOGLE_DRIVE_SYNC_SETUP.md)

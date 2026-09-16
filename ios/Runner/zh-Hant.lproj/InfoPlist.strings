@@ -2,6 +2,8 @@
 "NSCalendarsFullAccessUsageDescription" = "僅在將 Apple 行事曆的行程匯入 Daily 時讀取行事曆。";
 "NSCalendarsUsageDescription" = "僅在將 Apple 行事曆的行程匯入 Daily 時讀取行事曆。";
 "NSFaceIDUsageDescription" = "Daily 使用 Face ID 安全地解除 App 鎖定。";
+"NSPhotoLibraryAddUsageDescription" = "僅在您點選儲存圖片時將月曆圖片加入照片，以便選為鎖定畫面的背景圖片。";
 "NSMicrophoneUsageDescription" = "僅在您向 Signal 說出行事曆指令時使用麥克風。";
 "NSSpeechRecognitionUsageDescription" = "Daily 會將您對 Signal 說出的行事曆指令轉成文字，以執行要求的操作。";
 "CFBundleSpokenName" = "Daily";
+"NSLocationWhenInUseUsageDescription" = "使用概略位置顯示附近地區的氣象廳預報。您也可以不授予位置權限而自行選擇地區。";

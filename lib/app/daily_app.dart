@@ -17,6 +17,10 @@ import '../core/platform/windows_build_identity.dart';
 import '../features/calendar/presentation/month_calendar_page.dart';
 import '../features/onboarding/presentation/analytics_consent_page.dart';
 import '../features/onboarding/presentation/welcome_page.dart';
+import '../features/onboarding/presentation/update_features_gate.dart';
+import '../core/weather/weather_widgets.dart';
+import '../core/sync/startup_sync_gate.dart';
+import '../core/sync/google_drive_auth_service.dart';
 import 'daily_theme.dart';
 
 class DailyApp extends ConsumerWidget {
@@ -79,7 +83,10 @@ class DailyApp extends ConsumerWidget {
           if (settings.onboardingCompleted) {
             content = _AppLockGate(
               enabled: settings.appLockEnabled,
-              child: content,
+              child: WeatherScope(
+                controller: ref.watch(weatherControllerProvider),
+                child: content,
+              ),
             );
           }
           final brightness = Theme.of(context).brightness;
@@ -662,6 +669,9 @@ class _AppHomeState extends ConsumerState<_AppHome>
   ];
 
   var _servicesStarted = false;
+  late final bool _requiresStartupSync;
+  bool _startupGateOpen = false;
+  Future<void>? _startupOperation;
   Future<bool>? _syncStartOperation;
   Timer? _syncRestoreRetryTimer;
   var _syncRestoreRetryIndex = 0;
@@ -674,6 +684,10 @@ class _AppHomeState extends ConsumerState<_AppHome>
   @override
   void initState() {
     super.initState();
+    _requiresStartupSync =
+        ref.read(settingsRepositoryProvider).dailyAccount()?.googleAccount !=
+        null;
+    _startupGateOpen = !_requiresStartupSync;
     WidgetsBinding.instance.addObserver(this);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
@@ -692,7 +706,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
         await _processPendingWidgetTodoActions();
       }),
     );
-    _startSyncIfConnected();
+    if (!_requiresStartupSync) _startSyncIfConnected();
     _refreshCalendarWidgets();
   }
 
@@ -886,13 +900,15 @@ class _AppHomeState extends ConsumerState<_AppHome>
         ref.invalidate(eventsInRangeProvider);
         _processPendingSiriEventChanges();
         _processPendingWidgetTodoActions();
-        _startSyncIfConnected();
+        if (_startupGateOpen) _startSyncIfConnected();
         _refreshCalendarWidgets();
         break;
       case AppLifecycleState.paused:
       case AppLifecycleState.hidden:
       case AppLifecycleState.detached:
-        _syncBeforeBackgroundOrExit();
+        if (_startupGateOpen && _startupOperation == null) {
+          _syncBeforeBackgroundOrExit();
+        }
         break;
       case AppLifecycleState.inactive:
         break;
@@ -910,7 +926,63 @@ class _AppHomeState extends ConsumerState<_AppHome>
         }
       }
     });
-    return const MonthCalendarPage();
+    return StartupSyncGate(
+      requiredAtStartup: _requiresStartupSync,
+      synchronize: _synchronizeStartup,
+      onContinue: () {
+        _startupGateOpen = true;
+        _scheduleSyncRestoreRetry();
+        if (_startupOperation == null) unawaited(_refreshAcademicCalendars());
+      },
+      child: const UpdateFeaturesGate(child: MonthCalendarPage()),
+    );
+  }
+
+  Future<void> _synchronizeStartup() async {
+    final operation = _startupOperation ??= _runStartupSync();
+    try {
+      await operation;
+    } finally {
+      if (identical(_startupOperation, operation)) _startupOperation = null;
+      if (mounted && _startupGateOpen) _scheduleSyncRestoreRetry();
+      if (mounted && _startupGateOpen) unawaited(_refreshAcademicCalendars());
+    }
+  }
+
+  Future<void> _runStartupSync() async {
+    await _tryStartSyncIfConnected(startup: true);
+    if (!mounted) return;
+    _refreshSettingsState();
+    ref.invalidate(eventsInRangeProvider);
+    // Prime the actual stream providers used by the initial month/quick view,
+    // week and selected-day sidebar, not a separate throwaway database query.
+    final monday = ref.read(appSettingsProvider).weekStartsOnMonday;
+    final month = ref.read(visibleMonthProvider);
+    final selected = ref.read(selectedDateProvider);
+    final day = DateTime(selected.year, selected.month, selected.day);
+    final first = DateTime(month.year, month.month);
+    DateTime weekStart(DateTime date) => date.subtract(
+      Duration(days: monday ? date.weekday - 1 : date.weekday % 7),
+    );
+    final monthStart = weekStart(first);
+    final selectedWeekStart = weekStart(day);
+    for (final range in [
+      CalendarRange(monthStart, monthStart.add(const Duration(days: 42))),
+      CalendarRange(
+        selectedWeekStart,
+        selectedWeekStart.add(const Duration(days: 7)),
+      ),
+      CalendarRange(day, day.add(const Duration(days: 1))),
+    ]) {
+      if (!mounted) return;
+      final provider = eventsInRangeProvider(range);
+      final subscription = ref.listenManual(provider, (_, _) {});
+      try {
+        await ref.read(provider.future);
+      } finally {
+        subscription.close();
+      }
+    }
   }
 
   void _refreshCalendarWidgets() {
@@ -926,6 +998,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   Future<void> _startSyncIfConnected() async {
+    if (_startupOperation != null || !_startupGateOpen) return;
     final activeOperation = _syncStartOperation;
     if (activeOperation != null) {
       await activeOperation;
@@ -945,14 +1018,43 @@ class _AppHomeState extends ConsumerState<_AppHome>
       if (identical(_syncStartOperation, operation)) {
         _syncStartOperation = null;
       }
+      if (mounted) unawaited(_refreshAcademicCalendars());
     }
   }
 
-  Future<bool> _tryStartSyncIfConnected() async {
+  Future<void> _refreshAcademicCalendars() async {
+    if (!mounted) return;
+    // Do not instantiate network/import services for users without a subscription.
+    try {
+      final store = ref.read(settingsRepositoryProvider).academicStore;
+      if (!store.load().values.any((subscription) => subscription.enabled)) {
+        return;
+      }
+      await ref.read(academicCalendarServiceProvider).refreshIfDue();
+      if (mounted) _refreshSettingsState();
+    } on Object {
+      // Source errors are reported in academic settings, not as a startup failure.
+    }
+  }
+
+  Future<bool> _tryStartSyncIfConnected({bool startup = false}) async {
     final settingsRepository = ref.read(settingsRepositoryProvider);
+    final initialAccount = settingsRepository.dailyAccount();
+    void ensureCurrentAccount() {
+      final currentAccount = settingsRepository.dailyAccount();
+      if (!mounted ||
+          (startup &&
+              (currentAccount?.id != initialAccount?.id ||
+                  currentAccount?.googleAccount?.email !=
+                      initialAccount?.googleAccount?.email))) {
+        throw const GoogleDriveAuthException('계정이 변경되었습니다.');
+      }
+    }
+
     try {
       final auth = ref.read(googleDriveAuthServiceProvider);
       final account = await auth.restorePreviousSignIn();
+      ensureCurrentAccount();
       var dailyAccount = settingsRepository.dailyAccount();
       if (account != null && !settingsRepository.hasStoredDailyAccount) {
         // Migrate the pre-Daily-account Google session once. New Apple-only
@@ -965,29 +1067,49 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
       final linkedGoogleEmail = dailyAccount?.googleAccount?.email;
       if (linkedGoogleEmail == null) {
+        if (startup) {
+          throw const GoogleDriveAuthException('Google Drive 연결이 필요합니다.');
+        }
         return false;
       }
       if (account != null &&
           linkedGoogleEmail.toLowerCase() != account.email.toLowerCase()) {
+        if (startup) throw const GoogleDriveAuthException('계정이 변경되었습니다.');
         return false;
       }
 
       // This call is always non-interactive. It also restores desktop OAuth
       // tokens when account metadata was temporarily unavailable.
       final headers = await auth.authorizationHeaders();
+      ensureCurrentAccount();
       if (headers == null) {
+        if (startup) {
+          throw const GoogleDriveAuthException('Google Drive 연결이 필요합니다.');
+        }
         return false;
       }
-      _startPostLoginServices();
+      if (startup) {
+        _listenForSyncedSettings();
+        await ref.read(syncServiceProvider).start();
+        ensureCurrentAccount();
+        _servicesStarted = true;
+      } else {
+        _startPostLoginServices();
+      }
       return true;
     } on Object {
+      if (startup) rethrow;
       // Google Drive sync is optional; local calendar use stays available.
       return false;
     }
   }
 
   void _scheduleSyncRestoreRetry() {
-    if (!mounted || _servicesStarted || _syncRestoreRetryTimer != null) {
+    if (!mounted ||
+        !_startupGateOpen ||
+        _startupOperation != null ||
+        _servicesStarted ||
+        _syncRestoreRetryTimer != null) {
       return;
     }
     final linkedGoogleAccount = ref

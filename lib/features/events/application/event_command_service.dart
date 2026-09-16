@@ -208,13 +208,21 @@ class EventCommandService {
     await _refreshWidgets();
   }
 
-  Future<Set<String>> importBatch(Iterable<CalendarEvent> events) async {
+  Future<Set<String>> importBatch(
+    Iterable<CalendarEvent> events, {
+    Future<CalendarEvent?> Function(CalendarEvent event)? prepare,
+    bool Function()? isCurrent,
+  }) async {
     final importedIds = <String>{};
     for (final event in events) {
-      final imported = event
-          .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
-          .normalizeAllDayBounds();
+      CalendarEvent imported;
       try {
+        final prepared = prepare == null ? event : await prepare(event);
+        if (isCurrent != null && !isCurrent()) break;
+        if (prepared == null) continue;
+        imported = prepared
+            .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
+            .normalizeAllDayBounds();
         await _repository.save(imported);
       } on Object {
         continue;

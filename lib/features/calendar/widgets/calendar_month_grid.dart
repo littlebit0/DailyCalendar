@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/calendar/calendar_event_movement.dart';
+import '../../../core/calendar/calendar_event_span.dart';
 import '../../../core/calendar/korean_lunar_calendar.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/theme/event_completion_style.dart';
+import '../../../core/weather/weather_widgets.dart';
 import '../../events/domain/calendar_event.dart';
 import '../../events/presentation/event_completion_action.dart';
 import 'calendar_event_drag_layer.dart';
@@ -863,11 +865,15 @@ class _WeekRowState extends State<_WeekRow> {
     return LayoutBuilder(
       builder: (context, constraints) {
         final cellWidth = constraints.maxWidth / 7;
+        final showWeather =
+            WeatherScope.of(context)?.settings.enabled == true &&
+            constraints.maxHeight >= 70;
         var metrics = _MonthFlagMetrics.forLayout(
           compact: widget.compact,
           rowHeight: constraints.maxHeight,
           maxFlags: widget.maxFlags,
           reserveOverflow: false,
+          weatherHeader: showWeather,
         );
         final flagInset = widget.compact ? 1.0 : 5.0;
         final overflowInset = widget.compact ? 2.0 : 6.0;
@@ -880,6 +886,7 @@ class _WeekRowState extends State<_WeekRow> {
             rowHeight: constraints.maxHeight,
             maxFlags: widget.maxFlags,
             reserveOverflow: true,
+            weatherHeader: showWeather,
           );
           visibleLanes = metrics.visibleLanes;
           overflowCounts = _overflowCounts(segments, visibleLanes);
@@ -945,6 +952,7 @@ class _WeekRowState extends State<_WeekRow> {
                               (day.year == widget.month.year &&
                                   day.month == widget.month.month);
                           return _DayCellBackground(
+                            showWeather: showWeather,
                             day: day,
                             inMonth:
                                 day.year == widget.month.year &&
@@ -1285,23 +1293,7 @@ class _WeekRowState extends State<_WeekRow> {
             return a.event.id.compareTo(b.event.id);
           });
 
-    final lanes = <List<_EventSegment>>[];
-    final laidOut = <_EventSegment>[];
-    for (final segment in rawSegments) {
-      var laneIndex = 0;
-      while (true) {
-        if (laneIndex == lanes.length) {
-          lanes.add(<_EventSegment>[]);
-        }
-        if (_canPlace(lanes[laneIndex], segment)) {
-          lanes[laneIndex].add(segment);
-          laidOut.add(segment.copyWith(lane: laneIndex));
-          break;
-        }
-        laneIndex += 1;
-      }
-    }
-    return laidOut;
+    return layoutCalendarEventLanes(rawSegments);
   }
 
   List<CalendarEvent> _eventsForDay(DateTime day) {
@@ -1339,13 +1331,6 @@ class _WeekRowState extends State<_WeekRow> {
       return null;
     }
     return segment.copyWith(startCol: startCol, endCol: endCol);
-  }
-
-  bool _canPlace(List<_EventSegment> lane, _EventSegment segment) {
-    return lane.every(
-      (placed) =>
-          segment.endCol < placed.startCol || segment.startCol > placed.endCol,
-    );
   }
 
   List<int> _overflowCounts(List<_EventSegment> segments, int visibleLanes) {
@@ -1396,6 +1381,7 @@ class _DayCellBackground extends StatelessWidget {
     required this.showLunarDate,
     required this.showContent,
     required this.onTap,
+    this.showWeather = false,
   });
 
   final DateTime day;
@@ -1409,6 +1395,7 @@ class _DayCellBackground extends StatelessWidget {
   final bool showLunarDate;
   final bool showContent;
   final VoidCallback? onTap;
+  final bool showWeather;
 
   static const _lunarCalendar = KoreanLunarCalendar();
 
@@ -1435,7 +1422,12 @@ class _DayCellBackground extends StatelessWidget {
       child: Container(
         key: ValueKey('day-cell-${day.year}-${day.month}-${day.day}'),
         margin: const EdgeInsets.symmetric(horizontal: 1.5),
-        padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+        padding: EdgeInsets.fromLTRB(
+          showWeather ? 4 : 6,
+          4,
+          showWeather ? 4 : 6,
+          4,
+        ),
         decoration: BoxDecoration(
           color: fill,
           borderRadius: BorderRadius.circular(8),
@@ -1450,45 +1442,56 @@ class _DayCellBackground extends StatelessWidget {
         alignment: Alignment.topLeft,
         child: !showContent
             ? const SizedBox.shrink()
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  _DayNumber(
-                    key: ValueKey(
-                      'day-number-${day.year}-${day.month}-${day.day}',
-                    ),
-                    day: day,
-                    inMonth: inMonth,
-                    today: today,
-                    holiday: holiday,
-                  ),
-                  if (lunar != null) ...[
-                    const SizedBox(width: 3),
-                    Flexible(
-                      child: SizedBox(
-                        height: 21,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              lunar.shortLabel,
-                              maxLines: 1,
-                              softWrap: false,
-                              style: TextStyle(
-                                fontSize: 8.5,
-                                height: 1.0,
-                                color: inMonth
-                                    ? colorScheme.onSurfaceVariant
-                                    : colorScheme.outline,
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _DayNumber(
+                        key: ValueKey(
+                          'day-number-${day.year}-${day.month}-${day.day}',
+                        ),
+                        day: day,
+                        inMonth: inMonth,
+                        today: today,
+                        holiday: holiday,
+                      ),
+                      if (lunar != null) ...[
+                        const SizedBox(width: 3),
+                        Flexible(
+                          child: SizedBox(
+                            height: 21,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  lunar.shortLabel,
+                                  maxLines: 1,
+                                  softWrap: false,
+                                  style: TextStyle(
+                                    fontSize: 8.5,
+                                    height: 1.0,
+                                    color: inMonth
+                                        ? colorScheme.onSurfaceVariant
+                                        : colorScheme.outline,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
+                    ],
+                  ),
+                  if (showWeather)
+                    SizedBox(
+                      height: 14,
+                      child: CalendarWeather(date: day, small: true),
                     ),
-                  ],
                 ],
               ),
       ),
@@ -1641,6 +1644,33 @@ class _CalendarEventDropTargetState extends State<_CalendarEventDropTarget> {
   }
 }
 
+Widget calendarMonthDragCard(
+  CalendarEvent event, {
+  required bool centerTitle,
+  required bool showTime,
+  required bool compact,
+}) => _EventSpanFlag(
+  event: event,
+  segmentStart: DateTime(
+    event.startAt.year,
+    event.startAt.month,
+    event.startAt.day,
+  ),
+  segmentEnd: DateTime(
+    event.startAt.year,
+    event.startAt.month,
+    event.startAt.day,
+  ),
+  showTime: showTime,
+  compact: compact,
+  dense: false,
+  centerTitle: centerTitle,
+  draggable: false,
+  onDragStateChanged: (_) {},
+  onDragInteractionStateChanged: (_) {},
+  onDateSelected: (_) {},
+);
+
 class _EventSpanFlag extends StatelessWidget {
   const _EventSpanFlag({
     required this.event,
@@ -1725,6 +1755,9 @@ class _EventSpanFlag extends StatelessWidget {
                   ),
                   completed: event.completed,
                   eventColor: color,
+                  backgroundColor: color.withValues(
+                    alpha: event.holiday ? 0.12 : 0.15,
+                  ),
                 ),
               ),
             ),
@@ -1825,8 +1858,9 @@ class _MonthFlagMetrics {
     required double rowHeight,
     required int maxFlags,
     required bool reserveOverflow,
+    bool weatherHeader = false,
   }) {
-    var top = 27.0;
+    var top = weatherHeader ? 41.0 : 27.0;
     var bottomReserve = compact ? 3.0 : 10.0;
     final overflowHeight = compact ? 10.0 : 12.0;
     final overflowGap = compact ? 1.0 : 2.0;
@@ -1896,50 +1930,7 @@ class _RangeHighlightSegment {
   final int endCol;
 }
 
-class _EventSegment {
-  const _EventSegment({
-    required this.event,
-    required this.startCol,
-    required this.endCol,
-    this.lane = 0,
-  });
-
-  final CalendarEvent event;
-  final int startCol;
-  final int endCol;
-  final int lane;
-
-  int get span => endCol - startCol + 1;
-
-  static _EventSegment? fromEvent(CalendarEvent event, DateTime weekStart) {
-    final eventStart = _dayStart(event.startAt);
-    final eventEnd = _inclusiveEndDay(event.endAt);
-    final startCol = math.max(0, eventStart.difference(weekStart).inDays);
-    final endCol = math.min(6, eventEnd.difference(weekStart).inDays);
-    if (endCol < 0 || startCol > 6 || endCol < startCol) {
-      return null;
-    }
-    return _EventSegment(event: event, startCol: startCol, endCol: endCol);
-  }
-
-  _EventSegment copyWith({int? startCol, int? endCol, int? lane}) {
-    return _EventSegment(
-      event: event,
-      startCol: startCol ?? this.startCol,
-      endCol: endCol ?? this.endCol,
-      lane: lane ?? this.lane,
-    );
-  }
-
-  static DateTime _dayStart(DateTime value) {
-    return DateTime(value.year, value.month, value.day);
-  }
-
-  static DateTime _inclusiveEndDay(DateTime value) {
-    final adjusted = value.subtract(const Duration(microseconds: 1));
-    return DateTime(adjusted.year, adjusted.month, adjusted.day);
-  }
-}
+typedef _EventSegment = CalendarEventSpan;
 
 bool _sameDraggedEvent(CalendarEvent? first, CalendarEvent? second) {
   return first != null &&

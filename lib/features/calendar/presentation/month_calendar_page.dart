@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/weather/weather_widgets.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/analytics/product_analytics.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
@@ -30,6 +31,7 @@ import '../../events/domain/event_category.dart';
 import '../../events/domain/event_draft.dart';
 import '../../events/domain/recurrence_rule.dart';
 import '../../events/presentation/event_details_panel.dart';
+import '../../events/presentation/day_sheet_scroll_physics.dart';
 import '../../events/presentation/event_editor_dialog.dart';
 import '../../settings/presentation/settings_page.dart';
 import '../widgets/calendar_event_drag_layer.dart';
@@ -95,6 +97,8 @@ class MonthCalendarPage extends ConsumerStatefulWidget {
 }
 
 class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
+  static const _daySheetReturnHandleHeight = 32.0;
+
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _searchController = TextEditingController();
   final _searchFocusNode = FocusNode();
@@ -478,10 +482,12 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       final panel = _daySheetSurfaceKey.currentContext?.findRenderObject();
       if (bounds != null && panel is RenderBox && panel.hasSize) {
         _daySheetDragBounds = bounds;
-        // The unchanged handle and safe area remain below the calendar.
+        // Keep a visible return handle when the event list reveals the calendar.
         _daySheetDragReturnBounds = Rect.fromLTRB(
           bounds.left,
-          bounds.bottom - (bounds.height - panel.size.height),
+          bounds.bottom -
+              (bounds.height - panel.size.height) -
+              _daySheetReturnHandleHeight,
           bounds.right,
           bounds.bottom,
         );
@@ -588,11 +594,15 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           sidebarRenderObject.localToGlobal(Offset.zero) &
           sidebarRenderObject.size;
       if (sidebarBounds.contains(globalPosition)) {
+        final event = activeCalendarEventDrag.value?.event;
         _setActiveDragFeedbackSpec(
           CalendarEventDragFeedbackSpec.target(
             style: CalendarEventDragFeedbackStyle.sidebar,
             width: math.max(160, sidebarRenderObject.size.width - 32),
             height: 76,
+            builder: event == null
+                ? null
+                : (_) => calendarSidebarDragCard(event),
           ),
         );
         return;
@@ -621,6 +631,16 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
               style: CalendarEventDragFeedbackStyle.month,
               width: math.max(24, cellWidth - (compactMonth ? 2 : 10)),
               height: compactMonth ? 13 : 19,
+              builder: event == null
+                  ? null
+                  : (_) => calendarMonthDragCard(
+                      event,
+                      centerTitle:
+                          settings.calendarEventTitleAlignment ==
+                          CalendarEventTitleAlignment.center,
+                      showTime: !compactMonth,
+                      compact: compactMonth,
+                    ),
             );
             break;
           case CalendarViewMode.week:
@@ -635,6 +655,14 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                 style: CalendarEventDragFeedbackStyle.week,
                 width: math.max(56, (renderObject.size.width - 24) / 7 - 6),
                 height: 32,
+                builder: event == null
+                    ? null
+                    : (_) => _WeekEventFlag(
+                        event: event,
+                        centerTitle:
+                            settings.calendarEventTitleAlignment ==
+                            CalendarEventTitleAlignment.center,
+                      ),
               );
             }
             break;
@@ -650,6 +678,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                 style: CalendarEventDragFeedbackStyle.day,
                 width: math.max(120, renderObject.size.width - 32),
                 height: 64,
+                builder: event == null
+                    ? null
+                    : (_) => calendarSidebarDragCard(event),
               );
             }
             break;
@@ -672,11 +703,24 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   }) {
     final gutter = dayCount > 1 ? 42.0 : 54.0;
     final dayWidth = math.max(1, (surfaceSize.width - gutter) / dayCount);
-    final durationMinutes = event?.duration.inMinutes ?? 30;
+    final durationMinutes = event?.allDay == true
+        ? 30
+        : event?.duration.inMinutes ?? 30;
     return CalendarEventDragFeedbackSpec.target(
       style: CalendarEventDragFeedbackStyle.schedule,
       width: math.max(44, dayWidth - 4),
       height: math.max(24, durationMinutes / 60 * 64 - 2),
+      builder: event == null
+          ? null
+          : (context) => calendarScheduleDragCard(
+              context,
+              event,
+              height: math.max(24, durationMinutes / 60 * 64 - 2),
+              use24HourTime: ref.read(appSettingsProvider).use24HourTime,
+              centerEventTitles:
+                  ref.read(appSettingsProvider).calendarEventTitleAlignment ==
+                  CalendarEventTitleAlignment.center,
+            ),
     );
   }
 
@@ -1138,7 +1182,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       previousController.close();
       await previousController.closed;
     }
-    if (!mounted || revision != _daySheetRevision) {
+    if (!mounted || !context.mounted || revision != _daySheetRevision) {
       return;
     }
     final scaffold = _scaffoldKey.currentState;
@@ -1161,7 +1205,14 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                 child: child,
                 builder: (context, factor, child) => Align(
                   alignment: Alignment.topCenter,
-                  heightFactor: factor,
+                  heightFactor:
+                      factor +
+                      (1 - factor) *
+                          (_daySheetReturnHandleHeight /
+                                  (_daySheetScrollController.isAttached
+                                      ? _daySheetScrollController.pixels
+                                      : _daySheetReturnHandleHeight))
+                              .clamp(0.0, 1.0),
                   child: child,
                 ),
               ),
@@ -1181,6 +1232,11 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
               date: date,
               events: events,
               scrollController: scrollController,
+              scrollPhysics: DaySheetScrollPhysics(
+                isCollapsed: () =>
+                    _daySheetScrollController.isAttached &&
+                    _daySheetScrollController.size <= 0.4001,
+              ),
               onEventDropped: (event, targetDate, targetIndex) =>
                   _handleCalendarEventDrop(
                     context,
@@ -1197,7 +1253,14 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           ),
         ),
       ),
-      showDragHandle: true,
+      showDragHandle: false,
+      backgroundColor: DailyUi.groupedSurface(context),
+      elevation: 8,
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+        side: BorderSide(color: DailyUi.separator(context), width: 0.5),
+      ),
+      clipBehavior: Clip.antiAlias,
     );
     setState(() {
       _daySheetController = controller;
@@ -4979,6 +5042,8 @@ Future<void> _openRangeEventEditor(
   final draft = await showDialog<EventDraft>(
     context: context,
     builder: (_) => EventEditorDialog(
+      frequentPlaces: ref.read(settingsRepositoryProvider).frequentPlaces,
+      loadPlaceEvents: ref.read(eventRepositoryProvider).allEventsForSync,
       initialDate: start,
       initialEndDate: end,
       initialAllDay: true,
@@ -7420,6 +7485,7 @@ class _WeekDayPanel extends ConsumerWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
+                CalendarWeather(date: day),
                 if (events.isEmpty &&
                     !(hoverDate != null && _sameDay(hoverDate!, day)))
                   Text(
@@ -7738,6 +7804,7 @@ class _WeekEventFlag extends StatelessWidget {
                 ),
                 completed: event.completed,
                 eventColor: categoryColor,
+                backgroundColor: backgroundColor,
               ),
             ),
           ),

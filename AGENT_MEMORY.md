@@ -5,6 +5,813 @@ release state, completed work, release status, and safe next steps. Do not add
 OAuth client secrets, GitHub tokens, signing certificates, provisioning
 profiles, keystore passwords, or private keys to this file.
 
+## 2026-09-16 Version 3.5.0 Release Preparation
+
+- User requested version promotion, README update, commit/push, then GitHub
+  release. Pending approved feature work is included, not just the last sync fix.
+- pubspec/MSIX, Apple app/widget marketing/build versions are 3.5.0 (MSIX four
+  components); Android code is 350. No native Apple behavior edits for this task.
+- README and RELEASE_NOTES_3.5.0.md cover sync, drag continuity, all-day spans,
+  completion contrast, weather, implemented Sangmyung academic imports, wallpaper,
+  onboarding and editor improvements. Privacy policy now describes optional
+  weather/location, public university requests and deletion retention limits.
+- Release Installers checks out the exact tag and stages Apple, Android,
+  Windows and both Linux architectures as one draft, with SHA256SUMS. Apple-only
+  tag auto-publishing is disabled; its manual path stages a draft only. Linux
+  reusable build can stage without advancing the signed APT update channel.
+- Public Apple assets remain unsigned verification files, not Transporter
+  exports. App Store submission, physical-device use and live account sync are
+  separate verification boundaries. Final workflow/install status follows below.
+
+## 2026-09-16 Latest-Mutation Sync And Deleted-Event Compaction
+
+- Approved shared-layer implementation: compare real UTC create/edit/delete
+  times by event ID, not upload time or pending status. Backup, restore and
+  pre-open migration share deterministic exact-time conflict rules. Per-field
+  settings revisions preserve independent category name/color edits, visibility
+  and per-date manual order. Legacy settings remain untimed baselines.
+- SQLite schema 8 adds precise timestamp metadata with a stale-native-write
+  fingerprint and a minimal deletion ledger. Only user-deleted expired event
+  bodies compact; undeleted history, future dates and unbounded recurrence remain.
+  Stale copies cannot resurrect compacted records; newer local winners are queued
+  to repair stale remote copies. Upload acknowledgement also respects the ledger.
+- Drive event-per-file v2 layout is retained. Existing files use Drive API v2
+  metadata ETag plus content checksum and If-Match media updates; concurrency
+  retries re-read/re-merge and fail closed. Duplicate filenames are merged.
+  Manual backup does not apply remote values, restore needs no preliminary
+  backup, partial/conflicting work cannot report successful completion or permit
+  logout to discard pending changes. No automatic interactive auth was added.
+- Migration keeps the original consistent SQLite snapshot, validates a merged
+  working copy before replacement, and leaves unsuccessful uploads pending.
+  Rules, compatibility constraints and user checks: docs/SYNC_MERGE_RULES.md.
+- Verification: analyze clean; full Flutter suite 548 passed, one existing skip;
+  diff whitespace check clean. Includes real SQLite migration/precision tests
+  and fake HTTP concurrent-write/checksum/partial-failure tests. Live Google
+  Drive, interactive app use and actual user DB migration were NOT exercised.
+- In-place updates completed without launching: iPhone 17 simulator
+  BF524643-403E-4212-ACB7-621E11279532 (com.littlebit0.daily),
+  ~/Applications/Daily Test.app (com.littlebit0.daily.test), Android Pixel 9
+  emulator-5554 (com.littlebit0.dailycalendar). Version stays 3.4.0, Android 340.
+  SQLite/preferences hashes unchanged; App Store app untouched. Signatures and
+  fresh/installed artifact hashes verified:
+  iOS kernel b3840756f17075c5f272a7ab44a21e109b5dcb1b586d9a3a4226acf5252d7e5a;
+  macOS kernel 7f768f785c4e20cd393e66be1daa2af3d9c1827fff1bb28f7cdd74acc3b5ca61;
+  Android APK cfb72d9eed0c70afc958f56bd7547a031319be184a9999f4f8109aafe8818038.
+- iOS SPM cache was repaired at the existing pinned versions, then built through
+  xcodebuild with /tmp/daily-sync-ios-packages. macOS build used a temporary
+  XCODE_XCCONFIG_FILE deployment-target override of 14.0. No native Apple source
+  changes in this task. Existing Swift/GoogleSignIn and Kotlin migration warnings
+  remain. Native Siri/widget timestamp precision is still its prior resolution.
+- Shared Windows/Linux implementation is included but native build/install is
+  unverified here. All participating clients must update together: old clients
+  do not understand compact deletion records or field revisions. Do not publish
+  a partial-platform sync-schema release; do not mix this test with an old App
+  Store client on the same account. No commit/push/version bump/public release.
+
+## 2026-09-16 Academic Calendar Category Color
+
+- University calendar settings now includes a category-color swatch. Before the
+  first import, the choice is a page-local draft, shown beside preview events;
+  import creates the university category with that color. Merely picking or
+  cancelling does not subscribe/import. Existing category color is authoritative
+  on refresh/reimport and is never replaced by a stale initial draft.
+- Existing university category changes use SettingsRepository with changedFrom,
+  EventCommandService.updateCategoryUsage, event v2 upserts/widget refresh and
+  the settings-backup queue. IDs, dates, notes, completion, visibility and other
+  categories remain unchanged. Failed propagation can retry the same color.
+- Extracted the existing circular presets/rainbow RGB palette into
+  category_color_picker.dart for reuse by ordinary category settings. Kept its
+  touch/drag color plane, RGB sliders/inputs and explicit cancel/apply behavior.
+  No native platform implementation or sync schema changes.
+- Verification: analyze clean; full suite 522 passed, one pre-existing skip.
+  Added SQLite propagation/preservation, repeated changes, failure retry, draft
+  import, cancellation, RGB interaction and four-language large-text tests.
+- iPhone 17, macOS Daily Test and Android Pixel 9 updated in place without launch.
+  SQLite/preferences hashes unchanged before/after; App Store app untouched.
+  Signatures verified and fresh/installed hashes match:
+  iOS kernel f9a6b05c60ac6230710c9672d73da543ea39e3e47cf3ce5a19b6bf7346bed324;
+  macOS kernel 5f15d8622def8642969890b723873ab97bf8be30eeb1f84bd93c6c82214edeb4;
+  Android APK 2f1bf92c4042161faa654cf63d3f891d089e3a57f3a4184fce21198ae185e6d5.
+- Shared Windows/Linux code included, native builds/installations unverified in
+  this environment. No version bump, commit/push, release or real-use testing.
+
+## 2026-09-16 Academic Calendar Update Announcement Follow-up
+
+- The academic-calendar feature had not been registered with the existing #72
+  update introduction. Added `university-academic-calendar-v1` to the catalog at
+  3.4.0, without resetting acknowledgements or changing the release version.
+  Existing users see the new introduction even on a same-version test update.
+- Four-language announcement opens the existing academic settings page. It does
+  not import events or create a subscription. Later/return from settings records
+  acknowledgement; merely displaying or interrupting it does not. Existing
+  startup-sync gate and fresh-install baseline remain unchanged.
+- Exhaustive feature switching replaces the former wallpaper/weather binary
+  presentation. Large text can scroll the illustration area without overflow.
+- Verification: targeted 35 tests and full suite 507 tests passed (one existing
+  skip); analyze and whitespace checks clean. No interactive app testing.
+- Updated iPhone 17, macOS Daily Test and Android Pixel 9 in place, without launch.
+  SQLite and preferences hashes match before/after. App Store app untouched.
+  Fresh/installed artifact hashes match, signatures verified:
+  iOS kernel 04b6574ad9d7ad541143c1c534a17b7ac3d92d2b4ec5ba2a0379e6e465592394;
+  macOS kernel 7f42e913d9d4f4d21e8cd3f1e490601484f47064e5de3f0f2e5a0f395ea4916e;
+  Android APK f3887fe9ed29ce1d809a7361bd972f415272c276b4880a91712fe66e748cbe51.
+- Shared Windows/Linux code included; native builds/installations not verified
+  here. No native implementation edits, commit/push, release or issue closure.
+
+## 2026-09-16 Issue 63 University Academic Calendar
+
+- User approved the described approach. First source is Sangmyung University's
+  official undergraduate calendar (one real source, no unsupported school list).
+  Native platform implementations untouched; all implementation is shared Dart.
+- Settings > Screen and calendar > University calendar: university/year selector,
+  preview, individual selection, fixed import button, manual refresh, visibility,
+  disconnect-keep, separately confirmed removal. Four UI languages; original
+  official titles/campus labels are kept. University-named category is created.
+- Stable articleNo-based IDs, complete all-day spans, source edit updates,
+  conservative user-edit/tombstone preservation, explicit removal by managed IDs
+  only. Uses EventCommandService and existing v2 event sync. No schema migration.
+- academic.subscriptions.v1 is local-only and reset with local logout/reset.
+  It stores baselines/exclusions/managed IDs and last attempt/success. Automatic
+  refresh is lifecycle-triggered, after startup/resume sync attempts, <= daily;
+  failures are throttled, no polling. Current-year subscriptions follow rollover.
+- Source read probe: official 2026 JSON returned 62 unique valid records.
+  Tests, limitations and user checks: docs/ACADEMIC_CALENDAR.md.
+- Verification: analyze clean, 497 Flutter tests passed, 1 pre-existing skip,
+  diff whitespace check passed. Source probe and automated widget tests only;
+  no interactive app use. Native Windows/Linux build/install unavailable here.
+- Updated iPhone 17, macOS Daily Test and Android Pixel 9 in place without launch;
+  all app data hashes unchanged (iOS SQLite f58af019... / plist d4e1c688...,
+  macOS SQLite 31ad1b11... / plist d2c90416..., Android SQLite 655b2fc4... plus
+  eight shared preference files). App Store app remains untouched.
+- Installed artifact checks match fresh builds:
+  iOS kernel ebd2409003b9ab93ac71311735a9953e9b6f0b45b017be2dcfeb56dc3d8a04f5;
+  macOS kernel 615c3454e985de0a390e461a860e5d0f9c722ee547548974c53c5c3c3190f0f5;
+  Android APK 94b792b959f8859fd60f95397277e90b143990bb9925a8bf03b22e7c0e8143b3.
+  Apple strict/deep signature and Android APK signature checks passed.
+  macOS debug build again used command-line MACOSX_DEPLOYMENT_TARGET=14.0 for
+  current Xcode compatibility, without changing release target/project settings.
+- Version remains 3.4.0. No commit/push, release or issue closure. Real-use
+  acceptance belongs to the user; do not equate installation with acceptance.
+
+## 2026-09-16 Issues 72, 73, 77, 78
+
+- Follow-up #73: user requested the onboarding example read
+  `시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.` instead of the
+  two-stage `Daily에서 시그널 실행` example. Updated this onboarding copy and
+  EN/JA/zh-Hant translations only; no Siri invocation implementation changes.
+  Focused onboarding assertion passed; Apple debug builds and signing verified.
+  iOS/macOS test apps updated without launch, DB/preferences hashes unchanged.
+  Android unchanged because this onboarding step is Apple-only.
+
+- Implemented in requested order in shared Flutter, without removing prior
+  calendar, drag, sync or wallpaper work. No native Apple source changes.
+- #72: stable feature-ID acknowledgements in local SharedPreferences, version
+  and OS filtering, introduced weather/wallpaper catalog, existing settings
+  actions, sequential skip, fresh-install baseline. Gate is inside startup sync
+  gate, after synchronization or explicit offline continuation. Package lookup
+  failure/timeout never prevents calendar access. No existing feature is toggled
+  by skip. Hotfixes do not replay acknowledged IDs.
+- #73: retained existing optional Apple-only Signal/Siri step. Categories now
+  follow Siri (analytics on other OSes), before permissions/account. Reuses
+  SettingsPage.categories; defaults is a no-write skip. Existing onboarding
+  completion remains unchanged.
+- #77: local place suggestions from nondeleted source events; pins before
+  frequency and recency; whitespace deduplication; tap-to-fill; field management
+  icon for pins/hidden entries/automatic switch. No server or location permission.
+  frequentPlaces.v1 is cleared with local reset. All three editor callers wired.
+- #78: removed title/number autofocus and validation requestFocus. Input outside
+  taps and picker/dropdown entry clear focus; explicit input still opens keyboard.
+- All new user-visible strings support Korean, English, Japanese and traditional
+  Chinese. Shared Windows/Linux code is included; native Windows/Linux builds
+  and installations are not available in this macOS environment.
+- Verification: full Flutter suite 476 passed, 1 pre-existing skip; analyze and
+  diff checks passed. See docs/ISSUES_72_73_77_78_ACCEPTANCE.md for user checks.
+  No interactive app tests, personal shortcut execution, commit/push or release.
+- iPhone 17 updated without uninstall/launch. Database e18c843b... and preferences
+  6618b073... hashes unchanged. Installed/build kernel SHA-256:
+  22fcd42cf7aa1093b4102171feccb54a7085a41a8b0ba7672676336aa73ac5e8.
+  macOS/Android installation verification:
+- macOS `/Users/kimhwi/Applications/Daily Test.app` updated in place, strict/deep
+  signing verified, registered without launch. SQLite 31ad1b11... and preferences
+  d2c90416... unchanged. Installed/build kernel SHA-256:
+  ed1c72b95b298aa847974a07d6f64184be7309f996e4812afcc0176c821812cc.
+  Current Xcode rejects the old 10.15 target. This local Debug build used the
+  command-line MACOSX_DEPLOYMENT_TARGET=14.0 override (including widget target),
+  no project minimum-version edits. Missing Swift package checkout cache was
+  refetched. Release compatibility must be evaluated separately.
+- Android Pixel 9 emulator-5554 updated with adb install -r -t, no launch.
+  APK signature verified; installed/build SHA-256:
+  da1a12204c469000ef14ec09b9afdfb8610d984248a3dd41e630838e13473d80.
+  SQLite 655b2fc4... and all eight shared preference hashes were unchanged.
+  Local SDK/JDK environment required; Kotlin/SDK tooling warnings are preexisting.
+- App Store installation and production release files untouched. No version
+  bump, commit, push, issue closure or public release. User performs real-use
+  acceptance. All installations retain version 3.4.0.
+
+## 2026-09-16 Wallpaper Setup Redesign and String-Token Repair
+
+- iOS-only task; no other platform implementation or release version changes.
+  Preserve unrelated dirty work. The user performs interactive/real-use testing;
+  automatic verified test-app updates are allowed.
+- Read-only logs for the user's 14:58 run showed empty `updateID` parameters.
+  The previous workflow used a bare attachment for String parameters, prompted
+  for an internal ID and silently ignored non-UUID input. Both parameters now
+  use `WFTextTokenString` with an attachment range, matching the working
+  editor-saved Signal input. The optional completion parameter never prompts;
+  missing/unknown/replayed IDs throw a replace-shortcut error instead of success.
+  Boolean guards, PNG output, Lock Screen-only target and shortcut names remain.
+- Replaced the fragmented form/helper/modal flow with native four-stage setup:
+  Photo -> Shortcut -> Visible confirmation -> optional Automation. Actual
+  calendar preview, compact progress, fixed action area, and two interactive
+  screen walkthroughs highlight one control at a time. They are illustrations,
+  not control of Settings/Shortcuts. Guide pages persist separately from explicit
+  user acknowledgements. Sharing, generation and callbacks never auto-confirm
+  installation, automation or visible wallpaper.
+- Added explicit Save Calendar to Photos with add-only PhotoKit permission and
+  four-language usage/consent copy. Only that button saves a copy, not preview,
+  intents or automatic refresh. Saved copies may sync with iCloud Photos.
+  Enablement, design, refresh, last generation, notifications, removal and the
+  legacy helper remain in options. No private Settings/wallpaper API was added.
+- The same run logged PhotosPosterProvider snapshot failure/termination and
+  Scene/XPC failure after Set Wallpaper returned. Simulator rendering remains
+  an unverified visual-acceptance boundary, not a proven production-device
+  cause. Simulator-only help explains this. Never claim display fixed from a
+  build or action receipt; no wallpapers/system services were reset.
+- Verification passed: 479 Swift checks, 14 workflow/compiled and installed
+  artifact checks, 17 focused Flutter tests, Flutter analyze, plist validation,
+  arm64 iPhone 17 Debug build, strict/deep codesign and diff check. No app launch,
+  shortcut import/run, wallpaper manipulation or GUI usage tests.
+- Updated Daily Test 3.4.0 (3.4.0), com.littlebit0.daily, on iPhone 17 simulator
+  BF524643-403E-4212-ACB7-621E11279532 with simctl install, without uninstall.
+  App container suffix: 363A68D8-E3E9-4674-BABD-CAD8BAC11A9D/Runner.app.
+  Data container relocated to BAB78828-260D-4738-AF42-1BF548BCD14C.
+  Before/after hashes matched exactly: daily.sqlite
+  e18c843b5a07379f58da968120fadd735a2d4a91d02f4d4e7edc48a5fbc2ff53;
+  preferences 752700333c185a9164e2b0b797282337265dabb066d041ba39f734334ef1cc28.
+  Installed Runner.debug.dylib matches the build:
+  2a511a9b8f7f6ee7abc32b252d6ff2d3f3ed5f142d0f203c40b0cc0f53356c24.
+- Apple-signed resources match the installed bundle. SHA-256:
+  update 130c9a55b3feb802c50348243ce4d6e96332e7bf6a9451eb6a91370c2d881141;
+  helper e8d010b06cd832cae69bcf369656e289e9ad457c496be23d3e4c7ab76333d482.
+  IMPORTANT: updating Daily does not replace imported shortcuts. The user must
+  use stage 2 to replace DailyCalendar Wallpaper, select the intended photo
+  Lock Screen and recheck existing automation references. App Store app and
+  other platforms untouched. No commit/push/release. See LOCK_SCREEN_WALLPAPER.md.
+
+## 2026-09-15 Automatic Test-App Update Policy
+
+- Latest explicit user instruction: defer installation only when they say
+  "업데이트 보류". Otherwise, after implementing and verifying the requested
+  changes, update the affected test app(s) automatically without asking again.
+- Preserve app data and the App Store app. Do not extend installation to
+  unrelated platforms. App launch, shortcut/automation execution and interactive
+  real-use tests still require an explicit user request. A failed verification
+  must be reported, not worked around with an older/unverified build.
+- This policy supersedes older handoff notes that require a separate update
+  request after every implementation. It is also recorded in AGENTS.md.
+
+## 2026-09-15 iPhone Wallpaper Feedback Update Installed
+
+- Applied the new automatic-update policy immediately to the pending iOS-only
+  wallpaper changes. Updated Daily Test 3.4.0 (3.4.0), com.littlebit0.daily,
+  on booted iPhone 17 BF524643-403E-4212-ACB7-621E11279532 (iOS 26.5).
+  Terminated Daily and used simctl install without uninstall. Did not launch
+  Daily, execute/import shortcuts, change wallpaper or perform GUI usage tests.
+- Installed bundle:
+  /Users/kimhwi/Library/Developer/CoreSimulator/Devices/BF524643-403E-4212-ACB7-621E11279532/data/Containers/Bundle/Application/800937E5-8982-4666-A779-401A1F7B652A/Runner.app.
+  Data container was relocated by the simulator during installation to:
+  /Users/kimhwi/Library/Developer/CoreSimulator/Devices/BF524643-403E-4212-ACB7-621E11279532/data/Containers/Data/Application/3CF3D39C-AE0F-45CF-91E1-A82953B628DC.
+  Both before/after hashes match exactly: daily.sqlite
+  e18c843b5a07379f58da968120fadd735a2d4a91d02f4d4e7edc48a5fbc2ff53;
+  preferences com.littlebit0.daily.plist
+  deab2867669d9460cd2995b1fc0e466d09c5908f605124a8a718a7d63dfc6ddb.
+- Installed native dylib SHA-256 matches the verified build:
+  b03b09f73199bf40d96aebb6749de6c75844fe8d5a34105e603bdbf665bf7701.
+  All 13 workflow/installed-artifact checks and strict/deep codesign passed.
+  Both signed shortcut files match the new resources documented below.
+- User still needs to replace the previously imported wallpaper shortcut with
+  the new bundled file. App installation alone does not update imported copies.
+  macOS, Android and other platforms were not updated for this iOS-only change.
+  No version bump, commit/push, release or public deployment.
+
+## 2026-09-15 Wallpaper Completion and Failure Feedback
+
+- Latest user request: wallpaper still appears unapplied after setup; notify
+  when setup/application is incomplete, including no Photos-based wallpaper.
+  Inspected existing simulator logs/Shortcuts workflow read-only. The latest
+  run at 16:42:07 successfully ran Set Wallpaper against a Photos poster. The
+  generated PNG and the poster's actual version-3 Original.png are byte-identical
+  (SHA-256 66150d5c5e2c067e365e3bb98ee877db33055ed856d7c5732fc217e54a3ccea9).
+  Do not claim image handoff failed. Visible Lock Screen rendering is still
+  unconfirmed: an async question asked whether the user checked Lock Screen or
+  Home Screen; no answer was received during implementation. Do not silently
+  change Home Screen, switch active wallpapers or reset system caches.
+- Added local attempt IDs, persistent waiting/system-reported/error/cancel/
+  unconfirmed states, two-minute local notification watchdog, and a completion
+  intent placed AFTER the wallpaper action. Generate gets an optional updateID
+  to report image failures without breaking standalone/old image intents.
+  Begin/Complete use explicit ID wiring; both existing true/false guards stay.
+  Enabled/image generation now require consent as well as enablement.
+- Explicit manual update uses public x-callback-url with per-launch tokens.
+  Warm/cold callbacks are consumed by a Flutter scene lifecycle plugin; Google
+  callback handling is untouched. Unknown/replayed IDs and callback error text
+  are not trusted. URL success does not claim visual wallpaper application.
+- Sharing/import dismissal now shows an unverified-application alert and a Test
+  Now button. Settings show results and notification-permission settings.
+  Permission requests occur on explicit consent/manual use only. OFF/reset
+  cancels wallpaper warnings without cancelling calendar reminders. A directly
+  launched automation that fails BEFORE Begin cannot be observed by Daily.
+- Regenerated and signed both bundled shortcuts after Apple signing 502/503
+  errors on the first two attempts. Third attempt succeeded. Generator now
+  stages both signed outputs before replacing existing files. Update SHA-256:
+  108fd8a8cafde6682b2849e05f5c4955ee7e70e747f6cddc47ffc757784013cd;
+  Setup SHA-256:
+  7753c5e5c90467084a2761f8cfe93daa50b1a174cdfef76529af91f0c2179778.
+- Swift model/localization checks: 414. Focused Flutter platform/service tests:
+  17. Workflow/compiled-artifact tests: 13; strict/deep codesign and
+  git diff --check passed. Both embedded shortcut hashes match the new resources.
+  Native arm64 simulator build passed without new wallpaper warnings;
+  final resource-inclusive build log /tmp/daily-wallpaper-result-signed-build.log.
+  No app/shortcut was installed or executed and no wallpaper/automation changed.
+  Notification delivery, callback behavior and visible wallpaper remain user
+  runtime acceptance. On the NEXT update, replace the already-imported update
+  shortcut; updating the app alone cannot update that copy. Preserve names and
+  existing automations; reselect the Photos Lock Screen if needed.
+- No version bump, commit/push, release or other-platform edits. Prior dirty
+  work preserved. See docs/LOCK_SCREEN_WALLPAPER.md for details and acceptance.
+
+## 2026-09-15 Wallpaper Selection Prerequisite
+
+- User could not select wallpaper during shortcut import. Read existing iOS
+  26.5 simulator logs without GUI interaction: at 15:11:07 and 15:11:14,
+  PosterBoardServices retrieved one com.apple.MercuryPoster configuration and
+  explicitly skipped it as non-Photos. The picker did open; no eligible Photos
+  Lock Screen existed. This was not another malformed conditional/import field.
+- The user must create a single-photo Lock Screen via iPhone Settings > Wallpaper
+  > Add New Wallpaper > Photos, save it and review the Home Screen configuration,
+  then return to select that wallpaper during import. No app update or shortcut
+  regeneration is needed to address this device prerequisite itself.
+- Added an iOS-native preparation route before the update-shortcut share sheet,
+  with three navigable pages, four-language labels and an existing-photo fast
+  path. Later guide stages also expose selection help. The guide is explicitly
+  not the system Settings UI; it does not detect or persist preparation success,
+  open private Settings URLs, access Photos or alter wallpaper/consent. Import
+  file errors remain visible on the preparation route.
+- Preserved both signed shortcuts and all three corrected Boolean guards.
+  No wallpaper was created/changed, no Shortcuts import/execution or GUI test
+  was performed, and no app was installed/launched. This is a preparation UX
+  fix, not a claim that the current simulator wallpaper was changed. The wider
+  visual automation guide requested earlier still requires separate work.
+- Eleven source/workflow/compiled-artifact tests, 377 Swift model/localization
+  checks, arm64 iPhone 17-targeted simulator build, strict/deep codesign and
+  git diff --check passed. Build log:
+  /tmp/daily-wallpaper-photo-prerequisite-build.log. Output:
+  build/ios/Debug-iphonesimulator/Runner.app. Actual picker selection, Settings
+  configuration and guide UI acceptance remain with the user.
+- No other-platform edits, version bump, commit/push or release. Earlier dirty
+  changes are preserved. See docs/LOCK_SCREEN_WALLPAPER.md for evidence and
+  device acceptance steps.
+
+## 2026-09-15 iPhone Update for Wallpaper Conditional Repair
+
+- User requested update. Installed the verified arm64 simulator build with the
+  repaired wallpaper conditions on iPhone 17 BF524643-403E-4212-ACB7-621E11279532
+  (iOS 26.5). Daily Test remains 3.4.0 (3.4.0), com.littlebit0.daily. Terminated
+  the old app and used simctl install without uninstall; did not launch it.
+- Installed app: /Users/kimhwi/Library/Developer/CoreSimulator/Devices/BF524643-403E-4212-ACB7-621E11279532/data/Containers/Bundle/Application/7E274F8F-E73F-46AB-8821-4D6E15F639D4/Runner.app.
+  Data container: /Users/kimhwi/Library/Developer/CoreSimulator/Devices/BF524643-403E-4212-ACB7-621E11279532/data/Containers/Data/Application/199594C3-AD86-43ED-BCCF-CF72929781AE.
+- Before/after SHA-256 matched for daily.sqlite:
+  e18c843b5a07379f58da968120fadd735a2d4a91d02f4d4e7edc48a5fbc2ff53;
+  com.littlebit0.daily.plist:
+  8b9b735bc24059ca3322cf7c99db9625843c07c8fa1d863467d16e82cf788fb2.
+- Installed native dylib, Flutter kernel, AppIntents metadata and both signed
+  shortcut files match the build byte-for-byte. Update shortcut SHA-256:
+  ae6ebff4ceb267ce55b37b5f6489af005031bf6b476b31f7bae0aa47f12da9b2;
+  Setup: 810bd5433cfc5fe34849f4252bddf8f4de207c17f69270c80a9ffe045d4257b6.
+  Ten artifact/contract tests and installed strict/deep codesign passed.
+- The Shortcuts library was not imported, edited or executed. User must add the
+  corrected two files again and replace the old copies; app installation alone
+  does not update those copies. No wallpaper/automation changes or GUI testing.
+  No other-platform update, version bump, commit/push or release.
+
+## 2026-09-15 Wallpaper Shortcut Missing-Parameter Repair
+
+- User prioritized the Shortcuts missing-parameter alert over the visual guide
+  redesign. Read existing iPhone 17 / iOS 26.5 Shortcuts logs and only the two
+  Daily wallpaper workflows via read-only SQLite access. Did not execute a
+  shortcut, edit the library or interact with the simulator UI.
+- Logs show ConditionalAction failures at action indexes 1 and 4 in the update
+  workflow. Generated If inputs were bare WFTextTokenAttachments; they need
+  the outer {Type: Variable, Variable: <attachment>} structure. Repaired both
+  update guards and the Setup helper guard in tool/build_wallpaper_shortcut.py.
+  Use Boolean is-true condition 4, not has-any-value condition 100. The existing
+  native Setup parameter is optional; its absence was not the observed cause.
+- Normalized the editor-saved first Boolean guard as a regression fixture.
+  The user's edited second guard referenced image file size, so it is not the
+  reference fixture. Generated second guard correctly reads the second Enabled
+  intent's Boolean output; wallpaper still receives the PNG separately.
+- Regenerated and signed both bundled shortcuts, keeping names, permissions,
+  opt-in guards, Lock-Screen-only scope and native implementation unchanged.
+  Compiled metadata confirms Boolean outputs from Enabled and Setup intents.
+  Ten workflow/compiled-artifact tests, strict/deep codesign, targeted arm64
+  simulator build and git diff --check passed. Build log:
+  /tmp/daily-wallpaper-condition-fix-build.log. Artifact:
+  build/ios/Debug-iphonesimulator/Runner.app.
+- The user must replace BOTH already-imported shortcuts with the corrected
+  files after the next app update. Updating Daily alone cannot replace those
+  copies. Keep the update shortcut's name; reselect the photo Lock Screen if
+  prompted and check the existing automation still points to that shortcut.
+  Never mutate the private Shortcuts database or claim signing proves runtime.
+- No app installation/update, app launch, shortcut import/execution, wallpaper
+  change, version bump, commit/push or release. Runtime verification remains
+  with the user. Visual guide work is still pending and is not completed by
+  this repair. Other platforms and earlier dirty changes were preserved.
+
+## 2026-09-15 iPhone Test Update for Shortcut Setup Guide
+
+- User requested update only; real-use verification remains theirs. Installed
+  the freshly verified arm64 build from build/ios/Debug-iphonesimulator/Runner.app
+  on iPhone 17 simulator BF524643-403E-4212-ACB7-621E11279532 (iOS 26.5) using
+  simctl install without uninstall. Daily Test remains 3.4.0 (3.4.0), bundle
+  com.littlebit0.daily. Terminated the old app first; did not launch afterward.
+- Installed app: /Users/kimhwi/Library/Developer/CoreSimulator/Devices/BF524643-403E-4212-ACB7-621E11279532/data/Containers/Bundle/Application/6359401E-D56C-4C97-B07D-00091E26400E/Runner.app.
+  Updated data container: /Users/kimhwi/Library/Developer/CoreSimulator/Devices/BF524643-403E-4212-ACB7-621E11279532/data/Containers/Data/Application/0E658938-C1D4-4B0A-8206-6AC64A14BF35.
+- Database/preferences content hashes are unchanged despite the container path
+  changing during installation. SHA-256: daily.sqlite
+  e18c843b5a07379f58da968120fadd735a2d4a91d02f4d4e7edc48a5fbc2ff53;
+  com.littlebit0.daily.plist
+  58f529bdef6451990d8ede80ae8167e871c76271df79624caf5873fa5a87a1fa.
+- Installed/build hashes match for Runner.debug.dylib, kernel, both wallpaper
+  shortcuts and extracted AppIntents metadata. Native SHA-256:
+  069efb04190413edab2bac34ead0df842c55ad2d76304d3139ce1977a9bd32c9;
+  kernel: 8febe5c3fe36fc08ca76ca214db9ce841dafef52dd3214d94b7a0da97be7b0e4.
+  Installed strict/deep codesign passed; nine build-artifact contract tests
+  passed before install. No Shortcuts import/execution or wallpaper changes.
+- No macOS/Android update, App Store app modification, version bump, commit,
+  push, release or issue closure. This is installation proof, not UI acceptance.
+
+## 2026-09-15 Issue #66 Guide Inside Shortcuts
+
+- Implemented the user-approved iPhone setup helper. The app guide now offers
+  adding the existing update shortcut, adding the optional Setup helper, then
+  launching the helper. Local guide progress resumes independently of consent,
+  installation and automation status; wallpaper reset clears this progress.
+  Existing manual instructions remain available in an expandable section.
+- Bundled and Apple-signed `DailyCalendar Wallpaper Setup.shortcut`. Its native
+  DailyWallpaperSetupIntent uses Shortcuts-hosted selection/confirmation prompts
+  for View Connection Steps, Test Now and Close Guide. Text supports Korean,
+  English, Japanese and Traditional Chinese with the existing app/system locale
+  policy. Instructions name the actual Daily/Daily Test app.
+- Test Now requires enabled updates and consent, warns about changing the Lock
+  Screen, then rechecks both flags before returning true. Only that result runs
+  the existing `DailyCalendar Wallpaper` workflow by name. Guide/close return
+  false; cancellation stops execution. Missing shortcuts and permission failures
+  are not reported as success. No guide action creates consent or automation.
+- Preserved the update shortcut's name and action contract, including both OFF
+  guards and Lock-Screen-only wallpaper action. Do not attach the Setup helper
+  to an automatic trigger. It is a manual guide, not an overlay on the editor,
+  and cannot observe automation configuration or verify installation.
+- Verification: Swift model/localization 360 checks, 9 workflow/compiled metadata
+  tests and 17 focused Flutter platform/bridge tests passed; analyze and strict
+  deep app codesign passed. Both signed resources match the actual built app.
+- Xcode is now 27.0 (27A266a). Generic Flutter simulator build failed at lipo's
+  multi-architecture verify step even though the framework contains both arm64
+  and x86_64. An iPhone 17-targeted xcodebuild with command-line ARCHS=arm64 and
+  ONLY_ACTIVE_ARCH=YES passed. No project/SDK architecture changes were made.
+  Build log: /tmp/daily-wallpaper-setup-arm64-final.log. Output is
+  build/ios/Debug-iphonesimulator/Runner.app, not the older export folder.
+- New constants and URL callbacks have explicit safe actor/sendability rules.
+  Xcode 27 still warns about the iOS 16-compatible AppIntents confirmation API
+  being deprecated; existing plugin deprecations also remain outside this task.
+- No app installation/update, app launch, Shortcuts import/execution, wallpaper
+  change, version bump, commit/push, release or issue closure. Device acceptance
+  is still required for import, prompt presentation, name-based update execution,
+  cancellation/permissions and wallpaper application. See
+  docs/LOCK_SCREEN_WALLPAPER.md. Other-platform code and earlier dirty fixes
+  (#62/#64/#68/#70/#71) were not changed by this task.
+
+## 2026-09-14 iOS Test Update for #66 Follow-ups
+
+- Rebuilt iOS simulator Debug with the black-screen lifecycle fix and the
+  settings-root entry. Current shared #62 scroll follow-up is also included.
+- Updated Daily Test 3.4.0 (3.4.0), com.littlebit0.daily, on iPhone 17 simulator
+  BF524643-403E-4212-ACB7-621E11279532 using simctl install without uninstall.
+  Terminated the old app before install; did not launch or GUI-test afterward.
+- Build and installed strict/deep code signatures passed. Installed/build
+  kernel SHA-256: 6b7331cf15c917ab095601d8e05e74ccd991a91137f3b7048b7c3a873df1592d.
+  Runner.debug.dylib matches: cf374e50990ae59d7b0e1441a009f3bd7950b004dc2c7a7e3f5d78b69c3e7e14.
+- SQLite and preferences were unchanged across install (SHA-256):
+  DB 50c02e21a71bb415d283ae9337109ee86263e7829ad4685b9c6e78fa3fd4c90e;
+  prefs d39bbae003f404c0764e531523f93f00cfe70622b5e8a050ea8fbb2360eb5bfb.
+- Native-screen runtime verification remains with the user. No macOS/Android
+  update, App Store app changes, version bump, commit, push or release.
+
+## 2026-09-14 Issue #66 Settings Root Entry
+
+- Moved Lock Screen Calendar from the Screen & Calendar subpage to the
+  settings root, in Screen & Events after Screen & Calendar. No duplicate
+  subpage entry remains. The existing iOS-only gate, native openSettings call,
+  error handling and wallpaper behavior are unchanged; no other OS gains it.
+- Updated the feature guide and five platform widget tests for root access,
+  native channel invocation and absence from the appearance subpage.
+- Five focused tests, scoped analyze and git diff --check passed. No app
+  installation, real-use GUI testing, version bump, commit or push.
+
+## 2026-09-14 Issue #66 Black Settings Screen
+
+- User confirmed black screen after tapping Settings > Lock Screen Calendar,
+  not app startup or shortcut execution. Captured existing simulator screen
+  without interacting: status bar visible, content entirely black.
+- The UIKit-presented SwiftUI form hid its entire content unless the SwiftUI
+  scenePhase environment was active. Replaced that visibility/lifecycle source
+  with UIApplication.applicationState on initialization/appearance and UIKit
+  willResignActive/didBecomeActive/didEnterBackground notifications. Background
+  privacy hiding and return through Flutter app lock remain; hidden controls
+  no longer receive taps. Preview, shortcut and calendar rendering unchanged.
+- Relevant Dart bridge/static configuration checks: 17 passed. This is not
+  runtime proof of the SwiftUI screen; user real-use verification remains.
+- iOS simulator Debug build passed; log: /tmp/daily-66-black-screen-build.log.
+  The visibility gate is the suspected cause from source and the captured
+  screen; its old scenePhase value was not measured at runtime.
+- No app update installation, launch, shortcut execution, wallpaper mutation,
+  commit or push in this fix. Existing installed build still requires updating.
+
+## 2026-09-14 Issue #62 Sheet Scroll Follow-up
+
+- User reported one-event lists bouncing/scrolling in the collapsed 40% day
+  sheet. Added sheet-specific clamping physics: at 40% the list offset cannot
+  move; at 68%/96% bounds follow the actual list content and current viewport.
+  No fixed event-count threshold: title wrapping, text scale, weather/header
+  height and device dimensions affect available space independently per size.
+- Keep native DraggableScrollableSheet expansion/snap gesture priority and
+  whole-surface expansion, including empty lists. Do not use NeverScrollable
+  physics, which would disable resizing. Read the live sheet extent from a
+  callback because Flutter can retain the same physics instance across rebuilds.
+- Scope is the iOS/Android day popup; default sidebar physics and #68 drag
+  feedback, #70 completion styling, #71 startup gate remain unchanged.
+- Added boundary and actual draggable-sheet tests for 0/1/10 events, no bounce,
+  viewport-dependent overflow and re-expansion. No installation, app launch,
+  real-use GUI test, commit, push or release in this follow-up.
+- Verification: analyze and diff whitespace checks passed; full Flutter suite
+  passed 464 tests with 1 existing skip.
+
+## 2026-09-14 Three-Platform Test Update and Mac Cleanup
+
+- User requested Android/iOS/macOS test updates, then removal of other macOS
+  test copies. Built current debug apps with #71 and preserved #68/#70 work;
+  version remains 3.4.0. No app launch or real-use GUI test was performed.
+- Updated `/Users/kimhwi/Applications/Daily Test.app` in place with rsync.
+  Strict/deep codesign passed; installed kernel SHA-256 matches the build:
+  `c4c4902325770353c7b7860c1bcdd4a45525b16dc3d95b231733f0137aa4f292`.
+  macOS database and preferences hashes were unchanged.
+- Updated iPhone 17 simulator `BF524643-403E-4212-ACB7-621E11279532`, bundle
+  `com.littlebit0.daily`, using simctl install without uninstall. DB/preferences
+  hashes unchanged; installed kernel matches:
+  `9d50bc830a70371da94491c7d28021fb56813db499c5ef7c138974b188a604d9`.
+- Updated Android `Daily_Pixel_9_API_36` / emulator-5554 with adb install -r -t,
+  package `com.littlebit0.dailycalendar`. DB and all 8 preferences hashes stayed
+  unchanged. Installed APK matches:
+  `effec6ded2ee56c0655abbf629bb0d0a797588ff297f2d444f6c7c6fb79e1b98`.
+- Removed three old `.app` copies in
+  `work/test-updates/20260912-issues-68-70/` (3.3.1 installed-original, 3.3.1,
+  and 3.4.0 issues-68-70) and the duplicate debug app at
+  `/private/tmp/daily-flutter-build/macos/Build/Products/Debug/Daily Test.app`.
+  The latter is regenerated by a future Mac build; do not launch from it.
+- Preserved `/Applications/Daily.app` with its App Store receipt, the updated
+  test installation, all app data, source files and production release archives.
+  Registered the surviving test app with Launch Services. No commit/push/release.
+
+## 2026-09-14 Issue #71 Startup Sync Gate
+
+- Implemented the user's explicit #71 request in shared Flutter code for all
+  platforms. Google-linked cold starts await silent authentication, v2 change
+  detection/merge, pending backup, settings refresh and actual initial calendar
+  stream readiness before displaying the calendar. Local/Apple-only accounts
+  skip the gate; existing legacy-account recovery stays non-blocking.
+- Startup errors now propagate instead of being swallowed. Retry preserves
+  restore-before-backup ordering and adds no fixed three-second resume delay.
+  After error/20-second timeout, users can retry or continue with device data
+  without signing out, clearing pending edits or claiming sync succeeded.
+- Retries join live operations; resume/background do not race startup. Gate
+  does not recur on resume. Account/session checks prevent old download results
+  from entering a different account; normal v2 conflict/tombstone rules remain.
+- Added localized, theme/text-scale-aware loading/error UI and automated gate,
+  real AppHome integration, no-change, failure/pending-data and account-change
+  coverage. Manual acceptance is in `docs/ISSUE_71_ACCEPTANCE.md`.
+- Final verification: analyze and `git diff --check` passed; 459 Flutter tests
+  passed with 1 existing skip. Startup holds a temporary provider subscription
+  while priming each stream so an unobserved stream cannot pause indefinitely.
+- #68 macOS calendar/sidebar transitions, #70 completion contrast and existing
+  dirty #62/#64/#66 changes are preserved. No #63/#65/#67 work or native platform
+  file changes for #71. No test-app install, GUI testing, version bump, commit,
+  push, release or issue closure in this task. All-platform manual acceptance
+  remains pending; shared-code tests do not prove native Windows/Linux parity.
+
+## 2026-09-13 macOS Drag Transition Correction
+
+- User clarified that #68 must preserve, not remove, the existing macOS
+  calendar/sidebar bidirectional UI transition. Never interpret source-card
+  continuity as authorization to remove this behavior.
+- Restored animated calendar-to-sidebar and sidebar-to-calendar sizing and
+  reverse restoration (170 ms), including normalized pointer anchoring. Same
+  surface drags retain the original measured source. Destination feedback uses
+  actual month/week/sidebar/schedule event renderers rather than a separate
+  approximate card; category colors, configured alignment and #70 completion
+  styling are retained. Schedule content renderer is shared with live blocks.
+  iOS/Android drag policy and #70 contrast are not rolled back.
+- Automated validation: 448 Flutter tests passed, 1 existing skip. Added reverse
+  sidebar-to-month sizing/alignment coverage and restored calendar-to-sidebar
+  animation assertions. No GUI real-use tests were performed.
+- macOS debug build and analyze passed. Initial normal quit returned -128;
+  no force-kill was used. A subsequent process check confirmed the app had
+  exited, then `/Users/kimhwi/Applications/Daily Test.app` was updated in place.
+  Database/preferences hashes matched immediately before and after copying;
+  strict/deep codesign verification passed and installed kernel matched build.
+  App was not relaunched. iOS/Android installed builds were not replaced during
+  this macOS-specific correction. No commit, push or release was performed.
+
+## 2026-09-13 Issues #68 and #70 Reimplementation and Test Updates
+
+- User explicitly requested #68, then #70 without another approval, followed by
+  test-app updates and a complete manual acceptance list. This supersedes the
+  rollback state below. Existing dirty #62/#64/#66 work is preserved; no
+  #63/#65/#67/#71 implementation, version bump, commit, push, release or issue
+  closure was performed.
+- #68: the shared draggable now carries the actual source widget at its frozen
+  rendered bounds, preserving inherited text style/theme, alignment, category
+  colors, padding, corners, time and completion line. Destination-specific
+  replacement cards and scaling were initially removed due to an incorrect
+  interpretation. This did NOT supersede the user's existing macOS bidirectional
+  calendar/sidebar transition requirement; see the correction below.
+  Pointer hit coordinates remain unchanged; the grab offset is visual only.
+  Source gaps, asynchronous save settling, popup reveal, 30-minute time drops,
+  recurrence/data/sync semantics remain in the existing code paths.
+- #70: opaque grayscale strike color maximizes the weaker luminance contrast
+  against category text and composited background. Candidate extrema plus the
+  geometric luminance midpoint are compared. Category text/background/accent,
+  single-line thickness and position remain unchanged. Impossible simultaneous
+  high-contrast combinations use this explicit max-min compromise.
+  Flutter calendar/details/search/quick/drag paths and Apple/Android widgets
+  use the adaptive policy. iOS wallpaper completion rendering also uses it.
+  Android RemoteViews retains its title TextView and overlays only the colored
+  line bitmap, avoiding unsupported custom RemoteViews spans.
+- Verification: 447 Flutter tests passed, 1 existing skip; analyze and diff
+  checks passed. Android DailyAndroidParityTest: 10 passed, 0 failures/errors.
+  macOS debug, iOS Simulator debug and Android debug builds succeeded. Apple
+  strict/deep codesign checks passed. Existing dependency deprecation warnings
+  remain; no unrelated dependency upgrades were made.
+- Updated existing 3.4.0 test apps in place, without uninstall/data clearing:
+  `/Users/kimhwi/Applications/Daily Test.app` (com.littlebit0.daily.test),
+  iPhone 17 BF524643-403E-4212-ACB7-621E11279532 (com.littlebit0.daily), and
+  Daily_Pixel_9_API_36 emulator-5554 (com.littlebit0.dailycalendar).
+  macOS/iOS database and preferences and Android database plus 8 preference
+  files had identical before/after SHA-256 hashes. Installed Flutter kernels
+  and Android APK matched build artifacts. `/Applications/Daily.app` executable
+  hash was unchanged. All three app processes remain stopped; emulator boot
+  was only for installation. No GUI app launch or real-use tests were run.
+- Current debug APK SHA-256:
+  `2d29945cbe9d9f2ba3bae945e7e576ae5889f7251c821ca2c23d32d72b5eaffd`.
+- Manual acceptance list: `docs/ISSUES_68_70_ACCEPTANCE.md`. Windows/Linux share
+  the Flutter changes and platform-parameterized tests, but native installs and
+  runtime validation were not available here. Real device touch, widget host
+  tinting, font scaling and visual contrast still require user acceptance.
+
+## 2026-09-13 Issues #68 and #70 Rollback
+
+- Rolled back only the immediately preceding #68 drag-feedback and #70
+  completed-event contrast implementation and its tests at the user's request.
+  Existing uncommitted #62, #64 and #66 work remains intact; #68 and #70 are
+  open and unimplemented again.
+- Verification returned to the pre-task baseline: 429 Flutter tests passed with
+  1 existing skip, `flutter analyze --no-pub` reported no issues, formatting and
+  diff checks passed, and debug builds succeeded for macOS, iOS Simulator and
+  Android.
+- Rebuilt and reinstalled the 3.4.0 test apps from the restored source on macOS,
+  iPhone 17 Simulator and Daily Pixel 9 API 36 without uninstalling or clearing
+  app data. Database and preference hashes matched before and after on all three
+  platforms, installed executables/APK matched their build artifacts, and all
+  test apps were left stopped. The production macOS app was not touched.
+- No GUI launch, commit, push, release, issue closure or production deployment
+  was performed for this rollback.
+
+## 2026-09-12 Issue #66 iPhone Lock Screen Calendar
+
+- Implemented #66's iPhone-only wallpaper/Shortcuts flow. User explicitly asked
+  for #66 after the previous queue work, authorizing its iOS implementation.
+  #63/#65 and #71 startup synchronization remain untouched. Prior dirty #62/#64
+  changes are preserved. No version, event schema or Drive sync changes.
+- Settings > Screen & Calendar > Lock Screen Calendar opens native SwiftUI
+  settings: real saved-event PNG preview, dark/light background, vertical layout,
+  first-enable privacy consent, four-step automation guide, manual update/test,
+  OFF/ON and removal instructions. OFF/ON reuses accepted consent and setup.
+- DailyWallpaperEnabledIntent returns device-local opt-in; authenticated
+  GenerateDailyWallpaperIntent renders the current month from the existing Siri
+  database/recurrence reader with hidden-category filtering, category colors,
+  completion, holidays, week start and title alignment. Native wallpaper bridge
+  and actions are iOS-only; macOS metadata contains neither wallpaper action.
+- Bundled a ready-made Apple-signed `DailyCalendar Wallpaper.shortcut` with
+  two opt-in guards, generated image input and Lock-Screen-only Set Wallpaper
+  Photo. Rebuild with tool/build_wallpaper_shortcut.py. The source uses Daily's
+  existing exported App Intent descriptor format and observed iOS action keys.
+  Signing and static wiring checks do NOT establish Shortcuts runtime success.
+- Add Shortcut presents the system file-sharing/import route. Personal automation
+  creation remains user-controlled: App > Daily > Is Opened > Run Immediately >
+  DailyCalendar Wallpaper. Never record guide completion as installation or
+  wallpaper application success. Runtime import availability, photo Lock Screen
+  selection and actual wallpaper application still require iPhone acceptance.
+- Native defaults/cache are device-local and excluded from Drive. Generated PNG
+  cache is hashed by rendering inputs, protected and pruned. Reset/logout disables
+  and clears wallpaper data first; pending exports are invalidated. OFF/deletion
+  does not restore a previously applied wallpaper; the guide states this clearly.
+  Native preview hides when inactive; with app lock enabled, backgrounding returns
+  through Flutter's lock gate instead of retaining an unlocked native form.
+- Native pixel layout reserves clock/bottom areas with adjustable vertical position,
+  continuous week bars and bounded overflow for dense/small screens. Large iOS
+  clocks/widgets/notifications still need device framing checks. App-open automation
+  reads saved data at that instant, not a guaranteed later remote-sync result.
+- Verification: 429 Flutter tests passed, 1 existing skip; 322 Swift model/layout/
+  localization checks and 6 workflow/compiled-resource checks passed; analyze,
+  plist lint and diff check passed. iOS simulator debug and macOS debug builds
+  succeeded. Existing macOS Siri deprecation/Google SDK warnings remain.
+  Bundled/source shortcut SHA-256 matched:
+  47902c9e4207b8b7b3c6e0c5ab65392c570634ef744cee9d936e2e0ad5973129.
+- No app install/launch, real GUI test, shortcut execution, wallpaper change,
+  automation creation, commit/push, release or issue closure was performed.
+  Full architecture, commands, public Apple sources and remaining device checks:
+  docs/LOCK_SCREEN_WALLPAPER.md. Keep #66 open until device acceptance is complete.
+
+## 2026-09-11 Issue #64 Weather Forecast Display
+
+- Implemented the forecast-display stage of #64 only, after #62. The latest
+  user scope covers all OSs unless an issue names one; this explicitly permits
+  the required Apple location configuration. #63 and #65 remain untouched.
+  Next permitted issue is #66, followed by #67, #68 and #70.
+- Settings > Screen & Calendar > Weather forecast is off by default. Users can
+  choose an official Korean region offline or explicitly enable current location.
+  Startup/resume never requests a new location permission. Manual forecasts work
+  without location permission, and failed location lookup keeps the manual region.
+- Uses public KMA grid XML and a bundled official 2026 Q2 district index. KST
+  forecast dates, hour-24 boundaries, missing temperatures and unavailable dates
+  are handled explicitly; no forecast is fabricated for past or distant dates.
+- Month cells reserve a compact weather row without covering events; week headers
+  and day details show forecast summaries. Four languages and both themes are
+  supported. Individual events' existing manual weather memo is unchanged.
+- WeatherStore is device-local, outside AppSettings/Drive backup. Cache is bounded
+  to four grids, refreshed after three hours and hidden twelve hours after issue.
+  Requests are coalesced; region changes/OFF/reset invalidate stale responses.
+  Background stops the refresh timer; OFF cancels requests. Local reset clears
+  settings/cache. No event database, sync schema or production sync change.
+- Only coarse Android/When-In-Use iOS location is requested; macOS adds the sandbox
+  location entitlement and Windows MSIX adds location capability. Linux uses
+  GeoClue with the installed desktop ID and checks existing permission-store grants
+  before automatic lookup. Desktops without queryable grants need explicit Retry;
+  manual selection remains available. GeoClue is an optional .deb recommendation.
+- Verification: 415 Flutter tests passed, 1 existing skip; 23 new weather tests,
+  11 Linux Python tests, analyze, plist lint and diff check passed. Official region
+  conversion matched the bundled index; the actual public KMA response passed the
+  production parser. Current iOS simulator, macOS debug and Android debug builds
+  succeeded. Existing generated Xcode cache failures were resolved by preserving
+  and replacing build caches, not by changing installed apps or user data.
+- Windows/Linux native runtime, actual permission prompts and real-device UI
+  acceptance remain unverified. Shared tests do not establish native OS parity.
+  No install, app launch, real GUI test, commit/push, release, issue closure or
+  version change was performed. Prior uncommitted #62 work remains preserved.
+- Weather notifications are deferred as explicitly allowed by #64, not marked
+  implemented. Review privacy/store disclosures before distribution. Architecture,
+  source, cache, permission and verification details: docs/WEATHER_FORECAST.md.
+
+## 2026-09-11 Issue Queue and #62 Implementation
+
+- Latest user scope: handle issues one at a time; an explicitly named OS limits
+  that requirement, otherwise target all OSs (including Linux). Do not work on
+  #63 or #65. Open permitted queue: #62, #64, #66, #67, #68, #70.
+- This step implements #62 only. The other issues remain unmodified. No issue
+  was closed, and no app install, launch, release or commit/push was performed.
+- Existing memo rendering was present, not missing from the model. Event details
+  now scroll the title and fields together, omit whitespace-only memo rows, and
+  keep long text fully accessible. On iOS/Android, the standard draggable sheet
+  hands downward gestures at offset zero to dismissal; short content has zero
+  internal scroll extent. Desktop detail scrolling remains available.
+- Mobile day-sheet header, handle, padding and empty space share the same list
+  controller, allowing expansion outside event tiles. Added the existing grouped
+  light/dark surface, subtle separator, rounded top and elevation. A 32px return
+  handle remains when dragging an event out to reveal the entire month. Returning
+  or canceling restores the sheet and its original-size event feedback.
+- Schedule all-day spans use the monthly calendar's extracted date-span and lane
+  placement code. One bar covers the visible dates, clipping only at week bounds;
+  overlapping events use consistent lanes and the existing four-row scroll cap.
+  Date tapping/dropping, completion actions, category colors and alignment remain.
+  Shared date columns use calendar ordinals so DST cannot remove a date column.
+- Verification: 392 Flutter tests passed, 1 existing skip; analyze and diff check
+  passed. Includes iOS/Android light/dark detail scrolling/dismissal, collapsed
+  header/empty-space expansion, existing month reveal/return/drop/cancel tests,
+  and all-day span/tap/drop tests configured for all five OSs. Date-span tests
+  also passed with TZ=America/New_York. These are automated tests on macOS, not
+  real-device GUI acceptance or Windows/Linux runtime parity.
+- Follow-up: user-requested test-app update and manual UI acceptance are still
+  pending. Current public binaries, native platform files, version, sync schema,
+  production apps and user data were not changed. Next issue is #64 (weather).
+
 ## 2026-09-11 Linux Distribution Published
 
 - User authorized a Linux installer with automatic updates after one installation.

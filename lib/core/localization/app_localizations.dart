@@ -154,6 +154,33 @@ class _AppLocalizationsDelegate
 
 const Map<String, Map<String, String>> _translations = {
   'en': {
+    '날씨 예보': 'Weather forecast',
+    '장소 관리': 'Manage places',
+    '자동 장소 추천': 'Suggest frequent places',
+    '장소 고정': 'Pin place',
+    '고정 해제': 'Unpin',
+    '숨기기': 'Hide',
+    '숨긴 장소 다시 표시': 'Restore hidden places',
+    '장소 추천을 불러오지 못했습니다. 다시 시도': 'Could not load places. Retry',
+    '일정 분류 설정': 'Set up categories',
+    '사용할 분류를 미리 설정하거나 기본 분류로 시작하세요.':
+        'Customize your categories or start with the defaults.',
+    '분류 설정하기': 'Manage categories',
+    '기본으로만 사용': 'Use defaults',
+    '새로운 기능': 'What\'s new',
+    '대학교 학사일정': 'University calendar',
+    '대학교 공식 학사일정을 가져오고 변경사항을 갱신하세요. 현재 상명대학교를 지원합니다.':
+        'Import official university events and keep them up to date. Sangmyung University is currently supported.',
+    '설정 보기': 'View settings',
+    '잠금화면에서 이번 달 일정을 확인하세요. 설정은 나중에도 할 수 있습니다.':
+        'See this month on your Lock Screen. You can set it up later in Settings.',
+    '캘린더에서 선택한 지역의 날씨를 확인하세요. 기존 설정은 그대로 유지됩니다.':
+        'See your selected region\'s forecast in the calendar. Your existing settings are preserved.',
+    '최신 일정을 확인하고 있습니다.': 'Checking for the latest events.',
+    '최신 데이터를 확인하지 못했습니다.': 'Could not check for the latest data.',
+    '기기에 저장된 데이터로 계속': 'Continue with data on this device',
+    '기기에 저장된 데이터로 계속할 수 있습니다. 아직 다른 기기의 변경사항이 반영되지 않았을 수 있습니다.':
+        'You can continue with data on this device. Changes from other devices may not be available yet.',
     '업데이트 중입니다': 'Updating Daily',
     '업데이트 확인 중': 'Checking for updates',
     '최신 백업을 복원하고 있습니다.': 'Restoring the latest backup.',
@@ -174,6 +201,8 @@ const Map<String, Map<String, String>> _translations = {
         'Event reminders, morning briefing, and D-day alerts',
     '계정': 'Account',
     'Siri 단축어 설정': 'Siri Shortcut Setup',
+    '잠금화면 월간 캘린더': 'Lock Screen Calendar',
+    '잠금화면 설정을 열지 못했습니다.': 'Could not open Lock Screen settings.',
     '자동 등록된 시그널 단축어와 사용 방법을 확인합니다.':
         'Review the automatically registered Signal shortcut and how to use it.',
     '시그널 단축어 사용': 'Use Signal Shortcut',
@@ -763,8 +792,8 @@ const Map<String, Map<String, String>> _translations = {
     '언어, 테마, 글자 크기와 달력 표시 방식을 설정합니다.':
         'Set language, theme, text size, and calendar display options.',
     '연락처 보호': 'Contact privacy',
-    '예: “Siri야, Daily에서 시그널 실행.”이라고 말한 뒤 “내일 오전 9시에 헬스장 일정 추가해줘.”라고 이어서 말하세요.':
-        'For example, say “Siri, run Signal in Daily,” then say “Add a gym event tomorrow at 9 AM.”',
+    '예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”':
+        'For example: “Hey Siri, Signal, add a gym event tomorrow at 9 AM.”',
     '오늘을 더\n가볍게 정리하세요.': 'Make today\neasier to manage.',
     '오류 범주와 응답 시간': 'Error categories and response time',
     '월간, 주간, 일간 보기': 'Month, week, and day views',
@@ -792,6 +821,32 @@ const Map<String, Map<String, String>> _translations = {
     '화면과 기능 사용': 'Screens and feature usage',
   },
   'ja': {
+    '날씨 예보': '天気予報',
+    '장소 관리': '場所を管理',
+    '자동 장소 추천': 'よく使う場所を提案',
+    '장소 고정': '場所を固定',
+    '고정 해제': '固定を解除',
+    '숨기기': '非表示',
+    '숨긴 장소 다시 표시': '非表示の場所を戻す',
+    '장소 추천을 불러오지 못했습니다. 다시 시도': '場所を取得できませんでした。再試行',
+    '일정 분류 설정': '予定の分類を設定',
+    '사용할 분류를 미리 설정하거나 기본 분류로 시작하세요.': '分類を設定するか、標準の分類で始められます。',
+    '분류 설정하기': '分類を設定する',
+    '기본으로만 사용': '標準のまま使う',
+    '새로운 기능': '新機能',
+    '대학교 학사일정': '大学の学年暦',
+    '대학교 공식 학사일정을 가져오고 변경사항을 갱신하세요. 현재 상명대학교를 지원합니다.':
+        '大学の公式学年暦を取り込み、変更を反映できます。現在は祥明大学校に対応しています。',
+    '설정 보기': '設定を見る',
+    '잠금화면에서 이번 달 일정을 확인하세요. 설정은 나중에도 할 수 있습니다.':
+        'ロック画面で今月の予定を確認できます。後から設定することもできます。',
+    '캘린더에서 선택한 지역의 날씨를 확인하세요. 기존 설정은 그대로 유지됩니다.':
+        'カレンダーで選択した地域の天気を確認できます。既存の設定は維持されます。',
+    '최신 일정을 확인하고 있습니다.': '最新の予定を確認しています。',
+    '최신 데이터를 확인하지 못했습니다.': '最新のデータを確認できませんでした。',
+    '기기에 저장된 데이터로 계속': 'この端末のデータで続ける',
+    '기기에 저장된 데이터로 계속할 수 있습니다. 아직 다른 기기의 변경사항이 반영되지 않았을 수 있습니다.':
+        'この端末に保存されたデータで続けられます。他の端末での変更はまだ反映されていない可能性があります。',
     '업데이트 중입니다': 'Dailyを更新しています',
     '업데이트 확인 중': '更新を確認しています',
     '최신 백업을 복원하고 있습니다.': '最新のバックアップを復元しています。',
@@ -810,6 +865,8 @@ const Map<String, Map<String, String>> _translations = {
     '알림': '通知',
     '계정': 'アカウント',
     'Siri 단축어 설정': 'Siriショートカット設定',
+    '잠금화면 월간 캘린더': 'ロック画面カレンダー',
+    '잠금화면 설정을 열지 못했습니다.': 'ロック画面の設定を開けませんでした。',
     '자동 등록된 시그널 단축어와 사용 방법을 확인합니다.': '自動登録されたSignalショートカットと使い方を確認します。',
     '시그널 단축어 사용': 'Signalショートカットを使う',
     '시그널은 앱 설치와 함께 자동으로 등록되므로 직접 만들 필요가 없습니다.':
@@ -1346,8 +1403,8 @@ const Map<String, Map<String, String>> _translations = {
     '앱 정보 및 지원': 'アプリ情報とサポート',
     '언어, 테마, 글자 크기와 달력 표시 방식을 설정합니다.': '言語、テーマ、文字サイズ、カレンダーの表示方法を設定します。',
     '연락처 보호': '連絡先の保護',
-    '예: “Siri야, Daily에서 시그널 실행.”이라고 말한 뒤 “내일 오전 9시에 헬스장 일정 추가해줘.”라고 이어서 말하세요.':
-        '例：「Siri、DailyでSignalを実行」と言った後、「明日の午前9時にジムの予定を追加して」と続けます。',
+    '예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”':
+        '例：「Siri、Signal、明日の午前9時にジムの予定を追加して。」',
     '오늘을 더\n가볍게 정리하세요.': '今日をもっと\n軽やかに整えましょう。',
     '오류 범주와 응답 시간': 'エラー分類と応答時間',
     '월간, 주간, 일간 보기': '月・週・日表示',
@@ -1373,6 +1430,30 @@ const Map<String, Map<String, String>> _translations = {
     '화면과 기능 사용': '画面と機能の利用',
   },
   'zh_Hant': {
+    '날씨 예보': '天氣預報',
+    '장소 관리': '管理地點',
+    '자동 장소 추천': '推薦常用地點',
+    '장소 고정': '釘選地點',
+    '고정 해제': '取消釘選',
+    '숨기기': '隱藏',
+    '숨긴 장소 다시 표시': '恢復隱藏地點',
+    '장소 추천을 불러오지 못했습니다. 다시 시도': '無法載入地點。重試',
+    '일정 분류 설정': '設定行程分類',
+    '사용할 분류를 미리 설정하거나 기본 분류로 시작하세요.': '自訂分類或使用預設分類開始。',
+    '분류 설정하기': '管理分類',
+    '기본으로만 사용': '使用預設分類',
+    '새로운 기능': '新功能',
+    '대학교 학사일정': '大學行事曆',
+    '대학교 공식 학사일정을 가져오고 변경사항을 갱신하세요. 현재 상명대학교를 지원합니다.':
+        '匯入大學官方行程並更新異動。目前支援祥明大學。',
+    '설정 보기': '查看設定',
+    '잠금화면에서 이번 달 일정을 확인하세요. 설정은 나중에도 할 수 있습니다.': '在鎖定畫面查看本月行程。也可以稍後在設定中啟用。',
+    '캘린더에서 선택한 지역의 날씨를 확인하세요. 기존 설정은 그대로 유지됩니다.': '在月曆查看所選地區的天氣。現有設定將保持不變。',
+    '최신 일정을 확인하고 있습니다.': '正在確認最新行程。',
+    '최신 데이터를 확인하지 못했습니다.': '無法確認最新資料。',
+    '기기에 저장된 데이터로 계속': '使用此裝置的資料繼續',
+    '기기에 저장된 데이터로 계속할 수 있습니다. 아직 다른 기기의 변경사항이 반영되지 않았을 수 있습니다.':
+        '您可以使用此裝置儲存的資料繼續。其他裝置的變更可能尚未同步。',
     '업데이트 중입니다': '正在更新 Daily',
     '업데이트 확인 중': '正在檢查更新',
     '최신 백업을 복원하고 있습니다.': '正在還原最新備份。',
@@ -1391,6 +1472,8 @@ const Map<String, Map<String, String>> _translations = {
     '알림': '通知',
     '계정': '帳號',
     'Siri 단축어 설정': 'Siri 捷徑設定',
+    '잠금화면 월간 캘린더': '鎖定畫面月曆',
+    '잠금화면 설정을 열지 못했습니다.': '無法開啟鎖定畫面設定。',
     '자동 등록된 시그널 단축어와 사용 방법을 확인합니다.': '查看自動註冊的 Signal 捷徑及其使用方式。',
     '시그널 단축어 사용': '使用 Signal 捷徑',
     '시그널은 앱 설치와 함께 자동으로 등록되므로 직접 만들 필요가 없습니다.': 'Signal 會隨 App 自動註冊，因此不需要自行建立。',
@@ -1916,8 +1999,8 @@ const Map<String, Map<String, String>> _translations = {
     '앱 정보 및 지원': 'App 資訊與支援',
     '언어, 테마, 글자 크기와 달력 표시 방식을 설정합니다.': '設定語言、主題、文字大小與行事曆顯示方式。',
     '연락처 보호': '聯絡資訊保護',
-    '예: “Siri야, Daily에서 시그널 실행.”이라고 말한 뒤 “내일 오전 9시에 헬스장 일정 추가해줘.”라고 이어서 말하세요.':
-        '例如，先說「Siri，在 Daily 執行 Signal」，再接著說「新增明天上午 9 點的健身房行程」。',
+    '예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”':
+        '例如：「Siri，Signal，新增明天上午 9 點的健身房行程。」',
     '오늘을 더\n가볍게 정리하세요.': '更輕鬆地\n整理今天。',
     '오류 범주와 응답 시간': '錯誤類別與回應時間',
     '월간, 주간, 일간 보기': '月、週、日檢視',

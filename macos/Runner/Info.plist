@@ -73,6 +73,8 @@
 	</array>
 	<key>NSHumanReadableCopyright</key>
 	<string>$(PRODUCT_COPYRIGHT)</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Use your approximate location to show the nearby KMA weather forecast. You can select a region without location access.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Daily 시그널에 음성으로 일정 명령을 전달하기 위해 마이크를 사용합니다.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>

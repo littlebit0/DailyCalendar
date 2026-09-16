@@ -1,16 +1,31 @@
 name: Linux installers and signed updates
 
 on:
+  workflow_call:
+    inputs:
+      tag:
+        required: true
+        type: string
+      revision:
+        type: string
+        default: '1'
+      stage_only:
+        type: boolean
+        default: true
   workflow_dispatch:
     inputs:
       tag:
         description: Existing product release tag
         required: true
-        default: v3.4.0
+        default: v3.5.0
       revision:
         description: Monotonically increasing Linux package revision
         required: true
         default: '1'
+      stage_only:
+        description: Build artifacts without publishing the APT channel
+        type: boolean
+        default: false
   release:
     types: [published]
 
@@ -23,7 +38,7 @@ concurrency:
 
 jobs:
   build:
-    if: github.event_name == 'workflow_dispatch' || (!github.event.release.prerelease && startsWith(github.event.release.tag_name, 'v'))
+    if: inputs.tag != '' || (!github.event.release.prerelease && startsWith(github.event.release.tag_name, 'v'))
     strategy:
       fail-fast: false
       matrix:
@@ -37,6 +52,8 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.event.release.tag_name }}
       - name: Validate release identity
         env:
           RELEASE_TAG: ${{ inputs.tag || github.event.release.tag_name }}
@@ -99,11 +116,14 @@ jobs:
 
   publish:
     needs: build
+    if: ${{ !inputs.stage_only }}
     runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.event.release.tag_name }}
       - uses: actions/download-artifact@v4
         with:
           pattern: linux-*

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:crypto/crypto.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart';
 
@@ -9,6 +11,9 @@ import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../../features/events/domain/recurrence_rule.dart';
+import '../../features/events/domain/event_deletion.dart';
+import 'sync_version.dart';
+import 'settings_sync_document.dart';
 import '../analytics/product_analytics.dart';
 import '../notifications/notification_service.dart';
 import '../alarms/alarm_service.dart';
@@ -30,6 +35,7 @@ class GoogleDriveSyncService implements SyncService {
     List<Duration> automaticRetryDelays = _automaticRetryDelays,
     ProductAnalytics analytics = const NoopProductAnalytics(),
     Future<void> Function()? onEventsChanged,
+    DateTime Function()? now,
   }) : _authService = authService,
        _eventRepository = eventRepository,
        _notificationService = notificationService,
@@ -41,7 +47,8 @@ class GoogleDriveSyncService implements SyncService {
        _changeSyncDelay = changeSyncDelay,
        _retryDelays = automaticRetryDelays,
        _analytics = analytics,
-       _onEventsChanged = onEventsChanged;
+       _onEventsChanged = onEventsChanged,
+       _now = now ?? DateTime.now;
 
   static const _legacySyncFileName = 'daily-sync-v1.json';
   static const _settingsFileName = 'daily-sync-v2-settings.json';
@@ -71,7 +78,20 @@ class GoogleDriveSyncService implements SyncService {
   final List<Duration> _retryDelays;
   final ProductAnalytics _analytics;
   final Future<void> Function()? _onEventsChanged;
+  final DateTime Function() _now;
+  EventSyncMaintenance? get _maintenance =>
+      _eventRepository is EventSyncMaintenance
+      ? _eventRepository as EventSyncMaintenance
+      : null;
   Future<void>? _syncInFlight;
+  int _sessionGeneration = 0;
+  VoidCallback? _validateSyncSession;
+
+  (String?, String?, String?) get _accountIdentity => (
+    _settingsRepository.dailyAccount()?.id,
+    _settingsRepository.dailyAccount()?.googleAccount?.email.toLowerCase(),
+    _authService.currentAccount?.email.toLowerCase(),
+  );
   StreamSubscription<GoogleDriveAccount?>? _accountSubscription;
   Timer? _changeSyncTimer;
   Timer? _automaticRetryTimer;
@@ -103,28 +123,43 @@ class GoogleDriveSyncService implements SyncService {
     required bool runInitialRestore,
     bool flushPendingChanges = true,
   }) async {
+    final generation = _sessionGeneration;
+    final account = _settingsRepository.dailyAccount();
+    void validateStartup() {
+      final current = _settingsRepository.dailyAccount();
+      if (generation != _sessionGeneration ||
+          account?.id != current?.id ||
+          account?.googleAccount?.email != current?.googleAccount?.email) {
+        throw const GoogleDriveAuthException('Google Drive 계정이 변경되었습니다.');
+      }
+    }
+
     if (_started) {
       if (!runInitialRestore && !flushPendingChanges) {
         return;
       }
       if (runInitialRestore) {
-        return syncOnResume();
+        await checkForRemoteChangesNow();
+        validateStartup();
+        await syncPendingChangesNow();
+        return;
       }
       return syncPendingChangesNow();
     }
-    _started = true;
-
     await _authService.initialize();
+    validateStartup();
+    _started = true;
     _accountSubscription = _authService.accountChanges.listen((account) {
       if (account != null) {
         _requestAutomaticChangeCheck();
       }
     });
     if (runInitialRestore) {
-      await checkForRemoteChangesNow().catchError((_) {});
+      await checkForRemoteChangesNow();
     }
     if (flushPendingChanges) {
-      await syncPendingChangesNow().catchError((_) {});
+      validateStartup();
+      await syncPendingChangesNow();
     }
   }
 
@@ -243,43 +278,51 @@ class GoogleDriveSyncService implements SyncService {
   /// Downloads the current v2 event snapshots without writing to the local
   /// repository. Startup schema migration uses this before Drift opens the
   /// database so it can merge remote changes into a validated working copy.
+  List<EventDeletion> migrationDeletions = const [];
+
   Future<List<CalendarEvent>?> downloadEventsForMigration() async {
+    migrationDeletions = const [];
     final headers = await _authService.authorizationHeaders(
       promptIfNecessary: false,
     );
-    if (headers == null) {
-      return null;
-    }
-
-    final remoteFiles = await _listEventFiles(headers);
-    final downloaded = await _mapInBatches(remoteFiles.values, (file) async {
-      return _downloadEventFile(headers, file.id);
-    });
-    final eventsById = <String, CalendarEvent>{};
-    for (final item in downloaded.whereType<_DownloadedEvent>()) {
-      final event = item.event;
-      final existing = eventsById[event.id];
-      if (existing == null ||
-          _effectiveUpdatedAt(event).isAfter(_effectiveUpdatedAt(existing))) {
-        eventsById[event.id] = event;
-      }
-    }
-    return eventsById.values.toList(growable: false);
+    if (headers == null) return null;
+    final records = await _downloadAllEvents(headers);
+    migrationDeletions = records
+        .map((record) => record.deletion)
+        .whereType<EventDeletion>()
+        .toList();
+    return records
+        .map((record) => record.event)
+        .whereType<CalendarEvent>()
+        .toList();
   }
 
   Future<Set<String>> _takePendingEventIds() async {
     _changeSyncTimer?.cancel();
+    await _maintenance?.compactDeletedEvents(_now());
     final eventIds = Set<String>.from(_queuedEventIds);
     _queuedEventIds.clear();
     final pendingEvents = await _eventRepository.pendingSyncEvents();
     eventIds.addAll(pendingEvents.map((event) => event.id));
+    eventIds.addAll(
+      (await _maintenance?.deletionRecords(pendingOnly: true) ??
+              const <EventDeletion>[])
+          .map((item) => item.id),
+    );
     return eventIds;
   }
+
+  Future<bool> hasPendingChanges() async =>
+      _settingsRepository.hasPendingSettingsSync ||
+      (await _eventRepository.pendingSyncEvents()).isNotEmpty ||
+      (await _maintenance?.deletionRecords(pendingOnly: true) ??
+              const <EventDeletion>[])
+          .isNotEmpty;
 
   Future<void> deleteCloudBackup({bool promptIfNecessary = false}) async {
     _changeSyncTimer?.cancel();
     _queuedEventIds.clear();
-    _pendingSyncRequests.clear();
+    _cancelQueuedRequests();
     final inFlight = _syncInFlight;
     if (inFlight != null) {
       await inFlight;
@@ -289,7 +332,7 @@ class GoogleDriveSyncService implements SyncService {
       promptIfNecessary: promptIfNecessary,
     );
     if (headers == null) {
-      return;
+      throw const GoogleDriveAuthException('Google Drive 연결이 필요합니다.');
     }
 
     final files = <_DriveFile>[
@@ -315,6 +358,7 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<void> stop() async {
+    _sessionGeneration++;
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
     _changeSyncTimer = null;
@@ -322,7 +366,7 @@ class GoogleDriveSyncService implements SyncService {
     _automaticRetryKind = null;
     _automaticRetryIndex = 0;
     _queuedEventIds.clear();
-    _pendingSyncRequests.clear();
+    _cancelQueuedRequests();
     final inFlight = _syncInFlight;
     if (inFlight != null) {
       await inFlight.catchError((_) {});
@@ -334,6 +378,8 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   void dispose() {
+    _sessionGeneration++;
+    _cancelQueuedRequests();
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
     unawaited(_accountSubscription?.cancel());
@@ -342,6 +388,19 @@ class GoogleDriveSyncService implements SyncService {
     if (_ownsHttpClient) {
       _httpClient.close();
     }
+  }
+
+  void _cancelQueuedRequests() {
+    for (final request in _pendingSyncRequests) {
+      for (final completer in request.completers) {
+        if (!completer.isCompleted) {
+          completer.completeError(
+            const GoogleDriveAuthException('동기화 요청이 취소되었습니다.'),
+          );
+        }
+      }
+    }
+    _pendingSyncRequests.clear();
   }
 
   Future<void> _enqueueSync(
@@ -445,6 +504,15 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<void> _runSyncRequest(_PendingSyncRequest request) async {
+    final generation = _sessionGeneration;
+    var identity = _accountIdentity;
+    void validateSession() {
+      if (generation != _sessionGeneration || identity != _accountIdentity) {
+        throw const GoogleDriveAuthException('Google Drive 계정이 변경되었습니다.');
+      }
+    }
+
+    _validateSyncSession = validateSession;
     final stopwatch = Stopwatch()..start();
     final analyticsOperation = _analyticsOperation(request.kind);
     final analyticsTrigger = _analyticsTrigger(request);
@@ -480,6 +548,14 @@ class GoogleDriveSyncService implements SyncService {
       if (headers == null) {
         throw const GoogleDriveAuthException('Google Drive 연결이 필요합니다.');
       }
+      // Restoring token metadata can populate a previously absent auth account.
+      // This is valid only while the linked Daily identity is unchanged.
+      if (identity.$3 == null &&
+          identity.$1 == _accountIdentity.$1 &&
+          identity.$2 == _accountIdentity.$2) {
+        identity = _accountIdentity;
+      }
+      validateSession();
 
       switch (request.kind) {
         case _SyncRequestKind.backupOnly:
@@ -489,7 +565,15 @@ class GoogleDriveSyncService implements SyncService {
             includeSettings: request.includeSettings,
           );
           if (conflicts > 0) {
-            completionMessage = '일부 백업 보류 · 먼저 복원 필요';
+            throw const GoogleDriveSyncException(
+              '더 최신인 원격 변경이 있어 일부 백업이 보류되었습니다. 복원 후 다시 백업해 주세요.',
+            );
+          }
+          if (request.includeSettings &&
+              _settingsRepository.hasPendingSettingsSync) {
+            throw const GoogleDriveSyncException(
+              '아직 병합되지 않은 설정 변경이 남아 있습니다. 복원 후 다시 백업해 주세요.',
+            );
           }
           break;
         case _SyncRequestKind.restoreOnly:
@@ -536,6 +620,21 @@ class GoogleDriveSyncService implements SyncService {
           completionMessage = restored ? '동기화 완료 · 다른 기기 변경 복원' : '동기화 완료';
           break;
       }
+      validateSession();
+      if (request.kind == _SyncRequestKind.backupThenRestore ||
+          request.kind == _SyncRequestKind.backupThenDetectRemoteChanges) {
+        final remaining = await _takePendingEventIds();
+        final conflicts = await _backup(
+          headers,
+          eventIds: remaining,
+          includeSettings: _settingsRepository.hasPendingSettingsSync,
+        );
+        if (conflicts > 0 || await hasPendingChanges()) {
+          throw const GoogleDriveSyncException(
+            '아직 동기화되지 않은 변경이 남아 있습니다. 다시 시도해 주세요.',
+          );
+        }
+      }
       _resetAutomaticRetry(request.kind);
       statusNotifier.value = statusNotifier.value.copyWith(
         syncing: false,
@@ -552,6 +651,12 @@ class GoogleDriveSyncService implements SyncService {
         ),
       );
     } on Object catch (error) {
+      if (generation != _sessionGeneration || identity != _accountIdentity) {
+        if (generation == _sessionGeneration) {
+          statusNotifier.value = const GoogleDriveSyncStatus();
+        }
+        rethrow;
+      }
       _scheduleAutomaticRetry(request, error);
       statusNotifier.value = statusNotifier.value.copyWith(
         syncing: false,
@@ -571,6 +676,8 @@ class GoogleDriveSyncService implements SyncService {
         ),
       );
       rethrow;
+    } finally {
+      _validateSyncSession = null;
     }
   }
 
@@ -653,6 +760,8 @@ class GoogleDriveSyncService implements SyncService {
         text.contains('host lookup') ||
         text.contains('시간이 초과') ||
         text.contains('요청이 너무 많') ||
+        text.contains('동시에 변경된') ||
+        text.contains('아직 동기화되지 않은') ||
         text.contains('서버 응답이 불안정');
   }
 
@@ -695,69 +804,74 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<void> _restore(Map<String, String> authHeaders) async {
-    final localSettingsRevision = _settingsRepository.settingsSyncRevision;
-    final localSettingsMutationGeneration =
-        _settingsRepository.settingsMutationGeneration;
     final remoteSettings = await _downloadRestorableSettings(authHeaders);
     final remoteEvents = await _downloadAllEvents(authHeaders);
-    AppSettings? settingsBeforeRestore;
-    AppSettings? restoredSettings;
-    var settingsWritten = false;
+    _validateSyncSession?.call();
+    await _applyDownloadedEvents(remoteEvents);
+    if (remoteSettings != null) await _applyDownloadedSettings(remoteSettings);
+    await _refreshWidgets();
+  }
+
+  Future<bool> _applyDownloadedEvents(List<_DownloadedEvent> records) async {
+    _validateSyncSession?.call();
     final keptLocalEventIds = <String>{};
-    late final List<EventRestoreMutation> mutations;
-    try {
-      if (remoteSettings != null) {
-        final settingsApplied = await _settingsRepository
-            .applyRestoredSettingsIfUnchanged(
-              expectedRevision: localSettingsRevision,
-              expectedMutationGeneration: localSettingsMutationGeneration,
-              buildRestoredSettings: (current) {
-                settingsBeforeRestore = current;
-                restoredSettings = _restoredSettingsTarget(
-                  remoteSettings,
-                  current,
-                );
-                return restoredSettings!;
-              },
-            );
-        settingsWritten =
-            settingsApplied &&
-            !_sameSettingsSnapshot(restoredSettings!, settingsBeforeRestore!);
+    CalendarEvent resolve(CalendarEvent? local, CalendarEvent remote) {
+      if (local != null && _shouldKeepLocalEvent(local, remote)) {
+        keptLocalEventIds.add(local.id);
+        return local.copyWith(syncStatus: 'pending');
       }
-      mutations = await _eventRepository.mergeRestoredEventsAtomically(
-        remoteEvents,
-        resolve: (local, remote) {
-          if (local != null && _shouldKeepLocalEvent(local, remote)) {
-            keptLocalEventIds.add(local.id);
-            return local;
-          }
-          if (local != null && _sameEventSnapshot(local, remote)) {
-            return local.syncStatus == 'synced'
-                ? local
-                : local.copyWith(syncStatus: 'synced');
-          }
-          return remote.copyWith(syncStatus: 'synced');
-        },
+      if (local != null && _sameEventSnapshot(local, remote)) {
+        return local.syncStatus == 'synced'
+            ? local
+            : local.copyWith(syncStatus: 'synced');
+      }
+      return remote.copyWith(syncStatus: 'synced');
+    }
+
+    final events = records
+        .map((item) => item.event)
+        .whereType<CalendarEvent>()
+        .toList();
+    final deletions = records
+        .map((item) => item.deletion)
+        .whereType<EventDeletion>()
+        .toList();
+    if (deletions.isNotEmpty && _maintenance == null) {
+      throw const GoogleDriveSyncException(
+        '삭제 기록을 처리할 수 없는 데이터베이스입니다. 업데이트가 필요합니다.',
       );
-    } on Object {
-      if (settingsWritten) {
-        await _settingsRepository.applyRestoredSettingsIfUnchanged(
-          expectedRevision: localSettingsRevision,
-          expectedMutationGeneration: localSettingsMutationGeneration,
-          buildRestoredSettings: (_) => settingsBeforeRestore!,
-        );
-      }
-      rethrow;
     }
-    if (settingsWritten) {
-      settingsRevisionNotifier.value += 1;
-    }
+    final mutations = _maintenance == null
+        ? await _eventRepository.mergeRestoredEventsAtomically(
+            events,
+            resolve: resolve,
+          )
+        : await _maintenance!.mergeSyncRecords(
+            events,
+            deletions,
+            resolve: resolve,
+          );
     if (keptLocalEventIds.isNotEmpty) {
       _queuedEventIds.addAll(keptLocalEventIds);
       _queueChangeSync();
     }
     await _applyRestoredEventSideEffects(mutations);
-    await _refreshWidgets();
+    for (final deletion in deletions) {
+      final current = await _eventRepository.findById(deletion.id);
+      if (current != null && !current.isDeleted) continue;
+      try {
+        await _notificationService.cancelEventReminder(deletion.id);
+        await _alarmService.cancelEventAlarm(deletion.id);
+      } on Object {
+        /* Reconciled again when notification services initialize. */
+      }
+    }
+    return deletions.isNotEmpty ||
+        mutations.any(
+          (mutation) =>
+              mutation.previous == null ||
+              !_sameEventSnapshot(mutation.previous!, mutation.current),
+        );
   }
 
   Future<bool> _detectAndRestoreExternalChanges(
@@ -778,6 +892,7 @@ class GoogleDriveSyncService implements SyncService {
       }
       final startToken = await _getDriveStartPageToken(authHeaders);
       await _restore(authHeaders);
+      _validateSyncSession?.call();
       await _settingsRepository.saveDriveChangePageToken(
         accountEmail: accountEmail,
         pageToken: startToken,
@@ -786,6 +901,7 @@ class GoogleDriveSyncService implements SyncService {
     }
 
     final batch = await _listDriveChanges(authHeaders, savedToken);
+    _validateSyncSession?.call();
     final dailyChanges = <String, _DriveChange>{};
     for (final change in batch.changes) {
       if (!change.removed && _isDailySyncFileName(change.fileName)) {
@@ -801,46 +917,40 @@ class GoogleDriveSyncService implements SyncService {
       return false;
     }
 
-    final localDeviceId = await _settingsRepository.deviceId();
     _DownloadedSettings? externalSettings;
-    final externalEvents = <CalendarEvent>[];
+    final externalEvents = <_DownloadedEvent>[];
+    final eventIds = <String>{};
     for (final change in dailyChanges.values) {
       if (change.fileName == _settingsFileName) {
-        final downloaded = await _downloadSettingsFile(
-          authHeaders,
-          change.fileId,
-        );
-        if (downloaded != null && downloaded.sourceDeviceId != localDeviceId) {
-          externalSettings = downloaded;
-        }
+        externalSettings ??= await _downloadRestorableSettings(authHeaders);
         continue;
       }
       if (_eventIdFromFileName(change.fileName) == null) {
         continue;
       }
-      final downloaded = await _downloadEventFile(authHeaders, change.fileId);
-      if (downloaded != null && downloaded.sourceDeviceId != localDeviceId) {
-        externalEvents.add(downloaded.event);
-      }
+      eventIds.add(_eventIdFromFileName(change.fileName)!);
+    }
+    if (eventIds.isNotEmpty) {
+      externalEvents.addAll(
+        await _downloadEventFiles(
+          authHeaders,
+          await _listEventFilesForIds(authHeaders, eventIds),
+        ),
+      );
     }
 
     var restored = false;
+    _validateSyncSession?.call();
     if (externalSettings != null) {
-      restored = await _applyDownloadedSettings(
-        externalSettings,
-        expectedLocalRevision: _settingsRepository.settingsSyncRevision,
-        expectedMutationGeneration:
-            _settingsRepository.settingsMutationGeneration,
-      );
+      restored = await _applyDownloadedSettings(externalSettings);
     }
-    externalEvents.sort((a, b) => a.updatedAt.compareTo(b.updatedAt));
-    for (final event in externalEvents) {
-      await _saveRestoredEvent(event.copyWith(syncStatus: 'synced'));
-      restored = true;
+    if (externalEvents.isNotEmpty) {
+      restored = await _applyDownloadedEvents(externalEvents) || restored;
     }
     if (restored) {
       await _refreshWidgets();
     }
+    _validateSyncSession?.call();
     await _settingsRepository.saveDriveChangePageToken(
       accountEmail: accountEmail,
       pageToken: batch.newStartPageToken,
@@ -937,131 +1047,111 @@ class GoogleDriveSyncService implements SyncService {
     Map<String, String> authHeaders,
     AppSettings localSettings,
   ) async {
-    final revision = _settingsRepository.settingsSyncRevision;
-    final sourceDeviceId = await _settingsRepository.deviceId();
-    final settingsFile = await _findFileByName(authHeaders, _settingsFileName);
-    await _uploadJsonFile(
-      authHeaders,
-      fileName: _settingsFileName,
-      fileId: settingsFile?.id,
-      jsonBody: _encodeSettingsFile(
-        localSettings,
-        sourceDeviceId: sourceDeviceId,
-      ),
-    );
-    if (_sameSettingsSnapshot(_settingsRepository.load(), localSettings)) {
-      await _settingsRepository.markSettingsSyncedIfRevision(revision);
+    for (var attempt = 0; attempt < 4; attempt++) {
+      final files = await _listSettingsFiles(authHeaders);
+      final remote = await _mapInBatches(
+        files,
+        (file) =>
+            _downloadSettingsFile(authHeaders, file.id, requireVersion: true),
+      );
+      var merged = SettingsSyncDocument.legacy(
+        syncSettingsValues(_settingsRepository.load()),
+      ).merge(_settingsRepository.settingsSyncDocument());
+      for (final item in remote) {
+        merged = merged.merge(item.document);
+      }
+      final current = _settingsRepository.load();
+      final payload = jsonEncode({
+        'schemaVersion': 2,
+        'type': 'settings',
+        'updatedAt': _now().toUtc().toIso8601String(),
+        'sourceDeviceId': await _settingsRepository.deviceId(),
+        'settings': merged.values(syncSettingsValues(current)),
+        'fieldRevisions': merged.toJson(),
+      });
+      try {
+        if (files.isEmpty) {
+          await _uploadJsonFile(
+            authHeaders,
+            fileName: _settingsFileName,
+            jsonBody: payload,
+          );
+        } else {
+          for (final item in remote) {
+            if (item.document.sameAs(merged)) continue;
+            await _uploadJsonFile(
+              authHeaders,
+              fileName: _settingsFileName,
+              fileId: item.fileId,
+              expectedEtag: item.etag,
+              jsonBody: payload,
+            );
+          }
+        }
+      } on _ConcurrentDriveWrite {
+        continue;
+      }
+      _validateSyncSession?.call();
+      await _settingsRepository.acknowledgeSettingsSyncDocument(merged);
+      return;
     }
+    throw const GoogleDriveSyncException('동시에 변경된 설정이 있어 동기화를 다시 시도해야 합니다.');
   }
+
+  Future<List<_DriveFile>> _listSettingsFiles(Map<String, String> headers) =>
+      _listFiles(headers, "name = '$_settingsFileName' and trashed = false");
 
   Future<_DownloadedSettings?> _downloadRestorableSettings(
     Map<String, String> authHeaders,
   ) async {
-    if (_settingsRepository.hasPendingSettingsSync) {
-      return null;
+    final files = await _listSettingsFiles(authHeaders);
+    if (files.isEmpty) return null;
+    var merged = const SettingsSyncDocument();
+    for (final file in files) {
+      merged = merged.merge(
+        (await _downloadSettingsFile(authHeaders, file.id)).document,
+      );
     }
-    final settingsFile = await _findFileByName(authHeaders, _settingsFileName);
-    if (settingsFile == null) {
-      return null;
-    }
-    return _downloadSettingsFile(authHeaders, settingsFile.id);
+    return _DownloadedSettings(document: merged);
   }
 
-  Future<bool> _applyDownloadedSettings(
-    _DownloadedSettings remoteSettings, {
-    required int expectedLocalRevision,
-    required int expectedMutationGeneration,
-  }) async {
-    final applied = await _settingsRepository.applyRestoredSettingsIfUnchanged(
-      expectedRevision: expectedLocalRevision,
-      expectedMutationGeneration: expectedMutationGeneration,
-      buildRestoredSettings: (current) =>
-          _restoredSettingsTarget(remoteSettings, current),
+  Future<bool> _applyDownloadedSettings(_DownloadedSettings remote) async {
+    final changed = await _settingsRepository.mergeSettingsSyncDocument(
+      remote.document,
+      (values, current) => _settingsFromJson(values).copyWith(
+        onboardingCompleted: current.onboardingCompleted,
+        appLockEnabled: current.appLockEnabled,
+        appLockBiometricsEnabled: current.appLockBiometricsEnabled,
+        appLockMethod: current.appLockMethod,
+        language: current.language,
+      ),
+      validateSession: _validateSyncSession,
     );
-    if (!applied) {
-      return false;
-    }
-    settingsRevisionNotifier.value += 1;
-    return true;
+    if (changed) settingsRevisionNotifier.value += 1;
+    return changed;
   }
 
-  AppSettings _restoredSettingsTarget(
-    _DownloadedSettings remoteSettings,
-    AppSettings localSettings,
-  ) {
-    return remoteSettings.settings.copyWith(
-      onboardingCompleted: localSettings.onboardingCompleted,
-      appLockEnabled: localSettings.appLockEnabled,
-      appLockBiometricsEnabled: localSettings.appLockBiometricsEnabled,
-      appLockMethod: localSettings.appLockMethod,
-      language: localSettings.language,
-      appTextSize: remoteSettings.hasAppTextSize
-          ? remoteSettings.settings.appTextSize
-          : localSettings.appTextSize,
-      appStartView: remoteSettings.hasAppStartView
-          ? remoteSettings.settings.appStartView
-          : localSettings.appStartView,
-      weekDayLayoutMode: remoteSettings.hasWeekDayLayoutMode
-          ? remoteSettings.settings.weekDayLayoutMode
-          : localSettings.weekDayLayoutMode,
-      calendarEventTitleAlignment: remoteSettings.hasCalendarEventTitleAlignment
-          ? remoteSettings.settings.calendarEventTitleAlignment
-          : localSettings.calendarEventTitleAlignment,
-      calendarEventSortPriority: remoteSettings.hasCalendarEventSortPriority
-          ? remoteSettings.settings.calendarEventSortPriority
-          : localSettings.calendarEventSortPriority,
-      calendarManualEventOrders: remoteSettings.hasCalendarManualEventOrders
-          ? mergeCalendarManualEventOrders(
-              localSettings.calendarManualEventOrders,
-              remoteSettings.settings.calendarManualEventOrders,
-            )
-          : localSettings.calendarManualEventOrders,
-      calendarHolidayBackgroundEnabled:
-          remoteSettings.hasCalendarHolidayBackgroundEnabled
-          ? remoteSettings.settings.calendarHolidayBackgroundEnabled
-          : localSettings.calendarHolidayBackgroundEnabled,
-    );
-  }
-
-  Future<List<CalendarEvent>> _downloadAllEvents(
+  Future<List<_DownloadedEvent>> _downloadAllEvents(
     Map<String, String> authHeaders,
+  ) async =>
+      _downloadEventFiles(authHeaders, await _listEventFiles(authHeaders));
+
+  Future<List<_DownloadedEvent>> _downloadEventFiles(
+    Map<String, String> headers,
+    List<_DriveFile> files,
   ) async {
-    final remoteFiles = await _listEventFiles(authHeaders);
-    final remoteById = <String, CalendarEvent>{};
-
-    final downloadedEvents = await _mapInBatches(remoteFiles.entries, (
-      entry,
-    ) async {
-      return MapEntry(
-        entry.key,
-        await _downloadEventFile(authHeaders, entry.value.id),
-      );
-    });
-
-    if (remoteFiles.isNotEmpty) {
-      statusNotifier.value = statusNotifier.value.copyWith(
-        message: '복원 중 · 일정 ${remoteFiles.length}개 확인',
-      );
-    }
-
-    for (final entry in downloadedEvents) {
-      final downloadedEvent = entry.value;
-      if (downloadedEvent == null) {
-        continue;
-      }
-      final remoteEvent = downloadedEvent.event;
-      final existing = remoteById[entry.key];
-      if (existing == null ||
-          _effectiveUpdatedAt(
-            remoteEvent,
-          ).isAfter(_effectiveUpdatedAt(existing))) {
-        remoteById[entry.key] = remoteEvent;
+    final downloaded = await _mapInBatches(
+      files,
+      (file) => _downloadEventFile(headers, file.id),
+    );
+    final winners = <String, _DownloadedEvent>{};
+    for (final item in downloaded) {
+      final previous = winners[item.id];
+      if (previous == null || item.compareTo(previous) > 0) {
+        winners[item.id] = item;
       }
     }
-
-    final remoteEvents = remoteById.values.toList()
-      ..sort((a, b) => a.updatedAt.compareTo(b.updatedAt));
-    return remoteEvents;
+    return winners.values.toList();
   }
 
   Future<void> _applyRestoredEventSideEffects(
@@ -1099,61 +1189,93 @@ class GoogleDriveSyncService implements SyncService {
     Map<String, String> authHeaders,
     Set<String> eventIds,
   ) async {
-    final remoteFileById = await _listEventFilesForIds(authHeaders, eventIds);
-    final localDeviceId = await _settingsRepository.deviceId();
-    final List<int> conflictCounts = await _mapInBatches<String, int>(
-      eventIds,
-      (eventId) async {
+    await _maintenance?.compactDeletedEvents(_now());
+    final deletions =
+        await _maintenance?.deletionRecords() ?? const <EventDeletion>[];
+    final deletionById = {for (final item in deletions) item.id: item};
+    final ids = {
+      ...eventIds,
+      ...deletions.where((item) => item.pending).map((item) => item.id),
+    };
+    final remoteFiles = await _listEventFilesForIds(authHeaders, ids);
+    final List<int> conflictCounts = await _mapInBatches<String, int>(ids, (
+      eventId,
+    ) async {
+      var files = remoteFiles
+          .where((file) => _eventIdFromFileName(file.name) == eventId)
+          .toList();
+      for (var attempt = 0; attempt < 4; attempt++) {
+        _validateSyncSession?.call();
         final local = await _eventRepository.findById(eventId);
-        if (local == null) {
-          return 0;
+        final deletion = deletionById[eventId];
+        if (local == null && deletion == null) return 0;
+        var candidate = _DownloadedEvent(
+          event: local,
+          deletion: local == null ? deletion : null,
+          sourceDeviceId: null,
+        );
+        if (deletion != null) {
+          final marker = _DownloadedEvent(
+            deletion: deletion,
+            sourceDeviceId: null,
+          );
+          if (marker.compareTo(candidate) > 0) candidate = marker;
         }
-
-        final remoteFile = remoteFileById[eventId];
-        if (remoteFile != null) {
-          final remote = await _downloadEventFile(authHeaders, remoteFile.id);
-          if (remote != null &&
-              remote.sourceDeviceId != localDeviceId &&
-              _remoteEventWinsUploadConflict(
-                local: local,
-                remote: remote.event,
-                localDeviceId: localDeviceId,
-                remoteDeviceId: remote.sourceDeviceId,
-              )) {
-            // A backup operation must never mutate local data. Keep the local
-            // revision pending so an explicit restore can resolve the conflict.
-            return 1;
+        final remote = await _mapInBatches(
+          files,
+          (file) =>
+              _downloadEventFile(authHeaders, file.id, requireVersion: true),
+        );
+        for (final item in remote) {
+          if (item.compareTo(candidate) > 0) return 1;
+        }
+        final json = candidate.deletion != null
+            ? _encodeDeletionFile(candidate.deletion!)
+            : _encodeEventFile(
+                candidate.event!,
+                sourceDeviceId: await _settingsRepository.deviceId(),
+              );
+        try {
+          if (files.isEmpty) {
+            await _uploadJsonFile(
+              authHeaders,
+              fileName: _eventFileName(eventId),
+              jsonBody: json,
+            );
+          } else {
+            for (final item in remote) {
+              if (item.compareTo(candidate) == 0) continue;
+              await _uploadJsonFile(
+                authHeaders,
+                fileName: _eventFileName(eventId),
+                fileId: item.fileId,
+                expectedEtag: item.etag,
+                jsonBody: json,
+              );
+            }
+          }
+        } on _ConcurrentDriveWrite {
+          files = await _listEventFilesForIds(authHeaders, {eventId});
+          continue;
+        }
+        _validateSyncSession?.call();
+        if (candidate.deletion != null) {
+          await _maintenance?.markDeletionSynced(candidate.deletion!);
+        } else {
+          await _saveSyncedEvent(candidate.event!);
+          if (deletion != null) {
+            await _maintenance?.markDeletionSynced(deletion);
           }
         }
-
-        await _uploadEventFile(authHeaders, local, remoteFile);
-        await _saveSyncedEvent(local);
         return 0;
-      },
-    );
+      }
+      throw const GoogleDriveSyncException('동시에 변경된 일정이 있어 동기화를 다시 시도해야 합니다.');
+    });
     var conflictCount = 0;
     for (final count in conflictCounts) {
       conflictCount += count;
     }
     return conflictCount;
-  }
-
-  bool _remoteEventWinsUploadConflict({
-    required CalendarEvent local,
-    required CalendarEvent remote,
-    required String localDeviceId,
-    required String? remoteDeviceId,
-  }) {
-    final updatedComparison = _effectiveUpdatedAt(
-      remote,
-    ).compareTo(_effectiveUpdatedAt(local));
-    if (updatedComparison != 0) {
-      return updatedComparison > 0;
-    }
-    if (_sameEventSnapshot(local, remote)) {
-      return false;
-    }
-    return (remoteDeviceId ?? '').compareTo(localDeviceId) > 0;
   }
 
   Future<List<T>> _mapInBatches<S, T>(
@@ -1173,12 +1295,12 @@ class GoogleDriveSyncService implements SyncService {
     return result;
   }
 
-  Future<Map<String, _DriveFile>> _listEventFilesForIds(
+  Future<List<_DriveFile>> _listEventFilesForIds(
     Map<String, String> authHeaders,
     Set<String> eventIds,
   ) async {
     if (eventIds.isEmpty) {
-      return {};
+      return [];
     }
     final nameQuery = eventIds
         .map(_eventFileName)
@@ -1189,14 +1311,9 @@ class GoogleDriveSyncService implements SyncService {
       '($nameQuery) and trashed = false',
       pageSize: eventIds.length,
     );
-    final result = <String, _DriveFile>{};
-    for (final file in files) {
-      final eventId = _eventIdFromFileName(file.name);
-      if (eventId != null) {
-        result[eventId] = file;
-      }
-    }
-    return result;
+    return files
+        .where((file) => eventIds.contains(_eventIdFromFileName(file.name)))
+        .toList();
   }
 
   String _escapeDriveQueryString(String value) {
@@ -1204,42 +1321,20 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<void> _saveSyncedEvent(CalendarEvent event) async {
-    final existing = await _eventRepository.findById(event.id);
-    if (existing == null) {
-      return;
+    _validateSyncSession?.call();
+    CalendarEvent resolve(CalendarEvent? existing, CalendarEvent uploaded) {
+      if (existing == null) return uploaded.copyWith(syncStatus: 'synced');
+      return _sameEventSnapshot(existing, uploaded)
+          ? existing.copyWith(syncStatus: 'synced')
+          : existing;
     }
-    if (jsonEncode(_eventToJson(existing)) != jsonEncode(_eventToJson(event))) {
-      // A newer local edit landed while this upload was in flight. Keep that
-      // revision pending instead of replacing it with the uploaded snapshot.
-      return;
-    }
-    await _eventRepository.markSynced(event.id);
-  }
 
-  Future<void> _saveRestoredEvent(CalendarEvent event) async {
-    final existing = await _eventRepository.findById(event.id);
-    if (existing != null && _shouldKeepLocalEvent(existing, event)) {
-      _queuedEventIds.add(existing.id);
-      _queueChangeSync();
-      return;
-    }
-    if (existing != null && _sameEventSnapshot(existing, event)) {
-      if (existing.syncStatus != 'synced') {
-        await _eventRepository.markSynced(existing.id);
-      }
-      return;
-    }
-    await _eventRepository.save(event);
-    await _notificationService.cancelEventReminder(
-      event.id,
-      reminderMinutesBeforeList: _combinedReminderMinutes(existing, event),
-    );
-    if (event.deletedAt == null) {
-      await _notificationService.scheduleEventReminder(event);
-    }
-    await _alarmService.cancelEventAlarm(event.id);
-    if (event.deletedAt == null) {
-      await _alarmService.scheduleEventAlarm(event);
+    if (_maintenance != null) {
+      await _maintenance!.mergeSyncRecords([event], [], resolve: resolve);
+    } else {
+      await _eventRepository.mergeRestoredEventsAtomically([
+        event,
+      ], resolve: resolve);
     }
   }
 
@@ -1247,64 +1342,24 @@ class GoogleDriveSyncService implements SyncService {
     CalendarEvent existing,
     CalendarEvent restoredSnapshot,
   ) {
-    final localUpdatedAt = _effectiveUpdatedAt(existing);
-    final restoredUpdatedAt = _effectiveUpdatedAt(restoredSnapshot);
-    if (localUpdatedAt.isAfter(restoredUpdatedAt)) {
-      return true;
-    }
-
-    if (existing.syncStatus == 'synced') {
-      return false;
-    }
-
-    return jsonEncode(_eventToJson(existing)) !=
-        jsonEncode(_eventToJson(restoredSnapshot));
+    return compareEventVersions(existing, restoredSnapshot) > 0;
   }
 
   bool _sameEventSnapshot(CalendarEvent left, CalendarEvent right) {
-    return jsonEncode(_eventToJson(left)) == jsonEncode(_eventToJson(right));
+    return canonicalSyncJson(eventVersionValues(left)) ==
+        canonicalSyncJson(eventVersionValues(right));
   }
 
-  bool _sameSettingsSnapshot(AppSettings left, AppSettings right) {
-    return jsonEncode(_settingsToJson(left)) ==
-        jsonEncode(_settingsToJson(right));
-  }
-
-  DateTime _effectiveUpdatedAt(CalendarEvent event) {
-    final deletedAt = event.deletedAt;
-    if (deletedAt != null && deletedAt.isAfter(event.updatedAt)) {
-      return deletedAt;
-    }
-    return event.updatedAt;
-  }
-
-  Future<Map<String, _DriveFile>> _listEventFiles(
+  Future<List<_DriveFile>> _listEventFiles(
     Map<String, String> authHeaders,
   ) async {
     final files = await _listFiles(
       authHeaders,
       "name contains '$_eventFilePrefix' and trashed = false",
     );
-    final result = <String, _DriveFile>{};
-    for (final file in files) {
-      final eventId = _eventIdFromFileName(file.name);
-      if (eventId != null) {
-        result[eventId] = file;
-      }
-    }
-    return result;
-  }
-
-  Future<_DriveFile?> _findFileByName(
-    Map<String, String> authHeaders,
-    String name,
-  ) async {
-    final files = await _listFiles(
-      authHeaders,
-      "name = '$name' and trashed = false",
-      pageSize: 1,
-    );
-    return files.isEmpty ? null : files.first;
+    return files
+        .where((file) => _eventIdFromFileName(file.name) != null)
+        .toList();
   }
 
   Future<List<_DriveFile>> _listFiles(
@@ -1349,19 +1404,28 @@ class GoogleDriveSyncService implements SyncService {
     return files;
   }
 
-  Future<_DownloadedEvent?> _downloadEventFile(
+  Future<_DownloadedEvent> _downloadEventFile(
     Map<String, String> authHeaders,
-    String fileId,
-  ) async {
-    final response = await _httpClient
-        .get(
-          Uri.https(_driveHost, '/drive/v3/files/$fileId', {'alt': 'media'}),
-          headers: authHeaders,
-        )
-        .timeout(_driveRequestTimeout);
-    _throwIfFailed(response);
+    String fileId, {
+    bool requireVersion = false,
+  }) async {
+    final (response, etag) = await _downloadJson(
+      authHeaders,
+      fileId,
+      requireVersion,
+    );
 
     final decoded = jsonDecode(response.body) as Map<String, Object?>;
+    if (decoded['compacted'] == true) {
+      return _DownloadedEvent(
+        deletion: EventDeletion.fromJson(
+          Map<String, Object?>.from(decoded['deletion'] as Map),
+        ),
+        sourceDeviceId: decoded['sourceDeviceId'] as String?,
+        etag: etag,
+        fileId: fileId,
+      );
+    }
     final event = decoded['event'];
     final parsedEvent = _eventFromJson(
       event is Map ? Map<String, Object?>.from(event) : decoded,
@@ -1372,62 +1436,72 @@ class GoogleDriveSyncService implements SyncService {
     return _DownloadedEvent(
       event: parsedEvent,
       sourceDeviceId: decoded['sourceDeviceId'] as String?,
+      etag: etag,
+      fileId: fileId,
     );
   }
 
-  Future<_DownloadedSettings?> _downloadSettingsFile(
+  Future<_DownloadedSettings> _downloadSettingsFile(
     Map<String, String> authHeaders,
-    String fileId,
-  ) async {
-    final response = await _httpClient
-        .get(
-          Uri.https(_driveHost, '/drive/v3/files/$fileId', {'alt': 'media'}),
-          headers: authHeaders,
-        )
-        .timeout(_driveRequestTimeout);
-    _throwIfFailed(response);
-
+    String fileId, {
+    bool requireVersion = false,
+  }) async {
+    final (response, etag) = await _downloadJson(
+      authHeaders,
+      fileId,
+      requireVersion,
+    );
     final decoded = jsonDecode(response.body) as Map<String, Object?>;
     final settings = decoded['settings'];
     if (settings is! Map) {
       throw const GoogleDriveSyncException('Google Drive 설정 백업 데이터가 손상되었습니다.');
     }
-    final settingsJson = Map<String, Object?>.from(settings);
-    return _DownloadedSettings(
-      settings: _settingsFromJson(settingsJson),
-      sourceDeviceId: decoded['sourceDeviceId'] as String?,
-      hasAppTextSize:
-          settingsJson.containsKey('appTextSize') ||
-          settingsJson.containsKey('calendarEventTextSize'),
-      hasAppStartView: settingsJson.containsKey('appStartView'),
-      hasWeekDayLayoutMode: settingsJson.containsKey('weekDayLayoutMode'),
-      hasCalendarEventTitleAlignment: settingsJson.containsKey(
-        'calendarEventTitleAlignment',
-      ),
-      hasCalendarEventSortPriority: settingsJson.containsKey(
-        'calendarEventSortPriority',
-      ),
-      hasCalendarManualEventOrders: settingsJson.containsKey(
-        'calendarManualEventOrders',
-      ),
-      hasCalendarHolidayBackgroundEnabled: settingsJson.containsKey(
-        'calendarHolidayBackgroundEnabled',
-      ),
-    );
+    final revisions = decoded['fieldRevisions'];
+    final document = revisions is Map
+        ? SettingsSyncDocument.fromJson(Map<String, Object?>.from(revisions))
+        : SettingsSyncDocument.legacy(
+            Map<String, Object?>.from(settings)..remove('onboardingCompleted'),
+          );
+    return _DownloadedSettings(document: document, fileId: fileId, etag: etag);
   }
 
-  Future<void> _uploadEventFile(
-    Map<String, String> authHeaders,
-    CalendarEvent event,
-    _DriveFile? remoteFile,
+  Future<(http.Response, String?)> _downloadJson(
+    Map<String, String> headers,
+    String fileId,
+    bool requireVersion,
   ) async {
-    final sourceDeviceId = await _settingsRepository.deviceId();
-    await _uploadJsonFile(
-      authHeaders,
-      fileName: _eventFileName(event.id),
-      fileId: remoteFile?.id,
-      jsonBody: _encodeEventFile(event, sourceDeviceId: sourceDeviceId),
-    );
+    for (var attempt = 0; attempt < 4; attempt++) {
+      final body = await _httpClient
+          .get(
+            Uri.https(_driveHost, '/drive/v3/files/$fileId', {'alt': 'media'}),
+            headers: headers,
+          )
+          .timeout(_driveRequestTimeout);
+      _throwIfFailed(body);
+      if (!requireVersion) return (body, null);
+      // Media ETags are not file metadata ETags. Drive v2 exposes the latter;
+      // the checksum binds it to the exact snapshot we are about to merge.
+      final metadata = await _httpClient
+          .get(
+            Uri.https(_driveHost, '/drive/v2/files/$fileId', {
+              'fields': 'etag,md5Checksum',
+            }),
+            headers: headers,
+          )
+          .timeout(_driveRequestTimeout);
+      _throwIfFailed(metadata);
+      final data = jsonDecode(metadata.body) as Map<String, dynamic>;
+      final etag = data['etag'] as String?;
+      if (etag == null || etag.isEmpty || data['md5Checksum'] == null) {
+        throw const GoogleDriveSyncException(
+          'Google Drive 파일의 변경 확인 정보를 받지 못했습니다. 기존 데이터는 덮어쓰지 않았습니다.',
+        );
+      }
+      if (data['md5Checksum'] == md5.convert(body.bodyBytes).toString()) {
+        return (body, etag);
+      }
+    }
+    throw const GoogleDriveSyncException('동시에 변경된 파일이 있어 동기화를 다시 시도해야 합니다.');
   }
 
   Future<void> _uploadJsonFile(
@@ -1435,21 +1509,32 @@ class GoogleDriveSyncService implements SyncService {
     required String fileName,
     required String jsonBody,
     String? fileId,
+    String? expectedEtag,
   }) async {
+    _validateSyncSession?.call();
     if (fileId != null) {
+      if (expectedEtag == null || expectedEtag.isEmpty) {
+        throw const GoogleDriveSyncException(
+          'Google Drive 파일의 변경 확인 정보를 받지 못했습니다. 기존 데이터는 덮어쓰지 않았습니다.',
+        );
+      }
       final response = await _httpClient
-          .patch(
-            Uri.https(_driveHost, '/upload/drive/v3/files/$fileId', {
+          .put(
+            Uri.https(_driveHost, '/upload/drive/v2/files/$fileId', {
               'uploadType': 'media',
               'fields': 'id',
             }),
             headers: {
               ...authHeaders,
               'Content-Type': 'application/json; charset=UTF-8',
+              'If-Match': expectedEtag,
             },
             body: utf8.encode(jsonBody),
           )
           .timeout(_driveRequestTimeout);
+      if (response.statusCode == 412 || response.statusCode == 404) {
+        throw const _ConcurrentDriveWrite();
+      }
       _throwIfFailed(response);
       return;
     }
@@ -1532,18 +1617,12 @@ class GoogleDriveSyncService implements SyncService {
     });
   }
 
-  String _encodeSettingsFile(
-    AppSettings settings, {
-    required String sourceDeviceId,
-  }) {
-    return jsonEncode({
-      'schemaVersion': 2,
-      'type': 'settings',
-      'updatedAt': DateTime.now().toUtc().toIso8601String(),
-      'sourceDeviceId': sourceDeviceId,
-      'settings': _settingsToJson(settings),
-    });
-  }
+  String _encodeDeletionFile(EventDeletion deletion) => jsonEncode({
+    'schemaVersion': 2,
+    'type': 'event',
+    'compacted': true,
+    'deletion': deletion.toJson(),
+  });
 
   String _eventFileName(String eventId) {
     return '$_eventFilePrefix$eventId$_eventFileSuffix';
@@ -1585,6 +1664,12 @@ class GoogleDriveSyncService implements SyncService {
       'recurrenceFrequency': normalized.recurrence.frequency.name,
       'recurrenceInterval': normalized.recurrence.interval,
       'recurrenceUntil': normalized.recurrence.until?.toUtc().toIso8601String(),
+      'recurrenceUntilDate': normalized.recurrence.until == null
+          ? null
+          : _dateOnlyToJson(normalized.recurrence.until!),
+      'recurrenceExcludedDatesOnly': normalized.recurrence.excludedDates
+          .map(_dateOnlyToJson)
+          .toList(),
       'recurrenceCount': normalized.recurrence.count,
       'recurrenceExcludedDates': normalized.recurrence.excludedDates
           .map((date) => DateTime(date.year, date.month, date.day))
@@ -1640,9 +1725,16 @@ class GoogleDriveSyncService implements SyncService {
           json['recurrenceFrequency'] as String?,
         ),
         interval: json['recurrenceInterval'] as int? ?? 1,
-        until: _readDate(json['recurrenceUntil']),
+        until: json.containsKey('recurrenceUntilDate')
+            ? _readAllDayDate(json['recurrenceUntilDate'])
+            : _readDate(json['recurrenceUntil']),
         count: json['recurrenceCount'] as int?,
-        excludedDates: _dateListValue(json['recurrenceExcludedDates']),
+        excludedDates: json['recurrenceExcludedDatesOnly'] is List
+            ? (json['recurrenceExcludedDatesOnly'] as List)
+                  .map(_readAllDayDate)
+                  .whereType<DateTime>()
+                  .toList()
+            : _dateListValue(json['recurrenceExcludedDates']),
       ),
       createdAt: createdAt,
       updatedAt: updatedAt,
@@ -1723,46 +1815,6 @@ class GoogleDriveSyncService implements SyncService {
       });
     }
     return EventCategory.fromStored(rawCategory, colorValue: colorValue);
-  }
-
-  Map<String, Object?> _settingsToJson(AppSettings settings) {
-    return {
-      'defaultReminderMinutes': settings.defaultReminderMinutes,
-      'defaultReminderMinutesList': settings.defaultReminderMinutesList,
-      'allDayReminderHour': settings.allDayReminderHour,
-      'allDayReminderMinute': settings.allDayReminderMinute,
-      'morningBriefingHour': settings.morningBriefingHour,
-      'morningBriefingMinute': settings.morningBriefingMinute,
-      'morningBriefingEnabled': settings.morningBriefingEnabled,
-      'weekStartsOnMonday': settings.weekStartsOnMonday,
-      'showLunarDates': settings.showLunarDates,
-      'showAdjacentMonthDates': settings.showAdjacentMonthDates,
-      'onboardingCompleted': settings.onboardingCompleted,
-      'aiEnabled': settings.aiEnabled,
-      'aiOnlyForComplexInput': settings.aiOnlyForComplexInput,
-      'blockSensitiveAi': settings.blockSensitiveAi,
-      'categories': settings.categories
-          .map((category) => category.toJson())
-          .toList(),
-      'dDayReminderOffsets': settings.dDayReminderOffsets,
-      'appTextSize': settings.appTextSize.name,
-      'appStartView': settings.appStartView.name,
-      'defaultCalendarView': settings.defaultCalendarView.name,
-      'weekDayLayoutMode': settings.weekDayLayoutMode.name,
-      'calendarEventTitleAlignment': settings.calendarEventTitleAlignment.name,
-      'calendarEventSortPriority': settings.calendarEventSortPriority.name,
-      'calendarManualEventOrders': settings.calendarManualEventOrders.map(
-        (date, order) => MapEntry(date, order.toJson()),
-      ),
-      'hiddenCategoryIds': settings.hiddenCategoryIds,
-      'calendarShowHolidays': settings.calendarShowHolidays,
-      'calendarHolidayBackgroundEnabled':
-          settings.calendarHolidayBackgroundEnabled,
-      'calendarDdayOnly': settings.calendarDdayOnly,
-      'use24HourTime': settings.use24HourTime,
-      'themeMode': settings.themeMode.name,
-      'monthNavigationMode': settings.monthNavigationMode.name,
-    };
   }
 
   AppSettings _settingsFromJson(Map<String, Object?> json) {
@@ -1945,34 +1997,46 @@ enum _SyncRequestKind {
 }
 
 class _DownloadedSettings {
-  const _DownloadedSettings({
-    required this.settings,
-    required this.hasAppTextSize,
-    required this.hasAppStartView,
-    required this.hasWeekDayLayoutMode,
-    required this.hasCalendarEventTitleAlignment,
-    required this.hasCalendarEventSortPriority,
-    required this.hasCalendarManualEventOrders,
-    required this.hasCalendarHolidayBackgroundEnabled,
-    required this.sourceDeviceId,
-  });
-
-  final AppSettings settings;
-  final bool hasAppTextSize;
-  final bool hasAppStartView;
-  final bool hasWeekDayLayoutMode;
-  final bool hasCalendarEventTitleAlignment;
-  final bool hasCalendarEventSortPriority;
-  final bool hasCalendarManualEventOrders;
-  final bool hasCalendarHolidayBackgroundEnabled;
-  final String? sourceDeviceId;
+  const _DownloadedSettings({required this.document, this.fileId, this.etag});
+  final SettingsSyncDocument document;
+  final String? fileId;
+  final String? etag;
 }
 
 class _DownloadedEvent {
-  const _DownloadedEvent({required this.event, required this.sourceDeviceId});
+  const _DownloadedEvent({
+    this.event,
+    this.deletion,
+    required this.sourceDeviceId,
+    this.etag,
+    this.fileId,
+  });
 
-  final CalendarEvent event;
+  final CalendarEvent? event;
+  final EventDeletion? deletion;
   final String? sourceDeviceId;
+  final String? etag;
+  final String? fileId;
+  String get id => event?.id ?? deletion!.id;
+  DateTime get changedAt =>
+      event == null ? deletion!.deletedAt : eventChangedAt(event!);
+  bool get isDeleted => deletion != null || event!.isDeleted;
+
+  int compareTo(_DownloadedEvent other) {
+    final time = changedAt.compareTo(other.changedAt);
+    if (time != 0) return time;
+    if (isDeleted != other.isDeleted) return isDeleted ? 1 : -1;
+    if (isDeleted && (deletion != null || other.deletion != null)) {
+      return (deletion != null ? 1 : 0).compareTo(
+        other.deletion != null ? 1 : 0,
+      );
+    }
+    return compareEventVersions(event!, other.event!);
+  }
+}
+
+class _ConcurrentDriveWrite implements Exception {
+  const _ConcurrentDriveWrite();
 }
 
 class _PendingSyncRequest {

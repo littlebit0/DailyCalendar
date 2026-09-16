@@ -1,12 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 import 'package:daily/core/analytics/product_analytics.dart';
+import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/sync/google_drive_sync_service.dart';
+import 'package:daily/core/sync/settings_sync_document.dart';
+import 'package:daily/features/events/data/app_database.dart';
+import 'package:daily/features/events/data/drift_event_repository.dart';
+import 'package:drift/native.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
@@ -17,6 +23,141 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  _latestMergeTests();
+
+  test(
+    'startup propagates failure without backing up pending local changes',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final repository = _MemoryEventRepository();
+      await repository.save(
+        _event(
+          id: 'pending',
+          title: 'local',
+          startAt: DateTime(2026, 9, 14),
+          endAt: DateTime(2026, 9, 15),
+          updatedAt: DateTime(2026, 9, 14),
+          syncStatus: 'pending',
+        ),
+      );
+      final requests = <http.Request>[];
+      final service = _service(
+        repository: repository,
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: _versionedClient((request) async {
+          requests.add(request);
+          return http.Response('offline', 503);
+        }),
+      );
+      addTearDown(service.dispose);
+      await expectLater(
+        service.start(),
+        throwsA(isA<GoogleDriveSyncException>()),
+      );
+      expect((await repository.findById('pending'))?.syncStatus, 'pending');
+      expect(requests.every((request) => request.method == 'GET'), isTrue);
+      expect(service.statusNotifier.value.lastSyncedAt, isNull);
+    },
+  );
+
+  test(
+    'startup retry checks changes first and unchanged data avoids full download',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      await SettingsRepository(
+        preferences: preferences,
+      ).saveDriveChangePageToken(
+        accountEmail: 'tester@example.com',
+        pageToken: 'baseline',
+      );
+      var calls = 0;
+      final service = _service(
+        repository: _MemoryEventRepository(),
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: _versionedClient((request) async {
+          expect(request.url.path, '/drive/v3/changes');
+          if (++calls == 1) return http.Response('offline', 503);
+          return _jsonResponse({'changes': [], 'newStartPageToken': 'next'});
+        }),
+        backupRestoreDelay: const Duration(seconds: 3),
+      );
+      addTearDown(service.dispose);
+      await expectLater(
+        service.start(),
+        throwsA(isA<GoogleDriveSyncException>()),
+      );
+      await service.start().timeout(const Duration(seconds: 1));
+      expect(calls, 2);
+      expect(service.statusNotifier.value.message, '최신 상태');
+    },
+  );
+
+  test(
+    'account change during startup download never applies old account events',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final settings = SettingsRepository(preferences: preferences);
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'tester@example.com'),
+      );
+      final repository = _MemoryEventRepository();
+      final downloading = Completer<void>();
+      final response = Completer<http.Response>();
+      final service = _service(
+        repository: repository,
+        notificationService: _FakeNotificationService(),
+        preferences: preferences,
+        httpClient: _versionedClient((request) async {
+          if (request.url.path == '/drive/v3/changes/startPageToken') {
+            return _jsonResponse({'startPageToken': 'baseline'});
+          }
+          if (request.url.path == '/drive/v3/files') {
+            if ((request.url.queryParameters['q'] ?? '').contains(
+              'daily-sync-v2-event-',
+            )) {
+              return _driveFiles([
+                {
+                  'id': 'old-event-file',
+                  'name': 'daily-sync-v2-event-old-event.json',
+                },
+              ]);
+            }
+            return _driveFiles([]);
+          }
+          downloading.complete();
+          return response.future;
+        }),
+      );
+      addTearDown(service.dispose);
+      final operation = service.start();
+      final expectation = expectLater(
+        operation,
+        throwsA(isA<GoogleDriveAuthException>()),
+      );
+      await downloading.future;
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'other@example.com'),
+      );
+      response.complete(
+        _jsonResponse(
+          _eventFileJson(
+            id: 'old-event',
+            title: 'old account data',
+            startAt: '2026-09-14T09:00:00',
+            endAt: '2026-09-14T10:00:00',
+          ),
+        ),
+      );
+      await expectation;
+      expect(repository.events, isEmpty);
+      expect(settings.driveChangePageToken('tester@example.com'), isNull);
+    },
+  );
 
   test('restore sync downloads v2 event files without uploading', () async {
     SharedPreferences.setMockInitialValues({});
@@ -24,7 +165,7 @@ void main() {
     final repository = _MemoryEventRepository();
     final notificationService = _FakeNotificationService();
     final requests = <http.Request>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       requests.add(request);
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
@@ -119,7 +260,7 @@ void main() {
       final restoreStarted = Completer<void>();
       final releaseRestore = Completer<void>();
       final uploadRequests = <http.Request>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
           if (query.contains('daily-sync-v2-settings.json')) {
@@ -185,7 +326,7 @@ void main() {
       );
       await repository.save(local);
       final requests = <http.Request>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         requests.add(request);
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
@@ -278,7 +419,7 @@ void main() {
       );
       await repository.save(local);
       final requests = <http.Request>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         requests.add(request);
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
@@ -362,7 +503,7 @@ void main() {
 
       final uploadedEventBodies = <Map<String, Object?>>[];
       final requests = <http.Request>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         requests.add(request);
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
@@ -394,8 +535,8 @@ void main() {
             ),
           );
         }
-        if (request.method == 'PATCH' &&
-            request.url.path == '/upload/drive/v3/files/remote-queued-event') {
+        if (request.method == 'PUT' &&
+            request.url.path == '/upload/drive/v2/files/remote-queued-event') {
           uploadedEventBodies.add(
             jsonDecode(request.body) as Map<String, Object?>,
           );
@@ -441,7 +582,7 @@ void main() {
       final preferences = await SharedPreferences.getInstance();
       final repository = _MemoryEventRepository();
       final notificationService = _FakeNotificationService();
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           return _driveFiles([
             {
@@ -501,7 +642,7 @@ void main() {
         ),
       );
       final uploaded = <String>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
           if (query.contains('daily-sync-v2-settings.json')) {
@@ -552,7 +693,7 @@ void main() {
       ),
     );
     final requests = <http.Request>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       requests.add(request);
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
@@ -614,7 +755,7 @@ void main() {
       final uploadOrder = <String>[];
       Map<String, Object?>? uploadedEvent;
       Map<String, Object?>? uploadedSettings;
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
           if (query.contains('daily-sync-v2-event-category-color-event.json')) {
@@ -631,9 +772,9 @@ void main() {
             ]);
           }
         }
-        if (request.method == 'PATCH' &&
+        if (request.method == 'PUT' &&
             request.url.path ==
-                '/upload/drive/v3/files/category-color-event-file') {
+                '/upload/drive/v2/files/category-color-event-file') {
           uploadOrder.add('event');
           uploadedEvent =
               (jsonDecode(request.body) as Map<String, Object?>)['event']
@@ -653,8 +794,12 @@ void main() {
             ),
           );
         }
-        if (request.method == 'PATCH' &&
-            request.url.path == '/upload/drive/v3/files/settings-file') {
+        if (request.method == 'GET' &&
+            request.url.path == '/drive/v3/files/settings-file') {
+          return _jsonResponse({'settings': {}});
+        }
+        if (request.method == 'PUT' &&
+            request.url.path == '/upload/drive/v2/files/settings-file') {
           uploadOrder.add('settings');
           uploadedSettings =
               (jsonDecode(request.body) as Map<String, Object?>)['settings']
@@ -707,15 +852,27 @@ void main() {
       AppSettings(categories: [EventCategory.basic, localCategory]),
     );
 
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
         if (query.contains('daily-sync-v2-settings.json')) {
-          fail('pending local settings must not request an older remote file');
+          return _driveFiles([
+            {'id': 'old-settings', 'name': 'daily-sync-v2-settings.json'},
+          ]);
         }
         if (query.contains('daily-sync-v2-event-')) {
           return _driveFiles([]);
         }
+      }
+      if (request.url.path == '/drive/v3/files/old-settings') {
+        return _jsonResponse({
+          'settings': {
+            'categories': [
+              EventCategory.basic.toJson(),
+              localCategory.copyWith(colorValue: 0xff000000).toJson(),
+            ],
+          },
+        });
       }
       return http.Response('unexpected ${request.method} ${request.url}', 500);
     });
@@ -754,7 +911,10 @@ void main() {
     await repository.save(pending);
 
     final uploadedEventBodies = <Map<String, Object?>>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
+      if (request.url.path == '/drive/v3/changes/startPageToken') {
+        return _jsonResponse({'startPageToken': 'startup-baseline'});
+      }
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
         if (query.contains('daily-sync-v2-settings.json')) {
@@ -774,8 +934,8 @@ void main() {
           return _driveFiles([]);
         }
       }
-      if (request.method == 'PATCH' &&
-          request.url.path == '/upload/drive/v3/files/restart-pending-file') {
+      if (request.method == 'PUT' &&
+          request.url.path == '/upload/drive/v2/files/restart-pending-file') {
         uploadedEventBodies.add(
           jsonDecode(request.body) as Map<String, Object?>,
         );
@@ -833,7 +993,7 @@ void main() {
     await repository.save(changed);
 
     final uploadedEventBodies = <Map<String, Object?>>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
         if (query.contains('daily-sync-v2-settings.json')) {
@@ -853,9 +1013,9 @@ void main() {
           fail('pending event flush must not list every event file');
         }
       }
-      if (request.method == 'PATCH' &&
+      if (request.method == 'PUT' &&
           request.url.path ==
-              '/upload/drive/v3/files/queued-before-exit-file') {
+              '/upload/drive/v2/files/queued-before-exit-file') {
         uploadedEventBodies.add(
           jsonDecode(request.body) as Map<String, Object?>,
         );
@@ -925,7 +1085,7 @@ void main() {
     );
 
     final requests = <http.Request>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       requests.add(request);
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
@@ -949,8 +1109,8 @@ void main() {
           request.url.path == '/upload/drive/v3/files') {
         return _jsonResponse({'id': 'settings-file'});
       }
-      if (request.method == 'PATCH' &&
-          request.url.path == '/upload/drive/v3/files/local-file') {
+      if (request.method == 'PUT' &&
+          request.url.path == '/upload/drive/v2/files/local-file') {
         return _jsonResponse({'id': 'local-file'});
       }
       if (request.method == 'GET' &&
@@ -994,8 +1154,8 @@ void main() {
 
     final uploadIndex = requests.indexWhere(
       (request) =>
-          request.method == 'PATCH' &&
-          request.url.path == '/upload/drive/v3/files/local-file',
+          request.method == 'PUT' &&
+          request.url.path == '/upload/drive/v2/files/local-file',
     );
     final restoreDownloadIndex = requests.indexWhere(
       (request) =>
@@ -1029,7 +1189,7 @@ void main() {
     final releaseFirst = Completer<void>();
     final releaseSecond = Completer<void>();
     var settingsRequestCount = 0;
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
         if (query.contains('daily-sync-v2-settings.json')) {
@@ -1098,7 +1258,7 @@ void main() {
       await repository.save(unchanged);
       final beforeRestore = await repository.findById(unchanged.id);
 
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
           if (query.contains('daily-sync-v2-settings.json')) {
@@ -1155,7 +1315,7 @@ void main() {
     final repository = _MemoryEventRepository();
     final notificationService = _FakeNotificationService();
     final requests = <http.Request>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       requests.add(request);
       return http.Response('unexpected ${request.method} ${request.url}', 500);
     });
@@ -1181,7 +1341,7 @@ void main() {
       final repository = _MemoryEventRepository();
       final notificationService = _FakeNotificationService();
       final requests = <http.Request>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         requests.add(request);
         return http.Response(
           'unexpected ${request.method} ${request.url}',
@@ -1247,7 +1407,7 @@ void main() {
       final repository = _MemoryEventRepository();
       final notificationService = _FakeNotificationService();
       final requests = <http.Request>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         requests.add(request);
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
@@ -1351,7 +1511,7 @@ void main() {
     final preferences = await SharedPreferences.getInstance();
     final repository = _MemoryEventRepository();
     final notificationService = _FakeNotificationService();
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
         if (query.contains('daily-sync-v2-settings.json')) {
@@ -1427,7 +1587,7 @@ void main() {
         updatedAt: DateTime(2026, 7, 17, 9, 1),
         syncStatus: 'pending',
       );
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           return _driveFiles([
             {
@@ -1449,8 +1609,8 @@ void main() {
             ),
           );
         }
-        if (request.method == 'PATCH' &&
-            request.url.path == '/upload/drive/v3/files/editing-event-file') {
+        if (request.method == 'PUT' &&
+            request.url.path == '/upload/drive/v2/files/editing-event-file') {
           await repository.save(newer);
           return _jsonResponse({'id': 'editing-event-file'});
         }
@@ -1509,7 +1669,7 @@ void main() {
         await repository.save(latest);
       };
 
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           final query = request.url.queryParameters['q'] ?? '';
           if (query.contains('daily-sync-v2-settings.json')) {
@@ -1571,8 +1731,16 @@ void main() {
     final repository = _MemoryEventRepository();
     final notificationService = _FakeNotificationService();
     final requests = <http.Request>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       requests.add(request);
+      if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
+        return _driveFiles([
+          {
+            'id': 'external-event-file',
+            'name': 'daily-sync-v2-event-external-event.json',
+          },
+        ]);
+      }
       if (request.method == 'GET' && request.url.path == '/drive/v3/changes') {
         expect(request.url.queryParameters['pageToken'], 'token-1');
         expect(request.url.queryParameters['spaces'], 'appDataFolder');
@@ -1648,7 +1816,15 @@ void main() {
       updatedAt: DateTime(2026, 7, 29, 15),
     );
     await repository.save(local);
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
+      if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
+        return _driveFiles([
+          {
+            'id': 'own-event-file',
+            'name': 'daily-sync-v2-event-own-event.json',
+          },
+        ]);
+      }
       if (request.method == 'GET' && request.url.path == '/drive/v3/changes') {
         return _jsonResponse({
           'newStartPageToken': 'token-2',
@@ -1702,7 +1878,7 @@ void main() {
       final repository = _MemoryEventRepository();
       final notificationService = _FakeNotificationService();
       var startTokenRequests = 0;
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' &&
             request.url.path == '/drive/v3/changes/startPageToken') {
           startTokenRequests += 1;
@@ -1755,8 +1931,13 @@ void main() {
       final repository = _MemoryEventRepository();
       final notificationService = _FakeNotificationService();
       final requests = <http.Request>[];
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         requests.add(request);
+        if (request.url.path == '/drive/v3/files') {
+          return _driveFiles([
+            {'id': 'settings-file', 'name': 'daily-sync-v2-settings.json'},
+          ]);
+        }
         if (request.method == 'GET' &&
             request.url.path == '/drive/v3/changes') {
           return _jsonResponse({
@@ -1804,7 +1985,7 @@ void main() {
       );
       expect(
         requests.any(
-          (request) => request.method == 'POST' || request.method == 'PATCH',
+          (request) => request.method == 'POST' || request.method == 'PUT',
         ),
         isFalse,
       );
@@ -1830,9 +2011,18 @@ void main() {
     );
     await repository.save(pending);
     final requestOrder = <String>[];
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
-        return _driveFiles([]);
+        return _driveFiles(
+          request.url.queryParameters['q']!.contains('external-event')
+              ? [
+                  {
+                    'id': 'external-event-file',
+                    'name': 'daily-sync-v2-event-external-event.json',
+                  },
+                ]
+              : [],
+        );
       }
       if (request.method == 'POST' &&
           request.url.path == '/upload/drive/v3/files') {
@@ -1900,7 +2090,7 @@ void main() {
     );
     await repository.save(local);
     var uploadCount = 0;
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         return _driveFiles([
           {
@@ -1922,7 +2112,7 @@ void main() {
           ),
         );
       }
-      if (request.method == 'PATCH') {
+      if (request.method == 'PUT') {
         uploadCount += 1;
         return _jsonResponse({'id': 'conflict-event-file'});
       }
@@ -1937,12 +2127,16 @@ void main() {
     );
     addTearDown(service.dispose);
 
-    await service.backupNow(eventIds: {local.id});
+    await expectLater(
+      service.backupNow(eventIds: {local.id}),
+      throwsA(isA<GoogleDriveSyncException>()),
+    );
 
     expect(uploadCount, 0);
     expect((await repository.findById(local.id))?.title, '오래된 로컬 수정');
     expect((await repository.findById(local.id))?.syncStatus, 'pending');
-    expect(service.statusNotifier.value.message, '일부 백업 보류 · 먼저 복원 필요');
+    expect(service.statusNotifier.value.lastSyncedAt, isNull);
+    expect(service.statusNotifier.value.message, '동기화 실패');
   });
 
   test('backup never applies a newer remote tombstone to local data', () async {
@@ -1960,7 +2154,7 @@ void main() {
     );
     await repository.save(local);
 
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         return _driveFiles([
           {
@@ -1994,13 +2188,17 @@ void main() {
     );
     addTearDown(service.dispose);
 
-    await service.backupNow(eventIds: {local.id});
+    await expectLater(
+      service.backupNow(eventIds: {local.id}),
+      throwsA(isA<GoogleDriveSyncException>()),
+    );
 
     final saved = await repository.findById(local.id);
     expect(saved?.deletedAt, isNull);
     expect(saved?.syncStatus, 'pending');
     expect(notificationService.cancelled, isEmpty);
-    expect(service.statusNotifier.value.message, '일부 백업 보류 · 먼저 복원 필요');
+    expect(service.statusNotifier.value.lastSyncedAt, isNull);
+    expect(service.statusNotifier.value.message, '동기화 실패');
   });
 
   test('failed automatic backup keeps pending data and retries', () async {
@@ -2018,7 +2216,7 @@ void main() {
     );
     await repository.save(pending);
     var uploadAttempts = 0;
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         return _driveFiles([
           {
@@ -2027,8 +2225,8 @@ void main() {
           },
         ]);
       }
-      if (request.method == 'PATCH' &&
-          request.url.path == '/upload/drive/v3/files/retry-event-file') {
+      if (request.method == 'PUT' &&
+          request.url.path == '/upload/drive/v2/files/retry-event-file') {
         uploadAttempts += 1;
         if (uploadAttempts == 1) {
           return http.Response('temporary server error', 503);
@@ -2094,7 +2292,7 @@ void main() {
       );
       await repository.save(pending);
       var uploadAttempts = 0;
-      final httpClient = MockClient((request) async {
+      final httpClient = _versionedClient((request) async {
         if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
           return _driveFiles([]);
         }
@@ -2165,7 +2363,7 @@ void main() {
     await repository.save(second);
     var firstUploads = 0;
     var secondUploads = 0;
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
         return _driveFiles([
@@ -2181,13 +2379,13 @@ void main() {
             },
         ]);
       }
-      if (request.method == 'PATCH' &&
-          request.url.path == '/upload/drive/v3/files/partial-success-file') {
+      if (request.method == 'PUT' &&
+          request.url.path == '/upload/drive/v2/files/partial-success-file') {
         firstUploads += 1;
         return _jsonResponse({'id': 'partial-success-file'});
       }
-      if (request.method == 'PATCH' &&
-          request.url.path == '/upload/drive/v3/files/partial-retry-file') {
+      if (request.method == 'PUT' &&
+          request.url.path == '/upload/drive/v2/files/partial-retry-file') {
         secondUploads += 1;
         if (secondUploads == 1) {
           return http.Response('temporary server error', 503);
@@ -2261,7 +2459,7 @@ void main() {
     );
     await repository.save(pending);
     var attempts = 0;
-    final httpClient = MockClient((request) async {
+    final httpClient = _versionedClient((request) async {
       attempts += 1;
       throw http.ClientException('network unavailable', request.url);
     });
@@ -2300,7 +2498,7 @@ void main() {
         repository: _MemoryEventRepository(),
         notificationService: _FakeNotificationService(),
         preferences: preferences,
-        httpClient: MockClient((request) async => http.Response('', 500)),
+        httpClient: _versionedClient((request) async => http.Response('', 500)),
         analytics: analytics,
       );
       addTearDown(service.dispose);
@@ -2325,7 +2523,7 @@ void main() {
 
 GoogleDriveSyncService _service({
   GoogleDriveAuthService? authService,
-  required _MemoryEventRepository repository,
+  required EventRepository repository,
   required _FakeNotificationService notificationService,
   required SharedPreferences preferences,
   required http.Client httpClient,
@@ -2349,6 +2547,31 @@ GoogleDriveSyncService _service({
 
 http.Response _driveFiles(List<Map<String, Object?>> files) {
   return _jsonResponse({'files': files});
+}
+
+MockClient _versionedClient(
+  Future<http.Response> Function(http.Request) handler,
+) {
+  final bodies = <String, http.Response>{};
+  return MockClient((request) async {
+    if (request.url.path.startsWith('/drive/v2/files/')) {
+      final body = bodies[request.url.pathSegments.last];
+      if (body == null) {
+        throw StateError('Metadata without downloaded snapshot');
+      }
+      return _jsonResponse({
+        'etag': '"metadata-version"',
+        'md5Checksum': md5.convert(body.bodyBytes).toString(),
+      });
+    }
+    final response = await handler(request);
+    if (request.method == 'GET' &&
+        request.url.queryParameters['alt'] == 'media' &&
+        response.statusCode == 200) {
+      bodies[request.url.pathSegments.last] = response;
+    }
+    return response;
+  });
 }
 
 http.Response _jsonResponse(Map<String, Object?> body) {
@@ -2632,5 +2855,345 @@ class _MemoryEventRepository implements EventRepository {
     DateTime rangeEnd,
   ) {
     return Stream.value(events);
+  }
+}
+
+void _latestMergeTests() {
+  group('latest mutation merge with versioned Drive', () {
+    late _VersionedDrive drive;
+    late AppDatabase database;
+    late DriftEventRepository repository;
+    late SettingsRepository settings;
+    late GoogleDriveSyncService service;
+    setUp(() async {
+      SharedPreferences.setMockInitialValues({'deviceId': 'local'});
+      final prefs = await SharedPreferences.getInstance();
+      settings = SettingsRepository(
+        preferences: prefs,
+        now: () => DateTime.utc(2026, 9, 15),
+      );
+      database = AppDatabase.forTesting(NativeDatabase.memory());
+      repository = DriftEventRepository(database);
+      drive = _VersionedDrive();
+      service = GoogleDriveSyncService(
+        authService: _FakeGoogleDriveAuthService(),
+        eventRepository: repository,
+        notificationService: _FakeNotificationService(),
+        settingsRepository: settings,
+        httpClient: MockClient(drive.handle),
+        changeSyncDelay: const Duration(hours: 1),
+        backupRestoreDelay: Duration.zero,
+        automaticRetryDelays: const [],
+        now: () => DateTime(2026, 9, 16),
+      );
+    });
+    tearDown(() async {
+      service.dispose();
+      await database.close();
+    });
+
+    CalendarEvent local() => _event(
+      id: 'merge',
+      title: 'Local',
+      startAt: DateTime(2026, 9, 17),
+      endAt: DateTime(2026, 9, 18),
+      updatedAt: DateTime.utc(2026, 9, 15),
+      syncStatus: 'pending',
+    );
+
+    Map<String, Object?> remote({
+      String title = 'Remote',
+      String updated = '2026-09-15T01:00:00Z',
+      String? deleted,
+    }) => _eventFileJson(
+      id: 'merge',
+      title: title,
+      startAt: '2026-09-17',
+      endAt: '2026-09-18',
+      updatedAt: updated,
+      deletedAt: deleted,
+    );
+
+    test(
+      'newer remote edit replaces pending local; later local edits upload',
+      () async {
+        await repository.save(local());
+        drive.seed('file', 'daily-sync-v2-event-merge.json', remote());
+        await service.syncNow();
+        expect((await repository.findById('merge'))!.title, 'Remote');
+        expect(await service.hasPendingChanges(), isFalse);
+        await repository.save(
+          (await repository.findById('merge'))!.copyWith(
+            title: 'Latest',
+            updatedAt: DateTime.utc(2026, 9, 15, 2),
+            syncStatus: 'pending',
+          ),
+        );
+        await service.syncNow();
+        expect((drive.payload('file')['event'] as Map)['title'], 'Latest');
+        expect(await service.hasPendingChanges(), isFalse);
+      },
+    );
+
+    test(
+      'duplicate Drive names choose newest independent of list order',
+      () async {
+        drive.seed('new', 'daily-sync-v2-event-merge.json', remote());
+        drive.seed(
+          'old',
+          'daily-sync-v2-event-merge.json',
+          remote(title: 'Old', updated: '2026-09-14T00:00:00Z'),
+        );
+        await service.restoreNow();
+        expect((await repository.findById('merge'))!.title, 'Remote');
+        drive.reverseOrder = true;
+        await service.restoreNow();
+        expect((await repository.findById('merge'))!.title, 'Remote');
+      },
+    );
+
+    test(
+      'conditional write retries and never overwrites a concurrent newer edit',
+      () async {
+        await repository.save(local());
+        drive.seed(
+          'file',
+          'daily-sync-v2-event-merge.json',
+          remote(updated: '2026-09-14T00:00:00Z'),
+        );
+        drive.beforeWrite = () => drive.seed(
+          'file',
+          'daily-sync-v2-event-merge.json',
+          remote(title: 'Concurrent'),
+        );
+        await expectLater(
+          service.backupNow(eventIds: {'merge'}),
+          throwsA(isA<GoogleDriveSyncException>()),
+        );
+        expect(drive.preconditionFailures, 1);
+        expect((drive.payload('file')['event'] as Map)['title'], 'Concurrent');
+        expect((await repository.findById('merge'))!.title, 'Local');
+        expect(service.statusNotifier.value.lastSyncedAt, isNull);
+        await service.restoreNow();
+        expect((await repository.findById('merge'))!.title, 'Concurrent');
+      },
+    );
+
+    test(
+      'mismatched file checksum fails closed and leaves local edits pending',
+      () async {
+        await repository.save(local());
+        drive.seed(
+          'file',
+          'daily-sync-v2-event-merge.json',
+          remote(updated: '2026-09-14T00:00:00Z'),
+        );
+        drive.invalidChecksum = true;
+        await expectLater(
+          service.backupNow(eventIds: {'merge'}),
+          throwsA(isA<GoogleDriveSyncException>()),
+        );
+        expect(drive.writes, 0);
+        expect(await service.hasPendingChanges(), isTrue);
+      },
+    );
+
+    test(
+      'upload acknowledgement cannot resurrect a concurrently compacted event',
+      () async {
+        final original = local().copyWith(
+          startAt: DateTime(2026, 9, 1),
+          endAt: DateTime(2026, 9, 2),
+        );
+        await repository.save(original);
+        drive.seed(
+          'file',
+          'daily-sync-v2-event-merge.json',
+          remote(updated: '2026-09-14T00:00:00Z'),
+        );
+        drive.beforeWrite = () async {
+          await repository.save(
+            original.copyWith(
+              deletedAt: DateTime.utc(2026, 9, 15, 2),
+              syncStatus: 'pending_delete',
+            ),
+          );
+          await repository.compactDeletedEvents(DateTime(2026, 9, 16));
+        };
+        await service.backupNow(eventIds: {'merge'});
+        expect(await repository.findById('merge'), isNull);
+        expect(
+          await repository.deletionRecords(pendingOnly: true),
+          hasLength(1),
+        );
+        await service.syncPendingChangesNow();
+        expect(drive.payload('file')['compacted'], isTrue);
+        expect(await service.hasPendingChanges(), isFalse);
+      },
+    );
+
+    test(
+      'past deleted body is replaced by minimal ledger and blocks stale copies',
+      () async {
+        final removed = local().copyWith(
+          startAt: DateTime(2026, 9, 1),
+          endAt: DateTime(2026, 9, 2),
+          deletedAt: DateTime.utc(2026, 9, 15, 2),
+          syncStatus: 'pending_delete',
+        );
+        await repository.save(removed);
+        drive.seed(
+          'file',
+          'daily-sync-v2-event-merge.json',
+          remote(updated: '2026-09-14T00:00:00Z'),
+        );
+        await service.syncPendingChangesNow();
+        expect(await repository.findById('merge'), isNull);
+        expect(drive.payload('file')['event'], isNull);
+        expect((drive.payload('file')['deletion'] as Map).keys.toSet(), {
+          'id',
+          'deletedAt',
+        });
+        expect(await service.hasPendingChanges(), isFalse);
+        await repository.save(local());
+        await service.restoreNow();
+        expect(await repository.findById('merge'), isNull);
+      },
+    );
+
+    test(
+      'settings merge different fields on restore instead of skipping pending data',
+      () async {
+        await settings.save(
+          settings.load().copyWith(themeMode: AppThemeMode.dark),
+        );
+        final remoteDoc = const SettingsSyncDocument().recordChanges(
+          before: {'weekStartsOnMonday': false},
+          after: {'weekStartsOnMonday': true},
+          changedAt: DateTime.utc(2026, 9, 15, 1),
+          deviceId: 'remote',
+        );
+        drive.seed('settings', 'daily-sync-v2-settings.json', {
+          'settings': {'weekStartsOnMonday': true},
+          'fieldRevisions': remoteDoc.toJson(),
+        });
+        await service.syncNow();
+        expect(settings.load().themeMode, AppThemeMode.dark);
+        expect(settings.load().weekStartsOnMonday, isTrue);
+        expect(settings.hasPendingSettingsSync, isFalse);
+        expect(
+          (drive.payload('settings')['settings'] as Map)['themeMode'],
+          'dark',
+        );
+        expect(
+          (drive.payload('settings')['settings'] as Map)['weekStartsOnMonday'],
+          isTrue,
+        );
+      },
+    );
+
+    test('settings conditional retry merges a concurrent field edit', () async {
+      await settings.save(
+        settings.load().copyWith(themeMode: AppThemeMode.dark),
+      );
+      drive.seed('settings', 'daily-sync-v2-settings.json', {'settings': {}});
+      drive.beforeWrite = () {
+        final doc = const SettingsSyncDocument().recordChanges(
+          before: {'weekStartsOnMonday': false},
+          after: {'weekStartsOnMonday': true},
+          changedAt: DateTime.utc(2026, 9, 15, 1),
+          deviceId: 'remote',
+        );
+        drive.seed('settings', 'daily-sync-v2-settings.json', {
+          'settings': {'weekStartsOnMonday': true},
+          'fieldRevisions': doc.toJson(),
+        });
+      };
+      await service.syncNow();
+      expect(drive.preconditionFailures, 1);
+      expect(settings.load().themeMode, AppThemeMode.dark);
+      expect(settings.load().weekStartsOnMonday, isTrue);
+      expect(await service.hasPendingChanges(), isFalse);
+    });
+  });
+}
+
+class _VersionedDrive {
+  final files =
+      <String, ({String name, Map<String, Object?> data, int version})>{};
+  bool reverseOrder = false;
+  bool invalidChecksum = false;
+  FutureOr<void> Function()? beforeWrite;
+  int preconditionFailures = 0;
+  int writes = 0;
+  void seed(String id, String name, Map<String, Object?> data) {
+    files[id] = (
+      name: name,
+      data: data,
+      version: (files[id]?.version ?? 0) + 1,
+    );
+  }
+
+  Map<String, Object?> payload(String id) => files[id]!.data;
+  Future<http.Response> handle(http.Request request) async {
+    final path = request.url.path, id = request.url.pathSegments.last;
+    if (request.method == 'GET' && path == '/drive/v3/files') {
+      final q = request.url.queryParameters['q'] ?? '';
+      var entries = files.entries.where(
+        (e) =>
+            q.contains(e.value.name) ||
+            (q.contains("name contains 'daily-sync-v2-event-'") &&
+                e.value.name.startsWith('daily-sync-v2-event-')),
+      );
+      if (reverseOrder) entries = entries.toList().reversed;
+      return _driveFiles([
+        for (final entry in entries)
+          {'id': entry.key, 'name': entry.value.name},
+      ]);
+    }
+    if (request.method == 'GET' && path.startsWith('/drive/v3/files/')) {
+      return _jsonResponse(files[id]!.data);
+    }
+    if (request.method == 'GET' && path.startsWith('/drive/v2/files/')) {
+      return _jsonResponse({
+        'etag': '"${files[id]!.version}"',
+        'md5Checksum': invalidChecksum
+            ? 'invalid'
+            : md5.convert(utf8.encode(jsonEncode(files[id]!.data))).toString(),
+      });
+    }
+    if (request.method == 'PUT') {
+      final action = beforeWrite;
+      beforeWrite = null;
+      await action?.call();
+      if (request.headers['if-match'] != '"${files[id]!.version}"') {
+        preconditionFailures++;
+        return http.Response('', 412);
+      }
+      writes++;
+      seed(
+        id,
+        files[id]!.name,
+        jsonDecode(request.body) as Map<String, Object?>,
+      );
+      return _jsonResponse({'id': id});
+    }
+    if (request.method == 'POST') {
+      final boundary = request.headers['content-type']!.split('boundary=').last;
+      final jsonParts = request.body
+          .split('--$boundary')
+          .where((p) => p.contains('\r\n\r\n'))
+          .map(
+            (p) =>
+                jsonDecode(p.substring(p.indexOf('\r\n\r\n') + 4).trim())
+                    as Map<String, Object?>,
+          )
+          .toList();
+      final key = 'created-${files.length}';
+      seed(key, jsonParts.first['name'] as String, jsonParts.last);
+      writes++;
+      return _jsonResponse({'id': key});
+    }
+    return http.Response('Unexpected request: $request', 500);
   }
 }

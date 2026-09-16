@@ -7,3 +7,5 @@ Icon=com.littlebit0.daily
 Terminal=false
 Categories=Office;Calendar;
 StartupWMClass=com.littlebit0.daily
+X-Geoclue-Reason=Show the weather forecast for your nearby region
+X-Geoclue-Reason[ko]=가까운 지역의 날씨 예보 표시

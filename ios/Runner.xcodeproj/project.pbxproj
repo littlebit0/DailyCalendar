@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D66000000000000000000007 /* DailyCalendar Wallpaper Setup.shortcut in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */; };
+		D66000000000000000000006 /* WallpaperIntents.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000016 /* WallpaperIntents.xcstrings */; };
+		D66000000000000000000001 /* DailyWallpaperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000011 /* DailyWallpaperModel.swift */; };
+		D66000000000000000000002 /* DailyWallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000012 /* DailyWallpaper.swift */; };
+		D66000000000000000000003 /* DailyWallpaperText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000013 /* DailyWallpaperText.swift */; };
+		D66000000000000000000004 /* DailyWallpaperSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000014 /* DailyWallpaperSettingsView.swift */; };
+		D66000000000000000000005 /* DailyCalendar Wallpaper.shortcut in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000015 /* DailyCalendar Wallpaper.shortcut */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
 		A10000000000000000000001 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* InfoPlist.strings */; };
 		23F775F04B1318C0128516CA /* DailyAlarmMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC54DBD089C7F46E65000F0 /* DailyAlarmMetadata.swift */; };
@@ -68,6 +75,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper Setup.shortcut"; sourceTree = "<group>"; };
+		D66000000000000000000016 /* WallpaperIntents.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = WallpaperIntents.xcstrings; sourceTree = "<group>"; };
+		D66000000000000000000011 /* DailyWallpaperModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperModel.swift; sourceTree = "<group>"; };
+		D66000000000000000000012 /* DailyWallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaper.swift; sourceTree = "<group>"; };
+		D66000000000000000000013 /* DailyWallpaperText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperText.swift; sourceTree = "<group>"; };
+		D66000000000000000000014 /* DailyWallpaperSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperSettingsView.swift; sourceTree = "<group>"; };
+		D66000000000000000000015 /* DailyCalendar Wallpaper.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper.shortcut"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
 		A10000000000000000000010 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A10000000000000000000011 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -178,6 +192,13 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
+				D66000000000000000000011 /* DailyWallpaperModel.swift */,
+				D66000000000000000000012 /* DailyWallpaper.swift */,
+				D66000000000000000000013 /* DailyWallpaperText.swift */,
+				D66000000000000000000014 /* DailyWallpaperSettingsView.swift */,
+				D66000000000000000000015 /* DailyCalendar Wallpaper.shortcut */,
+				D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */,
+				D66000000000000000000016 /* WallpaperIntents.xcstrings */,
 				D52222222222222222222222 /* DailySiriIntents.swift */,
 				A10000000000000000000020 /* InfoPlist.strings */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
@@ -349,6 +370,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D66000000000000000000005 /* DailyCalendar Wallpaper.shortcut in Resources */,
+				D66000000000000000000007 /* DailyCalendar Wallpaper Setup.shortcut in Resources */,
+				D66000000000000000000006 /* WallpaperIntents.xcstrings in Resources */,
 				A10000000000000000000001 /* InfoPlist.strings in Resources */,
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
@@ -423,6 +447,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D66000000000000000000001 /* DailyWallpaperModel.swift in Sources */,
+				D66000000000000000000002 /* DailyWallpaper.swift in Sources */,
+				D66000000000000000000003 /* DailyWallpaperText.swift in Sources */,
+				D66000000000000000000004 /* DailyWallpaperSettingsView.swift in Sources */,
 				D51111111111111111111111 /* DailySiriIntents.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
@@ -537,7 +565,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -567,10 +595,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.4.0;
+				MARKETING_VERSION = 3.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -585,10 +613,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.4.0;
+				MARKETING_VERSION = 3.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -601,10 +629,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.4.0;
+				MARKETING_VERSION = 3.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -619,7 +647,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -629,7 +657,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.0;
+				MARKETING_VERSION = 3.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Widgets";
@@ -760,7 +788,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -793,7 +821,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -825,7 +853,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -835,7 +863,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.0;
+				MARKETING_VERSION = 3.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Widgets";
@@ -855,7 +883,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.4.0;
+				CURRENT_PROJECT_VERSION = 3.5.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -865,7 +893,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.4.0;
+				MARKETING_VERSION = 3.5.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Test Widgets";

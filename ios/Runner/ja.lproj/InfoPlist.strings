@@ -2,6 +2,8 @@
 "NSCalendarsFullAccessUsageDescription" = "Appleカレンダーの予定をDailyに読み込む場合にのみ使用します。";
 "NSCalendarsUsageDescription" = "Appleカレンダーの予定をDailyに読み込む場合にのみ使用します。";
 "NSFaceIDUsageDescription" = "Dailyのロックを安全に解除するためにFace IDを使用します。";
+"NSPhotoLibraryAddUsageDescription" = "画像を保存ボタンを押したときだけカレンダー画像を写真に追加します。保存した画像をロック画面の壁紙に選べます。";
 "NSMicrophoneUsageDescription" = "Signalにカレンダー操作を話すときだけマイクを使用します。";
 "NSSpeechRecognitionUsageDescription" = "Signalに話したカレンダー操作を実行するため、音声をテキストに変換します。";
 "CFBundleSpokenName" = "デイリー";
+"NSLocationWhenInUseUsageDescription" = "近くの地域の気象庁予報を表示するため、おおよその位置を使用します。位置情報を許可せずに地域を選択することもできます。";

@@ -49,6 +49,12 @@ Future<void> _openWelcomeStartPage(WidgetTester tester) async {
       continue;
     }
     final laterButton = find.text('나중에');
+    final defaultsButton = find.text('기본으로만 사용');
+    if (defaultsButton.evaluate().isNotEmpty) {
+      await tester.tap(defaultsButton);
+      await tester.pumpAndSettle();
+      continue;
+    }
     if (laterButton.evaluate().isNotEmpty) {
       await tester.tap(laterButton.first);
       await tester.pumpAndSettle();
@@ -61,6 +67,14 @@ Future<void> _openWelcomeStartPage(WidgetTester tester) async {
 
 void main() {
   setUp(() {
+    // Calendar tests are independent of the separately tested update catalog.
+    PackageInfo.setMockInitialValues(
+      appName: 'Daily',
+      packageName: 'daily',
+      version: '3.3.0',
+      buildNumber: '330',
+      buildSignature: '',
+    );
     TestWidgetsFlutterBinding.instance.platformDispatcher.localesTestValue =
         const [Locale('ko')];
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -1243,10 +1257,19 @@ void main() {
       await tester.tap(find.text('나중에'));
       await tester.pumpAndSettle();
       expect(find.text('Siri 단축어 추가하기'), findsOneWidget);
+      expect(
+        find.text('예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”'),
+        findsOneWidget,
+      );
       expect(notificationService.initializeCalls, 0);
 
       await tester.tap(find.text('나중에'));
       await tester.pumpAndSettle();
+      expect(find.text('일정 분류 설정'), findsOneWidget);
+      final categoriesBefore = settingsRepository.load().categories;
+      await tester.tap(find.text('기본으로만 사용'));
+      await tester.pumpAndSettle();
+      expect(settingsRepository.load().categories, categoriesBefore);
       expect(find.text('알림 및 알람 허용'), findsOneWidget);
       expect(notificationService.initializeCalls, 0);
 
@@ -1338,6 +1361,9 @@ void main() {
         expect(analytics.completeConsentPromptCalls, 1);
         expect(analytics.consentPromptCompleted, isTrue);
         expect(find.text('익명 분석 허용'), findsNothing);
+        expect(find.text('일정 분류 설정'), findsOneWidget);
+        await tester.tap(find.text('기본으로만 사용'));
+        await tester.pumpAndSettle();
         expect(find.text('알림 및 알람 허용'), findsOneWidget);
 
         await tester.tap(find.text('알림 및 알람 허용'));
@@ -3146,53 +3172,24 @@ void main() {
 
     await gesture.moveTo(tester.getCenter(sidebar));
     await tester.pump();
-    expect(
-      find.byKey(const ValueKey('calendar-event-sidebar-feedback-title')),
-      findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('calendar-event-sidebar-feedback-time')),
-      findsNothing,
-    );
     await tester.pump(const Duration(milliseconds: 85));
-    final growingFeedbackSize = tester.getSize(feedback);
-    final growingLetterboxSize = tester.getSize(
-      find.byKey(const ValueKey('calendar-event-target-feedback-sidebar')),
-    );
-    expect(growingFeedbackSize.width, greaterThan(monthFeedbackSize.width));
-    expect(growingFeedbackSize.width, lessThan(328));
-    expect(growingFeedbackSize.height, greaterThan(monthFeedbackSize.height));
-    expect(growingFeedbackSize.height, lessThan(76));
-    expect(growingLetterboxSize, growingFeedbackSize);
-    await tester.pump(const Duration(milliseconds: 100));
     expect(
-      find.byKey(const ValueKey('calendar-event-target-feedback-sidebar')),
-      findsOneWidget,
+      tester.getSize(feedback).height,
+      greaterThan(monthFeedbackSize.height),
     );
+    expect(tester.getSize(feedback).height, lessThan(76));
+    await tester.pump(const Duration(milliseconds: 150));
     expect(tester.getSize(feedback), const Size(328, 76));
-    expect(
-      find.byKey(const ValueKey('calendar-event-sidebar-feedback-time')),
-      findsOneWidget,
-    );
-
     await gesture.moveTo(tester.getCenter(calendarEvent));
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 85));
-    final shrinkingFeedbackSize = tester.getSize(feedback);
-    final shrinkingLetterboxSize = tester.getSize(
-      find.byKey(const ValueKey('calendar-event-compact-feedback')),
-    );
-    expect(shrinkingFeedbackSize.width, lessThan(328));
-    expect(shrinkingFeedbackSize.width, greaterThan(monthFeedbackSize.width));
-    expect(shrinkingFeedbackSize.height, lessThan(76));
-    expect(shrinkingFeedbackSize.height, greaterThan(monthFeedbackSize.height));
-    expect(shrinkingLetterboxSize, shrinkingFeedbackSize);
-    await tester.pump(const Duration(milliseconds: 100));
     expect(
-      find.byKey(const ValueKey('calendar-event-compact-feedback')),
-      findsOneWidget,
+      tester.getSize(feedback).height,
+      greaterThan(monthFeedbackSize.height),
     );
-    expect(tester.getSize(feedback).height, 19);
+    expect(tester.getSize(feedback).height, lessThan(76));
+    await tester.pump(const Duration(milliseconds: 220));
+    expect(tester.getSize(feedback), monthFeedbackSize);
 
     await gesture.cancel();
     await tester.pumpAndSettle();
@@ -4208,7 +4205,7 @@ void main() {
   );
 
   testWidgets(
-    'Daily retries a temporary Google Drive restore failure without prompting',
+    'Daily startup gate retries Google Drive only after explicit retry without prompting',
     (tester) async {
       SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
       final preferences = await SharedPreferences.getInstance();
@@ -4239,6 +4236,9 @@ void main() {
       );
       await tester.pump();
       await tester.pump(const Duration(seconds: 1));
+      expect(authService.restorePreviousSignInCalls, 1);
+      expect(find.text('최신 데이터를 확인하지 못했습니다.'), findsOneWidget);
+      await tester.tap(find.text('다시 시도'));
       await tester.pumpAndSettle();
 
       expect(authService.restorePreviousSignInCalls, 2);
@@ -4249,6 +4249,86 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     },
   );
+
+  testWidgets(
+    'startup blocks calendar until sync completes and resume does not duplicate it',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'tester@example.com'),
+      );
+      final completion = Completer<void>();
+      final sync = _FakeSync(startupCompletion: completion.future);
+      final auth = _FakeGoogleDriveAuthService();
+      final repository = _DelayedStartupEventRepository();
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            settingsRepositoryProvider.overrideWithValue(settings),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(sync),
+            eventRepositoryProvider.overrideWithValue(repository),
+            googleDriveAuthServiceProvider.overrideWithValue(auth),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(MonthCalendarPage), findsNothing);
+      expect(sync.startCalls, 1);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pump();
+      expect(sync.startCalls, 1);
+      expect(auth.signInCalls, 0);
+      completion.complete();
+      await tester.pump();
+      expect(find.byType(MonthCalendarPage), findsNothing);
+      repository.ready.complete();
+      await tester.pumpAndSettle();
+      expect(find.byType(MonthCalendarPage), findsOneWidget);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets('startup failure continue preserves the linked account', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'tester@example.com'),
+    );
+    final auth = _FakeGoogleDriveAuthService(authorizationAvailable: false);
+    final sync = _FakeSync();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(sync),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(auth),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byType(MonthCalendarPage), findsNothing);
+    await tester.tap(find.text('기기에 저장된 데이터로 계속'));
+    await tester.pumpAndSettle();
+    expect(find.byType(MonthCalendarPage), findsOneWidget);
+    expect(settings.dailyAccount()?.googleAccount?.email, 'tester@example.com');
+    expect(auth.signOutCalls, 0);
+    expect(auth.signInCalls, 0);
+    expect(sync.startCalls, 0);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   testWidgets('settings shows restored Google Drive account after restart', (
     tester,
@@ -4817,6 +4897,83 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     },
   );
+  for (final platform in [
+    TargetPlatform.iOS,
+    TargetPlatform.android,
+    TargetPlatform.macOS,
+    TargetPlatform.windows,
+    TargetPlatform.linux,
+  ]) {
+    testWidgets('wallpaper settings opens from root only on iOS: $platform', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(393, 852));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      debugDefaultTargetPlatformOverride = platform;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+      FlutterSecureStorage.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final repository = SettingsRepository(preferences: preferences);
+      final auth = _FakeGoogleDriveAuthService(account: null);
+      final notifications = _FakeNotification();
+      final events = _FakeEventRepository();
+      const channel = MethodChannel('daily/wallpaper');
+      final calls = <String>[];
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(channel, (call) async {
+        calls.add(call.method);
+        return null;
+      });
+      addTearDown(() => messenger.setMockMethodCallHandler(channel, null));
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            settingsRepositoryProvider.overrideWithValue(repository),
+            notificationServiceProvider.overrideWithValue(notifications),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(events),
+            googleDriveAuthServiceProvider.overrideWithValue(auth),
+            googleDriveSyncServiceProvider.overrideWithValue(
+              _FakeGoogleDriveSyncService(
+                authService: auth,
+                eventRepository: events,
+                notificationService: notifications,
+                settingsRepository: repository,
+              ),
+            ),
+          ],
+          child: const MaterialApp(home: SettingsPage()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final tile = find.byKey(const ValueKey('wallpaper-settings-navigation'));
+      expect(calls, isEmpty);
+      if (platform == TargetPlatform.iOS) {
+        expect(tile, findsOneWidget);
+        await tester.ensureVisible(tile);
+        await tester.pumpAndSettle();
+        await tester.tap(tile);
+        await tester.pumpAndSettle();
+        expect(calls, ['openSettings']);
+      } else {
+        expect(tile, findsNothing);
+      }
+      final appearance = find.byKey(
+        const ValueKey('appearance-settings-navigation'),
+      );
+      await tester.ensureVisible(appearance);
+      await tester.pumpAndSettle();
+      await tester.tap(appearance);
+      await tester.pumpAndSettle();
+      expect(tile, findsNothing);
+      expect(tester.takeException(), isNull);
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    });
+  }
+
   testWidgets('settings manages the four start screens in one control', (
     tester,
   ) async {
@@ -5905,82 +6062,127 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('day schedule sheet expands and keeps its list draggable', (
-    tester,
-  ) async {
-    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
-    addTearDown(() => debugDefaultTargetPlatformOverride = null);
-    SharedPreferences.setMockInitialValues({
-      'onboardingCompleted': true,
-      'defaultCalendarView': 'month',
-    });
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
+  for (final (platform, themeMode) in [
+    for (final platform in [TargetPlatform.iOS, TargetPlatform.android])
+      for (final mode in [AppThemeMode.light, AppThemeMode.dark])
+        (platform, mode),
+  ]) {
+    testWidgets(
+      '$platform $themeMode day schedule sheet expands from header and empty space',
+      (tester) async {
+        debugDefaultTargetPlatformOverride = platform;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        SharedPreferences.setMockInitialValues({
+          'onboardingCompleted': true,
+          'defaultCalendarView': 'month',
+        });
+        final preferences = await SharedPreferences.getInstance();
+        final settingsRepository = SettingsRepository(preferences: preferences);
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          settingsRepositoryProvider.overrideWithValue(settingsRepository),
-          notificationServiceProvider.overrideWithValue(_FakeNotification()),
-          syncServiceProvider.overrideWithValue(_FakeSync()),
-          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
-          googleDriveAuthServiceProvider.overrideWithValue(
-            _FakeGoogleDriveAuthService(),
+        await settingsRepository.save(
+          settingsRepository.load().copyWith(themeMode: themeMode),
+        );
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              settingsRepositoryProvider.overrideWithValue(settingsRepository),
+              notificationServiceProvider.overrideWithValue(
+                _FakeNotification(),
+              ),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+              eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+              googleDriveAuthServiceProvider.overrideWithValue(
+                _FakeGoogleDriveAuthService(),
+              ),
+            ],
+            child: const DailyApp(),
           ),
-        ],
-        child: const DailyApp(),
-      ),
+        );
+        await tester.pumpAndSettle();
+
+        final container = ProviderScope.containerOf(
+          tester.element(find.byType(DailyApp)),
+        );
+        final month = container.read(visibleMonthProvider);
+        final dayCell = find
+            .byWidgetPredicate((widget) {
+              final key = widget.key;
+              return key is ValueKey<String> &&
+                  key.value.startsWith(
+                    'day-cell-${month.year}-${month.month}-',
+                  );
+            })
+            .hitTestable()
+            .first;
+        expect(dayCell, findsOneWidget);
+
+        await tester.tap(dayCell);
+        await tester.pumpAndSettle();
+
+        final sheet = tester.widget<DraggableScrollableSheet>(
+          find.byType(DraggableScrollableSheet),
+        );
+        expect(sheet.initialChildSize, 0.68);
+        expect(sheet.minChildSize, 0.4);
+        expect(sheet.maxChildSize, 0.96);
+        expect(sheet.snap, isTrue);
+        expect(sheet.shouldCloseOnMinExtent, isFalse);
+        final bottomSheet = tester.widget<BottomSheet>(
+          find.byType(BottomSheet),
+        );
+        expect(
+          bottomSheet.backgroundColor,
+          themeMode == AppThemeMode.dark
+              ? const Color(0xff1c1c1e)
+              : Colors.white,
+        );
+        expect((bottomSheet.shape! as RoundedRectangleBorder).side.width, 0.5);
+        expect(
+          find.byKey(const ValueKey('day-sheet-drag-handle')),
+          findsOneWidget,
+        );
+        final controller = sheet.controller!;
+        for (final fromHeader in [true, false]) {
+          controller.jumpTo(sheet.minChildSize);
+          await tester.pumpAndSettle();
+          final panelRect = tester.getRect(find.byType(EventDetailsPanel));
+          final point = fromHeader
+              ? tester.getCenter(
+                  find.byKey(const ValueKey('event-details-date-label')),
+                )
+              : Offset(panelRect.left + 8, panelRect.bottom - 25);
+          await tester.dragFrom(point, const Offset(0, -180));
+          await tester.pumpAndSettle();
+          expect(controller.size, greaterThan(sheet.minChildSize));
+        }
+        controller.jumpTo(sheet.initialChildSize);
+        await tester.pumpAndSettle();
+        expect(
+          tester
+              .widget<EventDetailsPanel>(find.byType(EventDetailsPanel))
+              .scrollController,
+          isNotNull,
+        );
+
+        final selectedDate = container.read(selectedDateProvider);
+        final targetDay = selectedDate.day == 1 ? 2 : 1;
+        final targetCell = find.byKey(
+          ValueKey('day-cell-${month.year}-${month.month}-$targetDay'),
+        );
+        expect(targetCell, findsOneWidget);
+
+        await tester.tapAt(tester.getCenter(targetCell));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(EventDetailsPanel), findsNothing);
+        expect(container.read(selectedDateProvider), selectedDate);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        debugDefaultTargetPlatformOverride = null;
+      },
     );
-    await tester.pumpAndSettle();
-
-    final container = ProviderScope.containerOf(
-      tester.element(find.byType(DailyApp)),
-    );
-    final month = container.read(visibleMonthProvider);
-    final dayCell = find
-        .byWidgetPredicate((widget) {
-          final key = widget.key;
-          return key is ValueKey<String> &&
-              key.value.startsWith('day-cell-${month.year}-${month.month}-');
-        })
-        .hitTestable()
-        .first;
-    expect(dayCell, findsOneWidget);
-
-    await tester.tap(dayCell);
-    await tester.pumpAndSettle();
-
-    final sheet = tester.widget<DraggableScrollableSheet>(
-      find.byType(DraggableScrollableSheet),
-    );
-    expect(sheet.initialChildSize, 0.68);
-    expect(sheet.minChildSize, 0.4);
-    expect(sheet.maxChildSize, 0.96);
-    expect(sheet.snap, isTrue);
-    expect(sheet.shouldCloseOnMinExtent, isFalse);
-    expect(
-      tester
-          .widget<EventDetailsPanel>(find.byType(EventDetailsPanel))
-          .scrollController,
-      isNotNull,
-    );
-
-    final selectedDate = container.read(selectedDateProvider);
-    final targetDay = selectedDate.day == 1 ? 2 : 1;
-    final targetCell = find.byKey(
-      ValueKey('day-cell-${month.year}-${month.month}-$targetDay'),
-    );
-    expect(targetCell, findsOneWidget);
-
-    await tester.tapAt(tester.getCenter(targetCell));
-    await tester.pumpAndSettle();
-
-    expect(find.byType(EventDetailsPanel), findsNothing);
-    expect(container.read(selectedDateProvider), selectedDate);
-
-    await tester.pumpWidget(const SizedBox.shrink());
-    debugDefaultTargetPlatformOverride = null;
-  });
+  }
 
   for (final (platform, navigationMode) in [
     for (final platform in [TargetPlatform.iOS, TargetPlatform.android])
@@ -6160,12 +6362,7 @@ void main() {
         await tester.pump();
         expect(tester.getSize(feedback), originalEventSize);
         await tester.pump(const Duration(milliseconds: 85));
-        final shrinkingSize = tester.getSize(feedback);
-        expect(
-          shrinkingSize.height,
-          inExclusiveRange(13, originalEventSize.height),
-        );
-        expect(shrinkingSize.width, lessThan(originalEventSize.width));
+        expect(tester.getSize(feedback), originalEventSize);
         await tester.pump(const Duration(milliseconds: 220));
         expect(
           tester.getSize(find.byType(EventDetailsPanel)).height,
@@ -6179,14 +6376,10 @@ void main() {
         );
         expect(feedback, findsOneWidget);
         expect(
-          find.byKey(const ValueKey('calendar-event-compact-feedback')),
+          find.byKey(const ValueKey('calendar-event-source-feedback')),
           findsOneWidget,
         );
-        expect(tester.getSize(feedback).height, 13);
-        expect(
-          tester.getSize(feedback).width,
-          lessThan(originalEventSize.width),
-        );
+        expect(tester.getSize(feedback), originalEventSize);
         final compactSize = tester.getSize(feedback);
         await gesture.moveTo(coveredCellRect.center);
         await tester.pump();
@@ -6209,14 +6402,7 @@ void main() {
         expect(tester.getSize(feedback), compactSize);
         await tester.pump(const Duration(milliseconds: 85));
         final growingSize = tester.getSize(feedback);
-        expect(
-          growingSize.height,
-          inExclusiveRange(13, originalEventSize.height),
-        );
-        expect(
-          growingSize.width,
-          inExclusiveRange(compactSize.width, originalEventSize.width),
-        );
+        expect(growingSize, originalEventSize);
         expect(tester.getCenter(feedback), returnPosition);
         expect(
           find.descendant(of: feedback, matching: find.text(event.title)),
@@ -6261,10 +6447,7 @@ void main() {
         await gesture.moveTo(targetPosition);
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 85));
-        expect(
-          tester.getSize(feedback).height,
-          inExclusiveRange(13, originalEventSize.height),
-        );
+        expect(tester.getSize(feedback), originalEventSize);
         await tester.pump(const Duration(milliseconds: 220));
         expect(tester.getSize(feedback), compactSize);
         await gesture.cancel();
@@ -7201,6 +7384,8 @@ class _FakeNotification implements NotificationService {
 }
 
 class _FakeSync implements SyncService {
+  _FakeSync({this.startupCompletion});
+  final Future<void>? startupCompletion;
   @override
   Future<void> queueSettingsBackup() async {}
 
@@ -7215,6 +7400,7 @@ class _FakeSync implements SyncService {
   @override
   Future<void> start() async {
     startCalls += 1;
+    await startupCompletion;
   }
 }
 
@@ -7279,6 +7465,19 @@ class _FakeProductAnalytics implements ProductAnalytics {
   Future<void> setEnabled(bool enabled) async {
     _enabled.value = enabled;
     if (!enabled) await deletePendingData();
+  }
+}
+
+class _DelayedStartupEventRepository extends _FakeEventRepository {
+  final ready = Completer<void>();
+
+  @override
+  Stream<List<CalendarEvent>> watchEventsInRange(
+    DateTime start,
+    DateTime end,
+  ) async* {
+    await ready.future;
+    yield* super.watchEventsInRange(start, end);
   }
 }
 

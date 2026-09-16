@@ -7,10 +7,125 @@ import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/widgets/smooth_mouse_wheel_scroll_controller.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  for (final platform in [
+    TargetPlatform.iOS,
+    TargetPlatform.android,
+    TargetPlatform.macOS,
+    TargetPlatform.windows,
+    TargetPlatform.linux,
+  ]) {
+    testWidgets(
+      '$platform multi-day all-day event is one bar with correct date taps and drops',
+      (tester) async {
+        await tester.binding.setSurfaceSize(const Size(420, 850));
+        addTearDown(() => tester.binding.setSurfaceSize(null));
+        final event = CalendarEvent(
+          id: 'trip',
+          title: '여행',
+          startAt: DateTime(2026, 8, 24),
+          endAt: DateTime(2026, 8, 27),
+          allDay: true,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: DateTime(2026, 8, 1),
+          updatedAt: DateTime(2026, 8, 1),
+        );
+        DateTime? selected;
+        DateTime? dropped;
+        for (final brightness in Brightness.values) {
+          await _pumpAllDaySchedule(
+            tester,
+            eventCount: 0,
+            weekMode: true,
+            eventsOverride: [event],
+            platform: platform,
+            brightness: brightness,
+            onDateSelected: (date) => selected = date,
+            onEventDropped: (item, date, index) async => dropped = date,
+          );
+          final letterbox = find.byKey(
+            const ValueKey('schedule-all-day-letterbox-trip'),
+          );
+          expect(letterbox, findsOneWidget);
+          expect(find.text('여행'), findsOneWidget);
+          final rect = tester.getRect(letterbox);
+          final cellWidth = (420 - 42) / 7;
+          expect(rect.width, closeTo(3 * cellWidth - 4, 0.01));
+          final decoration =
+              tester.widget<Container>(letterbox).decoration! as BoxDecoration;
+          expect(decoration.borderRadius, BorderRadius.circular(5));
+          await tester.tapAt(
+            rect.topLeft + Offset(cellWidth * 2.5, rect.height / 2),
+          );
+          await tester.pump(kDoubleTapTimeout);
+          await tester.pumpAndSettle();
+          expect(selected, DateTime(2026, 8, 26));
+          final gesture = await tester.startGesture(rect.center);
+          await tester.pump(const Duration(milliseconds: 400));
+          await gesture.moveTo(Offset(42 + cellWidth * 5.5, rect.center.dy));
+          await tester.pump();
+          await gesture.up();
+          await tester.pumpAndSettle();
+          expect(dropped, DateTime(2026, 8, 28));
+          expect(tester.takeException(), isNull);
+          await tester.pumpWidget(const SizedBox.shrink());
+        }
+      },
+    );
+  }
+
+  testWidgets(
+    'all-day bar clips corners only at the week continuation boundaries',
+    (tester) async {
+      final event = CalendarEvent(
+        id: 'trip',
+        title: '여행',
+        startAt: DateTime(2026, 8, 27),
+        endAt: DateTime(2026, 9, 2),
+        allDay: true,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: DateTime(2026, 8, 1),
+        updatedAt: DateTime(2026, 8, 1),
+      );
+      final letterbox = find.byKey(
+        const ValueKey('schedule-all-day-letterbox-trip'),
+      );
+      await _pumpAllDaySchedule(
+        tester,
+        eventCount: 0,
+        weekMode: true,
+        eventsOverride: [event],
+      );
+      var decoration =
+          tester.widget<Container>(letterbox).decoration! as BoxDecoration;
+      expect(
+        decoration.borderRadius,
+        const BorderRadius.horizontal(left: Radius.circular(5)),
+      );
+      await _pumpAllDaySchedule(
+        tester,
+        eventCount: 0,
+        weekMode: true,
+        eventsOverride: [event],
+        firstDay: DateTime(2026, 8, 30),
+      );
+      decoration =
+          tester.widget<Container>(letterbox).decoration! as BoxDecoration;
+      expect(
+        decoration.borderRadius,
+        const BorderRadius.horizontal(right: Radius.circular(5)),
+      );
+      expect(decoration.border, isNull);
+      expect(find.text('여행'), findsOneWidget);
+    },
+  );
+
   testWidgets(
     'Windows mouse wheel smoothly accumulates time-axis scroll without changing the day',
     (tester) async {
@@ -789,24 +904,33 @@ Future<void> _pumpAllDaySchedule(
   required int eventCount,
   double textScale = 1,
   bool weekMode = false,
+  List<CalendarEvent>? eventsOverride,
+  DateTime? firstDay,
+  TargetPlatform platform = TargetPlatform.android,
+  Brightness brightness = Brightness.light,
+  ValueChanged<DateTime>? onDateSelected,
+  CalendarEventDropCallback? onEventDropped,
 }) async {
-  final events = List.generate(
-    eventCount,
-    (index) => CalendarEvent(
-      id: 'all-day-$index',
-      title: '종일 일정 ${index + 1}',
-      startAt: DateTime(2026, 8, 27),
-      endAt: DateTime(2026, 8, 28),
-      allDay: true,
-      category: EventCategory.basic,
-      colorValue: EventCategory.basic.colorValue,
-      createdAt: DateTime(2026, 8, 1),
-      updatedAt: DateTime(2026, 8, 1),
-    ),
-  );
+  final events =
+      eventsOverride ??
+      List.generate(
+        eventCount,
+        (index) => CalendarEvent(
+          id: 'all-day-$index',
+          title: '종일 일정 ${index + 1}',
+          startAt: DateTime(2026, 8, 27),
+          endAt: DateTime(2026, 8, 28),
+          allDay: true,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: DateTime(2026, 8, 1),
+          updatedAt: DateTime(2026, 8, 1),
+        ),
+      );
 
   await tester.pumpWidget(
     MaterialApp(
+      theme: ThemeData(platform: platform, brightness: brightness),
       builder: (context, child) => MediaQuery(
         data: MediaQuery.of(
           context,
@@ -816,7 +940,10 @@ Future<void> _pumpAllDaySchedule(
       home: Scaffold(
         body: ScheduleTimelineView(
           days: weekMode
-              ? List.generate(7, (index) => DateTime(2026, 8, 23 + index))
+              ? List.generate(7, (index) {
+                  final start = firstDay ?? DateTime(2026, 8, 23);
+                  return DateTime(start.year, start.month, start.day + index);
+                })
               : [DateTime(2026, 8, 27)],
           events: events,
           selectedDate: DateTime(2026, 8, 27),
@@ -825,7 +952,8 @@ Future<void> _pumpAllDaySchedule(
           holidayBackgroundEnabled: true,
           holidayColorValue: EventCategory.holiday.colorValue,
           onShowAllDayEventsChanged: (_) {},
-          onDateSelected: (_) {},
+          onDateSelected: onDateSelected ?? (_) {},
+          onEventDropped: onEventDropped,
         ),
       ),
     ),

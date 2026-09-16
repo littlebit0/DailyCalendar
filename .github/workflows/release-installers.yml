@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag, for example v3.4.0"
+        description: "Release tag, for example v3.5.0"
         required: true
         type: string
 
@@ -15,11 +15,21 @@ env:
   RELEASE_TAG: ${{ inputs.tag }}
 
 jobs:
+  linux:
+    uses: ./.github/workflows/release-linux.yml
+    with:
+      tag: ${{ inputs.tag }}
+      revision: '1'
+      stage_only: true
+    secrets: inherit
+
   ios:
     name: iOS unsigned IPA
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -45,6 +55,8 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -59,6 +71,10 @@ jobs:
             gsub(%q{CODE_SIGN_STYLE = Automatic;}, %q{CODE_SIGN_STYLE = Manual;})
             gsub(%r{DEVELOPMENT_TEAM = [A-Z0-9]+;}, %q{DEVELOPMENT_TEAM = "";})
           ' macos/Runner.xcodeproj/project.pbxproj
+      - name: Configure supported macOS deployment target
+        run: |
+          printf 'MACOSX_DEPLOYMENT_TARGET = 14.0\n' > "$RUNNER_TEMP/daily-release.xcconfig"
+          echo "XCODE_XCCONFIG_FILE=$RUNNER_TEMP/daily-release.xcconfig" >> "$GITHUB_ENV"
       - name: Build macOS app
         env:
           GOOGLE_DESKTOP_CLIENT_SECRET: ${{ secrets.GOOGLE_DESKTOP_CLIENT_SECRET }}
@@ -81,6 +97,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -150,6 +168,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -188,20 +208,31 @@ jobs:
           if-no-files-found: error
 
   publish:
-    name: Publish GitHub release
-    needs: [ios, macos, android, windows]
+    name: Stage complete GitHub release
+    needs: [ios, macos, android, windows, linux]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
       - uses: actions/download-artifact@v4
         with:
-          pattern: release-*
+          pattern: '*'
           path: dist
           merge-multiple: true
+      - name: Verify complete asset set
+        shell: bash
+        run: |
+          version="${RELEASE_TAG#v}"
+          for name in "daily-ios-${version}-unsigned.ipa" "daily-macos-${version}-unsigned.dmg" "daily-android-${version}.apk" "daily-windows-${version}-setup.exe" "daily-windows-${version}.zip" "daily-linux-${version}-1-amd64.deb" "daily-linux-${version}-1-arm64.deb"; do
+            test -s "dist/$name"
+          done
+          (cd dist && sha256sum *.ipa *.dmg *.apk *.exe *.zip *.deb > SHA256SUMS)
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag }}
           name: DailyCalendar ${{ inputs.tag }}
-          body_path: docs/RELEASE_NOTES_3.4.0.md
+          body_path: docs/RELEASE_NOTES_3.5.0.md
+          draft: true
           files: dist/*
           fail_on_unmatched_files: true

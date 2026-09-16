@@ -1,0 +1,16 @@
+{
+  "WFControlFlowMode": 0,
+  "WFInput": {
+    "Type": "Variable",
+    "Variable": {
+      "Value": {
+        "OutputUUID": "BOOLEAN_OUTPUT",
+        "Type": "ActionOutput",
+        "OutputName": "Boolean result"
+      },
+      "WFSerializationType": "WFTextTokenAttachment"
+    }
+  },
+  "GroupingIdentifier": "GROUP",
+  "WFCondition": 4
+}

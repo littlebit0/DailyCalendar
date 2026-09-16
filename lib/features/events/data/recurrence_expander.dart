@@ -2,6 +2,53 @@ import '../domain/calendar_event.dart';
 import '../domain/recurrence_rule.dart';
 
 class RecurrenceExpander {
+  DateTime lastPlannedEnd(CalendarEvent event) {
+    final until = event.recurrence.until;
+    final count = event.recurrence.count;
+    DateTime? end = count == null ? null : lastCountedEnd(event);
+    if (until != null) {
+      final limit = DateTime(until.year, until.month, until.day + 1);
+      var current = _fastForward(
+        current: event.startAt,
+        duration: Duration.zero,
+        rangeStart: limit.subtract(const Duration(microseconds: 1)),
+        rule: event.recurrence,
+      ).current;
+      var last = event.startAt;
+      while (current.isBefore(limit)) {
+        last = current;
+        final next = _next(current, event.recurrence);
+        if (!next.isAfter(current)) break;
+        current = next;
+      }
+      final untilEnd = last.add(event.duration);
+      if (end == null || untilEnd.isBefore(end)) end = untilEnd;
+    }
+    return end ?? event.endAt;
+  }
+
+  DateTime lastCountedEnd(CalendarEvent event) {
+    final steps = (event.recurrence.count ?? 1) - 1;
+    if (steps <= 0) return event.endAt;
+    final interval = event.recurrence.interval < 1
+        ? 1
+        : event.recurrence.interval;
+    if (event.recurrence.frequency == RecurrenceFrequency.daily ||
+        event.recurrence.frequency == RecurrenceFrequency.weekly) {
+      final days = event.recurrence.frequency == RecurrenceFrequency.daily
+          ? 1
+          : 7;
+      return event.startAt
+          .add(Duration(days: steps * interval * days))
+          .add(event.duration);
+    }
+    var start = event.startAt;
+    for (var index = 0; index < steps; index++) {
+      start = _next(start, event.recurrence);
+    }
+    return start.add(event.duration);
+  }
+
   List<CalendarEvent> expand(
     CalendarEvent event,
     DateTime rangeStart,

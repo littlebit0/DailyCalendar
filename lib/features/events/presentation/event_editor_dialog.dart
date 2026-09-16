@@ -12,6 +12,8 @@ import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
 import '../domain/recurrence_rule.dart';
+import '../domain/frequent_places.dart';
+import 'frequent_places_field.dart';
 
 enum _RecurrenceEndMode { never, until, count }
 
@@ -28,6 +30,8 @@ class EventEditorDialog extends StatefulWidget {
     this.defaultReminderMinutes = 60,
     this.defaultReminderMinutesList,
     this.alarmService = const UnsupportedAlarmService(),
+    this.frequentPlaces,
+    this.loadPlaceEvents,
   });
 
   final DateTime initialDate;
@@ -38,6 +42,8 @@ class EventEditorDialog extends StatefulWidget {
   final int defaultReminderMinutes;
   final List<int>? defaultReminderMinutesList;
   final AlarmService alarmService;
+  final FrequentPlaces? frequentPlaces;
+  final Future<List<CalendarEvent>> Function()? loadPlaceEvents;
 
   @override
   State<EventEditorDialog> createState() => _EventEditorDialogState();
@@ -247,7 +253,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                                 ? context.tr('제목을 입력하세요.')
                                 : null,
                           ),
-                          autofocus: true,
+                          autofocus: false,
+                          onTapOutside: (_) => _dismissInput(),
                           textInputAction: TextInputAction.next,
                           onChanged: (_) {
                             if (_validationTarget == _ValidationTarget.title &&
@@ -313,6 +320,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           contentPadding: EdgeInsets.zero,
                         ),
                         DropdownButtonFormField<EventCategory>(
+                          onTap: _dismissInput,
                           key: ValueKey(_category.id),
                           initialValue: _category,
                           decoration: InputDecoration(
@@ -428,6 +436,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                         ],
                         const SizedBox(height: 12),
                         DropdownButtonFormField<RecurrenceFrequency>(
+                          onTap: _dismissInput,
                           initialValue: _frequency,
                           decoration: InputDecoration(
                             labelText: context.tr('반복'),
@@ -469,6 +478,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                               Expanded(
                                 child:
                                     DropdownButtonFormField<_RecurrenceEndMode>(
+                                      onTap: _dismissInput,
                                       initialValue: _recurrenceEndMode,
                                       decoration: InputDecoration(
                                         labelText: context.tr('반복 종료'),
@@ -551,16 +561,28 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           contentPadding: EdgeInsets.zero,
                         ),
                         const SizedBox(height: 12),
-                        TextField(
-                          controller: _locationController,
-                          decoration: InputDecoration(
-                            labelText: context.tr('장소'),
-                            prefixIcon: const Icon(Icons.location_on_outlined),
+                        if (widget.frequentPlaces != null &&
+                            widget.loadPlaceEvents != null)
+                          FrequentPlacesField(
+                            store: widget.frequentPlaces!,
+                            loadEvents: widget.loadPlaceEvents!,
+                            controller: _locationController,
+                          )
+                        else
+                          TextField(
+                            controller: _locationController,
+                            onTapOutside: (_) => _dismissInput(),
+                            decoration: InputDecoration(
+                              labelText: context.tr('장소'),
+                              prefixIcon: const Icon(
+                                Icons.location_on_outlined,
+                              ),
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 12),
                         TextField(
                           controller: _urlController,
+                          onTapOutside: (_) => _dismissInput(),
                           decoration: InputDecoration(
                             labelText: context.tr('URL / 링크'),
                             prefixIcon: const Icon(Icons.link_rounded),
@@ -570,6 +592,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                         const SizedBox(height: 12),
                         TextField(
                           controller: _weatherController,
+                          onTapOutside: (_) => _dismissInput(),
                           decoration: InputDecoration(
                             labelText: context.tr('날씨'),
                             hintText: context.tr('예: 흐림'),
@@ -579,6 +602,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                         const SizedBox(height: 12),
                         TextField(
                           controller: _memoController,
+                          onTapOutside: (_) => _dismissInput(),
                           maxLines: 3,
                           decoration: InputDecoration(
                             labelText: context.tr('메모'),
@@ -657,6 +681,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   Future<void> _pickCustomReminder() async {
+    _dismissInput();
     final picked = await _showNumberDialog(
       context: context,
       title: context.tr('알림 직접 입력'),
@@ -673,6 +698,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   Future<void> _pickRecurrenceInterval() async {
+    _dismissInput();
     final picked = await _showNumberDialog(
       context: context,
       title: context.tr('반복 간격'),
@@ -690,6 +716,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   Future<void> _pickRecurrenceUntil() async {
+    _dismissInput();
     final picked = await showDatePicker(
       context: context,
       firstDate: _startDate,
@@ -706,6 +733,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   Future<void> _pickRecurrenceCount() async {
+    _dismissInput();
     final picked = await _showNumberDialog(
       context: context,
       title: context.tr('반복 횟수'),
@@ -723,6 +751,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   Future<void> _pickStartDate() async {
+    _dismissInput();
     final picked = await showDatePicker(
       context: context,
       firstDate: DateTime(2000),
@@ -745,6 +774,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   Future<void> _pickEndDate() async {
+    _dismissInput();
     final picked = await showDatePicker(
       context: context,
       firstDate: DateTime(2000),
@@ -775,7 +805,12 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     }
   }
 
+  void _dismissInput() {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
   void _submit() {
+    _dismissInput();
     final title = _titleController.text.trim();
     if (title.isEmpty) {
       _showValidation(
@@ -878,9 +913,6 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         Directionality.of(context),
       ),
     );
-    if (target == _ValidationTarget.title) {
-      _titleFocusNode.requestFocus();
-    }
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
         0,
@@ -972,6 +1004,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   }
 
   Future<TimeOfDay?> _showTimePicker(TimeOfDay initialTime) {
+    _dismissInput();
     return showTimePicker(
       context: context,
       initialTime: initialTime,
@@ -1145,7 +1178,7 @@ Future<int?> _showNumberDialog({
           title: Text(title),
           content: TextField(
             controller: controller,
-            autofocus: true,
+            autofocus: false,
             keyboardType: TextInputType.number,
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(labelText: label, errorText: errorText),

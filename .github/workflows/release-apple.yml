@@ -1,9 +1,6 @@
 name: Release Apple Installers
 
 on:
-  push:
-    tags:
-      - "v*"
   workflow_dispatch:
     inputs:
       tag:
@@ -94,6 +91,7 @@ jobs:
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
           name: DailyCalendar ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
-          body_path: docs/RELEASE_NOTES_3.4.0.md
+          body_path: docs/RELEASE_NOTES_3.5.0.md
+          draft: true
           files: dist/*
           fail_on_unmatched_files: true

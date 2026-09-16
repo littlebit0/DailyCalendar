@@ -11,9 +11,12 @@ import android.content.res.Configuration
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.style.StrikethroughSpan
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.text.TextPaint
+import android.view.View
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import org.json.JSONArray
@@ -460,7 +463,7 @@ private class DailyEventWidgetFactory(
         val views = RemoteViews(context.packageName, R.layout.widget_event_item)
         views.setTextViewText(
             R.id.widget_event_title,
-            completedTitle(event.optString("title"), completed),
+            event.optString("title"),
         )
         views.setTextColor(
             R.id.widget_event_title,
@@ -473,6 +476,13 @@ private class DailyEventWidgetFactory(
         )
         views.setTextColor(R.id.widget_event_detail, palette.secondaryText)
         val eventColor = eventColor(event, palette.accent)
+        views.setViewVisibility(R.id.widget_event_strike, if (completed) View.VISIBLE else View.GONE)
+        if (completed) {
+            val surface = if (palette.backgroundResource == R.drawable.widget_background_dark)
+                Color.BLACK else Color.WHITE
+            views.setImageViewBitmap(R.id.widget_event_strike,
+                completionLine(context, event.optString("title"), eventColor, surface))
+        }
         views.setInt(R.id.widget_event_color, "setColorFilter", eventColor)
         views.setImageViewResource(
             R.id.widget_todo_button,
@@ -606,15 +616,22 @@ class DailyWidgetActionReceiver : BroadcastReceiver() {
     }
 }
 
-private fun completedTitle(title: String, completed: Boolean): CharSequence {
-    if (!completed) return title
-    return SpannableString(title).apply {
-        setSpan(
-            StrikethroughSpan(),
-            0,
-            length,
-            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
-        )
+private fun completionLine(context: Context, title: String, text: Int, surface: Int): Bitmap {
+    val metrics = context.resources.displayMetrics
+    val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_SP, 13f, metrics)
+        typeface = Typeface.create("sans-serif", Typeface.BOLD)
+    }
+    val fm = paint.fontMetrics
+    val width = kotlin.math.ceil(paint.measureText(title).toDouble()).toInt()
+        .coerceIn(1, metrics.widthPixels.coerceAtLeast(1))
+    val height = kotlin.math.ceil((fm.bottom - fm.top).toDouble()).toInt().coerceAtLeast(1)
+    return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).apply {
+        density = metrics.densityDpi
+        paint.color = DailyCompletionContrast.strike(text, surface)
+        paint.strokeWidth = (paint.textSize / 18).coerceAtLeast(1f)
+        val y = -fm.top - paint.textSize * 0.3f
+        Canvas(this).drawLine(0f, y, width.toFloat(), y, paint)
     }
 }
 

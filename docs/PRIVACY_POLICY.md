@@ -1,8 +1,8 @@
 # Daily Privacy Policy
 
-Effective date: 2026-08-25
+Effective date: 2026-09-16
 
-Current app release baseline: `3.3.1`.
+Current app release baseline: `3.5.0`.
 
 Daily is a personal calendar app. This policy explains what data the app uses
 and how it is handled.
@@ -20,6 +20,27 @@ as calendar events, settings, D-day entries, and deletion tombstones.
 
 Daily does not read, modify, or manage your regular Google Drive files. Sync
 data is stored in the app-specific Google Drive AppData area.
+
+Deleted event bodies may be compacted after their final planned date has passed.
+Minimal event IDs and deletion timestamps remain to prevent stale devices from
+restoring deleted events. Existing safety snapshots and Drive revision history
+may still retain older content. Undeleted historical events are not purged by
+this cleanup.
+
+## Optional Weather And Academic Calendars
+
+Weather display is off by default. You may choose a Korean region manually or
+explicitly allow approximate location to select a nearby forecast region.
+Daily requests Korea Meteorological Administration forecasts using the region's
+grid, not raw device coordinates or account identity. The service receives the
+usual network connection information, including the requesting IP address.
+Location is not collected for advertising, analytics or background tracking.
+Forecast preferences and bounded caches remain on the device.
+
+University calendar imports request public academic-calendar records from the
+selected university's official website. Daily does not send personal schedules
+or account credentials to that website. Imported events can be backed up through
+the optional Drive connection; subscription preferences remain device-local.
 
 ## Data Use
 

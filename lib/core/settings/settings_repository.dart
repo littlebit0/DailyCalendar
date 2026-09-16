@@ -11,17 +11,31 @@ import '../auth/daily_account.dart';
 import '../auth/google_account.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
+import '../weather/weather_store.dart';
+import '../widgets/lock_screen_wallpaper_service.dart';
 import 'app_settings.dart';
+import '../../features/onboarding/feature_announcements.dart';
+import '../academic/academic_store.dart';
+import '../../features/events/domain/frequent_places.dart';
+import '../sync/settings_sync_document.dart';
+import '../sync/sync_version.dart';
 
 class SettingsRepository {
   SettingsRepository({
     required SharedPreferences preferences,
     FlutterSecureStorage? secureStorage,
+    DateTime Function()? now,
   }) : _preferences = preferences,
-       _secureStorage = secureStorage ?? const FlutterSecureStorage();
+       _secureStorage = secureStorage ?? const FlutterSecureStorage(),
+       _now = now ?? DateTime.now;
 
   final SharedPreferences _preferences;
+  late final announcements = FeatureAnnouncementStore(_preferences);
+  late final frequentPlaces = FrequentPlaces(_preferences);
+  late final weatherStore = WeatherStore(_preferences);
+  late final academicStore = AcademicStore(_preferences);
   final FlutterSecureStorage _secureStorage;
+  final DateTime Function() _now;
   Future<void> _settingsMutationTail = Future<void>.value();
   var _settingsMutationGeneration = 0;
 
@@ -66,6 +80,7 @@ class SettingsRepository {
   static const _languageKey = 'language';
   static const _settingsSyncPendingKey = 'settingsSyncPending';
   static const _settingsSyncRevisionKey = 'settingsSyncRevision';
+  static const _settingsSyncDocumentKey = 'settingsSyncDocument.v1';
   static const _driveChangeTokenKey = 'driveChangePageToken';
   static const _driveChangeAccountKey = 'driveChangeAccount';
   static const _deviceIdKey = 'deviceId';
@@ -160,6 +175,8 @@ class SettingsRepository {
     required AppSettings? changedFrom,
   }) async {
     final previous = load();
+    final changedAt = _now();
+    final previousSyncDocument = settingsSyncDocument();
     final baseline = changedFrom ?? previous;
     final previousReminderListJson = jsonEncode(
       previous.defaultReminderMinutesList,
@@ -435,7 +452,19 @@ class SettingsRepository {
         previous.language != settings.language) {
       await _preferences.setString(_languageKey, settings.language.name);
     }
-    if (markSyncPending) {
+    if (markSyncPending &&
+        canonicalSyncJson(syncSettingsValues(previous)) !=
+            canonicalSyncJson(syncSettingsValues(load()))) {
+      final document = previousSyncDocument.recordChanges(
+        before: syncSettingsValues(previous),
+        after: syncSettingsValues(load()),
+        changedAt: changedAt,
+        deviceId: await deviceId(),
+      );
+      await _preferences.setString(
+        _settingsSyncDocumentKey,
+        canonicalSyncJson(document.toJson()),
+      );
       await _preferences.setInt(
         _settingsSyncRevisionKey,
         settingsSyncRevision + 1,
@@ -451,6 +480,71 @@ class SettingsRepository {
 
   int get settingsSyncRevision =>
       _preferences.getInt(_settingsSyncRevisionKey) ?? 0;
+
+  SettingsSyncDocument settingsSyncDocument() {
+    final raw = _preferences.getString(_settingsSyncDocumentKey);
+    if (raw != null) {
+      return SettingsSyncDocument.fromJson(
+        Map<String, Object?>.from(jsonDecode(raw) as Map),
+      );
+    }
+    return hasPendingSettingsSync
+        ? SettingsSyncDocument.legacy(syncSettingsValues(load()))
+        : const SettingsSyncDocument();
+  }
+
+  Future<bool> mergeSettingsSyncDocument(
+    SettingsSyncDocument remote,
+    AppSettings Function(Map<String, Object?> values, AppSettings current)
+    decode, {
+    void Function()? validateSession,
+  }) async {
+    var changed = false;
+    await _enqueueSettingsMutation(() async {
+      validateSession?.call();
+      final current = load();
+      final merged = settingsSyncDocument().merge(remote);
+      final target = decode(
+        merged.values(syncSettingsValues(current)),
+        current,
+      );
+      changed =
+          canonicalSyncJson(syncSettingsValues(current)) !=
+          canonicalSyncJson(syncSettingsValues(target));
+      await _saveSettings(target, markSyncPending: false, changedFrom: null);
+      await _preferences.setString(
+        _settingsSyncDocumentKey,
+        canonicalSyncJson(merged.toJson()),
+      );
+      await _preferences.setBool(
+        _settingsSyncPendingKey,
+        !merged.sameAs(remote),
+      );
+    });
+    return changed;
+  }
+
+  Future<bool> acknowledgeSettingsSyncDocument(
+    SettingsSyncDocument uploaded,
+  ) async {
+    var acknowledged = false;
+    await _enqueueSettingsMutation(() async {
+      final current = settingsSyncDocument();
+      final merged = current.merge(uploaded);
+      final values = syncSettingsValues(load());
+      acknowledged =
+          merged.sameAs(uploaded) &&
+          canonicalSyncJson(merged.values(values)) == canonicalSyncJson(values);
+      if (acknowledged) {
+        await _preferences.setString(
+          _settingsSyncDocumentKey,
+          canonicalSyncJson(merged.toJson()),
+        );
+        await _preferences.setBool(_settingsSyncPendingKey, false);
+      }
+    });
+    return acknowledged;
+  }
 
   Future<void> markSettingsSyncedIfRevision(int revision) {
     return _enqueueSettingsMutation(() async {
@@ -652,11 +746,16 @@ class SettingsRepository {
   }
 
   Future<void> resetAll() {
+    academicStore.invalidate();
     _settingsMutationGeneration += 1;
     return _enqueueSettingsMutation(_resetAll);
   }
 
   Future<void> _resetAll() async {
+    await academicStore.clear();
+    await LockScreenWallpaperService.reset();
+    await weatherStore.clear();
+    await frequentPlaces.clear();
     await _preferences.remove(_defaultReminderKey);
     await _preferences.remove(_defaultReminderListKey);
     await _preferences.remove(_allDayReminderHourKey);
@@ -698,6 +797,7 @@ class SettingsRepository {
     await _preferences.remove(_languageKey);
     await _preferences.remove(_settingsSyncPendingKey);
     await _preferences.remove(_settingsSyncRevisionKey);
+    await _preferences.remove(_settingsSyncDocumentKey);
     await clearDriveChangePageToken();
     await _preferences.remove(_deviceIdKey);
     await deleteDailyAccount();

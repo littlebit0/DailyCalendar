@@ -236,6 +236,17 @@ class $EventRecordsTable extends EventRecords
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _syncTimestampDetailsMeta =
+      const VerificationMeta('syncTimestampDetails');
+  @override
+  late final GeneratedColumn<String> syncTimestampDetails =
+      GeneratedColumn<String>(
+        'sync_timestamp_details',
+        aliasedName,
+        true,
+        type: DriftSqlType.string,
+        requiredDuringInsert: false,
+      );
   static const VerificationMeta _deviceIdMeta = const VerificationMeta(
     'deviceId',
   );
@@ -339,6 +350,7 @@ class $EventRecordsTable extends EventRecords
     createdAt,
     updatedAt,
     deletedAt,
+    syncTimestampDetails,
     deviceId,
     syncStatus,
     showDday,
@@ -516,6 +528,15 @@ class $EventRecordsTable extends EventRecords
         deletedAt.isAcceptableOrUnknown(data['deleted_at']!, _deletedAtMeta),
       );
     }
+    if (data.containsKey('sync_timestamp_details')) {
+      context.handle(
+        _syncTimestampDetailsMeta,
+        syncTimestampDetails.isAcceptableOrUnknown(
+          data['sync_timestamp_details']!,
+          _syncTimestampDetailsMeta,
+        ),
+      );
+    }
     if (data.containsKey('device_id')) {
       context.handle(
         _deviceIdMeta,
@@ -651,6 +672,10 @@ class $EventRecordsTable extends EventRecords
         DriftSqlType.dateTime,
         data['${effectivePrefix}deleted_at'],
       ),
+      syncTimestampDetails: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sync_timestamp_details'],
+      ),
       deviceId: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}device_id'],
@@ -706,6 +731,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime? deletedAt;
+  final String? syncTimestampDetails;
   final String deviceId;
   final String syncStatus;
   final bool showDday;
@@ -734,6 +760,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     required this.createdAt,
     required this.updatedAt,
     this.deletedAt,
+    this.syncTimestampDetails,
     required this.deviceId,
     required this.syncStatus,
     required this.showDday,
@@ -785,6 +812,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     if (!nullToAbsent || deletedAt != null) {
       map['deleted_at'] = Variable<DateTime>(deletedAt);
     }
+    if (!nullToAbsent || syncTimestampDetails != null) {
+      map['sync_timestamp_details'] = Variable<String>(syncTimestampDetails);
+    }
     map['device_id'] = Variable<String>(deviceId);
     map['sync_status'] = Variable<String>(syncStatus);
     map['show_dday'] = Variable<bool>(showDday);
@@ -829,6 +859,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       deletedAt: deletedAt == null && nullToAbsent
           ? const Value.absent()
           : Value(deletedAt),
+      syncTimestampDetails: syncTimestampDetails == null && nullToAbsent
+          ? const Value.absent()
+          : Value(syncTimestampDetails),
       deviceId: Value(deviceId),
       syncStatus: Value(syncStatus),
       showDday: Value(showDday),
@@ -873,6 +906,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
       updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
       deletedAt: serializer.fromJson<DateTime?>(json['deletedAt']),
+      syncTimestampDetails: serializer.fromJson<String?>(
+        json['syncTimestampDetails'],
+      ),
       deviceId: serializer.fromJson<String>(json['deviceId']),
       syncStatus: serializer.fromJson<String>(json['syncStatus']),
       showDday: serializer.fromJson<bool>(json['showDday']),
@@ -910,6 +946,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       'createdAt': serializer.toJson<DateTime>(createdAt),
       'updatedAt': serializer.toJson<DateTime>(updatedAt),
       'deletedAt': serializer.toJson<DateTime?>(deletedAt),
+      'syncTimestampDetails': serializer.toJson<String?>(syncTimestampDetails),
       'deviceId': serializer.toJson<String>(deviceId),
       'syncStatus': serializer.toJson<String>(syncStatus),
       'showDday': serializer.toJson<bool>(showDday),
@@ -941,6 +978,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     DateTime? createdAt,
     DateTime? updatedAt,
     Value<DateTime?> deletedAt = const Value.absent(),
+    Value<String?> syncTimestampDetails = const Value.absent(),
     String? deviceId,
     String? syncStatus,
     bool? showDday,
@@ -977,6 +1015,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     createdAt: createdAt ?? this.createdAt,
     updatedAt: updatedAt ?? this.updatedAt,
     deletedAt: deletedAt.present ? deletedAt.value : this.deletedAt,
+    syncTimestampDetails: syncTimestampDetails.present
+        ? syncTimestampDetails.value
+        : this.syncTimestampDetails,
     deviceId: deviceId ?? this.deviceId,
     syncStatus: syncStatus ?? this.syncStatus,
     showDday: showDday ?? this.showDday,
@@ -1023,6 +1064,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
       updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
       deletedAt: data.deletedAt.present ? data.deletedAt.value : this.deletedAt,
+      syncTimestampDetails: data.syncTimestampDetails.present
+          ? data.syncTimestampDetails.value
+          : this.syncTimestampDetails,
       deviceId: data.deviceId.present ? data.deviceId.value : this.deviceId,
       syncStatus: data.syncStatus.present
           ? data.syncStatus.value
@@ -1062,6 +1106,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
+          ..write('syncTimestampDetails: $syncTimestampDetails, ')
           ..write('deviceId: $deviceId, ')
           ..write('syncStatus: $syncStatus, ')
           ..write('showDday: $showDday, ')
@@ -1095,6 +1140,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     createdAt,
     updatedAt,
     deletedAt,
+    syncTimestampDetails,
     deviceId,
     syncStatus,
     showDday,
@@ -1127,6 +1173,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
           other.deletedAt == this.deletedAt &&
+          other.syncTimestampDetails == this.syncTimestampDetails &&
           other.deviceId == this.deviceId &&
           other.syncStatus == this.syncStatus &&
           other.showDday == this.showDday &&
@@ -1157,6 +1204,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
   final Value<DateTime?> deletedAt;
+  final Value<String?> syncTimestampDetails;
   final Value<String> deviceId;
   final Value<String> syncStatus;
   final Value<bool> showDday;
@@ -1186,6 +1234,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
     this.deletedAt = const Value.absent(),
+    this.syncTimestampDetails = const Value.absent(),
     this.deviceId = const Value.absent(),
     this.syncStatus = const Value.absent(),
     this.showDday = const Value.absent(),
@@ -1216,6 +1265,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     required DateTime createdAt,
     required DateTime updatedAt,
     this.deletedAt = const Value.absent(),
+    this.syncTimestampDetails = const Value.absent(),
     this.deviceId = const Value.absent(),
     this.syncStatus = const Value.absent(),
     this.showDday = const Value.absent(),
@@ -1252,6 +1302,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
     Expression<DateTime>? deletedAt,
+    Expression<String>? syncTimestampDetails,
     Expression<String>? deviceId,
     Expression<String>? syncStatus,
     Expression<bool>? showDday,
@@ -1286,6 +1337,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       if (createdAt != null) 'created_at': createdAt,
       if (updatedAt != null) 'updated_at': updatedAt,
       if (deletedAt != null) 'deleted_at': deletedAt,
+      if (syncTimestampDetails != null)
+        'sync_timestamp_details': syncTimestampDetails,
       if (deviceId != null) 'device_id': deviceId,
       if (syncStatus != null) 'sync_status': syncStatus,
       if (showDday != null) 'show_dday': showDday,
@@ -1319,6 +1372,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
     Value<DateTime?>? deletedAt,
+    Value<String?>? syncTimestampDetails,
     Value<String>? deviceId,
     Value<String>? syncStatus,
     Value<bool>? showDday,
@@ -1352,6 +1406,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       deletedAt: deletedAt ?? this.deletedAt,
+      syncTimestampDetails: syncTimestampDetails ?? this.syncTimestampDetails,
       deviceId: deviceId ?? this.deviceId,
       syncStatus: syncStatus ?? this.syncStatus,
       showDday: showDday ?? this.showDday,
@@ -1434,6 +1489,11 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     if (deletedAt.present) {
       map['deleted_at'] = Variable<DateTime>(deletedAt.value);
     }
+    if (syncTimestampDetails.present) {
+      map['sync_timestamp_details'] = Variable<String>(
+        syncTimestampDetails.value,
+      );
+    }
     if (deviceId.present) {
       map['device_id'] = Variable<String>(deviceId.value);
     }
@@ -1482,6 +1542,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
           ..write('deletedAt: $deletedAt, ')
+          ..write('syncTimestampDetails: $syncTimestampDetails, ')
           ..write('deviceId: $deviceId, ')
           ..write('syncStatus: $syncStatus, ')
           ..write('showDday: $showDday, ')
@@ -1528,6 +1589,7 @@ typedef $$EventRecordsTableCreateCompanionBuilder =
       required DateTime createdAt,
       required DateTime updatedAt,
       Value<DateTime?> deletedAt,
+      Value<String?> syncTimestampDetails,
       Value<String> deviceId,
       Value<String> syncStatus,
       Value<bool> showDday,
@@ -1559,6 +1621,7 @@ typedef $$EventRecordsTableUpdateCompanionBuilder =
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
       Value<DateTime?> deletedAt,
+      Value<String?> syncTimestampDetails,
       Value<String> deviceId,
       Value<String> syncStatus,
       Value<bool> showDday,
@@ -1679,6 +1742,11 @@ class $$EventRecordsTableFilterComposer
 
   ColumnFilters<DateTime> get deletedAt => $composableBuilder(
     column: $table.deletedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get syncTimestampDetails => $composableBuilder(
+    column: $table.syncTimestampDetails,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1827,6 +1895,11 @@ class $$EventRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get syncTimestampDetails => $composableBuilder(
+    column: $table.syncTimestampDetails,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get deviceId => $composableBuilder(
     column: $table.deviceId,
     builder: (column) => ColumnOrderings(column),
@@ -1946,6 +2019,11 @@ class $$EventRecordsTableAnnotationComposer
   GeneratedColumn<DateTime> get deletedAt =>
       $composableBuilder(column: $table.deletedAt, builder: (column) => column);
 
+  GeneratedColumn<String> get syncTimestampDetails => $composableBuilder(
+    column: $table.syncTimestampDetails,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get deviceId =>
       $composableBuilder(column: $table.deviceId, builder: (column) => column);
 
@@ -2023,6 +2101,7 @@ class $$EventRecordsTableTableManager
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
                 Value<DateTime?> deletedAt = const Value.absent(),
+                Value<String?> syncTimestampDetails = const Value.absent(),
                 Value<String> deviceId = const Value.absent(),
                 Value<String> syncStatus = const Value.absent(),
                 Value<bool> showDday = const Value.absent(),
@@ -2052,6 +2131,7 @@ class $$EventRecordsTableTableManager
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
+                syncTimestampDetails: syncTimestampDetails,
                 deviceId: deviceId,
                 syncStatus: syncStatus,
                 showDday: showDday,
@@ -2083,6 +2163,7 @@ class $$EventRecordsTableTableManager
                 required DateTime createdAt,
                 required DateTime updatedAt,
                 Value<DateTime?> deletedAt = const Value.absent(),
+                Value<String?> syncTimestampDetails = const Value.absent(),
                 Value<String> deviceId = const Value.absent(),
                 Value<String> syncStatus = const Value.absent(),
                 Value<bool> showDday = const Value.absent(),
@@ -2112,6 +2193,7 @@ class $$EventRecordsTableTableManager
                 createdAt: createdAt,
                 updatedAt: updatedAt,
                 deletedAt: deletedAt,
+                syncTimestampDetails: syncTimestampDetails,
                 deviceId: deviceId,
                 syncStatus: syncStatus,
                 showDday: showDday,

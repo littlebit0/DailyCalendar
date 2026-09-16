@@ -7,6 +7,27 @@ Future<String> _readNormalized(String path) async {
 }
 
 void main() {
+  test(
+    'UIKit-hosted wallpaper settings use UIKit activity and preserve privacy',
+    () async {
+      final source = await _readNormalized(
+        'ios/Runner/DailyWallpaperSettingsView.swift',
+      );
+      expect(source, isNot(contains('@Environment(\\.scenePhase)')));
+      expect(
+        source,
+        contains('UIApplication.shared.applicationState == .active'),
+      );
+      expect(source, contains('UIApplication.willResignActiveNotification'));
+      expect(source, contains('UIApplication.didBecomeActiveNotification'));
+      expect(source, contains('UIApplication.didEnterBackgroundNotification'));
+      expect(source, contains('.opacity(appIsActive ? 1 : 0)'));
+      expect(source, contains('.allowsHitTesting(appIsActive)'));
+      expect(source, contains('bool(forKey: "flutter.appLockEnabled")'));
+      expect(source, contains('dismiss()'));
+    },
+  );
+
   test('iOS declares why Daily uses Face ID', () async {
     final plist = await _readNormalized('ios/Runner/Info.plist');
 
@@ -86,7 +107,9 @@ void main() {
       expect(source, contains('.foregroundStyle(eventColor)'));
       expect(
         source,
-        contains('.strikethrough(true, color: Color.primary.opacity(0.78))'),
+        contains(
+          '.strikethrough(completed, color: Color(white: Double(best) / 255))',
+        ),
       );
       expect(source, isNot(contains('VStack(spacing: 1.5)')));
       expect(source, contains('snapshot["generatedAt"]'));

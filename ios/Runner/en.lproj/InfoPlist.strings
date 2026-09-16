@@ -2,6 +2,8 @@
 "NSCalendarsFullAccessUsageDescription" = "Daily reads Apple Calendar events only when you import them into Daily.";
 "NSCalendarsUsageDescription" = "Daily reads Apple Calendar events only when you import them into Daily.";
 "NSFaceIDUsageDescription" = "Daily uses Face ID to securely unlock the app.";
+"NSPhotoLibraryAddUsageDescription" = "Save a calendar image to Photos only when you tap Save Image, so you can choose it as a Lock Screen wallpaper.";
 "NSMicrophoneUsageDescription" = "Daily uses the microphone only when you speak a calendar command to Signal.";
 "NSSpeechRecognitionUsageDescription" = "Daily converts your Signal calendar command to text so it can carry out the requested action.";
 "CFBundleSpokenName" = "Daily";
+"NSLocationWhenInUseUsageDescription" = "Use your approximate location to show the nearby KMA forecast. You can also select a region without location access.";

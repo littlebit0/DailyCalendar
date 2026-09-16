@@ -1695,6 +1695,47 @@ struct DailySiriEvent: Sendable {
   }
 }
 
+#if os(iOS)
+@available(iOS 16.0, *)
+enum DailyWallpaperDataSource {
+  static func events(from start: Date, to end: Date) throws -> [DailyWallpaperEvent] {
+    try DailySiriDatabase.wallpaperEvents(from: start, to: end)
+  }
+}
+
+@available(iOS 16.0, *)
+private extension DailySiriDatabase {
+  static func wallpaperEvents(from start: Date, to end: Date) throws -> [DailyWallpaperEvent] {
+    let defaults = UserDefaults.standard
+    let hidden = Set((defaults.string(forKey: "flutter.hiddenCategoryIds") ?? "[]")
+      .data(using: .utf8).flatMap { try? JSONDecoder().decode([String].self, from: $0) } ?? [])
+    let colors = Dictionary(DailySiriPreferences.categories.map { ($0.id, $0.colorValue) },
+                            uniquingKeysWith: { _, latest in latest })
+    let completed: Set<String> = try withDatabase { database in
+      var statement: OpaquePointer?
+      guard sqlite3_prepare_v2(database,
+        "SELECT id FROM event_records WHERE deleted_at IS NULL AND completed = 1", -1, &statement, nil) == SQLITE_OK else {
+        throw DailySiriError.databaseUnavailable
+      }
+      defer { sqlite3_finalize(statement) }
+      var ids = Set<String>()
+      var status = sqlite3_step(statement)
+      while status == SQLITE_ROW {
+        ids.insert(string(statement, 0))
+        status = sqlite3_step(statement)
+      }
+      guard status == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
+      return ids
+    }
+    return try events(from: start, to: end).filter { !hidden.contains($0.categoryID) }.map {
+      DailyWallpaperEvent(id: "\($0.id):\($0.startAt.timeIntervalSince1970)", title: $0.title,
+        start: $0.startAt, end: $0.endAt, color: colors[$0.categoryID] ?? $0.colorValue,
+        completed: completed.contains($0.id), holiday: $0.isHoliday)
+    }
+  }
+}
+#endif
+
 enum DailyKoreanHolidayService {
   static func events(
     from start: Date,

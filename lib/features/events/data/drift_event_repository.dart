@@ -8,8 +8,10 @@ import 'recurrence_expander.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_repository.dart';
+import '../domain/event_deletion.dart';
+import '../../../core/sync/sync_version.dart';
 
-class DriftEventRepository implements EventRepository {
+class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   DriftEventRepository(this._database, {RecurrenceExpander? expander})
     : _expander = expander ?? RecurrenceExpander();
 
@@ -224,6 +226,7 @@ class DriftEventRepository implements EventRepository {
             category: Value(_storedCategoryValue(normalized)),
             colorValue: Value(normalized.colorValue),
             updatedAt: Value(normalized.updatedAt),
+            syncTimestampDetails: Value(encodeSyncTimestamps(normalized)),
             syncStatus: const Value('pending'),
           ),
           where: (table) => table.id.equals(normalized.id),
@@ -241,16 +244,17 @@ class DriftEventRepository implements EventRepository {
   }
 
   @override
-  Future<void> delete(String eventId) {
-    return (_database.update(
-      _database.eventRecords,
-    )..where((table) => table.id.equals(eventId))).write(
-      EventRecordsCompanion(
-        deletedAt: Value(DateTime.now()),
-        syncStatus: const Value('pending_delete'),
-      ),
-    );
-  }
+  Future<void> delete(String eventId) => _database.transaction(() async {
+    final event = await findById(eventId);
+    if (event != null) {
+      await save(
+        event.copyWith(
+          deletedAt: DateTime.now().toUtc(),
+          syncStatus: 'pending_delete',
+        ),
+      );
+    }
+  });
 
   @override
   Future<void> hardDelete(String eventId) {
@@ -261,8 +265,133 @@ class DriftEventRepository implements EventRepository {
 
   @override
   Future<void> clearAll() {
-    return _database.delete(_database.eventRecords).go();
+    return _database.transaction(() async {
+      await _database.customStatement('DELETE FROM sync_event_deletions');
+      await _database.delete(_database.eventRecords).go();
+    });
   }
+
+  @override
+  Future<List<EventDeletion>> deletionRecords({
+    bool pendingOnly = false,
+  }) async {
+    final rows = await _database
+        .customSelect(
+          'SELECT id, deleted_at, pending FROM sync_event_deletions'
+          '${pendingOnly ? ' WHERE pending = 1' : ''}',
+        )
+        .get();
+    return rows
+        .map(
+          (row) => EventDeletion(
+            id: row.read<String>('id'),
+            deletedAt: DateTime.parse(row.read<String>('deleted_at')).toUtc(),
+            pending: row.read<int>('pending') != 0,
+          ),
+        )
+        .toList();
+  }
+
+  @override
+  Future<List<EventRestoreMutation>> mergeSyncRecords(
+    List<CalendarEvent> events,
+    List<EventDeletion> deletions, {
+    required RestoredEventResolver resolve,
+  }) => _database.transaction(() async {
+    await mergeDeletionRecords(deletions);
+    final markers = {
+      for (final record in await deletionRecords()) record.id: record,
+    };
+    for (final deletion in deletions) {
+      final local = await findById(deletion.id);
+      if (local != null && eventChangedAt(local).isAfter(deletion.deletedAt)) {
+        await save(local.copyWith(syncStatus: 'pending'));
+      }
+      if (markers[deletion.id]!.deletedAt.isAfter(deletion.deletedAt)) {
+        await _queueDeletionRepair(deletion.id);
+      }
+    }
+    for (final event in events) {
+      final marker = markers[event.id];
+      if (marker != null && !eventChangedAt(event).isAfter(marker.deletedAt)) {
+        await _queueDeletionRepair(event.id);
+      }
+    }
+    return mergeRestoredEventsAtomically(
+      events.where((event) {
+        final marker = markers[event.id];
+        return marker == null ||
+            eventChangedAt(event).isAfter(marker.deletedAt);
+      }),
+      resolve: resolve,
+    );
+  });
+
+  Future<void> _queueDeletionRepair(String id) => _database.customStatement(
+    'UPDATE sync_event_deletions SET pending = 1 WHERE id = ?',
+    [id],
+  );
+
+  @override
+  Future<void> mergeDeletionRecords(
+    Iterable<EventDeletion> records,
+  ) => _database.transaction(() async {
+    for (final deletion in records) {
+      final old = await _database
+          .customSelect(
+            'SELECT deleted_at FROM sync_event_deletions WHERE id = ?',
+            variables: [Variable.withString(deletion.id)],
+          )
+          .getSingleOrNull();
+      if (old == null ||
+          DateTime.parse(
+            old.read<String>('deleted_at'),
+          ).isBefore(deletion.deletedAt)) {
+        await _database.customStatement(
+          'INSERT OR REPLACE INTO sync_event_deletions (id, deleted_at, pending) VALUES (?, ?, ?)',
+          [
+            deletion.id,
+            deletion.deletedAt.toUtc().toIso8601String(),
+            deletion.pending ? 1 : 0,
+          ],
+        );
+      }
+      final current = await findById(deletion.id);
+      final oldDate = old == null
+          ? null
+          : DateTime.parse(old.read<String>('deleted_at'));
+      final effectiveDate =
+          oldDate != null && oldDate.isAfter(deletion.deletedAt)
+          ? oldDate
+          : deletion.deletedAt;
+      if (current != null && !eventChangedAt(current).isAfter(effectiveDate)) {
+        await hardDelete(current.id);
+      }
+    }
+  });
+
+  @override
+  Future<void> compactDeletedEvents(DateTime now) =>
+      _database.transaction(() async {
+        final rows = await (_database.select(
+          _database.eventRecords,
+        )..where((table) => table.deletedAt.isNotNull())).get();
+        for (final row in rows) {
+          final event = row.toDomain();
+          if (!canCompactDeletedEvent(event, now)) continue;
+          await mergeDeletionRecords([
+            EventDeletion(id: event.id, deletedAt: eventChangedAt(event)),
+          ]);
+        }
+      });
+
+  @override
+  Future<void> markDeletionSynced(
+    EventDeletion deletion,
+  ) => _database.customStatement(
+    'UPDATE sync_event_deletions SET pending = 0 WHERE id = ? AND deleted_at = ?',
+    [deletion.id, deletion.deletedAt.toUtc().toIso8601String()],
+  );
 
   String _storedCategoryValue(CalendarEvent event) {
     if (event.category.id == 'basic' || event.category.id == 'holiday') {
@@ -303,6 +432,7 @@ class DriftEventRepository implements EventRepository {
       createdAt: Value(event.createdAt),
       updatedAt: Value(event.updatedAt),
       deletedAt: Value(event.deletedAt),
+      syncTimestampDetails: Value(encodeSyncTimestamps(event)),
       deviceId: Value(event.deviceId),
       syncStatus: Value(event.syncStatus),
       showDday: Value(event.showDday),

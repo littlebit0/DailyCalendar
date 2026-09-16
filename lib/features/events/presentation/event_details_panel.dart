@@ -15,6 +15,8 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
 import '../../../core/theme/event_completion_style.dart';
 import '../../../core/theme/calendar_date_color.dart';
+import '../../../core/theme/daily_ui.dart';
+import '../../../core/weather/weather_widgets.dart';
 import '../../calendar/widgets/calendar_event_drag_layer.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
@@ -31,6 +33,7 @@ class EventDetailsPanel extends ConsumerWidget {
     required this.date,
     required this.events,
     this.scrollController,
+    this.scrollPhysics,
     this.initialEvent,
     this.onEventDropped,
     this.onEventDragStateChanged,
@@ -45,6 +48,7 @@ class EventDetailsPanel extends ConsumerWidget {
   final DateTime date;
   final List<CalendarEvent> events;
   final ScrollController? scrollController;
+  final ScrollPhysics? scrollPhysics;
   final CalendarEvent? initialEvent;
   final CalendarEventDropCallback? onEventDropped;
   final ValueChanged<bool>? onEventDragStateChanged;
@@ -109,108 +113,135 @@ class EventDetailsPanel extends ConsumerWidget {
             const <String>[],
       ),
     );
-    final panel = Material(
-      color: Theme.of(context).colorScheme.surface,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: AlignmentDirectional.centerStart,
-                    child: Text.rich(
-                      key: const ValueKey('event-details-date-label'),
-                      TextSpan(
-                        children: weekdayColor != null && weekdayIndex >= 0
-                            ? [
-                                TextSpan(
-                                  text: dateLabel.substring(0, weekdayIndex),
-                                ),
-                                TextSpan(
-                                  text: weekday,
-                                  style: TextStyle(color: weekdayColor),
-                                ),
-                                TextSpan(
-                                  text: dateLabel.substring(
-                                    weekdayIndex + weekday.length,
-                                  ),
-                                ),
-                              ]
-                            : [TextSpan(text: dateLabel)],
-                      ),
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                ),
-                IconButton(
-                  tooltip: context.tr('일정 추가'),
-                  onPressed: () => _addEvent(
-                    context,
-                    ref,
-                    settings.categories,
-                    settings.defaultReminderMinutesList,
-                  ),
-                  icon: const Icon(Icons.add),
-                ),
-              ],
+    final header = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (scrollController != null)
+          Center(
+            child: Container(
+              key: const ValueKey('day-sheet-drag-handle'),
+              width: 36,
+              height: 5,
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: DailyUi.secondaryText(context),
+                borderRadius: BorderRadius.circular(3),
+              ),
             ),
-            const SizedBox(height: 12),
+          ),
+        Row(
+          children: [
             Expanded(
-              child: dayEvents.isEmpty
-                  ? ListView(
-                      controller: scrollController,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      children: [
-                        Text(
-                          context.tr('일정이 없습니다.'),
-                          style: Theme.of(context).textTheme.labelMedium,
-                        ),
-                      ],
-                    )
-                  : _DraggableEventList(
-                      date: date,
-                      events: dayEvents,
-                      scrollController: scrollController,
-                      onEventDropped: onEventDropped,
-                      onEventDragStateChanged: onEventDragStateChanged,
-                      onEventDragInteractionStateChanged:
-                          onEventDragInteractionStateChanged,
-                      onEventDragGlobalPositionChanged:
-                          onEventDragGlobalPositionChanged,
-                      compactDragFeedbackListenable:
-                          compactDragFeedbackListenable,
-                      dragFeedbackSpecListenable: dragFeedbackSpecListenable,
-                      dragOrigin: dragOrigin,
-                      itemBuilder: (context, event) => _EventTile(
-                        event: event,
-                        onOpen: () => _openEventDetails(
-                          context,
-                          ref,
-                          event,
-                          settings.categories,
-                          settings.defaultReminderMinutesList,
-                        ),
-                        onEdit: event.readOnly
-                            ? null
-                            : () => _editEvent(
-                                context,
-                                ref,
-                                event,
-                                settings.categories,
-                                settings.defaultReminderMinutesList,
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text.rich(
+                  key: const ValueKey('event-details-date-label'),
+                  TextSpan(
+                    children: weekdayColor != null && weekdayIndex >= 0
+                        ? [
+                            TextSpan(
+                              text: dateLabel.substring(0, weekdayIndex),
+                            ),
+                            TextSpan(
+                              text: weekday,
+                              style: TextStyle(color: weekdayColor),
+                            ),
+                            TextSpan(
+                              text: dateLabel.substring(
+                                weekdayIndex + weekday.length,
                               ),
-                        onDelete: event.readOnly
-                            ? null
-                            : () => _deleteEvent(context, ref, event),
-                      ),
-                    ),
+                            ),
+                          ]
+                        : [TextSpan(text: dateLabel)],
+                  ),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+            ),
+            IconButton(
+              tooltip: context.tr('일정 추가'),
+              onPressed: () => _addEvent(
+                context,
+                ref,
+                settings.categories,
+                settings.defaultReminderMinutesList,
+              ),
+              icon: const Icon(Icons.add),
             ),
           ],
         ),
-      ),
+        CalendarWeather(date: date, detailed: true),
+        const SizedBox(height: 12),
+      ],
+    );
+    final list = dayEvents.isEmpty
+        ? ListView(
+            controller: scrollController,
+            physics: scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+            padding: scrollController == null
+                ? EdgeInsets.zero
+                : const EdgeInsets.all(16),
+            children: [
+              if (scrollController != null) header,
+              Text(
+                context.tr('일정이 없습니다.'),
+                style: Theme.of(context).textTheme.labelMedium,
+              ),
+            ],
+          )
+        : _DraggableEventList(
+            header: scrollController == null ? null : header,
+            date: date,
+            events: dayEvents,
+            scrollController: scrollController,
+            scrollPhysics: scrollPhysics,
+            onEventDropped: onEventDropped,
+            onEventDragStateChanged: onEventDragStateChanged,
+            onEventDragInteractionStateChanged:
+                onEventDragInteractionStateChanged,
+            onEventDragGlobalPositionChanged: onEventDragGlobalPositionChanged,
+            compactDragFeedbackListenable: compactDragFeedbackListenable,
+            dragFeedbackSpecListenable: dragFeedbackSpecListenable,
+            dragOrigin: dragOrigin,
+            itemBuilder: (context, event) => _EventTile(
+              event: event,
+              onOpen: () => _openEventDetails(
+                context,
+                ref,
+                event,
+                settings.categories,
+                settings.defaultReminderMinutesList,
+              ),
+              onEdit: event.readOnly
+                  ? null
+                  : () => _editEvent(
+                      context,
+                      ref,
+                      event,
+                      settings.categories,
+                      settings.defaultReminderMinutesList,
+                    ),
+              onDelete: event.readOnly
+                  ? null
+                  : () => _deleteEvent(context, ref, event),
+            ),
+          );
+    final panel = Material(
+      color: scrollController == null
+          ? Theme.of(context).colorScheme.surface
+          : DailyUi.groupedSurface(context),
+      child: scrollController != null
+          ? list
+          : Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  header,
+                  Expanded(child: list),
+                ],
+              ),
+            ),
     );
     if (onEventDropped == null) {
       return panel;
@@ -292,6 +323,8 @@ class EventDetailsPanel extends ConsumerWidget {
     final draft = await showDialog<EventDraft>(
       context: context,
       builder: (_) => EventEditorDialog(
+        frequentPlaces: ref.read(settingsRepositoryProvider).frequentPlaces,
+        loadPlaceEvents: ref.read(eventRepositoryProvider).allEventsForSync,
         initialDate: date,
         categories: categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
@@ -339,6 +372,8 @@ class EventDetailsPanel extends ConsumerWidget {
     final draft = await showDialog<EventDraft>(
       context: context,
       builder: (_) => EventEditorDialog(
+        frequentPlaces: ref.read(settingsRepositoryProvider).frequentPlaces,
+        loadPlaceEvents: ref.read(eventRepositoryProvider).allEventsForSync,
         initialDate: event.startAt,
         event: event,
         categories: categories,
@@ -561,6 +596,7 @@ class _DraggableEventList extends StatefulWidget {
     required this.date,
     required this.events,
     required this.scrollController,
+    this.scrollPhysics,
     required this.onEventDropped,
     required this.onEventDragStateChanged,
     required this.onEventDragInteractionStateChanged,
@@ -569,11 +605,13 @@ class _DraggableEventList extends StatefulWidget {
     required this.dragFeedbackSpecListenable,
     required this.dragOrigin,
     required this.itemBuilder,
+    this.header,
   });
 
   final DateTime date;
   final List<CalendarEvent> events;
   final ScrollController? scrollController;
+  final ScrollPhysics? scrollPhysics;
   final CalendarEventDropCallback? onEventDropped;
   final ValueChanged<bool>? onEventDragStateChanged;
   final ValueChanged<bool>? onEventDragInteractionStateChanged;
@@ -583,6 +621,7 @@ class _DraggableEventList extends StatefulWidget {
   dragFeedbackSpecListenable;
   final CalendarEventDragOrigin dragOrigin;
   final Widget Function(BuildContext context, CalendarEvent event) itemBuilder;
+  final Widget? header;
 
   @override
   State<_DraggableEventList> createState() => _DraggableEventListState();
@@ -690,8 +729,11 @@ class _DraggableEventListState extends State<_DraggableEventList> {
 
     return ListView(
       controller: widget.scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: children,
+      physics: widget.scrollPhysics ?? const AlwaysScrollableScrollPhysics(),
+      padding: widget.header == null
+          ? EdgeInsets.zero
+          : const EdgeInsets.all(16),
+      children: [if (widget.header != null) widget.header!, ...children],
     );
   }
 
@@ -965,6 +1007,9 @@ class _EventInsertionGap extends StatelessWidget {
   }
 }
 
+Widget calendarSidebarDragCard(CalendarEvent event) =>
+    _EventTile(event: event, onOpen: () {}, onEdit: null, onDelete: null);
+
 class _EventTile extends StatelessWidget {
   const _EventTile({
     required this.event,
@@ -1046,6 +1091,7 @@ class _EventTile extends StatelessWidget {
                                             ),
                                             completed: event.completed,
                                             eventColor: categoryColor,
+                                            backgroundColor: backgroundColor,
                                           ),
                                         ),
                                       ),
@@ -1249,174 +1295,184 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
     final color = Color(event.colorValue);
     final canChangeCompletion =
         !event.readOnly && !event.systemEvent && !event.holiday;
-    return SafeArea(
-      top: false,
-      child: FractionallySizedBox(
-        heightFactor: 0.82,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
-          child: Column(
+    Widget content(ScrollController? controller) => SingleChildScrollView(
+      key: const ValueKey('event-detail-content-scroll'),
+      controller: controller,
+      physics: const ClampingScrollPhysics(),
+      padding: const EdgeInsets.fromLTRB(20, 4, 20, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    width: 5,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: color,
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          context.l10n.eventTitle(
-                            event.title,
-                            holiday: event.holiday,
-                          ),
-                          style: calendarEventCompletionStyle(
-                            context,
-                            Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.w800,
-                            ),
-                            completed: event.completed,
-                            eventColor: color,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          context.l10n.categoryName(
-                            id: event.category.id,
-                            label: event.category.label,
-                          ),
-                          style: Theme.of(
-                            context,
-                          ).textTheme.labelMedium?.copyWith(color: color),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+              Container(
+                width: 5,
+                height: 44,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(3),
+                ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(width: 12),
               Expanded(
-                child: ListView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CheckboxListTile(
-                      key: ValueKey(
-                        'event-detail-todo-${event.occurrenceId ?? event.id}',
+                    Text(
+                      context.l10n.eventTitle(
+                        event.title,
+                        holiday: event.holiday,
                       ),
-                      contentPadding: EdgeInsets.zero,
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(context.tr('완료')),
-                      value: _completed,
-                      onChanged: !canChangeCompletion || _updatingCompletion
-                          ? null
-                          : (value) {
-                              if (value != null) {
-                                unawaited(_setCompleted(value));
-                              }
-                            },
-                    ),
-                    const Divider(height: 8),
-                    _DetailRow(
-                      icon: Icons.schedule_outlined,
-                      label: context.tr('시간'),
-                      value: _formatTimeLabel(context, event),
-                    ),
-                    if (event.alarmEnabled)
-                      _DetailRow(
-                        icon: Icons.alarm_outlined,
-                        label: context.tr('일정 알람'),
-                        value: _formatAlarmLabel(context, event),
-                      ),
-                    if (event.location != null && event.location!.isNotEmpty)
-                      _DetailActionRow(
-                        icon: Icons.location_on_outlined,
-                        label: context.tr('장소'),
-                        value: event.location!,
-                        actionIcon: Icons.map_outlined,
-                        actionLabel: context.tr('지도 바로가기'),
-                        onPressed: () =>
-                            MapLauncher().openLocation(event.location!),
-                      ),
-                    if (event.weather != null && event.weather!.isNotEmpty)
-                      _DetailRow(
-                        icon: Icons.cloud_outlined,
-                        label: context.tr('날씨'),
-                        value: event.weather!,
-                      ),
-                    if (event.url != null && event.url!.isNotEmpty)
-                      _DetailActionRow(
-                        icon: Icons.link,
-                        label: 'URI',
-                        value: event.url!,
-                        actionIcon: Icons.open_in_new,
-                        actionLabel: context.tr('열기'),
-                        onPressed: () => _openUrl(event.url!),
-                      ),
-                    if (event.memo != null && event.memo!.isNotEmpty)
-                      _DetailRow(
-                        icon: Icons.notes_outlined,
-                        label: context.tr('메모'),
-                        value: event.memo!,
-                      ),
-                    if (event.showDday)
-                      _DetailRow(
-                        icon: Icons.flag_outlined,
-                        label: 'D-day',
-                        value: _formatDday(event),
-                      ),
-                    if (event.location == null &&
-                        event.weather == null &&
-                        event.url == null &&
-                        event.memo == null &&
-                        !event.alarmEnabled &&
-                        !event.showDday)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 18),
-                        child: Text(
-                          context.tr('추가 상세정보가 없습니다.'),
-                          style: Theme.of(context).textTheme.labelMedium,
+                      style: calendarEventCompletionStyle(
+                        context,
+                        Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w800,
                         ),
+                        completed: event.completed,
+                        eventColor: color,
                       ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      context.l10n.categoryName(
+                        id: event.category.id,
+                        label: event.category.label,
+                      ),
+                      style: Theme.of(
+                        context,
+                      ).textTheme.labelMedium?.copyWith(color: color),
+                    ),
                   ],
                 ),
               ),
-              if (onEdit != null || onDelete != null) ...[
-                const Divider(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    if (onDelete != null)
-                      TextButton.icon(
-                        onPressed: onDelete,
-                        icon: const Icon(Icons.delete_outline),
-                        label: Text(context.tr('삭제')),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.red,
-                        ),
-                      ),
-                    if (onEdit != null) ...[
-                      const SizedBox(width: 8),
-                      FilledButton.icon(
-                        onPressed: onEdit,
-                        icon: const Icon(Icons.edit_outlined),
-                        label: Text(context.tr('수정')),
-                      ),
-                    ],
-                  ],
-                ),
-              ],
             ],
           ),
-        ),
+          const SizedBox(height: 18),
+          ...[
+            CheckboxListTile(
+              key: ValueKey(
+                'event-detail-todo-${event.occurrenceId ?? event.id}',
+              ),
+              contentPadding: EdgeInsets.zero,
+              controlAffinity: ListTileControlAffinity.leading,
+              title: Text(context.tr('완료')),
+              value: _completed,
+              onChanged: !canChangeCompletion || _updatingCompletion
+                  ? null
+                  : (value) {
+                      if (value != null) {
+                        unawaited(_setCompleted(value));
+                      }
+                    },
+            ),
+            const Divider(height: 8),
+            _DetailRow(
+              icon: Icons.schedule_outlined,
+              label: context.tr('시간'),
+              value: _formatTimeLabel(context, event),
+            ),
+            if (event.alarmEnabled)
+              _DetailRow(
+                icon: Icons.alarm_outlined,
+                label: context.tr('일정 알람'),
+                value: _formatAlarmLabel(context, event),
+              ),
+            if (event.location != null && event.location!.isNotEmpty)
+              _DetailActionRow(
+                icon: Icons.location_on_outlined,
+                label: context.tr('장소'),
+                value: event.location!,
+                actionIcon: Icons.map_outlined,
+                actionLabel: context.tr('지도 바로가기'),
+                onPressed: () => MapLauncher().openLocation(event.location!),
+              ),
+            if (event.weather != null && event.weather!.isNotEmpty)
+              _DetailRow(
+                icon: Icons.cloud_outlined,
+                label: context.tr('날씨'),
+                value: event.weather!,
+              ),
+            if (event.url != null && event.url!.isNotEmpty)
+              _DetailActionRow(
+                icon: Icons.link,
+                label: 'URI',
+                value: event.url!,
+                actionIcon: Icons.open_in_new,
+                actionLabel: context.tr('열기'),
+                onPressed: () => _openUrl(event.url!),
+              ),
+            if (event.memo != null && event.memo!.trim().isNotEmpty)
+              _DetailRow(
+                icon: Icons.notes_outlined,
+                label: context.tr('메모'),
+                value: event.memo!,
+              ),
+            if (event.showDday)
+              _DetailRow(
+                icon: Icons.flag_outlined,
+                label: 'D-day',
+                value: _formatDday(event),
+              ),
+            if ((event.location?.trim().isEmpty ?? true) &&
+                (event.weather?.trim().isEmpty ?? true) &&
+                (event.url?.trim().isEmpty ?? true) &&
+                (event.memo?.trim().isEmpty ?? true) &&
+                !event.alarmEnabled &&
+                !event.showDday)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 18),
+                child: Text(
+                  context.tr('추가 상세정보가 없습니다.'),
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
+              ),
+          ],
+          if (onEdit != null || onDelete != null) ...[
+            const Divider(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                if (onDelete != null)
+                  TextButton.icon(
+                    onPressed: onDelete,
+                    icon: const Icon(Icons.delete_outline),
+                    label: Text(context.tr('삭제')),
+                    style: TextButton.styleFrom(foregroundColor: Colors.red),
+                  ),
+                if (onEdit != null) ...[
+                  const SizedBox(width: 8),
+                  FilledButton.icon(
+                    onPressed: onEdit,
+                    icon: const Icon(Icons.edit_outlined),
+                    label: Text(context.tr('수정')),
+                  ),
+                ],
+              ],
+            ),
+          ],
+        ],
       ),
+    );
+    final mobile = switch (Theme.of(context).platform) {
+      TargetPlatform.iOS || TargetPlatform.android => true,
+      _ => false,
+    };
+    return SafeArea(
+      top: false,
+      child: mobile
+          ? DraggableScrollableSheet(
+              key: const ValueKey('event-detail-draggable-sheet'),
+              expand: false,
+              initialChildSize: 0.82,
+              maxChildSize: 0.82,
+              minChildSize: 0.25,
+              snap: true,
+              // This controller hands a downward drag at scroll offset zero
+              // back to the parent sheet instead of bouncing empty content.
+              builder: (context, controller) => content(controller),
+            )
+          : FractionallySizedBox(heightFactor: 0.82, child: content(null)),
     );
   }
 

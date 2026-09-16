@@ -79,7 +79,9 @@ internal object DailyWidgetCalendarRenderer {
             val label = TextUtils.ellipsize(bar.event.optString("title"), paint, (rect.width() - 4).coerceAtLeast(0f), TextUtils.TruncateAt.END).toString()
             canvas.drawText(label, rect.left + 2, rect.top + 10, paint)
             if (bar.event.optBoolean("completed")) {
-                paint.color = primary
+                val surface = if (Color.red(primary) > 128) Color.BLACK else Color.WHITE
+                paint.color = DailyCompletionContrast.strike(raw,
+                    DailyCompletionContrast.blend(raw, surface, 38 / 255.0))
                 paint.strokeWidth = 0.8f
                 canvas.drawLine(rect.left + 2, rect.top + 6, rect.left + 2 + paint.measureText(label), rect.top + 6, paint)
             }
