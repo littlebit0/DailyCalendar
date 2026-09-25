@@ -5,7 +5,7 @@ release state, completed work, release status, and safe next steps. Do not add
 OAuth client secrets, GitHub tokens, signing certificates, provisioning
 profiles, keystore passwords, or private keys to this file.
 
-## 2026-09-25 release 3.5.2 in progress
+## 2026-09-25 release 3.5.2 published
 
 - User paused #74/#75 before implementation and requested commit, push and public
   3.5.2 release of the current #79–83 fixes. Timetable support is confirmed for
@@ -14,9 +14,26 @@ profiles, keystore passwords, or private keys to this file.
 - App/widget version 3.5.2, Android code 352. DB schema remains 8.
 - Local release checks: analyze clean; Flutter 587 passed, one existing skip;
   Python 17 tests, one environment-dependent skip; ruby syntax valid.
-- Release verification/publication is in progress; this entry is not proof of
-  published artifacts or store submission. Wallpaper/Shortcut tests remain
-  explicitly deferred to the user.
+- Source commit 7496a8e and annotated v3.5.2 tag pushed. Release Installers
+  run 36106567248 passed all platform builds. Platform Builds 36106503212
+  passed analysis/tests and Windows/Android debug builds.
+- Local iOS simulator, macOS and Android 3.5.2 debug builds succeeded. Updated
+  Mac test app, iPhone 17 and iPad Pro 13-inch simulators, and Pixel 9 emulator.
+  Bundle/APK signatures and full installed artifact digests verified. Protected
+  files unchanged: Mac 2 readable files, iPhone 3, iPad 2, Android 14. App Store
+  bundle unchanged. No app launch, login or interactive wallpaper test. Android
+  updated quick-boot snapshot saved. Evidence: work/release-3.5.2.
+- Published v3.5.2 at 2026-09-25T07:23:23Z after downloading all seven installers
+  and verifying SHA256SUMS, embedded Apple app/widget, Windows executable,
+  Linux and Android versions, and existing Android certificate SHA-1
+  3ab44a04827cb218654f34c67779291b256d2950. Anonymous latest-release API confirms
+  v3.5.2, not draft/prerelease, eight assets. No store submission.
+- Linux signed APT run 36107382266 passed both builds, signed installation/
+  update tests, public InRelease signature verification, and APT downloads for
+  both architectures matching that workflow build. Public Packages includes
+  3.5.2-1 for amd64/arm64. The APT rebuild is separate from the immutable seven
+  product installers; their public hashes remain unchanged.
+- Wallpaper/Shortcut tests remain explicitly deferred to the user.
 - Widget configuration now derives version from pubspec and retains the shared
   Swift palette in widget and iOS host targets.
 

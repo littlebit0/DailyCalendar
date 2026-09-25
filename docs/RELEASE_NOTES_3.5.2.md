@@ -23,6 +23,12 @@ Android 3.3.1 이전 서명키와는 호환되지 않으므로 이전 설치본�
 
 ## 검증 범위
 
+- Linux 서명된 APT 채널에 3.5.2-1을 반영하고 두 아키텍처의 공개 다운로드를 검증했습니다. [자동 업데이트 채널 검증](https://github.com/littlebit0/DailyCalendar/actions/runs/36107382266)
+
+- 설치 파일 7개의 SHA-256과 내부 버전 검증을 통과했고, Android APK의 기존 인증서 서명을 확인했습니다.
+
+- iOS·macOS·Android·Windows 및 Linux amd64/arm64 배포 빌드가 모두 통과했습니다. [배포 빌드 결과](https://github.com/littlebit0/DailyCalendar/actions/runs/36106567248)
+- Mac 테스트 앱, iPhone·iPad 시뮬레이터 및 Android 에뮬레이터를 3.5.2로 업데이트하고 기존 데이터 보존을 확인했습니다.
 - 공유 Flutter 정적 분석 통과, 전체 자동화 테스트 587개 통과 및 기존 제외 항목 1개.
 - 색상 검증은 RGB 각 채널 0,10,…,250,255의 19,683개 조합을 양쪽 테마에서 검사했습니다. 배경·투명도 조합 1,417,176건과 실제 글자 렌더링 39,366건 및 추가 1,440건이 통과했습니다.
 - Kotlin·Swift 색상 결과는 공통 Dart 기준 데이터와 일치합니다.
