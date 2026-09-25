@@ -1,15 +1,16 @@
-# iPhone Lock Screen Calendar (#66)
+# iPhone and iPad Lock Screen Calendar (#66, #83)
 
 ## Scope
 
-iPhone, iOS 16 or later. This is a locally rendered PNG wallpaper, not a
+iPhone, iOS 16 or later; iPad, iPadOS 17 or later. The app's deployment minimum
+still applies. This is a locally rendered PNG wallpaper, not a
 WidgetKit widget. It does not add wallpaper behavior to macOS, Android, Windows
 or Linux. Existing Siri shortcuts, widgets and synchronization are unchanged.
 
 Settings > Lock Screen Calendar opens a native iOS setup screen directly from the
 settings root screen, in the Screen & Events group.
 The first enable action requests consent because event titles remain visible
-while the phone is locked. Subsequent OFF/ON changes reuse the existing setup.
+while the device is locked. Subsequent OFF/ON changes reuse the existing setup.
 Finishing the guide is never recorded as proof of installation or application.
 
 ## Data Flow
@@ -22,7 +23,8 @@ Finishing the guide is never recorded as proof of installation or application.
    saved events using the existing native Siri database/recurrence reader.
 4. Deleted events and hidden categories are excluded. Current category colors,
    completion, visible Korean holidays, week start and title alignment apply.
-5. A portrait PNG is rendered at the phone's native pixel resolution. Continuous
+5. A portrait PNG is rendered at the phone's native pixel resolution. iPad uses
+   the square canvas and common orientation-safe region described below. Continuous
    events occupy one bar per visible week. Dense rows reserve an overflow count;
    small displays may show only the count where titles cannot fit safely.
 6. A second opt-in check precedes the system **Set Wallpaper Photo** action.
@@ -57,11 +59,12 @@ scheme. They do not report wallpaper success merely because the URL opened.
   app's selected theme. Native settings and guides follow the app theme/language.
 - Korean, English, Japanese and Traditional Chinese are supported. App Intent
   action names/descriptions also have an iOS string catalog.
-- The top 34-52% is reserved according to the vertical-position control; the
+- On iPhone, the top 34-52% is reserved according to the vertical-position control; the
   bottom 15% remains free of calendar content. This is not a universal guarantee
   for enlarged iOS clocks, extra widgets, notifications or system zoom. The guide
   asks users to check the actual Lock Screen and adjust position as needed.
-- Cache identity includes dates, events, completion, colors, settings, dimensions,
+- Cache identity includes dates, events, completion, colors, settings, device kind,
+  native display dimensions (including both edges of an iPad's square canvas),
   locale, alignment and renderer version. Old PNGs are pruned after generation.
 - `Caches/DailyWallpaper` uses atomic writes, complete file protection and backup
   exclusion. Native settings (`daily.wallpaper.settings.v1`) are not Drive sync
@@ -73,6 +76,68 @@ scheme. They do not report wallpaper success merely because the URL opened.
 - OFF stops future shortcut updates but cannot remove an already applied image.
   Full removal clears only wallpaper cache/settings, preserving events, and
   guides the user to delete the iOS automation/shortcut and restore wallpaper.
+
+## iPad Layout and Verification Boundary (#83)
+
+The same settings bridge, consent, App Intents, signed Shortcuts, local event
+reader, OFF/re-enable behavior, setup progress, feedback and removal flow serve
+iPhone and iPad. No new shortcut actions or imported-shortcut replacement is
+required for this extension. The two phone-only guards now accept iPadOS 17+.
+Wallpaper settings and generated images remain device-local and outside Drive
+sync; reset invalidates pending image generation before clearing the cache.
+
+`DailyWallpaperCanvas` measures the built-in display's native pixels. It does
+not identify an iPad model or use the size/orientation of a Split View, Stage
+Manager or external-display window. The PNG is square, with each edge equal to
+the native display's long edge. This is a deliberate single-image strategy:
+App Intents may run without a foreground window, and rotating a Lock Screen
+does not trigger Daily to regenerate or apply another wallpaper.
+
+The calendar occupies the intersection of the centered portrait and landscape
+crops. Each crop reserves clock/date space above it; landscape also reserves
+the left quarter for the usual widget column. The existing position slider
+maps to 32-44% of each crop's height. The bottom 10% of portrait and 9% of
+landscape remain outside the calendar. These proportional bounds do not promise
+avoidance of every enlarged clock, widget configuration or notification stack.
+
+iPad typography scales from the native short edge using a different proportion
+than iPhone. A height limit keeps at least two event slots per week even for
+six-week months at the slider's lowest position: dense days show an event and
+an overflow count. The month model, week start, holiday/completion colors,
+current-day emphasis, continuous-event lanes and title alignment are shared.
+iPhone framing and type sizes are unchanged. Renderer version 2 invalidates
+old images; cache identity also includes device kind and both native edges, so
+two iPads with the same long edge but different ratios cannot reuse a layout.
+
+The settings screen displays portrait and landscape crops taken from the
+**same actual generated PNG**. They are labeled as crop previews. They do not
+show system clocks/widgets or claim to read the Lock Screen. Wallpaper zoom,
+repositioning, spatial/depth effects and OS behavior may produce a different
+crop; verify both orientations on the device and adjust the photo placement
+and calendar position as needed. The supplied shortcut already disables
+perspective zoom, smart crop and legibility blur, but that is not proof of the
+OS's final composition.
+
+Apple documents that [nativeBounds remains in portrait coordinates](https://developer.apple.com/documentation/uikit/uiscreen/nativebounds),
+that [iPad supports Set Wallpaper in personal automations](https://support.apple.com/en-gb/guide/ipad/ipad997d908e/18.0/ipados/18.0),
+and that [landscape Lock Screen widgets appear on the left](https://www.apple.com/mideast/ipados/ipados-17/a/pdf/en/iPadOS_All_New_Features_JOEN.pdf).
+These references establish the design constraints, not runtime acceptance of
+Daily's generated image or a guarantee of centered system cropping.
+
+Host Swift tests cover native pixel examples for mini (1488x2266), base/Air
+(1640x2360), Pro 11 (1668x2388 and 1668x2420), Pro 12.9/13 (2048x2732 and
+2064x2752), an older 4:3 display (1536x2048), and an arbitrary 1730x2470
+display. For every size, 4-6 weeks and seven slider positions are checked for
+crop containment, clock/widget margins, readable type bounds and event/overflow
+capacity. These are geometry cases, **not physical-device test results**.
+
+The user will perform actual iPad shortcut import/application tests. No shortcut
+execution, wallpaper change or personal automation change is authorized for the
+agent in this task. Before closing #83, the user must verify the real photo
+Lock Screen selection and application, portrait/landscape cropping and clock
+overlap, readable dense events, OFF/no-change and re-enable/reuse, and removal
+on representative iPad devices. Actual application remains unverified until
+that acceptance is supplied.
 
 ## Application Feedback (Updated 2026-09-16)
 

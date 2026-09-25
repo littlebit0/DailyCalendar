@@ -7,3 +7,4 @@
 "NSSpeechRecognitionUsageDescription" = "Signalに話したカレンダー操作を実行するため、音声をテキストに変換します。";
 "CFBundleSpokenName" = "デイリー";
 "NSLocationWhenInUseUsageDescription" = "近くの地域の気象庁予報を表示するため、おおよその位置を使用します。位置情報を許可せずに地域を選択することもできます。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "天気の地域を自動設定するとき、おおよその位置を使って近くの韓国気象庁の予報地域を探します。バックグラウンドで位置を追跡しません。位置情報を許可せずに地域を選択することもできます。";

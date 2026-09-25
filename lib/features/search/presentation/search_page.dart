@@ -190,6 +190,7 @@ class _SearchResultTile extends StatelessWidget {
                 Theme.of(context).textTheme.titleMedium,
                 completed: event.completed,
                 eventColor: color,
+                backgroundColor: DailyUi.groupedSurface(context),
               ),
             ),
             subtitle: Text('$date  $time'),

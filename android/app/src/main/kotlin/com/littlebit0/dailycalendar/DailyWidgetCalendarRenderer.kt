@@ -40,7 +40,7 @@ internal object DailyWidgetCalendarRenderer {
 
     fun render(
         context: Context, days: List<JSONObject>, width: Int, height: Int,
-        primary: Int, muted: Int, accent: Int, sunday: Int, saturday: Int,
+        primary: Int, muted: Int, accent: Int, sunday: Int, saturday: Int, surface: Int,
     ): Bitmap {
         val scale = context.resources.displayMetrics.density.coerceAtMost(2f)
         val bitmap = Bitmap.createBitmap((width * scale).toInt(), (height * scale).toInt(), Bitmap.Config.ARGB_8888)
@@ -72,18 +72,19 @@ internal object DailyWidgetCalendarRenderer {
         bars.filter { it.lane < lanes }.forEach { bar ->
             val raw = bar.event.optLong("color", accent.toLong()).toInt() or -0x1000000
             val rect = RectF(bar.first * cell + 1, 25f + bar.lane * 16, (bar.last + 1) * cell - 1, 39f + bar.lane * 16)
-            paint.color = (raw and 0x00ffffff) or 0x26000000
+            val colors = DailyCompletionContrast.resolve(raw,
+                DailyCompletionContrast.blend(raw, surface, 38 / 255.0))
+            paint.color = colors.background
             canvas.drawRoundRect(rect, 3f, 3f, paint)
-            paint.color = raw
+            paint.color = colors.foreground
             paint.textSize = 9f
             val label = TextUtils.ellipsize(bar.event.optString("title"), paint, (rect.width() - 4).coerceAtLeast(0f), TextUtils.TruncateAt.END).toString()
             canvas.drawText(label, rect.left + 2, rect.top + 10, paint)
             if (bar.event.optBoolean("completed")) {
-                val surface = if (Color.red(primary) > 128) Color.BLACK else Color.WHITE
-                paint.color = DailyCompletionContrast.strike(raw,
-                    DailyCompletionContrast.blend(raw, surface, 38 / 255.0))
-                paint.strokeWidth = 0.8f
-                canvas.drawLine(rect.left + 2, rect.top + 6, rect.left + 2 + paint.measureText(label), rect.top + 6, paint)
+                paint.color = colors.strike
+                paint.strokeWidth = DailyCompletionContrast.strokeWidth(paint.textSize)
+                val lineY = rect.top + 10 - paint.textSize * .3f
+                canvas.drawLine(rect.left + 2, lineY, rect.left + 2 + paint.measureText(label), lineY, paint)
             }
         }
         return bitmap

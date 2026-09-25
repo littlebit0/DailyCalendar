@@ -112,6 +112,39 @@ struct DailyWallpaperEvent: Codable, Sendable {
   let holiday: Bool
 }
 
+// A wallpaper belongs to the built-in display, not the current app window.
+// iPad uses one square image so a background App Intent need not guess which
+// orientation the user will choose later on the Lock Screen.
+struct DailyWallpaperCanvas: Codable, Equatable {
+  enum Device: String, Codable { case phone, pad }
+  static let rendererVersion = 3
+  let device: Device
+  let nativeWidth: Double
+  let nativeHeight: Double
+
+  init(device: Device, nativeSize: CGSize) {
+    self.device = device
+    nativeWidth = min(nativeSize.width, nativeSize.height)
+    nativeHeight = max(nativeSize.width, nativeSize.height)
+  }
+
+  var size: CGSize {
+    CGSize(width: device == .pad ? nativeHeight : nativeWidth, height: nativeHeight)
+  }
+
+  // These are centered, unzoomed crops of the PNG, not a readback of iPadOS's
+  // wallpaper placement. System/user zoom and repositioning may differ.
+  var portraitCrop: CGRect {
+    CGRect(x: (size.width - nativeWidth) / 2, y: 0,
+           width: nativeWidth, height: nativeHeight)
+  }
+
+  var landscapeCrop: CGRect {
+    CGRect(x: 0, y: (size.height - nativeWidth) / 2,
+           width: nativeHeight, height: nativeWidth)
+  }
+}
+
 struct DailyWallpaperMonth {
   struct Segment {
     let event: DailyWallpaperEvent
@@ -170,6 +203,46 @@ struct DailyWallpaperMonth {
 }
 
 enum DailyWallpaperGeometry {
+  struct Layout {
+    let content: CGRect
+    let scale: Double
+    let gridTop: Double
+    let rowHeight: Double
+  }
+
+  static func layout(canvas: DailyWallpaperCanvas, topFraction: Double, rows: Int) -> Layout {
+    let content: CGRect
+    let scale: Double
+    let rowCount = max(1, rows)
+    if canvas.device == .pad {
+      let portrait = canvas.portraitCrop
+      let landscape = canvas.landscapeCrop
+      let position = topFraction.isFinite ? min(0.52, max(0.34, topFraction)) : 0.40
+      let safeTop = 0.32 + (position - 0.34) * (2.0 / 3.0)
+      // Reserve clock/date space in both orientations and the usual left-side
+      // landscape widgets. Enlarged clocks/widgets still need a visual check.
+      let portraitSafe = CGRect(x: portrait.minX + portrait.width * 0.055,
+        y: portrait.height * safeTop, width: portrait.width * 0.89,
+        height: portrait.height * (0.90 - safeTop))
+      let landscapeSafe = CGRect(x: landscape.width * 0.25,
+        y: landscape.minY + landscape.height * safeTop,
+        width: landscape.width * 0.695, height: landscape.height * (0.91 - safeTop))
+      content = portraitSafe.intersection(landscapeSafe)
+      // More title room per day than a phone. At the lowest calendar position,
+      // retain at least one event plus its overflow count in a six-week month.
+      let twoSlotHeight = 16.0 + 2 + 13 * 2 + 2
+      scale = min(canvas.nativeWidth / 650,
+                  content.height / (58 + Double(rowCount) * twoSlotHeight + 1))
+    } else {
+      content = contentRect(width: canvas.size.width, height: canvas.size.height,
+                            topFraction: topFraction)
+      scale = canvas.size.width / 390
+    }
+    let gridTop = content.minY + 58 * scale
+    return Layout(content: content, scale: scale, gridTop: gridTop,
+                  rowHeight: (content.maxY - gridTop) / Double(rowCount))
+  }
+
   struct RowLayout {
     let dateHeight: Double
     let eventHeight: Double

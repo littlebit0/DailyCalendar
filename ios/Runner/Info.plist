@@ -79,6 +79,8 @@
 	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Use your approximate location to show the nearby KMA weather forecast. You can select a region without location access.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Daily uses your approximate location when you use automatic weather location to find the nearby KMA forecast region. Daily does not track your location in the background. You can select a region without location access.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Save a calendar image to Photos only when you tap Save Image, so you can choose it as a Lock Screen wallpaper.</string>
 	<key>NSAlarmKitUsageDescription</key>

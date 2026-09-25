@@ -110,6 +110,21 @@ enum DailyWallpaperStore {
   nonisolated static let automationGuidePageKey = "daily.wallpaper.automationGuidePage.v2"
   private static var generation = 0
 
+  static var canvas: DailyWallpaperCanvas? {
+    let device: DailyWallpaperCanvas.Device
+    switch UIDevice.current.userInterfaceIdiom {
+    case .phone: device = .phone
+    case .pad:
+      // iPad's selectable photo Lock Screens were introduced in iPadOS 17.
+      guard #available(iOS 17.0, *) else { return nil }
+      device = .pad
+    default: return nil
+    }
+    // Intentionally use the built-in display, not a Stage Manager/Split View
+    // window or external display. App Intents can run without a foreground scene.
+    return DailyWallpaperCanvas(device: device, nativeSize: UIScreen.main.nativeBounds.size)
+  }
+
   static var progress: DailyWallpaperSetupProgress {
     guard let data = UserDefaults.standard.data(forKey: progressKey),
           let value = try? JSONDecoder().decode(DailyWallpaperSetupProgress.self, from: data) else {
@@ -178,7 +193,7 @@ enum DailyWallpaperStore {
     let settings = settings
     let revision = generation
     guard preview || (settings.enabled && settings.consentAccepted) else { throw DailyWallpaperError.disabled }
-    guard UIDevice.current.userInterfaceIdiom == .phone else { throw DailyWallpaperError.unsupported }
+    guard let canvas = canvas else { throw DailyWallpaperError.unsupported }
     let defaults = UserDefaults.standard
     let month = DailyWallpaperMonth(now: Date(), mondayFirst: defaults.bool(forKey: "flutter.weekStartsOnMonday"))
     let start = month.start
@@ -187,8 +202,6 @@ enum DailyWallpaperStore {
       try DailyWallpaperDataSource.events(from: start, to: end)
     }.value
     guard revision == generation, !Task.isCancelled else { throw CancellationError() }
-    let size = UIScreen.main.nativeBounds.size
-    let portrait = CGSize(width: min(size.width, size.height), height: max(size.width, size.height))
     let locale = DailyWallpaperText.locale
     let centered = defaults.string(forKey: "flutter.calendarEventTitleAlignment") == "center"
     struct CacheInput: Encodable {
@@ -196,15 +209,14 @@ enum DailyWallpaperStore {
       let events: [DailyWallpaperEvent]
       let today: Date
       let monday: Bool
-      let width: Double
-      let height: Double
+      let canvas: DailyWallpaperCanvas
       let locale: String
       let centered: Bool
-      let renderer = 1
+      let renderer = DailyWallpaperCanvas.rendererVersion
     }
     let input = CacheInput(settings: settings, events: events, today: month.today,
                            monday: month.calendar.firstWeekday == 2,
-                           width: portrait.width, height: portrait.height,
+                           canvas: canvas,
                            locale: locale.identifier, centered: centered)
     let encoder = JSONEncoder()
     encoder.outputFormatting = .sortedKeys
@@ -215,7 +227,7 @@ enum DailyWallpaperStore {
       return data
     }
     let data = DailyWallpaperRenderer.render(month: month, events: events, settings: settings,
-                                            size: portrait, locale: locale, centered: centered)
+                                            canvas: canvas, locale: locale, centered: centered)
     try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
     try data.write(to: cached, options: [.atomic, .completeFileProtection])
     var excludedDirectory = directory
@@ -248,9 +260,11 @@ enum DailyWallpaperError: Error, LocalizedError {
 @MainActor
 enum DailyWallpaperRenderer {
   static func render(month: DailyWallpaperMonth, events: [DailyWallpaperEvent],
-                     settings: DailyWallpaperSettings, size: CGSize, locale: Locale,
+                     settings: DailyWallpaperSettings, canvas: DailyWallpaperCanvas, locale: Locale,
                      centered: Bool) -> Data {
-    let scale = size.width / 390
+    let size = canvas.size
+    let layout = DailyWallpaperGeometry.layout(canvas: canvas, topFraction: settings.topFraction, rows: month.rows)
+    let scale = layout.scale
     let format = UIGraphicsImageRendererFormat()
     format.scale = 1
     format.opaque = true
@@ -263,8 +277,7 @@ enum DailyWallpaperRenderer {
       let blue = UIColor.systemBlue.resolvedColor(with: traits)
       background.setFill()
       context.fill(CGRect(origin: .zero, size: size))
-      let rect = DailyWallpaperGeometry.contentRect(width: size.width, height: size.height,
-                                                    topFraction: settings.topFraction)
+      let rect = layout.content
       func text(_ value: String, _ frame: CGRect, _ font: CGFloat, _ color: UIColor,
                 weight: UIFont.Weight = .regular, alignment: NSTextAlignment = .left) {
         let paragraph = NSMutableParagraphStyle()
@@ -282,8 +295,8 @@ enum DailyWallpaperRenderer {
       formatter.setLocalizedDateFormatFromTemplate("yMMMM")
       text(formatter.string(from: month.start), CGRect(x: rect.minX, y: rect.minY,
           width: rect.width, height: 35 * scale), 25, foreground, weight: .bold)
-      let gridY = rect.minY + 58 * scale
-      let rowHeight = (rect.maxY - gridY) / CGFloat(month.rows)
+      let gridY = layout.gridTop
+      let rowHeight = layout.rowHeight
       let columnWidth = rect.width / 7
       let rowLayout = DailyWallpaperGeometry.rowLayout(height: rowHeight, scale: scale)
       let labelHeight = CGFloat(rowLayout.dateHeight)
@@ -323,21 +336,21 @@ enum DailyWallpaperRenderer {
             y: top + rowLayout.eventTop + CGFloat(segment.lane) * eventHeight,
             width: CGFloat(segment.endColumn - segment.startColumn + 1) * columnWidth - 2 * scale,
             height: eventHeight - 2 * scale)
-          let raw = segment.event.color
-          var color = UIColor(red: CGFloat((raw >> 16) & 255) / 255,
-                              green: CGFloat((raw >> 8) & 255) / 255,
-                              blue: CGFloat(raw & 255) / 255, alpha: 1)
-          color = color.readableWallpaperColor(onDark: dark)
-          color.withAlphaComponent(dark ? 0.22 : 0.12).setFill()
+          let raw = Int(segment.event.color) | 0xff000000
+          let bar = DailyEventPalette.blend(raw, on: dark ? 0xff000000 : 0xffffffff,
+                                            alpha: dark ? 0.22 : 0.12)
+          let colors = DailyEventPalette.resolve(category: raw, background: bar)
+          UIColor.dailyPalette(colors.background).setFill()
           UIBezierPath(roundedRect: frame, cornerRadius: 2.5 * scale).fill()
-          text(segment.event.title, frame.insetBy(dx: 2 * scale, dy: 0), 8.5, color,
+          text(segment.event.title, frame.insetBy(dx: 2 * scale, dy: 0), 8.5,
+               UIColor.dailyPalette(colors.foreground),
                weight: .medium, alignment: centered ? .center : .left)
           if segment.event.completed {
-            color.wallpaperCompletionColor(onDark: dark).setStroke()
+            UIColor.dailyPalette(colors.strike).setStroke()
             let line = UIBezierPath()
             line.move(to: CGPoint(x: frame.minX + 2 * scale, y: frame.midY))
             line.addLine(to: CGPoint(x: frame.maxX - 2 * scale, y: frame.midY))
-            line.lineWidth = scale
+            line.lineWidth = 1.25 * scale
             line.stroke()
           }
         }
@@ -355,50 +368,10 @@ enum DailyWallpaperRenderer {
 }
 
 private extension UIColor {
-  func wallpaperCompletionColor(onDark: Bool) -> UIColor {
-    var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
-    getRed(&r, green: &g, blue: &b, alpha: &a)
-    let rgb = [Double(r), Double(g), Double(b)]
-    let alpha = onDark ? 0.22 : 0.12
-    let surface = onDark ? 0.0 : 1.0
-    func luminance(_ values: [Double]) -> Double {
-      let linear = values.map { $0 <= 0.04045 ? $0 / 12.92 : pow(($0 + 0.055) / 1.055, 2.4) }
-      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722 + 0.05
-    }
-    let ink = luminance(rgb)
-    let background = luminance(rgb.map { $0 * alpha + surface * (1 - alpha) })
-    let midpoint = sqrt(ink * background) - 0.05
-    let encoded = midpoint <= 0.0031308 ? midpoint * 12.92 : 1.055 * pow(midpoint, 1 / 2.4) - 0.055
-    let c = Int((encoded * 255).rounded())
-    func score(_ value: Int) -> Double {
-      let l = luminance(Array(repeating: Double(value) / 255, count: 3))
-      return min(max(l, ink) / min(l, ink), max(l, background) / min(l, background))
-    }
-    let best = [0, 255, c, max(0, c - 1), min(255, c + 1)]
-      .max { score($0) < score($1) } ?? 0
-    return UIColor(white: CGFloat(best) / 255, alpha: 1)
-  }
-
-  func readableWallpaperColor(onDark: Bool) -> UIColor {
-    var red: CGFloat = 0, green: CGFloat = 0, blue: CGFloat = 0, alpha: CGFloat = 0
-    getRed(&red, green: &green, blue: &blue, alpha: &alpha)
-    func luminance(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat) -> CGFloat {
-      func linear(_ v: CGFloat) -> CGFloat { v <= 0.04045 ? v / 12.92 : pow((v + 0.055) / 1.055, 2.4) }
-      return 0.2126 * linear(r) + 0.7152 * linear(g) + 0.0722 * linear(b)
-    }
-    for _ in 0..<24 {
-      let lum = luminance(red, green, blue)
-      let opacity: CGFloat = onDark ? 0.22 : 0.12
-      let base: CGFloat = onDark ? 0 : 1
-      let barLum = luminance(base * (1 - opacity) + red * opacity,
-                             base * (1 - opacity) + green * opacity,
-                             base * (1 - opacity) + blue * opacity)
-      if (max(lum, barLum) + 0.05) / (min(lum, barLum) + 0.05) >= 4.5 { break }
-      red = onDark ? red + (1 - red) * 0.12 : red * 0.88
-      green = onDark ? green + (1 - green) * 0.12 : green * 0.88
-      blue = onDark ? blue + (1 - blue) * 0.12 : blue * 0.88
-    }
-    return UIColor(red: red, green: green, blue: blue, alpha: 1)
+  static func dailyPalette(_ argb: Int) -> UIColor {
+    UIColor(red: CGFloat((argb >> 16) & 255) / 255,
+            green: CGFloat((argb >> 8) & 255) / 255,
+            blue: CGFloat(argb & 255) / 255, alpha: 1)
   }
 }
 
@@ -514,7 +487,7 @@ final class DailyWallpaperBridge: NSObject, @preconcurrency FlutterSceneLifeCycl
         do { try DailyWallpaperStore.clear(); result(nil) }
         catch { result(FlutterError(code: "wallpaper_reset", message: error.localizedDescription, details: nil)) }
       case "openSettings":
-        guard #available(iOS 16.0, *), UIDevice.current.userInterfaceIdiom == .phone,
+        guard #available(iOS 16.0, *), DailyWallpaperStore.canvas != nil,
               let root = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene })
                 .flatMap({ $0.windows }).first(where: \.isKeyWindow)?.rootViewController else {
           result(FlutterError(code: "wallpaper_unsupported", message: DailyWallpaperText.value("unsupported"), details: nil))

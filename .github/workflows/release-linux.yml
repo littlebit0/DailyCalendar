@@ -17,7 +17,7 @@ on:
       tag:
         description: Existing product release tag
         required: true
-        default: v3.5.0
+        default: v3.5.2
       revision:
         description: Monotonically increasing Linux package revision
         required: true

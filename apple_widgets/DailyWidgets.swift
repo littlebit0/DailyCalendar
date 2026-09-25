@@ -272,22 +272,26 @@ private struct DailyMonthWeekRow: View {
 }
 
 private struct DailyWidgetEventLabel: View {
+  @Environment(\.colorScheme) private var colorScheme
   let event: DailyWidgetMonthEvent
   let height: CGFloat
   let fontSize: CGFloat
 
   var body: some View {
+    let surface = colorScheme == .dark ? 0xff000000 : 0xffffffff
+    let background = DailyEventPalette.blend(event.color, on: surface, alpha: 0.18)
+    let colors = DailyEventPalette.resolve(category: event.color | 0xff000000, background: background)
     Text(event.title)
       .font(.system(size: fontSize, weight: .medium))
       .dailyTodoCompletion(
         event.completed == true,
-        eventColor: Color.daily(argb: event.color), backgroundAlpha: 0.18
+        category: event.color, backgroundAlpha: 0.18
       )
       .lineLimit(1)
       .minimumScaleFactor(0.7)
       .padding(.horizontal, 2)
       .frame(maxWidth: .infinity, minHeight: height, maxHeight: height, alignment: .leading)
-      .background(Color.daily(argb: event.color).opacity(0.18))
+      .background(Color.daily(argb: colors.background))
       .clipShape(RoundedRectangle(cornerRadius: 2.5))
   }
 }
@@ -471,7 +475,7 @@ struct DailyTodayWidgetView: View {
               .font(.subheadline)
               .dailyTodoCompletion(
                 event.completed == true,
-                eventColor: Color.daily(argb: event.color)
+                category: event.color
               )
               .lineLimit(1)
             Spacer(minLength: 0)
@@ -522,7 +526,7 @@ struct DailyLockScreenTodayView: View {
           Text(next.title)
             .dailyTodoCompletion(
               next.completed == true,
-              eventColor: Color.daily(argb: next.color)
+              category: next.color, systemManaged: true
             )
             .privacySensitive()
         }
@@ -561,7 +565,7 @@ struct DailyLockScreenTodayView: View {
                 .font(.caption)
                 .dailyTodoCompletion(
                   event.completed == true,
-                  eventColor: Color.daily(argb: event.color)
+                  category: event.color, systemManaged: true
                 )
                 .lineLimit(1)
                 .privacySensitive()
@@ -791,7 +795,7 @@ struct DailyDdayWidgetView: View {
                 .font(.subheadline)
                 .dailyTodoCompletion(
                   item.completed == true,
-                  eventColor: Color.daily(argb: item.color)
+                  category: item.color
                 )
                 .lineLimit(1)
               Text(item.dateLabel)
@@ -842,10 +846,10 @@ private struct DailyWidgetBackgroundModifier: ViewModifier {
 }
 
 private extension View {
-  func dailyTodoCompletion(_ completed: Bool, eventColor: Color,
-                           backgroundAlpha: Double = 0) -> some View {
-    modifier(DailyCompletionModifier(completed: completed, eventColor: eventColor,
-                                     backgroundAlpha: backgroundAlpha))
+  func dailyTodoCompletion(_ completed: Bool, category: Int,
+                           backgroundAlpha: Double = 0, systemManaged: Bool = false) -> some View {
+    modifier(DailyCompletionModifier(completed: completed, category: category,
+      backgroundAlpha: backgroundAlpha, systemManaged: systemManaged))
   }
 
   func dailyWidgetBackground(themeMode: String?) -> some View {
@@ -854,32 +858,37 @@ private extension View {
 }
 
 private struct DailyCompletionModifier: ViewModifier {
-  @Environment(\.self) private var environment
+  @Environment(\.colorScheme) private var colorScheme
+  @ScaledMetric(relativeTo: .subheadline) private var strikeThickness: CGFloat = 1.25
   let completed: Bool
-  let eventColor: Color
+  let category: Int
   let backgroundAlpha: Double
+  let systemManaged: Bool
 
+  @ViewBuilder
   func body(content: Content) -> some View {
-    let resolved = eventColor.resolve(in: environment)
-    let rgb = [Double(resolved.red), Double(resolved.green), Double(resolved.blue)]
-    let surface = environment.colorScheme == .dark ? 0.0 : 1.0
-    let background = rgb.map { $0 * backgroundAlpha + surface * (1 - backgroundAlpha) }
-    func luminance(_ values: [Double]) -> Double {
-      let linear = values.map { $0 <= 0.04045 ? $0 / 12.92 : pow(($0 + 0.055) / 1.055, 2.4) }
-      return linear[0] * 0.2126 + linear[1] * 0.7152 + linear[2] * 0.0722 + 0.05
+    if systemManaged {
+      // Accessory widgets are composited/tinted by the Lock Screen. Its actual
+      // wallpaper is unavailable, so use the OS foreground and native line.
+      content.foregroundStyle(.primary).strikethrough(completed)
+    } else {
+      let surface = colorScheme == .dark ? 0xff000000 : 0xffffffff
+      let background = DailyEventPalette.blend(category, on: surface, alpha: backgroundAlpha)
+      let colors = DailyEventPalette.resolve(category: category | 0xff000000, background: background)
+      content.foregroundStyle(Color.daily(argb: colors.foreground))
+        .background(Color.daily(argb: colors.background))
+        // Keep a visible line in both appearances and at small month-label sizes.
+        // Apply it before the caller's padding/frame expansion.
+        .overlay {
+          if completed {
+            Rectangle()
+              .fill(Color.daily(argb: colors.strike))
+              .frame(height: strikeThickness)
+              .allowsHitTesting(false)
+              .accessibilityHidden(true)
+          }
+        }
     }
-    let a = luminance(rgb), b = luminance(background)
-    let middle = sqrt(a * b) - 0.05
-    let encoded = middle <= 0.0031308 ? middle * 12.92 : 1.055 * pow(middle, 1 / 2.4) - 0.055
-    let channel = Int((encoded * 255).rounded())
-    let candidates = [0, 255, channel, max(0, channel - 1), min(255, channel + 1)]
-    func score(_ c: Int) -> Double {
-      let l = luminance(Array(repeating: Double(c) / 255, count: 3))
-      return min(max(a, l) / min(a, l), max(b, l) / min(b, l))
-    }
-    let best = candidates.max { score($0) < score($1) } ?? 0
-    return content.foregroundStyle(eventColor)
-      .strikethrough(completed, color: Color(white: Double(best) / 255))
   }
 }
 

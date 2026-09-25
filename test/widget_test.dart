@@ -15,6 +15,7 @@ import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/sync/google_drive_sync_service.dart';
 import 'package:daily/core/sync/sync_service.dart';
 import 'package:daily/core/theme/daily_ui.dart';
+import 'package:daily/core/theme/event_completion_style.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/domain/event_category.dart';
@@ -254,9 +255,150 @@ void main() {
     },
   );
 
-  testWidgets('Android medium tablet constrains the calendar content', (
-    tester,
-  ) async {
+  for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
+    testWidgets(
+      '${platform.name} resizes calendar navigation without losing date or view',
+      (tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = const Size(390, 844);
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        debugDefaultTargetPlatformOverride = platform;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        SharedPreferences.setMockInitialValues({
+          'onboardingCompleted': true,
+          'defaultCalendarView': 'month',
+        });
+        final preferences = await SharedPreferences.getInstance();
+        final settingsRepository = SettingsRepository(preferences: preferences);
+
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              settingsRepositoryProvider.overrideWithValue(settingsRepository),
+              notificationServiceProvider.overrideWithValue(
+                _FakeNotification(),
+              ),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+              eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+              googleDriveAuthServiceProvider.overrideWithValue(
+                _FakeGoogleDriveAuthService(),
+              ),
+            ],
+            child: const DailyApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+
+        final element = tester.element(find.byType(MonthCalendarPage));
+        final container = ProviderScope.containerOf(element);
+        final date = DateTime(2026, 9, 17);
+        container.read(selectedDateProvider.notifier).state = date;
+        container.read(visibleMonthProvider.notifier).state = DateTime(2026, 9);
+        for (final layout in WeekDayLayoutMode.values) {
+          container.read(appSettingsProvider.notifier).state = container
+              .read(appSettingsProvider)
+              .copyWith(weekDayLayoutMode: layout);
+          for (final mode in CalendarViewMode.values) {
+            container.read(calendarViewModeProvider.notifier).state = mode;
+            for (final size in [
+              const Size(667, 375),
+              const Size(720, 390),
+              const Size(900, 390),
+              const Size(1200, 800),
+              const Size(600, 800),
+              const Size(390, 844),
+            ]) {
+              tester.view.physicalSize = size;
+              await tester.pumpAndSettle();
+              expect(
+                find.byKey(const ValueKey('macos-calendar-toolbar')),
+                size.width >= dailyCalendarWideMinWidth
+                    ? findsOneWidget
+                    : findsNothing,
+              );
+              expect(container.read(calendarViewModeProvider), mode);
+              expect(container.read(selectedDateProvider), date);
+              expect(container.read(visibleMonthProvider), DateTime(2026, 9));
+              expect(tester.takeException(), isNull);
+            }
+          }
+        }
+        tester.view.physicalSize = const Size(720, 390);
+        tester.platformDispatcher.textScaleFactorTestValue = 1.8;
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+        tester.platformDispatcher.clearTextScaleFactorTestValue();
+        container.read(calendarViewModeProvider.notifier).state =
+            CalendarViewMode.month;
+        tester.view.physicalSize = const Size(1200, 800);
+        await tester.pumpAndSettle();
+        expect(
+          find.byKey(const ValueKey('calendar-event-sidebar')),
+          findsOneWidget,
+        );
+        tester.view.physicalSize = const Size(840, 390);
+        tester.view.padding = const FakeViewPadding(
+          left: 60,
+          right: 60,
+          bottom: 21,
+        );
+        addTearDown(tester.view.resetPadding);
+        // The exit animation must reserve actual usable width immediately,
+        // including when SafeArea removes padding from descendant MediaQuery.
+        for (final elapsed in [
+          Duration.zero,
+          const Duration(milliseconds: 80),
+          const Duration(milliseconds: 80),
+          const Duration(milliseconds: 80),
+        ]) {
+          await tester.pump(elapsed);
+          expect(
+            tester
+                .getSize(
+                  find.byKey(
+                    const ValueKey('calendar-content-repaint-boundary'),
+                  ),
+                )
+                .width,
+            greaterThanOrEqualTo(400),
+          );
+          expect(tester.takeException(), isNull);
+        }
+        await tester.pumpAndSettle();
+        expect(
+          find.byKey(const ValueKey('macos-calendar-toolbar')),
+          findsOneWidget,
+        );
+        await tester.tap(find.byTooltip('빠른 보기'));
+        await tester.pumpAndSettle();
+        expect(
+          find.byKey(const ValueKey('quick-view-pointer-navigation')),
+          findsWidgets,
+        );
+        tester.view.padding = const FakeViewPadding(
+          left: 61,
+          right: 61,
+          bottom: 21,
+        );
+        await tester.pumpAndSettle();
+        expect(
+          find.byKey(const ValueKey('macos-calendar-toolbar')),
+          findsNothing,
+        );
+        expect(
+          find.byKey(const ValueKey('quick-view-pointer-navigation')),
+          findsWidgets,
+        );
+        expect(tester.takeException(), isNull);
+        debugDefaultTargetPlatformOverride = null;
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
+
+  testWidgets('Android wide tablet reuses desktop navigation', (tester) async {
     tester.view.physicalSize = const Size(1280, 800);
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.resetPhysicalSize);
@@ -288,17 +430,16 @@ void main() {
 
     expect(
       find.byKey(const ValueKey('android-tablet-content-frame')),
+      findsNothing,
+    );
+    expect(
+      find.byKey(const ValueKey('macos-calendar-toolbar')),
       findsOneWidget,
     );
     expect(
-      tester
-          .getSize(
-            find.byKey(const ValueKey('android-tablet-content-constraint')),
-          )
-          .width,
-      1120,
+      find.byKey(const ValueKey('calendar-event-sidebar')),
+      findsOneWidget,
     );
-    expect(find.byKey(const ValueKey('calendar-event-sidebar')), findsNothing);
     expect(tester.takeException(), isNull);
 
     debugDefaultTargetPlatformOverride = null;
@@ -609,6 +750,8 @@ void main() {
       'onboardingCompleted': true,
       'defaultCalendarView': 'week',
       'weekDayLayoutMode': 'list',
+      // Keep this two-event drag fixture independent of today's holidays.
+      'calendarShowHolidays': false,
     });
     final preferences = await SharedPreferences.getInstance();
     final settingsRepository = SettingsRepository(preferences: preferences);
@@ -1257,10 +1400,7 @@ void main() {
       await tester.tap(find.text('나중에'));
       await tester.pumpAndSettle();
       expect(find.text('Siri 단축어 추가하기'), findsOneWidget);
-      expect(
-        find.text('예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”'),
-        findsOneWidget,
-      );
+      expect(find.text('예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”'), findsOneWidget);
       expect(notificationService.initializeCalls, 0);
 
       await tester.tap(find.text('나중에'));
@@ -1499,6 +1639,124 @@ void main() {
 
     await tester.pumpWidget(const SizedBox.shrink());
   });
+
+  for (final settingsScreen in [false, true]) {
+    testWidgets(
+      'Android ${settingsScreen ? 'settings' : 'welcome'} cancellation clears busy state and retries without saving',
+      (tester) async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        SharedPreferences.setMockInitialValues({
+          'onboardingCompleted': settingsScreen,
+        });
+        FlutterSecureStorage.setMockInitialValues({});
+        final preferences = await SharedPreferences.getInstance();
+        final settingsRepository = SettingsRepository(preferences: preferences);
+        if (settingsScreen) {
+          await settingsRepository.saveGoogleAccount(
+            const GoogleAccount(email: 'existing@example.com'),
+          );
+        }
+        final attempts = List.generate(
+          3,
+          (_) => Completer<GoogleDriveAccount?>(),
+        );
+        var attemptIndex = 0;
+        final authService = _FakeGoogleDriveAuthService(
+          account: null,
+          signInResponse: () => attempts[attemptIndex++].future,
+        );
+        final notificationService = _FakeNotification();
+        final eventRepository = _FakeEventRepository();
+        final driveSyncService = _FakeGoogleDriveSyncService(
+          authService: authService,
+          eventRepository: eventRepository,
+          notificationService: notificationService,
+          settingsRepository: settingsRepository,
+        );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              settingsRepositoryProvider.overrideWithValue(settingsRepository),
+              notificationServiceProvider.overrideWithValue(
+                notificationService,
+              ),
+              eventRepositoryProvider.overrideWithValue(eventRepository),
+              googleDriveAuthServiceProvider.overrideWithValue(authService),
+              googleDriveSyncServiceProvider.overrideWithValue(
+                driveSyncService,
+              ),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+            ],
+            child: settingsScreen
+                ? const MaterialApp(home: SettingsPage())
+                : const DailyApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        if (settingsScreen) {
+          await _openAccountSettings(tester);
+        } else {
+          await _openWelcomeStartPage(tester);
+        }
+        final storedBefore = {
+          for (final key in preferences.getKeys()) key: preferences.get(key),
+        };
+        final label = settingsScreen ? 'Google 다시 연결' : 'Google로 계속';
+        for (var attempt = 0; attempt < 2; attempt++) {
+          await tester.ensureVisible(find.text(label));
+          await tester.tap(find.text(label));
+          await tester.pump();
+          expect(find.text('Google 연결 중'), findsOneWidget);
+          expect(find.text('연결 취소'), findsNothing);
+          attempts[attempt].complete(null);
+          await tester.pumpAndSettle();
+          expect(find.text('Google 연결 중'), findsNothing);
+          expect(find.text('Google 로그인 창을 여는 중입니다.'), findsNothing);
+          expect(find.textContaining('취소되었습니다'), findsNothing);
+          final button = find.ancestor(
+            of: find.text(label),
+            matching: find.byWidgetPredicate(
+              (widget) => widget is ButtonStyleButton,
+            ),
+          );
+          expect(tester.widget<ButtonStyleButton>(button).onPressed, isNotNull);
+          expect({
+            for (final key in preferences.getKeys()) key: preferences.get(key),
+          }, storedBefore);
+          expect(authService.signOutCalls, 0);
+          expect(driveSyncService.syncPendingChangesNowCalls, 0);
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.paused,
+          );
+          await tester.pump();
+          tester.binding.handleAppLifecycleStateChanged(
+            AppLifecycleState.resumed,
+          );
+          await tester.pumpAndSettle();
+          expect(authService.signInCalls, attempt + 1);
+        }
+        await tester.ensureVisible(find.text(label));
+        await tester.tap(find.text(label));
+        await tester.pump();
+        authService.account = const GoogleDriveAccount(
+          email: 'existing@example.com',
+        );
+        attempts[2].complete(authService.account);
+        await tester.pumpAndSettle();
+        expect(
+          settingsRepository.dailyAccount()?.googleAccount?.email,
+          'existing@example.com',
+        );
+        expect(settingsRepository.load().onboardingCompleted, isTrue);
+        expect(driveSyncService.syncPendingChangesNowCalls, greaterThan(0));
+        expect(authService.signInCalls, 3);
+        expect(find.text('Google 연결 중'), findsNothing);
+        await tester.pumpWidget(const SizedBox.shrink());
+        debugDefaultTargetPlatformOverride = null;
+      },
+    );
+  }
 
   testWidgets('Google sign-in preserves the linked Apple identity', (
     tester,
@@ -6959,9 +7217,27 @@ void main() {
           tester.widget<Text>(find.text('업무 일정')).style?.decorationThickness,
           lessThan(2),
         );
+        final completedTitle = tester.widget<Text>(find.text('업무 일정')).style!;
+        final completedSurface = CalendarEventSurface.of(
+          tester.element(find.text('업무 일정')),
+        );
         expect(
-          tester.widget<Text>(find.text('업무 일정')).style?.color,
-          Color(work.colorValue),
+          calendarEventContrast(completedTitle.color!, completedSurface),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(
+          calendarEventContrast(
+            completedTitle.decorationColor!,
+            completedSurface,
+          ),
+          greaterThanOrEqualTo(3),
+        );
+        expect(
+          calendarEventContrast(
+            completedTitle.decorationColor!,
+            completedTitle.color!,
+          ),
+          greaterThanOrEqualTo(3),
         );
         expect(
           tester.widget<Text>(find.text('업무 일정')).textAlign,
@@ -7099,6 +7375,7 @@ class _FakeGoogleDriveAuthService extends GoogleDriveAuthService {
     this.restoredAccount,
     this.signInAccount,
     this.signInCompleter,
+    this.signInResponse,
     this.canCancelOnResume = false,
     this.restoreFailuresRemaining = 0,
     this.authorizationAvailable = true,
@@ -7108,6 +7385,7 @@ class _FakeGoogleDriveAuthService extends GoogleDriveAuthService {
   final GoogleDriveAccount? restoredAccount;
   final GoogleDriveAccount? signInAccount;
   final Completer<GoogleDriveAccount?>? signInCompleter;
+  final Future<GoogleDriveAccount?> Function()? signInResponse;
   final bool canCancelOnResume;
   int restoreFailuresRemaining;
   final bool authorizationAvailable;
@@ -7142,6 +7420,7 @@ class _FakeGoogleDriveAuthService extends GoogleDriveAuthService {
     bool forceAccountSelection = false,
   }) async {
     signInCalls += 1;
+    if (signInResponse != null) return signInResponse!();
     if (signInCompleter != null) {
       return signInCompleter!.future;
     }

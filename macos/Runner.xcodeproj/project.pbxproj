@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		D81000000000000000000001 /* DailyEventPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81000000000000000000011 /* DailyEventPalette.swift */; };
 		331C80D8294CF71000263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C80D7294CF71000263BE5 /* RunnerTests.swift */; };
 		335BBD1B22A9A15E00E9071D /* GeneratedPluginRegistrant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335BBD1A22A9A15E00E9071D /* GeneratedPluginRegistrant.swift */; };
 		33CC10F12044A3C60003C045 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC10F02044A3C60003C045 /* AppDelegate.swift */; };
@@ -84,6 +85,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D81000000000000000000011 /* DailyEventPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyEventPalette.swift; sourceTree = "<group>"; };
 		331C80D5294CF71000263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		331C80D7294CF71000263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		333000ED22D3DE5D00554162 /* Warnings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Warnings.xcconfig; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				609A6B6568DD37F77D02DE96 /* DailyWidgets.swift */,
+				D81000000000000000000011 /* DailyEventPalette.swift */,
 				B7623A302B3A8AAE2AC6D2F4 /* Info.plist */,
 				6B16E45DE37BE0659471FDDE /* DailyMacWidgets.entitlements */,
 			);
@@ -473,6 +476,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EA52C5B2E1BD412CFA0D0065 /* DailyWidgets.swift in Sources */,
+				D81000000000000000000001 /* DailyEventPalette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -533,9 +537,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -547,9 +551,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -561,9 +565,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -823,7 +827,7 @@
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyMacWidgets.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -833,7 +837,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Widgets";
@@ -851,7 +855,7 @@
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyMacWidgets.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -861,7 +865,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Widgets";
@@ -879,7 +883,7 @@
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyMacWidgets.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -889,7 +893,7 @@
 					"@executable_path/../../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.test.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Test Widgets";

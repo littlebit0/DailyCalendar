@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Release tag, for example v3.5.0"
+        description: "Release tag, for example v3.5.2"
         required: true
         type: string
 
@@ -236,7 +236,7 @@ jobs:
         with:
           tag_name: ${{ inputs.tag }}
           name: DailyCalendar ${{ inputs.tag }}
-          body_path: docs/RELEASE_NOTES_3.5.0.md
+          body_path: docs/RELEASE_NOTES_3.5.2.md
           draft: true
           files: dist/*
           fail_on_unmatched_files: true

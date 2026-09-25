@@ -300,6 +300,7 @@ object DailyWidgetUpdater {
 
 private data class DailyWidgetPalette(
     val backgroundResource: Int,
+    val surface: Int,
     val primaryText: Int,
     val secondaryText: Int,
     val mutedText: Int,
@@ -316,6 +317,7 @@ private data class DailyWidgetPalette(
             return if (dark) {
                 DailyWidgetPalette(
                     backgroundResource = R.drawable.widget_background_dark,
+                    surface = Color.BLACK,
                     primaryText = Color.parseColor("#FFF8FAFC"),
                     secondaryText = Color.parseColor("#FFCBD5E1"),
                     mutedText = Color.parseColor("#FF64748B"),
@@ -327,6 +329,7 @@ private data class DailyWidgetPalette(
             } else {
                 DailyWidgetPalette(
                     backgroundResource = R.drawable.widget_background_light,
+                    surface = Color.rgb(253, 253, 254),
                     primaryText = Color.parseColor("#FF111827"),
                     secondaryText = Color.parseColor("#FF64748B"),
                     mutedText = Color.parseColor("#FFCBD5E1"),
@@ -399,7 +402,7 @@ private class DailyMonthWidgetFactory(
             .div(getCount().coerceAtLeast(1)).coerceIn(32, 260)
         views.setImageViewBitmap(R.id.widget_week_image, DailyWidgetCalendarRenderer.render(
             context, week, width, height, palette.primaryText, palette.mutedText,
-            palette.accent, palette.sundayText, palette.saturdayText,
+            palette.accent, palette.sundayText, palette.saturdayText, palette.surface,
         ))
         week.forEachIndexed { index, day ->
             val id = WEEK_DAY_IDS[index]
@@ -465,23 +468,20 @@ private class DailyEventWidgetFactory(
             R.id.widget_event_title,
             event.optString("title"),
         )
-        views.setTextColor(
-            R.id.widget_event_title,
-            eventColor(event, palette.accent),
-        )
+        val eventColor = eventColor(event, palette.accent)
+        val colors = DailyCompletionContrast.resolve(eventColor, palette.surface)
+        views.setTextColor(R.id.widget_event_title, colors.foreground)
+        views.setInt(R.id.widget_event_title, "setBackgroundColor", colors.background)
         views.setTextViewText(
             R.id.widget_event_detail,
             if (kind == DailyWidgetKind.DDAY) ddayDetail(event)
             else event.optString("timeLabel"),
         )
         views.setTextColor(R.id.widget_event_detail, palette.secondaryText)
-        val eventColor = eventColor(event, palette.accent)
         views.setViewVisibility(R.id.widget_event_strike, if (completed) View.VISIBLE else View.GONE)
         if (completed) {
-            val surface = if (palette.backgroundResource == R.drawable.widget_background_dark)
-                Color.BLACK else Color.WHITE
             views.setImageViewBitmap(R.id.widget_event_strike,
-                completionLine(context, event.optString("title"), eventColor, surface))
+                completionLine(context, event.optString("title"), colors.strike))
         }
         views.setInt(R.id.widget_event_color, "setColorFilter", eventColor)
         views.setImageViewResource(
@@ -616,7 +616,7 @@ class DailyWidgetActionReceiver : BroadcastReceiver() {
     }
 }
 
-private fun completionLine(context: Context, title: String, text: Int, surface: Int): Bitmap {
+private fun completionLine(context: Context, title: String, strike: Int): Bitmap {
     val metrics = context.resources.displayMetrics
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_SP, 13f, metrics)
@@ -628,8 +628,8 @@ private fun completionLine(context: Context, title: String, text: Int, surface: 
     val height = kotlin.math.ceil((fm.bottom - fm.top).toDouble()).toInt().coerceAtLeast(1)
     return Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888).apply {
         density = metrics.densityDpi
-        paint.color = DailyCompletionContrast.strike(text, surface)
-        paint.strokeWidth = (paint.textSize / 18).coerceAtLeast(1f)
+        paint.color = strike
+        paint.strokeWidth = DailyCompletionContrast.strokeWidth(paint.textSize, metrics.density)
         val y = -fm.top - paint.textSize * 0.3f
         Canvas(this).drawLine(0f, y, width.toFloat(), y, paint)
     }

@@ -103,14 +103,15 @@ void main() {
       );
       expect(source, contains('DailyTodoToggle(event: event)'));
       expect(source, contains('.dailyTodoCompletion('));
-      expect(source, contains('eventColor: Color.daily(argb: event.color)'));
-      expect(source, contains('.foregroundStyle(eventColor)'));
-      expect(
-        source,
-        contains(
-          '.strikethrough(completed, color: Color(white: Double(best) / 255))',
-        ),
-      );
+      // The shared Swift palette is exercised against numeric RGB fixtures and
+      // the full colour grid by tool/tests/event_palette_test.swift. This check
+      // guards target wiring, rather than freezing a particular drawing syntax.
+      for (final project in ['ios', 'macos']) {
+        final projectFile = await _readNormalized(
+          '$project/Runner.xcodeproj/project.pbxproj',
+        );
+        expect(projectFile, contains('DailyEventPalette.swift in Sources'));
+      }
       expect(source, isNot(contains('VStack(spacing: 1.5)')));
       expect(source, contains('snapshot["generatedAt"]'));
       expect(source, contains('notifyApp()'));

@@ -82,6 +82,70 @@ struct WallpaperModelTests {
        }
       }
     }
+    // Representative native pixels for mini, base/Air, both Pro sizes, and a
+    // non-model-specific size. Production layout contains no model lookup.
+    let tabletSizes = [CGSize(width: 1488, height: 2266), CGSize(width: 1640, height: 2360),
+      CGSize(width: 1668, height: 2388), CGSize(width: 1668, height: 2420),
+      CGSize(width: 2048, height: 2732), CGSize(width: 2064, height: 2752),
+      CGSize(width: 1536, height: 2048), CGSize(width: 1730, height: 2470)]
+    for size in tabletSizes {
+      let canvas = DailyWallpaperCanvas(device: .pad, nativeSize: size)
+      let rotated = DailyWallpaperCanvas(device: .pad,
+        nativeSize: CGSize(width: size.height, height: size.width))
+      check(canvas == rotated, "An app rotation cannot alter the generated iPad wallpaper")
+      check(canvas.size == CGSize(width: size.height, height: size.height), "Square canvas uses actual long edge")
+      check(canvas.portraitCrop.size == size, "Portrait crop preserves native resolution")
+      check(canvas.landscapeCrop.size == CGSize(width: size.height, height: size.width),
+            "Landscape crop preserves native resolution")
+      let imageRect = CGRect(origin: .zero, size: canvas.size)
+      check(imageRect.contains(canvas.portraitCrop) && imageRect.contains(canvas.landscapeCrop),
+            "Both preview crops come from the same complete image")
+      for position in [0.34, 0.37, 0.4, 0.43, 0.46, 0.49, 0.52] {
+        for weeks in 4...6 {
+          let layout = DailyWallpaperGeometry.layout(canvas: canvas, topFraction: position, rows: weeks)
+          let rect = layout.content
+          check(canvas.portraitCrop.contains(rect) && canvas.landscapeCrop.contains(rect),
+                "Every calendar edge survives both centered orientation crops")
+          check(rect.minY >= size.height * 0.32 && rect.maxY <= size.height * 0.90,
+                "Portrait clock/date and bottom space remain free")
+          check(rect.minY >= canvas.landscapeCrop.minY + size.width * 0.32 - 0.001
+                && rect.maxY <= canvas.landscapeCrop.minY + size.width * 0.91 + 0.001,
+                "Landscape clock/date and bottom space remain free")
+          check(rect.minX >= size.height * 0.25 && rect.maxX <= size.height * 0.945 + 0.001,
+                "Landscape widgets have a separate left margin")
+          check(layout.scale * 8.5 >= 17, "Event type remains at least 17 native pixels in covered iPad sizes")
+          check(rect.width / 7 / (layout.scale * 8.5) >= 8,
+                "Tablet cells have meaningful event title width")
+          let row = DailyWallpaperGeometry.rowLayout(height: layout.rowHeight, scale: layout.scale)
+          check(row.slots >= 2, "Even lowest position and six weeks retain an event and overflow count")
+          check(row.visibleLanes(required: 100) >= 1 && row.visibleLanes(required: 100) < row.slots,
+                "Dense iPad days display an event and reserve overflow")
+          check(row.eventTop + Double(row.slots) * row.eventHeight <= layout.rowHeight,
+                "Dense event lanes never cross a week boundary")
+          check(abs(layout.gridTop + layout.rowHeight * Double(weeks) - rect.maxY) < 0.001,
+                "Last week fits the calendar bounds")
+        }
+      }
+    }
+    let pixels = CGSize(width: 1170, height: 2532)
+    let phoneCanvas = DailyWallpaperCanvas(device: .phone, nativeSize: pixels)
+    for position in [0.34, 0.4, 0.52] {
+      let layout = DailyWallpaperGeometry.layout(canvas: phoneCanvas, topFraction: position, rows: 6)
+      check(layout.content == DailyWallpaperGeometry.contentRect(width: pixels.width,
+        height: pixels.height, topFraction: position), "iPhone layout remains unchanged")
+      check(layout.scale == pixels.width / 390 && phoneCanvas.size == pixels,
+            "iPhone native resolution and typography remain unchanged")
+    }
+    let encoder = JSONEncoder()
+    encoder.outputFormatting = .sortedKeys
+    let a = DailyWallpaperCanvas(device: .pad, nativeSize: CGSize(width: 1668, height: 2388))
+    let b = DailyWallpaperCanvas(device: .pad, nativeSize: CGSize(width: 1640, height: 2388))
+    let distinctRatios = try encoder.encode(a) != encoder.encode(b)
+    let distinctDevices = try encoder.encode(phoneCanvas) != encoder.encode(DailyWallpaperCanvas(device: .pad, nativeSize: pixels))
+    check(distinctRatios, "Cache distinguishes native ratio even for equal square canvases")
+    check(distinctDevices,
+          "Phone and tablet never share a cache identity")
+    check(DailyWallpaperCanvas.rendererVersion > 1, "Old portrait-only cache is invalidated")
     var settings = DailyWallpaperSettings()
     check(!settings.enabled, "Opt in only")
     settings.appearance = "invalid"

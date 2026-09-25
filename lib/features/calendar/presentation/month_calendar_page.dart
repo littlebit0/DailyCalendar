@@ -181,22 +181,22 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     final androidMedium =
         platform == TargetPlatform.android &&
         windowClass == DailyWindowClass.medium;
-    final androidExpanded =
-        platform == TargetPlatform.android &&
-        windowClass == DailyWindowClass.expanded;
-    final wide = platform == TargetPlatform.android
-        ? androidExpanded
-        : windowSize.width >= 880;
-    final desktop = _usesDesktopCalendarLayout(platform);
+    final usableSize = dailyCalendarUsableSize(context);
+    final desktop = dailyUsesWideCalendar(platform, usableSize);
+    final showWideDetails =
+        usableSize.width >= dailyCalendarDetailsMinWidth &&
+        (_usesDesktopCalendarLayout(platform) ||
+            usableSize.height >= dailyCalendarDetailsMinHeight);
+    final wide = showWideDetails;
     final inlineAi =
         (platform == TargetPlatform.iOS ||
             platform == TargetPlatform.android) &&
         settings.monthNavigationMode == MonthNavigationMode.horizontal;
     final showScheduleDaySidebar =
-        (platform == TargetPlatform.macOS ||
-            platform == TargetPlatform.linux ||
-            androidExpanded) &&
-        windowSize.width >= 720 &&
+        ((platform == TargetPlatform.macOS ||
+                platform == TargetPlatform.linux)
+            ? usableSize.width >= dailyCalendarWideMinWidth
+            : showWideDetails) &&
         viewMode == CalendarViewMode.day &&
         settings.weekDayLayoutMode == WeekDayLayoutMode.schedule;
     final showEventSidebar = wide || showScheduleDaySidebar;
@@ -221,6 +221,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
               Column(
                 children: [
                   _CalendarHeader(
+                    desktop: desktop,
                     month: month,
                     selectedDate: selectedDate,
                     viewMode: viewMode,
@@ -242,7 +243,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                         Expanded(
                           key: _calendarDragSurfaceKey,
                           child: _AndroidTabletCalendarFrame(
-                            enabled: androidMedium,
+                            enabled: androidMedium && !desktop,
                             child: _OrderedCalendarSwitcher(
                               order: _calendarContentOrder(
                                 _quickAccessSelected,
@@ -354,6 +355,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                             'calendar-event-sidebar-transition',
                           ),
                           visible: showStableEventSidebar,
+                          availableWidth: usableSize.width,
                           surfaceKey: _eventSidebarSurfaceKey,
                           child: KeyedSubtree(
                             key: const ValueKey('calendar-event-sidebar'),
@@ -1397,11 +1399,13 @@ class _AnimatedCalendarSidebar extends StatefulWidget {
   const _AnimatedCalendarSidebar({
     super.key,
     required this.visible,
+    required this.availableWidth,
     required this.surfaceKey,
     required this.child,
   });
 
   final bool visible;
+  final double availableWidth;
   final GlobalKey surfaceKey;
   final Widget child;
 
@@ -1456,7 +1460,14 @@ class _AnimatedCalendarSidebarState extends State<_AnimatedCalendarSidebar>
         animation: _animation,
         child: widget.child,
         builder: (context, child) {
-          final factor = _animation.value;
+          // A resize can remove space faster than the exit animation. Keep
+          // at least 400 logical pixels for the calendar during that transition.
+          final factor = widget.visible
+              ? _animation.value
+              : math.min(
+                  _animation.value,
+                  ((widget.availableWidth - 400) / _width).clamp(0.0, 1.0),
+                );
           return SizedBox(
             key: widget.surfaceKey,
             width: _width * factor,
@@ -2245,6 +2256,7 @@ class _InlineSearchResultTile extends StatelessWidget {
                 Theme.of(context).textTheme.titleMedium,
                 completed: event.completed,
                 eventColor: color,
+                backgroundColor: DailyUi.groupedSurface(context),
               ),
             ),
             subtitle: Text('$date  $time'),
@@ -5072,6 +5084,7 @@ Future<void> _openRangeEventEditor(
 
 class _CalendarHeader extends ConsumerWidget {
   const _CalendarHeader({
+    required this.desktop,
     required this.month,
     required this.selectedDate,
     required this.viewMode,
@@ -5087,6 +5100,7 @@ class _CalendarHeader extends ConsumerWidget {
 
   final DateTime month;
   final DateTime selectedDate;
+  final bool desktop;
   final CalendarViewMode viewMode;
   final MonthNavigationMode monthNavigationMode;
   final String searchQuery;
@@ -5104,7 +5118,6 @@ class _CalendarHeader extends ConsumerWidget {
     final platform = Theme.of(context).platform;
     final ios = platform == TargetPlatform.iOS;
     final mobile = ios || platform == TargetPlatform.android;
-    final desktop = _usesDesktopCalendarLayout(platform);
     final androidTablet =
         platform == TargetPlatform.android &&
         dailyWindowClassFor(windowSize) != DailyWindowClass.compact;
@@ -5267,7 +5280,9 @@ class _CalendarHeader extends ConsumerWidget {
     ];
 
     if (desktop) {
-      final assistantLabel = platform == TargetPlatform.macOS ? 'Siri' : 'LLM';
+      final assistantLabel = platform == TargetPlatform.macOS || ios
+          ? 'Siri'
+          : 'LLM';
       final viewSwitch = SegmentedButton<CalendarViewMode>(
         selected: quickAccessSelected ? const {} : {viewMode},
         emptySelectionAllowed: quickAccessSelected,
@@ -5334,10 +5349,15 @@ class _CalendarHeader extends ConsumerWidget {
 
       return Padding(
         key: const ValueKey('macos-calendar-toolbar'),
-        padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+        padding: EdgeInsets.fromLTRB(
+          14,
+          windowSize.height < 500 ? 0 : 8,
+          14,
+          windowSize.height < 500 ? 0 : 8,
+        ),
         child: Row(
           children: [
-            monthButton,
+            Flexible(child: monthButton),
             const Spacer(),
             quickAccessButton,
             const SizedBox(width: 6),
@@ -6636,7 +6656,10 @@ class _YearOverviewPageState extends State<_YearOverviewPage> {
   Widget build(BuildContext context) {
     final vertical = widget.navigationMode == MonthNavigationMode.vertical;
     final platform = Theme.of(context).platform;
-    final desktop = _usesDesktopCalendarLayout(platform);
+    final desktop = dailyUsesWideCalendar(
+      platform,
+      dailyCalendarUsableSize(context),
+    );
     final androidExpanded =
         platform == TargetPlatform.android &&
         dailyWindowClassFor(MediaQuery.sizeOf(context)) ==

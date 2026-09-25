@@ -1707,6 +1707,12 @@ class _EventSpanFlag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = Color(event.colorValue);
+    final backgroundColor = calendarEventBackgroundColor(
+      context,
+      color,
+      completed: event.completed,
+      categoryAlpha: event.holiday ? 0.12 : 0.15,
+    );
     final formatter = DateFormat('HH:mm');
     final showStartTime =
         showTime &&
@@ -1720,9 +1726,7 @@ class _EventSpanFlag extends StatelessWidget {
 
     final flag = DecoratedBox(
       decoration: BoxDecoration(
-        color: event.holiday
-            ? color.withValues(alpha: 0.12)
-            : color.withValues(alpha: 0.15),
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(5),
       ),
       child: Padding(
@@ -1755,9 +1759,7 @@ class _EventSpanFlag extends StatelessWidget {
                   ),
                   completed: event.completed,
                   eventColor: color,
-                  backgroundColor: color.withValues(
-                    alpha: event.holiday ? 0.12 : 0.15,
-                  ),
+                  backgroundColor: backgroundColor,
                 ),
               ),
             ),

@@ -26,6 +26,70 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => initializeDateFormatting('ko'));
 
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'details keep category and D-day text readable in $brightness',
+      (tester) async {
+        final color = brightness == Brightness.dark
+            ? Colors.black
+            : Colors.white;
+        final event = _event().copyWith(
+          colorValue: color.toARGB32(),
+          category: EventCategory(
+            id: 'contrast-category',
+            label: '분류 대비',
+            colorValue: color.toARGB32(),
+          ),
+          showDday: true,
+          completed: true,
+        );
+        await _pumpPanel(tester, event: event, brightness: brightness);
+        final titleFinder = find.text(event.title);
+        final titleStyle = tester.widget<Text>(titleFinder).style!;
+        final background = tester
+            .widget<Material>(
+              find
+                  .ancestor(of: titleFinder, matching: find.byType(Material))
+                  .first,
+            )
+            .color!;
+        final dday = tester.widget<Text>(
+          find.textContaining(RegExp(r'^D[-+]')),
+        );
+        expect(
+          _contrast(titleStyle.color!, background),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(
+          _contrast(dday.style!.color!, background),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(dday.style!.decoration, isNot(TextDecoration.lineThrough));
+        expect(titleStyle.decoration, TextDecoration.lineThrough);
+        await tester.tap(find.byKey(ValueKey('event-open-${event.id}')));
+        await tester.pump(kDoubleTapTimeout);
+        await tester.pumpAndSettle();
+        final categoryFinder = find.text('분류 대비');
+        final categoryStyle = tester.widget<Text>(categoryFinder).style!;
+        final sheetMaterial = tester.widget<Material>(
+          find
+              .ancestor(of: categoryFinder, matching: find.byType(Material))
+              .first,
+        );
+        final sheetBackground =
+            sheetMaterial.color ??
+            Theme.of(tester.element(categoryFinder)).colorScheme.surface;
+        expect(
+          _contrast(categoryStyle.color!, sheetBackground),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(categoryStyle.decoration, isNot(TextDecoration.lineThrough));
+        expect(event.colorValue, color.toARGB32());
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
     for (final brightness in Brightness.values) {
       testWidgets(
@@ -504,6 +568,12 @@ void main() {
       );
     },
   );
+}
+
+double _contrast(Color first, Color second) {
+  final a = first.computeLuminance() + 0.05;
+  final b = second.computeLuminance() + 0.05;
+  return a >= b ? a / b : b / a;
 }
 
 List<Offset> _insetCorners(Rect rect) => [

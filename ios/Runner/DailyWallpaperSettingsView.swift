@@ -288,6 +288,9 @@ struct DailyWallpaperSettingsView: View {
             if !editing { change { _ in } }
           }).accessibilityLabel(t("position"))
           Text(t("layoutNote")).font(.footnote).foregroundStyle(.secondary)
+          if DailyWallpaperStore.canvas?.device == .pad {
+            Text(t("ipadLayoutNote")).font(.footnote).foregroundStyle(.secondary)
+          }
           WallpaperPreview(image: preview)
           Button { previewSuppressed = false; Task { await updatePreview() } } label: {
             Label(t("refresh"), systemImage: "arrow.clockwise")
@@ -381,15 +384,43 @@ struct DailyWallpaperSettingsView: View {
 
 private struct WallpaperPreview: View {
   let image: UIImage?
+  var showDeviceCrops = true
+
+  private func picture(_ image: UIImage, crop: CGRect? = nil) -> some View {
+    let visible: UIImage
+    if let crop, let pixels = image.cgImage?.cropping(to: crop.integral) {
+      visible = UIImage(cgImage: pixels)
+    } else { visible = image }
+    return Image(uiImage: visible).resizable().scaledToFit()
+      .clipShape(RoundedRectangle(cornerRadius: 8))
+      .overlay(RoundedRectangle(cornerRadius: 8).stroke(.secondary.opacity(0.3), lineWidth: 1))
+  }
+
   var body: some View {
     Group {
       if let image {
-        Image(uiImage: image).resizable().scaledToFit()
-          .clipShape(RoundedRectangle(cornerRadius: 8))
-          .overlay(RoundedRectangle(cornerRadius: 8).stroke(.secondary.opacity(0.3), lineWidth: 1))
+        if let canvas = DailyWallpaperStore.canvas, canvas.device == .pad {
+          if showDeviceCrops {
+            VStack(alignment: .leading, spacing: 10) {
+              HStack(alignment: .top, spacing: 16) {
+                VStack(spacing: 6) {
+                  Text(DailyWallpaperText.value("portraitPreview")).font(.caption)
+                  picture(image, crop: canvas.portraitCrop).frame(maxHeight: 180)
+                }.frame(maxWidth: .infinity)
+                VStack(spacing: 6) {
+                  Text(DailyWallpaperText.value("landscapePreview")).font(.caption)
+                  picture(image, crop: canvas.landscapeCrop).frame(maxHeight: 180)
+                }.frame(maxWidth: .infinity)
+              }
+              Text(DailyWallpaperText.value("ipadPreviewNote"))
+                .font(.caption).foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            }
+          } else { picture(image, crop: canvas.portraitCrop).frame(maxHeight: 240) }
+        } else { picture(image).frame(maxHeight: 240) }
       } else { ProgressView().frame(width: 110, height: 240) }
     }
-    .frame(maxWidth: .infinity, maxHeight: 240)
+    .frame(maxWidth: .infinity)
     .accessibilityLabel(DailyWallpaperText.value("preview"))
   }
 }
@@ -486,22 +517,22 @@ private struct WallpaperScreenGuide: View {
       Label(t("appearance"), systemImage: "sun.max").foregroundStyle(.secondary).frame(maxWidth: .infinity, alignment: .leading)
       target(t("wallpaperSettings"), symbol: "photo")
     case 1:
-      WallpaperPreview(image: preview).frame(height: 170)
+      WallpaperPreview(image: preview, showDeviceCrops: false).frame(height: 170)
       target(t("addWallpaper"), symbol: "plus")
     case 2:
       target(t("photosWallpaper"), symbol: "photo")
     case 3:
       Button(action: advance) {
-        WallpaperPreview(image: preview).frame(height: 220)
+        WallpaperPreview(image: preview, showDeviceCrops: false).frame(height: 220)
           .padding(8).overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.accentColor, lineWidth: 3))
       }.accessibilityLabel(t("choosePhoto"))
     case 4:
       HStack { Spacer(); target(t("saveWallpaper"), symbol: "plus").frame(maxWidth: 190) }
-      WallpaperPreview(image: preview).frame(height: 200)
+      WallpaperPreview(image: preview, showDeviceCrops: false).frame(height: 200)
     case 5:
       target(t("customizeHomeScreen"), symbol: "house")
     default:
-      WallpaperPreview(image: preview).frame(height: 220)
+      WallpaperPreview(image: preview, showDeviceCrops: false).frame(height: 220)
       target(t("photoReady"), symbol: "checkmark.circle")
     }
   }

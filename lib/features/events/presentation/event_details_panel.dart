@@ -1110,11 +1110,14 @@ class _EventTile extends StatelessWidget {
                             if (event.showDday)
                               Text(
                                 _formatDday(event),
-                                style: Theme.of(context).textTheme.labelMedium
-                                    ?.copyWith(
-                                      color: color,
-                                      fontWeight: FontWeight.w800,
-                                    ),
+                                style: calendarEventCompletionStyle(
+                                  context,
+                                  Theme.of(context).textTheme.labelMedium
+                                      ?.copyWith(fontWeight: FontWeight.w800),
+                                  completed: false,
+                                  eventColor: categoryColor,
+                                  backgroundColor: backgroundColor,
+                                ),
                               ),
                             if (event.location != null &&
                                 event.location!.isNotEmpty)
@@ -1339,9 +1342,12 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
                         id: event.category.id,
                         label: event.category.label,
                       ),
-                      style: Theme.of(
+                      style: calendarEventCompletionStyle(
                         context,
-                      ).textTheme.labelMedium?.copyWith(color: color),
+                        Theme.of(context).textTheme.labelMedium,
+                        completed: false,
+                        eventColor: color,
+                      ),
                     ),
                   ],
                 ),

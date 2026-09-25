@@ -4,6 +4,8 @@ require 'xcodeproj'
 
 ROOT = File.expand_path('..', __dir__)
 TEAM_ID = 'A6Y73X2ZLS'
+APP_VERSION = File.read(File.join(ROOT, 'pubspec.yaml'))[/^version:\s*([^+\s]+)/, 1]
+raise 'Missing app version' unless APP_VERSION
 
 def file_reference(group, name)
   group.files.find { |file| file.path == name } || group.new_file(name)
@@ -49,6 +51,7 @@ def configure_project(
   widget_group = project.main_group.groups.find { |group| group.name == 'DailyWidgets' }
   widget_group ||= project.main_group.new_group('DailyWidgets', '../apple_widgets')
   swift_file = file_reference(widget_group, 'DailyWidgets.swift')
+  palette_file = file_reference(widget_group, 'DailyEventPalette.swift')
   alarm_metadata_file = platform == :ios \
     ? file_reference(widget_group, 'DailyAlarmMetadata.swift') \
     : nil
@@ -77,6 +80,11 @@ def configure_project(
   unless widget.source_build_phase.files_references.include?(swift_file)
     widget.source_build_phase.add_file_reference(swift_file)
   end
+  [widget, (host if platform == :ios)].compact.each do |target|
+    unless target.source_build_phase.files_references.include?(palette_file)
+      target.source_build_phase.add_file_reference(palette_file)
+    end
+  end
   if alarm_metadata_file
     unless widget.source_build_phase.files_references.include?(alarm_metadata_file)
       widget.source_build_phase.add_file_reference(alarm_metadata_file)
@@ -91,7 +99,7 @@ def configure_project(
     settings['APPLICATION_EXTENSION_API_ONLY'] = 'YES'
     settings['CODE_SIGN_ENTITLEMENTS'] = "../apple_widgets/#{File.basename(entitlements)}"
     settings['CODE_SIGN_STYLE'] = 'Automatic'
-    settings['CURRENT_PROJECT_VERSION'] = '3.4.0'
+    settings['CURRENT_PROJECT_VERSION'] = APP_VERSION
     settings['DEVELOPMENT_TEAM'] = TEAM_ID
     settings['GENERATE_INFOPLIST_FILE'] = 'NO'
     settings['INFOPLIST_FILE'] = '../apple_widgets/Info.plist'
@@ -100,7 +108,7 @@ def configure_project(
       '@executable_path/Frameworks',
       '@executable_path/../../Frameworks'
     ]
-    settings['MARKETING_VERSION'] = '3.4.0'
+    settings['MARKETING_VERSION'] = APP_VERSION
     settings['PRODUCT_BUNDLE_IDENTIFIER'] = bundle_identifier
     settings['PRODUCT_NAME'] = '$(TARGET_NAME)'
     settings['PROVISIONING_PROFILE_SPECIFIER'] = ''

@@ -5,6 +5,346 @@ release state, completed work, release status, and safe next steps. Do not add
 OAuth client secrets, GitHub tokens, signing certificates, provisioning
 profiles, keystore passwords, or private keys to this file.
 
+## 2026-09-25 release 3.5.2 in progress
+
+- User paused #74/#75 before implementation and requested commit, push and public
+  3.5.2 release of the current #79–83 fixes. Timetable support is confirmed for
+  Sangmyung University Seoul and Cheonan campuses; resume only after exchanging
+  the remaining necessary source/semester information with the user.
+- App/widget version 3.5.2, Android code 352. DB schema remains 8.
+- Local release checks: analyze clean; Flutter 587 passed, one existing skip;
+  Python 17 tests, one environment-dependent skip; ruby syntax valid.
+- Release verification/publication is in progress; this entry is not proof of
+  published artifacts or store submission. Wallpaper/Shortcut tests remain
+  explicitly deferred to the user.
+- Widget configuration now derives version from pubspec and retains the shared
+  Swift palette in widget and iOS host targets.
+
+## 2026-09-25 iPad test installation
+
+- User requested installation on iPad. The connected target was the already
+  booted iPad Pro 13-inch (M5) (16GB) simulator, iOS 27.0,
+  409E594D-39B0-4AB0-B7B1-EFC93888BA13; no physical iPad was connected.
+- Installed verified Daily Test 3.5.0 simulator build including latest #81 and
+  #79–83 changes. No prior Daily installation existed on this simulator.
+- Signature and complete installed bundle manifest match the verified #81
+  artifact: 05f69725b6a14236b61c3a55f638f7cbd8526f2151a248ed35da8d55f7a70b0c.
+  Evidence: work/ipad-install-2026-09-25/verification.json.
+- Installation only; no app launch, login, Shortcut execution or wallpaper
+  change. Other devices and the App Store app were not modified.
+
+<a id="current-handoff"></a>
+## 현재 인계 상태 — 2026-09-24 #81 전체 RGB 재검증
+
+- User rejected the prior #81 dark-only thickness/representative-colour fix and
+  required every R/G/B value in steps of ten, in both appearances. This entry
+  supersedes the #81 colour/"light unchanged" claims in the earlier 79–83 entry.
+  Scope, data, auth and #79/#80/#82/#83 behaviour remain preserved.
+- Display palettes now jointly solve title/background >=4.5 and a single
+  strike/title plus strike/background >=3. Stored category RGB and identifying
+  accents are unchanged. Display colours mix the source toward black/white,
+  retaining its RGB hue. There are no per-colour exceptions. If a fixed surface
+  has no feasible solution, minimally project its luminance as well; check final
+  8-bit output. Completed/uncompleted titles share the same readable colour.
+- Flutter month strips paint the resolved opaque surface, including above
+  selection/holiday sibling layers. Time, D-day and category labels also use
+  readable ink without gaining a strike. Source/drag surface continuity remains.
+  Both themes use a visible single stroke at small font sizes.
+- Kotlin and shared Swift use the same algorithm. Android uses actual #FDFDFE
+  light surfaces and correct month-line position. Apple widget/Runner targets
+  share apple_widgets/DailyEventPalette.swift. Wallpaper renderer version is 3
+  to invalidate old cached PNGs. OS-managed accessory widgets use native primary
+  text/strike rather than assuming an unknown wallpaper is black or white.
+- Exhaustive channels: 0,10,...,250,255; 27^3 = 19,683 colours. Flutter checked
+  8 surfaces x 9 opacities = 1,417,176 combinations, zero failures. Actual minimum
+  title/background 4.500788, strike/background 3.006203, strike/title 3.008788;
+  6,718 combinations needed background adjustment. This conservative matrix
+  includes cross-combinations beyond individual current callsites.
+- Actual TextPainter raster: all 39,366 light/dark RGB cases at Korean 8pt/DPR1,
+  plus 1,440 font/size/DPR/surface cases passed. Checks cover one continuous line
+  inside the glyph height and surviving title strokes. Full-grid minimum line
+  coverage 90%, original glyph pixels preserved 71.07%; antialiased edge pixels
+  are not claimed to individually have WCAG contrast. Comparison PNG inspected.
+- Automated checks: Flutter 587 passed, one pre-existing skip; analyze clean;
+  focused quick-view and Apple target-wiring checks passed after test updates.
+  Android JVM 12 passed, including 78,732 RGB/surface cases; Swift 118,098 cases
+  passed. Kotlin and Swift each exactly match 512 Dart input/output fixtures.
+  Python workflow checks ran 17 with one existing environment-dependent skip;
+  Swift wallpaper model checks also passed (2,212).
+- Fresh Android debug, iOS simulator and macOS debug builds succeeded. All three
+  test apps were updated in place with signature/artifact verification. Protected
+  data hashes unchanged: macOS readable support/preferences 2 files, iPhone 3,
+  Android 14. macOS OS-protected container was untouched but not readable for
+  hashing. App Store bundle unchanged. Test processes were stopped for backup;
+  the existing Android quick-boot state was loaded before taking its baseline.
+  Saved the verified Android default_boot snapshot before stopping the emulator.
+  Updated binaries were not manually launched; no new account, event edits,
+  Shortcut execution or wallpaper application. The user's no-wallpaper-test
+  restriction remains in force.
+- Verified installed artifact digests: macOS bundle manifest
+  b4500fd33558f815541d96ce3703d1ca0833858a1961c706444a8e877823ac35;
+  iPhone bundle manifest 05f69725b6a14236b61c3a55f638f7cbd8526f2151a248ed35da8d55f7a70b0c;
+  Android APK 5693c10358e78ec832c15c7226efd52ab25660032dd46a2edb1b738b8b22f115.
+  These are full-bundle manifest digests for Apple, not the earlier kernel hashes.
+- Reproduction, objective criteria and remaining native/physical-device limits:
+  [#81 verification report](docs/ISSUE_81_COMPLETION_CONTRAST.md). Evidence and
+  private pre-update backups: ignored work/issue81-full-rgb/; native unit logs:
+  work/issue-81-full-rgb/. No version bump, commit, push, release, store submission
+  or issue closure. Windows/Linux runtime and actual iPad wallpaper remain unverified.
+
+## 2026-09-24 기록 대조 및 공통 인계 요약
+
+**새 기록은 파일 맨 위에 추가한다.** 아래쪽 9월 7일 기록은 과거 이력이다.
+9월 11~24일 구현 기록은 이미 있었으나, 과거의 `Current Platform Status`
+제목과 별도 Codex 메모리 요약이 오래된 상태를 현재처럼 보이게 했다.
+이전 작업 `DailyCalendar`의 9월 7~21일 최종 응답 83건과 관련 사용자 요청,
+9월 24일 후속 작업, 현재 코드·변경 내역을 대조했다. 누락된 후속 확인과
+잘못된 안내를 보완했으며, 상세 근거는 [기록 대조표](docs/AGENT_MEMORY_AUDIT_2026-09-24.md)에 있다.
+이 정리 작업에서는 제품 코드·설치 앱·계정·자동화·원격 배포를 변경하지 않았다.
+
+- 현재 저장소: `/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0`.
+  과거 기록의 `/Users/kimhwi/Documents/Codex/2026-05-26/littlebit0-daily-https-github-com-littlebit0`
+  경로는 이전 위치다. 자료를 찾을 때 현재 저장소의 같은 상대 경로부터 확인한다.
+- 소스 버전은 **3.5.0**, HEAD는 `9dc27a2`. 9월 16일 공개한 v3.5.0은
+  Windows·Android·Apple·Linux 설치 파일 7개와 체크섬, Linux APT를 포함한다.
+  이는 당시 배포 검증 기록이며, 이번 메모리 감사에서 서버 상태를 다시 조회하지 않았다.
+- 현재 미커밋 **#79~83** 변경과 iOS 위치 권한 설명 보완은 공개 릴리스와 구분한다.
+  #79~83은 구현·자동 검사·macOS/iPhone 17/Pixel 9 테스트 앱 업데이트까지 완료했다.
+  아래 9월 24일 상세 기록이 기준이며, 새 커밋·푸시·스토어 제출은 하지 않았다.
+- 정상 동기화는 **Drive AppData v2 일정별 파일 + 설정 파일**, SQLite schema 8이다.
+  실제 UTC 변경 시각 비교, 설정 항목별 병합, 최소 삭제 기록을 사용한다.
+  과거 `daily-sync-v1.json` 전체 파일 방식이나 Firestore 설명을 현재 규칙으로 쓰지 않는다.
+- 학사일정 실제 지원은 **상명대학교만**이다. 단국대·전남대는 요청 이력은 있으나
+  구현되지 않았다. 9월 21일 대화의 세 대학 지원 출시 문구는 잘못된 안내다.
+- **남은 범위:** #65는 사용자 제외 요청 유지. #67은 완료 근거를 찾지 못했으며
+  #79/#80 변경만으로 해결됐다고 간주하지 않는다. 날씨 알림도 후속 단계다.
+  실제 모바일 회전·Google 계정 선택 취소, iPad 배경 적용, 실제 여러 기기의
+  동기화 충돌·마이그레이션 수용 검증과 Windows/Linux 네이티브 실사용은 별도다.
+- **허용 범위:** 9월 24일 앱 실행·회전·메뉴·설정 및 Android 계정 선택창 취소는
+  허용됐다. 새 로그인 완료·기존 계정 변경은 하지 않았다. 사용자는 배경화면 단축어
+  추가·실행·잠금화면 변경 테스트를 거절하고 직접 하겠다고 했다. 과거 실행 기록은
+  현재 실행 권한이 아니다. 이 메모리 정리 요청도 새 UI 테스트 허용을 뜻하지 않는다.
+- **제출 상태:** 서명된 로컬 Apple 제출 파일과 공개 미서명 Apple 파일은 별개다.
+  iOS 제출용은 3.5.0 / build 3.5.1, macOS는 3.5.0 / build 3.5.0이다.
+  사용자가 Apple 오류를 보고한 이력은 있으나 수정 IPA의 재업로드·처리·심사 결과는
+  확인되지 않았다. Play 키 불일치도 미해결이며, 아래 정정대로 Console 상태 재확인이 우선이다.
+
+## 2026-09-24 Audit: recovered follow-ups from prior sessions
+
+- 2026-09-11: #68/#70 were registered before implementation. #69 was registered
+  and then deleted at the user's request; do not recreate it as pending work.
+  #63 was initially excluded with #65, but explicitly approved and implemented
+  on September 16. That later approval does not authorize #65.
+- 2026-09-15 13:02 KST: reopened the existing iPhone 17 simulator in Xcode 27's
+  Device Hub. The device had not been deleted, and Daily was not launched.
+- 2026-09-16 16:01 KST: read-only follow-up found the user's 15:21:54 Shortcut
+  execution/completion receipt, the selected lock screen referencing the photo,
+  and identical SHA-256 for the OS-stored image and Daily-generated PNG.
+  This establishes stored/selected image state, not successful visible rendering.
+  PhotosPosterProvider rendering trouble remained; no settings change or Shortcut
+  rerun occurred during that check. The later September 24 no-wallpaper-test
+  instruction still applies.
+- 2026-09-16: App Store review-account discussion distinguished a dedicated test
+  account from personal Apple/developer credentials. The user reported fields
+  refilling after save. Browser autofill versus server retention was unresolved;
+  no confirmed credential removal, password change, test-account creation or
+  review submission followed. Do not record credential values or claim resolution.
+- 2026-09-21: Play's later screenshot invalidated the assumption that an upload
+  key was already registered. The signing entry below and submission guide now
+  retain that correction. No reset request or successful upload was confirmed.
+- 2026-09-21: correct the conversational release note to "상명대학교 학사 일정
+  가져오기 및 분류 색상 설정 추가". The source registry contains only
+  SangmyungAcademicSource; do not advertise Dankook or Chonnam support.
+- 2026-09-24: the old task's continuation failed before #79~83 implementation.
+  In this task an initial attempt was rolled back at the user's request, then
+  restarted with clarified platform scope. The completed implementation below
+  is the later authorized work; do not restore the abandoned attempt.
+
+## 2026-09-24 Issues 79-83 implementation and verification
+
+- User restarted issues 79-83 after the earlier attempt was rolled back. The
+  user clarified that the Windows agent's Apple-edit restriction does not apply
+  to this Mac task. Apple implementation changes below are explicitly allowed.
+  Existing release/submission notes and iOS location-purpose changes were
+  preserved. Source baseline remains 9dc27a2; no commit, push, issue closure,
+  release, store upload or version change was performed.
+- User allowed test-app launch, rotation/menu/settings checks and opening then
+  cancelling Android Google account selection. They explicitly declined running
+  wallpaper Shortcuts or changing wallpaper; actual iPad application is for the
+  user to test. Do not run those actions based on the general UI-test permission.
+- #79/#80: iOS/Android calendar navigation now uses usable width after safe-area
+  padding: >=720 logical pixels uses the existing desktop toolbar, narrower
+  windows retain mobile navigation. Mobile details require width >=880 and
+  height >=500; short landscape windows retain calendar space. Date, view and
+  quick-view state survive resizing. Header/body use the same size decision.
+  Existing macOS/Linux schedule-day details at >=720 remain supported. The exit
+  animation caps sidebar width during a shrink, using the pre-SafeArea width.
+- #81 (historical attempt, superseded by the full-RGB rework above): preserve classification colors and contrast color selection; increase
+  dark strike coverage based on actual font size. Search tiles use their actual
+  card background. Flutter, Android widgets, Apple widgets and the wallpaper
+  renderer use the stronger line; light-mode appearance remains unchanged.
+- #82: Android account selection plus Drive consent is one connection operation.
+  Cancellation returns null, clears busy UI and preserves the previous account
+  and preferences. Queue reservation, logout generations, owned SDK result
+  events and actual native Future tracking prevent late results and overlapping
+  requests. Credential clearing and manual Calendar consent are covered in both
+  request orders. A timed-out native request remains busy until it really ends;
+  the SDK has no cancellation API. Genuine errors remain visible. No new login
+  or account switch was performed as part of verification.
+- #83: iPadOS 17+ shares existing settings, OFF/reset, AppIntent and Shortcut
+  flows. Render a square image from physical display dimensions, with calendar
+  content inside both portrait/landscape centered crop areas and space for
+  landscape widgets. Preview both crops of the same PNG and clearly label them
+  as estimates. Cache keys include device type, dimensions and renderer version.
+  iPhone framing remains unchanged. Four-language guidance and user acceptance
+  steps are in docs/LOCK_SCREEN_WALLPAPER.md. Actual system zoom/crop, wallpaper
+  application and automatic updates have not been verified in this task.
+- Automated verification: analyze clean; full Flutter suite 581 passed, one
+  existing skip; Android JVM 11 passed; Swift wallpaper model 2,212 checks passed;
+  Python workflow/privacy 17 passed including the fresh built AppIntent metadata.
+  Actual-font raster checks covered 420 combinations (Roboto/Korean, seven
+  colors, five sizes, three pixel ratios, light/dark). Small dark strike signal
+  improved 1.615-2.312x; all 210 light cases were pixel-identical. These are
+  component/render tests, not physical-widget or Google-provider acceptance.
+- A pre-existing drag-test fixture depended on today's public holidays. Disabled
+  holidays only in that test so its two fixture events determine insertion order;
+  product drag behavior was not changed for that test correction.
+- Final Android debug APK and Apple debug simulator/macOS builds passed. Xcode 27
+  uses the existing build-only lipo compatibility wrapper and macOS deployment
+  target 14 override; product deployment settings were not changed. Existing
+  Swift deprecation/Android plugin migration warnings remain. Windows native
+  build/install and physical devices are unavailable in this environment.
+- Updated macOS Daily Test, existing iPhone 17 simulator and Android Pixel 9 in
+  place. Signatures passed; installed artifacts match final builds. DB/preferences
+  hashes were preserved before any interactive app use; App Store app executable
+  and signature resources are unchanged. Android's sole expected non-user-data
+  change was AndroidX ProfileVerifier's files/profileInstalled runtime marker;
+  the other 14 protected files were unchanged. Previous binaries/data and exact
+  evidence are in ignored work/issues-79-83-restart/pre-update and
+  installation-verification.json. Android's loaded quick-boot state was used,
+  rather than treating the empty cold-boot disk as the existing installation.
+  Saved the updated default_boot snapshot successfully before stopping the
+  emulator so the next normal launch retains the updated APK and existing data.
+- Installed SHA-256: macOS kernel
+  69c1ab1989287f3cf34f985744e5a68473fe1f4bac602deb84b23880439cb18d;
+  iPhone kernel ec61f78977d8837fe3923cb3ab497812d9741bbd00dc97a059a2302dbc84c2ce;
+  Android APK 4fa67019e8ac7e607222f99afce2c1d49b9c7f5f5159e47e3cb4ec588f6cc169.
+- Interactive verification: Device Hub UI access timed out and Android Emulator
+  was not a supported native-app target of the computer-use tool. Therefore the
+  permitted device rotation and actual Google chooser cancellation remain
+  unverified despite automated UI/service coverage. macOS test-app launch was
+  verified through completion of existing startup sync. Dismissed the existing
+  weather/academic-calendar feature notices with Later, checked week/month and
+  settings entry/return, then restored week view. No event edits, account changes
+  or wallpaper actions. Installation data hashes above were checked before this
+  normal startup sync and notice dismissal, not after interactive use.
+
+## 2026-09-21 Google Play Signing Mismatch — Console State Unresolved
+
+- User reported Play rejected the AAB: expected SHA-1
+  04:97:A8:86:73:A5:53:43:D3:13:47:BB:C3:B2:EC:26:65:73:BC:0E,
+  current signer 3A:B4:4A:04:82:7C:B2:18:65:4F:34:C6:77:79:29:1B:25:6D:29:50.
+- User confirmed the old key is unavailable. Extracted the current public X.509
+  certificate from the AAB to
+  dist/google-play/closed-testing/3.5.0/Daily-upload-certificate.pem.
+  SHA-1 and SHA-256 match the current signer; no private key exported or generated.
+- Follow-up: certificates.zip contained three public certificates, not a private
+  signing key. Its distribution certificate (2F:31:F0:38:...) differed from the
+  upload error's required certificate. It cannot be used to re-sign the bundle.
+- The later Console screenshot said the upload certificate fingerprint would
+  appear after the first App Bundle upload, and had no upload-key reset button.
+  The earlier claim that a registered upload key required reset was explicitly
+  withdrawn. The error and screenshot states remain inconsistent; verify the
+  same app, upload error and certificate section before choosing a remedy.
+- No reset request, app signing key change or successful Play acceptance was
+  confirmed. Do not treat reset as an established prerequisite or replace the
+  app signing key. The public PEM remains available; versionCode use is unverified.
+
+## 2026-09-21 Google Play Closed-Test AAB
+
+- User requested one Google Play closed-testing bundle, not upload or install.
+  Built current 3.5.0 source, Android code 350, com.littlebit0.dailycalendar,
+  with existing private release key; no runtime or signing configuration edits.
+- Artifact: dist/google-play/closed-testing/3.5.0/Daily-3.5.0-code-350.aab,
+  71,721,846 bytes. SHA-256:
+  82667dace4cdf99c484cb709d43cf5c9b81bd978e836ddbd4ef2949912cb3dc4.
+- Bundletool 1.18.3 validate and manifest dump passed: version 3.5.0/code 350,
+  minSdk 24/targetSdk 36, no debuggable flag. arm64-v8a/armeabi-v7a/x86_64
+  present; all ten 64-bit native libraries have >=16KB ELF LOAD alignment and
+  BundleConfig uses PAGE_ALIGNMENT_16K.
+- jarsigner verifies; expected Android self-signed/no-timestamp and AGP ZIP
+  manifest-order warnings were inspected. Independent JarFile verification
+  reads/verifies all 524 payload entries and checks every certificate against
+  SHA-256 424c0bb7eeccbb1da6b2d33e1e748596af6e8d0f419830f9c366d10dfa947029.
+- Analyze clean; full Flutter suite 548 passed with one existing skip.
+  Work logs/verifier are under work/release-3.5.0; no new secrets committed.
+- No Play Console access/upload, track creation, install, launch, commit/push
+  or GitHub release replacement. Existing Apple artifacts and app data untouched.
+  Play's registered upload certificate and previously used versionCodes remain
+  unverified. If Play re-signs with a different app signing certificate, register
+  that SHA-1 for Android OAuth before expecting Google sign-in to work.
+
+## 2026-09-16 iOS ITMS-90683 Re-export
+
+- User reported Apple missing NSLocationAlwaysAndWhenInUseUsageDescription in
+  Runner.app, then explicitly requested rebuilding iOS only. Supersedes the
+  initial iOS signed export below; macOS remains byte-for-byte unchanged.
+- Geolocator 2.3.14 includes requestAlwaysAuthorization but selects the existing
+  WhenInUse key first. Added an accurate weather-location purpose string to iOS
+  Info.plist and ko/en/ja/zh-Hant InfoPlist.strings. No permission request flow,
+  entitlement or background location mode added; no macOS/source behavior edit.
+- Source privacy tests 3 passed, Apple configuration/weather tests 24 passed,
+  plist lint and git diff --check passed. Export verifier rejects old IPA for
+  the missing key, and passes new IPA purpose strings in all four languages,
+  versions, arm64, deep/strict signatures, Store profiles/certificates and
+  no-debug/app-group checks. Apple-side reprocessing is not yet verified.
+- New iOS app/widget: marketing 3.5.0, build 3.5.1. Flutter build-number and
+  xcodebuild CURRENT_PROJECT_VERSION/FLUTTER_BUILD_NUMBER override only, not a
+  shared pubspec version promotion. Archive:
+  dist/appstore-archives/3.5.0/Daily-iOS-3.5.0-build-3.5.1.xcarchive.
+- Final IPA: dist/transporter-upload/3.5.0/Daily-iOS-AppStore-3.5.0-build-3.5.1.ipa,
+  28,422,734 bytes, SHA-256
+  564651c97479a5760423d366c3b2ff4110422c1b7f5f53e05cf054ac1f2d8c71.
+  Prior IPA moved to work/release-3.5.0/replaced-ios-build-3.5.0.ipa to avoid
+  accidental submission. Export/verification logs use ios-*-3.5.1 paths there.
+- macOS PKG remains build 3.5.0, SHA-256
+  490307c494931bcf7614f82014624d1d21c9261ebc105e923091445d01098eda.
+- Submission packaging only; no test app install/launch, data changes,
+  Transporter upload, Git commit/push or public release asset replacement.
+
+## 2026-09-16 Signed Apple 3.5.0 Exports
+
+- User requested local signed iOS/macOS files in one Finder folder and Korean
+  promotional text, description and What's New. No upload/submission requested.
+- Both Release archives and App Store Connect local exports succeeded at source
+  9dc27a2 (product v3.5.0 source cf96077); app/widget versions 3.5.0 (3.5.0).
+- Final folder: dist/transporter-upload/3.5.0, containing only:
+  Daily-iOS-AppStore-3.5.0-build-3.5.0.ipa (28,421,632 bytes), SHA-256
+  def53eaa0ca7b6fb4a7ddb4d0b09d86024879ba06512069848fd5dff18ff13e6;
+  Daily-macOS-AppStore-3.5.0-build-3.5.0.pkg (66,863,349 bytes), SHA-256
+  490307c494931bcf7614f82014624d1d21c9261ebc105e923091445d01098eda.
+- Verified exact copy hashes, app/widget IDs, Apple Distribution signing,
+  codesign deep/strict, app groups and absence of debug entitlement. Store
+  profiles for iOS app/widget and macOS app match signer, ID and valid expiry.
+  macOS widget uses only sandbox/team-prefixed app group, without a required
+  profile, and matches the app's distribution certificate. Installer package
+  signature passes. macOS app/widget and four native frameworks are universal
+  arm64/x86_64; no Intel support removed.
+- Local Xcode 27 lipo rejects multi-arch -verify_arch. Build-scoped
+  work/release-3.5.0/bin/lipo delegates verification to existing NDK llvm-lipo
+  and extraction to Apple lipo. BASH_ENV prepends that path in nested Flutter
+  build phases. Positive and negative arch checks pass; SDK/product code is
+  untouched. Deployment target override remains macOS 14 as before.
+  Reference: https://github.com/flutter/flutter/issues/188461.
+- Archives: dist/appstore-archives/3.5.0; export options, logs and verifier:
+  work/release-3.5.0. Export destination is export, not upload.
+- APP_STORE_METADATA_3.5.0_KO.md has 128-character promotion, 1,196-character
+  description and 723-character What's New. Sangmyung undergraduate support,
+  Korea-only weather and user-configured iPhone wallpaper are stated accurately.
+- Packaging only: no installed app/data changes or interactive usage tests.
+  No Transporter upload, Connect metadata save or review submission. Public
+  release remains unchanged. Documentation updates are not committed this turn.
+
 ## 2026-09-16 Version 3.5.0 Release Preparation
 
 - User requested version promotion, README update, commit/push, then GitHub
@@ -821,6 +1161,9 @@ profiles, keystore passwords, or private keys to this file.
 
 ## 2026-09-11 Issue Queue and #62 Implementation
 
+- Historical scope: #63's exclusion below was superseded by explicit approval
+  on September 16. #65 remains deferred; #67 completion is unverified. Use the
+  [current handoff](#current-handoff), not this old queue, for next steps.
 - Latest user scope: handle issues one at a time; an explicitly named OS limits
   that requirement, otherwise target all OSs (including Linux). Do not work on
   #63 or #65. Open permitted queue: #62, #64, #66, #67, #68, #70.
@@ -981,7 +1324,11 @@ profiles, keystore passwords, or private keys to this file.
   현재 빌드는 성공했다. git diff --check 통과. 커밋/푸시/릴리스 갱신과
   실제 기기 로그인/분류 순서 실사용 검증은 하지 않았다.
 
-## Current Platform Status: 3.4.0 (2026-09-07)
+## Historical Platform Status: 3.4.0 (2026-09-07)
+
+This is a historical snapshot, superseded by the [current handoff](#current-handoff)
+and September 11–24 entries above. In particular, its version, Windows release,
+submission-artifact and pending-work statements are not the current status.
 
 - Android APK 후속: 사용자가 기존 배포 키가 없음을 확인하고 새 키 생성을
   명시적으로 승인했다. 새 JKS(RSA 4096)는
@@ -6756,3 +7103,9 @@ Historical app-version notes below `2.0.0` were intentionally removed on
   실제 3.4.0 릴리스 발행 전에는 새 릴리스 노트/README/제출 문서를 작성하고
   release-apple.yml 및 release-installers.yml의 body_path가 아직
   RELEASE_NOTES_3.3.1.md를 가리키는 부분도 해당 릴리스 노트로 갱신해야 한다.
+
+---
+
+최신 상태는 파일 맨 위의 [현재 인계 요약](#current-handoff)과
+[2026-09-24 기록 대조표](docs/AGENT_MEMORY_AUDIT_2026-09-24.md)에 있다.
+이 파일 끝의 9월 7일 이력을 마지막 작업일로 해석하지 않는다.

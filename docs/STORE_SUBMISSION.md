@@ -1,11 +1,48 @@
 # Daily Apple App Store Submission
 
-## Current Source Version: 3.5.0
+## Current Preparation: 3.5.0
 
-소스의 앱·위젯 버전을 `3.5.0 (3.5.0)`으로 승격했습니다.
-이번 작업은 GitHub 공개 릴리스이며, 3.5.0 Transporter 서명 파일 생성·업로드나
-App Store 심사 제출을 완료했다는 의미가 아닙니다.
-[3.5.0 릴리스 노트](RELEASE_NOTES_3.5.0.md)를 참고하세요.
+최종 갱신: 2026-09-16
+준비 버전: iOS 앱·위젯 `3.5.0 (3.5.1)`, macOS 앱·위젯 `3.5.0 (3.5.0)`
+
+- Transporter 제출용 서명 파일을 `dist/transporter-upload/3.5.0`에 모았습니다.
+  - iOS: `Daily-iOS-AppStore-3.5.0-build-3.5.1.ipa`
+  - macOS: `Daily-macOS-AppStore-3.5.0-build-3.5.0.pkg`
+- 두 플랫폼 모두 Release 아카이브 및 `app-store-connect` 방식의 로컬 내보내기
+  성공. `destination=export`를 사용했으며 Transporter 업로드·App Store Connect
+  빌드 선택·심사 제출은 하지 않았습니다. 공개 스토어 상태도 조회하지 않았습니다.
+- 앱 ID `com.littlebit0.daily`, 위젯 ID `com.littlebit0.daily.widgets`,
+  팀 `A6Y73X2ZLS`를 유지합니다. 앱·위젯 Apple Distribution 인증서,
+  `codesign --verify --deep --strict`, 디버깅 비활성화와 앱 그룹을 확인했습니다.
+- iOS 앱·위젯 및 macOS 앱의 Store 프로파일 만료일·ID·인증서 일치를 확인했습니다.
+  macOS 위젯은 기존 팀 접두사 앱 그룹과 샌드박스 권한만 사용하므로 별도
+  프로파일 없이 동일 배포 인증서로 서명됩니다.
+  [Apple 앱 그룹 문서](https://developer.apple.com/documentation/xcode/accessing-app-group-containers)를 참고하세요.
+- macOS PKG의 Mac App Store Installer 서명을 확인했습니다. 앱·위젯과 내장
+  네이티브 프레임워크 4개 모두 arm64/x86_64 universal 및 서명 검증을 통과했습니다.
+- 최종 파일과 내보낸 원본의 SHA-256 일치:
+  - IPA (28,422,734 bytes): `564651c97479a5760423d366c3b2ff4110422c1b7f5f53e05cf054ac1f2d8c71`
+  - PKG (66,863,349 bytes): `490307c494931bcf7614f82014624d1d21c9261ebc105e923091445d01098eda`
+- 아카이브: `dist/appstore-archives/3.5.0`. 로그·검증 추출본은
+  `work/release-3.5.0`에 보관합니다. GitHub의 unsigned 파일과 구분합니다.
+- Xcode 27의 lipo 다중 아키텍처 검증 오류는 이번 빌드의 PATH/BASH_ENV에만
+  적용한 도구 래퍼로 처리했습니다. LLVM은 검증, Apple lipo는 추출을 수행하며
+  미지원 아키텍처 실패 검사도 통과했습니다. 전역 SDK·앱 구현은 변경하지 않았습니다.
+- 기존 설치 앱과 사용자 데이터는 변경하지 않았고 앱 실행도 하지 않았습니다.
+- 사용자 업로드에서 보고된 ITMS-90683을 수정하여 iOS만 재생성했습니다.
+  `NSLocationAlwaysAndWhenInUseUsageDescription`과 ko/en/ja/zh-Hant 번역을
+  추가했습니다. geolocator 라이브러리의 API 참조를 위한 목적 설명이며,
+  실제 앱의 사용 중 위치 요청 경로와 백그라운드 위치 비활성화는 유지합니다.
+  원본 plist 테스트 3개와 Apple 설정·날씨 테스트 24개를 통과했습니다.
+  최종 IPA의 목적 설명·네 언어 번역·서명·프로파일·앱/위젯 빌드 번호도 확인했습니다.
+  이전 IPA는 제출 폴더에서 `work/release-3.5.0/replaced-ios-build-3.5.0.ipa`로
+  이동했습니다. macOS PKG는 해시가 동일하며 다시 만들지 않았습니다.
+  새 iOS 아카이브는 `Daily-iOS-3.5.0-build-3.5.1.xcarchive`입니다.
+  iOS 제출용 재빌드는 Flutter `--build-number=3.5.1`과 Xcode
+  `CURRENT_PROJECT_VERSION=3.5.1 FLUTTER_BUILD_NUMBER=3.5.1`을 함께 적용합니다.
+  새 IPA의 Apple 서버 처리 결과는 재업로드 후 별도로 확인해야 합니다.
+- [3.5.0 릴리스 노트](RELEASE_NOTES_3.5.0.md),
+  [한국어 프로모션·설명·업데이트 문구](APP_STORE_METADATA_3.5.0_KO.md)를 참고하세요.
 
 ## Previous Preparation: 3.4.0
 

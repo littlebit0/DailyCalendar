@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D81000000000000000000001 /* DailyEventPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81000000000000000000011 /* DailyEventPalette.swift */; };
+		D81000000000000000000002 /* DailyEventPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81000000000000000000011 /* DailyEventPalette.swift */; };
 		D66000000000000000000007 /* DailyCalendar Wallpaper Setup.shortcut in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */; };
 		D66000000000000000000006 /* WallpaperIntents.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000016 /* WallpaperIntents.xcstrings */; };
 		D66000000000000000000001 /* DailyWallpaperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000011 /* DailyWallpaperModel.swift */; };
@@ -75,6 +77,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D81000000000000000000011 /* DailyEventPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyEventPalette.swift; sourceTree = "<group>"; };
 		D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper Setup.shortcut"; sourceTree = "<group>"; };
 		D66000000000000000000016 /* WallpaperIntents.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = WallpaperIntents.xcstrings; sourceTree = "<group>"; };
 		D66000000000000000000011 /* DailyWallpaperModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperModel.swift; sourceTree = "<group>"; };
@@ -146,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				6849C20408FC9AC20030F39E /* DailyWidgets.swift */,
+				D81000000000000000000011 /* DailyEventPalette.swift */,
 				442F8F4DFCC4066F0BCB7D1E /* Info.plist */,
 				29EB6F741D6857E667F322C0 /* DailyWidgets.entitlements */,
 				2CC54DBD089C7F46E65000F0 /* DailyAlarmMetadata.swift */,
@@ -431,6 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0682F69220361A92396D6D6 /* DailyWidgets.swift in Sources */,
+				D81000000000000000000001 /* DailyEventPalette.swift in Sources */,
 				5510AAC3D00832F60A57D7C3 /* DailyAlarmMetadata.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -449,6 +454,7 @@
 			files = (
 				D66000000000000000000001 /* DailyWallpaperModel.swift in Sources */,
 				D66000000000000000000002 /* DailyWallpaper.swift in Sources */,
+				D81000000000000000000002 /* DailyEventPalette.swift in Sources */,
 				D66000000000000000000003 /* DailyWallpaperText.swift in Sources */,
 				D66000000000000000000004 /* DailyWallpaperSettingsView.swift in Sources */,
 				D51111111111111111111111 /* DailySiriIntents.swift in Sources */,
@@ -565,7 +571,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -595,10 +601,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -613,10 +619,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -629,10 +635,10 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -647,7 +653,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -657,7 +663,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Widgets";
@@ -788,7 +794,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -821,7 +827,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -853,7 +859,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -863,7 +869,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Widgets";
@@ -883,7 +889,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.0;
+				CURRENT_PROJECT_VERSION = 3.5.2;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -893,7 +899,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.0;
+				MARKETING_VERSION = 3.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WIDGET_DISPLAY_NAME = "Daily Test Widgets";

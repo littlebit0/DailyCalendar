@@ -722,7 +722,9 @@ Widget calendarScheduleDragCard(
                 ),
                 style: calendarEventCompletionStyle(
                   context,
-                  const TextStyle(fontWeight: FontWeight.w600),
+                  Theme.of(
+                    context,
+                  ).textTheme.labelSmall?.copyWith(fontWeight: FontWeight.w600),
                   completed: event.completed,
                   eventColor: categoryColor,
                   backgroundColor: backgroundColor,
@@ -734,9 +736,13 @@ Widget calendarScheduleDragCard(
           maxLines: height >= 42 ? 3 : 1,
           textAlign: centerEventTitles ? TextAlign.center : TextAlign.start,
           overflow: TextOverflow.ellipsis,
-          style: Theme.of(
+          style: calendarEventCompletionStyle(
             context,
-          ).textTheme.labelSmall?.copyWith(color: color, height: 1.15),
+            Theme.of(context).textTheme.labelSmall?.copyWith(height: 1.15),
+            completed: false,
+            eventColor: categoryColor,
+            backgroundColor: backgroundColor,
+          ),
         ),
       ),
     ),

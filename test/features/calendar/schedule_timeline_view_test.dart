@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/calendar/calendar_event_movement.dart';
 import 'package:daily/features/calendar/widgets/schedule_timeline_view.dart';
 import 'package:daily/features/calendar/widgets/calendar_event_drag_layer.dart';
@@ -12,6 +13,90 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  for (final brightness in Brightness.values) {
+    testWidgets('timed card keeps its title and time readable in $brightness', (
+      tester,
+    ) async {
+      final theme = brightness == Brightness.dark
+          ? DailyTheme.dark()
+          : DailyTheme.light();
+      for (final color in [Colors.black, Colors.white, Colors.yellow]) {
+        final date = DateTime(2026, 5, 4, 9);
+        final event = CalendarEvent(
+          id: 'timed-contrast',
+          title: '완료 시간 일정',
+          startAt: date,
+          endAt: date.add(const Duration(hours: 1)),
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: color.toARGB32(),
+          createdAt: date,
+          updatedAt: date,
+          completed: true,
+        );
+        await tester.pumpWidget(
+          MaterialApp(
+            theme: theme,
+            home: Material(
+              color: brightness == Brightness.dark
+                  ? const Color(0xff252528)
+                  : const Color(0xfff0f0f5),
+              child: Builder(
+                builder: (context) => Center(
+                  child: SizedBox(
+                    width: 220,
+                    height: 60,
+                    child: calendarScheduleDragCard(
+                      context,
+                      event,
+                      height: 60,
+                      use24HourTime: true,
+                      centerEventTitles: false,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        final textFinder = find.byWidgetPredicate(
+          (widget) =>
+              widget is Text &&
+              widget.textSpan?.toPlainText() == '완료 시간 일정\n09:00',
+        );
+        final text = tester.widget<Text>(textFinder);
+        final titleStyle = (text.textSpan! as TextSpan).children!.first.style!;
+        final background = tester
+            .widget<Material>(
+              find
+                  .ancestor(of: textFinder, matching: find.byType(Material))
+                  .first,
+            )
+            .color!;
+        expect(background.a, 1);
+        expect(
+          _contrast(titleStyle.color!, background),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(
+          _contrast(text.style!.color!, background),
+          greaterThanOrEqualTo(4.5),
+        );
+        expect(text.style!.decoration, isNot(TextDecoration.lineThrough));
+        expect(titleStyle.decoration, TextDecoration.lineThrough);
+        expect(
+          _contrast(titleStyle.decorationColor!, background),
+          greaterThanOrEqualTo(3),
+        );
+        expect(
+          _contrast(titleStyle.decorationColor!, titleStyle.color!),
+          greaterThanOrEqualTo(3),
+        );
+        expect(event.colorValue, color.toARGB32());
+      }
+    });
+  }
+
   for (final platform in [
     TargetPlatform.iOS,
     TargetPlatform.android,
@@ -584,16 +669,22 @@ void main() {
     final style = tester.widget<Text>(find.text('완료 일정')).style!;
     expect(style.decoration, TextDecoration.lineThrough);
     expect(style.decorationStyle, TextDecorationStyle.solid);
-    expect(style.decorationThickness, lessThan(2));
-    expect(style.color, Color(EventCategory.basic.colorValue));
+    expect(style.decorationThickness, inExclusiveRange(1.4, 3));
     final eventContainer = tester.widget<Container>(
       find
           .ancestor(of: find.text('완료 일정'), matching: find.byType(Container))
           .first,
     );
+    final background = (eventContainer.decoration! as BoxDecoration).color!;
+    expect(background.a, 1);
+    expect(_contrast(style.color!, background), greaterThanOrEqualTo(4.5));
     expect(
-      (eventContainer.decoration! as BoxDecoration).color,
-      Color(EventCategory.basic.colorValue).withValues(alpha: 0.17),
+      _contrast(style.decorationColor!, background),
+      greaterThanOrEqualTo(3),
+    );
+    expect(
+      _contrast(style.decorationColor!, style.color!),
+      greaterThanOrEqualTo(3),
     );
   });
 
@@ -977,4 +1068,10 @@ Color? _headerBackgroundColor(WidgetTester tester, DateTime day) {
     ),
   );
   return (container.decoration! as BoxDecoration).color;
+}
+
+double _contrast(Color first, Color second) {
+  final a = first.computeLuminance() + 0.05;
+  final b = second.computeLuminance() + 0.05;
+  return a >= b ? a / b : b / a;
 }

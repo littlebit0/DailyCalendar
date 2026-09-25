@@ -21,32 +21,64 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
 class DailyAndroidParityTest {
-    @Test fun completionContrastMaximizesBothSurfaces() {
-        fun luminance(color: Int): Double {
-            fun linear(c: Int): Double {
-                val v = c / 255.0
-                return if (v <= .04045) v / 12.92 else Math.pow((v + .055) / 1.055, 2.4)
-            }
-            return linear(android.graphics.Color.red(color)) * .2126 +
-                linear(android.graphics.Color.green(color)) * .7152 +
-                linear(android.graphics.Color.blue(color)) * .0722 + .05
-        }
-        fun score(c: Int, a: Int, b: Int): Double {
-            val x = luminance(c); val y = luminance(a); val z = luminance(b)
-            return minOf(maxOf(x, y) / minOf(x, y), maxOf(x, z) / minOf(x, z))
-        }
-        for (text in listOf(0xff000000.toInt(), 0xffffffff.toInt(), 0xffffff00.toInt(),
-            0xff808080.toInt(), 0xff2563eb.toInt(), 0xffff0000.toInt())) {
-            for (surface in listOf(0xff000000.toInt(), 0xffffffff.toInt())) {
-                val background = DailyCompletionContrast.blend(text, surface, .15)
-                val best = DailyCompletionContrast.strike(text, background)
-                for (c in 0..255) {
-                    assertTrue(score(best, text, background) + 1e-9 >=
-                        score(android.graphics.Color.rgb(c, c, c), text, background))
+    @Test fun completionLinesRetainLogicalWidthAcrossDensityAndFontScale() {
+        for (density in listOf(1f, 2f, 3f)) {
+            for (fontScale in listOf(1f, 1.5f, 2f)) {
+                for (size in listOf(8f, 9f, 13f, 24f)) {
+                    val font = size * density * fontScale
+                    assertTrue(DailyCompletionContrast.strokeWidth(font, density) / density >= 1.25f)
                 }
             }
         }
     }
+
+    @Test fun nativePalettesExactlyMatchDartFixtures() {
+        val roots = generateSequence(java.io.File(checkNotNull(System.getProperty("user.dir")))) { it.parentFile }
+        val file = roots.map { java.io.File(it, "tool/tests/fixtures/event_palette.json") }
+            .first { it.isFile }
+        val cases = JSONObject(file.readText()).getJSONArray("cases")
+        assertEquals(512, cases.length())
+        for (index in 0 until cases.length()) {
+            val row = cases.getJSONArray(index)
+            val colors = DailyCompletionContrast.resolve(row.getLong(0).toInt(), row.getLong(1).toInt())
+            assertEquals("foreground at $index", row.getLong(2).toInt(), colors.foreground)
+            assertEquals("strike at $index", row.getLong(3).toInt(), colors.strike)
+            assertEquals("background at $index", row.getLong(4).toInt(), colors.background)
+        }
+    }
+
+    @Test fun everyRgbTenStepValueHasReadableTitleAndLineOnActualWidgetSurfaces() {
+        // This independent evaluator checks final 8-bit rendered colours.
+        val linear = DoubleArray(256) { c ->
+            val v = c / 255.0
+            if (v <= .04045) v / 12.92 else Math.pow((v + .055) / 1.055, 2.4)
+        }
+        fun luminance(color: Int): Double =
+            linear[android.graphics.Color.red(color)] * .2126 +
+                linear[android.graphics.Color.green(color)] * .7152 +
+                linear[android.graphics.Color.blue(color)] * .0722 + .05
+        fun contrast(a: Int, b: Int): Double =
+            maxOf(luminance(a), luminance(b)) / minOf(luminance(a), luminance(b))
+        val values = (0..250 step 10).toList() + 255
+        var count = 0
+        for (r in values) for (g in values) for (b in values) {
+            val category = android.graphics.Color.rgb(r, g, b)
+            for (surface in listOf(0xff000000.toInt(), 0xfffdfdfe.toInt())) {
+                for (alpha in listOf(0.0, 38 / 255.0)) {
+                    val background = DailyCompletionContrast.blend(category, surface, alpha)
+                    val colors = DailyCompletionContrast.resolve(category, background)
+                    check(contrast(colors.foreground, colors.background) >= 4.5 &&
+                        contrast(colors.strike, colors.foreground) >= 3 &&
+                        contrast(colors.strike, colors.background) >= 3) {
+                        "Inaccessible palette for $r/$g/$b on $surface at $alpha"
+                    }
+                    count++
+                }
+            }
+        }
+        assertEquals(78732, count)
+    }
+
     private val context: Context get() = RuntimeEnvironment.getApplication()
 
     @Before fun reset() {
@@ -108,7 +140,7 @@ class DailyAndroidParityTest {
         assertEquals(1, shadowOf(context.getSystemService(AlarmManager::class.java)).scheduledAlarms.size)
     }
 
-    @Test fun todayWidgetRetainsCategoryColorAndRendersBothSystemThemes() {
+    @Test fun todayWidgetPreservesStoredCategoryAndPaintsReadableTitleInBothThemes() {
         val categoryColor = 0xff2563eb.toInt()
         DailyAndroidWidgetStore.updateSnapshot(context, mapOf(
             "generatedAt" to 1L, "themeMode" to "system", "monthDays" to emptyList<Any>(),
@@ -125,7 +157,13 @@ class DailyAndroidParityTest {
             context.resources.updateConfiguration(configuration, context.resources.displayMetrics)
             factory.onDataSetChanged()
             val view = factory.getViewAt(0)!!.apply(context, LinearLayout(context))
-            assertEquals(categoryColor, view.findViewById<TextView>(R.id.widget_event_title).currentTextColor)
+            val surface = if (mode == Configuration.UI_MODE_NIGHT_YES) 0xff000000.toInt() else 0xfffdfdfe.toInt()
+            val colors = DailyCompletionContrast.resolve(categoryColor, surface)
+            val title = view.findViewById<TextView>(R.id.widget_event_title)
+            assertEquals(colors.foreground, title.currentTextColor)
+            assertEquals(colors.background, (title.background as android.graphics.drawable.ColorDrawable).color)
+            assertEquals(categoryColor, DailyAndroidWidgetStore.snapshot(context)!!
+                .getJSONArray("todayEvents").getJSONObject(0).getInt("color"))
             assertEquals(android.view.View.VISIBLE,
                 view.findViewById<android.view.View>(R.id.widget_event_strike).visibility)
             assertNotNull(view.findViewById<android.widget.ImageView>(R.id.widget_event_strike).drawable)

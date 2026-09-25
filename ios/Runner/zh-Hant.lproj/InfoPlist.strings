@@ -7,3 +7,4 @@
 "NSSpeechRecognitionUsageDescription" = "Daily 會將您對 Signal 說出的行事曆指令轉成文字，以執行要求的操作。";
 "CFBundleSpokenName" = "Daily";
 "NSLocationWhenInUseUsageDescription" = "使用概略位置顯示附近地區的氣象廳預報。您也可以不授予位置權限而自行選擇地區。";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "使用天氣地區自動設定時，Daily 會以概略位置尋找附近的韓國氣象廳預報地區。不會在背景追蹤您的位置，也可不授予位置權限而自行選擇地區。";

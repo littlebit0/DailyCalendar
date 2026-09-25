@@ -2,41 +2,13 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-/// Maximizes the weaker contrast against both the title and its background.
-/// Contrast depends only on luminance: extrema are black, white and the
-/// geometric midpoint of the two adjusted luminances.
-Color calendarEventStrikeColor(Color text, Color background) {
-  final bg = Color.alphaBlend(background, Colors.white);
-  final ink = Color.alphaBlend(text, bg);
-  final a = ink.computeLuminance() + 0.05;
-  final b = bg.computeLuminance() + 0.05;
-  final midpoint = math.sqrt(a * b) - 0.05;
-  final srgb = midpoint <= 0.0031308
-      ? midpoint * 12.92
-      : 1.055 * math.pow(midpoint, 1 / 2.4) - 0.055;
-  final channel = (srgb * 255).round().clamp(0, 255);
-  var best = Colors.black;
-  var bestScore = 0.0;
-  for (final c in {
-    0,
-    255,
-    channel,
-    (channel - 1).clamp(0, 255),
-    (channel + 1).clamp(0, 255),
-  }) {
-    final color = Color.fromARGB(255, c, c, c);
-    final l = color.computeLuminance() + 0.05;
-    final score = math.min(
-      math.max(l, a) / math.min(l, a),
-      math.max(l, b) / math.min(l, b),
-    );
-    if (score > bestScore) {
-      best = color;
-      bestScore = score;
-    }
-  }
-  return best;
-}
+import 'event_completion_palette.dart';
+
+export 'event_completion_palette.dart';
+
+/// The line belongs to the resolved display palette, not the raw stored RGB.
+Color calendarEventStrikeColor(Color text, Color background) =>
+    calendarEventPalette(text, background).strike;
 
 Color _eventSurface(BuildContext context, Color? background) {
   final layers = <Color>[?background];
@@ -87,7 +59,10 @@ Color calendarEventBackgroundColor(
   required bool completed,
   double categoryAlpha = 0.12,
 }) {
-  return categoryColor.withValues(alpha: categoryAlpha);
+  return calendarEventPalette(
+    categoryColor,
+    _eventSurface(context, categoryColor.withValues(alpha: categoryAlpha)),
+  ).background;
 }
 
 TextStyle calendarEventCompletionStyle(
@@ -97,20 +72,30 @@ TextStyle calendarEventCompletionStyle(
   required Color eventColor,
   Color? backgroundColor,
 }) {
-  final style = (base ?? const TextStyle()).copyWith(color: eventColor);
-  if (!completed) {
-    return style;
-  }
-  final theme = Theme.of(context);
-  final dark = theme.brightness == Brightness.dark;
-  final strikeColor = calendarEventStrikeColor(
-    eventColor,
-    _eventSurface(context, backgroundColor),
+  final surface = _eventSurface(context, backgroundColor);
+  final palette = calendarEventPalette(eventColor, surface);
+  final style = (base ?? const TextStyle()).copyWith(
+    color: palette.foreground,
+    // Usually the containing card already paints this exact opaque surface.
+    // Plain rows need a backing only if their original surface is infeasible.
+    backgroundColor: palette.background.toARGB32() == surface.toARGB32()
+        ? null
+        : palette.background,
   );
+  if (!completed) return style;
+  final theme = Theme.of(context);
+  final fontSize =
+      style.fontSize ??
+      DefaultTextStyle.of(context).style.fontSize ??
+      theme.textTheme.bodyMedium?.fontSize ??
+      14;
   return style.copyWith(
     decoration: TextDecoration.lineThrough,
     decorationStyle: TextDecorationStyle.solid,
-    decorationColor: strikeColor,
-    decorationThickness: dark ? 1.4 : 1.5,
+    decorationColor: palette.strike,
+    // Flutter multiplies the font's strike metric (about fontSize / 20 in
+    // Roboto), not logical pixels. Both themes need at least 1.25 logical
+    // pixels at small sizes; scaling keeps one line visible without double ink.
+    decorationThickness: math.max(1.5, 25 / fontSize),
   );
 }

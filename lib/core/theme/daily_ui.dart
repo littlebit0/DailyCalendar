@@ -11,6 +11,26 @@ DailyWindowClass dailyWindowClassFor(Size size) {
   };
 }
 
+/// Minimum usable logical width for the shared calendar toolbar.
+const dailyCalendarWideMinWidth = 720.0;
+// The 360px detail pane needs a usable calendar alongside it. Short phone
+// landscape windows keep that space for the calendar and open details on tap.
+const dailyCalendarDetailsMinWidth = 880.0;
+const dailyCalendarDetailsMinHeight = 500.0;
+
+bool dailyUsesWideCalendar(TargetPlatform platform, Size size) {
+  return platform == TargetPlatform.macOS ||
+      platform == TargetPlatform.windows ||
+      platform == TargetPlatform.linux ||
+      size.width >= dailyCalendarWideMinWidth;
+}
+
+Size dailyCalendarUsableSize(BuildContext context) {
+  final size = MediaQuery.sizeOf(context);
+  final padding = MediaQuery.paddingOf(context);
+  return Size(size.width - padding.horizontal, size.height - padding.vertical);
+}
+
 abstract final class DailyUi {
   static const primary = Color(0xff0a63d8);
   static const success = Color(0xff2aa65a);

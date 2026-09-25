@@ -9,7 +9,6 @@ import '../../../core/auth/google_account.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/siri/siri_shortcut_installer.dart';
-import '../../../core/sync/google_drive_auth_service.dart';
 import '../../../core/theme/daily_ui.dart';
 import 'analytics_consent_page.dart';
 import '../feature_announcements.dart';
@@ -485,9 +484,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       _message = context.tr('Google 로그인 창을 여는 중입니다.');
     });
     try {
-      final connected = await _connectGoogleDriveAndRestore(
-        cancelMessage: 'Google 로그인이 취소되었습니다.',
-      );
+      final connected = await _connectGoogleDriveAndRestore();
       if (connected) {
         await _completeOnboarding();
       }
@@ -498,33 +495,19 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     }
   }
 
-  Future<bool> _connectGoogleDriveAndRestore({
-    required String cancelMessage,
-  }) async {
+  Future<bool> _connectGoogleDriveAndRestore() async {
     final attempt = ++_googleDriveAttempt;
     try {
       final authService = ref.read(googleDriveAuthServiceProvider);
-      final account = await authService.signIn(forceAccountSelection: true);
+      final account = await authService.connectToDrive();
       if (!_isCurrentGoogleDriveAttempt(attempt)) {
         return false;
       }
       if (account == null) {
         if (mounted) {
-          setState(() => _message = cancelMessage);
+          setState(() => _message = '');
         }
         return false;
-      }
-
-      final headers = await authService.authorizationHeaders(
-        promptIfNecessary: true,
-      );
-      if (!_isCurrentGoogleDriveAttempt(attempt)) {
-        return false;
-      }
-      if (headers == null) {
-        throw const GoogleDriveAuthException(
-          'Google Drive 권한 승인이 완료되지 않았습니다. 다시 연결해 주세요.',
-        );
       }
       await ref
           .read(settingsRepositoryProvider)

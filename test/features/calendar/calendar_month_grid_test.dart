@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:daily/app/daily_theme.dart';
 import 'package:daily/features/calendar/widgets/calendar_month_grid.dart';
 import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
@@ -10,6 +11,102 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'spanning event contrast survives selected and holiday layers in $brightness',
+      (tester) async {
+        final date = DateTime(2026, 5, 4);
+        final theme = brightness == Brightness.dark
+            ? DailyTheme.dark()
+            : DailyTheme.light();
+        for (final color in [
+          Colors.black,
+          Colors.white,
+          Colors.yellow,
+          const Color(0xff000aff),
+          const Color(0xff28b496),
+        ]) {
+          for (final completed in [false, true]) {
+            final event = CalendarEvent(
+              id: 'contrast-span',
+              title: '대비 일정',
+              startAt: date,
+              endAt: DateTime(2026, 5, 9),
+              allDay: true,
+              category: EventCategory.basic,
+              colorValue: color.toARGB32(),
+              createdAt: date,
+              updatedAt: date,
+              completed: completed,
+            );
+            final holiday = event.copyWith(
+              id: 'contrast-holiday',
+              title: '공휴일',
+              startAt: DateTime(2026, 5, 7),
+              endAt: DateTime(2026, 5, 8),
+              holiday: true,
+              completed: false,
+            );
+            await tester.pumpWidget(
+              MaterialApp(
+                theme: theme,
+                home: Scaffold(
+                  body: SizedBox(
+                    width: 700,
+                    height: 420,
+                    child: CalendarMonthGrid(
+                      month: DateTime(2026, 5),
+                      selectedDate: date,
+                      externalRangeStart: date,
+                      externalRangeEnd: DateTime(2026, 5, 5),
+                      events: [event, holiday],
+                      weekStartsOnMonday: true,
+                      showLunarDates: false,
+                      holidayColorValue: color.toARGB32(),
+                      onDateSelected: (_) {},
+                    ),
+                  ),
+                ),
+              ),
+            );
+            final title = find.text('대비 일정');
+            final style = tester.widget<Text>(title).style!;
+            final box = tester.widget<DecoratedBox>(
+              find
+                  .ancestor(of: title, matching: find.byType(DecoratedBox))
+                  .first,
+            );
+            final background = (box.decoration as BoxDecoration).color!;
+            expect(
+              background.a,
+              1,
+              reason: 'Sibling highlights must not alter the event surface',
+            );
+            expect(
+              _contrast(style.color!, background),
+              greaterThanOrEqualTo(4.5),
+            );
+            if (completed) {
+              expect(style.decoration, TextDecoration.lineThrough);
+              expect(
+                _contrast(style.decorationColor!, background),
+                greaterThanOrEqualTo(3),
+              );
+              expect(
+                _contrast(style.decorationColor!, style.color!),
+                greaterThanOrEqualTo(3),
+              );
+            } else {
+              expect(style.decoration, isNot(TextDecoration.lineThrough));
+            }
+            expect(event.colorValue, color.toARGB32());
+            expect(tester.takeException(), isNull);
+          }
+        }
+      },
+    );
+  }
+
   testWidgets('keeps today and lunar day labels on the same row', (
     tester,
   ) async {
@@ -829,6 +926,10 @@ void main() {
 
     final flag = find.byKey(const ValueKey('event-span-drag-event-2026-5-4'));
     final target = _dayNumberKey(DateTime(2026, 5, 6));
+    final sourceTitleColor = tester
+        .widget<Text>(find.textContaining('이동할 일정'))
+        .style
+        ?.color;
     final gesture = await tester.startGesture(
       tester.getCenter(flag),
       kind: PointerDeviceKind.mouse,
@@ -849,10 +950,7 @@ void main() {
       tester.widget<Material>(feedback).color,
       isNot(Color(event.colorValue)),
     );
-    expect(
-      tester.widget<Text>(feedbackTitle).style?.color,
-      Color(event.colorValue),
-    );
+    expect(tester.widget<Text>(feedbackTitle).style?.color, sourceTitleColor);
 
     await gesture.moveTo(tester.getCenter(target) + const Offset(0, 35));
     await tester.pump(const Duration(milliseconds: 150));
@@ -1151,4 +1249,10 @@ Future<void> _expectVisibleEventFlags(
     greaterThanOrEqualTo(tester.getBottomLeft(lastVisibleFlag).dy),
     reason: '$width px overflow label should not overlap visible events.',
   );
+}
+
+double _contrast(Color first, Color second) {
+  final a = first.computeLuminance() + 0.05;
+  final b = second.computeLuminance() + 0.05;
+  return a >= b ? a / b : b / a;
 }

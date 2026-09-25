@@ -2015,23 +2015,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     });
     try {
       final authService = ref.read(googleDriveAuthServiceProvider);
-      final account = await authService.signIn(forceAccountSelection: true);
+      final account = await authService.connectToDrive();
       if (!_isCurrentGoogleDriveConnectAttempt(attempt)) {
         return;
       }
       if (account == null) {
-        throw const GoogleDriveAuthException('Google 로그인이 취소되었습니다.');
-      }
-      final headers = await authService.authorizationHeaders(
-        promptIfNecessary: true,
-      );
-      if (!_isCurrentGoogleDriveConnectAttempt(attempt)) {
         return;
-      }
-      if (headers == null) {
-        throw const GoogleDriveAuthException(
-          'Google Drive 권한 승인이 완료되지 않았습니다. 다시 연결해 주세요.',
-        );
       }
       await ref
           .read(settingsRepositoryProvider)

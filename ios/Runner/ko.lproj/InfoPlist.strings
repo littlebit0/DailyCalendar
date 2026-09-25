@@ -7,3 +7,4 @@
 "NSSpeechRecognitionUsageDescription" = "Signal에 말한 캘린더 명령을 실행하기 위해 음성을 텍스트로 변환합니다.";
 "CFBundleSpokenName" = "데일리";
 "NSLocationWhenInUseUsageDescription" = "가까운 지역의 기상청 예보를 표시하기 위해 대략적인 위치를 사용합니다. 위치 권한 없이 직접 지역을 선택할 수도 있습니다.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "날씨 지역 자동 설정을 사용할 때 대략적인 위치로 가까운 기상청 예보 지역을 찾습니다. 백그라운드에서 위치를 추적하지 않으며, 위치 권한 없이 직접 지역을 선택할 수도 있습니다.";
