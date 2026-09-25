@@ -15,6 +15,60 @@ import FlutterMacOS
 
 private let dailySQLiteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 
+// BEGIN LMS VISIBILITY POLICY
+// A stored LMS row alone is never permission to expose school data. The app
+// grants visibility only after checking the active account and source session.
+struct DailySiriLmsVisibility: Equatable {
+  let ownerID: String?
+  let checkedAt: Double?
+  let eventIDs: Set<String>
+
+  init(ownerID: String?, snapshot: [String: Any]?, now: Date = Date()) {
+    let owner = Self.normalizedOwner(ownerID)
+    self.ownerID = owner
+    guard let owner,
+          let grant = snapshot?["lmsVisibility"] as? [String: Any],
+          Self.normalizedOwner(grant["ownerId"] as? String) == owner,
+          let checked = grant["checkedAt"] as? Double,
+          checked.isFinite,
+          checked > 0,
+          now.timeIntervalSince1970 * 1000 >= checked,
+          now.timeIntervalSince1970 * 1000 - checked <= 300_000,
+          let ids = grant["eventIds"] as? [String] else {
+      checkedAt = nil
+      eventIDs = []
+      return
+    }
+    checkedAt = checked
+    eventIDs = Set(ids)
+  }
+
+  static func normalizedOwner(_ value: String?) -> String? {
+    guard let value else { return nil }
+    let normalized = value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+    return normalized.isEmpty ? nil : normalized
+  }
+
+  static func isLms(id: String, metadata: String?) -> Bool {
+    id.hasPrefix("lms:") || metadata != nil
+  }
+
+  func allows(id: String, metadata: String?) -> Bool {
+    guard Self.isLms(id: id, metadata: metadata) else { return true }
+    guard let ownerID, checkedAt != nil, eventIDs.contains(id),
+          let data = metadata?.data(using: .utf8),
+          let source = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
+          source["provider"] as? String == "coursemos",
+          Self.normalizedOwner(source["ownerId"] as? String) == ownerID,
+          let school = source["schoolId"] as? String, !school.isEmpty,
+          let principal = source["lmsUserId"] as? String, !principal.isEmpty else {
+      return false
+    }
+    return true
+  }
+}
+// END LMS VISIBILITY POLICY
+
 struct DailySiriLogRecord: Codable, Sendable {
   let id: String
   let occurredAt: Date
@@ -715,6 +769,20 @@ private enum DailySiriText {
     case .traditionalChinese: "無法使用 Daily 行事曆資料。請先開啟一次 Daily，然後再試一次。"
     }
   }
+
+  static var lmsOriginalReadOnly: String { localized(
+    "학교에서 받은 일정은 Siri에서 변경하거나 삭제할 수 없습니다. 개인 메모·분류·알림은 Daily에서 수정해 주세요.",
+    "School events cannot be changed or deleted with Siri. Edit personal notes, categories and reminders in Daily.",
+    "大学から取得した予定はSiriで変更・削除できません。個人のメモ・分類・通知はDailyで編集してください。",
+    "無法透過 Siri 變更或刪除學校行程。請在 Daily 編輯個人備註、分類及提醒。"
+  ) }
+
+  static var lmsReadCompleted: String { localized(
+    "학교 일정 조회 완료",
+    "School event lookup completed",
+    "大学の予定を取得しました",
+    "已完成查詢學校行程"
+  ) }
 
   static var eventNotFound: String {
     switch language {
@@ -1642,6 +1710,7 @@ struct DailySiriEvent: Sendable {
   let alarmEnabled: Bool
   let allDayAlarmMinutes: Int
   let isHoliday: Bool
+  let isLms: Bool
   let recurrenceFrequency: String
   let recurrenceInterval: Int
   let recurrenceUntil: Date?
@@ -1665,6 +1734,7 @@ struct DailySiriEvent: Sendable {
     alarmEnabled: Bool = false,
     allDayAlarmMinutes: Int = 540,
     isHoliday: Bool = false,
+    isLms: Bool = false,
     recurrenceFrequency: String = "none",
     recurrenceInterval: Int = 1,
     recurrenceUntil: Date? = nil,
@@ -1687,6 +1757,7 @@ struct DailySiriEvent: Sendable {
     self.alarmEnabled = alarmEnabled
     self.allDayAlarmMinutes = allDayAlarmMinutes
     self.isHoliday = isHoliday
+    self.isLms = isLms
     self.recurrenceFrequency = recurrenceFrequency
     self.recurrenceInterval = recurrenceInterval
     self.recurrenceUntil = recurrenceUntil
@@ -1954,6 +2025,7 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
   case eventNotFound
   case ambiguousEvent
   case invalidTime
+  case lmsOriginalReadOnly
 
   var localizedStringResource: LocalizedStringResource {
     switch self {
@@ -1965,6 +2037,8 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
       LocalizedStringResource(stringLiteral: DailySiriText.ambiguousEvent)
     case .invalidTime:
       LocalizedStringResource(stringLiteral: DailySiriText.invalidTime)
+    case .lmsOriginalReadOnly:
+      LocalizedStringResource(stringLiteral: DailySiriText.lmsOriginalReadOnly)
     }
   }
 }
@@ -2137,7 +2211,13 @@ private enum DailySiriDatabase {
     try query(
       whereClause: "deleted_at IS NULL",
       bindings: []
-    )
+    ).filter { !$0.isLms }
+  }
+
+  static func requireEditable(id: String) throws {
+    guard !id.hasPrefix("lms:") else { throw DailySiriError.lmsOriginalReadOnly }
+    guard let event = try events(withIDs: [id]).first else { throw DailySiriError.eventNotFound }
+    guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
   }
 
   static func ddayEvents() throws -> [DailySiriEvent] {
@@ -2233,6 +2313,7 @@ private enum DailySiriDatabase {
     showDday: Bool?,
     alarmEnabled: Bool?
   ) throws -> DailySiriEvent {
+    guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
     let updatedTitle = normalized(newTitle) ?? event.title
     let updatedStart = newStartAt ?? event.startAt
     let updatedEnd: Date
@@ -2251,7 +2332,7 @@ private enum DailySiriDatabase {
           category = ?, color_value = ?, location = ?, memo = ?, url = ?, weather = ?,
           reminder_minutes_before = ?, reminder_minutes_before_list = ?,
           show_dday = ?, alarm_enabled = ?, updated_at = ?, sync_status = 'pending'
-        WHERE id = ?
+        WHERE id = ? AND id NOT LIKE 'lms:%' \(try lmsMutationPredicate(database))
         """
       var statement: OpaquePointer?
       guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
@@ -2280,6 +2361,7 @@ private enum DailySiriDatabase {
       sqlite3_bind_int64(statement, 15, Int64(Date().timeIntervalSince1970))
       bind(event.id, to: 16, in: statement)
       guard sqlite3_step(statement) == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
+      guard sqlite3_changes(database) == 1 else { throw DailySiriError.eventNotFound }
     }
     if #available(iOS 18.0, macOS 15.0, *) {
       DailySiriSearchIndexer.scheduleRefresh()
@@ -2328,8 +2410,9 @@ private enum DailySiriDatabase {
   }
 
   private static func delete(event: DailySiriEvent) throws -> DailySiriEvent {
+    guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
     try withDatabase { database in
-      let sql = "UPDATE event_records SET deleted_at = ?, updated_at = ?, sync_status = 'pending_delete' WHERE id = ?"
+      let sql = "UPDATE event_records SET deleted_at = ?, updated_at = ?, sync_status = 'pending_delete' WHERE id = ? AND id NOT LIKE 'lms:%' \(try lmsMutationPredicate(database))"
       var statement: OpaquePointer?
       guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
         throw DailySiriError.databaseUnavailable
@@ -2340,6 +2423,7 @@ private enum DailySiriDatabase {
       sqlite3_bind_int64(statement, 2, now)
       bind(event.id, to: 3, in: statement)
       guard sqlite3_step(statement) == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
+      guard sqlite3_changes(database) == 1 else { throw DailySiriError.eventNotFound }
     }
     if #available(iOS 18.0, macOS 15.0, *) {
       DailySiriSearchIndexer.scheduleRefresh()
@@ -2371,15 +2455,16 @@ private enum DailySiriDatabase {
     limit: Int? = nil
   ) throws -> [DailySiriEvent] {
     try withDatabase { database in
-      var sql = """
+      let visibility = lmsVisibility()
+      let metadataColumn = try hasLmsMetadataColumn(database) ? "lms_metadata" : "NULL"
+      let sql = """
         SELECT id, title, memo, location, url, weather, start_at, end_at,
           all_day, category, color_value, reminder_minutes_before_list,
           show_dday, alarm_enabled, all_day_alarm_minutes,
           recurrence_frequency, recurrence_interval, recurrence_until,
-          recurrence_count, recurrence_excluded_dates
+          recurrence_count, recurrence_excluded_dates, \(metadataColumn)
         FROM event_records WHERE \(whereClause) ORDER BY start_at ASC
         """
-      if let limit { sql += " LIMIT \(limit)" }
       var statement: OpaquePointer?
       guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
         throw DailySiriError.databaseUnavailable
@@ -2393,9 +2478,12 @@ private enum DailySiriDatabase {
       }
       var events: [DailySiriEvent] = []
       while sqlite3_step(statement) == SQLITE_ROW {
+        let id = string(statement, 0)
+        let metadata = optionalString(statement, 20)
+        guard visibility.allows(id: id, metadata: metadata) else { continue }
         events.append(
           DailySiriEvent(
-            id: string(statement, 0),
+            id: id,
             title: string(statement, 1),
             memo: optionalString(statement, 2),
             location: optionalString(statement, 3),
@@ -2410,6 +2498,7 @@ private enum DailySiriDatabase {
             showDday: sqlite3_column_int(statement, 12) == 1,
             alarmEnabled: sqlite3_column_int(statement, 13) == 1,
             allDayAlarmMinutes: Int(sqlite3_column_int(statement, 14)),
+            isLms: DailySiriLmsVisibility.isLms(id: id, metadata: metadata),
             recurrenceFrequency: string(statement, 15),
             recurrenceInterval: max(Int(sqlite3_column_int(statement, 16)), 1),
             recurrenceUntil: optionalDate(statement, 17),
@@ -2417,9 +2506,47 @@ private enum DailySiriDatabase {
             recurrenceExcludedDates: excludedDates(optionalString(statement, 19))
           )
         )
+        // Apply limits after authorization, so hidden LMS rows cannot consume
+        // the ordinary event search result limit.
+        if let limit, events.count >= limit { break }
       }
+      if visibility != lmsVisibility() { events.removeAll { $0.isLms } }
       return events
     }
+  }
+
+  private static func hasLmsMetadataColumn(_ database: OpaquePointer) throws -> Bool {
+    var statement: OpaquePointer?
+    guard sqlite3_prepare_v2(database, "PRAGMA table_info(event_records)", -1, &statement, nil) == SQLITE_OK else {
+      throw DailySiriError.databaseUnavailable
+    }
+    defer { sqlite3_finalize(statement) }
+    while sqlite3_step(statement) == SQLITE_ROW {
+      if string(statement, 1) == "lms_metadata" { return true }
+    }
+    return false
+  }
+
+  private static func lmsMutationPredicate(_ database: OpaquePointer) throws -> String {
+    try hasLmsMetadataColumn(database) ? "AND lms_metadata IS NULL" : ""
+  }
+
+  private static func lmsVisibility() -> DailySiriLmsVisibility {
+    var owner: String?
+    if let accountJSON = UserDefaults.standard.string(forKey: "flutter.dailyAccount"),
+       let data = accountJSON.data(using: .utf8),
+       let account = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
+       let google = account["googleAccount"] as? [String: Any] {
+      owner = google["email"] as? String
+    }
+    var snapshot: [String: Any]?
+    if let url = FileManager.default.containerURL(
+      forSecurityApplicationGroupIdentifier: DailySiriLogStore.appGroup
+    )?.appendingPathComponent("daily-widget-snapshot.json"),
+       let data = try? Data(contentsOf: url) {
+      snapshot = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+    }
+    return DailySiriLmsVisibility(ownerID: owner, snapshot: snapshot)
   }
 
   private static func withDatabase<T>(_ operation: (OpaquePointer) throws -> T) throws -> T {
@@ -2536,6 +2663,7 @@ private enum DailySiriDatabase {
             alarmEnabled: event.alarmEnabled,
             allDayAlarmMinutes: event.allDayAlarmMinutes,
             isHoliday: event.isHoliday,
+            isLms: event.isLms,
             recurrenceFrequency: event.recurrenceFrequency,
             recurrenceInterval: event.recurrenceInterval,
             recurrenceUntil: event.recurrenceUntil,
@@ -2808,7 +2936,7 @@ struct GetNextDailyEventIntent: AppIntent {
       try DailySiriDatabase.nextEvent(after: Date())
     }
     let message = DailySiriText.nextEvent(event)
-    DailySiriLogStore.append(action: "next", summary: "Next event", result: message, success: true)
+    logSiriRead(action: "next", summary: "Next event", result: message, events: event.map { [$0] } ?? [])
     return .result(dialog: IntentDialog(stringLiteral: message))
   }
 }
@@ -2823,7 +2951,7 @@ struct SearchDailyEventsIntent: AppIntent {
       try DailySiriDatabase.search(query)
     }
     let message = summaryMessage(events, empty: DailySiriText.noSearchResults)
-    DailySiriLogStore.append(action: "search", summary: query, result: message, success: true)
+    logSiriRead(action: "search", summary: query, result: message, events: events)
     return .result(dialog: IntentDialog(stringLiteral: message))
   }
 }
@@ -2847,6 +2975,7 @@ struct UpdateDailyEventIntent: AppIntent {
   @Parameter(title: "D-day") var showDday: Bool?
 
   func perform() async throws -> some IntentResult & ProvidesDialog {
+    try DailySiriDatabase.requireEditable(id: event.id)
     guard let newTitle, !newTitle.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
       throw $newTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
     }
@@ -2899,6 +3028,7 @@ struct DeleteDailyEventIntent: AppIntent {
   @Parameter(title: "Event") var event: DailyEventEntity
 
   func perform() async throws -> some IntentResult & ProvidesDialog {
+    try DailySiriDatabase.requireEditable(id: event.id)
     do {
       try await requestConfirmation(result: .result(
         dialog: IntentDialog(stringLiteral: DailySiriText.deleteConfirmation(event.title))
@@ -2935,7 +3065,7 @@ struct GetDailyDdayEventsIntent: AppIntent {
       try DailySiriDatabase.ddayEvents()
     }
     let message = summaryMessage(events, empty: DailySiriText.noDdayEvents)
-    DailySiriLogStore.append(action: "dday", summary: "D-day", result: message, success: true)
+    logSiriRead(action: "dday", summary: "D-day", result: message, events: events)
     return .result(dialog: IntentDialog(stringLiteral: message))
   }
 }
@@ -3067,11 +3197,11 @@ struct DailySignalCommandIntent: AppIntent {
         try DailySiriDatabase.nextEvent(after: Date())
       }
       let message = DailySiriText.nextEvent(nextEvent)
-      DailySiriLogStore.append(
+      logSiriRead(
         action: "signal-next",
         summary: "Next event",
         result: message,
-        success: true
+        events: nextEvent.map { [$0] } ?? []
       )
       return .result(
         dialog: IntentDialog(stringLiteral: message),
@@ -3088,11 +3218,11 @@ struct DailySignalCommandIntent: AppIntent {
         try DailySiriDatabase.search(query)
       }
       let message = summaryMessage(events, empty: DailySiriText.noSearchResults)
-      DailySiriLogStore.append(
+      logSiriRead(
         action: "signal-search",
         summary: query,
         result: message,
-        success: true
+        events: events
       )
       return .result(
         dialog: IntentDialog(stringLiteral: message),
@@ -3103,11 +3233,11 @@ struct DailySignalCommandIntent: AppIntent {
         try DailySiriDatabase.ddayEvents()
       }
       let message = summaryMessage(events, empty: DailySiriText.noDdayEvents)
-      DailySiriLogStore.append(
+      logSiriRead(
         action: "signal-dday",
         summary: "D-day",
         result: message,
-        success: true
+        events: events
       )
       return .result(
         dialog: IntentDialog(stringLiteral: message),
@@ -3178,6 +3308,7 @@ struct DailySignalCommandIntent: AppIntent {
       guard let event = event ?? resolvedEvent(from: generatedUnderstanding?.eventReference) else {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.updateTargetRequest))
       }
+      try DailySiriDatabase.requireEditable(id: event.id)
       guard let resolvedNewTitle = normalized(newTitle) ?? generatedUnderstanding?.newTitle else {
         throw $newTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
       }
@@ -3243,6 +3374,7 @@ struct DailySignalCommandIntent: AppIntent {
       guard let event = event ?? resolvedEvent(from: generatedUnderstanding?.eventReference) else {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.deleteTargetRequest))
       }
+      try DailySiriDatabase.requireEditable(id: event.id)
       try await authenticateMutation(DailySiriText.deleteAuthentication)
       if !confirmedInApp {
         do {
@@ -3517,10 +3649,23 @@ private func eventDialog(
   } else {
     message = factualMessage
   }
-  DailySiriLogStore.append(action: action, summary: label, result: message, success: true)
+  logSiriRead(action: action, summary: label, result: message, events: events)
   return DailyScheduleResponse(
     dialog: IntentDialog(stringLiteral: message),
     message: message
+  )
+}
+
+@available(iOS 16.0, macOS 13.0, *)
+private func logSiriRead(action: String, summary: String, result: String, events: [DailySiriEvent]) {
+  // The action history outlives account switches; do not persist LMS titles,
+  // source details, or the matching search phrase in that unscoped history.
+  let containsLms = events.contains { $0.isLms }
+  DailySiriLogStore.append(
+    action: action,
+    summary: containsLms ? DailySiriText.lmsReadCompleted : summary,
+    result: containsLms ? DailySiriText.lmsReadCompleted : result,
+    success: true
   )
 }
 

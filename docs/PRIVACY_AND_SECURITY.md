@@ -11,9 +11,26 @@ before public distribution.
 - Calendar events: title, dates, times, all-day flag, recurrence, category,
   memo, location, URL, optional weather note, reminders, D-day display flag,
   sync metadata, and soft-delete timestamps.
+- Unreleased timetable work (#74/#75): an offline cache of course titles,
+  professors, meeting days/times and classrooms, notes, colors, lecture modes,
+  session exceptions, source IDs, academic terms/date periods, timetable names, and sync
+  metadata/deletion records. These fields also sync when Google Drive is linked.
 - App settings: reminder defaults, week start day, lunar-date display, category
   definitions, D-day reminder offsets, onboarding completion, default calendar
   view, calendar filters, calendar display preferences, and AI feature toggles.
+- Unreleased academic profile: stable university and campus IDs, school/campus
+  names and degree group selected by the user. The linked Google account's
+  AppData settings document stores this profile; the device keeps an offline
+  cache. Login offers selection or Later, and account settings allow editing.
+  Switching or unlinking Google accounts retains each inactive academic profile
+  and its pending field revision in a local account-scoped cache. Reconnecting
+  that account restores it; another account cannot upload it. Explicit local
+  data reset removes the inactive caches too.
+  Daily does not infer school membership from an email address or collect a
+  university password, student number, department or enrollment history.
+  Public university-directory and course data are bundled from documented
+  official sources. Directory search is local and sends no search text to a
+  school or third-party search service.
 - App lock PIN, when enabled, is stored locally through platform secure storage
   and is not included in Google Drive sync files.
 - Linked Apple and Google account metadata is stored locally in secure app
@@ -94,7 +111,10 @@ For a build that includes authenticated bug reporting, also declare:
 - The app stores private v2 JSON files in the user's app data folder:
   `daily-sync-v2-event-{eventId}.json` for each event and
   `daily-sync-v2-settings.json` for non-secret app settings.
-- Event files and settings files do not include the local app lock PIN.
+- Unreleased #74/#75 working-tree code also stores
+  `daily-sync-v2-timetable.json` for the timetable fields listed above, including
+  user-entered course notes. This addition is not in the published 3.5.2 assets.
+- Sync files do not include the local app lock PIN.
 - The app does not request access to the user's visible Drive files.
 - Google Drive AppData sync files are not yet end-to-end encrypted. Treat that
   as a blocker before storing highly sensitive content.

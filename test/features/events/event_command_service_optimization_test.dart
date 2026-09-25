@@ -1,17 +1,215 @@
 import 'package:daily/core/alarms/alarm_service.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
+import 'package:daily/core/auth/google_account.dart';
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/sync/sync_service.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
+import 'package:daily/features/events/data/app_database.dart';
+import 'package:daily/features/events/data/drift_event_repository.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
+import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  for (final operation in [
+    'editor',
+    'import',
+    'completion',
+    'other-owner',
+    'recover-source',
+  ]) {
+    test(
+      'LMS $operation preserves latest atomic source and personal state',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        await settings.saveGoogleAccount(
+          const GoogleAccount(email: 'student@example.com'),
+        );
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = _RacingLmsRepository(database);
+        final metadata = LmsEventMetadata(
+          schoolId: 'smu',
+          ownerId: 'student@example.com',
+          lmsUserId: '42',
+          courseId: '123',
+          courseTitle: '자료구조',
+          activityType: 'assignment',
+          activityId: '456',
+          sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=456',
+          submissionStatus: '미제출',
+        );
+        final original = _event(
+          'lms:race',
+          EventCategory.basic,
+        ).copyWith(lms: metadata, memo: '원래 메모');
+        await repository.save(original);
+        final notifications = _CountingNotificationService();
+        final alarms = _CountingAlarmService();
+        final sync = _CountingSyncService();
+        final commands = EventCommandService(
+          repository: repository,
+          settingsRepository: settings,
+          notificationService: notifications,
+          alarmService: alarms,
+          syncService: sync,
+        );
+        const personalCategory = EventCategory(
+          id: 'personal',
+          label: '개인',
+          colorValue: 0xff123456,
+        );
+        final source = original.copyWith(
+          title: '최신 학교 제목',
+          startAt: DateTime(2099, 9, 1),
+          endAt: DateTime(2099, 9, 1),
+          updatedAt: DateTime(2099, 8, 1),
+          lms: metadata.copyWith(submissionStatus: '제출 완료'),
+        );
+        if (operation == 'editor') {
+          repository.beforeMerge = () =>
+              repository.save(source.copyWith(completed: true));
+          await commands.save(
+            original.copyWith(
+              memo: '새 개인 메모',
+              category: personalCategory,
+              colorValue: personalCategory.colorValue,
+              reminderMinutesBeforeList: [10],
+              clearLms: true,
+            ),
+          );
+          final result = (await repository.findById(original.id))!;
+          expect(result.title, source.title);
+          expect(result.startAt, source.startAt);
+          expect(result.endAt, source.endAt);
+          expect(result.lms, source.lms);
+          expect(result.memo, '새 개인 메모');
+          expect(result.category.label, personalCategory.label);
+          expect(result.reminderMinutesBeforeList, [10]);
+          expect(result.completed, isTrue);
+          expect(result.updatedAt.isAfter(source.updatedAt), isTrue);
+        } else if (operation == 'import') {
+          repository.beforeMerge = () => repository.save(
+            original.copyWith(
+              memo: '동시에 저장한 개인 메모',
+              category: personalCategory,
+              colorValue: personalCategory.colorValue,
+              completed: true,
+              reminderMinutesBeforeList: [15],
+            ),
+          );
+          expect(await commands.importBatch([source]), {source.id});
+          final result = (await repository.findById(original.id))!;
+          expect(result.title, source.title);
+          expect(result.startAt, source.startAt);
+          expect(result.lms, source.lms);
+          expect(result.memo, '동시에 저장한 개인 메모');
+          expect(result.category.label, personalCategory.label);
+          expect(result.reminderMinutesBeforeList, [15]);
+          expect(result.completed, isTrue);
+        } else if (operation == 'completion') {
+          repository.beforeMerge = () => repository.save(source);
+          await commands.setCompleted(original, true);
+          final result = (await repository.findById(original.id))!;
+          expect(result.title, source.title);
+          expect(result.startAt, source.startAt);
+          expect(result.lms, source.lms);
+          expect(result.completed, isTrue);
+        } else if (operation == 'recover-source') {
+          await repository.save(original.copyWith(clearLms: true));
+          expect(await commands.importBatch([source]), {source.id});
+          final result = (await repository.findById(original.id))!;
+          expect(result.lms, source.lms);
+          expect(result.title, source.title);
+          expect(result.memo, original.memo);
+          expect(result.isVisibleToOwner('student@example.com'), isTrue);
+        } else {
+          await settings.saveGoogleAccount(
+            const GoogleAccount(email: 'other@example.com'),
+          );
+          await commands.save(original.copyWith(memo: '잘못된 계정'));
+          await commands.setCompleted(original, true);
+          await commands.delete(original.id);
+          final result = (await repository.findById(original.id))!;
+          expect(result.memo, original.memo);
+          expect(result.completed, isFalse);
+          expect(result.isDeleted, isFalse);
+          expect(sync.upsertedIds, isEmpty);
+          expect(sync.deletedIds, isEmpty);
+          expect(notifications.cancelCalls, 0);
+          expect(alarms.cancelCalls, 0);
+        }
+      },
+    );
+  }
+  for (final operation in [
+    'import',
+    'delete-after-find',
+    'delete-after-write',
+  ]) {
+    test('stale LMS session stops $operation side effects', () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      var current = true;
+      final repository = _GuardedRepository(
+        _event('guarded', EventCategory.basic),
+      );
+      if (operation == 'import') repository.afterSave = () => current = false;
+      if (operation == 'delete-after-find') {
+        repository.afterFind = () => current = false;
+      }
+      if (operation == 'delete-after-write') {
+        repository.afterDelete = () => current = false;
+      }
+      final notifications = _CountingNotificationService();
+      final alarms = _CountingAlarmService();
+      final sync = _CountingSyncService();
+      var refreshes = 0;
+      final service = EventCommandService(
+        repository: repository,
+        settingsRepository: SettingsRepository(preferences: preferences),
+        notificationService: notifications,
+        alarmService: alarms,
+        syncService: sync,
+        onEventsChanged: () async => refreshes++,
+      );
+      if (operation == 'import') {
+        var prepareCalls = 0;
+        final ids = await service.importBatch(
+          [repository.event, repository.event.copyWith(id: 'next')],
+          prepare: (event) async {
+            prepareCalls++;
+            return event;
+          },
+          isCurrent: () => current,
+        );
+        expect(ids, {'guarded'});
+        expect(prepareCalls, 1);
+      } else {
+        await service.delete(repository.event.id, isCurrent: () => current);
+        expect(
+          repository.deleteCalls,
+          operation == 'delete-after-find' ? 0 : 1,
+        );
+      }
+      expect(notifications.scheduleCalls, 0);
+      expect(notifications.cancelCalls, 0);
+      expect(alarms.scheduleCalls, 0);
+      expect(alarms.cancelCalls, 0);
+      expect(sync.upsertedIds, isEmpty);
+      expect(sync.deletedIds, isEmpty);
+      expect(refreshes, 0);
+    });
+  }
   test(
     'category appearance updates skip OS notification rescheduling',
     () async {
@@ -403,6 +601,49 @@ class _CompletionRepository implements EventRepository {
   ) => Stream.value([event]);
 }
 
+class _GuardedRepository extends _CompletionRepository {
+  _GuardedRepository(super.event);
+  void Function()? afterFind;
+  void Function()? afterSave;
+  void Function()? afterDelete;
+  int deleteCalls = 0;
+
+  @override
+  Future<CalendarEvent?> findById(String id) async {
+    final found = await super.findById(id);
+    afterFind?.call();
+    return found;
+  }
+
+  @override
+  Future<void> save(CalendarEvent value) async {
+    await super.save(value);
+    afterSave?.call();
+  }
+
+  @override
+  Future<void> delete(String eventId) async {
+    deleteCalls++;
+    afterDelete?.call();
+  }
+}
+
+class _RacingLmsRepository extends DriftEventRepository {
+  _RacingLmsRepository(super.database);
+  Future<void> Function()? beforeMerge;
+
+  @override
+  Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
+    Iterable<CalendarEvent> remoteEvents, {
+    required RestoredEventResolver resolve,
+  }) async {
+    final action = beforeMerge;
+    beforeMerge = null;
+    await action?.call();
+    return super.mergeRestoredEventsAtomically(remoteEvents, resolve: resolve);
+  }
+}
+
 class _MultiCompletionRepository implements EventRepository {
   _MultiCompletionRepository(Iterable<CalendarEvent> events)
     : events = {for (final event in events) event.id: event};
@@ -479,9 +720,11 @@ class _CountingSyncService implements SyncService {
   Future<void> queueSettingsBackup() async {}
 
   final upsertedIds = <String>[];
+  final deletedIds = <String>[];
 
   @override
-  Future<void> queueEventDelete(String eventId) async {}
+  Future<void> queueEventDelete(String eventId) async =>
+      deletedIds.add(eventId);
 
   @override
   Future<void> queueEventUpsert(CalendarEvent event) async {

@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'schema 8 preserves events and adds sync metadata without fabricated times',
+    'schema 9 preserves events and adds sync metadata without fabricated times',
     () async {
       final directory = await Directory.systemTemp.createTemp(
         'daily-migration-',
@@ -58,8 +58,12 @@ void main() {
       expect(event.read<String>('id'), 'kept-event');
       expect(event.read<String>('title'), '보존할 일정');
       expect(event.read<int>('completed'), 0);
-      expect(version.read<int>('user_version'), 8);
+      expect(
+        version.read<int>('user_version'),
+        AppDatabase.currentSchemaVersion,
+      );
       expect(names, contains('sync_timestamp_details'));
+      expect(names, contains('lms_metadata'));
       expect(
         await database.customSelect('SELECT * FROM sync_event_deletions').get(),
         isEmpty,

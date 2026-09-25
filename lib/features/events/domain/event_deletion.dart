@@ -1,4 +1,5 @@
 import 'calendar_event.dart';
+import '../../../core/lms/lms_models.dart';
 import '../data/recurrence_expander.dart';
 import 'event_repository.dart';
 
@@ -7,14 +8,22 @@ class EventDeletion {
     required this.id,
     required this.deletedAt,
     this.pending = true,
+    this.lmsOwnerId,
   });
   final String id;
   final DateTime deletedAt;
   final bool pending;
+  final String? lmsOwnerId;
+
+  bool isVisibleToOwner(String? owner) => lmsOwnerId == null
+      ? !id.startsWith('lms:')
+      : owner != null &&
+            normalizeLmsOwner(owner) == normalizeLmsOwner(lmsOwnerId!);
 
   Map<String, Object?> toJson() => {
     'id': id,
     'deletedAt': deletedAt.toUtc().toIso8601String(),
+    if (lmsOwnerId != null) 'lmsOwnerId': normalizeLmsOwner(lmsOwnerId!),
   };
 
   factory EventDeletion.fromJson(Map<String, Object?> json) {
@@ -23,7 +32,16 @@ class EventDeletion {
     if (id == null || id.isEmpty || deletedAt == null) {
       throw const FormatException('Invalid deletion record');
     }
-    return EventDeletion(id: id, deletedAt: deletedAt.toUtc(), pending: false);
+    final owner = json['lmsOwnerId'];
+    if (owner != null && (owner is! String || owner.trim().isEmpty)) {
+      throw const FormatException('Invalid deletion owner');
+    }
+    return EventDeletion(
+      id: id,
+      deletedAt: deletedAt.toUtc(),
+      pending: false,
+      lmsOwnerId: owner == null ? null : normalizeLmsOwner(owner as String),
+    );
   }
 }
 

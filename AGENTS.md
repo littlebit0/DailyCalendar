@@ -22,12 +22,14 @@ memory.
 
 ## 3. Platform Boundary
 
-- Windows and Android implementation work can be performed in this local
-  environment.
-- Do not edit macOS or iOS platform implementation files unless the user
-  explicitly changes this rule.
-- If a Mac/iPhone change is needed, document the exact required work in
-  `AGENT_MEMORY.md` for the Mac/iPhone Codex agent.
+- The macOS/iOS editing restriction applies only to agents running in a Windows
+  environment. Windows-hosted agents may implement Windows/Android changes but
+  must hand off required macOS/iOS platform changes in `AGENT_MEMORY.md`.
+- Agents running on macOS may edit macOS and iOS platform implementation files
+  as needed for the user's approved task, including native dependencies and
+  build integration. Do not ask for a separate platform exception on macOS.
+- Keep work within the approved feature scope; unrelated changes still require
+  the user's approval when requested.
 - Shared Flutter code may affect all platforms; after changing shared code,
   record any Mac/iPhone verification or porting needs in `AGENT_MEMORY.md`.
 
@@ -74,6 +76,11 @@ memory.
   finish an approved implementation task by updating the verified test app on
   the affected platform(s). Do not wait for a separate update request. Preserve
   installed test-app data and the App Store app; do not update unrelated platforms.
+- Keep one current test installation per affected platform/device. Update the
+  existing app in place with the same bundle/package identity and installation
+  path; do not create version-named copies or uninstall as a routine update.
+  Preserve app data, accounts and secure storage. Keep required backups separate
+  from launchable `.app` bundles so they do not appear as duplicate test apps.
 - Updating is not permission to launch the app, run personal automations or
   perform interactive usage tests. Do those only when the user requests them.
   If build/install verification is blocked, report the blocker instead of

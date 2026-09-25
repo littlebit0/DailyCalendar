@@ -1,8 +1,12 @@
 import 'dart:async';
+import 'package:daily/features/timetable/domain/timetable.dart';
+import 'package:daily/features/timetable/presentation/university_course_page.dart';
 
 import 'package:daily/app/daily_app.dart';
 import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/alarms/alarm_service.dart';
+import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/university_directory.dart';
 import 'package:daily/core/auth/apple_sign_in_service.dart';
 import 'package:daily/core/auth/apple_account.dart';
 import 'package:daily/core/auth/google_account.dart';
@@ -29,6 +33,7 @@ import 'package:daily/features/calendar/widgets/calendar_event_drag_layer.dart';
 import 'package:daily/features/calendar/widgets/calendar_month_grid.dart';
 import 'package:daily/features/calendar/presentation/month_calendar_page.dart';
 import 'package:daily/features/settings/presentation/settings_page.dart';
+import 'package:daily/features/settings/presentation/academic_profile_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
@@ -67,6 +72,12 @@ Future<void> _openWelcomeStartPage(WidgetTester tester) async {
 }
 
 void main() {
+  late UniversityDirectory universityDirectory;
+  setUpAll(() async {
+    // Decode the real directory outside the fake widget clock. Interactive
+    // tests still use the complete bundled corpus, with no network access.
+    universityDirectory = await UniversityDirectory.load();
+  });
   setUp(() {
     // Calendar tests are independent of the separately tested update catalog.
     PackageInfo.setMockInitialValues(
@@ -1326,6 +1337,9 @@ void main() {
       ProviderScope(
         overrides: [
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          universityDirectoryProvider.overrideWith(
+            (_) async => universityDirectory,
+          ),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
           eventRepositoryProvider.overrideWithValue(eventRepository),
@@ -1345,6 +1359,10 @@ void main() {
     await tester.pump();
     await tester.pumpAndSettle();
 
+    expect(settingsRepository.load().onboardingCompleted, isFalse);
+    expect(find.byType(AcademicProfilePage), findsOneWidget);
+    await tester.tap(find.text('나중에'));
+    await tester.pumpAndSettle();
     expect(settingsRepository.load().onboardingCompleted, isTrue);
     expect(settingsRepository.appleAccount()?.email, 'hwi@example.com');
     expect(
@@ -1677,6 +1695,9 @@ void main() {
         await tester.pumpWidget(
           ProviderScope(
             overrides: [
+              universityDirectoryProvider.overrideWith(
+                (_) async => universityDirectory,
+              ),
               settingsRepositoryProvider.overrideWithValue(settingsRepository),
               notificationServiceProvider.overrideWithValue(
                 notificationService,
@@ -1744,6 +1765,11 @@ void main() {
         );
         attempts[2].complete(authService.account);
         await tester.pumpAndSettle();
+        expect(find.byType(AcademicProfilePage), findsOneWidget);
+        expect(settingsRepository.load().academicProfile, isNull);
+        await tester.tap(find.text('나중에'));
+        await tester.pumpAndSettle();
+        expect(settingsRepository.load().academicProfile, isNull);
         expect(
           settingsRepository.dailyAccount()?.googleAccount?.email,
           'existing@example.com',
@@ -1789,6 +1815,9 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          universityDirectoryProvider.overrideWith(
+            (_) async => universityDirectory,
+          ),
           settingsRepositoryProvider.overrideWithValue(settingsRepository),
           notificationServiceProvider.overrideWithValue(notificationService),
           syncServiceProvider.overrideWithValue(_FakeSync()),
@@ -1804,6 +1833,11 @@ void main() {
 
     await tester.tap(find.text('Google로 계속'));
     await tester.pumpAndSettle();
+    expect(find.byType(AcademicProfilePage), findsOneWidget);
+    expect(settingsRepository.load().academicProfile, isNull);
+    await tester.tap(find.text('나중에'));
+    await tester.pumpAndSettle();
+    expect(settingsRepository.load().academicProfile, isNull);
 
     final mergedAccount = settingsRepository.dailyAccount();
     expect(mergedAccount?.appleAccount?.userIdentifier, 'linked-apple-user');
@@ -1812,6 +1846,127 @@ void main() {
 
     await tester.pumpWidget(const SizedBox.shrink());
   });
+
+  for (final restoredProfile in [false, true]) {
+    testWidgets(
+      'Google onboarding ${restoredProfile ? 'uses restored' : 'saves selected'} academic profile and preserves it after restart',
+      (tester) async {
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        SharedPreferences.setMockInitialValues({});
+        FlutterSecureStorage.setMockInitialValues({});
+        final preferences = await SharedPreferences.getInstance();
+        final settings = SettingsRepository(preferences: preferences);
+        const account = GoogleDriveAccount(email: 'academic@example.com');
+        final profile = AcademicProfile(
+          universityId: restoredProfile
+              ? 'academyinfo:0002959'
+              : 'institution:academyinfo:0000117',
+          universityName: '상명대학교',
+          schoolKind: 'fourYear',
+          campus: restoredProfile ? '천안캠퍼스' : null,
+        );
+        final auth = _FakeGoogleDriveAuthService(
+          account: null,
+          signInAccount: account,
+        );
+        final events = _FakeEventRepository();
+        final notifications = _FakeNotification();
+        final sync = _FakeGoogleDriveSyncService(
+          authService: auth,
+          eventRepository: events,
+          notificationService: notifications,
+          settingsRepository: settings,
+          onSyncPending: restoredProfile
+              ? () => settings.saveAcademicProfile(
+                  profile,
+                  expectedGoogleEmail: account.email,
+                )
+              : null,
+        );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              settingsRepositoryProvider.overrideWithValue(settings),
+              universityDirectoryProvider.overrideWith(
+                (_) async => universityDirectory,
+              ),
+              notificationServiceProvider.overrideWithValue(notifications),
+              eventRepositoryProvider.overrideWithValue(events),
+              googleDriveAuthServiceProvider.overrideWithValue(auth),
+              googleDriveSyncServiceProvider.overrideWithValue(sync),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+            ],
+            child: const DailyApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await _openWelcomeStartPage(tester);
+        await tester.tap(find.text('Google로 계속'));
+        await tester.pumpAndSettle();
+        expect(auth.signInCalls, 1);
+        expect(sync.syncPendingChangesNowCalls, greaterThan(0));
+        if (restoredProfile) {
+          // Restore runs before the offer, so a profile already in Drive
+          // should not force the user through school selection again.
+          expect(find.byType(AcademicProfilePage), findsNothing);
+        } else {
+          expect(find.byType(AcademicProfilePage), findsOneWidget);
+          expect(settings.load().onboardingCompleted, isFalse);
+          await tester.enterText(
+            find.byKey(const ValueKey('university-search')),
+            'ㅅㅁㄷ ㅊㅇ',
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(
+            find.byKey(
+              const ValueKey('university-institution:academyinfo:0000117'),
+            ),
+          );
+          await tester.pump();
+          await tester.ensureVisible(
+            find.byKey(const ValueKey('academic-profile-save')),
+          );
+          await tester.pumpAndSettle();
+          await tester.tap(find.byKey(const ValueKey('academic-profile-save')));
+          await tester.pumpAndSettle();
+          expect(sync.settingsBackupCalls, 1);
+          expect(settings.hasPendingSettingsSync, isTrue);
+        }
+        expect(settings.load().academicProfile, profile);
+        expect(settings.load().onboardingCompleted, isTrue);
+        expect(find.byType(AcademicProfilePage), findsNothing);
+
+        await tester.pumpWidget(const SizedBox.shrink());
+        final reloaded = SettingsRepository(preferences: preferences);
+        final restoredAuth = _FakeGoogleDriveAuthService(
+          account: null,
+          restoredAccount: account,
+        );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              settingsRepositoryProvider.overrideWithValue(reloaded),
+              notificationServiceProvider.overrideWithValue(notifications),
+              eventRepositoryProvider.overrideWithValue(events),
+              googleDriveAuthServiceProvider.overrideWithValue(restoredAuth),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+            ],
+            child: const DailyApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(reloaded.load().academicProfile, profile);
+        expect(restoredAuth.signInCalls, 0);
+        expect(find.byType(AcademicProfilePage), findsNothing);
+        await tester.tap(find.byTooltip('시간표'));
+        await tester.pumpAndSettle();
+        expect(find.byKey(const ValueKey('timetable-page')), findsOneWidget);
+        await tester.pumpWidget(const SizedBox.shrink());
+        debugDefaultTargetPlatformOverride = null;
+      },
+    );
+  }
 
   testWidgets(
     'welcome keeps desktop Google auth active until the user cancels it',
@@ -2247,7 +2402,7 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   }, skip: true);
 
-  testWidgets('iOS uses one liquid-style five-segment calendar navigation', (
+  testWidgets('iOS uses one liquid-style six-segment calendar navigation', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(393, 852);
@@ -2264,6 +2419,30 @@ void main() {
     final preferences = await SharedPreferences.getInstance();
     final settingsRepository = SettingsRepository(preferences: preferences);
 
+    await settingsRepository.saveGoogleAccount(
+      const GoogleAccount(email: 'tester@example.com'),
+    );
+    await settingsRepository.saveAcademicProfile(
+      const AcademicProfile(
+        universityId: 'academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+        campus: '서울캠퍼스',
+      ),
+      expectedGoogleEmail: 'tester@example.com',
+    );
+    final today = DateTime.now();
+    await settingsRepository.timetableStore.save(
+      TimetableClass(
+        id: 'isolation',
+        title: '시간표 전용 수업',
+        academicYear: today.year,
+        semester: today.month < 7 ? '1' : '2',
+        meetings: const [
+          ClassMeeting(id: 'm', weekday: 1, startMinute: 540, endMinute: 600),
+        ],
+      ),
+    );
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
@@ -2280,6 +2459,42 @@ void main() {
     );
     await tester.pumpAndSettle();
 
+    expect(find.textContaining('시간표 전용 수업', findRichText: true), findsNothing);
+    await tester.tap(find.byTooltip('시간표'));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('timetable-page')), findsOneWidget);
+    expect(
+      find.textContaining('시간표 전용 수업', findRichText: true),
+      findsOneWidget,
+    );
+    expect(find.byType(BackButton), findsNothing);
+    expect(
+      Navigator.of(
+        tester.element(find.byKey(const ValueKey('timetable-page'))),
+      ).canPop(),
+      isFalse,
+    );
+    await tester.tap(find.byKey(const ValueKey('timetable-search')));
+    // The route is independent of catalogue I/O; allow its transition to finish
+    // without waiting for the loading indicator to stop on the fake clock.
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
+    await tester.pump();
+    expect(find.byType(UniversityCoursePage), findsOneWidget);
+    expect(find.byType(BackButton), findsOneWidget);
+    expect(find.byKey(const ValueKey('bottom-mode-switcher')), findsNothing);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byType(UniversityCoursePage), findsNothing);
+    expect(find.byKey(const ValueKey('timetable-page')), findsOneWidget);
+    expect(find.byType(BackButton), findsNothing);
+    expect(find.byKey(const ValueKey('bottom-mode-switcher')), findsOneWidget);
+
+    await tester.tap(find.byTooltip('주간'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('시간표 전용 수업', findRichText: true), findsNothing);
+    await tester.tapAt(const Offset(10, 150));
+    await tester.pumpAndSettle();
     final switcher = find.byKey(const ValueKey('bottom-mode-switcher'));
     expect(tester.getSize(switcher), const Size(281.6, 42));
     expect(find.byKey(const ValueKey('calendar-view-button')), findsNothing);
@@ -2288,12 +2503,13 @@ void main() {
     expect(find.byTooltip('월간'), findsOneWidget);
     expect(find.byTooltip('일간'), findsOneWidget);
     expect(find.byTooltip('Siri'), findsOneWidget);
+    expect(find.byTooltip('시간표'), findsOneWidget);
 
     final trackRect = tester.getRect(switcher);
     final thumb = find.byKey(const ValueKey('bottom-mode-thumb-circle'));
     expect(
       tester.getCenter(thumb).dx,
-      closeTo(trackRect.left + trackRect.width * 0.3, 3),
+      closeTo(trackRect.left + trackRect.width * 0.25, 3),
     );
 
     await tester.tap(find.byTooltip('빠른 보기'));
@@ -2306,7 +2522,7 @@ void main() {
     expect(find.byType(PageView), findsOneWidget);
     expect(
       tester.getCenter(thumb).dx,
-      closeTo(trackRect.left + trackRect.width * 0.5, 3),
+      closeTo(trackRect.left + trackRect.width * (2.5 / 6), 3),
     );
 
     final thumbSize = tester.getSize(thumb);
@@ -6026,7 +6242,7 @@ void main() {
     TargetPlatform.macOS,
   ]) {
     testWidgets(
-      'Google Drive backup and restore are separate actions in one row on $platform',
+      'Google Drive single sync action restores settings and allows retry on $platform',
       (tester) async {
         debugDefaultTargetPlatformOverride = platform;
         try {
@@ -6044,11 +6260,25 @@ void main() {
           );
           final notificationService = _FakeNotification();
           final eventRepository = _FakeEventRepository();
+          final syncCompletion = Completer<void>();
+          var failSync = false;
           final driveSyncService = _FakeGoogleDriveSyncService(
             authService: authService,
             eventRepository: eventRepository,
             notificationService: notificationService,
             settingsRepository: settingsRepository,
+            onSyncPending: () async {
+              if (failSync) {
+                throw const GoogleDriveSyncException('test sync failure');
+              }
+              await syncCompletion.future;
+              await settingsRepository.save(
+                settingsRepository.load().copyWith(
+                  themeMode: AppThemeMode.dark,
+                ),
+                markSyncPending: false,
+              );
+            },
           );
 
           await tester.pumpWidget(
@@ -6075,31 +6305,71 @@ void main() {
           await tester.drag(find.byType(ListView), const Offset(0, -2200));
           await tester.pumpAndSettle();
 
-          final actionRow = find.byKey(
-            const ValueKey('google-drive-backup-restore-row'),
+          final syncAction = find.byKey(
+            const ValueKey('google-drive-primary-action'),
           );
-          expect(actionRow, findsOneWidget);
-          expect(
-            find.descendant(of: actionRow, matching: find.text('복원')),
-            findsOneWidget,
+          final syncButton = find.descendant(
+            of: syncAction,
+            matching: find.byType(FilledButton),
           );
+          expect(syncAction, findsOneWidget);
+          expect(find.text('지금 동기화'), findsOneWidget);
+          expect(find.text('백업'), findsNothing);
+          expect(find.text('복원'), findsNothing);
 
-          await tester.tap(find.text('백업'));
-          await tester.pumpAndSettle();
+          // An immediate second input before the disabled state is painted
+          // must not start another upload/download sequence.
+          final onSync = tester.widget<FilledButton>(syncButton).onPressed!;
+          onSync();
+          onSync();
+          await tester.pump();
           expect(driveSyncService.syncPendingChangesNowCalls, 1);
+          expect(driveSyncService.restoreAfterBackupRequests, [true]);
           expect(driveSyncService.restoreNowCalls, 0);
+          expect(tester.widget<FilledButton>(syncButton).onPressed, isNull);
+          expect(find.text('동기화 중'), findsOneWidget);
+          expect(find.byType(AlertDialog), findsNothing);
 
-          await tester.tap(find.text('복원'));
+          syncCompletion.complete();
           await tester.pumpAndSettle();
-          await tester.tap(find.widgetWithText(FilledButton, '복원'));
-          await tester.pumpAndSettle();
-          expect(driveSyncService.restoreNowCalls, 1);
+          final container = ProviderScope.containerOf(
+            tester.element(syncAction),
+          );
+          expect(
+            container.read(appSettingsProvider).themeMode,
+            AppThemeMode.dark,
+          );
+          expect(find.text('동기화 완료'), findsOneWidget);
           expect(driveSyncService.backupPrompts, [
             platform != TargetPlatform.android,
           ]);
-          expect(driveSyncService.restorePrompts, [
-            platform != TargetPlatform.android,
+          expect(driveSyncService.restorePrompts, isEmpty);
+
+          failSync = true;
+          await tester.tap(syncButton);
+          await tester.pumpAndSettle();
+          expect(find.text('test sync failure'), findsOneWidget);
+          expect(tester.widget<FilledButton>(syncButton).onPressed, isNotNull);
+          expect(
+            container.read(appSettingsProvider).themeMode,
+            AppThemeMode.dark,
+          );
+          expect(
+            settingsRepository.dailyAccount()?.googleAccount?.email,
+            'linked@example.com',
+          );
+
+          failSync = false;
+          await tester.tap(syncButton);
+          await tester.pumpAndSettle();
+          expect(driveSyncService.syncPendingChangesNowCalls, 3);
+          expect(driveSyncService.restoreAfterBackupRequests, [
+            true,
+            true,
+            true,
           ]);
+          expect(find.text('test sync failure'), findsNothing);
+          expect(find.text('동기화 완료'), findsOneWidget);
 
           await tester.pumpWidget(const SizedBox.shrink());
         } finally {
@@ -7551,8 +7821,11 @@ class _FakeGoogleDriveSyncService extends GoogleDriveSyncService {
     required super.eventRepository,
     required super.notificationService,
     required super.settingsRepository,
+    this.onSyncPending,
   });
 
+  final Future<void> Function()? onSyncPending;
+  var settingsBackupCalls = 0;
   var deleteCloudBackupCalls = 0;
   var startListeningOnlyCalls = 0;
   var syncNowCalls = 0;
@@ -7561,9 +7834,12 @@ class _FakeGoogleDriveSyncService extends GoogleDriveSyncService {
   var restoreNowCalls = 0;
   final backupPrompts = <bool>[];
   final restorePrompts = <bool>[];
+  final restoreAfterBackupRequests = <bool>[];
 
   @override
-  Future<void> queueSettingsBackup() async {}
+  Future<void> queueSettingsBackup() async {
+    settingsBackupCalls++;
+  }
 
   @override
   Future<void> startListeningOnly({bool flushPendingChanges = true}) async {
@@ -7587,6 +7863,8 @@ class _FakeGoogleDriveSyncService extends GoogleDriveSyncService {
   }) async {
     syncPendingChangesNowCalls += 1;
     backupPrompts.add(promptIfNecessary);
+    restoreAfterBackupRequests.add(restoreAfterBackup);
+    await onSyncPending?.call();
   }
 
   @override

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../features/timetable/data/timetable_store.dart';
+import '../../features/timetable/data/timetable_period_defaults.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
@@ -10,6 +12,8 @@ import '../../features/chat/domain/schedule_parser.dart';
 import '../../features/events/application/event_command_service.dart';
 import '../../features/events/data/app_database.dart';
 import '../../features/events/data/drift_event_repository.dart';
+import '../../features/events/data/owner_scoped_event_repository.dart';
+import '../lms/lms_controller.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
@@ -83,14 +87,30 @@ final eventRepositoryProvider = Provider<EventRepository>((ref) {
   return DriftEventRepository(ref.watch(databaseProvider));
 });
 
-final calendarWidgetServiceProvider = Provider<CalendarWidgetService>((ref) {
-  final service = CalendarWidgetService(
-    eventRepository: ref.watch(eventRepositoryProvider),
-    settingsRepository: ref.watch(settingsRepositoryProvider),
+final visibleEventRepositoryProvider = Provider<EventRepository>((ref) {
+  final settings = ref.watch(settingsRepositoryProvider);
+  return OwnerScopedEventRepository(
+    ref.watch(eventRepositoryProvider),
+    () => settings.dailyAccount()?.googleAccount?.email,
   );
-  ref.onDispose(service.dispose);
-  return service;
 });
+
+final lmsPresentationStateProvider = Provider<LmsPresentationState>(
+  (ref) => LmsPresentationState(),
+);
+
+final Provider<CalendarWidgetService> calendarWidgetServiceProvider =
+    Provider<CalendarWidgetService>((ref) {
+      final presentation = ref.watch(lmsPresentationStateProvider);
+      final service = CalendarWidgetService(
+        eventRepository: ref.watch(visibleEventRepositoryProvider),
+        settingsRepository: ref.watch(settingsRepositoryProvider),
+        isEventVisible: presentation.isEventVisible,
+        lmsVerifiedAt: () => presentation.verifiedAt,
+      );
+      ref.onDispose(service.dispose);
+      return service;
+    });
 
 /// Temporary source-compatibility alias for extensions that still reference
 /// the pre-parity provider name.
@@ -99,7 +119,7 @@ final appleWidgetServiceProvider = calendarWidgetServiceProvider;
 final notificationServiceProvider = Provider<NotificationService>((ref) {
   return LocalNotificationService(
     settingsRepository: ref.watch(settingsRepositoryProvider),
-    eventRepository: ref.watch(eventRepositoryProvider),
+    eventRepository: ref.watch(visibleEventRepositoryProvider),
   );
 });
 
@@ -194,7 +214,11 @@ final academicCalendarServiceProvider = Provider<AcademicCalendarService>((
 ) {
   final settings = ref.watch(settingsRepositoryProvider);
   final service = AcademicCalendarService(
-    sources: [SangmyungAcademicSource()],
+    sources: [
+      SangmyungAcademicSource(),
+      DankookAcademicSource(),
+      ChonnamAcademicSource(),
+    ],
     store: settings.academicStore,
     settings: settings,
     repository: ref.watch(eventRepositoryProvider),
@@ -203,6 +227,22 @@ final academicCalendarServiceProvider = Provider<AcademicCalendarService>((
   );
   ref.onDispose(service.dispose);
   return service;
+});
+
+final lmsControllerProvider = ChangeNotifierProvider<LmsController>((ref) {
+  final presentation = ref.watch(lmsPresentationStateProvider);
+  final controller = LmsController(
+    settings: ref.watch(settingsRepositoryProvider),
+    repository: ref.watch(eventRepositoryProvider),
+    commands: ref.watch(eventCommandServiceProvider),
+  );
+  presentation.controller = controller;
+  ref.onDispose(() {
+    if (identical(presentation.controller, controller)) {
+      presentation.controller = null;
+    }
+  });
+  return controller;
 });
 
 final scheduleParserProvider = Provider<ScheduleParser>((ref) {
@@ -237,6 +277,7 @@ final calendarSearchQueryProvider = StateProvider<String>((ref) => '');
 
 final eventsInRangeProvider =
     StreamProvider.family<List<CalendarEvent>, CalendarRange>((ref, range) {
+      final lms = ref.watch(lmsControllerProvider);
       final holidayConfiguration = ref.watch(
         appSettingsProvider.select(
           (settings) => (
@@ -264,7 +305,7 @@ final eventsInRangeProvider =
           .watch(eventRepositoryProvider)
           .watchEventsInRange(range.start, range.end)
           .map((events) {
-            return [...events, ...holidays]
+            return [...events.where(lms.isEventVisible), ...holidays]
               ..sort((a, b) => a.startAt.compareTo(b.startAt));
           });
     });
@@ -281,3 +322,26 @@ final eventsForSelectedDateProvider = Provider<AsyncValue<List<CalendarEvent>>>(
 extension DateTimeRangeX on DateTimeRange {
   CalendarRange toCalendarRange() => CalendarRange(start, end);
 }
+
+final timetablePeriodDefaultsProvider = FutureProvider<TimetablePeriodDefaults>(
+  (ref) => TimetablePeriodDefaults.load(),
+);
+
+final timetablePeriodPreparationProvider = FutureProvider<void>((ref) async {
+  final store = ref.watch(settingsRepositoryProvider).timetableStore;
+  final profile = ref.watch(
+    appSettingsProvider.select((s) => s.academicProfile),
+  );
+  final defaults = await ref.watch(timetablePeriodDefaultsProvider.future);
+  // Existing pre-profile timetable caches belong to the original SMU catalog.
+  // An explicitly selected university must never receive another school's dates.
+  final university = profile == null
+      ? 'smu'
+      : profile.timetableUniversity ?? '';
+  if (ref.mounted) await store.seedTermPeriods(defaults.periodsFor(university));
+});
+
+final timetableStoreProvider = Provider<TimetableStore>((ref) {
+  ref.watch(timetablePeriodPreparationProvider);
+  return ref.watch(settingsRepositoryProvider).timetableStore;
+});

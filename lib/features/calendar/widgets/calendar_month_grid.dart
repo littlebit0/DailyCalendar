@@ -1235,8 +1235,7 @@ class _WeekRowState extends State<_WeekRow> {
         sourceEvents.where(
           (event) =>
               !_sameDraggedEvent(event, previewEvent) &&
-              event.startAt.isBefore(dayEnd) &&
-              event.endAt.isAfter(dayStart),
+              event.overlaps(dayStart, dayEnd),
         ),
         priority: widget.eventSortPriority,
         categoryOrder: widget.categoryOrder,
@@ -1300,10 +1299,7 @@ class _WeekRowState extends State<_WeekRow> {
     final dayStart = _dayStart(day);
     final dayEnd = dayStart.add(const Duration(days: 1));
     return sortedCalendarEvents(
-      widget.events.where(
-        (event) =>
-            event.startAt.isBefore(dayEnd) && event.endAt.isAfter(dayStart),
-      ),
+      widget.events.where((event) => event.overlaps(dayStart, dayEnd)),
       priority: widget.eventSortPriority,
       categoryOrder: widget.categoryOrder,
       manualOrder:

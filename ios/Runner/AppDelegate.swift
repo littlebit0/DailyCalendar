@@ -3,6 +3,7 @@ import AuthenticationServices
 import UIKit
 import UserNotifications
 import WidgetKit
+import WebKit
 import flutter_local_notifications
 import AlarmKit
 import SwiftUI
@@ -956,6 +957,7 @@ private final class DailyMapLauncher {
   }
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    DailyLmsCookieStore.register(with: engineBridge.applicationRegistrar.messenger())
     FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { registry in
       GeneratedPluginRegistrant.register(with: registry)
     }
@@ -970,5 +972,124 @@ private final class DailyMapLauncher {
     } else {
       super.userNotificationCenter(center, willPresent: notification, withCompletionHandler: completionHandler)
     }
+  }
+}
+
+// The school browser uses a nonpersistent WKWebsiteDataStore. This channel is
+// callable only by Daily, never exposed as a JavaScript message handler.
+private final class DailyLmsCookieStore {
+  private static var stores: [String: WKWebsiteDataStore] = [:]
+  // BEGIN LMS COOKIE READ POLICY
+  private static let hosts: Set<String> = ["ecampus.smu.ac.kr", "sel.jnu.ac.kr"]
+  private static func sessionName(_ name: String) -> Bool {
+    name == "MoodleSession" || name.hasPrefix("MoodleSession_")
+  }
+  static func permitsSessionCookie(_ cookie: HTTPCookie, host: String) -> Bool {
+    // Issuance flags are not authentication evidence: the official school can
+    // omit Secure/HttpOnly on a valid session. Only read the bound private store.
+    hosts.contains(host) && sessionName(cookie.name) &&
+      cookie.domain.trimmingCharacters(in: CharacterSet(charactersIn: ".")) == host
+  }
+  // END LMS COOKIE READ POLICY
+  static func register(with messenger: FlutterBinaryMessenger) {
+    let channel = FlutterMethodChannel(name: "daily/lms_cookie_store", binaryMessenger: messenger)
+    channel.setMethodCallHandler { call, result in
+      guard let args = call.arguments as? [String: Any],
+            let host = args["host"] as? String, hosts.contains(host) else {
+        result(FlutterError(code: "invalid_school", message: nil, details: nil)); return
+      }
+      if call.method == "bind" {
+        guard let marker = args["marker"] as? String, marker.count >= 32,
+              marker.count <= 160 else {
+          result(FlutterError(code: "invalid_marker", message: nil, details: nil)); return
+        }
+        let candidates = schoolViews(host: host)
+        let group = DispatchGroup()
+        var matches: [WKWebsiteDataStore] = []
+        for view in candidates {
+          group.enter()
+          view.evaluateJavaScript("window.name") { name, error in
+            if error == nil, name as? String == marker,
+               view.url?.host == host, !view.configuration.websiteDataStore.isPersistent {
+              matches.append(view.configuration.websiteDataStore)
+            }
+            group.leave()
+          }
+        }
+        group.notify(queue: .main) {
+          guard matches.count == 1, let store = matches.first else {
+            result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
+          }
+          stores[host] = store
+          result(true)
+        }
+        return
+      }
+      guard let store = stores[host], !store.isPersistent else {
+        if call.method == "clear" { result(true) }
+        else { result(FlutterError(code: "school_view_missing", message: nil, details: nil)) }
+        return
+      }
+      switch call.method {
+      case "read":
+        store.httpCookieStore.getAllCookies { cookies in
+          result(cookies.filter { cookie in
+            permitsSessionCookie(cookie, host: host)
+          }.map { cookie -> [String: Any] in
+            var value: [String: Any] = ["name": cookie.name, "value": cookie.value]
+            if let expiry = cookie.expiresDate {
+              value["expires"] = Int64(expiry.timeIntervalSince1970 * 1000)
+            }
+            return value
+          })
+        }
+      case "write":
+        guard let values = args["cookies"] as? [[String: Any]], values.count <= 16 else {
+          result(FlutterError(code: "invalid_cookies", message: nil, details: nil)); return
+        }
+        var cookies: [HTTPCookie] = []
+        for value in values {
+          guard let name = value["name"] as? String, sessionName(name),
+                let content = value["value"] as? String, content.utf8.count <= 8192 else {
+            result(FlutterError(code: "invalid_cookies", message: nil, details: nil)); return
+          }
+          var properties: [HTTPCookiePropertyKey: Any] = [
+            .name: name, .value: content, .domain: host, .path: "/",
+            .secure: "TRUE", HTTPCookiePropertyKey("HttpOnly"): "TRUE"
+          ]
+          if let milliseconds = value["expires"] as? NSNumber {
+            let expiry = Date(timeIntervalSince1970: milliseconds.doubleValue / 1000)
+            if expiry <= Date() { continue }
+            properties[.expires] = expiry
+          }
+          guard let cookie = HTTPCookie(properties: properties) else {
+            result(FlutterError(code: "invalid_cookies", message: nil, details: nil)); return
+          }
+          cookies.append(cookie)
+        }
+        let group = DispatchGroup()
+        for cookie in cookies {
+          group.enter()
+          store.httpCookieStore.setCookie(cookie) { group.leave() }
+        }
+        group.notify(queue: .main) { result(true) }
+      case "clear":
+        stores.removeValue(forKey: host)
+        // This store belongs exclusively to the bound private school WebView.
+        store.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(),
+                         modifiedSince: .distantPast) { result(true) }
+      default: result(FlutterMethodNotImplemented)
+      }
+    }
+  }
+  private static func schoolViews(host: String) -> [WKWebView] {
+    func walk(_ view: UIView) -> [WKWebView] {
+      var result = view.subviews.flatMap(walk)
+      if let web = view as? WKWebView, web.url?.host == host,
+         !web.configuration.websiteDataStore.isPersistent { result.append(web) }
+      return result
+    }
+    return UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+      .flatMap(\.windows).flatMap(walk)
   }
 }

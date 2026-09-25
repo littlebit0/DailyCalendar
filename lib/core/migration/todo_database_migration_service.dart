@@ -115,22 +115,32 @@ class TodoDatabaseMigrationService {
         original.close();
       }
 
-      stage = TodoMigrationStage.restoring;
-      _report(stage, '최신 백업을 복원하고 있습니다.');
-      final remoteEvents = _hasLinkedGoogleAccount()
-          ? await _loadRemoteEvents()
-          : const <CalendarEvent>[];
-      if (_hasLinkedGoogleAccount() && remoteEvents == null) {
-        throw const TodoMigrationException(
-          stage: TodoMigrationStage.restoring,
-          message: 'Google Drive 복원 정보를 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
-        );
+      // Schema 8 already has Todo completion, exact sync timestamps and compact
+      // deletions. Schema 9 only adds nullable LMS metadata: it must not repeat
+      // the old cloud migration or turn every unchanged event into an upload.
+      final isAdditiveLmsMigration =
+          originalVersion == 8 && AppDatabase.currentSchemaVersion == 9;
+      final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
+      List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
+      if (requiresLegacyCloudMigration) {
+        stage = TodoMigrationStage.restoring;
+        _report(stage, '최신 백업을 복원하고 있습니다.');
+        remoteEvents = _hasLinkedGoogleAccount()
+            ? await _loadRemoteEvents()
+            : const <CalendarEvent>[];
+        if (_hasLinkedGoogleAccount() && remoteEvents == null) {
+          throw const TodoMigrationException(
+            stage: TodoMigrationStage.restoring,
+            message: 'Google Drive 복원 정보를 확인하지 못했습니다. 연결을 확인한 뒤 다시 시도해 주세요.',
+          );
+        }
       }
       final remoteWinners = _remoteWinners(
         localStates,
         remoteEvents ?? const <CalendarEvent>[],
       );
-      final deletions = _hasLinkedGoogleAccount()
+      final deletions =
+          requiresLegacyCloudMigration && _hasLinkedGoogleAccount()
           ? _remoteDeletionRecords()
           : const <EventDeletion>[];
       final removedIds = <String>{};
@@ -174,15 +184,34 @@ class TodoDatabaseMigrationService {
               'ALTER TABLE event_records ADD COLUMN sync_timestamp_details TEXT',
             );
           }
+          if (!_hasColumn(working, 'event_records', 'lms_metadata')) {
+            working.execute(
+              'ALTER TABLE event_records ADD COLUMN lms_metadata TEXT',
+            );
+          }
           for (final event in remoteWinners) {
             _upsertRemoteWinner(working, event);
           }
           working.execute(AppDatabase.createDeletionTable);
+          if (!_hasColumn(working, 'sync_event_deletions', 'lms_owner_id')) {
+            working.execute(
+              'ALTER TABLE sync_event_deletions ADD COLUMN lms_owner_id TEXT',
+            );
+          }
           for (final deletion in deletions) {
             final candidates = working.select(
               'SELECT * FROM event_records WHERE id = ?',
               [deletion.id],
             );
+            final local = candidates.isEmpty
+                ? null
+                : _readEventRow(candidates.single);
+            if (local != null && local.lms?.ownerId != deletion.lmsOwnerId) {
+              continue;
+            }
+            if (deletion.id.startsWith('lms:') && deletion.lmsOwnerId == null) {
+              continue;
+            }
             if (candidates.isEmpty ||
                 !eventChangedAt(
                   _readEventRow(candidates.single),
@@ -193,12 +222,18 @@ class TodoDatabaseMigrationService {
               removedIds.add(deletion.id);
             }
             working.execute(
-              'INSERT OR REPLACE INTO sync_event_deletions (id, deleted_at, pending) VALUES (?, ?, 0)',
-              [deletion.id, deletion.deletedAt.toUtc().toIso8601String()],
+              'INSERT OR REPLACE INTO sync_event_deletions (id, deleted_at, pending, lms_owner_id) VALUES (?, ?, 0, ?)',
+              [
+                deletion.id,
+                deletion.deletedAt.toUtc().toIso8601String(),
+                deletion.lmsOwnerId,
+              ],
             );
           }
-          // A schema-changing release backs up every event after validation.
-          working.execute("UPDATE event_records SET sync_status = 'pending'");
+          if (requiresLegacyCloudMigration) {
+            // Only the legacy Todo conversion requires every event to upload.
+            working.execute("UPDATE event_records SET sync_status = 'pending'");
+          }
           working.execute(
             'PRAGMA user_version = ${AppDatabase.currentSchemaVersion}',
           );
@@ -227,7 +262,7 @@ class TodoDatabaseMigrationService {
       workingFile = null;
 
       var backupPending = false;
-      if (_hasLinkedGoogleAccount()) {
+      if (requiresLegacyCloudMigration && _hasLinkedGoogleAccount()) {
         stage = TodoMigrationStage.backingUp;
         _report(stage, '업데이트된 일정을 백업하고 있습니다.');
         try {
@@ -299,6 +334,7 @@ class TodoDatabaseMigrationService {
     location: row['location'] as String?,
     url: row['url'] as String?,
     weather: row['weather'] as String?,
+    lmsMetadata: row['lms_metadata'] as String?,
     startAt: _dateFromSql(row['start_at'])!,
     endAt: _dateFromSql(row['end_at'])!,
     allDay: row['all_day'] == 1,
@@ -337,7 +373,12 @@ class TodoDatabaseMigrationService {
     for (final remote in remoteEvents)
       if (localStates[remote.id] == null ||
           compareEventVersions(remote, localStates[remote.id]!) > 0)
-        remote,
+        if (localStates[remote.id]?.lms == null ||
+            remote.lms == null ||
+            localStates[remote.id]!.lms!.ownerId == remote.lms!.ownerId)
+          remote.lms == null && localStates[remote.id]?.lms != null
+              ? remote.copyWith(lms: localStates[remote.id]!.lms)
+              : remote,
   ];
 
   Future<void> _createConsistentSnapshot(
@@ -368,9 +409,9 @@ class TodoDatabaseMigrationService {
         recurrence_interval, recurrence_until, recurrence_count,
         recurrence_excluded_dates, created_at, updated_at, deleted_at,
         device_id, sync_status, show_dday, completed, alarm_enabled,
-        all_day_alarm_minutes
+        all_day_alarm_minutes, lms_metadata
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?, ?, ?)
+        ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
         title = excluded.title,
         memo = excluded.memo,
@@ -397,7 +438,8 @@ class TodoDatabaseMigrationService {
         show_dday = excluded.show_dday,
         completed = excluded.completed,
         alarm_enabled = excluded.alarm_enabled,
-        all_day_alarm_minutes = excluded.all_day_alarm_minutes
+        all_day_alarm_minutes = excluded.all_day_alarm_minutes,
+        lms_metadata = excluded.lms_metadata
       ''',
       [
         normalized.id,
@@ -434,6 +476,7 @@ class TodoDatabaseMigrationService {
         normalized.completed ? 1 : 0,
         normalized.alarmEnabled ? 1 : 0,
         normalized.allDayAlarmMinutes,
+        normalized.lms == null ? null : jsonEncode(normalized.lms!.toJson()),
       ],
     );
     database.execute(
@@ -448,7 +491,9 @@ class TodoDatabaseMigrationService {
     required Iterable<String> remoteIds,
   }) {
     if (_userVersion(database) != AppDatabase.currentSchemaVersion ||
-        !_hasColumn(database, 'event_records', 'completed')) {
+        !_hasColumn(database, 'event_records', 'completed') ||
+        !_hasColumn(database, 'event_records', 'lms_metadata') ||
+        !_hasColumn(database, 'sync_event_deletions', 'lms_owner_id')) {
       throw StateError('Todo schema validation failed.');
     }
     final expectedIds = {...localIds, ...remoteIds};

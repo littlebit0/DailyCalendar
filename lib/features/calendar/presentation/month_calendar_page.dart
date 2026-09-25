@@ -37,10 +37,13 @@ import '../../settings/presentation/settings_page.dart';
 import '../widgets/calendar_event_drag_layer.dart';
 import '../widgets/calendar_month_grid.dart';
 import '../widgets/schedule_timeline_view.dart';
+import '../../timetable/presentation/timetable_page.dart';
+import '../../settings/presentation/academic_profile_page.dart';
+import '../../timetable/presentation/timetable_schedule.dart';
 
-enum _BottomCenterAction { quickAccess, calendar, ai }
+enum _BottomCenterAction { quickAccess, calendar, ai, timetable }
 
-enum _BottomNavigationItem { quickAccess, week, month, day, siri }
+enum _BottomNavigationItem { quickAccess, week, month, day, siri, timetable }
 
 enum _RecurringDragScope { onlyThis, future, all }
 
@@ -115,6 +118,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   Future<List<CalendarEvent>>? _searchResults;
   var _searchOpen = false;
   var _quickAccessSelected = false;
+  var _timetableSelected = false;
   var _showAllDayScheduleEvents = true;
   var _eventDragActive = false;
   var _eventDragVisualActive = false;
@@ -193,13 +197,13 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
             platform == TargetPlatform.android) &&
         settings.monthNavigationMode == MonthNavigationMode.horizontal;
     final showScheduleDaySidebar =
-        ((platform == TargetPlatform.macOS ||
-                platform == TargetPlatform.linux)
+        ((platform == TargetPlatform.macOS || platform == TargetPlatform.linux)
             ? usableSize.width >= dailyCalendarWideMinWidth
             : showWideDetails) &&
         viewMode == CalendarViewMode.day &&
         settings.weekDayLayoutMode == WeekDayLayoutMode.schedule;
-    final showEventSidebar = wide || showScheduleDaySidebar;
+    final showEventSidebar =
+        !_timetableSelected && (wide || showScheduleDaySidebar);
     final showStableEventSidebar =
         !_quickAccessSelected &&
         showEventSidebar &&
@@ -229,8 +233,12 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                     searchQuery: searchQuery,
                     searchOpen: _searchOpen,
                     quickAccessSelected: _quickAccessSelected,
+                    timetableSelected: _timetableSelected,
                     onSearchPressed: _toggleSearch,
+                    onTimetablePressed: () =>
+                        _selectBottomAction(_BottomCenterAction.timetable),
                     onQuickAccessPressed: () {
+                      _timetableSelected = false;
                       _closeSearch();
                       setState(() => _quickAccessSelected = true);
                     },
@@ -242,112 +250,130 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                       children: [
                         Expanded(
                           key: _calendarDragSurfaceKey,
-                          child: _AndroidTabletCalendarFrame(
-                            enabled: androidMedium && !desktop,
-                            child: _OrderedCalendarSwitcher(
-                              order: _calendarContentOrder(
-                                _quickAccessSelected,
-                                viewMode,
-                              ),
-                              child: Column(
-                                key: ValueKey<int>(
-                                  _calendarContentOrder(
+                          child: _OrderedCalendarSwitcher(
+                            order: _timetableSelected
+                                ? (desktop ? -1 : 4)
+                                : _calendarContentOrder(
                                     _quickAccessSelected,
                                     viewMode,
                                   ),
-                                ),
-                                children: [
-                                  if (_quickAccessSelected)
-                                    Expanded(
-                                      child: _QuickMonthPageView(
-                                        month: month,
-                                        onMonthChanged: (target) =>
-                                            _setVisibleMonth(
-                                              ref,
-                                              target,
-                                              ref.read(selectedDateProvider),
-                                            ),
-                                        pageBuilder: (context, pageMonth) =>
-                                            Consumer(
-                                              builder: (context, pageRef, _) =>
-                                                  _buildQuickAccessPage(
-                                                    context,
-                                                    pageRef,
-                                                    settings,
-                                                    searchQuery,
-                                                    pageMonth,
-                                                  ),
-                                            ),
-                                      ),
-                                    )
-                                  else
-                                    Expanded(
-                                      child: _PaintOnlySearchLayout(
-                                        searchOpen: _searchOpen,
-                                        searchPanel: _InlineSearchPanel(
-                                          controller: _searchController,
-                                          focusNode: _searchFocusNode,
-                                          results: _searchResults,
-                                          onChanged: _handleSearchChanged,
-                                          onSubmitted: _runSearch,
-                                          onClose: _closeSearch,
-                                          onEventSelected: _selectSearchResult,
-                                        ),
-                                        child: RepaintBoundary(
-                                          key: const ValueKey(
-                                            'calendar-content-repaint-boundary',
-                                          ),
-                                          child: _CalendarMainContent(
-                                            month: month,
-                                            selectedDate: selectedDate,
-                                            viewMode: viewMode,
-                                            settings: settings,
-                                            searchQuery: searchQuery,
-                                            showAllDayScheduleEvents:
-                                                _showAllDayScheduleEvents,
-                                            onShowAllDayScheduleEventsChanged:
-                                                _setShowAllDayScheduleEvents,
-                                            onMonthDelta: (delta) =>
-                                                _moveVisibleRange(
-                                                  ref,
-                                                  viewMode,
-                                                  month,
-                                                  selectedDate,
-                                                  delta,
-                                                ),
-                                            onDateSelected: (date, events) {
-                                              ref
-                                                      .read(
-                                                        selectedDateProvider
-                                                            .notifier,
-                                                      )
-                                                      .state =
-                                                  date;
-                                              if (viewMode !=
-                                                      CalendarViewMode.day &&
-                                                  !showStableEventSidebar) {
-                                                _showDaySheet(
-                                                  context,
-                                                  date,
-                                                  _eventsForDay(events, date),
-                                                );
-                                              }
-                                            },
-                                            externalEventDragActive:
-                                                _eventDragVisualActive,
-                                            externalEventDragInteractionActive:
-                                                _eventDragActive,
-                                            onEventDragStateChanged:
-                                                _setEventDragVisualActive,
-                                            onEventDragInteractionStateChanged:
-                                                _setEventDragActive,
-                                          ),
-                                        ),
+                            child: _timetableSelected
+                                ? const AcademicFeatureGate(
+                                    key: ValueKey<int>(-1),
+                                    child: TimetablePage(),
+                                  )
+                                : _AndroidTabletCalendarFrame(
+                                    key: ValueKey<int>(
+                                      _calendarContentOrder(
+                                        _quickAccessSelected,
+                                        viewMode,
                                       ),
                                     ),
-                                ],
-                              ),
-                            ),
+                                    enabled: androidMedium && !desktop,
+                                    child: Column(
+                                      children: [
+                                        if (_quickAccessSelected)
+                                          Expanded(
+                                            child: _QuickMonthPageView(
+                                              month: month,
+                                              onMonthChanged: (target) =>
+                                                  _setVisibleMonth(
+                                                    ref,
+                                                    target,
+                                                    ref.read(
+                                                      selectedDateProvider,
+                                                    ),
+                                                  ),
+                                              pageBuilder:
+                                                  (
+                                                    context,
+                                                    pageMonth,
+                                                  ) => Consumer(
+                                                    builder:
+                                                        (context, pageRef, _) =>
+                                                            _buildQuickAccessPage(
+                                                              context,
+                                                              pageRef,
+                                                              settings,
+                                                              searchQuery,
+                                                              pageMonth,
+                                                            ),
+                                                  ),
+                                            ),
+                                          )
+                                        else
+                                          Expanded(
+                                            child: _PaintOnlySearchLayout(
+                                              searchOpen: _searchOpen,
+                                              searchPanel: _InlineSearchPanel(
+                                                controller: _searchController,
+                                                focusNode: _searchFocusNode,
+                                                results: _searchResults,
+                                                onChanged: _handleSearchChanged,
+                                                onSubmitted: _runSearch,
+                                                onClose: _closeSearch,
+                                                onEventSelected:
+                                                    _selectSearchResult,
+                                              ),
+                                              child: RepaintBoundary(
+                                                key: const ValueKey(
+                                                  'calendar-content-repaint-boundary',
+                                                ),
+                                                child: _CalendarMainContent(
+                                                  month: month,
+                                                  selectedDate: selectedDate,
+                                                  viewMode: viewMode,
+                                                  settings: settings,
+                                                  searchQuery: searchQuery,
+                                                  showAllDayScheduleEvents:
+                                                      _showAllDayScheduleEvents,
+                                                  onShowAllDayScheduleEventsChanged:
+                                                      _setShowAllDayScheduleEvents,
+                                                  onMonthDelta: (delta) =>
+                                                      _moveVisibleRange(
+                                                        ref,
+                                                        viewMode,
+                                                        month,
+                                                        selectedDate,
+                                                        delta,
+                                                      ),
+                                                  onDateSelected: (date, events) {
+                                                    ref
+                                                            .read(
+                                                              selectedDateProvider
+                                                                  .notifier,
+                                                            )
+                                                            .state =
+                                                        date;
+                                                    if (viewMode !=
+                                                            CalendarViewMode
+                                                                .day &&
+                                                        !showStableEventSidebar) {
+                                                      _showDaySheet(
+                                                        context,
+                                                        date,
+                                                        _eventsForDay(
+                                                          events,
+                                                          date,
+                                                        ),
+                                                      );
+                                                    }
+                                                  },
+                                                  externalEventDragActive:
+                                                      _eventDragVisualActive,
+                                                  externalEventDragInteractionActive:
+                                                      _eventDragActive,
+                                                  onEventDragStateChanged:
+                                                      _setEventDragVisualActive,
+                                                  onEventDragInteractionStateChanged:
+                                                      _setEventDragActive,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
                           ),
                         ),
                         _AnimatedCalendarSidebar(
@@ -402,8 +428,11 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                             return _CalendarBottomBar(
                               key: _bottomBarKey,
                               viewMode: viewMode,
-                              calendarActive: !_quickAccessSelected,
-                              activeAction: aiOpen
+                              calendarActive:
+                                  !_quickAccessSelected && !_timetableSelected,
+                              activeAction: _timetableSelected
+                                  ? _BottomCenterAction.timetable
+                                  : aiOpen
                                   ? _BottomCenterAction.ai
                                   : _quickAccessSelected
                                   ? _BottomCenterAction.quickAccess
@@ -800,7 +829,14 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     setState(() {
       _searchResults = query.isEmpty
           ? null
-          : ref.read(eventRepositoryProvider).search(query);
+          : ref
+                .read(visibleEventRepositoryProvider)
+                .search(query)
+                .then(
+                  (events) => events
+                      .where(ref.read(lmsControllerProvider).isEventVisible)
+                      .toList(),
+                );
     });
   }
 
@@ -821,6 +857,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     CalendarViewMode viewMode, {
     bool fromBottomBar = false,
   }) {
+    if (_timetableSelected) setState(() => _timetableSelected = false);
     ref.read(calendarViewModeProvider.notifier).state = viewMode;
     _recordAnalytics(
       AnalyticsRecord.calendarViewChanged(
@@ -904,7 +941,19 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   }
 
   void _selectBottomAction(_BottomCenterAction action) {
+    if (action != _BottomCenterAction.timetable && _timetableSelected) {
+      setState(() => _timetableSelected = false);
+    }
     switch (action) {
+      case _BottomCenterAction.timetable:
+        _closeSearch();
+        _dismissDaySheet();
+        _aiOpen.value = false;
+        _markBottomAction(action);
+        setState(() {
+          _timetableSelected = true;
+          _quickAccessSelected = false;
+        });
       case _BottomCenterAction.quickAccess:
         _markBottomAction(action);
         _closeSearch();
@@ -1335,7 +1384,7 @@ class _OrderedCalendarSwitcherState extends State<_OrderedCalendarSwitcher> {
 
   @override
   Widget build(BuildContext context) {
-    final currentKey = ValueKey<int>(widget.order);
+    final currentKey = widget.child.key;
     return ClipRect(
       child: AnimatedSwitcher(
         key: const ValueKey('calendar-content-switcher'),
@@ -1366,6 +1415,7 @@ class _OrderedCalendarSwitcherState extends State<_OrderedCalendarSwitcher> {
 
 class _AndroidTabletCalendarFrame extends StatelessWidget {
   const _AndroidTabletCalendarFrame({
+    super.key,
     required this.enabled,
     required this.child,
   });
@@ -2076,7 +2126,7 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
   }
 }
 
-class _InlineSearchPanel extends StatelessWidget {
+class _InlineSearchPanel extends ConsumerWidget {
   const _InlineSearchPanel({
     required this.controller,
     required this.focusNode,
@@ -2096,7 +2146,9 @@ class _InlineSearchPanel extends StatelessWidget {
   final ValueChanged<CalendarEvent> onEventSelected;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.watch(appSettingsProvider);
+    final lms = ref.watch(lmsControllerProvider);
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
@@ -2163,7 +2215,9 @@ class _InlineSearchPanel extends StatelessWidget {
                   child: LinearProgressIndicator(minHeight: 2),
                 );
               }
-              final events = snapshot.data ?? const <CalendarEvent>[];
+              final events = (snapshot.data ?? const <CalendarEvent>[])
+                  .where(lms.isEventVisible)
+                  .toList();
               if (events.isEmpty) {
                 return Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -2693,47 +2747,60 @@ class _CalendarWeekPage extends ConsumerWidget {
             7,
             (index) => range.start.add(Duration(days: index)),
           );
-          return ScheduleTimelineView(
+          return TimetableSchedule(
             days: days,
-            holidayDates: {
-              for (final day in days)
-                if (settings.calendarShowHolidays &&
-                    ref.read(koreanHolidayServiceProvider).isPublicHoliday(day))
-                  _dateOnly(day),
-            },
             events: visibleEvents,
-            selectedDate: selectedDate,
-            use24HourTime: settings.use24HourTime,
-            showAllDayEvents: showAllDayScheduleEvents,
-            holidayBackgroundEnabled: settings.calendarHolidayBackgroundEnabled,
-            holidayColorValue: settings.holidayCategory.colorValue,
-            centerEventTitles:
-                settings.calendarEventTitleAlignment ==
-                CalendarEventTitleAlignment.center,
-            eventSortPriority: settings.calendarEventSortPriority,
-            categoryOrder: settings.categories
-                .map((category) => category.id)
-                .toList(),
-            weekStartsOnMonday: settings.weekStartsOnMonday,
-            onEventDropped: (event, targetDate, targetIndex) =>
-                _handleCalendarEventDrop(
-                  context,
-                  ref,
-                  event,
-                  targetDate,
-                  targetIndex,
-                ),
-            onEventTimeDropped: (event, targetStart) =>
-                _handleCalendarEventTimeDrop(context, ref, event, targetStart),
-            onEventDragStateChanged: onEventDragStateChanged,
-            onEventDragInteractionStateChanged:
-                onEventDragInteractionStateChanged,
-            externalEventDragActive: externalEventDragActive,
-            externalEventDragInteractionActive:
-                externalEventDragInteractionActive,
-            onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
-            onDateSelected: (date) =>
-                onDateSelected(date, _eventsForDay(visibleEvents, date)),
+            builder: (scheduleEvents, classActions) => ScheduleTimelineView(
+              eventActions: classActions,
+              days: days,
+              holidayDates: {
+                for (final day in days)
+                  if (settings.calendarShowHolidays &&
+                      ref
+                          .read(koreanHolidayServiceProvider)
+                          .isPublicHoliday(day))
+                    _dateOnly(day),
+              },
+              events: scheduleEvents,
+              selectedDate: selectedDate,
+              use24HourTime: settings.use24HourTime,
+              showAllDayEvents: showAllDayScheduleEvents,
+              holidayBackgroundEnabled:
+                  settings.calendarHolidayBackgroundEnabled,
+              holidayColorValue: settings.holidayCategory.colorValue,
+              centerEventTitles:
+                  settings.calendarEventTitleAlignment ==
+                  CalendarEventTitleAlignment.center,
+              eventSortPriority: settings.calendarEventSortPriority,
+              categoryOrder: settings.categories
+                  .map((category) => category.id)
+                  .toList(),
+              weekStartsOnMonday: settings.weekStartsOnMonday,
+              onEventDropped: (event, targetDate, targetIndex) =>
+                  _handleCalendarEventDrop(
+                    context,
+                    ref,
+                    event,
+                    targetDate,
+                    targetIndex,
+                  ),
+              onEventTimeDropped: (event, targetStart) =>
+                  _handleCalendarEventTimeDrop(
+                    context,
+                    ref,
+                    event,
+                    targetStart,
+                  ),
+              onEventDragStateChanged: onEventDragStateChanged,
+              onEventDragInteractionStateChanged:
+                  onEventDragInteractionStateChanged,
+              externalEventDragActive: externalEventDragActive,
+              externalEventDragInteractionActive:
+                  externalEventDragInteractionActive,
+              onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
+              onDateSelected: (date) =>
+                  onDateSelected(date, _eventsForDay(visibleEvents, date)),
+            ),
           );
         }
         return _CalendarWeekView(
@@ -3042,41 +3109,52 @@ class _CalendarDayPage extends ConsumerWidget {
           date,
         );
         if (settings.weekDayLayoutMode == WeekDayLayoutMode.schedule) {
-          return ScheduleTimelineView(
+          return TimetableSchedule(
             days: [date],
-            showDateHeader: false,
             events: visibleEvents,
-            selectedDate: date,
-            use24HourTime: settings.use24HourTime,
-            showAllDayEvents: showAllDayScheduleEvents,
-            holidayBackgroundEnabled: settings.calendarHolidayBackgroundEnabled,
-            holidayColorValue: settings.holidayCategory.colorValue,
-            centerEventTitles:
-                settings.calendarEventTitleAlignment ==
-                CalendarEventTitleAlignment.center,
-            eventSortPriority: settings.calendarEventSortPriority,
-            categoryOrder: settings.categories
-                .map((category) => category.id)
-                .toList(),
-            weekStartsOnMonday: settings.weekStartsOnMonday,
-            onEventDropped: (event, targetDate, targetIndex) =>
-                _handleCalendarEventDrop(
-                  context,
-                  ref,
-                  event,
-                  targetDate,
-                  targetIndex,
-                ),
-            onEventTimeDropped: (event, targetStart) =>
-                _handleCalendarEventTimeDrop(context, ref, event, targetStart),
-            onEventDragStateChanged: onEventDragStateChanged,
-            onEventDragInteractionStateChanged:
-                onEventDragInteractionStateChanged,
-            externalEventDragActive: externalEventDragActive,
-            externalEventDragInteractionActive:
-                externalEventDragInteractionActive,
-            onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
-            onDateSelected: onDateSelected,
+            builder: (scheduleEvents, classActions) => ScheduleTimelineView(
+              eventActions: classActions,
+              days: [date],
+              showDateHeader: false,
+              events: scheduleEvents,
+              selectedDate: date,
+              use24HourTime: settings.use24HourTime,
+              showAllDayEvents: showAllDayScheduleEvents,
+              holidayBackgroundEnabled:
+                  settings.calendarHolidayBackgroundEnabled,
+              holidayColorValue: settings.holidayCategory.colorValue,
+              centerEventTitles:
+                  settings.calendarEventTitleAlignment ==
+                  CalendarEventTitleAlignment.center,
+              eventSortPriority: settings.calendarEventSortPriority,
+              categoryOrder: settings.categories
+                  .map((category) => category.id)
+                  .toList(),
+              weekStartsOnMonday: settings.weekStartsOnMonday,
+              onEventDropped: (event, targetDate, targetIndex) =>
+                  _handleCalendarEventDrop(
+                    context,
+                    ref,
+                    event,
+                    targetDate,
+                    targetIndex,
+                  ),
+              onEventTimeDropped: (event, targetStart) =>
+                  _handleCalendarEventTimeDrop(
+                    context,
+                    ref,
+                    event,
+                    targetStart,
+                  ),
+              onEventDragStateChanged: onEventDragStateChanged,
+              onEventDragInteractionStateChanged:
+                  onEventDragInteractionStateChanged,
+              externalEventDragActive: externalEventDragActive,
+              externalEventDragInteractionActive:
+                  externalEventDragInteractionActive,
+              onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
+              onDateSelected: onDateSelected,
+            ),
           );
         }
         return EventDetailsPanel(
@@ -4351,7 +4429,7 @@ class _CalendarMonthPage extends ConsumerWidget {
     DateTime targetDate,
     _RecurringDragScope scope,
   ) async {
-    final repository = ref.read(eventRepositoryProvider);
+    final repository = ref.read(visibleEventRepositoryProvider);
     final commandService = ref.read(eventCommandServiceProvider);
     final base = await repository.findById(occurrence.id);
     if (base == null) {
@@ -4571,7 +4649,7 @@ Future<void> _handleCalendarEventDrop(
       : normalizedTarget;
   final rangeEnd = rangeLastDate.add(const Duration(days: 1));
   final settings = ref.read(appSettingsProvider);
-  final repository = ref.read(eventRepositoryProvider);
+  final repository = ref.read(visibleEventRepositoryProvider);
   final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
   final holidayEvents = ref
       .read(koreanHolidayServiceProvider)
@@ -4641,7 +4719,7 @@ Future<void> _handleCalendarEventTimeDrop(
       : targetDate;
   final rangeEnd = rangeLastDate.add(const Duration(days: 1));
   final settings = ref.read(appSettingsProvider);
-  final repository = ref.read(eventRepositoryProvider);
+  final repository = ref.read(visibleEventRepositoryProvider);
   final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
   final holidayEvents = ref
       .read(koreanHolidayServiceProvider)
@@ -4714,7 +4792,7 @@ Future<CalendarEvent?> _moveRecurringCalendarEvent(
   DateTime targetDate,
   _RecurringDragScope scope,
 ) async {
-  final repository = ref.read(eventRepositoryProvider);
+  final repository = ref.read(visibleEventRepositoryProvider);
   final commandService = ref.read(eventCommandServiceProvider);
   final base = await repository.findById(occurrence.id);
   if (base == null) {
@@ -4777,7 +4855,7 @@ Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
   DateTime targetStart,
   _RecurringDragScope scope,
 ) async {
-  final repository = ref.read(eventRepositoryProvider);
+  final repository = ref.read(visibleEventRepositoryProvider);
   final commandService = ref.read(eventCommandServiceProvider);
   final base = await repository.findById(occurrence.id);
   if (base == null) {
@@ -5055,7 +5133,9 @@ Future<void> _openRangeEventEditor(
     context: context,
     builder: (_) => EventEditorDialog(
       frequentPlaces: ref.read(settingsRepositoryProvider).frequentPlaces,
-      loadPlaceEvents: ref.read(eventRepositoryProvider).allEventsForSync,
+      loadPlaceEvents: ref
+          .read(visibleEventRepositoryProvider)
+          .allEventsForSync,
       initialDate: start,
       initialEndDate: end,
       initialAllDay: true,
@@ -5092,8 +5172,10 @@ class _CalendarHeader extends ConsumerWidget {
     required this.searchQuery,
     required this.searchOpen,
     required this.quickAccessSelected,
+    required this.timetableSelected,
     required this.onSearchPressed,
     required this.onQuickAccessPressed,
+    required this.onTimetablePressed,
     required this.onCalendarViewSelected,
     required this.onLlmPressed,
   });
@@ -5106,8 +5188,10 @@ class _CalendarHeader extends ConsumerWidget {
   final String searchQuery;
   final bool searchOpen;
   final bool quickAccessSelected;
+  final bool timetableSelected;
   final VoidCallback onSearchPressed;
   final VoidCallback onQuickAccessPressed;
+  final VoidCallback onTimetablePressed;
   final ValueChanged<CalendarViewMode> onCalendarViewSelected;
   final VoidCallback onLlmPressed;
 
@@ -5278,14 +5362,26 @@ class _CalendarHeader extends ConsumerWidget {
         borderless: true,
       ),
     ];
+    final timetableTitle = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2),
+      child: Text(
+        context.tr('시간표'),
+        key: const ValueKey('timetable-primary-title'),
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: Theme.of(context).textTheme.titleLarge,
+      ),
+    );
 
     if (desktop) {
       final assistantLabel = platform == TargetPlatform.macOS || ios
           ? 'Siri'
           : 'LLM';
       final viewSwitch = SegmentedButton<CalendarViewMode>(
-        selected: quickAccessSelected ? const {} : {viewMode},
-        emptySelectionAllowed: quickAccessSelected,
+        selected: quickAccessSelected || timetableSelected
+            ? const {}
+            : {viewMode},
+        emptySelectionAllowed: quickAccessSelected || timetableSelected,
         showSelectedIcon: false,
         style: ButtonStyle(
           visualDensity: VisualDensity.compact,
@@ -5357,15 +5453,43 @@ class _CalendarHeader extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            Flexible(child: monthButton),
-            const Spacer(),
-            quickAccessButton,
-            const SizedBox(width: 6),
-            viewSwitch,
-            const SizedBox(width: 6),
-            ...navigationActions,
-            ...utilityActions,
+            Expanded(
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: timetableSelected ? timetableTitle : monthButton,
+              ),
+            ),
+            if (!timetableSelected) ...[
+              ...navigationActions,
+              ...utilityActions.take(2),
+            ],
             llmButton,
+            DailyIconAction(
+              tooltip: context.tr('시간표'),
+              onPressed: onTimetablePressed,
+              selected: timetableSelected,
+              icon: Icons.school_outlined,
+              selectedIcon: Icons.school_rounded,
+              borderless: true,
+            ),
+            quickAccessButton,
+            viewSwitch,
+            utilityActions.last,
+          ],
+        ),
+      );
+    }
+
+    if (timetableSelected) {
+      return Padding(
+        key: mobile
+            ? ValueKey('${ios ? 'ios' : 'android'}-calendar-toolbar')
+            : null,
+        padding: const EdgeInsets.fromLTRB(14, 8, 10, 8),
+        child: Row(
+          children: [
+            Expanded(child: timetableTitle),
+            utilityActions.last,
           ],
         ),
       );
@@ -5490,8 +5614,9 @@ class _CalendarHeader extends ConsumerWidget {
       showDragHandle: false,
       backgroundColor: DailyUi.pageBackground(context),
       clipBehavior: Clip.antiAlias,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+        side: DailyUi.popupBorder(context),
       ),
       builder: (context) => StatefulBuilder(
         builder: (context, setState) {
@@ -5785,6 +5910,9 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
   _BottomNavigationItem? _pressedItem;
 
   _BottomNavigationItem get _activeItem {
+    if (widget.activeAction == _BottomCenterAction.timetable) {
+      return _BottomNavigationItem.timetable;
+    }
     final selectedAction = widget.selectedAction;
     if (selectedAction == _BottomCenterAction.ai) {
       return _BottomNavigationItem.siri;
@@ -5891,7 +6019,9 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
                       ),
                       child: LayoutBuilder(
                         builder: (context, innerConstraints) {
-                          final segmentWidth = innerConstraints.maxWidth / 5;
+                          final segmentWidth =
+                              innerConstraints.maxWidth /
+                              _BottomNavigationItem.values.length;
                           final visibleItem = _visibleItem;
                           return Stack(
                             key: const ValueKey('bottom-mode-thumb-layer'),
@@ -5975,7 +6105,9 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
   }
 
   void _updateDrag(double dx, double width) {
-    final index = (dx / (width / 5)).floor().clamp(0, 4);
+    final index = (dx / (width / _BottomNavigationItem.values.length))
+        .floor()
+        .clamp(0, _BottomNavigationItem.values.length - 1);
     final item = _BottomNavigationItem.values[index];
     if (_dragItem != item) {
       setState(() => _dragItem = item);
@@ -5984,6 +6116,8 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
 
   void _select(_BottomNavigationItem item) {
     switch (item) {
+      case _BottomNavigationItem.timetable:
+        widget.onCenterActionSelected(_BottomCenterAction.timetable);
       case _BottomNavigationItem.quickAccess:
         widget.onCenterActionSelected(_BottomCenterAction.quickAccess);
       case _BottomNavigationItem.week:
@@ -6019,6 +6153,7 @@ class _UnifiedBottomNavigationButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tooltip = switch (item) {
+      _BottomNavigationItem.timetable => context.tr('시간표'),
       _BottomNavigationItem.quickAccess => context.tr('빠른 보기'),
       _BottomNavigationItem.week => context.l10n.calendarViewName(
         CalendarViewMode.week,
@@ -6048,6 +6183,9 @@ class _UnifiedBottomNavigationButton extends StatelessWidget {
 
   Widget _content(BuildContext context) {
     final color = selected ? Colors.white : DailyUi.secondaryText(context);
+    if (item == _BottomNavigationItem.timetable) {
+      return Icon(Icons.school_outlined, size: 20, color: color);
+    }
     if (item == _BottomNavigationItem.quickAccess) {
       return Icon(Icons.view_agenda_outlined, size: 20, color: color);
     }
@@ -6174,6 +6312,7 @@ class _LegacyCalendarBottomBar extends StatelessWidget {
                       _BottomCenterAction.quickAccess => context.tr('빠른 보기'),
                       _BottomCenterAction.calendar => context.tr('달력'),
                       _BottomCenterAction.ai => 'AI',
+                      _BottomCenterAction.timetable => context.tr('시간표'),
                     },
                     itemBuilder: (context, action, selected) => Icon(
                       switch (action) {
@@ -6182,6 +6321,7 @@ class _LegacyCalendarBottomBar extends StatelessWidget {
                         _BottomCenterAction.calendar =>
                           Icons.date_range_rounded,
                         _BottomCenterAction.ai => Icons.stars_rounded,
+                        _BottomCenterAction.timetable => Icons.school_outlined,
                       },
                       size: 20,
                       color: selected
@@ -7915,11 +8055,7 @@ List<CalendarEvent> _filterVisibleEvents(
 List<CalendarEvent> _eventsForDay(List<CalendarEvent> events, DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
   final end = start.add(const Duration(days: 1));
-  return events
-      .where(
-        (event) => event.startAt.isBefore(end) && event.endAt.isAfter(start),
-      )
-      .toList();
+  return events.where((event) => event.overlaps(start, end)).toList();
 }
 
 List<CalendarEvent> _orderedEventsForDay(

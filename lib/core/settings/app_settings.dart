@@ -1,5 +1,6 @@
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
+import '../academic/academic_profile.dart';
 
 enum AppLanguage {
   system,
@@ -252,6 +253,7 @@ class AppSettings {
     this.themeMode = AppThemeMode.system,
     this.monthNavigationMode = MonthNavigationMode.horizontal,
     this.language = AppLanguage.system,
+    this.academicProfile,
   }) : defaultReminderMinutesList = normalizeReminderMinutes(
          defaultReminderMinutesList ??
              (defaultReminderMinutes == null
@@ -300,6 +302,7 @@ class AppSettings {
   final AppThemeMode themeMode;
   final MonthNavigationMode monthNavigationMode;
   final AppLanguage language;
+  final AcademicProfile? academicProfile;
 
   AppSettings copyWith({
     int? defaultReminderMinutes,
@@ -336,6 +339,8 @@ class AppSettings {
     AppThemeMode? themeMode,
     MonthNavigationMode? monthNavigationMode,
     AppLanguage? language,
+    AcademicProfile? academicProfile,
+    bool clearAcademicProfile = false,
   }) {
     return AppSettings(
       defaultReminderMinutesList:
@@ -385,6 +390,9 @@ class AppSettings {
       themeMode: themeMode ?? this.themeMode,
       monthNavigationMode: monthNavigationMode ?? this.monthNavigationMode,
       language: language ?? this.language,
+      academicProfile: clearAcademicProfile
+          ? null
+          : academicProfile ?? this.academicProfile,
     );
   }
 

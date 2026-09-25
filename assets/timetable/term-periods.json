@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "university": "smu",
+  "sourceUrl": "https://www.smu.ac.kr/kor/life/academicCalendar.do",
+  "checkedAt": "2026-09-25",
+  "terms": [
+    {
+      "year": 2026,
+      "semester": "1",
+      "start": "2026-03-03",
+      "end": "2026-06-22",
+      "sourceArticleIds": [
+        "762385",
+        "762391",
+        "762392",
+        "762396"
+      ]
+    },
+    {
+      "year": 2026,
+      "semester": "여름",
+      "start": "2026-06-23",
+      "end": "2026-07-08",
+      "sourceArticleIds": [
+        "762397"
+      ]
+    },
+    {
+      "year": 2026,
+      "semester": "2",
+      "start": "2026-09-01",
+      "end": "2026-12-21",
+      "sourceArticleIds": [
+        "765597",
+        "766725",
+        "766727",
+        "766729"
+      ]
+    },
+    {
+      "year": 2026,
+      "semester": "겨울",
+      "start": "2026-12-22",
+      "end": "2027-01-08",
+      "sourceArticleIds": [
+        "766730"
+      ]
+    }
+  ],
+  "additionalUniversities": [
+    {
+      "university": "dku",
+      "sourceUrl": "https://www.dankook.ac.kr/web/kor/-2014-",
+      "checkedAt": "2026-09-26",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "1",
+          "start": "2026-03-03",
+          "end": "2026-06-19",
+          "sourceTitles": [
+            "2026학년도 1학기 개강",
+            "2026학년도 1학기 종강",
+            "2026학년도 1학기 공휴일 지정순연일"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "여름",
+          "start": "2026-06-23",
+          "end": "2026-07-13",
+          "sourceTitles": [
+            "2026학년도 계절(하계)학기 수업기간"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "2026학년도 2학기 개강",
+            "2026학년도 2학기 종강",
+            "2026학년도 2학기 공휴일 지정순연일"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "겨울",
+          "start": "2026-12-23",
+          "end": "2027-01-14",
+          "sourceTitles": [
+            "2026학년도 계절(동계)학기 수업기간"
+          ]
+        }
+      ]
+    },
+    {
+      "university": "jnu",
+      "sourceUrl": "https://events.jnu.ac.kr/Schedule.aspx?mode=1&YY=2026",
+      "checkedAt": "2026-09-26",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "1",
+          "start": "2026-03-03",
+          "end": "2026-06-23",
+          "sourceTitles": [
+            "제1학기 개강",
+            "제1학기 종강"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "여름",
+          "start": "2026-06-29",
+          "end": "2026-07-23",
+          "sourceTitles": [
+            "하계 계절학기"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "제2학기 개강",
+            "제2학기 종강"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "겨울",
+          "start": "2026-12-28",
+          "end": "2027-01-22",
+          "sourceTitles": [
+            "동계 계절학기"
+          ]
+        }
+      ]
+    }
+  ]
+}

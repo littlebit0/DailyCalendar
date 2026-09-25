@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:daily/core/academic/academic_calendar_service.dart';
+import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/academic_store.dart';
 import 'package:daily/core/di/app_providers.dart';
@@ -175,7 +176,16 @@ void main() {
   late DateTime now;
   late EventCommandService commands;
   setUp(() async {
-    SharedPreferences.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues({
+      'academicProfile.v1': jsonEncode(
+        const AcademicProfile(
+          universityId: 'academyinfo:0000117',
+          universityName: '상명대학교',
+          schoolKind: 'fourYear',
+          campus: '서울캠퍼스',
+        ).toJson(),
+      ),
+    });
     settings = SettingsRepository(
       preferences: await SharedPreferences.getInstance(),
     );

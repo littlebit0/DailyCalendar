@@ -32,6 +32,22 @@ Size dailyCalendarUsableSize(BuildContext context) {
 }
 
 abstract final class DailyUi {
+  static const darkPopupBorder = BorderSide(
+    color: Color(0xff495363),
+    width: 1.2,
+  );
+
+  static BorderSide popupBorder(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.dark
+      ? darkPopupBorder
+      : BorderSide.none;
+
+  static RoundedRectangleBorder popupShape(BuildContext context) =>
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: popupBorder(context),
+      );
+
   static const primary = Color(0xff0a63d8);
   static const success = Color(0xff2aa65a);
   static const warning = Color(0xffe88b00);

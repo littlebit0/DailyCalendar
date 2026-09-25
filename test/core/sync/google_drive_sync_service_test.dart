@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
 import 'package:daily/core/analytics/product_analytics.dart';
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/app_settings.dart';
@@ -14,6 +15,7 @@ import 'package:daily/features/events/data/app_database.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
 import 'package:drift/native.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
+import 'package:daily/features/events/domain/event_deletion.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,6 +26,60 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   _latestMergeTests();
+
+  for (final reason in ['rateLimitExceeded', 'userRateLimitExceeded']) {
+    test(
+      '403 $reason remains retryable without account reconnection',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final preferences = await SharedPreferences.getInstance();
+        var requests = 0;
+        final service = _service(
+          repository: _MemoryEventRepository(),
+          notificationService: _FakeNotificationService(),
+          preferences: preferences,
+          automaticRetryDelays: const [Duration(milliseconds: 10)],
+          httpClient: _versionedClient((request) async {
+            if (++requests == 1) {
+              return http.Response(
+                jsonEncode({
+                  'error': {
+                    'errors': [
+                      {'reason': reason},
+                    ],
+                    'code': 403,
+                  },
+                }),
+                403,
+              );
+            }
+            return _driveFiles([]);
+          }),
+        );
+        addTearDown(service.dispose);
+        final completed = Completer<void>();
+        service.statusNotifier.addListener(() {
+          if (service.statusNotifier.value.lastSyncedAt != null &&
+              !completed.isCompleted) {
+            completed.complete();
+          }
+        });
+        await expectLater(
+          service.restoreNow(),
+          throwsA(
+            isA<GoogleDriveSyncException>().having(
+              (error) => error.message,
+              'message',
+              contains('요청이 너무 많습니다'),
+            ),
+          ),
+        );
+        await completed.future.timeout(const Duration(seconds: 2));
+        expect(requests, greaterThan(1));
+        expect(service.statusNotifier.value.error, isNull);
+      },
+    );
+  }
 
   test(
     'startup propagates failure without backing up pending local changes',
@@ -1087,6 +1143,9 @@ void main() {
     final requests = <http.Request>[];
     final httpClient = _versionedClient((request) async {
       requests.add(request);
+      if (request.url.path == '/drive/v3/changes/startPageToken') {
+        return _jsonResponse({'startPageToken': 'baseline'});
+      }
       if (request.method == 'GET' && request.url.path == '/drive/v3/files') {
         final query = request.url.queryParameters['q'] ?? '';
         if (query.contains('daily-sync-v2-settings.json')) {
@@ -2533,6 +2592,7 @@ GoogleDriveSyncService _service({
   ProductAnalytics analytics = const NoopProductAnalytics(),
 }) {
   return GoogleDriveSyncService(
+    driveRequestDelay: Duration.zero,
     authService: authService ?? _FakeGoogleDriveAuthService(),
     eventRepository: repository,
     notificationService: notificationService,
@@ -2554,6 +2614,15 @@ MockClient _versionedClient(
 ) {
   final bodies = <String, http.Response>{};
   return MockClient((request) async {
+    // These event/settings fixtures predate timetable storage. Model an empty
+    // timetable namespace; its transport and bootstrap have dedicated tests.
+    if (request.method == 'GET' &&
+        request.url.path == '/drive/v3/files' &&
+        (request.url.queryParameters['q'] ?? '').contains(
+          "name = 'daily-sync-v2-timetable.json'",
+        )) {
+      return _driveFiles([]);
+    }
     if (request.url.path.startsWith('/drive/v2/files/')) {
       final body = bodies[request.url.pathSegments.last];
       if (body == null) {
@@ -2865,6 +2934,7 @@ void _latestMergeTests() {
     late DriftEventRepository repository;
     late SettingsRepository settings;
     late GoogleDriveSyncService service;
+    late int widgetRefreshes;
     setUp(() async {
       SharedPreferences.setMockInitialValues({'deviceId': 'local'});
       final prefs = await SharedPreferences.getInstance();
@@ -2875,7 +2945,9 @@ void _latestMergeTests() {
       database = AppDatabase.forTesting(NativeDatabase.memory());
       repository = DriftEventRepository(database);
       drive = _VersionedDrive();
+      widgetRefreshes = 0;
       service = GoogleDriveSyncService(
+        driveRequestDelay: Duration.zero,
         authService: _FakeGoogleDriveAuthService(),
         eventRepository: repository,
         notificationService: _FakeNotificationService(),
@@ -2885,6 +2957,7 @@ void _latestMergeTests() {
         backupRestoreDelay: Duration.zero,
         automaticRetryDelays: const [],
         now: () => DateTime(2026, 9, 16),
+        onEventsChanged: () async => widgetRefreshes++,
       );
     });
     tearDown(() async {
@@ -2912,6 +2985,406 @@ void _latestMergeTests() {
       endAt: '2026-09-18',
       updatedAt: updated,
       deletedAt: deleted,
+    );
+
+    LmsEventMetadata metadata([String owner = 'tester@example.com']) =>
+        LmsEventMetadata(
+          schoolId: 'smu',
+          ownerId: owner,
+          lmsUserId: '42',
+          courseId: '123',
+          courseTitle: '자료구조',
+          activityType: 'assignment',
+          activityId: '456',
+          sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=456',
+          dueAt: DateTime.utc(2026, 9, 17),
+          submissionStatus: '제출 완료',
+          progressPercent: 100,
+        );
+
+    test(
+      'LMS upload and compact deletions stay with owner while personal events still upload',
+      () async {
+        final own = local().copyWith(
+          id: 'lms:own',
+          lms: metadata(),
+          memo: '개인 메모',
+          completed: false,
+        );
+        final other = local().copyWith(
+          id: 'lms:other',
+          lms: metadata('other@example.com'),
+        );
+        await repository.saveAllAtomically([own, other, local()]);
+        await repository.mergeDeletionRecords([
+          EventDeletion(
+            id: 'lms:own-deleted',
+            deletedAt: DateTime.utc(2026, 9, 15),
+            lmsOwnerId: 'tester@example.com',
+          ),
+          EventDeletion(
+            id: 'lms:other-deleted',
+            deletedAt: DateTime.utc(2026, 9, 15),
+            lmsOwnerId: 'other@example.com',
+          ),
+        ]);
+        await service.backupNow(
+          eventIds: {own.id, other.id, 'merge', 'lms:other-deleted'},
+          includeSettings: false,
+        );
+        expect(drive.files.values.map((file) => file.name).toSet(), {
+          'daily-sync-v2-event-lms:own.json',
+          'daily-sync-v2-event-merge.json',
+          'daily-sync-v2-event-lms:own-deleted.json',
+        });
+        final uploaded =
+            drive.files.values
+                    .singleWhere((file) => file.name.endsWith('lms:own.json'))
+                    .data['event']
+                as Map;
+        expect(uploaded['lms'], own.lms!.toJson());
+        expect(uploaded['completed'], false);
+        expect(uploaded['memo'], '개인 메모');
+        expect((await repository.findById(other.id))!.syncStatus, 'pending');
+        expect(
+          (await repository.deletionRecords(
+            pendingOnly: true,
+          )).single.lmsOwnerId,
+          'other@example.com',
+        );
+        expect(await service.hasPendingChanges(), isFalse);
+        drive.requests.clear();
+        await service.syncPendingChangesNow();
+        expect(drive.requests, isEmpty);
+      },
+    );
+
+    test(
+      'LMS restore keeps metadata and ignores other owner data and deletions',
+      () async {
+        final ownData = remote();
+        (ownData['event'] as Map)['lms'] = metadata().toJson();
+        drive.seed('own', 'daily-sync-v2-event-merge.json', ownData);
+        final otherData = _eventFileJson(
+          id: 'lms:other',
+          title: '다른 계정',
+          startAt: '2026-09-17',
+          endAt: '2026-09-18',
+        );
+        (otherData['event'] as Map)['lms'] = metadata(
+          'other@example.com',
+        ).toJson();
+        drive.seed('other', 'daily-sync-v2-event-lms:other.json', otherData);
+        drive.seed('other-deletion', 'daily-sync-v2-event-lms:deleted.json', {
+          'schemaVersion': 2,
+          'type': 'event',
+          'compacted': true,
+          'deletion': EventDeletion(
+            id: 'lms:deleted',
+            deletedAt: DateTime.utc(2026, 10),
+            lmsOwnerId: 'other@example.com',
+          ).toJson(),
+        });
+        await service.restoreNow();
+        expect((await repository.findById('merge'))!.lms, metadata());
+        expect((await repository.findById('merge'))!.completed, isFalse);
+        expect(await repository.findById('lms:other'), isNull);
+        expect(await repository.deletionRecords(), isEmpty);
+      },
+    );
+
+    test(
+      'legacy metadata-stripped LMS edit preserves source and repairs Drive extension',
+      () async {
+        await repository.save(
+          local().copyWith(lms: metadata(), syncStatus: 'synced'),
+        );
+        final oldClient = remote();
+        (oldClient['event'] as Map)['memo'] = '다른 기기의 개인 메모';
+        drive.seed('legacy', 'daily-sync-v2-event-merge.json', oldClient);
+        await service.restoreNow();
+        final restored = (await repository.findById('merge'))!;
+        expect(restored.title, 'Remote');
+        expect(restored.memo, '다른 기기의 개인 메모');
+        expect(restored.lms, metadata());
+        expect(restored.syncStatus, 'pending');
+        await service.syncPendingChangesNow();
+        expect(
+          (drive.payload('legacy')['event'] as Map)['lms'],
+          metadata().toJson(),
+        );
+        expect((await repository.findById('merge'))!.syncStatus, 'synced');
+      },
+    );
+
+    test(
+      'legacy deletion is scoped before compaction and cannot delete another owner row',
+      () async {
+        await repository.save(
+          local().copyWith(
+            id: 'lms:own',
+            lms: metadata(),
+            syncStatus: 'synced',
+          ),
+        );
+        await repository.save(
+          local().copyWith(
+            id: 'lms:foreign-local',
+            lms: metadata('other@example.com'),
+            syncStatus: 'synced',
+          ),
+        );
+        for (final id in ['lms:own', 'lms:foreign-local', 'lms:unknown']) {
+          drive.seed(id, 'daily-sync-v2-event-$id.json', {
+            'schemaVersion': 2,
+            'type': 'event',
+            'compacted': true,
+            'deletion': EventDeletion(
+              id: id,
+              deletedAt: DateTime.utc(2026, 10),
+            ).toJson(),
+          });
+        }
+        await service.restoreNow();
+        expect(await repository.findById('lms:own'), isNull);
+        expect(await repository.findById('lms:foreign-local'), isNotNull);
+        final marker = (await repository.deletionRecords()).single;
+        expect(marker.id, 'lms:own');
+        expect(marker.lmsOwnerId, 'tester@example.com');
+        expect(marker.pending, isTrue);
+        await service.syncPendingChangesNow();
+        expect(
+          (drive.payload('lms:own')['deletion'] as Map)['lmsOwnerId'],
+          'tester@example.com',
+        );
+        final strippedAgain = <String, Object?>{
+          ...drive.payload('lms:own'),
+          'deletion': {
+            'id': marker.id,
+            'deletedAt': marker.deletedAt.toUtc().toIso8601String(),
+          },
+        };
+        drive.seed(
+          'lms:own',
+          'daily-sync-v2-event-lms:own.json',
+          strippedAgain,
+        );
+        await service.restoreNow();
+        expect((await repository.deletionRecords()).single.pending, isTrue);
+        await service.syncPendingChangesNow();
+        expect(
+          (drive.payload('lms:own')['deletion'] as Map)['lmsOwnerId'],
+          'tester@example.com',
+        );
+      },
+    );
+
+    test(
+      'metadata-stripped LMS record without known source remains hidden and never uploads',
+      () async {
+        final stripped = local().copyWith(id: 'lms:stripped');
+        await repository.save(stripped);
+        await service.backupNow(
+          eventIds: {stripped.id},
+          includeSettings: false,
+        );
+        expect(drive.files, isEmpty);
+        final data = remote();
+        (data['event'] as Map)['id'] = 'lms:stripped-new';
+        drive.seed(
+          'stripped-new',
+          'daily-sync-v2-event-lms:stripped-new.json',
+          data,
+        );
+        await service.restoreNow();
+        expect(await repository.findById('lms:stripped-new'), isNull);
+        expect(await service.hasPendingChanges(), isFalse);
+      },
+    );
+
+    test(
+      'repeated manual sync only requests changes, not all 200 event files',
+      () async {
+        for (var i = 0; i < 200; i++) {
+          drive.seed(
+            'file-$i',
+            'daily-sync-v2-event-event-$i.json',
+            _eventFileJson(
+              id: 'event-$i',
+              title: 'Event $i',
+              startAt: '2026-09-17',
+              endAt: '2026-09-18',
+            ),
+          );
+        }
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        expect((await repository.allEventsForSync()).length, 200);
+        expect(settings.driveChangePageToken('tester@example.com'), '200');
+        expect(
+          drive.requests.first.url.path,
+          '/drive/v3/changes/startPageToken',
+        );
+        drive.requests.clear();
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        expect(drive.requests.map((r) => r.url.path), ['/drive/v3/changes']);
+        drive.seed(
+          'file-3',
+          'daily-sync-v2-event-event-3.json',
+          _eventFileJson(
+            id: 'event-3',
+            title: 'Changed',
+            startAt: '2026-09-17',
+            endAt: '2026-09-18',
+            updatedAt: '2026-09-25T01:00:00Z',
+          ),
+        );
+        drive.requests.clear();
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        expect((await repository.findById('event-3'))!.title, 'Changed');
+        expect(
+          drive.requests
+              .where((r) => r.url.queryParameters['alt'] == 'media')
+              .length,
+          1,
+        );
+        expect(
+          drive.requests.any(
+            (r) => (r.url.queryParameters['q'] ?? '').contains('name contains'),
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'incremental sync resolves an older local edit even when the remote cursor is current',
+      () async {
+        drive.seed('file', 'daily-sync-v2-event-merge.json', remote());
+        await service.syncNow();
+        await repository.save(local());
+        drive.requests.clear();
+        final previousRefreshes = widgetRefreshes;
+        await service.syncNow();
+        expect((await repository.findById('merge'))!.title, 'Remote');
+        expect(await service.hasPendingChanges(), isFalse);
+        expect(widgetRefreshes, previousRefreshes + 1);
+        expect(
+          drive.requests
+              .where((r) => r.url.queryParameters['alt'] == 'media')
+              .every((r) => r.url.path.endsWith('/file')),
+          isTrue,
+        );
+      },
+    );
+
+    test(
+      'combined sync with no local changes skips the upload-to-download delay',
+      () async {
+        service.dispose();
+        service = GoogleDriveSyncService(
+          authService: _FakeGoogleDriveAuthService(),
+          eventRepository: repository,
+          notificationService: _FakeNotificationService(),
+          settingsRepository: settings,
+          httpClient: MockClient(drive.handle),
+          driveRequestDelay: Duration.zero,
+          backupRestoreDelay: const Duration(seconds: 3),
+          automaticRetryDelays: const [],
+        );
+        await service
+            .syncPendingChangesNow(restoreAfterBackup: true)
+            .timeout(const Duration(seconds: 1));
+        expect(settings.driveChangePageToken('tester@example.com'), '0');
+        drive.requests.clear();
+        await service
+            .syncPendingChangesNow(restoreAfterBackup: true)
+            .timeout(const Duration(seconds: 1));
+        expect(drive.requests.map((request) => request.url.path), [
+          '/drive/v3/changes',
+        ]);
+        expect(service.statusNotifier.value.completedItems, isNull);
+        expect(service.statusNotifier.value.totalItems, isNull);
+      },
+    );
+
+    test(
+      'combined incremental sync uploads a local edit queued during change download',
+      () async {
+        await service.syncNow();
+        final checking = Completer<void>();
+        final finishCheck = Completer<void>();
+        drive.requestOverride = (request) async {
+          if (request.url.path == '/drive/v3/changes') {
+            checking.complete();
+            await finishCheck.future;
+          }
+          return null;
+        };
+        final operation = service.syncPendingChangesNow(
+          restoreAfterBackup: true,
+        );
+        await checking.future;
+        final pending = local().copyWith(title: 'Edited while checking');
+        await repository.save(pending);
+        await service.queueEventUpsert(pending);
+        finishCheck.complete();
+        await operation;
+        expect(
+          drive.files.values.single.data['event'],
+          containsPair('title', 'Edited while checking'),
+        );
+        expect((await repository.findById(pending.id))!.syncStatus, 'synced');
+        expect(await service.hasPendingChanges(), isFalse);
+        expect(service.statusNotifier.value.error, isNull);
+      },
+    );
+
+    test(
+      'failed incremental batch clears progress and does not advance the saved cursor',
+      () async {
+        await service.syncNow();
+        for (var i = 0; i < 2; i++) {
+          drive.seed(
+            'progress-$i',
+            'daily-sync-v2-event-progress-$i.json',
+            _eventFileJson(
+              id: 'progress-$i',
+              title: 'Remote $i',
+              startAt: '2026-09-17',
+              endAt: '2026-09-18',
+            ),
+          );
+        }
+        final statuses = <GoogleDriveSyncStatus>[];
+        service.statusNotifier.addListener(
+          () => statuses.add(service.statusNotifier.value),
+        );
+        drive.requestOverride = (request) async =>
+            request.url.path == '/drive/v3/files/progress-1'
+            ? http.Response('unavailable', 503)
+            : null;
+        await expectLater(
+          service.syncPendingChangesNow(restoreAfterBackup: true),
+          throwsA(isA<GoogleDriveSyncException>()),
+        );
+        expect(
+          statuses.any(
+            (status) => status.completedItems == 1 && status.totalItems == 2,
+          ),
+          isTrue,
+        );
+        expect(service.statusNotifier.value.syncing, isFalse);
+        expect(service.statusNotifier.value.error, isNotNull);
+        expect(service.statusNotifier.value.completedItems, isNull);
+        expect(service.statusNotifier.value.totalItems, isNull);
+        expect(settings.driveChangePageToken('tester@example.com'), '0');
+        expect(await repository.allEventsForSync(), isEmpty);
+        drive.requestOverride = null;
+        await service.syncPendingChangesNow(restoreAfterBackup: true);
+        expect(await repository.allEventsForSync(), hasLength(2));
+        expect(settings.driveChangePageToken('tester@example.com'), '2');
+        expect(service.statusNotifier.value.error, isNull);
+      },
     );
 
     test(
@@ -3124,9 +3597,13 @@ class _VersionedDrive {
   bool reverseOrder = false;
   bool invalidChecksum = false;
   FutureOr<void> Function()? beforeWrite;
+  FutureOr<http.Response?> Function(http.Request)? requestOverride;
   int preconditionFailures = 0;
   int writes = 0;
+  final requests = <http.Request>[];
+  final changes = <String>[];
   void seed(String id, String name, Map<String, Object?> data) {
+    changes.add(id);
     files[id] = (
       name: name,
       data: data,
@@ -3136,7 +3613,27 @@ class _VersionedDrive {
 
   Map<String, Object?> payload(String id) => files[id]!.data;
   Future<http.Response> handle(http.Request request) async {
+    requests.add(request);
+    final overridden = await requestOverride?.call(request);
+    if (overridden != null) return overridden;
     final path = request.url.path, id = request.url.pathSegments.last;
+    if (path == '/drive/v3/changes/startPageToken') {
+      return _jsonResponse({'startPageToken': '${changes.length}'});
+    }
+    if (path == '/drive/v3/changes') {
+      final since = int.parse(request.url.queryParameters['pageToken']!);
+      return _jsonResponse({
+        'newStartPageToken': '${changes.length}',
+        'changes': [
+          for (final changed in changes.skip(since))
+            {
+              'fileId': changed,
+              'removed': false,
+              'file': {'id': changed, 'name': files[changed]!.name},
+            },
+        ],
+      });
+    }
     if (request.method == 'GET' && path == '/drive/v3/files') {
       final q = request.url.queryParameters['q'] ?? '';
       var entries = files.entries.where(

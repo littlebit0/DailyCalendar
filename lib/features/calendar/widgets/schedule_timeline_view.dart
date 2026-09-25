@@ -30,6 +30,7 @@ class ScheduleTimelineView extends StatefulWidget {
     required this.holidayBackgroundEnabled,
     required this.holidayColorValue,
     this.showDateHeader = true,
+    this.eventActions = const {},
     this.holidayDates,
     this.centerEventTitles = false,
     this.eventSortPriority = CalendarEventSortPriority.time,
@@ -45,6 +46,7 @@ class ScheduleTimelineView extends StatefulWidget {
     required this.onDateSelected,
   });
 
+  final Map<String, VoidCallback> eventActions;
   final List<DateTime> days;
   final List<CalendarEvent> events;
   final DateTime selectedDate;
@@ -175,6 +177,7 @@ class _ScheduleTimelineViewState extends State<ScheduleTimelineView> {
                   controller: scrollController,
                   physics: const ClampingScrollPhysics(),
                   child: _ScheduleTimeGrid(
+                    eventActions: widget.eventActions,
                     days: widget.days,
                     events: widget.events
                         .where((event) => !event.allDay)
@@ -674,6 +677,7 @@ Widget calendarScheduleDragCard(
   required bool centerEventTitles,
   VoidCallback? onTap,
   VoidCallback? onDoubleTap,
+  String? subtitle,
 }) {
   if (event.allDay) {
     return _AllDayEventChip(
@@ -731,6 +735,7 @@ Widget calendarScheduleDragCard(
                 ),
               ),
               TextSpan(text: '\n$time'),
+              if (subtitle != null) TextSpan(text: '\n$subtitle'),
             ],
           ),
           maxLines: height >= 42 ? 3 : 1,
@@ -751,6 +756,7 @@ Widget calendarScheduleDragCard(
 
 class _ScheduleTimeGrid extends StatelessWidget {
   const _ScheduleTimeGrid({
+    this.eventActions = const {},
     required this.days,
     required this.events,
     required this.use24HourTime,
@@ -772,6 +778,7 @@ class _ScheduleTimeGrid extends StatelessWidget {
 
   static const _hourHeight = 64.0;
 
+  final Map<String, VoidCallback> eventActions;
   final List<DateTime> days;
   final List<CalendarEvent> events;
   final bool use24HourTime;
@@ -952,7 +959,9 @@ class _ScheduleTimeGrid extends StatelessWidget {
     final eventBlock = CalendarEventDraggable(
       event: layout.event,
       enabled:
-          !preview && (onEventTimeDropped != null || onEventDropped != null),
+          !preview &&
+          !layout.event.readOnly &&
+          (onEventTimeDropped != null || onEventDropped != null),
       onDragStateChanged: (dragging) =>
           onEventDragStateChanged(dragging ? layout.event : null),
       onDragInteractionStateChanged: onEventDragInteractionStateChanged,
@@ -964,7 +973,13 @@ class _ScheduleTimeGrid extends StatelessWidget {
           height: height,
           use24HourTime: use24HourTime,
           centerEventTitles: centerEventTitles,
-          onTap: () => onDateSelected(day),
+          subtitle: eventActions.containsKey(layout.event.id)
+              ? [
+                  layout.event.location,
+                  layout.event.memo,
+                ].whereType<String>().where((s) => s.isNotEmpty).join(' · ')
+              : null,
+          onTap: eventActions[layout.event.id] ?? () => onDateSelected(day),
           onDoubleTap: onDoubleTap,
         ),
       ),
@@ -1160,9 +1175,7 @@ List<_TimelineSegment> _segmentsForDate(
   final dayEnd = dayStart.add(const Duration(days: 1));
   final segments = <_TimelineSegment>[];
   for (final event in events) {
-    if (event.allDay ||
-        !event.startAt.isBefore(dayEnd) ||
-        !event.endAt.isAfter(dayStart)) {
+    if (event.allDay || !event.overlaps(dayStart, dayEnd)) {
       continue;
     }
     final start = event.startAt.isAfter(dayStart) ? event.startAt : dayStart;
@@ -1242,7 +1255,7 @@ bool _isSameDay(DateTime first, DateTime second) =>
 bool _eventOccursOnDate(CalendarEvent event, DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
   final end = start.add(const Duration(days: 1));
-  return event.startAt.isBefore(end) && event.endAt.isAfter(start);
+  return event.overlaps(start, end);
 }
 
 bool _sameDraggedEvent(CalendarEvent event, CalendarEvent? draggedEvent) {

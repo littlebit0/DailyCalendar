@@ -23,6 +23,7 @@ import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
 import '../domain/recurrence_rule.dart';
 import 'event_editor_dialog.dart';
+import 'lms_event_status.dart';
 import 'event_completion_action.dart';
 
 enum _RecurringChangeScope { onlyThis, future, all }
@@ -78,7 +79,7 @@ class EventDetailsPanel extends ConsumerWidget {
                   settings.defaultReminderMinutesList,
                 ),
               ),
-        onDelete: selectedEvent.readOnly
+        onDelete: selectedEvent.readOnly || selectedEvent.lms != null
             ? null
             : () => unawaited(_deleteEvent(context, ref, selectedEvent)),
       );
@@ -221,7 +222,7 @@ class EventDetailsPanel extends ConsumerWidget {
                       settings.categories,
                       settings.defaultReminderMinutesList,
                     ),
-              onDelete: event.readOnly
+              onDelete: event.readOnly || event.lms != null
                   ? null
                   : () => _deleteEvent(context, ref, event),
             ),
@@ -292,7 +293,7 @@ class EventDetailsPanel extends ConsumerWidget {
                   ),
                 );
               },
-        onDelete: event.readOnly
+        onDelete: event.readOnly || event.lms != null
             ? null
             : () {
                 Navigator.of(sheetContext).pop();
@@ -324,7 +325,9 @@ class EventDetailsPanel extends ConsumerWidget {
       context: context,
       builder: (_) => EventEditorDialog(
         frequentPlaces: ref.read(settingsRepositoryProvider).frequentPlaces,
-        loadPlaceEvents: ref.read(eventRepositoryProvider).allEventsForSync,
+        loadPlaceEvents: ref
+            .read(visibleEventRepositoryProvider)
+            .allEventsForSync,
         initialDate: date,
         categories: categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
@@ -373,7 +376,9 @@ class EventDetailsPanel extends ConsumerWidget {
       context: context,
       builder: (_) => EventEditorDialog(
         frequentPlaces: ref.read(settingsRepositoryProvider).frequentPlaces,
-        loadPlaceEvents: ref.read(eventRepositoryProvider).allEventsForSync,
+        loadPlaceEvents: ref
+            .read(visibleEventRepositoryProvider)
+            .allEventsForSync,
         initialDate: event.startAt,
         event: event,
         categories: categories,
@@ -416,7 +421,8 @@ class EventDetailsPanel extends ConsumerWidget {
     }
 
     final base =
-        await ref.read(eventRepositoryProvider).findById(event.id) ?? event;
+        await ref.read(visibleEventRepositoryProvider).findById(event.id) ??
+        event;
     switch (scope) {
       case _RecurringChangeScope.onlyThis:
         await commandService.save(_excludeOccurrence(base, event.startAt));
@@ -436,6 +442,7 @@ class EventDetailsPanel extends ConsumerWidget {
     WidgetRef ref,
     CalendarEvent event,
   ) async {
+    if (event.lms != null) return;
     final commandService = ref.read(eventCommandServiceProvider);
     final confirmed = await showDialog<bool>(
       context: context,
@@ -475,7 +482,8 @@ class EventDetailsPanel extends ConsumerWidget {
         return;
       }
       final base =
-          await ref.read(eventRepositoryProvider).findById(event.id) ?? event;
+          await ref.read(visibleEventRepositoryProvider).findById(event.id) ??
+          event;
       switch (scope) {
         case _RecurringChangeScope.onlyThis:
           await commandService.save(_excludeOccurrence(base, event.startAt));
@@ -1107,6 +1115,8 @@ class _EventTile extends StatelessWidget {
                               timeLabel,
                               style: Theme.of(context).textTheme.labelMedium,
                             ),
+                            if (event.lms != null)
+                              LmsEventStatus(metadata: event.lms!),
                             if (event.showDday)
                               Text(
                                 _formatDday(event),
@@ -1185,17 +1195,18 @@ class _EventTile extends StatelessWidget {
                       icon: const Icon(Icons.edit_outlined),
                     ),
                   ),
-                  SizedBox.square(
-                    dimension: 48,
-                    child: IconButton(
-                      key: ValueKey('event-delete-${event.id}'),
-                      tooltip: context.tr('삭제'),
-                      onPressed: onDelete == null
-                          ? null
-                          : () => unawaited(onDelete!()),
-                      icon: const Icon(Icons.delete_outline),
+                  if (event.lms == null)
+                    SizedBox.square(
+                      dimension: 48,
+                      child: IconButton(
+                        key: ValueKey('event-delete-${event.id}'),
+                        tooltip: context.tr('삭제'),
+                        onPressed: onDelete == null
+                            ? null
+                            : () => unawaited(onDelete!()),
+                        icon: const Icon(Icons.delete_outline),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -1221,6 +1232,9 @@ class _EventTile extends StatelessWidget {
     final locale = context.l10n.locale.toLanguageTag();
     final dateFormatter = DateFormat.yMMMd(locale);
     final timeFormatter = DateFormat.Hm(locale);
+    if (event.lms?.dueAt != null) {
+      return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
+    }
     if (event.allDay) {
       final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
       if (_sameDay(event.startAt, inclusiveEnd)) {
@@ -1293,6 +1307,25 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   @override
   Widget build(BuildContext context) {
     final event = widget.event.copyWith(completed: _completed);
+    ref.watch(appSettingsProvider);
+    if (event.lms != null &&
+        !ref.watch(lmsControllerProvider).isEventVisible(event)) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(context.tr('학교 연결을 확인하고 있습니다.')),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(context.tr('닫기')),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     final onEdit = widget.onEdit;
     final onDelete = widget.onDelete;
     final color = Color(event.colorValue);
@@ -1354,6 +1387,7 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
               ),
             ],
           ),
+          if (event.lms != null) LmsEventStatus(metadata: event.lms!),
           const SizedBox(height: 18),
           ...[
             CheckboxListTile(
@@ -1362,7 +1396,7 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
               ),
               contentPadding: EdgeInsets.zero,
               controlAffinity: ListTileControlAffinity.leading,
-              title: Text(context.tr('완료')),
+              title: Text(context.tr(event.lms == null ? '완료' : 'Daily 완료 표시')),
               value: _completed,
               onChanged: !canChangeCompletion || _updatingCompletion
                   ? null
@@ -1515,6 +1549,9 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
     final locale = Localizations.localeOf(context).toLanguageTag();
     final dateFormatter = DateFormat.yMMMMd(locale);
     final timeFormatter = DateFormat.Hm(locale);
+    if (event.lms?.dueAt != null) {
+      return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
+    }
     if (event.allDay) {
       final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
       if (_sameDay(event.startAt, inclusiveEnd)) {
@@ -1677,9 +1714,7 @@ List<CalendarEvent> _eventsForDay(
   final start = DateTime(date.year, date.month, date.day);
   final end = start.add(const Duration(days: 1));
   return sortedCalendarEvents(
-    events.where(
-      (event) => event.startAt.isBefore(end) && event.endAt.isAfter(start),
-    ),
+    events.where((event) => event.overlaps(start, end)),
     priority: settings.calendarEventSortPriority,
     categoryOrder: settings.categories.map((category) => category.id).toList(),
     manualOrder:

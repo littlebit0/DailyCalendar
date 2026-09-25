@@ -236,7 +236,7 @@ jobs:
         with:
           tag_name: ${{ inputs.tag }}
           name: DailyCalendar ${{ inputs.tag }}
-          body_path: docs/RELEASE_NOTES_3.5.2.md
+          body_path: docs/RELEASE_NOTES_3.6.0.md
           draft: true
           files: dist/*
           fail_on_unmatched_files: true

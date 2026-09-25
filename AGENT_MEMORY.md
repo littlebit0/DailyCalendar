@@ -5,6 +5,951 @@ release state, completed work, release status, and safe next steps. Do not add
 OAuth client secrets, GitHub tokens, signing certificates, provisioning
 profiles, keystore passwords, or private keys to this file.
 
+## 2026-09-26 version 3.6.0 release preparation
+
+- User authorized LMS destination-category selection, version 3.6.0, Git commit/push,
+  GitHub release/assets, and local Transporter-ready iOS/macOS exports. Apple upload
+  or review submission is not included in this request.
+- LMS settings selects an existing personal category. The account-scoped academic
+  profile stores lmsCategoryId in Drive settings. Existing linked events are
+  reclassified locally, and future imports use the same category. Atomic updates
+  preserve current school fields and personal memo/reminders/completion; other
+  owners and ordinary events are excluded. Missing/deleted categories use Basic.
+- Versions set to 3.6.0, Android versionCode 360. Notes and Korean store copy:
+  docs/RELEASE_NOTES_3.6.0.md and docs/STORE_TEXT_3.6.0_KO.md.
+- Validation so far: Flutter 980 passed, one existing skip; analyze clean;
+  tool unittest suite 45 run, one skip. Prior focused LMS/academic/commands 87 passed.
+  Release builds/export/upload and test-app updates are pending at this checkpoint.
+- Android emulator remains blocked by the snapshot incident below. Do not boot,
+  wipe, uninstall or restore it as part of release packaging. Build APKs without it.
+
+## 2026-09-26 academic management menu and single test installation
+
+- User requested one latest Daily Test installation and in-place updates from now
+  on. AGENTS.md section 7 now preserves the same bundle/package identity and path,
+  accounts/data/secure storage, and prohibits version-named duplicate apps and
+  routine uninstall/reinstall. An explicit global-memory update note was saved at
+  ~/.codex/memories/extensions/ad_hoc/notes/2026-09-25T18-50-06Z-daily-test-in-place-updates.md.
+- Canonical Mac test app remains ~/Applications/Daily Test.app,
+  com.littlebit0.daily.test. /Applications/Daily.app is the separate production app
+  and was preserved byte-for-byte. Moved 70 historical work-folder app bundles and
+  4 finished build copies to Trash using the OS trash API; 15 already-trashed app
+  copies also had registrations cleared. Final LaunchServices inspection found
+  exactly one existing, launchable Daily Test installation, plus 89 disabled old
+  copies in Trash. Trash was not emptied. All 63 data-backup manifest files stayed
+  unchanged; data backup folders were retained. No simulator/device was uninstalled.
+- Future app backups must be ZIP archives, not launchable .app copies. This update
+  used work/academic-management/prepare_install.py with signature/digest/data checks
+  and ZIP backups, updating the existing installation in place. Mac and iOS build
+  .app products were removed only AFTER verified installation; rebuild them for
+  future updates rather than launching a stale or duplicate artifact.
+- Settings now has Academic management immediately after Account. Its four routes
+  are academic profile, school LMS connection, academic calendar, and timetable
+  settings. Old academic entries in Account/Appearance/Profile were moved here.
+  First-login academic onboarding, Google requirements and supported-school gates
+  remain. Existing university/campus summary and four UI languages are retained.
+- Timetable settings contains term selection, name, semester period and confirmed
+  current-term reset. The main timetable keeps quick term switching, search,
+  adding/editing classes, weekly view and week navigation. Its management action
+  and period summary open the new settings page; settings return preserves state.
+  The period/view controls wrap on narrow/large-text screens without overflow.
+- Validation: 351 distinct related settings/timetable/main-widget tests passed;
+  one existing skip. The combined run passed 347 and had four test-harness failures
+  from a global platform override; after removing that override, the entire five-
+  case academic-management test file passed. The product source was unchanged
+  between those runs. Analyze clean; Mac/iOS simulator/Android debug builds passed.
+  All 337 frozen build inputs and 16 assets per platform matched before build-copy
+  cleanup. Evidence: work/academic-management/ focused-tests.log, navigation-tests.log,
+  analyze.log, *-build.log, build-input-verification.json and cleanup JSON files.
+- Mac/iPhone17/iPadPro13M5 test installations updated without uninstalling. Protected
+  readable hashes stayed equal (Mac 2, iPhone 4, iPad 2), with ZIP app backups.
+  iOS widgets auto-started during install; only owned widgets were stopped and
+  final artifact/data hashes rechecked. No mobile main app was launched by the agent.
+  Mac installed digest: 0cbd0683ff73eb0cdd686d1621adefe9de0bff48a656b41aaa5a45f20542a9fb.
+  iOS installed digest: 62632389d39593cdfabe0fac3a78e1f918771e7c28f84649405eba1007bcb724.
+- Authorized Mac smoke run reached Drive ready/idle/no error in 6.71 seconds.
+  When brought frontmost, the saved school session restored: LMS ready, 11 courses,
+  14 activities unchanged, zero additions/updates/deletions. This verifies account
+  and LMS preservation through the menu update. Native app-menu visual inspection
+  was limited; the new routes/round trips were verified with widget tests.
+- Android APK signature/package verified only. Emulator recovery/install remains
+  blocked by the preceding snapshot incident; no emulator access in this task.
+  Windows native verification remains unavailable. No commit/push/release/version
+  bump was performed.
+
+## 2026-09-26 issue 65 Mac SSO and automatic import verified; Android blocked
+
+- User explicitly corrected AGENTS.md section 3: the native macOS/iOS editing
+  restriction applies ONLY to agents hosted on Windows. This Mac may implement
+  approved macOS/iOS work under that rule; no separate platform exception is
+  required. AGENTS.md updated.
+- App-internal official SSO and automatic LMS refresh are approved. Dedicated
+  research-browser login was completed by the user; actual SMU dashboard,
+  assignment and quiz read-only indexes were verified. No school credentials or
+  browser cookies were extracted/copied into the app. Submission, quiz attempt,
+  lecture playback, marking completion and security-key generation remain barred.
+- Implemented the school WebView, account/school-scoped secure session,
+  assignment/quiz parser, serial refresh/controller, settings and calendar UI.
+  Authentication success on the school home page triggers connection completion;
+  manual confirmation remains available. Refresh uses lifecycle/manual requests
+  and a minimum five-minute active-use interval, not a verified push channel.
+- SQLite schema 9 and Drive v2 persist LMS identity/source/status separately from
+  personal completion. Event uploads/restores, compact deletion records and UI
+  visibility enforce LMS ownership while preserving ordinary personal events.
+  Atomic command merges retain the latest school title/deadline and personal
+  memo/category/reminders/completion during overlapping edits or source refresh.
+  Metadata-stripped legacy LMS IDs fail closed until their authorized source is
+  recovered. Zero-duration midnight deadlines remain visible on the correct day.
+  Details: docs/LMS_SYNC_METADATA.md. Older binaries do not acquire these guards;
+  any shared-schema release still requires coordinated four-platform artifacts.
+- SMU assignment/quiz indexes are the verified first adapter. JNU actual private
+  responses and complete lecture/progress linkage still need verification.
+- Apple uses a dedicated nonpersistent WKWebsiteDataStore plus a narrow native
+  cookie channel; Windows uses InPrivate WebView2. Android WebView does not offer
+  the same private-store guarantees; app session cleanup is not proof of
+  crash-time nonpersistence. Passwords are never stored; LMS session material must
+  remain out of logs/Drive. No commit/push/release/version change authorized.
+- iOS/macOS now combine their existing SwiftPM integration with CocoaPods for
+  flutter_inappwebview. iOS LMS channel registration uses the implicit-engine
+  callback; Pods' deployment floor matches the app's existing iOS 15 minimum.
+  Headless browser restoration is foreground-only. Session-retirement failure
+  remains retryable, and an SSO popup cannot consume the login route's result.
+- Actual first Mac execution exposed a schema-9 regression: the legacy Todo
+  migration restored/re-uploaded all events before showing home. That run took
+  several minutes and completed. Fixed schema 8 -> 9 specifically to snapshot,
+  add nullable columns, validate and replace locally, without remote reads,
+  marking existing rows pending or full re-upload. Existing timestamps, pending
+  changes and deletion records remain unchanged; schema <=7 migration is retained.
+  Regression tests compare all stored rows and prove zero cloud callbacks.
+  Do not downgrade the already migrated real database to repeat the test.
+- Final verification: full Flutter suite 969 passed, one existing skip; analyze
+  has no issues; Siri policy checks (23 Swift checks in two Python tests), Swift
+  syntax and diff checks passed. Mac, iOS simulator and Android debug builds
+  passed. All 335 frozen source/build inputs and 16 bundled assets per platform
+  match. Evidence lives under work/issue65-cosmos/ (full-tests.log,
+  full-analyze.log, *-build.log, build-input-verification.json).
+- Final Mac Daily Test and iPhone 17 / iPad Pro 13-inch M5 simulator apps were
+  updated with verified signatures and artifact digests. Readable protected data
+  hashes stayed identical across final install: Mac 2, iPhone 4, iPad 2 files; the
+  unreadable OS-protected Mac container was not touched by the installer.
+  App Store app is unchanged. iOS did auto-start its widget extension; it was
+  stopped and final bundle/data hashes rechecked. No iOS app launch was performed.
+- The Mac runtime probe reached gateReady=true, syncing=false, no error and
+  latest-state status in 6.13 seconds after migration. However, launching the
+  binary directly and then open -a created TWO instances: hidden PID 30804 held
+  that VM probe and visible PID 30808 held the user's login. The timing must not
+  be represented as a measurement of the visible login window. Hidden 30804 was
+  stopped; visible 30808 and the user's authenticated school session are retained.
+  LaunchServices stdout redirection failed with -10810. The corrected probe now
+  launches one binary and activates that exact PID using NSRunningApplication,
+  without open -a. It ran successfully with single PID 40891: startup ready,
+  sync idle, no error, latest-state status in 5.44 seconds. Its private VM URI is
+  work/issue65-cosmos/vm-uri. The mDNS service currently belongs to the iPhone
+  simulator, not this Mac: always verify getVM.pid before inspecting a session.
+- Actual UI navigation settings -> account -> academic info -> LMS -> school
+  login succeeded. User personally logged in, and a screenshot confirmed the
+  authenticated school dashboard, but pressing Daily's Login Complete reports
+  connection verification failure. Live metadata-only debugging confirmed one
+  nonpersistent school WKWebView, one own-edit link, no password field, and a
+  valid exact-host MoodleSession issued without Secure/HttpOnly. Native read's
+  isSecure requirement filtered it out. Both Apple read policies now accept the
+  recognized exact-host session without requiring issuance flags; private-store
+  binding and Secure/HttpOnly HTTPS restoration remain. Two Python tests exercise
+  16 Foundation cookie cases against each actual native helper (32 total); passed.
+  To retain the user's login across the native update, exactly one existing
+  in-app private-store session cookie was narrowed to Secure=true, preserving all
+  other properties without output/exporting its value. Daily's connection button
+  then verified and saved the session. The corrected native Mac build was installed
+  and restarted: stored session and private-store binding restored successfully
+  without another login.
+- The subsequent activity_table_missing failure is also FIXED. Some normal empty
+  assignment indexes use h2=과제 plus .alert.alert-danger with the exact notice
+  이 강좌에는 과제가 없습니다., rather than a table. The parser now verifies the
+  exact notice, heading and same-school GET return form/course ID; unrelated
+  errors and access restrictions remain failures. An anonymized fixture and six
+  rejection variants cover the regression. All 11 courses / 22 index responses
+  were read with 400 ms spacing; 14 activities and no other unknown shape found.
+- Final Mac PID 46101 reached the ordinary Drive gate in 6.48 seconds. The app
+  initially remained inactive, so the foreground-only school restoration was
+  correctly deferred. Bringing the existing process frontmost through System
+  Events (no second launch) resumed restoration and automatic collection.
+  Live state: ready, no error, one authenticated private-store session, login
+  hidden, lastSuccess present; 11 courses / 14 activities / 0 unscheduled,
+  added 14, updated 0, deleted 0. No repeat school login was needed. Calendar
+  rendering also showed imported school items. Evidence: mac-lms-live-verification.json
+  and live-index-completeness.json under work/issue65-cosmos/.
+- Final installed digests: Mac 3724477450e2fb5d96ed760afb239bfbaa5fbfd44a1a1bd3363818bae452cdfe;
+  iPhone/iPad 0fbf7ff53a5f4ceb077092493c474b4a52ed18c1f894a292074f463d8991eca3.
+  iOS authentication itself was not exercised. Android APK rebuilt and its
+  signature/package verified only; installation remains blocked below. Windows
+  native build is unavailable here. No release was published.
+- Android update preparation is BLOCKED. The existing Daily_Pixel_9_API_36
+  default_boot snapshot was attempted with the renderer recorded in its
+  hardware.ini (lavapipe), -force-snapshot-load and -no-snapshot-save. It failed
+  with a GLES renderer mismatch. Although local option help described exiting on
+  failure, the emulator also automatically deleted snapshots/default_boot,
+  including its RAM/metadata/textures. No cold boot, wipe, APK installation, app
+  launch, restoration or new snapshot was performed; the emulator is stopped.
+- Android userdata-qemu.img, userdata-qemu.img.qcow2 and encryption-key images
+  still exist; read-only qemu-img check found no errors in the userdata/encryption
+  qcow2 files. Their modification times changed during the failed attempt and
+  internal snapshot lists are empty, so live app-data byte preservation and the
+  installed package/version are NOT currently verified. No Pixel 9 snapshot
+  backup was found under ~/.android or repository work/. Do not cold-boot,
+  restore, recreate a snapshot or install without coordinating the recovery.
+- Verified previous Android backups remain at
+  work/toolbar-four-year/20260925T162208.101205Z-android/: data.tar and data-after.tar
+  each match all 15 saved-manifest entries (14 protected files plus one runtime
+  metadata file); previous.apk and installed.apk also remain. This proves backup
+  integrity, not the current emulator's application data. Incident evidence:
+  work/issue65-cosmos/android-snapshot-boot.log, android-snapshot-launch.json and
+  android-prepare-status.json in that same issue65-cosmos directory. Report the
+  unexpected snapshot deletion and preservation uncertainty transparently.
+
+## 2026-09-26 issue 65 Cosmos plan approved, read-only account verification allowed
+
+- User approved the Cosmos-only plan after the toolbar/four-year update. Proceed
+  with SMU authentication/read capability verification, confirmed assignment and
+  submission support first, then JNU. Unrelated designs/fixes still need prior
+  approval. User has now explicitly allowed login-followed-by-read-only inspection
+  of their course list, deadlines/submission state, quiz schedule and integration
+  menu availability. User must perform official school login/2FA directly. Do not
+  re-request this already-given permission; token creation, settings changes,
+  submissions, quiz attempts or lecture playback remain outside the scope.
+- User clarified the final product must start school SSO from inside Daily and
+  automatically sync LMS data after connection. Manual browser exports/token
+  copying are not the product workflow. Research-browser login only verifies
+  the school capability. Keep authentication until expiry; use server push only
+  if confirmed, otherwise lifecycle/appropriately paced active-use refresh.
+- CUA Chrome and IAB unavailable; native pipe startup failed. agent-browser CLI
+  is absent, so bundled Playwright launched a dedicated visible Chrome profile
+  at work/issue65-cosmos/browser-profile (gitignored, mode 0700). The official
+  SMU login page was confirmed open; no credential fields or forms touched.
+  Browser launcher work/issue65-cosmos/open-school-login.cjs remains running
+  while user logs in. Do not read browser cookies, capture typing, export auth
+  state, or reuse unrelated personal browser profiles. Wait for user completion.
+- Public SMU login redirects to /login.php, with normal and SSO POST forms.
+  No login/form submission occurred. A cookie-free read of Moodle's documented
+  public-config route /lib/ajax/service-nologin.php returned HTTP 404 HTML. This
+  does not establish that all APIs are unavailable or that Daily is authorized.
+  Public theme JS refers to session-based course and calendar UI requests; none
+  was called, and some functions on the same endpoint mutate state.
+- Current official SMU notice bwid=588547 says remote-course secondary auth is
+  once per day since 2024-08-20; do not repeat the superseded every-login policy.
+  The 2025-12-24 outage notice says restored that day, not an ongoing outage.
+- Read-only authenticated inspection must avoid opening Moodle's security-key
+  page: upstream user/managetoken.php may generate tokens just by opening it.
+  Inspect link availability first; key creation/export or another auth method
+  requires a concrete explained scope. Never submit work, start quizzes or play
+  lectures to inspect state. User performs any school authentication directly.
+- Code audit found no persistent LMS source/status model. Existing completed is
+  personal completion; readOnly/systemEvent are not persisted in DB/Drive. LMS
+  owner/source metadata must survive DB, Drive and deletion records; current
+  upload selection is not account-scoped. Preserve personal-event behavior while
+  isolating LMS source items, credentials, LKG and stale in-flight responses.
+  AcademicProfile.supported includes DKU, so Cosmos support needs its own mapping.
+- docs/ISSUE_65_COSMOS_PLAN.md now records approval, and
+  docs/ISSUE_65_COSMOS_FEASIBILITY.md records evidence and next verification scope.
+  No product code/schema, account, remote data, or installed app changed. No
+  implementation claim, build/install/release or private-data test was made.
+
+## 2026-09-26 toolbar order, timetable motion and four-year-only picker
+
+- Latest user scope: align timetable / quick view / week-month-day / settings as
+  a contiguous rightmost group, put other toolbar actions to its left, repair
+  missing timetable transitions, offer only four-year universities, remove all
+  degree tabs and exclude LH University. Any extra fixes/design changes must be
+  proposed and approved BEFORE implementation; do not extrapolate new scope.
+- Desktop/wide toolbar now orders previous / next / today / search / filter /
+  Siri-or-LLM before timetable / quick / week-month-day / settings. Explicit
+  six-pixel separators were removed; standard button hit areas and outer margin
+  remain. Existing context-specific calendar controls remain hidden in timetable.
+  Position regressions require adjacent action bounds and rightmost settings
+  exactly at the standard right inset across views, sizes and text scales.
+- Timetable previously replaced the entire OrderedCalendarSwitcher, causing
+  immediate swaps entering/leaving it. The switcher now stays mounted and has
+  timetable (including unsupported/unselected academic gate) as a keyed child.
+  Existing 260/220 ms horizontal slide and curves remain. Timetable motion follows
+  desktop-left vs mobile-right placement; identity stays stable across resize.
+  Android tablet framing remains only on calendar children. Header remains outside
+  the transition. Search/dialog/bottom-sheet routes already had standard motion.
+- The directory keeps its 429 raw legacy IDs but offers only 183 eligible
+  four-year institutions. Junior/cyber choices and all degree-kind tabs are gone.
+  LH University is additionally excluded; prior military/theology exclusions and
+  the five separate-branch groups remain. Existing excluded profiles are readable
+  but cannot be re-saved in the picker without choosing an eligible university;
+  opening/cancelling the page never rewrites account/Drive data.
+- Issue #65: user now requests a Cosmos-only proposal and explicit prior approval.
+  docs/ISSUE_65_COSMOS_PLAN.md is the reviewable proposal, NOT an implementation.
+  Suggested first pilot is Sangmyung, followed by Chonnam. Dankook's Canvas LMS
+  is outside this LMS scope; its academic calendar/timetable support is unchanged.
+  Public official evidence does not establish a token/SSO callback path usable by
+  Daily or actual endpoint/field access. First verify permitted authentication and
+  read capabilities; real school login/private-data reads require separate consent.
+  Proposed order: assignments/submission, lectures/attendance/progress, quizzes,
+  LMS events/completion. School authentication data stays in OS secure storage.
+  LMS source fields stay network-first with failure-only last-good fallback;
+  normal empty results must not revive stale data. No #65 code, login or personal
+  LMS request has been performed; an asynchronous approval question is pending.
+- Final verification: focused navigation/directory/profile 38 passed; timetable
+  animation regressions 13 passed; full Flutter suite 887 passed, one existing
+  skip; full analyze has no issues; diff check clean. Read-only final code/test
+  audit found no missing requested transition or toolbar path. No native macOS
+  or iOS implementation file was edited. Windows build and physical-device
+  interaction remain unverified; Flutter tests cover platform-specific layouts.
+- Mac, iOS simulator and Android debug builds passed. All 141 frozen source/build
+  inputs remained unchanged, and 16 bundled JSON/PNG assets match every artifact.
+  Runtime animation evidence is widget-test based; the Mac screenshot confirms
+  the actual toolbar order and calendar entry, not interactive transition clicks.
+- Authorized Mac restart with the existing account reached ready=true,
+  sync=false and error absent in 13.81 seconds with latest-state status. No new
+  login or account change. Test-app update preserved readable Mac data (2 files);
+  unreadable OS-protected container was untouched. iPhone 17 (3 protected files)
+  and iPad Pro 13-inch M5 (2) simulator updates retained data hashes. The iPhone
+  OS auto-started its widget extension after install; only that extension was
+  stopped, then signature/artifact/data/App Store hashes were independently
+  reverified without reinstalling. Mobile test apps were not launched.
+- Pixel 9 Android emulator update preserved all 14 protected data files and
+  matched the verified APK. The updated default_boot snapshot was saved with OK
+  before emulator shutdown. All four updates left the App Store bundle unchanged;
+  backups are retained. No personal automation, wallpaper or account changes.
+- Evidence: work/toolbar-four-year/ (private build/runtime logs, source manifest,
+  artifact and data verification reports, own-window capture). No commit, push,
+  release or version change; version stays 3.5.2. Additional unrequested design
+  or behavior changes still require a proposal and user approval.
+
+
+## 2026-09-26 navigation, sync latency and university support
+
+- Scope: macOS toolbar right gap; timetable escape controls/settings; onboarding
+  academic profile; slow sync; Dankook/Chonnam calendar and timetable support;
+  university classification, exclusions, official campuses and integrated profiles.
+- The desktop toolbar used a loose Flexible title plus Spacer. Unused title
+  allocation became trailing free space. It now uses Expanded + left Align so
+  the last action ends exactly 14 px from the toolbar edge. Regression covers
+  week/month/day, quick view and timetable across window sizes/text scales.
+  Timetable reuses the primary header with week/month/day, quick view and settings;
+  mobile retains its six bottom tabs plus the header settings action. No primary
+  timetable back button was introduced. Native platform sources were not edited.
+- Manual Sync now previously entered a full restore on every press. It now
+  initializes/reuses the saved Drive changes cursor and downloads only changed
+  event IDs. Missing cursor still captures a token BEFORE initial restoration.
+  Only queued local work incurs the 3-second phase interval. Serial requests,
+  250 ms minimum quiet interval, transport abort/timeout, conditional writes,
+  pending state and merge rules remain. Clock-behind local conflicts already
+  covered by a cursor fetch exact remote winners and refresh widgets. Bulk
+  event upload/download exposes completed/total progress and clears it on exit.
+  Regression: 200 initial remote events, unchanged repeat = one changes request,
+  one changed event = one media download; mid-sync edits/failures remain pending.
+- Academic profile entry is centralized before onboarding completion, including
+  Apple sign-in restoring linked Google and local continuation with linked Google.
+  Remote restore still precedes profile entry; existing profiles are not replaced.
+- Academic calendar preview/import now captures school, repository/account and
+  academic-store session generation. School changes invalidate in-flight preview
+  epochs (including A-to-B-to-A), and stale display/import callbacks cannot add
+  another school's calendar after profile/account restoration. A new valid school
+  preview still imports normally; five widget regressions cover these boundaries.
+- Directory preserves all 429 legacy row IDs, with 346 selectable institutions:
+  184 four-year, 140 junior-college, 22 cyber. Five military academies and eighteen
+  theology/special clergy-training institutions are excluded from new choices;
+  comprehensive religious-affiliated universities remain. Integrated campuses
+  save one institution without requiring campus choice. Only Korea, Yonsei,
+  Konkuk, Dongguk and Hanyang retain branch selection. Official campus names
+  appear as secondary text; selected-profile footer has a themed 1.2 px border.
+  Single disclosure-row schools with multiple campuses also preserve official
+  names, including Gachon, Kyung Hee, Sungkyunkwan and HUFS; no new school IDs.
+- Profile provider IDs now route smu/dku/jnu to their own source, course datasets
+  and semester defaults. Legacy IDs/campus profiles remain readable. Existing
+  saved term periods (including untimed legacy values) are preserved when the
+  user changes university; never treat all untimed records as generated defaults.
+- DKU academic adapter uses its public calendar JSON; JNU uses its official
+  undergraduate annual calendar table. Date boundaries use Korean date-only
+  semantics. Sources have no stable IDs: title/year/occurrence-derived IDs can
+  change when those inputs change. Fixtures and parser/date/invalid-data tests
+  cover the adapters. Three universities each have four official 2026 periods.
+- Added 2026-2 public undergraduate catalogs: DKU Jukjeon 2,722 / Cheonan 2,562;
+  JNU Gwangju 3,166 / Yeosu 696. With SMU, six assets contain 11,339 unique sections.
+  Exact department classifications, credits, restrictions, source schedules and
+  rooms survive conversion. Search is scoped by university AND campus; campus
+  switching is a course filter, separate from integrated profile registration.
+  New fixed category dots include major/required/foundation/minor/certification.
+- DKU has 179 officially empty-time sections. JNU has 127 unrecognized schedules
+  (121 conflicting official late-period mappings, five '****', one unmatched
+  room count) and one officially empty schedule. These remain searchable with
+  raw details but cannot auto-add invalid meetings; UI directs manual entry after
+  university confirmation. Saturday mappings were verified in the 2026 JNU
+  freshman handbook. Source minutes stay intact; display uses existing 30-minute
+  boundaries. Never infer unspecified times or mode from title/remarks.
+- Source evidence/reproduction: docs/DANKOOK_TIMETABLE_SOURCES.md,
+  docs/CHONNAM_TIMETABLE_SOURCES.md, docs/ACADEMIC_SOURCE_ADAPTERS.md,
+  docs/TIMETABLE_PERIOD_SOURCES.md, docs/UNIVERSITY_DIRECTORY_SOURCES.md.
+  Public data snapshots are retrieved 2026-09-26, not fabricated publication dates.
+- Final verification: analyze clean; full Flutter suite 871 passed, one existing
+  skip. Importer Python tests: SMU 7, DKU 6, JNU 11 passed. Diff check clean.
+  Whole-suite rerun includes the final preview guard/campus metadata changes.
+  Mac, iOS simulator and Android debug builds passed. Frozen 144 input files
+  remained unchanged, and all 16 packaged JSON/PNG assets match across builds.
+- Updated Mac Daily Test, iPhone 17 and iPad Pro 13-inch M5 simulators, and
+  Pixel 9 Android emulator using verified new artifacts. Protected data hashes
+  unchanged: Mac 2 readable files, iPhone 3, iPad 2, Android 14. App Store bundle
+  unchanged. Unreadable protected Mac container was untouched. Test data was
+  backed up before replacement. No account changes, Shortcuts or wallpapers.
+- Authorized Mac restart with the existing account completed in 6.79 seconds:
+  startup ready=true, sync=false, error absent, latest-state status. Actual window
+  capture confirmed calendar entry and no excessive toolbar trailing gap. Native
+  control pipe was unavailable; view-switch/settings interactions were verified
+  by shared widget tests, not falsely claimed as automated physical UI clicks.
+  Mac remains open. Mobile test apps were installed without interactive launches.
+  Verified Android default_boot snapshot was saved, then the emulator was stopped.
+  Windows and physical-device execution were unavailable and remain unverified.
+- Final artifact digests: Mac
+  45f491254d8f16ab9f9e925248e78e64f2c590b19801a85f2a13e2d36e002353;
+  iOS 65bb19cd75f3ae532482d42047c3fca0f1a3bc68ea989a23755dcb9d246b424b;
+  Android 498427626e8d0f1ab1234cbc373dac8dcfcbfcbda385f1b13a8a37885637dcad.
+  A preliminary Mac installation earlier in this turn was superseded by the above
+  final artifact after the academic-preview guard was added; use the latest report.
+- Evidence: work/university-expansion (final analyze/test/build logs, source/asset
+  verification, install backup reports, mac-live-verification.json and calendar
+  capture), work/academic-selection (profile/preview regressions). Version remains
+  3.5.2; all follow-up work is uncommitted and not in published release artifacts.
+  No native platform implementation file was changed. Future shared release
+  still needs Windows/Android/Mac/iOS coordinated artifacts and Windows checks.
+
+## 2026-09-25 startup sync recovery and sequential Drive requests
+
+- User reported the Mac Daily Test startup failure screen repeatedly, then asked
+  to unify backup/restore and space sync work instead of running it in parallel.
+  User explicitly allowed restarting Mac Daily Test and checking startup sync
+  with its existing account; no new login/account change was performed.
+- Confirmed shared startup gate bug: after its 20-second UI timeout, successful
+  late completion only cleared the future, leaving the failure screen displayed.
+  Now the deadline shows a still-running state, joins the same operation, and
+  opens the calendar only after the original full startup future succeeds.
+  Actual failures (including late failures) retain retry/local continuation and
+  safe error categories. Logs include categories only, never raw exception data.
+  A transport timeout remains a genuine failure, distinct from the UI deadline.
+- The old nested eight-item Future.wait loops could multiply concurrent event
+  and duplicate-file downloads. Replaced with sequential loops plus a common
+  PacedHttpClient: complete response consumption, minimum 250 ms quiet interval,
+  one request at a time, and 10-second network timeout excluding queue time.
+  AbortableRequest cancels timed-out transport work. Migration and cloud-delete
+  HTTP paths use the same client. Owned versus injected client disposal remains.
+  Existing three-second backup-to-restore delay, v2 layout, conditional writes,
+  pending state, per-field merge and bounded retry behavior remain.
+- Drive 403 rateLimitExceeded/userRateLimitExceeded now receive the same retryable
+  throttling category as 429, instead of an incorrect reconnect request. Official
+  Drive error handling source is linked in docs/SYNC_MERGE_RULES.md.
+- Settings now has one Sync now action, using the existing combined pending
+  upload/restore/final-flush operation. Busy guard prevents duplicate actions;
+  restored settings refresh the provider, and failure permits retry. Separate
+  restore-only confirmation/action removed from this UI, service API retained.
+- Verification: analyze and diff checks clean; full Flutter suite 819 passed,
+  one existing skip. Dedicated gate/pacing run 20 passed; sync/timetable tests
+  and three-platform unified-button tests passed. Coverage includes slow success,
+  late failure, transport timeout, cancellation, interval/full-body serialization,
+  queue recovery, changed-account validation, rate-limit retries and UI reentry.
+- Existing installed app rerun and fixed app both completed live Drive startup
+  successfully. Fixed app runtime inspection confirmed message=latest state,
+  no sync error, startup gate ready and request interval 250000 microseconds;
+  captured actual calendar window. The old screenshot's exact network/auth
+  cause cannot be recovered because the prior gate discarded all exceptions;
+  do not claim a reproduced live rate-limit failure. The stale failure-screen
+  path was deterministically reproduced and fixed with widget tests.
+- Android debug, iOS simulator and macOS debug builds passed. Updated Mac Test,
+  iPhone 17 / iPad Pro 13-inch M5 simulators and Pixel 9 emulator. Installation
+  protected-file hashes unchanged: Mac 2 readable, iPhone 3, iPad 2, Android 14;
+  App Store bundle unchanged; unreadable protected Mac container untouched.
+  iPhone OS automatically launched only DailyWidgets during installation;
+  stopped it and independently reverified installed bundle/signature/data.
+  Saved the verified Android default_boot snapshot and stopped the emulator.
+  Mac app remains open after authorized live startup verification. No other
+  test app UI was launched; Windows and physical-device checks remain pending.
+- Artifact digests: Mac
+  f920e77b915979c2204f51c777acf876de4c335899db85dbf77b2c108bf25aea;
+  iOS 859e65aa910649cdf29d522c4664b60cd23613c5df0bbbd71eca55e7f1c46c92;
+  Android 94d28f56914f609d1b4a8086e3e726f5f9ca694a90f8c15c98a125117fe878bd.
+  Frozen 130 source files and five JSON assets match all three artifacts.
+  Evidence: work/startup-sync-fix (test/build logs, install reports, sanitized
+  mac-live-verification.json and mac-startup-success.png). No native source edit,
+  version increment, commit, push or publication; version remains 3.5.2.
+
+## 2026-09-25 university grouping, campus access and fixed course search
+
+- Universities are selected once, with campus selection inside the same
+  institution. The sourced 429 campus records and committed row IDs remain;
+  37 explicit multi-campus groups yield 369 institution entries (226 four-year,
+  143 junior-college). This is the existing directory's scope, not a newly
+  exhaustive physical-campus inventory. No name-substring merging at runtime.
+  Official group/campus evidence and source-value preservation are documented
+  in docs/UNIVERSITY_DIRECTORY_SOURCES.md. The bundled directory schema is now
+  2; this is not a Drive sync schema change.
+- Sangmyung Seoul/Cheonan share institution:academyinfo:0000117, Chonnam
+  Gwangju/Yeosu share institution:academyinfo:0000023, and Korea University
+  Seoul/Sejong share institution:academyinfo:0000069. Anam/안암캠퍼스 are searchable
+  aliases for Korea University's official Seoul campus label. Unrelated schools
+  such as Korea Cyber University remain separate.
+- Academic-profile UI lists one institution per row and opens its campus picker
+  by tapping the selected campus. Campus rows include their locations and current
+  selection. Degree groups, initial-consonant/name/campus search, Later, account
+  checks and save rollback remain. New profiles store the institution ID in
+  universityId and the campus-row ID in optional campusId. Legacy profiles with
+  a campus-row universityId still read/restore without a background rewrite;
+  explicit user save writes the new form. Profile remains one atomic Drive field.
+- Course search's campus selector is always available, even with a saved home
+  campus. That saved campus is only the initial selection. SMU students can
+  browse/add both Seoul and Cheonan courses in the same timetable without
+  changing their academic profile. Campus changes retain the query and existing
+  courses and clear the previous department filter. Integration availability
+  remains SMU-only; grouping other universities does not invent course data.
+- Search input/filter toggle are fixed above the scrolling results. Campus,
+  categories and result metadata remain inside the list; the input stays usable
+  while scrolling, expanding or adding a course. Input/controller identity is
+  preserved across window/keyboard resizing, including the 84px body regression.
+  Previous inline details, full remarks, semester bounds and popup rules remain.
+- Final verification: full Flutter suite 803 passed with one existing skip;
+  analyze and diff checks clean. Focused evidence includes 8 directory, 37 profile,
+  2 onboarding, 19 fake-HTTP Drive and 42 search UI tests. Both legacy and new
+  institution/campus profiles upload/restore; source records and previous IDs
+  were separately checked. Isolated light/dark widget captures confirm campus
+  selection and search position, not physical-device or real-account acceptance.
+- Android debug, iOS simulator and macOS debug builds passed. Verified signatures,
+  frozen source and all five bundled JSON assets. Updated Mac Daily Test, iPhone
+  17 and iPad Pro 13-inch M5 simulators, and Pixel 9 emulator. Protected files
+  unchanged: Mac 2 readable, iPhone 3, iPad 2, Android 14; App Store app unchanged.
+  Unreadable macOS protected container untouched. Stopped the iPhone test widget
+  extension automatically started by iOS and independently reverified data and
+  bundle. Android prior baseline matched before install; saved post-install
+  default_boot snapshot and stopped the emulator afterward.
+- Final artifact digests: Android
+  7d72e59386999fb53573a1a21276a03159df5f6e5395b6b264e3547b99efa05b;
+  iOS a8ea78e6224dfbb6e2375943c2232dda0775a82b9b1106ecd00bdf84dc09041d;
+  macOS 73706091bbbbf9d799caa96361453f8c8cdc53f63f5e98828c725eb2dcfd0ce1.
+  Windows/Linux native builds, physical-device acceptance and live Drive roundtrip
+  remain unverified. Version remains 3.5.2, with no publication in this task.
+- Shared Flutter/assets only; no native platform implementation changes or
+  version increment. Feature, privacy, sync and directory documentation updated.
+  Evidence: work/campus-grouping and work/navigation-review/fixed-search-*.png,
+  academic-profile-grouped-dark-393.png and academic-profile-campus-sheet-dark-393.png.
+  No commit/push/release, app UI launch or real account operation in this task.
+
+## 2026-09-25 inline catalog expansion and official course remarks
+
+- Supersedes the catalog-add modal described below: tapping a lecture search
+  result now expands that same card in place. The header keeps title/code-section/
+  category/professor/time, and expanded content contains departments, official
+  classifications, credits, full remarks, conflicts, lecture-mode selection and
+  Add. Same-row tap collapses; another selection switches the expanded row.
+  Manual course addition and existing course editing retain their full-screen
+  dialogs. Search remains a separate page without the main bottom bar.
+- Successful addition keeps the card expanded with disabled Added action, and
+  already-added rows can still expand for reading. Failures preserve selection/
+  mode and allow retry. In-flight writes block duplicate input and route pop.
+  Expanded state survives viewport recycling and keyed-list index changes;
+  filters/queries intentionally clear the selection. Accessible expanded state
+  and reduced-motion sizing are included.
+- Importer now preserves the official PDF table's 13th column, 비고, as
+  departmentRemarks. All 2,500 source rows were compared with the generated
+  assets: 835 nonempty source rows become 730 unique sections (Seoul 292,
+  Cheonan 438) among the existing 2,193 sections. Source IDs, metadata/hash,
+  meeting times, classifications, credits, departments and professors stayed
+  unchanged. Current cross-listed rows share their remarks; future differences
+  remain separate and are labelled by department. No enrollment eligibility is
+  inferred from missing remarks. Source line breaks and restrictions remain.
+- New catalog additions copy the remarks into the existing timetable note so
+  stored details and the existing Drive timetable sync retain them. Existing
+  saved courses and personal notes are not migrated or overwritten. No sync
+  schema, account, native platform or ordinary calendar changes.
+- Final verification: analyze clean; full Flutter suite 794 passed with one
+  existing skip; Python importer 7 passed. UI five-file run 40 passed, with the
+  final additional index-change regression included in a 12-test panel rerun.
+  Source-matched light/dark 393px screenshots and 320px/2x-text/keyboard tests
+  verify readable full remarks and inline actions. No live app UI was launched.
+- Android debug, iOS simulator and macOS debug builds passed, with valid
+  signatures, unchanged frozen source and matching five bundled JSON assets.
+  Updated Mac Daily Test, iPhone 17 and iPad Pro 13-inch M5 simulators, and Pixel
+  9 emulator. Protected data hashes remained unchanged: Mac 2 readable, iPhone
+  3, iPad 2, Android 14. App Store app unchanged; macOS unreadable protected
+  container untouched. iPhone's OS-started DailyWidgets extension caused the
+  final stopped-process check to fail after installation; stopped only that
+  extension, then independently verified installed digest/signature/data/App Store.
+  Android matched its prior data baseline, saved the verified post-install
+  default_boot snapshot, then stopped the emulator. Native Windows/Linux builds,
+  physical-device UI and real Drive roundtrip remain unverified.
+- Final artifact digests: Android
+  072e68881a9ff3423870bec88a572c8a67cb68eb4f7463d9dc9a634786b62483;
+  iOS 490c826d2fd3196fa3173a742d4e571eafd51c685abfbd8ebabacf3ead519bbe;
+  macOS cd6adeafd721f22049033b8b7607f3a55b6912113d2d26fcd09e81c9d8e61f54.
+- Evidence: work/course-inline-remarks for final builds/tests/install records;
+  work/course-remarks for rendered official pages and complete row/dataset
+  comparisons. Feature documentation and README reflect the new interaction.
+  Visuals: work/navigation-review/inline-course-{light,dark}-393.png.
+  No commit/push/release or real account/app-UI operation is part of this task.
+
+## 2026-09-25 nationwide academic profiles and timetable UX correction
+
+- This entry supersedes the saved-list/Create navigation below. The timetable
+  header immediately opens complete year/semester rows, such as 25년도 1학기,
+  25년도 여름계절학기 and 26년도 2학기. No year text entry or intermediate Create
+  screen. Saved rows show name/count/period/current selection and switch with one
+  tap; unsaved rows open only the name/required-period confirmation form. Earlier
+  and later years expand in place; arbitrary legacy terms remain reachable.
+- Lecture search is a pushed root page without the main bottom navigation.
+  Returning restores the timetable tab; the main timetable tab has no back
+  arrow. Catalog addition, manual addition and course editing use full-screen
+  modal dialogs with explicit close and cancellation without saving.
+- Official SMU catalog categories were recovered from 2,500 source rows into
+  2,193 merged course sections, retaining department-specific differences for
+  cross-listed sections. Category labels use small neutral text and fixed color
+  dots (전심, 전선, 교직, 교양, 일반, MD), with always-visible category filters.
+  Search covers title/code-section/professor/classroom/category, initial Korean
+  consonants and multiple terms. Section appears as CODE-SECTION, not in title.
+- ClassMeeting exposes floor-start/ceil-end 30-minute boundaries consistently
+  for timetable blocks, details, conflict checks and dated Schedule. For example,
+  09:00-09:50 displays to 10:00, and 09:00-10:15 to 10:30. Raw original times stay
+  in saved/Drive JSON and survive unrelated edits; existing saved courses also
+  gain the display rule without bulk writes. Manual time choices are 00/30
+  minutes with 24:00 available as an end time. Existing classroom layout stays.
+- Daily remains a general student calendar. Official national directory assets
+  contain 429 undergraduate university/campus rows, split into 260 four-year
+  and 169 two/three-year group rows. This is not 429 independent universities.
+  Academyinfo/CareerNet and official special-school sources, coverage exclusions,
+  checksums and refresh instructions are in docs/UNIVERSITY_DIRECTORY_SOURCES.md.
+  No fabricated university rows or third-party proprietary course data.
+- Google login first restores Drive, then offers academic-profile selection if
+  absent. Users can choose Later or edit later under Account settings. The page
+  provides degree-group tabs, university/campus name and initial-consonant search.
+  Profile contains public university ID/name, degree group and campus only; no
+  school password/student number/department/admission year is collected.
+- Profile is one atomic academicProfile field in the existing Drive settings
+  document, with existing LWW/retry/lifecycle behavior and no new OAuth scope.
+  Unset values are omitted; explicit clears retain null revisions. Legacy
+  settings without the field cannot erase a newer profile. SMU Seoul and Cheonan
+  stable directory IDs select the currently supported calendar/catalog services.
+  Other universities can save their profile and use ordinary Daily; academic
+  calendar/timetable integration displays an availability gate rather than SMU
+  data. Existing calendar events/timetable records are not silently deleted.
+- Google account changes/unlink park the active profile, exact revision and
+  pending flag in account-specific local cache, remove the active field without
+  producing a destination-account tombstone, and recover it only for the same
+  account. Ownerless legacy profiles are quarantined. Explicit local reset clears
+  these caches too. Account metadata/cache/profile/document/revision writes roll
+  back together on failure. Profile writes and account changes serialize; stale
+  editors cannot save into another account. Sync acknowledgement revalidates its
+  captured session inside the repository queue, including null tombstone races.
+- Dark dialogs, sheets, menus, date/time pickers and full-screen course popups
+  share a #495363 border at 1.2 logical pixels. Shared Flutter changes only;
+  native iOS/macOS/Android/Windows/Linux implementation files remain untouched.
+  Preserve the semester date boundaries, all-term dated projection, device-local
+  selection and Google Drive timetable behavior documented below.
+- Focused verification includes university coverage/initials, official category
+  extraction, raw-time preservation/normalization, modal save/cancel/failure,
+  navigation, large text/keyboard/narrow layouts, login profile selection/skip/
+  restored-profile bypass, Drive HTTP upload/restore, account isolation, offline
+  cache recovery, persistence failure rollback and queued stale acknowledgement.
+  Isolated widget screenshots verify term selection, catalog addition, academic
+  profile selection and dark popup boundaries; these are not live app proof.
+- Final verification: Flutter analyze clean; complete Flutter suite 788 passed
+  with one existing skip; importer Python suite 4 passed; git diff --check clean.
+  Android debug, iOS simulator debug and macOS debug builds all passed. Signature
+  and artifact digests checked; all five bundled university/catalog/period JSON
+  assets matched the source, and all 129 frozen source/asset files stayed intact.
+- Updated existing Mac Daily Test, iPhone 17 simulator, iPad Pro 13-inch M5
+  simulator and Pixel 9 emulator. Protected files unchanged: Mac 2 readable,
+  iPhone 3, iPad 2, Android 14. App Store bundle unchanged; unreadable macOS
+  protected container untouched. iOS later auto-started its DailyWidgets test
+  extension; stopped only that exact extension and reverified bundle/data.
+  No app UI launch. Android data matched its previous baseline before updating;
+  saved a verified post-install default_boot snapshot and stopped the emulator.
+- Final artifact digests: Android
+  bbca99bb0b5d27e11ee7bc88fc1a58343d95c734aa2402d845edf0a218f6ce32;
+  iOS e2019850fffdafdb69b412f6261bce19cf0d803452113272e3026ea252e99570;
+  macOS 685f548d83f5469411665c9e2506f829e38245b0beb7ee33dc750a5404c0f5fb.
+  Build/test/source/install/backups evidence: work/academic-profile-ui; final full
+  suite log full-test-release-check.log. Additional focused tests/source research
+  and visual fixtures: work/university-directory, work/navigation-review,
+  work/catalog-visuals and work/onboarding-profile-gate-test.log.
+- Current implementation remains uncommitted/unpublished at version 3.5.2.
+  No commit, push, release, store upload, real Google login/Drive roundtrip,
+  Shortcuts or wallpaper test was requested or performed. Windows/Linux native
+  builds and physical-device acceptance remain separate verification needs.
+
+## 2026-09-25 saved timetable navigation and semester date boundaries
+
+- User approved saved-list navigation and required classes to stay inside their
+  actual semester when projected into weekly/daily Schedule. Header now opens a
+  newest-first saved list with year groups, name, count, date range and current
+  selection. A separate Create action requests year/semester/name/required dates;
+  cancelling makes no record. Empty created timetables persist via their period.
+- Selection is now device-local UI state. Merely browsing another timetable does
+  not upload a new selection or move another device's screen. Legacy activeTerm
+  sync registers remain preserved/readable for compatibility but are neither
+  applied nor updated by selections. This supersedes the selected-term sync
+  description in the earlier Drive implementation entry below.
+- Inclusive date-only TimetablePeriod values sync in optional per-term LWW
+  termPeriods registers in the existing inner schemaVersion 1 document. Existing
+  classes, names, date overrides, tombstones, queue/rollback/account guards and
+  Drive storage remain intact. Clearing courses retains the term name/period.
+- TimetableSchedule projects ALL stored terms according to the displayed dates,
+  independently of the timetable tab's selection. Classes appear only when their
+  own term has a range containing that date. Missing ranges preserve the data but
+  exclude dated occurrences until configured. Basic timetable grids remain
+  viewable outside term dates; dated weekly changes use the same range filter.
+  Cancelled/video classes retain their existing Schedule exclusion behavior.
+- Official Sangmyung Seoul/Cheonan undergraduate 2026 defaults are sourced in
+  assets/timetable/term-periods.json and docs/TIMETABLE_PERIOD_SOURCES.md: spring
+  Mar 3-Jun 22, summer Jun 23-Jul 8, fall Sep 1-Dec 21, winter Dec 22-Jan 8 2027.
+  These include makeup/final-exam weeks and exclude the following vacation.
+  Other years/unknown terms require manual dates; no month-based dates invented.
+  Individual holidays/cancellations still use existing dated overrides.
+- Preparation loads the official asset and seeds missing known-term registers
+  as an untimed baseline, including existing local courses, later additions and
+  remote restores. Explicit edits and null tombstones win. Provider retry and
+  logout/generation races are tested; failed preparation never leaks year-round
+  classes. Dates can be edited from the header/menu and both endpoint years are
+  displayed, including winter crossing into a new calendar year.
+- Narrow screens/large text retain scroll access to the grid and course panel.
+  Cancelling a picker/period dialog preserves the viewed week and preview.
+  Native iOS/macOS/Android/Windows/Linux sources were not edited. Shared Flutter
+  affects all platforms; ordinary calendar/event storage and DB schema 8 remain.
+- Verification: full suite 732 passed with one existing skip; four subsequent
+  permanent accessibility regressions passed. After the final year-display fix,
+  all 148 timetable/Drive tests passed; final analyze clean and diff check clean.
+  Tests cover inclusive boundaries, outside/vacation/unknown periods, winter year
+  rollover, selection-independent projections, baseline migration, local/remote
+  selection isolation, HTTP period upload/restore, failures and account races.
+  Picker and layout screenshots are isolated widget fixtures, not live app proof.
+- Final Android debug, iOS simulator and macOS debug builds passed. Verified
+  signatures/artifact digests and bundled official-period JSON. Updated existing
+  Mac Daily Test, iPhone 17 simulator, iPad Pro 13-inch M5 simulator and Pixel 9
+  emulator. Protected files unchanged: Mac 2 readable, iPhone 3, iPad 2, Android
+  14. App Store bundle unchanged; unreadable macOS protected container untouched.
+  iOS automatically started DailyWidgets after iPhone installation; stopped only
+  that exact test extension and independently rechecked signature/data/App Store.
+  No app UI launch, login, real Drive account operation, Shortcuts or wallpaper
+  tests. Android data matched its previous baseline before update; saved the
+  verified default_boot snapshot and stopped the emulator afterward.
+- Final artifact digests: Android
+  8b06b428a3b3294607b0c9542ec68f31f02ae0d71a01d73f68f89814af9029fa;
+  iOS d71d4e6d675157f43ae8a73da9663a14b8f806d86314cf72c0383c5aa98535af;
+  macOS e78bee1e433e3a962f70fdb9c401eb2ee59a6c0125dc50e95f42cd5c8c447adb.
+- Evidence: work/timetable-periods (build/test logs, final source manifest,
+  backups, install verification and screenshots); work/timetable-period-review;
+  work/term-period-store-tests.log and work/term-period-provider-tests.log.
+  No commit/push/release/store upload; version remains 3.5.2. Windows/Linux native
+  builds, physical-device acceptance and real-account Drive roundtrip remain
+  unverified. Future shared-sync publication must include all platform families.
+
+## 2026-09-25 timetable Google Drive storage (supersedes local-only notes)
+
+- User explicitly corrected the storage requirement: timetables belong in Google
+  Drive, not only on the device. Added `daily-sync-v2-timetable.json` to the
+  existing AppData sync, using the existing OAuth scope and lifecycle/change
+  queue. All terms' courses, modes, meeting/date overrides, notes/colors, term
+  names and selected term sync. The device preference is now an offline cache
+  and durable pending outbox. No ordinary event/calendar projection changes.
+- File envelope: schemaVersion 2, type timetable, document with inner version 1.
+  Per-course and per-name registers merge independently; active term is another
+  register. Same-course concurrent edits choose a complete course snapshot.
+  Compare UTC mutation time, then deletion on equal time, device ID and canonical
+  JSON. Deletes retain tombstones. Imported course identity includes source ID,
+  year and term, so independent device UUIDs do not duplicate a class. Existing
+  local IDs stay stable where available. Mutation timestamps advance monotonically
+  from persisted revisions; migration/upload time is not invented as edit time.
+- Existing `daily.timetable.v1` content loads as a pending untimed baseline;
+  local version remains 1 with atomic `sync` metadata. Damaged local/remote data
+  fails rather than overwrites. Write/clear failures restore prior preference
+  cache where possible; acknowledgement preserves edits made during upload.
+  Local cache reset invalidates queued writes and clears without cloud tombstones.
+- Drive transport unions duplicate same-name files and uses existing MD5-bound
+  ETag/If-Match writes with bounded conflict retry. Timetable-only changes do not
+  upload events/settings; explicit event-only backup remains isolated. Startup
+  checks the timetable once per linked session even with an older-client change
+  token, then observes incremental changes. No idle polling or new login UI.
+- Pending timetable changes participate in lifecycle flush, retry and logout's
+  incomplete-backup check. Stop immediately disables new timetable callbacks;
+  old-session applies/acknowledgements are rejected. A mismatch between linked
+  and authenticated Google emails is rejected before Drive HTTP requests.
+  Rename/reset dialogs capture their original term so remote selection changes
+  cannot redirect their operation to another semester.
+- Footer now reports Drive sync intent or pending state, not local-only storage
+  or an unverified success. Updated timetable, sync, privacy and README docs;
+  historical release notes remain unchanged. Shared Dart only; no native Apple,
+  Android, Windows or Linux implementation changes and main DB schema remains 8.
+- Verification: analyze clean; full Flutter suite 686 passed, one existing skip.
+  Store/document tests 40 passed (18 new); 14 HTTP integration tests cover
+  pending restart, legacy union, new-device restore, old-token bootstrap, change
+  feed, deletion protection, ETag conflict, upload/edit race, corrupt remote,
+  account/stop guards and event isolation. Account-reset and sync-footer/resize
+  tests passed. These use isolated preferences/HTTP fakes, not a real Google
+  account. No live Drive upload or physical two-device acceptance performed.
+- Fresh Android debug, iOS simulator and macOS debug builds passed. Updated Mac
+  Daily Test, iPhone 17 simulator, iPad Pro 13-inch simulator and Pixel 9 emulator.
+  Signatures and installed artifact digests verified; protected files unchanged:
+  Mac 2 readable, iPhone 3, iPad 2, Android 14. App Store bundle unchanged; unreadable
+  Mac OS-protected container untouched. No app UI launch/account/automation tests.
+  Android default_boot restored successfully this time; all 14 files matched the
+  previous baseline before update. Saved new snapshot and stopped emulator.
+- Evidence: work/timetable-drive and work/timetable-drive-integration-test.log.
+  Work remains uncommitted; version 3.5.2 unchanged, no push/public release/store
+  upload. Windows/Linux build/runtime and real-account/device sync remain to be
+  verified. Future shared-sync publication must include all platform families.
+
+## 2026-09-25 timetable comparison workflow and independent design
+
+- User approved implementing the researched workflow while avoiding plagiarism
+  and copyright problems. Implemented common functional patterns with Daily's
+  existing Material theme/icons/course colors. No Everytime image, logo, code,
+  distinctive wording or course data reused. Provenance/design boundaries are
+  recorded in docs/TIMETABLE.md; do not claim a legal guarantee.
+- Timetable remains visible while browsing: compact grid above the course panel
+  on phones, grid and panel side by side on wide screens. Selecting a result
+  expands its details inline and shows a clearly marked, unsaved grid preview.
+  Preview does not affect stored counts, calendar, schedule or sync. Explicit
+  lecture-mode selection followed by Add saves directly; the browser stays open.
+  Real Seoul/Cheonan data, source dates, department credit differences, optional
+  conflict filtering, duplicate prevention and save-failure retry are preserved.
+- Saved course taps open a read-only details sheet; Edit opens the existing full
+  editor. Header shows term/name/search/add/menu. Menu retains weekly date-change
+  mode and confirmed reset, and adds per-term names. Optional `termNames` extends
+  local `daily.timetable.v1` JSON version 1; old payloads remain readable. Names
+  are trimmed, 1–60 grapheme characters, serialized with course writes, and survive
+  course reset. Main DB schema 8 and Drive sync are unchanged.
+- Fixed bugs found during verification: rename/term dialogs no longer dispose
+  controllers during route dismissal; search/filter/selection/focus survive
+  keyboard resizing and phone/wide layout changes; course panel has a Material
+  surface for checkbox ink; detail views respect 12/24-hour settings and long
+  notes scroll. Preview blocks have no misleading tap action. Shared code only;
+  native iOS/macOS/Android/Windows/Linux files remain unchanged.
+- Verification: final analyze clean; full Flutter suite 652 passed, one existing
+  skip. Includes real-catalog direct add, preview isolation, details/edit/rename,
+  persistence/corruption/concurrency, light/dark contrast, accessible preview,
+  keyboard/rotation state retention, 320px width with 2x text, time formats and
+  long-note scrolling. Phone light/wide dark renders inspected. Fresh Android,
+  iOS simulator and Mac debug builds passed; all three bundled catalog assets
+  match source across platforms. Evidence: work/timetable-workspace.
+- Updated Mac Daily Test, iPhone 17 simulator, iPad Pro 13-inch simulator and
+  Pixel 9 emulator with verified signatures and installed artifact digests.
+  Protected-file comparisons passed: Mac 2 readable, iPhone 3, iPad 2, Android
+  14. App Store bundle unchanged; Mac OS-protected container remains unreadable
+  and untouched. iPhone OS automatically restarted DailyWidgets after install;
+  stopped that test widget and completed artifact/data checks without reinstall.
+  No app UI launch, login, interactive usage, Shortcut or wallpaper test.
+- Android again reported a GLES renderer mismatch and cold booted while keeping
+  userdata. Before update, all 14 protected files matched the previous verified
+  baseline. Do not describe this as successful snapshot restoration. Saved the
+  updated default_boot snapshot and stopped the emulator after verification.
+- Work remains uncommitted, version 3.5.2 unchanged; no push, new public release or
+  store upload. Windows/Linux builds and physical-device user acceptance remain
+  unverified. Apple agents should verify the shared UI on real devices before a
+  future release; no native port is currently required.
+
+## 2026-09-25 detailed Everytime UI research
+
+- User asked for detailed investigation after the initial timetable UI work.
+  Research only; no product-code changes, builds, installs or login performed.
+- Findings: docs/RESEARCH_EVERYTIME_TIMETABLE_UI_2026-09-25.md. Official current
+  store assets show 2024-1 examples; VINU promo shows 2022-1. Their toolbar icons
+  differ, so do not equate store update dates with the screenshots' UI version.
+- University-distributed guide PDF pages 31–35 shows actual 2025-1 course selection:
+  existing grid remains above filters/results, selected row expands with Add and
+  Review; Add saves directly. Current Daily instead leaves the grid and requires
+  dialog then full editor; this is the main remaining workflow gap.
+- Official 2022-02-24 help confirms lower course-details panel, abbreviated title,
+  timetable rename, theme previews/text size/display fields/start hour and sharing.
+  Treat as historical, not proof of identical latest menus. Multiple timetables,
+  duplication/default designation, latest gestures/dark palette/iPad layout remain
+  unverified from primary sources. Do not invent those details.
+- Official 2025-12-11 PM interview confirms calendar introduced October 2025,
+  automatic semester timetable/academic-calendar integration with visibility
+  settings. This competitor behavior does not authorize changing Daily's agreed
+  calendar/schedule separation. Evidence images/PDF: work/everytime-ui-research.
+
+## 2026-09-25 timetable UX follow-up (Everytime approach)
+
+- User asked to follow Everytime's timetable approach. Replaced the timetable tab's
+  generic 24-hour ScheduleTimelineView with a dedicated WeeklyTimetableGrid:
+  all five weekdays fit a 393px phone, weekends appear when needed, 09–18 default
+  range expands for early/late classes, fixed weekday headers, separate overlap
+  lanes, theme-aware readable course colors and compact title/room/mode blocks.
+- Empty cells open the editor with the selected weekday/hour; cancelling does not
+  save a draft. Existing class colors persist, new classes use the least-used
+  preset color. Basic timetable uses course.defaultMode; explicit Weekly changes
+  uses date overrides and retains video/cancelled blocks for restoration. Search
+  and manual-add actions remain visible; short landscape bodies scroll as a whole.
+- Sangmyung chooser now has readable course cards, result count/added state,
+  campus/department/multiword search, source dates, optional conflict exclusion
+  and nonblocking conflict detail. Boundaries touching are not conflicts; other
+  terms and saved asynchronous video classes are excluded. Mode selection and
+  editor save remain explicit; existing duplicate-source prevention preserved.
+- No changes to native Apple implementation, stored schema, production sync or
+  regular calendar behavior. Timetable remains local-only; not in published 3.5.2.
+- Verification: analyze clean; full Flutter 616 passed, one pre-existing skip.
+  Added 16 checks for empty-slot prefill/cancel, basic vs weekly cancellation
+  restoration, accessible tap actions, Friday within viewport, overlap/adjacency,
+  weekends/early/late hours, localized weekdays, dark/light contrast, large text,
+  short landscape bodies, keyboard and catalog conflicts/duplicates. Real Korean
+  font light/dark widget renders inspected. Evidence: work/timetable-everytime.
+- Fresh Android debug, iOS simulator and macOS debug builds passed. Updated all
+  verified test targets: Mac Daily Test, iPhone 17 simulator, iPad Pro 13-inch
+  simulator and Pixel 9 emulator. Signatures/full artifact digests matched;
+  protected files unchanged (Mac 2 readable, iPhone 3, iPad 2, Android 14); App
+  Store app unchanged. Mac protected container remains unreadable and untouched.
+  No app launch or interactive usage, account action, Shortcut or wallpaper test.
+- Android snapshot restore reported renderer mismatch and cold booted without
+  clearing userdata. Before installation, all 14 protected data files matched the
+  previous #74/#75 installation baseline; only runtime metadata excluded. New
+  install data verification also passed. Saved the updated default_boot snapshot
+  and stopped the emulator. Do not claim snapshot restore succeeded.
+- Still uncommitted. No new release, push or store upload. Windows/Linux native
+  builds and physical-device user acceptance remain unverified for this work.
+
+## 2026-09-25 #74 / #75 timetable implementation (after 3.5.2 release)
+
+- User said "ㄱ" after the completed release and request for remaining timetable
+  information. Resumed #74/#75. Confirmed university scope: Sangmyung Seoul and
+  Cheonan. Asked asynchronously for semester/source; no reply received yet.
+  Explicitly stated current-semester 2026-2 assumption while preparing public data.
+- #74: timetable tab in mobile/desktop navigation, manual course CRUD with multiple
+  weekly meeting blocks, room/professor/color/note, selectable academic year/term,
+  active-term reset confirmation, default lecture mode and per-meeting/date
+  overrides. Cancelled/video are absent from schedule, present in timetable for
+  restoration. Default removes override. Overlapping classes/personal events use
+  shared timeline lanes. Read-only render projections never enter event repository,
+  normal calendar/list/search/widget or completion/drag command paths.
+- Dedicated TimetableStore preferences key daily.timetable.v1 is local only, shown
+  in UI. Saves are serialized; failed/corrupt data cannot be overwritten. No main
+  DB/schema/sync change. Cross-platform code only; native platform files unchanged.
+- #75: real bundled Sangmyung datasets: Seoul 2026-09-23 PDF, 1,359 source rows,
+  1,185 unique sections; Cheonan 2026-09-18 PDF, 1,141 rows, 1,008 sections.
+  Campus/department/course/code/professor search, section/time/room preview, explicit
+  user mode selection, duplicate-source prevention and editable independent saved
+  copies. Cross-listed departments/pages retained. HADA9238/1 differs only in
+  credits by department (2 vs 3), preserved and disclosed, never guessed.
+- Source/provenance and regeneration: docs/TIMETABLE.md,
+  tool/timetable/import_sangmyung.py and assets/timetable/. Unknown source rows,
+  period notation or conflicting identity fail conversion. Numeric and A-I periods
+  verified against official Seoul handbook page 240 and Cheonan guide page 9.
+  No login, account credentials or private academic data were requested/accessed.
+- Verification: analyze clean; full Flutter 600 passed, one pre-existing skip;
+  13 new timetable checks (store corruption/concurrency/terms/overrides and real
+  catalog UI/duplicate prevention/overlap/themes); Python period importer 3 passed.
+  Existing navigation test expanded to six items and proves class isolation from
+  ordinary calendar. Light/dark 393px layouts rendered with real Korean font.
+- Fresh iOS simulator/macOS/Android debug builds passed. Bundled catalog hashes
+  match source on all platforms. iPhone 17 and iPad Pro 13-inch simulators updated;
+  signatures and bundle digests verified, existing protected files unchanged
+  (iPhone 3, iPad 2), App Store bundle unchanged. Mac test app and Pixel 9 emulator
+  also updated with signature/full artifact verification: Mac 2 readable protected
+  files and Android 14 unchanged. Mac OS-protected container was untouched but not
+  readable for hashing. Saved updated Android default_boot snapshot and stopped
+  emulator. Evidence: work/issues-74-75 and work/timetable-ui.
+- These changes are UNCOMMITTED and not part of the published v3.5.2 artifacts.
+  Test version remains 3.5.2. No app launch or interactive usage, Shortcut run,
+  wallpaper change, login, store submission or new public release performed.
+- Remaining acceptance: user testing on real devices; Windows/Linux build/runtime
+  not run locally for this uncommitted work. Shared Dart has no native Apple changes.
+  Academic semester/source can be replaced if user chooses a different term.
+
 ## 2026-09-25 release 3.5.2 published
 
 - User paused #74/#75 before implementation and requested commit, push and public

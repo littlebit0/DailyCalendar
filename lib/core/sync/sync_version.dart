@@ -30,6 +30,11 @@ int compareEventVersions(CalendarEvent left, CalendarEvent right) {
   if (time != 0) return time;
   final deletion = (left.isDeleted ? 1 : 0).compareTo(right.isDeleted ? 1 : 0);
   if (deletion != 0) return deletion;
+  // An older client may omit the extension. Equal-time metadata must survive.
+  final source = (left.lms != null ? 1 : 0).compareTo(
+    right.lms != null ? 1 : 0,
+  );
+  if (source != 0) return source;
   return canonicalSyncJson(
     eventVersionValues(left),
   ).compareTo(canonicalSyncJson(eventVersionValues(right)));
@@ -42,6 +47,7 @@ Map<String, Object?> eventVersionValues(CalendarEvent event) => {
   'location': event.location,
   'url': event.url,
   'weather': event.weather,
+  if (event.lms != null) 'lms': event.lms!.toJson(),
   'startAt': event.allDay
       ? _day(event.startAt)
       : event.startAt.toUtc().toIso8601String(),

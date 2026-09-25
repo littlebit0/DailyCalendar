@@ -1,4 +1,5 @@
 import 'package:daily/core/calendar/calendar_event_span.dart';
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,6 +15,38 @@ void main() {
     colorValue: EventCategory.basic.colorValue,
     createdAt: start,
     updatedAt: start,
+  );
+
+  test(
+    'midnight LMS deadline occupies its own date without a fabricated duration',
+    () {
+      final due = DateTime(2026, 9, 26);
+      final deadline = event('lms:due', due, due).copyWith(
+        allDay: false,
+        lms: LmsEventMetadata(
+          schoolId: 'smu',
+          ownerId: 'student@example.com',
+          lmsUserId: '1',
+          courseId: '2',
+          courseTitle: '수업',
+          activityType: 'quiz',
+          activityId: '3',
+          sourceUrl: 'https://ecampus.smu.ac.kr/mod/quiz/view.php?id=3',
+          dueAt: due,
+        ),
+      );
+      final span = CalendarEventSpan.fromEvent(deadline, due, dayCount: 1)!;
+      expect((span.startCol, span.endCol, span.span), (0, 0, 1));
+      expect(
+        CalendarEventSpan.fromEvent(
+          deadline,
+          due.subtract(const Duration(days: 1)),
+          dayCount: 1,
+        ),
+        isNull,
+      );
+      expect(deadline.duration, Duration.zero);
+    },
   );
 
   test('exclusive ends and week boundaries produce one clipped span', () {

@@ -67,6 +67,17 @@ class $EventRecordsTable extends EventRecords
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _lmsMetadataMeta = const VerificationMeta(
+    'lmsMetadata',
+  );
+  @override
+  late final GeneratedColumn<String> lmsMetadata = GeneratedColumn<String>(
+    'lms_metadata',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _startAtMeta = const VerificationMeta(
     'startAt',
   );
@@ -335,6 +346,7 @@ class $EventRecordsTable extends EventRecords
     location,
     url,
     weather,
+    lmsMetadata,
     startAt,
     endAt,
     allDay,
@@ -405,6 +417,15 @@ class $EventRecordsTable extends EventRecords
       context.handle(
         _weatherMeta,
         weather.isAcceptableOrUnknown(data['weather']!, _weatherMeta),
+      );
+    }
+    if (data.containsKey('lms_metadata')) {
+      context.handle(
+        _lmsMetadataMeta,
+        lmsMetadata.isAcceptableOrUnknown(
+          data['lms_metadata']!,
+          _lmsMetadataMeta,
+        ),
       );
     }
     if (data.containsKey('start_at')) {
@@ -612,6 +633,10 @@ class $EventRecordsTable extends EventRecords
         DriftSqlType.string,
         data['${effectivePrefix}weather'],
       ),
+      lmsMetadata: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}lms_metadata'],
+      ),
       startAt: attachedDatabase.typeMapping.read(
         DriftSqlType.dateTime,
         data['${effectivePrefix}start_at'],
@@ -716,6 +741,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
   final String? location;
   final String? url;
   final String? weather;
+  final String? lmsMetadata;
   final DateTime startAt;
   final DateTime endAt;
   final bool allDay;
@@ -745,6 +771,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     this.location,
     this.url,
     this.weather,
+    this.lmsMetadata,
     required this.startAt,
     required this.endAt,
     required this.allDay,
@@ -784,6 +811,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     }
     if (!nullToAbsent || weather != null) {
       map['weather'] = Variable<String>(weather);
+    }
+    if (!nullToAbsent || lmsMetadata != null) {
+      map['lms_metadata'] = Variable<String>(lmsMetadata);
     }
     map['start_at'] = Variable<DateTime>(startAt);
     map['end_at'] = Variable<DateTime>(endAt);
@@ -836,6 +866,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       weather: weather == null && nullToAbsent
           ? const Value.absent()
           : Value(weather),
+      lmsMetadata: lmsMetadata == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lmsMetadata),
       startAt: Value(startAt),
       endAt: Value(endAt),
       allDay: Value(allDay),
@@ -883,6 +916,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       location: serializer.fromJson<String?>(json['location']),
       url: serializer.fromJson<String?>(json['url']),
       weather: serializer.fromJson<String?>(json['weather']),
+      lmsMetadata: serializer.fromJson<String?>(json['lmsMetadata']),
       startAt: serializer.fromJson<DateTime>(json['startAt']),
       endAt: serializer.fromJson<DateTime>(json['endAt']),
       allDay: serializer.fromJson<bool>(json['allDay']),
@@ -927,6 +961,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       'location': serializer.toJson<String?>(location),
       'url': serializer.toJson<String?>(url),
       'weather': serializer.toJson<String?>(weather),
+      'lmsMetadata': serializer.toJson<String?>(lmsMetadata),
       'startAt': serializer.toJson<DateTime>(startAt),
       'endAt': serializer.toJson<DateTime>(endAt),
       'allDay': serializer.toJson<bool>(allDay),
@@ -963,6 +998,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     Value<String?> location = const Value.absent(),
     Value<String?> url = const Value.absent(),
     Value<String?> weather = const Value.absent(),
+    Value<String?> lmsMetadata = const Value.absent(),
     DateTime? startAt,
     DateTime? endAt,
     bool? allDay,
@@ -992,6 +1028,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     location: location.present ? location.value : this.location,
     url: url.present ? url.value : this.url,
     weather: weather.present ? weather.value : this.weather,
+    lmsMetadata: lmsMetadata.present ? lmsMetadata.value : this.lmsMetadata,
     startAt: startAt ?? this.startAt,
     endAt: endAt ?? this.endAt,
     allDay: allDay ?? this.allDay,
@@ -1033,6 +1070,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       location: data.location.present ? data.location.value : this.location,
       url: data.url.present ? data.url.value : this.url,
       weather: data.weather.present ? data.weather.value : this.weather,
+      lmsMetadata: data.lmsMetadata.present
+          ? data.lmsMetadata.value
+          : this.lmsMetadata,
       startAt: data.startAt.present ? data.startAt.value : this.startAt,
       endAt: data.endAt.present ? data.endAt.value : this.endAt,
       allDay: data.allDay.present ? data.allDay.value : this.allDay,
@@ -1091,6 +1131,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           ..write('location: $location, ')
           ..write('url: $url, ')
           ..write('weather: $weather, ')
+          ..write('lmsMetadata: $lmsMetadata, ')
           ..write('startAt: $startAt, ')
           ..write('endAt: $endAt, ')
           ..write('allDay: $allDay, ')
@@ -1125,6 +1166,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     location,
     url,
     weather,
+    lmsMetadata,
     startAt,
     endAt,
     allDay,
@@ -1158,6 +1200,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           other.location == this.location &&
           other.url == this.url &&
           other.weather == this.weather &&
+          other.lmsMetadata == this.lmsMetadata &&
           other.startAt == this.startAt &&
           other.endAt == this.endAt &&
           other.allDay == this.allDay &&
@@ -1189,6 +1232,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
   final Value<String?> location;
   final Value<String?> url;
   final Value<String?> weather;
+  final Value<String?> lmsMetadata;
   final Value<DateTime> startAt;
   final Value<DateTime> endAt;
   final Value<bool> allDay;
@@ -1219,6 +1263,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.location = const Value.absent(),
     this.url = const Value.absent(),
     this.weather = const Value.absent(),
+    this.lmsMetadata = const Value.absent(),
     this.startAt = const Value.absent(),
     this.endAt = const Value.absent(),
     this.allDay = const Value.absent(),
@@ -1250,6 +1295,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.location = const Value.absent(),
     this.url = const Value.absent(),
     this.weather = const Value.absent(),
+    this.lmsMetadata = const Value.absent(),
     required DateTime startAt,
     required DateTime endAt,
     this.allDay = const Value.absent(),
@@ -1287,6 +1333,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Expression<String>? location,
     Expression<String>? url,
     Expression<String>? weather,
+    Expression<String>? lmsMetadata,
     Expression<DateTime>? startAt,
     Expression<DateTime>? endAt,
     Expression<bool>? allDay,
@@ -1318,6 +1365,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       if (location != null) 'location': location,
       if (url != null) 'url': url,
       if (weather != null) 'weather': weather,
+      if (lmsMetadata != null) 'lms_metadata': lmsMetadata,
       if (startAt != null) 'start_at': startAt,
       if (endAt != null) 'end_at': endAt,
       if (allDay != null) 'all_day': allDay,
@@ -1357,6 +1405,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Value<String?>? location,
     Value<String?>? url,
     Value<String?>? weather,
+    Value<String?>? lmsMetadata,
     Value<DateTime>? startAt,
     Value<DateTime>? endAt,
     Value<bool>? allDay,
@@ -1388,6 +1437,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       location: location ?? this.location,
       url: url ?? this.url,
       weather: weather ?? this.weather,
+      lmsMetadata: lmsMetadata ?? this.lmsMetadata,
       startAt: startAt ?? this.startAt,
       endAt: endAt ?? this.endAt,
       allDay: allDay ?? this.allDay,
@@ -1437,6 +1487,9 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     }
     if (weather.present) {
       map['weather'] = Variable<String>(weather.value);
+    }
+    if (lmsMetadata.present) {
+      map['lms_metadata'] = Variable<String>(lmsMetadata.value);
     }
     if (startAt.present) {
       map['start_at'] = Variable<DateTime>(startAt.value);
@@ -1527,6 +1580,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
           ..write('location: $location, ')
           ..write('url: $url, ')
           ..write('weather: $weather, ')
+          ..write('lmsMetadata: $lmsMetadata, ')
           ..write('startAt: $startAt, ')
           ..write('endAt: $endAt, ')
           ..write('allDay: $allDay, ')
@@ -1574,6 +1628,7 @@ typedef $$EventRecordsTableCreateCompanionBuilder =
       Value<String?> location,
       Value<String?> url,
       Value<String?> weather,
+      Value<String?> lmsMetadata,
       required DateTime startAt,
       required DateTime endAt,
       Value<bool> allDay,
@@ -1606,6 +1661,7 @@ typedef $$EventRecordsTableUpdateCompanionBuilder =
       Value<String?> location,
       Value<String?> url,
       Value<String?> weather,
+      Value<String?> lmsMetadata,
       Value<DateTime> startAt,
       Value<DateTime> endAt,
       Value<bool> allDay,
@@ -1667,6 +1723,11 @@ class $$EventRecordsTableFilterComposer
 
   ColumnFilters<String> get weather => $composableBuilder(
     column: $table.weather,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lmsMetadata => $composableBuilder(
+    column: $table.lmsMetadata,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1820,6 +1881,11 @@ class $$EventRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get lmsMetadata => $composableBuilder(
+    column: $table.lmsMetadata,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<DateTime> get startAt => $composableBuilder(
     column: $table.startAt,
     builder: (column) => ColumnOrderings(column),
@@ -1958,6 +2024,11 @@ class $$EventRecordsTableAnnotationComposer
   GeneratedColumn<String> get weather =>
       $composableBuilder(column: $table.weather, builder: (column) => column);
 
+  GeneratedColumn<String> get lmsMetadata => $composableBuilder(
+    column: $table.lmsMetadata,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<DateTime> get startAt =>
       $composableBuilder(column: $table.startAt, builder: (column) => column);
 
@@ -2086,6 +2157,7 @@ class $$EventRecordsTableTableManager
                 Value<String?> location = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 Value<String?> weather = const Value.absent(),
+                Value<String?> lmsMetadata = const Value.absent(),
                 Value<DateTime> startAt = const Value.absent(),
                 Value<DateTime> endAt = const Value.absent(),
                 Value<bool> allDay = const Value.absent(),
@@ -2116,6 +2188,7 @@ class $$EventRecordsTableTableManager
                 location: location,
                 url: url,
                 weather: weather,
+                lmsMetadata: lmsMetadata,
                 startAt: startAt,
                 endAt: endAt,
                 allDay: allDay,
@@ -2148,6 +2221,7 @@ class $$EventRecordsTableTableManager
                 Value<String?> location = const Value.absent(),
                 Value<String?> url = const Value.absent(),
                 Value<String?> weather = const Value.absent(),
+                Value<String?> lmsMetadata = const Value.absent(),
                 required DateTime startAt,
                 required DateTime endAt,
                 Value<bool> allDay = const Value.absent(),
@@ -2178,6 +2252,7 @@ class $$EventRecordsTableTableManager
                 location: location,
                 url: url,
                 weather: weather,
+                lmsMetadata: lmsMetadata,
                 startAt: startAt,
                 endAt: endAt,
                 allDay: allDay,

@@ -43,6 +43,16 @@ class _EventCompletionActionState extends State<EventCompletionAction> {
       if (source == null || !_canComplete(source) || source.deletedAt != null) {
         return;
       }
+      if ((source.lms != null || source.id.startsWith('lms:')) &&
+          !source.isVisibleToOwner(
+            container
+                .read(settingsRepositoryProvider)
+                .dailyAccount()
+                ?.googleAccount
+                ?.email,
+          )) {
+        return;
+      }
       final target = event.occurrenceId != null && source.recurrence.isRepeating
           ? event
           : source;

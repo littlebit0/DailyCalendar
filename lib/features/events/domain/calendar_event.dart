@@ -1,3 +1,4 @@
+import '../../../core/lms/lms_models.dart';
 import 'event_category.dart';
 import 'recurrence_rule.dart';
 
@@ -17,6 +18,7 @@ class CalendarEvent {
     this.location,
     this.url,
     this.weather,
+    this.lms,
     int? reminderMinutesBefore,
     List<int>? reminderMinutesBeforeList,
     this.recurrence = const RecurrenceRule(),
@@ -45,6 +47,7 @@ class CalendarEvent {
   final String? location;
   final String? url;
   final String? weather;
+  final LmsEventMetadata? lms;
   final DateTime startAt;
   final DateTime endAt;
   final bool allDay;
@@ -71,6 +74,11 @@ class CalendarEvent {
 
   bool get isRecurring => recurrence.isRepeating;
 
+  // A metadata-stripped LMS record from an older client is never a personal
+  // event: retain it without exposing it to another account.
+  bool isVisibleToOwner(String? googleEmail) =>
+      lms == null ? !id.startsWith('lms:') : lms!.belongsToOwner(googleEmail);
+
   int? get reminderMinutesBefore => reminderMinutesBeforeList.isEmpty
       ? null
       : reminderMinutesBeforeList.first;
@@ -91,6 +99,9 @@ class CalendarEvent {
   }
 
   bool overlaps(DateTime rangeStart, DateTime rangeEnd) {
+    if (lms != null && startAt.isAtSameMomentAs(endAt)) {
+      return !startAt.isBefore(rangeStart) && startAt.isBefore(rangeEnd);
+    }
     return startAt.isBefore(rangeEnd) && endAt.isAfter(rangeStart);
   }
 
@@ -102,6 +113,7 @@ class CalendarEvent {
     String? location,
     String? url,
     String? weather,
+    LmsEventMetadata? lms,
     DateTime? startAt,
     DateTime? endAt,
     bool? allDay,
@@ -127,6 +139,7 @@ class CalendarEvent {
     bool clearLocation = false,
     bool clearUrl = false,
     bool clearWeather = false,
+    bool clearLms = false,
     bool clearReminder = false,
     bool clearDeletedAt = false,
   }) {
@@ -146,6 +159,7 @@ class CalendarEvent {
       location: clearLocation ? null : location ?? this.location,
       url: clearUrl ? null : url ?? this.url,
       weather: clearWeather ? null : weather ?? this.weather,
+      lms: clearLms ? null : lms ?? this.lms,
       startAt: startAt ?? this.startAt,
       endAt: endAt ?? this.endAt,
       allDay: allDay ?? this.allDay,

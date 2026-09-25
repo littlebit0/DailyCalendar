@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../core/theme/daily_ui.dart';
 
 class DailyTheme {
   const DailyTheme._();
@@ -75,6 +76,10 @@ class DailyTheme {
     const text = Color(0xfff3f4f6);
     const border = Color(0xff232832);
     const primary = Color(0xff78a7ff);
+    const popupShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(20)),
+      side: DailyUi.darkPopupBorder,
+    );
 
     final colorScheme =
         ColorScheme.fromSeed(
@@ -108,15 +113,23 @@ class DailyTheme {
         color: surface,
         surfaceTintColor: Colors.transparent,
       ),
-      dialogTheme: const DialogThemeData(backgroundColor: surface),
+      dialogTheme: const DialogThemeData(
+        backgroundColor: surface,
+        shape: popupShape,
+      ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: surface,
         modalBackgroundColor: surface,
         surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          side: DailyUi.darkPopupBorder,
+        ),
       ),
       popupMenuTheme: const PopupMenuThemeData(
         color: surface,
         surfaceTintColor: Colors.transparent,
+        shape: popupShape,
       ),
       snackBarTheme: SnackBarThemeData(
         backgroundColor: surfaceHigh,
@@ -126,8 +139,12 @@ class DailyTheme {
       datePickerTheme: const DatePickerThemeData(
         backgroundColor: surface,
         surfaceTintColor: Colors.transparent,
+        shape: popupShape,
       ),
-      timePickerTheme: const TimePickerThemeData(backgroundColor: surface),
+      timePickerTheme: const TimePickerThemeData(
+        backgroundColor: surface,
+        shape: popupShape,
+      ),
       listTileTheme: const ListTileThemeData(
         textColor: text,
         iconColor: Color(0xffc7ccd5),

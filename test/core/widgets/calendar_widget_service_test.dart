@@ -1,4 +1,6 @@
 import 'package:daily/core/settings/app_settings.dart';
+import 'package:daily/core/lms/lms_models.dart';
+import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/widgets/calendar_widget_service.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
@@ -66,6 +68,69 @@ void main() {
       expect(snapshot['monthDays'], hasLength(42));
     });
   }
+
+  test(
+    'school visibility grant uses verified time and clears during refresh',
+    () async {
+      const channel = MethodChannel(CalendarWidgetChannelContract.appleChannel);
+      final snapshots = <Map<Object?, Object?>>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            snapshots.add(Map<Object?, Object?>.from(call.arguments as Map));
+            return null;
+          });
+      addTearDown(
+        () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null),
+      );
+      final now = DateTime(2026, 9, 26);
+      final metadata = LmsEventMetadata(
+        schoolId: 'smu',
+        ownerId: 'student@example.com',
+        lmsUserId: '1',
+        courseId: '2',
+        courseTitle: '수업',
+        activityType: 'assignment',
+        activityId: '3',
+        sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=3',
+        dueAt: now,
+      );
+      final deadline = _event(
+        id: 'lms:due',
+        title: '마감',
+        startAt: now,
+      ).copyWith(endAt: now, allDay: false, lms: metadata);
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'student@example.com'),
+      );
+      var visible = true;
+      DateTime? verified = now.subtract(const Duration(minutes: 1));
+      final service = CalendarWidgetService(
+        eventRepository: _FakeEventRepository([deadline]),
+        settingsRepository: settings,
+        targetPlatform: TargetPlatform.macOS,
+        channel: channel,
+        isEventVisible: (_) => visible,
+        lmsVerifiedAt: () => verified,
+      );
+      addTearDown(service.dispose);
+      await service.refresh(now: now);
+      expect(snapshots.last['todayEvents'], hasLength(1));
+      final grant = snapshots.last['lmsVisibility'] as Map;
+      expect(grant['ownerId'], 'student@example.com');
+      expect(grant['checkedAt'], verified.millisecondsSinceEpoch);
+      expect(grant['eventIds'], ['lms:due']);
+      visible = false;
+      verified = null;
+      await service.refresh(now: now);
+      expect(snapshots.last['todayEvents'], isEmpty);
+      expect((snapshots.last['lmsVisibility'] as Map)['eventIds'], isEmpty);
+      expect((snapshots.last['lmsVisibility'] as Map)['checkedAt'], isNull);
+    },
+  );
 
   test(
     'Windows uses the common pending and acknowledgement action shape',

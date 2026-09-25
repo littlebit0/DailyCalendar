@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/di/app_providers.dart';
+import '../core/lms/lms_controller.dart';
 import '../core/analytics/product_analytics.dart';
 import '../core/auth/google_account.dart';
 import '../core/security/biometric_auth_service.dart';
@@ -668,7 +669,9 @@ class _AppHomeState extends ConsumerState<_AppHome>
     Duration(seconds: 8),
   ];
 
+  late final LmsController _lmsController;
   var _servicesStarted = false;
+  String? _scheduledLmsOwner;
   late final bool _requiresStartupSync;
   bool _startupGateOpen = false;
   Future<void>? _startupOperation;
@@ -684,6 +687,12 @@ class _AppHomeState extends ConsumerState<_AppHome>
   @override
   void initState() {
     super.initState();
+    _lmsController = ref.read(lmsControllerProvider);
+    _scheduledLmsOwner = ref
+        .read(settingsRepositoryProvider)
+        .dailyAccount()
+        ?.googleAccount
+        ?.email;
     _requiresStartupSync =
         ref.read(settingsRepositoryProvider).dailyAccount()?.googleAccount !=
         null;
@@ -713,6 +722,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _lmsController.setForeground(false);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
       _siriEventChangesChannel.setMethodCallHandler(null);
@@ -765,7 +775,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     final actions = await widgetService.pendingTodoActions();
     if (actions.isEmpty) return;
 
-    final repository = ref.read(eventRepositoryProvider);
+    final repository = ref.read(visibleEventRepositoryProvider);
     final commandService = ref.read(eventCommandServiceProvider);
     final acknowledged = <String>[];
     for (final action in actions) {
@@ -812,7 +822,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
       if (changes.isEmpty) return;
 
       ref.invalidate(eventsInRangeProvider);
-      final repository = ref.read(eventRepositoryProvider);
+      final repository = ref.read(visibleEventRepositoryProvider);
       final notificationService = ref.read(notificationServiceProvider);
       final alarmService = ref.read(alarmServiceProvider);
       for (final change in changes) {
@@ -875,7 +885,14 @@ class _AppHomeState extends ConsumerState<_AppHome>
         reminderMinutesBeforeList: event.reminderMinutesBeforeList,
       );
       await alarmService.cancelEventAlarm(event.id);
-      if (event.isDeleted) {
+      if (event.isDeleted ||
+          !event.isVisibleToOwner(
+            ref
+                .read(settingsRepositoryProvider)
+                .dailyAccount()
+                ?.googleAccount
+                ?.email,
+          )) {
         continue;
       }
       await notificationService.scheduleEventReminder(
@@ -893,6 +910,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     }
     switch (state) {
       case AppLifecycleState.resumed:
+        ref.read(lmsControllerProvider).setForeground(true);
         _syncRestoreRetryTimer?.cancel();
         _syncRestoreRetryIndex = 0;
         // App Intents update the shared SQLite file outside Drift's active
@@ -906,6 +924,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
       case AppLifecycleState.paused:
       case AppLifecycleState.hidden:
       case AppLifecycleState.detached:
+        ref.read(lmsControllerProvider).setForeground(false);
         if (_startupGateOpen && _startupOperation == null) {
           _syncBeforeBackgroundOrExit();
         }
@@ -919,12 +938,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
   Widget build(BuildContext context) {
     ref.listen<AppSettings>(appSettingsProvider, (previous, next) {
       if (previous != next) {
+        ref.read(lmsControllerProvider).settingsChanged();
         if (previous?.themeMode != next.themeMode) {
           _refreshCalendarWidgetTheme();
         } else {
           _refreshCalendarWidgets();
         }
       }
+    });
+    ref.listen(lmsControllerProvider, (_, _) {
+      _refreshCalendarWidgets();
     });
     return StartupSyncGate(
       requiredAtStartup: _requiresStartupSync,
@@ -1023,6 +1046,15 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   Future<void> _refreshAcademicCalendars() async {
+    if (!mounted) return;
+    final lms = ref.read(lmsControllerProvider);
+    final foreground =
+        WidgetsBinding.instance.lifecycleState == null ||
+        WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
+    lms.setForeground(foreground);
+    // After the main Drive phase; it must not hold the startup gate open.
+    // The private native browser needs an active application window.
+    if (foreground) await lms.refresh();
     if (!mounted) return;
     // Do not instantiate network/import services for users without a subscription.
     try {
@@ -1175,8 +1207,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   void _refreshSettingsState() {
-    if (!mounted) {
-      return;
+    if (!mounted) return;
+    ref.read(lmsControllerProvider).settingsChanged();
+    final owner = ref
+        .read(settingsRepositoryProvider)
+        .dailyAccount()
+        ?.googleAccount
+        ?.email;
+    if (_scheduledLmsOwner != owner) {
+      _scheduledLmsOwner = owner;
+      unawaited(_reconcileAllEventSchedules().catchError((_) {}));
     }
     ref.read(appSettingsProvider.notifier).state = ref
         .read(settingsRepositoryProvider)

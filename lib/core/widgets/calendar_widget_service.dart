@@ -36,9 +36,13 @@ class CalendarWidgetService {
     required SettingsRepository settingsRepository,
     TargetPlatform? targetPlatform,
     MethodChannel? channel,
+    bool Function(CalendarEvent)? isEventVisible,
+    DateTime? Function()? lmsVerifiedAt,
     Duration themeRefreshDelay = const Duration(milliseconds: 400),
   }) : _eventRepository = eventRepository,
        _settingsRepository = settingsRepository,
+       _isEventVisible = isEventVisible,
+       _lmsVerifiedAt = lmsVerifiedAt,
        _targetPlatform = targetPlatform ?? defaultTargetPlatform,
        _themeRefreshDelay = themeRefreshDelay {
     final channelName = CalendarWidgetChannelContract.channelNameFor(
@@ -52,6 +56,8 @@ class CalendarWidgetService {
   }
 
   final EventRepository _eventRepository;
+  final bool Function(CalendarEvent)? _isEventVisible;
+  final DateTime? Function()? _lmsVerifiedAt;
   final SettingsRepository _settingsRepository;
   final TargetPlatform _targetPlatform;
   late final MethodChannel? _channel;
@@ -178,10 +184,33 @@ class CalendarWidgetService {
       now: current,
       settings: settings,
       gridStart: gridStart,
-      monthEvents: results[0],
-      allEvents: results[1],
+      monthEvents: results[0]
+          .where((event) => _isEventVisible?.call(event) ?? true)
+          .toList(),
+      allEvents: results[1]
+          .where((event) => _isEventVisible?.call(event) ?? true)
+          .toList(),
     );
 
+    final verifiedAt = _lmsVerifiedAt?.call();
+    snapshot['lmsVisibility'] = {
+      'ownerId': _settingsRepository
+          .dailyAccount()
+          ?.googleAccount
+          ?.email
+          .trim()
+          .toLowerCase(),
+      'checkedAt': verifiedAt?.millisecondsSinceEpoch,
+      'eventIds': verifiedAt == null
+          ? <String>[]
+          : [
+              for (final event in results[1])
+                if (event.lms != null &&
+                    !event.isDeleted &&
+                    (_isEventVisible?.call(event) ?? false))
+                  event.id,
+            ],
+    };
     try {
       await _channel!.invokeMethod<void>(
         CalendarWidgetChannelContract.updateSnapshotMethod,
@@ -342,7 +371,9 @@ class CalendarWidgetSnapshotBuilder {
         cursor = rangeStart;
       }
       var eventEnd = _dateOnly(
-        event.endAt.subtract(const Duration(microseconds: 1)),
+        event.lms != null && event.startAt == event.endAt
+            ? event.endAt
+            : event.endAt.subtract(const Duration(microseconds: 1)),
       );
       final lastRangeDay = rangeEnd.subtract(const Duration(days: 1));
       if (eventEnd.isAfter(lastRangeDay)) {

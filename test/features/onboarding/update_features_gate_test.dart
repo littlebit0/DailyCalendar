@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:daily/core/academic/academic_calendar_service.dart';
+import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/academic_store.dart';
 import 'package:daily/core/di/app_providers.dart';
@@ -100,7 +103,14 @@ void main() {
   testWidgets(
     'academic settings button opens the existing page without importing',
     (tester) async {
-      final settings = await _existingUser();
+      final settings = await _existingUser(
+        academicProfile: const AcademicProfile(
+          universityId: 'academyinfo:0000117',
+          universityName: '상명대학교',
+          schoolKind: 'fourYear',
+          campus: '서울캠퍼스',
+        ),
+      );
       final service = _AcademicService();
       addTearDown(service.dispose);
       await tester.pumpWidget(
@@ -174,10 +184,14 @@ void main() {
   }
 }
 
-Future<SettingsRepository> _existingUser() async {
+Future<SettingsRepository> _existingUser({
+  AcademicProfile? academicProfile,
+}) async {
   SharedPreferences.setMockInitialValues({
     'onboardingCompleted': true,
     'showLunarDates': true,
+    if (academicProfile != null)
+      'academicProfile.v1': jsonEncode(academicProfile.toJson()),
     FeatureAnnouncementStore.key: [
       'lockscreen-calendar-v1',
       'weather-forecast-v1',

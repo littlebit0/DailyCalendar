@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/core/migration/todo_database_migration_service.dart';
 import 'package:daily/core/sync/sync_version.dart';
 import 'package:daily/features/events/data/app_database.dart';
@@ -25,6 +26,181 @@ void main() {
       await directory.delete(recursive: true);
     }
   });
+
+  for (final hasLmsColumns in [false, true]) {
+    test('schema 8 adds LMS columns locally without cloud work '
+        '(existing metadata: $hasLmsColumns)', () async {
+      final timestamp = DateTime.utc(2026, 9, 26, 0, 0, 0, 123, 456);
+      final synced = _event(id: 'synced').copyWith(
+        memo: '개인 메모',
+        location: '강의실',
+        url: 'https://example.com/personal',
+        weather: '맑음',
+        createdAt: timestamp.subtract(const Duration(days: 1)),
+        updatedAt: timestamp,
+        completed: true,
+        reminderMinutesBeforeList: [10, 30],
+        alarmEnabled: true,
+        showDday: true,
+        deviceId: 'existing-device',
+      );
+      final events = [
+        synced,
+        synced.copyWith(id: 'pending', syncStatus: 'pending'),
+        synced.copyWith(
+          id: 'soft-deleted',
+          syncStatus: 'pending',
+          deletedAt: timestamp.add(const Duration(microseconds: 7)),
+        ),
+        if (hasLmsColumns)
+          synced.copyWith(
+            id: 'lms:known-source',
+            lms: LmsEventMetadata(
+              schoolId: 'smu',
+              ownerId: 'owner@example.com',
+              lmsUserId: 'student-1',
+              courseId: 'course-1',
+              courseTitle: '수업',
+              activityType: 'assignment',
+              activityId: 'activity-1',
+              sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=1',
+              dueAt: timestamp,
+              submissionStatus: '제출 완료',
+            ),
+          ),
+      ];
+      final database = AppDatabase.forTesting(NativeDatabase(databaseFile));
+      final repository = DriftEventRepository(database);
+      for (final event in events) {
+        await repository.save(event);
+      }
+      await database.close();
+
+      final before = sqlite3.open(databaseFile.path);
+      late final List<Map<String, Object?>> eventRows;
+      late final List<Map<String, Object?>> deletionRows;
+      try {
+        before.execute(
+          'INSERT INTO sync_event_deletions '
+          '(id, deleted_at, pending, lms_owner_id) VALUES (?, ?, ?, ?)',
+          [
+            hasLmsColumns ? 'lms:compact-pending' : 'compact-pending',
+            timestamp.toIso8601String(),
+            1,
+            hasLmsColumns ? 'owner@example.com' : null,
+          ],
+        );
+        before.execute(
+          'INSERT INTO sync_event_deletions '
+          '(id, deleted_at, pending) VALUES (?, ?, 0)',
+          ['compact-synced', timestamp.toIso8601String()],
+        );
+        if (!hasLmsColumns) {
+          before.execute('ALTER TABLE event_records DROP COLUMN lms_metadata');
+          before.execute(
+            'ALTER TABLE sync_event_deletions DROP COLUMN lms_owner_id',
+          );
+        }
+        before.execute('PRAGMA user_version = 8');
+        eventRows = _storedRows(before, 'event_records');
+        deletionRows = _storedRows(before, 'sync_event_deletions');
+      } finally {
+        before.close();
+      }
+
+      var restoreCalls = 0;
+      var deletionCalls = 0;
+      var backupCalls = 0;
+      final stages = <TodoMigrationStage>[];
+      final service = TodoDatabaseMigrationService(
+        databaseFile: () async => databaseFile,
+        hasLinkedGoogleAccount: () => true,
+        loadRemoteEvents: () async {
+          restoreCalls++;
+          return null;
+        },
+        remoteDeletionRecords: () {
+          deletionCalls++;
+          return const [];
+        },
+        backupMigratedEvents: () async {
+          backupCalls++;
+          throw StateError('Cloud unavailable during additive migration');
+        },
+      );
+      addTearDown(service.dispose);
+      service.progress.addListener(
+        () => stages.add(service.progress.value.stage),
+      );
+
+      final result = await service.migrateIfNeeded();
+
+      expect(result.migrated, isTrue);
+      expect(result.backupPending, isFalse);
+      expect(restoreCalls, 0);
+      expect(deletionCalls, 0);
+      expect(backupCalls, 0);
+      expect(stages, contains(TodoMigrationStage.snapshotting));
+      expect(stages, contains(TodoMigrationStage.validating));
+      expect(stages, isNot(contains(TodoMigrationStage.restoring)));
+      expect(stages, isNot(contains(TodoMigrationStage.backingUp)));
+
+      final snapshot = sqlite3.open(result.snapshotPath!);
+      addTearDown(snapshot.close);
+      expect(_userVersion(snapshot), 8);
+      expect(_storedRows(snapshot, 'event_records'), eventRows);
+      expect(_storedRows(snapshot, 'sync_event_deletions'), deletionRows);
+
+      final migrated = sqlite3.open(databaseFile.path);
+      addTearDown(migrated.close);
+      expect(_userVersion(migrated), AppDatabase.currentSchemaVersion);
+      expect(_hasColumn(migrated, 'lms_metadata'), isTrue);
+      expect(
+        migrated
+            .select('PRAGMA table_info(sync_event_deletions)')
+            .any((row) => row['name'] == 'lms_owner_id'),
+        isTrue,
+      );
+      expect(
+        _storedRows(
+          migrated,
+          'event_records',
+          omit: hasLmsColumns ? const [] : ['lms_metadata'],
+        ),
+        eventRows,
+      );
+      expect(
+        _storedRows(
+          migrated,
+          'sync_event_deletions',
+          omit: hasLmsColumns ? const [] : ['lms_owner_id'],
+        ),
+        deletionRows,
+      );
+      expect(
+        migrated.select('SELECT sync_status FROM event_records WHERE id = ?', [
+          'synced',
+        ]).single['sync_status'],
+        'synced',
+      );
+      if (!hasLmsColumns) {
+        expect(
+          migrated.select(
+            'SELECT id FROM event_records WHERE lms_metadata IS NOT NULL',
+          ),
+          isEmpty,
+        );
+        expect(
+          migrated.select(
+            'SELECT id FROM sync_event_deletions WHERE lms_owner_id IS NOT NULL',
+          ),
+          isEmpty,
+        );
+      }
+      expect((await service.migrateIfNeeded()).migrated, isFalse);
+      expect(restoreCalls + deletionCalls + backupCalls, 0);
+    });
+  }
 
   test(
     'migrates existing events to incomplete Todo items with a snapshot',
@@ -295,3 +471,12 @@ bool _hasColumn(Database database, String column) {
       .select('PRAGMA table_info(event_records)')
       .any((row) => row['name'] == column);
 }
+
+List<Map<String, Object?>> _storedRows(
+  Database database,
+  String table, {
+  List<String> omit = const [],
+}) => [
+  for (final row in database.select('SELECT * FROM $table ORDER BY id'))
+    Map<String, Object?>.from(row)..removeWhere((key, _) => omit.contains(key)),
+];

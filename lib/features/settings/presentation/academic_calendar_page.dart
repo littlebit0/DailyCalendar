@@ -8,9 +8,19 @@ import '../../../core/academic/academic_source.dart';
 import '../../../core/academic/academic_store.dart';
 import '../../../core/academic/academic_strings.dart';
 import '../../../core/di/app_providers.dart';
+import '../../../core/settings/settings_repository.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../events/domain/event_category.dart';
 import 'category_color_picker.dart';
+import 'academic_profile_page.dart';
+import '../../../core/localization/app_localizations.dart';
+
+typedef _PreviewAccount = ({
+  SettingsRepository repository,
+  String? accountId,
+  String? googleEmail,
+  int generation,
+});
 
 class AcademicCalendarPage extends ConsumerStatefulWidget {
   const AcademicCalendarPage({super.key});
@@ -20,13 +30,38 @@ class AcademicCalendarPage extends ConsumerStatefulWidget {
 }
 
 class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
-  String? _sourceId;
   int _year = DateTime.now().year;
   AcademicPreview? _preview;
+  _PreviewAccount? _previewAccount;
+  int _previewRequest = 0;
   final _selected = <String>{};
   final _draftColors = <String, int>{};
   bool _pickingColor = false;
   bool _localError = false;
+
+  _PreviewAccount get _currentAccount {
+    final repository = ref.read(settingsRepositoryProvider);
+    final account = repository.dailyAccount();
+    return (
+      repository: repository,
+      accountId: repository.hasStoredDailyAccount ? account?.id : null,
+      googleEmail: account?.googleAccount?.email.trim().toLowerCase(),
+      generation: repository.academicStore.generation,
+    );
+  }
+
+  bool _isCurrentPreview(String sourceId, _PreviewAccount? account) =>
+      account != null &&
+      account == _currentAccount &&
+      ref.read(appSettingsProvider).academicProfile?.academicSourceId ==
+          sourceId;
+
+  void _clearPreview() {
+    _previewRequest++;
+    _preview = null;
+    _previewAccount = null;
+    _selected.clear();
+  }
 
   String text(AcademicText key, [Map<String, Object> args = const {}]) =>
       academicText(context, key, args);
@@ -79,15 +114,34 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    final service = ref.watch(academicCalendarServiceProvider);
     final settings = ref.watch(appSettingsProvider);
+    ref.listen(
+      appSettingsProvider.select((s) => s.academicProfile?.academicSourceId),
+      (previous, next) {
+        if (previous != next) setState(_clearPreview);
+      },
+    );
+    final profile = settings.academicProfile;
+    if (profile?.supported != true) {
+      return Scaffold(
+        appBar: DailyNavigationBar(title: text(AcademicText.title)),
+        body: const AcademicFeatureGate(child: SizedBox.shrink()),
+      );
+    }
+    final service = ref.watch(academicCalendarServiceProvider);
     return ListenableBuilder(
       listenable: service,
       builder: (context, _) {
         final source = service.sources.firstWhere(
-          (s) => s.id == _sourceId,
+          (s) => s.id == profile!.academicSourceId,
           orElse: () => service.sources.first,
         );
+        final preview = _preview;
+        final currentPreview =
+            preview != null &&
+                _isCurrentPreview(preview.source.id, _previewAccount)
+            ? preview
+            : null;
         final color =
             settings.categories
                 .where(
@@ -105,23 +159,23 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
             child: ListView(
               children: [
                 if (service.busy) const LinearProgressIndicator(),
-                DropdownButtonFormField<String>(
+                ListTile(
                   key: const ValueKey('academic-school'),
-                  initialValue: source.id,
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    labelText: text(AcademicText.school),
-                  ),
-                  items: [
-                    for (final s in service.sources)
-                      DropdownMenuItem(value: s.id, child: Text(s.name)),
-                  ],
-                  onChanged: service.busy
+                  contentPadding: EdgeInsets.zero,
+                  title: Text(profile!.displayName),
+                  subtitle: Text(context.tr('저장된 학사 정보')),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: service.busy
                       ? null
-                      : (value) => setState(() {
-                          _sourceId = value;
-                          _preview = null;
-                        }),
+                      : () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute<bool>(
+                              builder: (_) => const AcademicProfilePage(),
+                            ),
+                          );
+                          if (mounted) setState(_clearPreview);
+                        },
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<int>(
@@ -142,7 +196,7 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                       ? null
                       : (value) => setState(() {
                           _year = value!;
-                          _preview = null;
+                          _clearPreview();
                         }),
                 ),
                 const SizedBox(height: 12),
@@ -182,10 +236,17 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                   onPressed: service.busy
                       ? null
                       : () => _perform(() async {
+                          final account = _currentAccount;
+                          final request = ++_previewRequest;
                           final preview = await service.preview(source, _year);
-                          if (!mounted) return;
+                          if (!mounted ||
+                              request != _previewRequest ||
+                              !_isCurrentPreview(source.id, account)) {
+                            return;
+                          }
                           setState(() {
                             _preview = preview;
+                            _previewAccount = account;
                             _selected
                               ..clear()
                               ..addAll(
@@ -239,7 +300,7 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                   if (result.failed > 0)
                     Text(text(AcademicText.failed, {'count': result.failed})),
                 ],
-                if (_preview case final preview?) ...[
+                if (currentPreview case final preview?) ...[
                   const Divider(height: 32),
                   Text(
                     text(AcademicText.selection, {'count': _selected.length}),
@@ -408,7 +469,7 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
               ],
             ),
           ),
-          bottomNavigationBar: _preview == null
+          bottomNavigationBar: currentPreview == null
               ? null
               : SafeArea(
                   top: false,
@@ -426,13 +487,21 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                           onPressed: service.busy || _selected.isEmpty
                               ? null
                               : () => _perform(() async {
+                                  if (!identical(_preview, currentPreview) ||
+                                      !_isCurrentPreview(
+                                        currentPreview.source.id,
+                                        _previewAccount,
+                                      )) {
+                                    setState(_clearPreview);
+                                    return;
+                                  }
                                   await service.importSelection(
-                                    _preview!,
+                                    currentPreview,
                                     Set.of(_selected),
                                     colorValue:
-                                        _draftColors[_preview!.source.id],
+                                        _draftColors[currentPreview.source.id],
                                   );
-                                  if (mounted) setState(() => _preview = null);
+                                  if (mounted) setState(_clearPreview);
                                 }),
                         ),
                       ),

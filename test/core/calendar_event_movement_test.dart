@@ -1,10 +1,36 @@
 import 'package:daily/core/calendar/calendar_event_movement.dart';
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test(
+    'LMS source schedules cannot drag while personal schedules remain movable',
+    () {
+      final personal = _event(
+        start: DateTime(2026, 9, 26),
+        end: DateTime(2026, 9, 27),
+      );
+      final lms = personal.copyWith(
+        lms: LmsEventMetadata(
+          schoolId: 'smu',
+          ownerId: 'student@example.com',
+          lmsUserId: '42',
+          courseId: '123',
+          courseTitle: '자료구조',
+          activityType: 'assignment',
+          activityId: '456',
+          sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=456',
+        ),
+      );
+      expect(calendarEventCanMove(personal), isTrue);
+      expect(calendarEventCanMove(lms), isFalse);
+      expect(calendarEventCanMove(lms.copyWith(completed: true)), isFalse);
+      expect(calendarEventCanMove(personal.copyWith(readOnly: true)), isFalse);
+    },
+  );
   test('timed move preserves wall-clock time and duration', () {
     final event = _event(
       start: DateTime(2026, 8, 21, 9, 35),

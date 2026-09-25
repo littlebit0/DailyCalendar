@@ -63,6 +63,18 @@ class SettingsSyncDocument {
   Map<String, Object?> toJson() =>
       fields.map((key, value) => MapEntry(key, value.toJson()));
 
+  /// Detaches an account-owned register without producing a delete for the
+  /// next account. A null register is different from a register with null value.
+  SettingsSyncDocument withField(String key, SettingsSyncValue? register) {
+    final next = Map<String, SettingsSyncValue>.from(fields);
+    if (register == null) {
+      next.remove(key);
+    } else {
+      next[key] = register;
+    }
+    return SettingsSyncDocument(next);
+  }
+
   SettingsSyncDocument merge(SettingsSyncDocument remote) {
     final merged = Map<String, SettingsSyncValue>.from(fields);
     for (final entry in remote.fields.entries) {
@@ -173,6 +185,8 @@ Map<String, Object?> expandSyncSettings(Map<String, Object?> flat) {
 }
 
 Map<String, Object?> syncSettingsValues(AppSettings settings) => {
+  if (settings.academicProfile != null)
+    'academicProfile': settings.academicProfile!.toJson(),
   'defaultReminderMinutes': settings.defaultReminderMinutes,
   'defaultReminderMinutesList': settings.defaultReminderMinutesList,
   'allDayReminderHour': settings.allDayReminderHour,

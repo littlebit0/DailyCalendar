@@ -77,6 +77,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   String? _validationMessage;
   _ValidationTarget? _validationTarget;
 
+  bool get _isLms => widget.event?.lms != null;
+
   @override
   void initState() {
     super.initState();
@@ -197,7 +199,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     return AlertDialog(
       backgroundColor: DailyUi.pageBackground(context),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: DailyUi.popupShape(context),
       insetPadding: EdgeInsets.symmetric(
         horizontal: DailyUi.isDesktop
             ? 40
@@ -242,83 +244,99 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        TextField(
-                          controller: _titleController,
-                          focusNode: _titleFocusNode,
-                          decoration: InputDecoration(
-                            labelText: context.tr('제목'),
-                            prefixIcon: const Icon(Icons.title_rounded),
-                            errorText:
-                                _validationTarget == _ValidationTarget.title
-                                ? context.tr('제목을 입력하세요.')
-                                : null,
+                        if (_isLms) ...[
+                          Text(
+                            widget.event!.title,
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
-                          autofocus: false,
-                          onTapOutside: (_) => _dismissInput(),
-                          textInputAction: TextInputAction.next,
-                          onChanged: (_) {
-                            if (_validationTarget == _ValidationTarget.title &&
-                                _titleController.text.trim().isNotEmpty) {
-                              _clearValidation();
-                            }
-                          },
-                        ),
-                        const SizedBox(height: 12),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: _LabeledPickerButton(
-                                label: context.tr('시작일'),
-                                icon: Icons.calendar_today_outlined,
-                                value: startDateLabel,
-                                onPressed: _pickStartDate,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: _LabeledPickerButton(
-                                label: context.tr('종료일'),
-                                icon: Icons.event_available_outlined,
-                                value: endDateLabel,
-                                onPressed: _pickEndDate,
-                              ),
-                            ),
-                          ],
-                        ),
-                        if (!_allDay) ...[
                           const SizedBox(height: 8),
+                          Text(
+                            context.tr(
+                              '제목·마감·제출 상태는 학교에서 갱신됩니다. Daily의 메모·분류·알림·완료 표시는 별도로 유지됩니다.',
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                        if (!_isLms) ...[
+                          TextField(
+                            controller: _titleController,
+                            focusNode: _titleFocusNode,
+                            decoration: InputDecoration(
+                              labelText: context.tr('제목'),
+                              prefixIcon: const Icon(Icons.title_rounded),
+                              errorText:
+                                  _validationTarget == _ValidationTarget.title
+                                  ? context.tr('제목을 입력하세요.')
+                                  : null,
+                            ),
+                            autofocus: false,
+                            onTapOutside: (_) => _dismissInput(),
+                            textInputAction: TextInputAction.next,
+                            onChanged: (_) {
+                              if (_validationTarget ==
+                                      _ValidationTarget.title &&
+                                  _titleController.text.trim().isNotEmpty) {
+                                _clearValidation();
+                              }
+                            },
+                          ),
+                          const SizedBox(height: 12),
                           Row(
                             children: [
                               Expanded(
                                 child: _LabeledPickerButton(
-                                  label: context.tr('시작 시간'),
-                                  icon: Icons.schedule,
-                                  value: startTimeLabel,
-                                  onPressed: _pickStartTime,
+                                  label: context.tr('시작일'),
+                                  icon: Icons.calendar_today_outlined,
+                                  value: startDateLabel,
+                                  onPressed: _pickStartDate,
                                 ),
                               ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: _LabeledPickerButton(
-                                  label: context.tr('종료 시간'),
-                                  icon: Icons.schedule,
-                                  value: endTimeLabel,
-                                  onPressed: _pickEndTime,
+                                  label: context.tr('종료일'),
+                                  icon: Icons.event_available_outlined,
+                                  value: endDateLabel,
+                                  onPressed: _pickEndDate,
                                 ),
                               ),
                             ],
                           ),
+                          if (!_allDay) ...[
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _LabeledPickerButton(
+                                    label: context.tr('시작 시간'),
+                                    icon: Icons.schedule,
+                                    value: startTimeLabel,
+                                    onPressed: _pickStartTime,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: _LabeledPickerButton(
+                                    label: context.tr('종료 시간'),
+                                    icon: Icons.schedule,
+                                    value: endTimeLabel,
+                                    onPressed: _pickEndTime,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                          const SizedBox(height: 8),
+                          SwitchListTile(
+                            value: _allDay,
+                            onChanged: (value) {
+                              _clearValidation();
+                              setState(() => _allDay = value);
+                            },
+                            title: Text(context.tr('종일')),
+                            contentPadding: EdgeInsets.zero,
+                          ),
                         ],
-                        const SizedBox(height: 8),
-                        SwitchListTile(
-                          value: _allDay,
-                          onChanged: (value) {
-                            _clearValidation();
-                            setState(() => _allDay = value);
-                          },
-                          title: Text(context.tr('종일')),
-                          contentPadding: EdgeInsets.zero,
-                        ),
                         DropdownButtonFormField<EventCategory>(
                           onTap: _dismissInput,
                           key: ValueKey(_category.id),
@@ -435,119 +453,125 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           ),
                         ],
                         const SizedBox(height: 12),
-                        DropdownButtonFormField<RecurrenceFrequency>(
-                          onTap: _dismissInput,
-                          initialValue: _frequency,
-                          decoration: InputDecoration(
-                            labelText: context.tr('반복'),
-                            prefixIcon: const Icon(Icons.repeat_rounded),
+                        if (!_isLms) ...[
+                          DropdownButtonFormField<RecurrenceFrequency>(
+                            onTap: _dismissInput,
+                            initialValue: _frequency,
+                            decoration: InputDecoration(
+                              labelText: context.tr('반복'),
+                              prefixIcon: const Icon(Icons.repeat_rounded),
+                            ),
+                            items: RecurrenceFrequency.values
+                                .map(
+                                  (frequency) => DropdownMenuItem(
+                                    value: frequency,
+                                    child: Text(_frequencyLabel(frequency)),
+                                  ),
+                                )
+                                .toList(),
+                            onChanged: (value) {
+                              if (value != null) {
+                                _clearValidation();
+                                setState(() {
+                                  _frequency = value;
+                                  if (value != RecurrenceFrequency.none) {
+                                    _alarmEnabled = false;
+                                  }
+                                });
+                              }
+                            },
                           ),
-                          items: RecurrenceFrequency.values
-                              .map(
-                                (frequency) => DropdownMenuItem(
-                                  value: frequency,
-                                  child: Text(_frequencyLabel(frequency)),
+                          if (_frequency != RecurrenceFrequency.none) ...[
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _LabeledPickerButton(
+                                    label: context.tr('반복 간격'),
+                                    icon: Icons.repeat,
+                                    value: _recurrenceIntervalLabel(),
+                                    onPressed: _pickRecurrenceInterval,
+                                  ),
                                 ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            if (value != null) {
-                              _clearValidation();
-                              setState(() {
-                                _frequency = value;
-                                if (value != RecurrenceFrequency.none) {
-                                  _alarmEnabled = false;
-                                }
-                              });
-                            }
-                          },
-                        ),
-                        if (_frequency != RecurrenceFrequency.none) ...[
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _LabeledPickerButton(
-                                  label: context.tr('반복 간격'),
-                                  icon: Icons.repeat,
-                                  value: _recurrenceIntervalLabel(),
-                                  onPressed: _pickRecurrenceInterval,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child:
-                                    DropdownButtonFormField<_RecurrenceEndMode>(
-                                      onTap: _dismissInput,
-                                      initialValue: _recurrenceEndMode,
-                                      decoration: InputDecoration(
-                                        labelText: context.tr('반복 종료'),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child:
+                                      DropdownButtonFormField<
+                                        _RecurrenceEndMode
+                                      >(
+                                        onTap: _dismissInput,
+                                        initialValue: _recurrenceEndMode,
+                                        decoration: InputDecoration(
+                                          labelText: context.tr('반복 종료'),
+                                        ),
+                                        items: [
+                                          DropdownMenuItem(
+                                            value: _RecurrenceEndMode.never,
+                                            child: Text(context.tr('종료 없음')),
+                                          ),
+                                          DropdownMenuItem(
+                                            value: _RecurrenceEndMode.until,
+                                            child: Text(context.tr('날짜까지')),
+                                          ),
+                                          DropdownMenuItem(
+                                            value: _RecurrenceEndMode.count,
+                                            child: Text(context.tr('횟수만큼')),
+                                          ),
+                                        ],
+                                        onChanged: (value) {
+                                          if (value == null) {
+                                            return;
+                                          }
+                                          _clearValidation();
+                                          setState(() {
+                                            _recurrenceEndMode = value;
+                                            if (value ==
+                                                    _RecurrenceEndMode.until &&
+                                                _recurrenceUntil == null) {
+                                              _recurrenceUntil =
+                                                  _endDate.isBefore(_startDate)
+                                                  ? _startDate
+                                                  : _endDate;
+                                            }
+                                            if (value ==
+                                                    _RecurrenceEndMode.count &&
+                                                _recurrenceCount == null) {
+                                              _recurrenceCount = 10;
+                                            }
+                                          });
+                                        },
                                       ),
-                                      items: [
-                                        DropdownMenuItem(
-                                          value: _RecurrenceEndMode.never,
-                                          child: Text(context.tr('종료 없음')),
-                                        ),
-                                        DropdownMenuItem(
-                                          value: _RecurrenceEndMode.until,
-                                          child: Text(context.tr('날짜까지')),
-                                        ),
-                                        DropdownMenuItem(
-                                          value: _RecurrenceEndMode.count,
-                                          child: Text(context.tr('횟수만큼')),
-                                        ),
-                                      ],
-                                      onChanged: (value) {
-                                        if (value == null) {
-                                          return;
-                                        }
-                                        _clearValidation();
-                                        setState(() {
-                                          _recurrenceEndMode = value;
-                                          if (value ==
-                                                  _RecurrenceEndMode.until &&
-                                              _recurrenceUntil == null) {
-                                            _recurrenceUntil =
-                                                _endDate.isBefore(_startDate)
-                                                ? _startDate
-                                                : _endDate;
-                                          }
-                                          if (value ==
-                                                  _RecurrenceEndMode.count &&
-                                              _recurrenceCount == null) {
-                                            _recurrenceCount = 10;
-                                          }
-                                        });
-                                      },
-                                    ),
+                                ),
+                              ],
+                            ),
+                            if (_recurrenceEndMode ==
+                                _RecurrenceEndMode.until) ...[
+                              const SizedBox(height: 8),
+                              _LabeledPickerButton(
+                                label: context.tr('반복 종료일'),
+                                icon: Icons.event_busy_outlined,
+                                value: _formatDate(
+                                  _recurrenceUntil ?? _endDate,
+                                ),
+                                onPressed: _pickRecurrenceUntil,
                               ),
                             ],
-                          ),
-                          if (_recurrenceEndMode ==
-                              _RecurrenceEndMode.until) ...[
-                            const SizedBox(height: 8),
-                            _LabeledPickerButton(
-                              label: context.tr('반복 종료일'),
-                              icon: Icons.event_busy_outlined,
-                              value: _formatDate(_recurrenceUntil ?? _endDate),
-                              onPressed: _pickRecurrenceUntil,
-                            ),
-                          ],
-                          if (_recurrenceEndMode ==
-                              _RecurrenceEndMode.count) ...[
-                            const SizedBox(height: 8),
-                            _LabeledPickerButton(
-                              label: context.tr('반복 횟수'),
-                              icon: Icons.format_list_numbered,
-                              value: context.tr(
-                                '{count}회',
-                                args: {'count': _recurrenceCount ?? 10},
+                            if (_recurrenceEndMode ==
+                                _RecurrenceEndMode.count) ...[
+                              const SizedBox(height: 8),
+                              _LabeledPickerButton(
+                                label: context.tr('반복 횟수'),
+                                icon: Icons.format_list_numbered,
+                                value: context.tr(
+                                  '{count}회',
+                                  args: {'count': _recurrenceCount ?? 10},
+                                ),
+                                onPressed: _pickRecurrenceCount,
                               ),
-                              onPressed: _pickRecurrenceCount,
-                            ),
+                            ],
                           ],
+                          const SizedBox(height: 12),
                         ],
-                        const SizedBox(height: 12),
                         SwitchListTile(
                           value: _showDday,
                           onChanged: (value) {
@@ -561,45 +585,47 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           contentPadding: EdgeInsets.zero,
                         ),
                         const SizedBox(height: 12),
-                        if (widget.frequentPlaces != null &&
-                            widget.loadPlaceEvents != null)
-                          FrequentPlacesField(
-                            store: widget.frequentPlaces!,
-                            loadEvents: widget.loadPlaceEvents!,
-                            controller: _locationController,
-                          )
-                        else
-                          TextField(
-                            controller: _locationController,
-                            onTapOutside: (_) => _dismissInput(),
-                            decoration: InputDecoration(
-                              labelText: context.tr('장소'),
-                              prefixIcon: const Icon(
-                                Icons.location_on_outlined,
+                        if (!_isLms) ...[
+                          if (widget.frequentPlaces != null &&
+                              widget.loadPlaceEvents != null)
+                            FrequentPlacesField(
+                              store: widget.frequentPlaces!,
+                              loadEvents: widget.loadPlaceEvents!,
+                              controller: _locationController,
+                            )
+                          else
+                            TextField(
+                              controller: _locationController,
+                              onTapOutside: (_) => _dismissInput(),
+                              decoration: InputDecoration(
+                                labelText: context.tr('장소'),
+                                prefixIcon: const Icon(
+                                  Icons.location_on_outlined,
+                                ),
                               ),
                             ),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: _urlController,
+                            onTapOutside: (_) => _dismissInput(),
+                            decoration: InputDecoration(
+                              labelText: context.tr('URL / 링크'),
+                              prefixIcon: const Icon(Icons.link_rounded),
+                            ),
+                            keyboardType: TextInputType.url,
                           ),
-                        const SizedBox(height: 12),
-                        TextField(
-                          controller: _urlController,
-                          onTapOutside: (_) => _dismissInput(),
-                          decoration: InputDecoration(
-                            labelText: context.tr('URL / 링크'),
-                            prefixIcon: const Icon(Icons.link_rounded),
+                          const SizedBox(height: 12),
+                          TextField(
+                            controller: _weatherController,
+                            onTapOutside: (_) => _dismissInput(),
+                            decoration: InputDecoration(
+                              labelText: context.tr('날씨'),
+                              hintText: context.tr('예: 흐림'),
+                              prefixIcon: const Icon(Icons.cloud_outlined),
+                            ),
                           ),
-                          keyboardType: TextInputType.url,
-                        ),
-                        const SizedBox(height: 12),
-                        TextField(
-                          controller: _weatherController,
-                          onTapOutside: (_) => _dismissInput(),
-                          decoration: InputDecoration(
-                            labelText: context.tr('날씨'),
-                            hintText: context.tr('예: 흐림'),
-                            prefixIcon: const Icon(Icons.cloud_outlined),
-                          ),
-                        ),
-                        const SizedBox(height: 12),
+                          const SizedBox(height: 12),
+                        ],
                         TextField(
                           controller: _memoController,
                           onTapOutside: (_) => _dismissInput(),
@@ -826,7 +852,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       );
       return;
     }
-    final startAt = _allDay
+    final startAt = _isLms
+        ? widget.event!.startAt
+        : _allDay
         ? _startDate
         : DateTime(
             _startDate.year,
@@ -835,7 +863,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             _startTime.hour,
             _startTime.minute,
           );
-    final endAt = _allDay
+    final endAt = _isLms
+        ? widget.event!.endAt
+        : _allDay
         ? _endDate.add(const Duration(days: 1))
         : DateTime(
             _endDate.year,
@@ -844,7 +874,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             _endTime.hour,
             _endTime.minute,
           );
-    if (!endAt.isAfter(startAt)) {
+    if (!_isLms && !endAt.isAfter(startAt)) {
       _showValidation(
         context.tr('종료 시간은 시작 시간보다 늦어야 합니다.'),
         target: _ValidationTarget.time,

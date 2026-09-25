@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/auth/apple_sign_in_service.dart';
 import '../../../core/auth/google_account.dart';
+import '../../settings/presentation/academic_profile_page.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/siri/siri_shortcut_installer.dart';
@@ -232,9 +233,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             DailyInfoCallout(
               icon: Icons.mic_none_rounded,
               color: DailyUi.purple,
-              text: context.tr(
-                '예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”',
-              ),
+              text: context.tr('예: “시리야 시그널, 내일 오전 9시에 헬스장 일정 추가해줘.”'),
             ),
             if (_message.isNotEmpty) ...[
               const SizedBox(height: 12),
@@ -486,6 +485,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     try {
       final connected = await _connectGoogleDriveAndRestore();
       if (connected) {
+        if (!mounted) return;
         await _completeOnboarding();
       }
     } finally {
@@ -616,6 +616,12 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
   }
 
   Future<void> _completeOnboarding() async {
+    // Every completion path can have an already linked Google account, including
+    // Apple sign-in restoring its connection and returning local users.
+    // Offer the profile before marking onboarding complete so rebuilding the
+    // app's root cannot skip or dispose the selection step.
+    await offerAcademicProfile(context, ref);
+    if (!mounted) return;
     final settingsRepository = ref.read(settingsRepositoryProvider);
     final previous = settingsRepository.load();
     await settingsRepository.announcements.acknowledge(

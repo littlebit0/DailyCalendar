@@ -10,6 +10,7 @@ import '../domain/event_category.dart';
 import '../domain/event_repository.dart';
 import '../domain/event_deletion.dart';
 import '../../../core/sync/sync_version.dart';
+import '../../../core/lms/lms_models.dart';
 
 class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   DriftEventRepository(this._database, {RecurrenceExpander? expander})
@@ -29,7 +30,10 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
             table.deletedAt.isNull() &
             (table.recurrenceFrequency.equals('none').not() |
                 (table.startAt.isSmallerThanValue(rangeEnd) &
-                    table.endAt.isBiggerThanValue(rangeStart))),
+                    (table.endAt.isBiggerThanValue(rangeStart) |
+                        (table.lmsMetadata.isNotNull() &
+                            table.endAt.equalsExp(table.startAt) &
+                            table.startAt.isBiggerOrEqualValue(rangeStart))))),
       )
       ..orderBy([(table) => OrderingTerm.asc(table.startAt)]);
 
@@ -58,7 +62,12 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
                     table.deletedAt.isNull() &
                     (table.recurrenceFrequency.equals('none').not() |
                         (table.startAt.isSmallerThanValue(rangeEnd) &
-                            table.endAt.isBiggerThanValue(rangeStart))),
+                            (table.endAt.isBiggerThanValue(rangeStart) |
+                                (table.lmsMetadata.isNotNull() &
+                                    table.endAt.equalsExp(table.startAt) &
+                                    table.startAt.isBiggerOrEqualValue(
+                                      rangeStart,
+                                    ))))),
               )
               ..orderBy([(table) => OrderingTerm.asc(table.startAt)]))
             .get();
@@ -277,7 +286,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   }) async {
     final rows = await _database
         .customSelect(
-          'SELECT id, deleted_at, pending FROM sync_event_deletions'
+          'SELECT id, deleted_at, pending, lms_owner_id FROM sync_event_deletions'
           '${pendingOnly ? ' WHERE pending = 1' : ''}',
         )
         .get();
@@ -287,6 +296,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
             id: row.read<String>('id'),
             deletedAt: DateTime.parse(row.read<String>('deleted_at')).toUtc(),
             pending: row.read<int>('pending') != 0,
+            lmsOwnerId: row.readNullable<String>('lms_owner_id'),
           ),
         )
         .toList();
@@ -304,16 +314,21 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     };
     for (final deletion in deletions) {
       final local = await findById(deletion.id);
-      if (local != null && eventChangedAt(local).isAfter(deletion.deletedAt)) {
+      if (local != null &&
+          local.lms?.ownerId == deletion.lmsOwnerId &&
+          eventChangedAt(local).isAfter(deletion.deletedAt)) {
         await save(local.copyWith(syncStatus: 'pending'));
       }
-      if (markers[deletion.id]!.deletedAt.isAfter(deletion.deletedAt)) {
+      if (markers[deletion.id]?.deletedAt.isAfter(deletion.deletedAt) ??
+          false) {
         await _queueDeletionRepair(deletion.id);
       }
     }
     for (final event in events) {
       final marker = markers[event.id];
-      if (marker != null && !eventChangedAt(event).isAfter(marker.deletedAt)) {
+      if (marker != null &&
+          marker.lmsOwnerId == event.lms?.ownerId &&
+          !eventChangedAt(event).isAfter(marker.deletedAt)) {
         await _queueDeletionRepair(event.id);
       }
     }
@@ -321,6 +336,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       events.where((event) {
         final marker = markers[event.id];
         return marker == null ||
+            marker.lmsOwnerId != event.lms?.ownerId ||
             eventChangedAt(event).isAfter(marker.deletedAt);
       }),
       resolve: resolve,
@@ -337,29 +353,42 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     Iterable<EventDeletion> records,
   ) => _database.transaction(() async {
     for (final deletion in records) {
+      final current = await findById(deletion.id);
       final old = await _database
           .customSelect(
-            'SELECT deleted_at FROM sync_event_deletions WHERE id = ?',
+            'SELECT deleted_at, lms_owner_id FROM sync_event_deletions WHERE id = ?',
             variables: [Variable.withString(deletion.id)],
           )
           .getSingleOrNull();
-      if (old == null ||
-          DateTime.parse(
-            old.read<String>('deleted_at'),
-          ).isBefore(deletion.deletedAt)) {
+      final oldOwner = old?.readNullable<String>('lms_owner_id');
+      final knownOwner = current?.lms?.ownerId ?? oldOwner;
+      // Older clients can lose extension fields. Keep the known owner rather
+      // than turning a scoped deletion into an account-independent marker.
+      final owner = deletion.lmsOwnerId == null
+          ? knownOwner
+          : normalizeLmsOwner(deletion.lmsOwnerId!);
+      if (knownOwner != null && owner != knownOwner) continue;
+      if (current != null && current.lms == null && owner != null) continue;
+      if (deletion.id.startsWith('lms:') && owner == null) continue;
+      final oldDate = old == null
+          ? null
+          : DateTime.parse(old.read<String>('deleted_at'));
+      if (oldDate == null ||
+          oldDate.isBefore(deletion.deletedAt) ||
+          oldDate.isAtSameMomentAs(deletion.deletedAt) && oldOwner != owner) {
         await _database.customStatement(
-          'INSERT OR REPLACE INTO sync_event_deletions (id, deleted_at, pending) VALUES (?, ?, ?)',
+          'INSERT OR REPLACE INTO sync_event_deletions (id, deleted_at, pending, lms_owner_id) VALUES (?, ?, ?, ?)',
           [
             deletion.id,
             deletion.deletedAt.toUtc().toIso8601String(),
             deletion.pending ? 1 : 0,
+            owner,
           ],
         );
+      } else if (deletion.pending &&
+          oldDate.isAtSameMomentAs(deletion.deletedAt)) {
+        await _queueDeletionRepair(deletion.id);
       }
-      final current = await findById(deletion.id);
-      final oldDate = old == null
-          ? null
-          : DateTime.parse(old.read<String>('deleted_at'));
       final effectiveDate =
           oldDate != null && oldDate.isAfter(deletion.deletedAt)
           ? oldDate
@@ -380,7 +409,11 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
           final event = row.toDomain();
           if (!canCompactDeletedEvent(event, now)) continue;
           await mergeDeletionRecords([
-            EventDeletion(id: event.id, deletedAt: eventChangedAt(event)),
+            EventDeletion(
+              id: event.id,
+              deletedAt: eventChangedAt(event),
+              lmsOwnerId: event.lms?.ownerId,
+            ),
           ]);
         }
       });
@@ -389,8 +422,14 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   Future<void> markDeletionSynced(
     EventDeletion deletion,
   ) => _database.customStatement(
-    'UPDATE sync_event_deletions SET pending = 0 WHERE id = ? AND deleted_at = ?',
-    [deletion.id, deletion.deletedAt.toUtc().toIso8601String()],
+    'UPDATE sync_event_deletions SET pending = 0 WHERE id = ? AND deleted_at = ? AND lms_owner_id IS ?',
+    [
+      deletion.id,
+      deletion.deletedAt.toUtc().toIso8601String(),
+      deletion.lmsOwnerId == null
+          ? null
+          : normalizeLmsOwner(deletion.lmsOwnerId!),
+    ],
   );
 
   String _storedCategoryValue(CalendarEvent event) {
@@ -408,6 +447,9 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       location: Value(event.location),
       url: Value(event.url),
       weather: Value(event.weather),
+      lmsMetadata: Value(
+        event.lms == null ? null : jsonEncode(event.lms!.toJson()),
+      ),
       startAt: Value(event.startAt),
       endAt: Value(event.endAt),
       allDay: Value(event.allDay),

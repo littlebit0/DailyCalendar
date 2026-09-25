@@ -1,6 +1,6 @@
 # Google Drive Sync Setup
 
-Current release baseline: `3.0.1`. iOS and macOS use the shared app bundle ID
+Current release baseline: `3.5.2`. iOS and macOS use the shared app bundle ID
 `com.littlebit0.daily`; their widget extensions use
 `com.littlebit0.daily.widgets`.
 
@@ -16,12 +16,28 @@ correctly until OAuth clients and scopes are configured.
   `appDataFolder`.
 - Event files are named `daily-sync-v2-event-{eventId}.json`. Non-secret app
   settings are stored separately in `daily-sync-v2-settings.json`.
+- Unreleased #74/#75 working-tree code adds `daily-sync-v2-timetable.json`
+  under the same AppData scope. It uses an outer v2 `type: timetable` envelope
+  and an inner timetable document with schema version 1. This addition is not
+  included in the published 3.5.2 artifacts.
 - Local events and remote events are merged by event ID and the newest
   `updatedAt` or `deletedAt` timestamp.
 - Deleted events are retained as tombstones so deletion can sync to other
   devices.
 - Settings now has a Google Drive sync section with connect, manual sync, and
   disconnect actions.
+- The unreleased manual action is one **Sync now** button: upload pending local
+  changes, wait 3 seconds only when local work was queued, check the saved Drive
+  change cursor and merge only changed files, then flush remaining local winners.
+  A missing cursor first captures a baseline token and restores the initial snapshot.
+  Repeated unchanged manual sync does not list/download all events again.
+  Duplicate taps are disabled while the operation is active.
+- Drive requests run one at a time, with at least 250 ms from each response's
+  completion to the next request. A 10-second transport timeout aborts the
+  underlying request; queue/wait time is excluded from that timeout.
+- Startup's 20-second UI deadline now indicates a slow operation rather than
+  failure. The calendar opens automatically when the original sync succeeds.
+  Real failures retain retry/local-continue actions and safe diagnostic text.
 - Automatic sync runs on app start, after Google Drive connection, when the app
   returns to the foreground, before the app backgrounds/exits, and after local
   event/settings changes.
@@ -31,8 +47,38 @@ correctly until OAuth clients and scopes are configured.
 - If another sync request arrives while a sync is already running, one more
   sync pass is guaranteed after the current pass finishes.
 - Event create/update/delete sync uploads only the changed event file. App
-  start, Google Drive connection, resume, and manual sync list v2 event files
-  and merge by event ID.
+  start, Google Drive connection, resume, and manual sync use the saved change
+  cursor, with a complete snapshot only to initialize it. All merges retain event IDs.
+  Event backup/restore status shows completed/total items during bulk work.
+- The timetable extension keeps `daily.timetable.v1` as an offline cache and
+  syncs every term's classes, session exceptions, names, and date periods
+  through the linked account. The selected term stays local to each device.
+  Existing local-only data migrates without
+  inventing mutation timestamps. Class/name deletions retain tombstones;
+  independent records merge by UTC mutation time, with deletion winning ties.
+- Academic profiles use the existing settings file, under `academicProfile`:
+  institution ID/name, campus ID/name and degree group travel together as one
+  field. Campuses of one university share an institution ID. The optional
+  campusId preserves the selected campus separately; legacy profiles with a
+  campus-row universityId remain readable without a bulk cloud rewrite.
+  Google login restores any existing profile before offering school selection;
+  users may skip selection and edit it later in Account settings. Sangmyung
+  (Seoul/Cheonan), Dankook (Jukjeon/Cheonan) and Chonnam (Gwangju/Yeosu)
+  have academic-calendar/timetable integrations, while
+  students at any listed university can save their profile and use Daily.
+  This adds no OAuth scope. A profile editor cannot save into a changed account;
+  failed writes preserve the prior profile and pending sync state. Switching or
+  unlinking Google accounts parks that account's profile, exact field revision
+  and pending state locally; they return only when the same account reconnects.
+  Neither the old profile nor a deletion record is sent to the new account.
+  Explicit local-data reset clears these inactive caches as well.
+- Timetable edits enter the existing change/lifecycle queue. Restore checks
+  its file once per linked session even when an older saved change token has
+  no new entries. A changed account/session cannot acknowledge an old request;
+  offline, conflicting, or failed uploads leave changes pending for retry.
+  This does not request additional OAuth scopes or automatic sign-in UI. See
+  [merge rules](SYNC_MERGE_RULES.md#timetable-extension-unreleased-7475) for the
+  remaining tie-breakers and conditional-write behavior.
 - All-day events are normalized to local date boundaries during sync and local
   database save/load. V2 event files include `startDate` and `endDate`
   date-only fields for all-day events, preventing iPhone/iOS UTC-midnight

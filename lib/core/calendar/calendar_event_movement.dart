@@ -26,7 +26,10 @@ class CalendarEventDragPayload {
 const calendarEventAppendIndex = 1 << 30;
 
 bool calendarEventCanMove(CalendarEvent event) {
-  return !event.readOnly && !event.systemEvent && !event.holiday;
+  return !event.readOnly &&
+      !event.systemEvent &&
+      !event.holiday &&
+      event.lms == null;
 }
 
 CalendarEvent shiftCalendarEventToDate(

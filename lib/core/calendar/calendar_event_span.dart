@@ -27,7 +27,9 @@ class CalendarEventSpan {
     final origin = ordinal(firstDay);
     final start = ordinal(event.startAt).difference(origin).inDays;
     final end = ordinal(
-      event.endAt.subtract(const Duration(microseconds: 1)),
+      event.lms != null && event.startAt == event.endAt
+          ? event.endAt
+          : event.endAt.subtract(const Duration(microseconds: 1)),
     ).difference(origin).inDays;
     if (dayCount <= 0 || end < 0 || start >= dayCount || end < start) {
       return null;

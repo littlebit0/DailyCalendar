@@ -1,4 +1,5 @@
 import 'package:daily/core/alarms/alarm_service.dart';
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_draft.dart';
@@ -8,6 +9,97 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  testWidgets(
+    'LMS point deadline editor saves personal fields without changing school source',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(900, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final due = DateTime(2026, 9, 26, 0, 0, 0, 123);
+      final metadata = LmsEventMetadata(
+        schoolId: 'smu',
+        ownerId: 'student@example.com',
+        lmsUserId: '42',
+        courseId: '123',
+        courseTitle: '자료구조',
+        activityType: 'assignment',
+        activityId: '456',
+        sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=456',
+        dueAt: due,
+        submissionStatus: '미제출',
+      );
+      final event = _eventWithEndBeforeStart().copyWith(
+        id: 'lms:deadline',
+        title: '[자료구조] 과제',
+        startAt: due,
+        endAt: due,
+        url: metadata.sourceUrl,
+        lms: metadata,
+        memo: '기존 메모',
+        reminderMinutesBeforeList: const [60],
+      );
+      const category = EventCategory(
+        id: 'personal',
+        label: '개인 분류',
+        colorValue: 0xff336699,
+      );
+      EventDraft? saved;
+      await tester.pumpWidget(
+        _DialogHost(
+          builder: (_) => EventEditorDialog(
+            initialDate: due,
+            event: event,
+            categories: const [EventCategory.basic, category],
+            alarmService: _AuthorizedAlarmService(),
+          ),
+          onSaved: (draft) => saved = draft,
+        ),
+      );
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+      expect(find.text(event.title), findsOneWidget);
+      for (final label in [
+        '시작일',
+        '종료일',
+        '시작 시간',
+        '종료 시간',
+        '종일',
+        '반복',
+        '장소',
+        'URL / 링크',
+        '날씨',
+      ]) {
+        expect(find.text(label), findsNothing);
+      }
+      final textFields = tester.widgetList<TextField>(find.byType(TextField));
+      expect(textFields.map((field) => field.decoration?.labelText), ['메모']);
+      await tester.tap(find.byType(DropdownButtonFormField<EventCategory>));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('개인 분류').last);
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilterChip, '없음'));
+      await tester.ensureVisible(find.text('일정 알람'));
+      await tester.tap(find.text('일정 알람'));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.text('D-day 표시'));
+      await tester.tap(find.text('D-day 표시'));
+      await tester.ensureVisible(find.byType(TextField));
+      await tester.enterText(find.byType(TextField), '개인 계획 메모');
+      await tester.tap(find.text('저장'));
+      await tester.pumpAndSettle();
+      expect(saved, isNotNull);
+      expect(saved!.title, event.title);
+      expect(saved!.startAt, event.startAt);
+      expect(saved!.endAt, event.endAt);
+      expect(saved!.url, event.url);
+      expect(saved!.memo, '개인 계획 메모');
+      expect(saved!.category, category);
+      expect(saved!.reminderMinutesBeforeList, isEmpty);
+      expect(saved!.showDday, isTrue);
+      expect(saved!.alarmEnabled, isTrue);
+      expect(saved!.recurrence.isRepeating, isFalse);
+      expect(find.text('종료 시간은 시작 시간보다 늦어야 합니다.'), findsNothing);
+    },
+  );
   for (final platform in [
     TargetPlatform.iOS,
     TargetPlatform.android,

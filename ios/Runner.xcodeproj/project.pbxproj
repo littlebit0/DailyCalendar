@@ -7,20 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D81000000000000000000001 /* DailyEventPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81000000000000000000011 /* DailyEventPalette.swift */; };
-		D81000000000000000000002 /* DailyEventPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81000000000000000000011 /* DailyEventPalette.swift */; };
-		D66000000000000000000007 /* DailyCalendar Wallpaper Setup.shortcut in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */; };
-		D66000000000000000000006 /* WallpaperIntents.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000016 /* WallpaperIntents.xcstrings */; };
-		D66000000000000000000001 /* DailyWallpaperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000011 /* DailyWallpaperModel.swift */; };
-		D66000000000000000000002 /* DailyWallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000012 /* DailyWallpaper.swift */; };
-		D66000000000000000000003 /* DailyWallpaperText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000013 /* DailyWallpaperText.swift */; };
-		D66000000000000000000004 /* DailyWallpaperSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000014 /* DailyWallpaperSettingsView.swift */; };
-		D66000000000000000000005 /* DailyCalendar Wallpaper.shortcut in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000015 /* DailyCalendar Wallpaper.shortcut */; };
 		1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */ = {isa = PBXBuildFile; fileRef = 1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */; };
-		A10000000000000000000001 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* InfoPlist.strings */; };
 		23F775F04B1318C0128516CA /* DailyAlarmMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC54DBD089C7F46E65000F0 /* DailyAlarmMetadata.swift */; };
 		331C808B294A63AB00263BE5 /* RunnerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 331C807B294A618700263BE5 /* RunnerTests.swift */; };
 		3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */; };
+		547A2C64F97C7ACB39583DCF /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 41121D47187BB6E3B8CC0A79 /* Pods_RunnerTests.framework */; };
 		5510AAC3D00832F60A57D7C3 /* DailyAlarmMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CC54DBD089C7F46E65000F0 /* DailyAlarmMetadata.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		756FCA7B7B5DD6246C0370D7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 968FCB5D489B416A8E6AEBAC /* Foundation.framework */; };
@@ -30,8 +21,19 @@
 		97C146FC1CF9000F007C117D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FA1CF9000F007C117D /* Main.storyboard */; };
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
-		E0682F69220361A92396D6D6 /* DailyWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6849C20408FC9AC20030F39E /* DailyWidgets.swift */; };
+		A10000000000000000000001 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* InfoPlist.strings */; };
+		C1D26ED91DD4BF1B0013AD06 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22C1165EB1AA66C92813E600 /* Pods_Runner.framework */; };
 		D51111111111111111111111 /* DailySiriIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = D52222222222222222222222 /* DailySiriIntents.swift */; };
+		D66000000000000000000001 /* DailyWallpaperModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000011 /* DailyWallpaperModel.swift */; };
+		D66000000000000000000002 /* DailyWallpaper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000012 /* DailyWallpaper.swift */; };
+		D66000000000000000000003 /* DailyWallpaperText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000013 /* DailyWallpaperText.swift */; };
+		D66000000000000000000004 /* DailyWallpaperSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000014 /* DailyWallpaperSettingsView.swift */; };
+		D66000000000000000000005 /* DailyCalendar Wallpaper.shortcut in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000015 /* DailyCalendar Wallpaper.shortcut */; };
+		D66000000000000000000006 /* WallpaperIntents.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000016 /* WallpaperIntents.xcstrings */; };
+		D66000000000000000000007 /* DailyCalendar Wallpaper Setup.shortcut in Resources */ = {isa = PBXBuildFile; fileRef = D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */; };
+		D81000000000000000000001 /* DailyEventPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81000000000000000000011 /* DailyEventPalette.swift */; };
+		D81000000000000000000002 /* DailyEventPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = D81000000000000000000011 /* DailyEventPalette.swift */; };
+		E0682F69220361A92396D6D6 /* DailyWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6849C20408FC9AC20030F39E /* DailyWidgets.swift */; };
 		EFAD5ACED22B6E145781F37D /* DailyWidgets.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 8AF852A827346A4275EEEAB0 /* DailyWidgets.appex */; };
 /* End PBXBuildFile section */
 
@@ -77,26 +79,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		D81000000000000000000011 /* DailyEventPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyEventPalette.swift; sourceTree = "<group>"; };
-		D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper Setup.shortcut"; sourceTree = "<group>"; };
-		D66000000000000000000016 /* WallpaperIntents.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = WallpaperIntents.xcstrings; sourceTree = "<group>"; };
-		D66000000000000000000011 /* DailyWallpaperModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperModel.swift; sourceTree = "<group>"; };
-		D66000000000000000000012 /* DailyWallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaper.swift; sourceTree = "<group>"; };
-		D66000000000000000000013 /* DailyWallpaperText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperText.swift; sourceTree = "<group>"; };
-		D66000000000000000000014 /* DailyWallpaperSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperSettingsView.swift; sourceTree = "<group>"; };
-		D66000000000000000000015 /* DailyCalendar Wallpaper.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper.shortcut"; sourceTree = "<group>"; };
 		1498D2321E8E86230040F4C2 /* GeneratedPluginRegistrant.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedPluginRegistrant.h; sourceTree = "<group>"; };
-		A10000000000000000000010 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A10000000000000000000011 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A10000000000000000000012 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		A10000000000000000000013 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneratedPluginRegistrant.m; sourceTree = "<group>"; };
+		206760DB6CC08C89E5F3F615 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
+		22C1165EB1AA66C92813E600 /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		29EB6F741D6857E667F322C0 /* DailyWidgets.entitlements */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.entitlements; path = DailyWidgets.entitlements; sourceTree = "<group>"; };
 		2CC54DBD089C7F46E65000F0 /* DailyAlarmMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DailyAlarmMetadata.swift; sourceTree = "<group>"; };
 		331C807B294A618700263BE5 /* RunnerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunnerTests.swift; sourceTree = "<group>"; };
 		331C8081294A63A400263BE5 /* RunnerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RunnerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B3967151E833CAA004F5970 /* AppFrameworkInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = AppFrameworkInfo.plist; path = Flutter/AppFrameworkInfo.plist; sourceTree = "<group>"; };
+		41121D47187BB6E3B8CC0A79 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		442F8F4DFCC4066F0BCB7D1E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5873B303FEF87C4704395565 /* Pods-Runner.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.debug.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.debug.xcconfig"; sourceTree = "<group>"; };
 		6849C20408FC9AC20030F39E /* DailyWidgets.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DailyWidgets.swift; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -114,10 +108,34 @@
 		97C146FD1CF9000F007C117D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		97C147001CF9000F007C117D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A10000000000000000000010 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A10000000000000000000011 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A10000000000000000000012 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		A10000000000000000000013 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
+		B58ED188729C83F6A0AFC020 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		C2657F8268E704B501ABF4E3 /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		CDA22A19F6C3621CDB7E49AA /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		D52222222222222222222222 /* DailySiriIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DailySiriIntents.swift; path = ../../apple_siri/DailySiriIntents.swift; sourceTree = "<group>"; };
+		D66000000000000000000011 /* DailyWallpaperModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperModel.swift; sourceTree = "<group>"; };
+		D66000000000000000000012 /* DailyWallpaper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaper.swift; sourceTree = "<group>"; };
+		D66000000000000000000013 /* DailyWallpaperText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperText.swift; sourceTree = "<group>"; };
+		D66000000000000000000014 /* DailyWallpaperSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWallpaperSettingsView.swift; sourceTree = "<group>"; };
+		D66000000000000000000015 /* DailyCalendar Wallpaper.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper.shortcut"; sourceTree = "<group>"; };
+		D66000000000000000000016 /* WallpaperIntents.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = WallpaperIntents.xcstrings; sourceTree = "<group>"; };
+		D66000000000000000000017 /* DailyCalendar Wallpaper Setup.shortcut */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Resources/DailyCalendar Wallpaper Setup.shortcut"; sourceTree = "<group>"; };
+		D81000000000000000000011 /* DailyEventPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyEventPalette.swift; sourceTree = "<group>"; };
+		DECDF0DE9F90073879A8DC07 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		320CB129F81A22CBA3F9336D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				547A2C64F97C7ACB39583DCF /* Pods_RunnerTests.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		895240966A336AD70DC6CA77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -131,6 +149,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				78A318202AECB46A00862997 /* FlutterGeneratedPluginSwiftPackage in Frameworks */,
+				C1D26ED91DD4BF1B0013AD06 /* Pods_Runner.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +177,20 @@
 			path = ../apple_widgets;
 			sourceTree = "<group>";
 		};
+		42E791CABB93CB0CE795E405 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				5873B303FEF87C4704395565 /* Pods-Runner.debug.xcconfig */,
+				206760DB6CC08C89E5F3F615 /* Pods-Runner.release.xcconfig */,
+				CDA22A19F6C3621CDB7E49AA /* Pods-Runner.profile.xcconfig */,
+				DECDF0DE9F90073879A8DC07 /* Pods-RunnerTests.debug.xcconfig */,
+				C2657F8268E704B501ABF4E3 /* Pods-RunnerTests.release.xcconfig */,
+				B58ED188729C83F6A0AFC020 /* Pods-RunnerTests.profile.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		9740EEB11CF90186004384FC /* Flutter */ = {
 			isa = PBXGroup;
 			children = (
@@ -180,6 +213,7 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				429E685D46251FB11D848742 /* DailyWidgets */,
 				E4BFD3B388BB6E9430C70B47 /* Frameworks */,
+				42E791CABB93CB0CE795E405 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -231,6 +265,8 @@
 			isa = PBXGroup;
 			children = (
 				CAE1544EC21BA21A652E1AFD /* iOS */,
+				22C1165EB1AA66C92813E600 /* Pods_Runner.framework */,
+				41121D47187BB6E3B8CC0A79 /* Pods_RunnerTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -242,8 +278,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 331C8087294A63A400263BE5 /* Build configuration list for PBXNativeTarget "RunnerTests" */;
 			buildPhases = (
+				01479B11DA481B5BE4B2C4D5 /* [CP] Check Pods Manifest.lock */,
 				331C807D294A63A400263BE5 /* Sources */,
 				331C807F294A63A400263BE5 /* Resources */,
+				320CB129F81A22CBA3F9336D /* Frameworks */,
 			);
 			buildRules = (
 			);
@@ -276,6 +314,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 97C147051CF9000F007C117D /* Build configuration list for PBXNativeTarget "Runner" */;
 			buildPhases = (
+				A9DCB39AF8E3262AC6DF9E11 /* [CP] Check Pods Manifest.lock */,
 				9740EEB61CF901F6004384FC /* Run Script */,
 				97C146EA1CF9000F007C117D /* Sources */,
 				97C146EB1CF9000F007C117D /* Frameworks */,
@@ -283,6 +322,7 @@
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
 				253490D4FF68BEEC7A487060 /* Embed App Extensions */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				434858987D07141C888218EF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -396,6 +436,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		01479B11DA481B5BE4B2C4D5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-RunnerTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		3B06AD1E1E4923F5004D2608 /* Thin Binary */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -412,6 +474,23 @@
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin";
 		};
+		434858987D07141C888218EF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Runner/Pods-Runner-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		9740EEB61CF901F6004384FC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -426,6 +505,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" build";
+		};
+		A9DCB39AF8E3262AC6DF9E11 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Runner-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -482,17 +583,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		A10000000000000000000020 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A10000000000000000000010 /* en */,
-				A10000000000000000000011 /* ko */,
-				A10000000000000000000012 /* ja */,
-				A10000000000000000000013 /* zh-Hant */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
 		97C146FA1CF9000F007C117D /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -507,6 +597,17 @@
 				97C147001CF9000F007C117D /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000020 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A10000000000000000000010 /* en */,
+				A10000000000000000000011 /* ko */,
+				A10000000000000000000012 /* ja */,
+				A10000000000000000000013 /* zh-Hant */,
+			);
+			name = InfoPlist.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -571,7 +672,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -598,13 +699,14 @@
 		};
 		331C8088294A63A400263BE5 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DECDF0DE9F90073879A8DC07 /* Pods-RunnerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -616,13 +718,14 @@
 		};
 		331C8089294A63A400263BE5 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C2657F8268E704B501ABF4E3 /* Pods-RunnerTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -632,13 +735,14 @@
 		};
 		331C808A294A63A400263BE5 /* Profile */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B58ED188729C83F6A0AFC020 /* Pods-RunnerTests.profile.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 3.5.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -653,7 +757,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -663,16 +767,16 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WIDGET_DISPLAY_NAME = "Daily Widgets";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				WIDGET_DISPLAY_NAME = "Daily Widgets";
 			};
 			name = Profile;
 		};
@@ -794,7 +898,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -827,7 +931,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -859,7 +963,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -869,16 +973,16 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WIDGET_DISPLAY_NAME = "Daily Widgets";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+				WIDGET_DISPLAY_NAME = "Daily Widgets";
 			};
 			name = Release;
 		};
@@ -889,7 +993,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_ENTITLEMENTS = ../apple_widgets/DailyWidgets.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3.5.2;
+				CURRENT_PROJECT_VERSION = 3.6.0;
 				DEVELOPMENT_TEAM = A6Y73X2ZLS;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = ../apple_widgets/Info.plist;
@@ -899,15 +1003,15 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				MARKETING_VERSION = 3.5.2;
+				MARKETING_VERSION = 3.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.widgets;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				WIDGET_DISPLAY_NAME = "Daily Test Widgets";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				WIDGET_DISPLAY_NAME = "Daily Test Widgets";
 			};
 			name = Debug;
 		};

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import '../../features/timetable/data/timetable_store.dart';
+
 import 'package:crypto/crypto.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -16,6 +18,7 @@ import '../widgets/lock_screen_wallpaper_service.dart';
 import 'app_settings.dart';
 import '../../features/onboarding/feature_announcements.dart';
 import '../academic/academic_store.dart';
+import '../academic/academic_profile.dart';
 import '../../features/events/domain/frequent_places.dart';
 import '../sync/settings_sync_document.dart';
 import '../sync/sync_version.dart';
@@ -34,12 +37,86 @@ class SettingsRepository {
   late final frequentPlaces = FrequentPlaces(_preferences);
   late final weatherStore = WeatherStore(_preferences);
   late final academicStore = AcademicStore(_preferences);
+  late final timetableStore = TimetableStore(_preferences, now: _now);
   final FlutterSecureStorage _secureStorage;
   final DateTime Function() _now;
   Future<void> _settingsMutationTail = Future<void>.value();
   var _settingsMutationGeneration = 0;
 
   int get settingsMutationGeneration => _settingsMutationGeneration;
+
+  String _lmsSuccessKey(String ownerId, String schoolId, String lmsUserId) {
+    final identity = jsonEncode([
+      ownerId.trim().toLowerCase(),
+      schoolId,
+      lmsUserId,
+    ]);
+    return 'daily.lms.lastSuccess.v1.${sha256.convert(utf8.encode(identity))}';
+  }
+
+  /// Local check time only; credentials and Drive-synced events do not contain it.
+  DateTime? lmsLastSuccess({
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) {
+    final owner = ownerId.trim().toLowerCase();
+    if (owner.isEmpty ||
+        schoolId.isEmpty ||
+        lmsUserId.isEmpty ||
+        dailyAccount()?.googleAccount?.email.trim().toLowerCase() != owner) {
+      return null;
+    }
+    final raw = _preferences.get(_lmsSuccessKey(owner, schoolId, lmsUserId));
+    return raw is String ? DateTime.tryParse(raw)?.toUtc() : null;
+  }
+
+  Future<void> saveLmsLastSuccess(
+    DateTime checkedAt, {
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+    void Function()? validateSession,
+  }) {
+    final owner = ownerId.trim().toLowerCase();
+    final generation = _settingsMutationGeneration;
+    void validate() {
+      validateSession?.call();
+      if (owner.isEmpty ||
+          schoolId.isEmpty ||
+          lmsUserId.isEmpty ||
+          generation != _settingsMutationGeneration ||
+          dailyAccount()?.googleAccount?.email.trim().toLowerCase() != owner) {
+        throw StateError('LMS check belongs to a different account');
+      }
+    }
+
+    return _enqueueSettingsMutation(() async {
+      validate();
+      final key = _lmsSuccessKey(owner, schoolId, lmsUserId);
+      final previous = _preferences.getString(key);
+      try {
+        if (!await _preferences.setString(
+          key,
+          checkedAt.toUtc().toIso8601String(),
+        )) {
+          throw StateError('LMS check time write failed');
+        }
+        validate();
+      } catch (_) {
+        try {
+          if (previous == null) {
+            await _preferences.remove(key);
+          } else {
+            await _preferences.setString(key, previous);
+          }
+        } catch (_) {
+          // Preserve the original failure after best-effort rollback.
+        }
+        rethrow;
+      }
+    });
+  }
 
   static const _defaultReminderKey = 'defaultReminderMinutes';
   static const _defaultReminderListKey = 'defaultReminderMinutesList';
@@ -78,6 +155,9 @@ class SettingsRepository {
   static const _themeModeKey = 'themeMode';
   static const _monthNavigationModeKey = 'monthNavigationMode';
   static const _languageKey = 'language';
+  static const _academicProfileKey = 'academicProfile.v1';
+  static const _academicProfileOwnerKey = 'academicProfile.owner.v1';
+  static const _academicProfileAccountsKey = 'academicProfile.accounts.v1';
   static const _settingsSyncPendingKey = 'settingsSyncPending';
   static const _settingsSyncRevisionKey = 'settingsSyncRevision';
   static const _settingsSyncDocumentKey = 'settingsSyncDocument.v1';
@@ -94,7 +174,13 @@ class SettingsRepository {
   static const _appLockPinLengthKey = 'appLockPinLength';
 
   AppSettings load() {
+    final rawProfile = _preferences.getString(_academicProfileKey);
     return AppSettings(
+      academicProfile: rawProfile != null
+          ? AcademicProfile.fromJson(
+              Map<String, Object?>.from(jsonDecode(rawProfile) as Map),
+            )
+          : null,
       defaultReminderMinutesList: _loadDefaultReminderMinutes(),
       allDayReminderHour: _preferences.getInt(_allDayReminderHourKey) ?? 9,
       allDayReminderMinute: _preferences.getInt(_allDayReminderMinuteKey) ?? 0,
@@ -167,6 +253,63 @@ class SettingsRepository {
         changedFrom: changedFrom,
       ),
     );
+  }
+
+  /// A stale editor must not write academic details into a different account.
+  Future<void> saveAcademicProfile(
+    AcademicProfile profile, {
+    required String expectedGoogleEmail,
+  }) {
+    final generation = _settingsMutationGeneration;
+    void validate() {
+      if (generation != _settingsMutationGeneration ||
+          dailyAccount()?.googleAccount?.email.toLowerCase() !=
+              expectedGoogleEmail.toLowerCase()) {
+        throw StateError('Academic profile account changed');
+      }
+    }
+
+    return _enqueueSettingsMutation(() async {
+      validate();
+      final keys = [
+        _academicProfileKey,
+        _settingsSyncDocumentKey,
+        _settingsSyncPendingKey,
+        _settingsSyncRevisionKey,
+      ];
+      final before = {for (final key in keys) key: _preferences.get(key)};
+      try {
+        final current = load();
+        await _saveSettings(
+          current.copyWith(academicProfile: profile),
+          markSyncPending: true,
+          changedFrom: current,
+        );
+        validate();
+        if (load().academicProfile != profile ||
+            !hasPendingSettingsSync && current.academicProfile != profile) {
+          throw StateError('Academic profile persistence incomplete');
+        }
+      } catch (_) {
+        for (final entry in before.entries) {
+          try {
+            switch (entry.value) {
+              case null:
+                await _preferences.remove(entry.key);
+              case String value:
+                await _preferences.setString(entry.key, value);
+              case int value:
+                await _preferences.setInt(entry.key, value);
+              case bool value:
+                await _preferences.setBool(entry.key, value);
+            }
+          } catch (_) {
+            /* Preserve the original failure after best-effort rollback. */
+          }
+        }
+        rethrow;
+      }
+    });
   }
 
   Future<void> _saveSettings(
@@ -452,6 +595,17 @@ class SettingsRepository {
         previous.language != settings.language) {
       await _preferences.setString(_languageKey, settings.language.name);
     }
+    if (baseline.academicProfile != settings.academicProfile &&
+        previous.academicProfile != settings.academicProfile) {
+      final profile = settings.academicProfile;
+      final saved = profile == null
+          ? await _preferences.remove(_academicProfileKey)
+          : await _preferences.setString(
+              _academicProfileKey,
+              jsonEncode(profile.toJson()),
+            );
+      if (!saved) throw StateError('Academic profile write failed');
+    }
     if (markSyncPending &&
         canonicalSyncJson(syncSettingsValues(previous)) !=
             canonicalSyncJson(syncSettingsValues(load()))) {
@@ -461,16 +615,22 @@ class SettingsRepository {
         changedAt: changedAt,
         deviceId: await deviceId(),
       );
-      await _preferences.setString(
+      final documentSaved = await _preferences.setString(
         _settingsSyncDocumentKey,
         canonicalSyncJson(document.toJson()),
       );
-      await _preferences.setInt(
+      if (!documentSaved) {
+        throw StateError('Settings sync document write failed');
+      }
+      final revisionSaved = await _preferences.setInt(
         _settingsSyncRevisionKey,
         settingsSyncRevision + 1,
       );
+      if (!revisionSaved) throw StateError('Settings revision write failed');
       if (!hasPendingSettingsSync) {
-        await _preferences.setBool(_settingsSyncPendingKey, true);
+        if (!await _preferences.setBool(_settingsSyncPendingKey, true)) {
+          throw StateError('Settings pending state write failed');
+        }
       }
     }
   }
@@ -525,10 +685,12 @@ class SettingsRepository {
   }
 
   Future<bool> acknowledgeSettingsSyncDocument(
-    SettingsSyncDocument uploaded,
-  ) async {
+    SettingsSyncDocument uploaded, {
+    void Function()? validateSession,
+  }) async {
     var acknowledged = false;
     await _enqueueSettingsMutation(() async {
+      validateSession?.call();
       final current = settingsSyncDocument();
       final merged = current.merge(uploaded);
       final values = syncSettingsValues(load());
@@ -687,18 +849,132 @@ class SettingsRepository {
     }
   }
 
-  Future<void> saveGoogleAccount(GoogleAccount account) async {
-    await _saveDailyAccount(
-      _currentOrNewDailyAccount().copyWith(googleAccount: account),
-    );
+  Future<void> saveGoogleAccount(GoogleAccount account) =>
+      _enqueueSettingsMutation(() => _switchGoogleAccount(account));
+
+  Future<void> deleteGoogleAccount() =>
+      _enqueueSettingsMutation(() => _switchGoogleAccount(null));
+
+  /// Academic details belong to a Google account. Other settings retain their
+  /// existing device-wide behavior. Keep inactive profiles and their exact LWW
+  /// registers locally until that account returns, including pending edits.
+  Future<void> _switchGoogleAccount(GoogleAccount? account) async {
+    String? email(String? value) => value?.trim().toLowerCase();
+    final currentAccount = _storedDailyAccount();
+    final previousEmail = email(currentAccount?.googleAccount?.email);
+    final nextEmail = email(account?.email);
+    final owner =
+        _preferences.getString(_academicProfileOwnerKey) ?? previousEmail;
+    final keys = [
+      _dailyAccountKey,
+      _academicProfileKey,
+      _academicProfileOwnerKey,
+      _academicProfileAccountsKey,
+      _settingsSyncDocumentKey,
+      _settingsSyncPendingKey,
+      _settingsSyncRevisionKey,
+      _driveChangeTokenKey,
+      _driveChangeAccountKey,
+    ];
+    final before = {for (final key in keys) key: _preferences.get(key)};
+    try {
+      if (owner != nextEmail || previousEmail != nextEmail) {
+        final raw = _preferences.getString(_academicProfileAccountsKey);
+        final cache = raw == null
+            ? <String, dynamic>{}
+            : Map<String, dynamic>.from(jsonDecode(raw) as Map);
+        final profile = load().academicProfile;
+        final document = settingsSyncDocument();
+        final activeRegister =
+            document.fields['academicProfile'] ??
+            (profile == null
+                ? null
+                : SettingsSyncValue(profile.toJson(), null, ''));
+        if (profile != null || activeRegister != null) {
+          // An ownerless legacy profile is never assigned to an arbitrary new
+          // login. Retain it in quarantine instead of discarding or uploading it.
+          cache[owner ?? '_unassigned'] = {
+            'profile': profile?.toJson(),
+            'register': activeRegister?.toJson(),
+            'pending': hasPendingSettingsSync,
+          };
+        }
+        final selected = nextEmail == null ? null : cache[nextEmail];
+        final selectedProfile = selected?['profile'] == null
+            ? null
+            : AcademicProfile.fromJson(
+                Map<String, Object?>.from(selected['profile'] as Map),
+              );
+        final selectedRegister = selected?['register'] == null
+            ? null
+            : SettingsSyncValue.fromJson(
+                Map<String, Object?>.from(selected['register'] as Map),
+              );
+        if (activeRegister != null || selected != null || profile != null) {
+          final remainingPending =
+              hasPendingSettingsSync &&
+              document.fields.keys.any((key) => key != 'academicProfile');
+          await _writeAcademicAccountValue(
+            _academicProfileAccountsKey,
+            canonicalSyncJson(cache),
+          );
+          await _writeAcademicAccountValue(
+            _academicProfileKey,
+            selectedProfile == null
+                ? null
+                : jsonEncode(selectedProfile.toJson()),
+          );
+          await _writeAcademicAccountValue(
+            _settingsSyncDocumentKey,
+            canonicalSyncJson(
+              document.withField('academicProfile', selectedRegister).toJson(),
+            ),
+          );
+          await _writeAcademicAccountValue(
+            _settingsSyncPendingKey,
+            remainingPending || selected?['pending'] == true,
+          );
+          await _writeAcademicAccountValue(
+            _settingsSyncRevisionKey,
+            settingsSyncRevision + 1,
+          );
+        }
+      }
+      await _writeAcademicAccountValue(_academicProfileOwnerKey, nextEmail);
+      final nextAccount = account == null
+          ? currentAccount?.copyWith(clearGoogleAccount: true)
+          : _currentOrNewDailyAccount().copyWith(googleAccount: account);
+      await _writeAcademicAccountValue(
+        _dailyAccountKey,
+        nextAccount?.hasProviders == true
+            ? jsonEncode(nextAccount!.toJson())
+            : null,
+      );
+      if (account == null) {
+        await _writeAcademicAccountValue(_driveChangeTokenKey, null);
+        await _writeAcademicAccountValue(_driveChangeAccountKey, null);
+      }
+    } catch (_) {
+      for (final entry in before.entries) {
+        try {
+          await _writeAcademicAccountValue(entry.key, entry.value);
+        } catch (_) {
+          // Preserve the first failure after attempting every rollback write.
+        }
+      }
+      rethrow;
+    }
   }
 
-  Future<void> deleteGoogleAccount() async {
-    final dailyAccount = _storedDailyAccount();
-    if (dailyAccount != null) {
-      await _saveDailyAccount(dailyAccount.copyWith(clearGoogleAccount: true));
-    }
-    await clearDriveChangePageToken();
+  Future<void> _writeAcademicAccountValue(String key, Object? value) async {
+    final saved = switch (value) {
+      null => await _preferences.remove(key),
+      String value => await _preferences.setString(key, value),
+      int value => await _preferences.setInt(key, value),
+      bool value => await _preferences.setBool(key, value),
+      _ => throw StateError('Invalid academic account cache'),
+    };
+    if (!saved) throw StateError('Academic account change was not persisted');
   }
 
   Future<void> deleteDailyAccount() async {
@@ -747,12 +1023,14 @@ class SettingsRepository {
 
   Future<void> resetAll() {
     academicStore.invalidate();
+    timetableStore.invalidate();
     _settingsMutationGeneration += 1;
     return _enqueueSettingsMutation(_resetAll);
   }
 
   Future<void> _resetAll() async {
     await academicStore.clear();
+    await timetableStore.clearLocal();
     await LockScreenWallpaperService.reset();
     await weatherStore.clear();
     await frequentPlaces.clear();
@@ -795,6 +1073,9 @@ class SettingsRepository {
     await _preferences.remove(_themeModeKey);
     await _preferences.remove(_monthNavigationModeKey);
     await _preferences.remove(_languageKey);
+    await _preferences.remove(_academicProfileKey);
+    await _preferences.remove(_academicProfileOwnerKey);
+    await _preferences.remove(_academicProfileAccountsKey);
     await _preferences.remove(_settingsSyncPendingKey);
     await _preferences.remove(_settingsSyncRevisionKey);
     await _preferences.remove(_settingsSyncDocumentKey);

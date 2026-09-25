@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../../../core/sync/sync_version.dart';
+import '../../../core/lms/lms_models.dart';
 
 import 'app_database.dart';
 import '../domain/calendar_event.dart';
@@ -25,6 +26,11 @@ extension EventRecordMapper on EventRecord {
       location: location,
       url: url,
       weather: weather,
+      lms: lmsMetadata == null
+          ? null
+          : LmsEventMetadata.fromJson(
+              Map<String, Object?>.from(jsonDecode(lmsMetadata!) as Map),
+            ),
       startAt: baseStart,
       endAt: baseStart.add(duration),
       allDay: allDay,

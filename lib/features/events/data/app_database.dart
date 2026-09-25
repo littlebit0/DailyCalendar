@@ -14,6 +14,7 @@ class EventRecords extends Table {
   TextColumn get location => text().nullable()();
   TextColumn get url => text().nullable()();
   TextColumn get weather => text().nullable()();
+  TextColumn get lmsMetadata => text().nullable()();
   DateTimeColumn get startAt => dateTime()();
   DateTimeColumn get endAt => dateTime()();
   BoolColumn get allDay => boolean().withDefault(const Constant(false))();
@@ -48,12 +49,13 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 8;
+  static const currentSchemaVersion = 9;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,
       deleted_at TEXT NOT NULL,
-      pending INTEGER NOT NULL DEFAULT 1
+      pending INTEGER NOT NULL DEFAULT 1,
+      lms_owner_id TEXT
     )
   ''';
 
@@ -118,6 +120,21 @@ class AppDatabase extends _$AppDatabase {
             await migrator.addColumn(
               eventRecords,
               eventRecords.syncTimestampDetails,
+            );
+          }
+        }
+        if (from < 9) {
+          if (!await _eventRecordsHasColumn('lms_metadata')) {
+            await migrator.addColumn(eventRecords, eventRecords.lmsMetadata);
+          }
+          final deletionColumns = await customSelect(
+            'PRAGMA table_info(sync_event_deletions)',
+          ).get();
+          if (!deletionColumns.any(
+            (row) => row.read<String>('name') == 'lms_owner_id',
+          )) {
+            await customStatement(
+              'ALTER TABLE sync_event_deletions ADD COLUMN lms_owner_id TEXT',
             );
           }
         }

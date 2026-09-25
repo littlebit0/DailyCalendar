@@ -28,9 +28,9 @@ import '../../../core/theme/daily_ui.dart';
 import '../../events/domain/calendar_event.dart';
 import '../../events/domain/event_category.dart';
 import 'calendar_import_page.dart';
-import 'academic_calendar_page.dart';
+import 'academic_management_page.dart';
+import 'academic_profile_page.dart';
 import 'category_color_picker.dart';
-import '../../../core/academic/academic_strings.dart';
 import 'siri_activity_log_page.dart';
 import 'weather_settings_page.dart';
 import '../../../core/weather/weather_strings.dart';
@@ -85,6 +85,9 @@ class SettingsPage extends ConsumerStatefulWidget {
 
   const SettingsPage.categories({super.key})
     : _destination = _SettingsDestination.categories;
+
+  const SettingsPage.account({super.key})
+    : _destination = _SettingsDestination.account;
 
   const SettingsPage._destination({required _SettingsDestination destination})
     : _destination = destination;
@@ -274,6 +277,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         trailing: const Icon(Icons.chevron_right_rounded),
                         onTap: () =>
                             _openDestination(_SettingsDestination.account),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        key: const ValueKey('academic-management-navigation'),
+                        contentPadding: EdgeInsets.zero,
+                        leading: const _SettingsLeadingIcon(
+                          Icons.school_outlined,
+                        ),
+                        title: Text(context.tr('학사 관리')),
+                        subtitle: _SettingsDescription(
+                          context.tr('학사 정보, LMS, 학사일정 및 시간표 설정'),
+                        ),
+                        trailing: const Icon(Icons.chevron_right_rounded),
+                        onTap: () => Navigator.of(context).push<void>(
+                          MaterialPageRoute(
+                            builder: (_) => const AcademicManagementPage(),
+                          ),
+                        ),
                       ),
                       const Divider(height: 1),
                       ListTile(
@@ -684,21 +705,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           onChanged: (value) => _save(
                             settings.copyWith(weekStartsOnMonday: value),
                             changedFrom: settings,
-                          ),
-                        ),
-                      ),
-                      const Divider(height: 1),
-                      ListTile(
-                        key: const ValueKey('academic-calendar-settings'),
-                        contentPadding: EdgeInsets.zero,
-                        leading: const _SettingsLeadingIcon(
-                          Icons.school_outlined,
-                        ),
-                        title: Text(academicText(context, AcademicText.title)),
-                        trailing: const Icon(Icons.chevron_right),
-                        onTap: () => Navigator.of(context).push<void>(
-                          MaterialPageRoute(
-                            builder: (_) => const AcademicCalendarPage(),
                           ),
                         ),
                       ),
@@ -1157,8 +1163,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         busy: _syncBusy,
                         message: _syncMessage,
                         onConnect: _connectGoogleDrive,
-                        onBackup: _backupGoogleDriveNow,
-                        onRestore: _restoreGoogleDriveNow,
+                        onSync: _syncGoogleDriveNow,
                         canCancelConnection: _canCancelGoogleDriveConnection,
                         onCancelConnection: _cancelGoogleDriveSignIn,
                         onDisconnect: _disconnectGoogle,
@@ -2030,6 +2035,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               displayName: account.displayName,
             ),
           );
+      if (mounted) {
+        ref.read(appSettingsProvider.notifier).state = ref
+            .read(settingsRepositoryProvider)
+            .load();
+      }
       final syncService = ref.read(googleDriveSyncServiceProvider);
       await syncService.startListeningOnly(flushPendingChanges: false);
       if (!_isCurrentGoogleDriveConnectAttempt(attempt)) {
@@ -2053,6 +2063,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         _dailyAccount = ref.read(settingsRepositoryProvider).dailyAccount();
         _syncMessage = context.tr('Google Drive 연결이 완료되었습니다.');
       });
+      await offerAcademicProfile(context, ref);
     } on Object catch (error) {
       if (mounted && _isCurrentGoogleDriveConnectAttempt(attempt)) {
         setState(() => _syncMessage = _googleAccountErrorMessage(error));
@@ -2133,7 +2144,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
-  Future<void> _backupGoogleDriveNow() async {
+  Future<void> _syncGoogleDriveNow() async {
+    if (_syncBusy) return;
     setState(() {
       _syncBusy = true;
       _syncMessage = '';
@@ -2143,70 +2155,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           .read(googleDriveSyncServiceProvider)
           .syncPendingChangesNow(
             promptIfNecessary: defaultTargetPlatform != TargetPlatform.android,
+            restoreAfterBackup: true,
           );
       if (mounted) {
+        ref.read(appSettingsProvider.notifier).state = ref
+            .read(settingsRepositoryProvider)
+            .load();
         final status = ref
             .read(googleDriveSyncServiceProvider)
             .statusNotifier
             .value;
         setState(
           () => _syncMessage = status.message.isEmpty
-              ? context.tr('백업할 변경 사항이 없습니다.')
+              ? context.tr('동기화 완료')
               : status.message,
         );
-      }
-    } on Object catch (error) {
-      if (mounted) {
-        setState(() => _syncMessage = _googleAccountErrorMessage(error));
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _syncBusy = false);
-      }
-    }
-  }
-
-  Future<void> _restoreGoogleDriveNow() async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.tr('Google Drive에서 복원')),
-        content: Text(
-          context.tr(
-            'Google Drive AppData의 일정과 설정을 이 기기에 복원할까요? 이 기기의 더 최신이거나 아직 백업되지 않은 변경은 유지됩니다.',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(context.tr('취소')),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(context.tr('복원')),
-          ),
-        ],
-      ),
-    );
-    if (confirmed != true || !mounted) {
-      return;
-    }
-
-    setState(() {
-      _syncBusy = true;
-      _syncMessage = '';
-    });
-    try {
-      await ref
-          .read(googleDriveSyncServiceProvider)
-          .restoreNow(
-            promptIfNecessary: defaultTargetPlatform != TargetPlatform.android,
-          );
-      if (mounted) {
-        ref.read(appSettingsProvider.notifier).state = ref
-            .read(settingsRepositoryProvider)
-            .load();
-        setState(() => _syncMessage = context.tr('Google Drive 복원 완료'));
       }
     } on Object catch (error) {
       if (mounted) {
@@ -2271,6 +2234,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
       await ref.read(settingsRepositoryProvider).deleteGoogleAccount();
       if (mounted) {
+        ref.read(appSettingsProvider.notifier).state = ref
+            .read(settingsRepositoryProvider)
+            .load();
         setState(() {
           _googleDriveAccount = null;
           _dailyAccount = ref.read(settingsRepositoryProvider).dailyAccount();
@@ -2505,7 +2471,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
           .read(googleDriveSyncServiceProvider)
           .syncPendingChangesNow(promptIfNecessary: false)
           .timeout(syncBudget);
-      return !await ref.read(googleDriveSyncServiceProvider).hasPendingChanges();
+      return !await ref
+          .read(googleDriveSyncServiceProvider)
+          .hasPendingChanges();
     } on Object {
       return false;
     }
@@ -3461,7 +3429,7 @@ class _BugReportDialogState extends State<_BugReportDialog> {
     return AlertDialog(
       backgroundColor: DailyUi.pageBackground(context),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: DailyUi.popupShape(context),
       insetPadding: EdgeInsets.symmetric(
         horizontal: DailyUi.isDesktop ? 40 : 14,
         vertical: DailyUi.isDesktop ? 32 : 18,
@@ -4029,8 +3997,7 @@ class _GoogleDriveSyncSettings extends StatelessWidget {
     required this.busy,
     required this.message,
     required this.onConnect,
-    required this.onBackup,
-    required this.onRestore,
+    required this.onSync,
     required this.canCancelConnection,
     required this.onCancelConnection,
     required this.onDisconnect,
@@ -4043,8 +4010,7 @@ class _GoogleDriveSyncSettings extends StatelessWidget {
   final bool busy;
   final String message;
   final VoidCallback onConnect;
-  final VoidCallback onBackup;
-  final VoidCallback onRestore;
+  final VoidCallback onSync;
   final bool canCancelConnection;
   final VoidCallback onCancelConnection;
   final VoidCallback onDisconnect;
@@ -4072,49 +4038,31 @@ class _GoogleDriveSyncSettings extends StatelessWidget {
           title: Text(context.tr('Google Drive 동기화')),
           subtitle: _SettingsDescription(
             sessionConnected
-                ? context.tr('이 계정의 Google Drive AppData에 일정을 백업하고 복원합니다.')
+                ? context.tr(
+                    '이 계정의 Google Drive에 일정, 설정, 시간표를 백업한 뒤 다른 기기의 변경을 가져옵니다.',
+                  )
                 : linked
                 ? context.tr('Google 인증 세션이 없습니다. 다시 연결하면 자동 동기화가 재개됩니다.')
                 : context.tr('Google 로그인 시 Drive AppData 권한도 함께 승인합니다.'),
           ),
         ),
-        Row(
-          key: const ValueKey('google-drive-backup-restore-row'),
-          children: [
-            Expanded(
-              child: _SettingsActionButton(
-                key: const ValueKey('google-drive-primary-action'),
-                onPressed: busy
-                    ? null
-                    : (sessionConnected ? onBackup : onConnect),
-                icon: sessionConnected
-                    ? Icons.cloud_upload_outlined
-                    : Icons.cloud_outlined,
-                label: context.tr(
-                  connecting
-                      ? 'Google 연결 중'
-                      : sessionConnected
-                      ? '백업'
-                      : linked
-                      ? 'Google 다시 연결'
-                      : 'Google로 계속',
-                ),
-                busy: busy,
-                filled: true,
-              ),
-            ),
-            if (sessionConnected) ...[
-              const SizedBox(width: 8),
-              Expanded(
-                child: _SettingsActionButton(
-                  key: const ValueKey('google-drive-restore-action'),
-                  onPressed: busy ? null : onRestore,
-                  icon: Icons.cloud_download_outlined,
-                  label: context.tr('복원'),
-                ),
-              ),
-            ],
-          ],
+        _SettingsActionButton(
+          key: const ValueKey('google-drive-primary-action'),
+          onPressed: busy ? null : (sessionConnected ? onSync : onConnect),
+          icon: sessionConnected
+              ? Icons.cloud_sync_outlined
+              : Icons.cloud_outlined,
+          label: context.tr(
+            connecting
+                ? 'Google 연결 중'
+                : sessionConnected
+                ? (busy ? '동기화 중' : '지금 동기화')
+                : linked
+                ? 'Google 다시 연결'
+                : 'Google로 계속',
+          ),
+          busy: busy,
+          filled: true,
         ),
         if (canCancelConnection) ...[
           const SizedBox(height: 8),
@@ -4389,7 +4337,10 @@ class _SyncStatusTile extends StatelessWidget {
       builder: (context, status, _) {
         final lastSyncedAt = status.lastSyncedAt;
         final error = status.error;
-        final message = context.tr(status.message);
+        final phase = context.tr(status.message);
+        final message = status.totalItems == null
+            ? phase
+            : '$phase · ${status.completedItems}/${status.totalItems}';
         final syncing = status.syncing;
         final subtitle = [
           if (lastSyncedAt != null)
@@ -4519,7 +4470,7 @@ class _CategoryDialogState extends State<_CategoryDialog> {
     return AlertDialog(
       backgroundColor: DailyUi.pageBackground(context),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: DailyUi.popupShape(context),
       title: _settingsDialogTitle(
         context.tr(_editing ? '분류 수정' : '분류 추가'),
         _editing ? Icons.edit_outlined : Icons.add_rounded,
@@ -4628,7 +4579,7 @@ class _NumberDialogState extends State<_NumberDialog> {
     return AlertDialog(
       backgroundColor: DailyUi.pageBackground(context),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: DailyUi.popupShape(context),
       title: _settingsDialogTitle(
         widget.title,
         Icons.numbers_rounded,
@@ -4732,7 +4683,7 @@ class _PinSetupDialogState extends State<_PinSetupDialog> {
     return AlertDialog(
       backgroundColor: DailyUi.pageBackground(context),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: DailyUi.popupShape(context),
       title: _settingsDialogTitle(
         widget.title,
         Icons.lock_outline_rounded,
@@ -4861,7 +4812,7 @@ class _PinVerificationDialogState extends State<_PinVerificationDialog> {
     return AlertDialog(
       backgroundColor: DailyUi.pageBackground(context),
       surfaceTintColor: Colors.transparent,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: DailyUi.popupShape(context),
       title: _settingsDialogTitle(
         context.tr('PIN 확인'),
         Icons.lock_open_rounded,
