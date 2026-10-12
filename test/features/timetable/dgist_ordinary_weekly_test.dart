@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,9 +10,9 @@ const directory =
     'work/university-research/catalog-r/dgist-lab-weekly-reservations-v2-20261008';
 const sourceDirectory = 'work/university-research/catalog-r';
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 String hash(String path) =>
-    sha256.convert(File(path).readAsBytesSync()).toString();
+    sha256.convert(fixtureFile(path).readAsBytesSync()).toString();
 void main() {
   final audit = read('$directory/lab-weekly-audit-v2.json');
   final raw = read('$directory/${audit['candidateFile']}');
@@ -21,7 +21,9 @@ void main() {
   final model = UniversityDataset.fromJson(raw);
   final classification =
       jsonDecode(
-            File('$directory/all569-classification-v2.json').readAsStringSync(),
+            fixtureFile(
+              '$directory/all569-classification-v2.json',
+            ).readAsStringSync(),
           )
           as List;
   final added = classification
@@ -32,7 +34,7 @@ void main() {
   for (final year in ['2020', '2024', '2014']) {
     final rows =
         jsonDecode(
-              File(
+              fixtureFile(
                 '$sourceDirectory/dgist2026-2-$year-current-recheck-20261008.json',
               ).readAsStringSync(),
             )

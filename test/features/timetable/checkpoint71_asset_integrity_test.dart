@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 
 void main() {
   test(
@@ -11,7 +11,7 @@ void main() {
     () {
       final manifest =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/checkpoint71-source-manifest.json',
                 ).readAsStringSync(),
               )

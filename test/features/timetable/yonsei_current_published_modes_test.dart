@@ -1,7 +1,7 @@
 // Historical frozen-source packet regression. Latest packaged sources are
 // checked by packaged_asset_source_integrity_test and resumed_batch_changed_courses_test.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -12,7 +12,7 @@ const dir =
     'work/university-research/catalog-c/yonsei-h1-published-mode-segments-v8-20261009';
 dynamic read(String name) {
   final actual = '$dir/$name';
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -35,7 +35,7 @@ void main() {
   final all = datasets.values.expand((d) => d['courses'] as List).toList();
   final native =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/catalog-d/yonsei-2026-2-public-all.json',
             ).readAsStringSync(),
           )
@@ -131,7 +131,9 @@ void main() {
     () {
       final page = read('own-h1-2026-2-mode-page7-source.json') as Map;
       expect(
-        sha256.convert(File(page['sourceFile']).readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile(page['sourceFile']).readAsBytesSync())
+            .toString(),
         page['sourcePDFSHA256'],
       );
       expect(page['physicalPage'], 7);
@@ -275,10 +277,12 @@ void main() {
       expect(priorPlans, 97066);
       for (final campus in ['mirae', 'unknown']) {
         expect(
-          File(
+          fixtureFile(
             '$dir/yonsei-$campus-2026-2.mode-segments-v8.json',
           ).readAsBytesSync(),
-          File('$dir/baseline-yonsei-$campus-2026-2.json').readAsBytesSync(),
+          fixtureFile(
+            '$dir/baseline-yonsei-$campus-2026-2.json',
+          ).readAsBytesSync(),
         );
       }
     },

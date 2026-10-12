@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,7 +10,7 @@ void main() {
   const root =
       'work/university-research/catalog-r/ku/current-public-broad-followup-v3-20261009/';
   dynamic read(String name) =>
-      jsonDecode(File('$root$name').readAsStringSync());
+      jsonDecode(fixtureFile('$root$name').readAsStringSync());
   final source = read('source-nursing53-education.json') as Map;
   final dataset =
       read('korea-seoul-2026-2.current-native-reviewed-v3-20261009.json')
@@ -40,7 +40,7 @@ void main() {
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '${root}source-current-ui-regular-campus-clock-education.json',
               ).readAsBytesSync(),
             )
@@ -84,7 +84,9 @@ void main() {
       expect(
         sha256
             .convert(
-              File('${root}source-nursing53-education.json').readAsBytesSync(),
+              fixtureFile(
+                '${root}source-nursing53-education.json',
+              ).readAsBytesSync(),
             )
             .toString(),
         read('source-nursing53-receipt.json')['sha256'],
@@ -270,7 +272,7 @@ void main() {
         expect(raw['rows'], hasLength(scope['whole'] as int));
         expect(
           sha256
-              .convert(File('$root${scope['file']}').readAsBytesSync())
+              .convert(fixtureFile('$root${scope['file']}').readAsBytesSync())
               .toString(),
           scope['sourceSHA256'],
         );
@@ -545,7 +547,9 @@ void main() {
       expect(
         sha256
             .convert(
-              File('${root}baseline-sejong22-18-701.json').readAsBytesSync(),
+              fixtureFile(
+                '${root}baseline-sejong22-18-701.json',
+              ).readAsBytesSync(),
             )
             .toString(),
         read(

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -14,7 +14,7 @@ dynamic read(String p) {
   final actual = p.endsWith('.teacher-corrected-v33e.json')
       ? 'assets/timetable/${p.split('/').last.split('.').first}.json'
       : p;
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -34,13 +34,15 @@ void main() {
       );
       for (final x in proof['sourceInputs'] as List) {
         expect(
-          sha256.convert(File(x['path']).readAsBytesSync()).toString(),
+          sha256.convert(fixtureFile(x['path']).readAsBytesSync()).toString(),
           x['sha256'],
         );
       }
       expect(
         sha256
-            .convert(File(proof['priorCoordinateProofPath']).readAsBytesSync())
+            .convert(
+              fixtureFile(proof['priorCoordinateProofPath']).readAsBytesSync(),
+            )
             .toString(),
         proof['priorCoordinateProofSHA256'],
       );

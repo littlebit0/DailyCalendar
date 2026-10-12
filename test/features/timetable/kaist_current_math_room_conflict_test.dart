@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,10 +10,11 @@ const root =
 Map<String, dynamic> read(String name) {
   final path =
       name == 'kaist-main-2026-2.math-room-unconfirmed-own-clock-v7.json'
-      ? 'assets/timetable/kaist-main-2026-2.json'
+      ? 'work/university-research/catalog-r/kaist/math-room-conflict-own-clock-v7-20261009/kaist-main-2026-2.math-room-unconfirmed-own-clock-v7.json'
       : '$root$name';
   final data =
-      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
+  if (data['courses'] != null) markHistoricalPublication(data);
   for (final c in data['courses'] as List? ?? []) {
     if (c['metadata']?.containsKey('researchOnly') == true) {
       c['metadata']['researchOnly'] = false;

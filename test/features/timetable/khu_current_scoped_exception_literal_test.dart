@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -10,7 +10,7 @@ const dir =
     'work/university-research/catalog-c/khu-full-operating-context-batches-v8-20261009/outside-shortlist-review-v1/packet011-reviewed30';
 dynamic read(String name) {
   final actual = '$dir/$name';
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -731,7 +731,7 @@ void main() {
           expect(
             raw[c.sourceId]['departmentRemarks'][entry.key],
             '$schoolRemaining\n'
-                '현재 2026-2 개별 강의계획서의 명시 대면 기본과 원문 날짜를 대조한 부분만 예약합니다. 공휴일·시험·명시 원격·별도 운영은 배치하지 않으며, 자체 원문에서 정상수업으로 확인된 시험기간 중 예외 날짜만 별도 근거로 예약합니다. 원문 전체 운영·이수 제한·과제 및 예외는 별도 기록에 보존합니다. 사용자 강의 방식은 유지하며 실제 출석·최신 폐강/변경 전체 확인 완료는 아닙니다.',
+            '현재 2026-2 개별 강의계획서의 명시 대면 기본과 원문 날짜를 대조한 부분만 예약합니다. 공휴일·시험·명시 원격·별도 운영은 배치하지 않으며, 자체 원문에서 정상수업으로 확인된 시험기간 중 예외 날짜만 별도 근거로 예약합니다. 원문 전체 운영·이수 제한·과제 및 예외는 별도 기록에 보존합니다. 사용자 강의 방식은 유지하며 실제 출석·최신 폐강/변경 전체 확인 완료는 아닙니다.',
           );
         }
         expect(c.campus, previous['campus']);

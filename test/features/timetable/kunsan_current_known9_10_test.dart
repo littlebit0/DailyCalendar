@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -12,7 +12,7 @@ const root =
 
 Map<String, dynamic> read(String name) =>
     jsonDecode(
-          File(
+          fixtureFile(
             name.endsWith('.known9-10-root-review-v3.json')
                 ? 'assets/timetable/${name.replaceAll('.known9-10-root-review-v3', '')}'
                 : '$root$name',

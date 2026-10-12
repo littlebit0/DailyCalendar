@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -13,20 +13,23 @@ void main() {
           'work/university-research/catalog-r/suwon/full-query-partial-v2/';
       final raw =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}suwon-unknown-2026-2.early-planned.json',
                 ).readAsStringSync(),
               )
               as Map<String, dynamic>;
       final proof =
-          jsonDecode(File('${root}educational-proof.json').readAsStringSync())
+          jsonDecode(
+                fixtureFile('${root}educational-proof.json').readAsStringSync(),
+              )
               as Map;
       final nativeBySequence = <String, List<dynamic>>{};
       final sourceFiles = (proof['sourceFilesSHA256'] as Map).keys;
       expect(sourceFiles, hasLength(108));
       for (final sourcePath in sourceFiles) {
         final snapshot =
-            jsonDecode(File(sourcePath as String).readAsStringSync()) as Map;
+            jsonDecode(fixtureFile(sourcePath as String).readAsStringSync())
+                as Map;
         expect(snapshot['year'], '2026');
         expect(snapshot['semester'], '2');
         final all = snapshot['rows'] as List;

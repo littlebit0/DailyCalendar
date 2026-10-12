@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -10,7 +10,7 @@ const folder =
     'work/university-research/catalog-c/ut-current-own-regular-planned-dates-v6-20261009';
 dynamic read(String name) {
   final actual = '$folder/$name';
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -22,7 +22,7 @@ dynamic read(String name) {
 }
 
 Map<String, dynamic> external(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 
 void main() {
   test(
@@ -35,7 +35,7 @@ void main() {
       );
       final archive =
           jsonDecode(
-                File(
+                fixtureFile(
                   '$folder/full-prior-research-note-external-archive.json',
                 ).readAsStringSync(),
               )
@@ -78,7 +78,7 @@ void main() {
       final rulesPath =
           'work/university-research/catalog-c/ut-current-own-regular-term-rule-proof-v5-20261009/independent-current-own-regular-term-rule-education-proof.json';
       expect(
-        sha256.convert(File(rulesPath).readAsBytesSync()).toString(),
+        sha256.convert(fixtureFile(rulesPath).readAsBytesSync()).toString(),
         proof['sourceInputsSHA256']['current2026RuleEducationalProof'],
       );
       final rules = external(rulesPath);

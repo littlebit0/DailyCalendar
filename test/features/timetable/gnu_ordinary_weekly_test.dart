@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -9,7 +9,7 @@ const researchRoot =
     'work/university-research/catalog-r/gnu/remaining-campus-clock-followup-v5-20261008/';
 Map<String, dynamic> readMap(String path) {
   final data =
-      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
   data['researchOnly'] = false;
   for (final row in data['courses'] ?? []) {
     if (row['metadata']?.containsKey('researchOnly') == true) {
@@ -41,7 +41,7 @@ void main() {
   final before = {for (final dynamic c in baselines) c['sourceId']: c};
   final originals =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/catalogs/gnu-public-course-rows.json',
             ).readAsStringSync(),
           )

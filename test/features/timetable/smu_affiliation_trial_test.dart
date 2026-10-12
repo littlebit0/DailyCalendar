@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/course_organization_directory.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,7 +11,7 @@ void main() {
     () {
       final document =
           jsonDecode(
-                File(
+                fixtureFile(
                   'assets/timetable/organizations/smu.json',
                 ).readAsStringSync(),
               )
@@ -55,7 +55,7 @@ void main() {
     () {
       final document =
           jsonDecode(
-                File(
+                fixtureFile(
                   'assets/timetable/organizations/smu.json',
                 ).readAsStringSync(),
               )
@@ -81,7 +81,7 @@ void main() {
     () {
       final document =
           jsonDecode(
-                File(
+                fixtureFile(
                   'assets/timetable/organizations/smu.json',
                 ).readAsStringSync(),
               )
@@ -112,17 +112,21 @@ void main() {
     },
   );
 
-  test('Sangmyung trial does not alter other university organization data', () {
+  test('release organization baseline remains unchanged during CI repair', () {
     final before =
         jsonDecode(
-              File(
-                'work/smu-affiliation-trial-20261012/other-organization-hashes-before.json',
+              fixtureFile(
+                'test/fixtures/release_4_0_0_asset_hashes.json',
               ).readAsStringSync(),
             )
             as Map<String, dynamic>;
-    for (final entry in before.entries) {
+    for (final entry in before.entries.where(
+      (e) =>
+          e.key.startsWith('assets/timetable/organizations/') &&
+          !e.key.endsWith('/smu.json'),
+    )) {
       expect(
-        sha256.convert(File(entry.key).readAsBytesSync()).toString(),
+        sha256.convert(fixtureFile(entry.key).readAsBytesSync()).toString(),
         entry.value,
         reason: entry.key,
       );

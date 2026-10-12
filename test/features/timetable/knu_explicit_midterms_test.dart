@@ -1,6 +1,6 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -10,10 +10,10 @@ void main() {
   const root =
       'work/university-research/catalog-r/knu/current-department-allocation-followup-20261008/';
   dynamic read(String name) =>
-      jsonDecode(File('$root$name').readAsStringSync());
+      jsonDecode(fixtureFile('$root$name').readAsStringSync());
   final candidate =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/resume-batch-20261010/before-projection/knu-daegu-2026-2.json',
             ).readAsStringSync(),
           )

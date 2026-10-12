@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -12,7 +12,7 @@ void main() {
       const root = 'work/university-research/catalog-f/inu/';
       final prior =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}inu-main-2026-2.whole2437-partial-dated-v2.json',
                 ).readAsStringSync(),
               )
@@ -31,7 +31,7 @@ void main() {
       for (final campus in expected.keys) {
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/inu-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )

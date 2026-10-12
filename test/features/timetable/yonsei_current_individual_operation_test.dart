@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -11,7 +11,8 @@ void main() {
   Map<String, dynamic> read(String n) {
     final path = '$root$n';
     final data =
-        jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+        jsonDecode(fixtureFile(path).readAsStringSync())
+            as Map<String, dynamic>;
     for (final row in data['courses'] ?? []) {
       if (row['metadata']?.containsKey('researchOnly') == true) {
         row['metadata']['researchOnly'] = false;
@@ -71,7 +72,7 @@ void main() {
     () {
       final sources =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}official-course-operation-educational-receipts.json',
                 ).readAsStringSync(),
               )
@@ -84,7 +85,7 @@ void main() {
       );
       final current =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}fresh-narrow-native-educational-receipts.json',
                 ).readAsStringSync(),
               )

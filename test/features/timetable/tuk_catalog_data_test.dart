@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -15,7 +15,8 @@ Map<String, dynamic> read(String f) {
   final path = match == null
       ? '$directory/$f'
       : 'assets/timetable/tuk-${match[1]}-2026-2.json';
-  return jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+  return jsonDecode(fixtureFile(path).readAsStringSync())
+      as Map<String, dynamic>;
 }
 
 void main() {
@@ -59,7 +60,7 @@ void main() {
       for (final e in audit['datasets'] as List) {
         expect(
           sha256
-              .convert(File('$directory/${e['file']}').readAsBytesSync())
+              .convert(fixtureFile('$directory/${e['file']}').readAsBytesSync())
               .toString(),
           e['sha256'],
         );

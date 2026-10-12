@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -11,13 +11,13 @@ void main() {
     () {
       const root = 'work/university-research/catalog-f/syu/';
       Map<String, dynamic> read(String name) =>
-          jsonDecode(File('$root$name').readAsStringSync())
+          jsonDecode(fixtureFile('$root$name').readAsStringSync())
               as Map<String, dynamic>;
       final raw = read('syu-main-2026-2.native1391-chapel-partial-v1.json');
       final dataset = UniversityDataset.fromJson(raw);
       final originalRows =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-l/syu-2026-2-public-all-rows.json',
                 ).readAsStringSync(),
               )

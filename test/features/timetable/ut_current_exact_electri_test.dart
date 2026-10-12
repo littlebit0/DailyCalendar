@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -11,7 +11,8 @@ const folder =
 Map<String, dynamic> read(String name) {
   final actual = '$folder/$name';
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   for (final c in data['courses'] as List? ?? []) {
     if (c['metadata']?.containsKey('researchOnly') == true) {
       c['metadata']['researchOnly'] = false;
@@ -32,7 +33,7 @@ void main() {
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '$folder/current-2026-2-electri-original.pdf',
               ).readAsBytesSync(),
             )

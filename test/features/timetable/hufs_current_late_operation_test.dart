@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -14,7 +14,8 @@ const prior = 'work/university-research/catalog-t';
 Map<String, dynamic> read(String path) {
   final actual = path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   if (data['courses'] is List) {
     data['researchOnly'] = false;
     for (final row in data['courses']) {
@@ -33,7 +34,7 @@ void main() {
   final proofs = {
     for (final p
         in jsonDecode(
-              File('$v4/reviewed-source-proofs.json').readAsStringSync(),
+              fixtureFile('$v4/reviewed-source-proofs.json').readAsStringSync(),
             )
             as List)
       p['sourceId']: p,
@@ -41,7 +42,9 @@ void main() {
   final additions = {
     for (final p
         in jsonDecode(
-              File('$folder/added174-source-proofs.json').readAsStringSync(),
+              fixtureFile(
+                '$folder/added174-source-proofs.json',
+              ).readAsStringSync(),
             )
             as List)
       p['sourceId']: p,
@@ -64,7 +67,9 @@ void main() {
     expect(proofs, hasLength(10));
     for (final entry in (sourceValidation['sourceSha256'] as Map).entries) {
       expect(
-        sha256.convert(File(entry.key as String).readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile(entry.key as String).readAsBytesSync())
+            .toString(),
         entry.value,
       );
     }
@@ -135,7 +140,7 @@ void main() {
         );
         expect(
           sha256
-              .convert(File(p['planPath'] as String).readAsBytesSync())
+              .convert(fixtureFile(p['planPath'] as String).readAsBytesSync())
               .toString(),
           p['planSha256'],
         );
@@ -218,7 +223,9 @@ void main() {
       expect(plan['fields']['schedule'].split('\n').first, c.sourceSchedule);
       expect(
         sha256
-            .convert(File(p['sourcePlanPath'] as String).readAsBytesSync())
+            .convert(
+              fixtureFile(p['sourcePlanPath'] as String).readAsBytesSync(),
+            )
             .toString(),
         p['sourcePlanSHA256'],
       );

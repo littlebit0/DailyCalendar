@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,7 +10,7 @@ void main() {
   const root =
       'work/university-research/catalog-f/pknu-operating-semantic-v2-20261008/';
   dynamic read(String file) =>
-      jsonDecode(File('$root$file').readAsStringSync());
+      jsonDecode(fixtureFile('$root$file').readAsStringSync());
   final audit = read('candidate-audit.json') as Map;
   final raw = [
     for (final d in audit['datasets'] as List) read(d['file'] as String),
@@ -43,7 +43,7 @@ void main() {
     () {
       final native =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-f/pknu-latest-rows.json',
                 ).readAsStringSync(),
               )
@@ -53,7 +53,7 @@ void main() {
       };
       final closed =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       'work/university-research/catalog-f/pknu-course-rows.json',
                     ).readAsStringSync(),
                   )
@@ -113,7 +113,7 @@ void main() {
   test(
     'Fresh30 public teaching receipts header identities and excluded contact fields;61 lexical decisions retained',
     () {
-      final files = Directory(root)
+      final files = fixtureDirectory(root)
           .listSync()
           .whereType<File>()
           .where((f) => f.path.endsWith('.current-operating-education.json'))
@@ -145,7 +145,9 @@ void main() {
       for (final row in semantic['rows'] as List) {
         expect(
           sha256
-              .convert(File(row['sourceReceipt'] as String).readAsBytesSync())
+              .convert(
+                fixtureFile(row['sourceReceipt'] as String).readAsBytesSync(),
+              )
               .toString(),
           row['receiptSHA256'],
         );

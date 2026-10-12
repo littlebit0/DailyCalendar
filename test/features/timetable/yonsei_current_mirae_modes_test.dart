@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 const dir =
     'work/university-research/catalog-c/yonsei-h2-published-mode-segments-v9-20261009';
 dynamic read(String name) {
-  final data = jsonDecode(File('$dir/$name').readAsStringSync());
+  final data = jsonDecode(fixtureFile('$dir/$name').readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -32,7 +32,7 @@ void main() {
   final all = datasets.values.expand((d) => d['courses'] as List).toList();
   final native =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/catalog-d/yonsei-2026-2-public-all.json',
             ).readAsStringSync(),
           )
@@ -128,7 +128,9 @@ void main() {
     () {
       final page = read('own-h2-current2026-2-mode-source.json');
       expect(
-        sha256.convert(File(page['sourceFile']).readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile(page['sourceFile']).readAsBytesSync())
+            .toString(),
         page['sourcePDFSHA256'],
       );
       expect(page['H1GuideBorrowed'], false);

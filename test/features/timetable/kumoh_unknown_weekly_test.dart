@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,7 +8,7 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 const root =
     'work/university-research/catalog-r/kumoh/unknown-campus-weekly-v2-20261008/';
 Map<String, dynamic> readMap(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 void main() {
   final payload = readMap('assets/timetable/kumoh-unknown-2026-2.json');
   final rows = payload['courses'] as List;
@@ -17,7 +17,7 @@ void main() {
           as List;
   final originals =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/catalog-m/kumoh-current-educational-recheck-20261008.json',
             ).readAsStringSync(),
           )

@@ -1,7 +1,7 @@
 // Historical frozen-source packet regression. Latest packaged sources are
 // checked by packaged_asset_source_integrity_test and resumed_batch_changed_courses_test.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -17,7 +17,8 @@ Map<String, dynamic> read(String path) {
       ? 'work/university-research/resume-batch-20261010/before-projection/${path.split('/').last.replaceAll('.room-only-ordinary-candidate', '')}'
       : path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   if (data['courses'] is List) {
     for (final c in data['courses']) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -76,7 +77,7 @@ void main() {
     () {
       final proof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}independent3-native-source-proof.json',
                 ).readAsStringSync(),
               )
@@ -84,14 +85,14 @@ void main() {
       expect(proof, hasLength(3));
       final calendar =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}own-calendar-native-receipts.json',
                 ).readAsStringSync(),
               )
               as List;
       for (final p in calendar) {
         expect(
-          sha256.convert(File(p['file']).readAsBytesSync()).toString(),
+          sha256.convert(fixtureFile(p['file']).readAsBytesSync()).toString(),
           p['sha256'],
         );
         expect(read(p['file']), p['education']);
@@ -134,7 +135,9 @@ void main() {
           expect(
             sha256
                 .convert(
-                  File(p['originalNativeEducationPath']).readAsBytesSync(),
+                  fixtureFile(
+                    p['originalNativeEducationPath'],
+                  ).readAsBytesSync(),
                 )
                 .toString(),
             p['originalNativeEducationSHA256'],
@@ -155,7 +158,9 @@ void main() {
           expect(
             sha256
                 .convert(
-                  File(p['currentOperatingEducationPath']).readAsBytesSync(),
+                  fixtureFile(
+                    p['currentOperatingEducationPath'],
+                  ).readAsBytesSync(),
                 )
                 .toString(),
             p['currentOperatingEducationSHA256'],
@@ -281,7 +286,7 @@ void main() {
       // Medical/clinical room-only labels do not authorize an ordinary-semester fallback.
       final untouched =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}all16-room-only-reason-full-native-rows.json',
                 ).readAsStringSync(),
               )

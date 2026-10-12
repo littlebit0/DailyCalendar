@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -13,7 +13,7 @@ void main() {
           'work/university-research/catalog-r/ku/remarkful-own-clock-reviewed-v10-20261009';
       final packet =
           jsonDecode(
-                File(
+                fixtureFile(
                   '$root/exact-generated-warning-correction-packet.json',
                 ).readAsStringSync(),
               )
@@ -25,14 +25,14 @@ void main() {
       for (final campus in ['seoul', 'sejong']) {
         final source =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     '$root/korea-$campus-2026-2.remarkful-own-clock-v10.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/korea-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )

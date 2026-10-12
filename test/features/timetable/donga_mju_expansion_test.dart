@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -12,7 +12,7 @@ const donga =
 const mju =
     'work/university-research/catalog-f/mju/current-business-reference-v2';
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 
 void main() {
   test(
@@ -22,7 +22,10 @@ void main() {
       final raw = <String, dynamic>{};
       final courses = <UniversityCourse>[];
       for (final campus in ['seunghak', 'unknown']) {
-        final part = read('assets/timetable/donga-$campus-2026-2.json');
+        final part = read(
+          '$donga/donga-$campus-2026-2.ordinary-reservation-v3.json',
+        );
+        markHistoricalPublication(part);
         for (final c in part['courses']) {
           raw[c['sourceId']] = c;
         }
@@ -31,7 +34,9 @@ void main() {
       final original = <String, dynamic>{};
       for (final path in (audit['inputSources'] as Map).keys) {
         expect(
-          sha256.convert(File(path as String).readAsBytesSync()).toString(),
+          sha256
+              .convert(fixtureFile(path as String).readAsBytesSync())
+              .toString(),
           audit['inputSources'][path],
         );
         for (final c in read(path)['courses']) {
@@ -225,7 +230,8 @@ void main() {
     'MJU current printed native references, exact aliases, unchanged prior100 and no invented appointments',
     () {
       Map<String, dynamic> read(String path) {
-        const frozenRoot = 'work/university-research/catalog-f/mju/natural-reference-v3-fixture-derivative-20261009';
+        const frozenRoot =
+            'work/university-research/catalog-f/mju/natural-reference-v3-fixture-derivative-20261009';
         final actual = path == 'assets/timetable/mju-unknown-2026-2.json'
             ? '$frozenRoot/baseline-unknown.json'
             : path == 'assets/timetable/mju-natural-2026-2.json'
@@ -233,8 +239,10 @@ void main() {
             : path == 'assets/timetable/mju-humanities-2026-2.json'
             ? '$frozenRoot/baseline-humanities.json'
             : path;
-        return jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+        return jsonDecode(fixtureFile(actual).readAsStringSync())
+            as Map<String, dynamic>;
       }
+
       final audit = read('$mju/candidate-audit.json');
       final raw = read('assets/timetable/mju-unknown-2026-2.json');
       final education = read('$mju/business-current-printed-education.json');
@@ -247,7 +255,7 @@ void main() {
       expect(model.courses, hasLength(41));
       final aliases =
           jsonDecode(
-                File(
+                fixtureFile(
                   '$mju/cross-source-native-aliases.json',
                 ).readAsStringSync(),
               )
@@ -281,7 +289,7 @@ void main() {
       for (final entry in (audit['original100CandidatesSHA'] as Map).entries) {
         final path = 'work/university-research/catalog-f/mju/${entry.key}';
         expect(
-          sha256.convert(File(path).readAsBytesSync()).toString(),
+          sha256.convert(fixtureFile(path).readAsBytesSync()).toString(),
           entry.value,
         );
         final frozen = read(path);

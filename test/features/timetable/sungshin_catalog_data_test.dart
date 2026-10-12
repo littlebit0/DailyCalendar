@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -13,7 +13,7 @@ void main() {
       const root = 'work/university-research/catalog-r/sungshin/';
       final proof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}sungshin-current-educational-proof-v1.json',
                 ).readAsStringSync(),
               )
@@ -63,7 +63,7 @@ void main() {
       for (final campus in ['sujeong', 'unjung']) {
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/sungshin-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )

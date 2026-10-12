@@ -81,7 +81,7 @@ void main() {
     },
   );
 
-  testWidgets('preliminary source notice is visible in summer search', (
+  testWidgets('disabled summer search never exposes archived planned courses', (
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
@@ -101,9 +101,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('course-source-notice')), findsOneWidget);
-    expect(find.textContaining('개설예정 자료'), findsOneWidget);
-    expect(find.text('대전대학교'), findsOneWidget);
+    expect(find.byKey(const ValueKey('course-source-notice')), findsNothing);
+    expect(find.textContaining('개설예정 자료'), findsNothing);
+    expect(find.text('해당 대학의 학교 시간표는 현재 미지원입니다.'), findsOneWidget);
+    expect(find.text('대전대학교'), findsNothing);
     expect(tester.takeException(), isNull);
   });
 }

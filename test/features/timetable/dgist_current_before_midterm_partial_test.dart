@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -30,7 +30,7 @@ dynamic read(String path) {
       path.endsWith('/dgist-unknown-2026-2.before-midterm-partial-v3.json')
       ? 'assets/timetable/dgist-unknown-2026-2.json'
       : path;
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -46,14 +46,16 @@ void main() {
     final proof = read(
       '$folder/independent-native-plan-calendar-and-whole-proof.json',
     );
-    final baseline = File('$folder/prior569-current-whole-archive.json');
+    final baseline = fixtureFile('$folder/prior569-current-whole-archive.json');
     expect(
       sha256.convert(baseline.readAsBytesSync()).toString(),
       proof['baselineSHA256'],
     );
     for (final entry in (proof['sourceInputsSHA256'] as Map).entries) {
       expect(
-        sha256.convert(File(entry.key as String).readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile(entry.key as String).readAsBytesSync())
+            .toString(),
         entry.value,
       );
     }
@@ -69,7 +71,7 @@ void main() {
     for (final year in ['2020', '2024', '2014']) {
       final rows =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-r/dgist2026-2-$year-current-recheck-20261008.json',
                 ).readAsStringSync(),
               )

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
@@ -50,7 +50,7 @@ void main() {
       const root = 'work/university-research/catalog-v/';
       final raw =
           jsonDecode(
-                File(
+                fixtureFile(
                   'assets/timetable/changwon-unknown-2026-2.json',
                 ).readAsStringSync(),
               )
@@ -58,7 +58,7 @@ void main() {
       final dataset = UniversityDataset.fromJson(raw);
       final source =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}changwon-current-educational-rows-20261008.json',
                 ).readAsStringSync(),
               )
@@ -78,7 +78,7 @@ void main() {
       }
       final priorRaw =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}changwon-unknown-2026-2.eleven-dated-v2.json',
                 ).readAsStringSync(),
               )

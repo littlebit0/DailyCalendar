@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -8,7 +8,8 @@ import 'package:daily/features/timetable/domain/university_course.dart';
 
 const root = 'work/university-research/catalog-w/yonsei/';
 Map<String, dynamic> read(String file) =>
-    jsonDecode(File('$root$file').readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile('$root$file').readAsStringSync())
+        as Map<String, dynamic>;
 
 void main() {
   test(
@@ -17,14 +18,14 @@ void main() {
       final audit = read('candidate-audit-v1.json');
       final clockProof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}current-native-clock-proof-v1.json',
                 ).readAsStringSync(),
               )
               as List;
       final source =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-d/yonsei-2026-2-public-all.json',
                 ).readAsStringSync(),
               )

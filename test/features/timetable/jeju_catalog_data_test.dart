@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -12,7 +12,7 @@ void main() {
     () {
       final originals =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       'work/university-research/catalog-i/jeju-current-whole-educational-review-20261008.json',
                     ).readAsStringSync(),
                   )
@@ -24,7 +24,7 @@ void main() {
       for (final campus in ['ara', 'sara', 'unknown']) {
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'work/university-research/catalog-r/jeju/jeju-$campus-2026-2.reservation-planned-v1.json',
                   ).readAsStringSync(),
                 )

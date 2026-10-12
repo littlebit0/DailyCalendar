@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -10,7 +10,8 @@ import 'package:daily/features/timetable/domain/university_course.dart';
 Map<String, dynamic> readMap(String path) {
   final actual = path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   if (data['courses'] is List) {
     data['researchOnly'] = false;
     for (final row in data['courses']) {

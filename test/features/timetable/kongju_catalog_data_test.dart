@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -40,7 +40,7 @@ void main() {
       const root = 'work/university-research/catalog-r/kongju/';
       final originals =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       '${root}kongju-contract-2026-2-educational-rows-v1.json',
                     ).readAsStringSync(),
                   )
@@ -56,14 +56,14 @@ void main() {
       for (final campus in ['cheonan']) {
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/kongju-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;
         final originalIds =
             (jsonDecode(
-                      File(
+                      fixtureFile(
                         '${root}current-whole-lecture-list-followup-20261008/baseline-cheonan65-frozen.json',
                       ).readAsStringSync(),
                     )['courses']

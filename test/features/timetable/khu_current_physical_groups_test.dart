@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -13,7 +13,8 @@ Map<String, dynamic> read(String name) {
       ? '$dir/packet001b-exact-research-note-correction/${name.replaceAll('.packet001-physical-groups-prepared.json', '.packet001b-prepared.json')}'
       : '$dir/$name';
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   for (final c in data['courses'] as List? ?? []) {
     if (c['metadata']?.containsKey('researchOnly') == true) {
       c['metadata']['researchOnly'] = false;
@@ -299,7 +300,7 @@ void main() {
       for (final campus in ['seoul', 'global']) {
         final original =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     '$dir/khu-$campus-2026-2.packet001-physical-groups-prepared.json',
                   ).readAsStringSync(),
                 )

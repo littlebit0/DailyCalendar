@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -12,7 +12,9 @@ void main() {
       const root = 'work/university-research/catalog-f/ssu/';
       final dataset = UniversityDataset.fromJson(
         jsonDecode(
-              File('assets/timetable/ssu-main-2026-2.json').readAsStringSync(),
+              fixtureFile(
+                'assets/timetable/ssu-main-2026-2.json',
+              ).readAsStringSync(),
             )
             as Map<String, dynamic>,
       );
@@ -24,7 +26,7 @@ void main() {
       expect(selected.fold<int>(0, (n, c) => n + c.meetings.length), 56624);
       final baseline =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}ssu-main-2026-2.whole2219-partial-dated-v3.json',
                 ).readAsStringSync(),
               )
@@ -112,7 +114,7 @@ void main() {
       ]);
       final prior = UniversityDataset.fromJson(
         jsonDecode(
-              File(
+              fixtureFile(
                 '${root}ssu-main-2026-2.whole2219-partial-dated-v2.json',
               ).readAsStringSync(),
             )

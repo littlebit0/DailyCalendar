@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -113,7 +113,7 @@ const literalMeetings = {
 };
 dynamic read(String name) {
   final actual = '$dir/$name';
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -164,7 +164,7 @@ void main() {
       }
       final global =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-c/khu-full-operating-context-batches-v8-20261009/outside-shortlist-review-v1/packet003-next30/khu-global-2026-2.packet003-physical-groups-prepared.json',
                 ).readAsStringSync(),
               )

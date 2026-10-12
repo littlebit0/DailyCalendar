@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,7 +8,7 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 const root =
     'work/university-research/catalog-r/kaist/nqe-current-ug-v2-20261009/';
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 int minute(String text) {
   final parts = text.split(':').map(int.parse).toList();
   return parts[0] * 60 + parts[1];
@@ -33,7 +33,7 @@ void main() {
     () {
       final sourceRows =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/root-kaist-public-followup-20261009/sheet1-cells.json',
                 ).readAsStringSync(),
               )

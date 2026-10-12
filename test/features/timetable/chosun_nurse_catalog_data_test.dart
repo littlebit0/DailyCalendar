@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -14,7 +14,7 @@ void main() {
       const root = 'work/university-research/catalog-f/chosun/';
       Map<String, dynamic> read(String name) =>
           jsonDecode(
-                File(
+                fixtureFile(
                   name ==
                           'chosun-unknown-2026-2.future-nurse-native135-partial-v2.json'
                       ? 'work/university-research/catalog-f/chosun/chosun-unknown-2026-2.future-nurse-native135-partial-v2.json'

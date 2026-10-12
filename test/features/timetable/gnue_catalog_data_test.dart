@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -11,7 +11,7 @@ void main() {
     () {
       const root = 'work/university-research/catalog-f/gnue/';
       Map<String, dynamic> read(String n) =>
-          jsonDecode(File('$root$n').readAsStringSync())
+          jsonDecode(fixtureFile('$root$n').readAsStringSync())
               as Map<String, dynamic>;
       final source = read('gnue-current-native-education-source-20261008.json');
       final rows = {

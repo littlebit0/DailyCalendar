@@ -1,7 +1,7 @@
 // Historical frozen-source packet regression. Latest packaged sources are
 // checked by packaged_asset_source_integrity_test and resumed_batch_changed_courses_test.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -13,7 +13,8 @@ const root =
 Map<String, dynamic> read(String path) {
   final actual = path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   if (data['courses'] is List) {
     data['researchOnly'] = false;
     data['productionIntegrationEnabled'] = true;
@@ -80,7 +81,7 @@ void main() {
     () {
       final proof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}independent4-fixed-live-source-proof.json',
                 ).readAsStringSync(),
               )
@@ -93,7 +94,9 @@ void main() {
       );
       for (final g in receipt['guides']) {
         expect(
-          sha256.convert(File(g['sourceFile']).readAsBytesSync()).toString(),
+          sha256
+              .convert(fixtureFile(g['sourceFile']).readAsBytesSync())
+              .toString(),
           g['SHA256'],
         );
       }
@@ -121,7 +124,7 @@ void main() {
           expect(plan, p['educationPlan']);
           expect(
             sha256
-                .convert(File(p['sourcePlanPath']).readAsBytesSync())
+                .convert(fixtureFile(p['sourcePlanPath']).readAsBytesSync())
                 .toString(),
             p['sourcePlanSHA256'],
           );

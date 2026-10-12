@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 const directory = 'work/university-research/catalog-c/jnue-current-20261008';
 Map<String, dynamic> read(String f) =>
-    jsonDecode(File('$directory/$f').readAsStringSync())
+    jsonDecode(fixtureFile('$directory/$f').readAsStringSync())
         as Map<String, dynamic>;
 void main() {
   final audit = read('reservation-audit.json');
@@ -21,7 +21,7 @@ void main() {
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '$directory/${audit['candidate']['file']}',
               ).readAsBytesSync(),
             )

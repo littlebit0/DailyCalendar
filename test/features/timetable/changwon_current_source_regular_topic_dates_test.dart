@@ -1,6 +1,6 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -15,7 +15,7 @@ dynamic read(String path) {
       path.endsWith('/changwon-unknown-2026-2.whole-plan-review-v6b.json')
       ? 'work/university-research/resume-batch-20261010/before-projection/changwon-unknown-2026-2.json'
       : path;
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -164,14 +164,16 @@ void main() {
       );
       expect(
         sha256
-            .convert(File('$folder/${proof['priorFile']}').readAsBytesSync())
+            .convert(
+              fixtureFile('$folder/${proof['priorFile']}').readAsBytesSync(),
+            )
             .toString(),
         proof['priorArchiveSHA256'],
       );
       for (final e in proof['sourceInputsSHA256'] as List) {
         expect(
           sha256
-              .convert(File(e['path'] as String).readAsBytesSync())
+              .convert(fixtureFile(e['path'] as String).readAsBytesSync())
               .toString(),
           e['sha256'],
         );
@@ -199,7 +201,7 @@ void main() {
 
       final reviews =
           jsonDecode(
-                File(
+                fixtureFile(
                   '$folder/whole30-plan-review-education.json',
                 ).readAsStringSync(),
               )

@@ -1,7 +1,7 @@
 // Historical frozen-source packet regression. Latest packaged sources are
 // checked by packaged_asset_source_integrity_test and resumed_batch_changed_courses_test.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -12,7 +12,7 @@ const dir =
     'work/university-research/catalog-c/yonsei-h2-vid-public-offerings-v10-20261009';
 dynamic read(String name) {
   final actual = '$dir/$name';
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -125,7 +125,9 @@ void main() {
   };
   test('Eight native exact department rows396 own dates and physical rooms', () {
     expect(
-      sha256.convert(File('$dir/offerings.xlsx').readAsBytesSync()).toString(),
+      sha256
+          .convert(fixtureFile('$dir/offerings.xlsx').readAsBytesSync())
+          .toString(),
       '6fde0a8551269f47178b711b5bce36f85c25a55ee03b483ae7fd99f485efba79',
     );
     final cells = read('workbook-extracted.json')['Sheet1']['rows'] as List;

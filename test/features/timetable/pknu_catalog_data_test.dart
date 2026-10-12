@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 const directory = 'work/university-research/catalog-f/pknu-current-20261008';
 Map<String, dynamic> read(String file) =>
-    jsonDecode(File('$directory/$file').readAsStringSync())
+    jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
         as Map<String, dynamic>;
 void main() {
   final audit = read('candidate-audit.json');
@@ -16,7 +16,7 @@ void main() {
   for (final dataset in audit['datasets']) {
     final file = dataset['file'] as String;
     raw.add(
-      jsonDecode(File('$directory/$file').readAsStringSync())
+      jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
           as Map<String, dynamic>,
     );
   }
@@ -31,7 +31,9 @@ void main() {
     for (final dataset in audit['datasets']) {
       final file = dataset['file'] as String;
       expect(
-        sha256.convert(File('$directory/$file').readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile('$directory/$file').readAsBytesSync())
+            .toString(),
         dataset['sha256'],
       );
     }
@@ -39,15 +41,17 @@ void main() {
     for (final d in raw) {
       expect(
         jsonDecode(
-          File('assets/timetable/pknu-${d['campus']}-2026-2.json')
-              .readAsStringSync(),
+          fixtureFile(
+            'assets/timetable/pknu-${d['campus']}-2026-2.json',
+          ).readAsStringSync(),
         )['researchOnly'],
         false,
       );
       expect(
         jsonDecode(
-          File('assets/timetable/pknu-${d['campus']}-2026-2.json')
-              .readAsStringSync(),
+          fixtureFile(
+            'assets/timetable/pknu-${d['campus']}-2026-2.json',
+          ).readAsStringSync(),
         )['completionClaim'],
         false,
       );

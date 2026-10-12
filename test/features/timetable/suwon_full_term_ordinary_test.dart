@@ -1,6 +1,6 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,10 +10,10 @@ void main() {
   const root =
       'work/university-research/catalog-r/suwon/full-term-ordinary-v3-20261008/';
   dynamic read(String name) =>
-      jsonDecode(File('$root$name').readAsStringSync());
+      jsonDecode(fixtureFile('$root$name').readAsStringSync());
   final raw =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/resume-batch-20261010/before-projection/suwon-unknown-2026-2.json',
             ).readAsStringSync(),
           )
@@ -32,7 +32,8 @@ void main() {
       expect((proof['sourceFilesSHA256'] as Map).length, 108);
       for (final filename in (proof['sourceFilesSHA256'] as Map).keys) {
         final source =
-            jsonDecode(File(filename as String).readAsStringSync()) as Map;
+            jsonDecode(fixtureFile(filename as String).readAsStringSync())
+                as Map;
         expect(source['year'], '2026');
         expect(source['semester'], '2');
         final rows = source['rows'] as List;

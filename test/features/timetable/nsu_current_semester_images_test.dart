@@ -1,6 +1,6 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -14,7 +14,7 @@ Map<String, dynamic> read(String name) {
       ? 'work/university-research/resume-batch-20261010/before-projection/nsu-unknown-2026-2.json'
       : '$dir/$name';
   final data =
-      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
   for (final c in data['courses'] as List? ?? []) {
     if (c['metadata']?.containsKey('researchOnly') == true) {
       c['metadata']['researchOnly'] = false;
@@ -143,7 +143,7 @@ void main() {
           ? 'notice-102907-file0.jpg'
           : 'notice-103190-image0.png';
       expect(
-        sha256.convert(File('$dir/$image').readAsBytesSync()).toString(),
+        sha256.convert(fixtureFile('$dir/$image').readAsBytesSync()).toString(),
         c['sourceImageSHA256'],
       );
       if ((c['schedules'] as List).isEmpty) continue;

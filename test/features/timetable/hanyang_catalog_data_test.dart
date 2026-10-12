@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -11,13 +11,14 @@ void main() {
     () {
       const root = 'work/university-research/catalog-f/hanyang/';
       Map<String, dynamic> read(String path) =>
-          jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+          jsonDecode(fixtureFile(path).readAsStringSync())
+              as Map<String, dynamic>;
       final native = read(
         'work/university-research/catalog-d/hanyang-cached-educational-scope-20261008.json',
       );
       final roomProofs =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-c/hanyang-native-clock-room-only-v4-20261009/independent36-native-clock-room-proof.json',
                 ).readAsStringSync(),
               )

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -11,7 +11,8 @@ const root =
 Map<String, dynamic> read(String path) {
   final actual = path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   if (data['courses'] is List) {
     data['researchOnly'] = false;
     data['productionIntegrationEnabled'] = true;
@@ -75,7 +76,7 @@ void main() {
     () {
       final proofs =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}independent5-global-source-proof.json',
                 ).readAsStringSync(),
               )
@@ -95,7 +96,9 @@ void main() {
         (g) => g['campus'] == 'global',
       );
       expect(
-        sha256.convert(File(guide['sourceFile']).readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile(guide['sourceFile']).readAsBytesSync())
+            .toString(),
         guide['SHA256'],
       );
       for (final c in now['courses']) {
@@ -110,7 +113,7 @@ void main() {
         expect(plan, p['educationPlan']);
         expect(
           sha256
-              .convert(File(p['sourcePlanPath']).readAsBytesSync())
+              .convert(fixtureFile(p['sourcePlanPath']).readAsBytesSync())
               .toString(),
           p['sourcePlanSHA256'],
         );

@@ -838,8 +838,11 @@ void main() {
                       as RenderRepaintBoundary)
                   .toImage();
           final png = await image.toByteData(format: ui.ImageByteFormat.png);
+          final captureDirectory = await Directory.systemTemp.createTemp(
+            'daily-ui-audit-',
+          );
           await File(
-            'work/academic-symbols-20261011/profile-${dark ? 'dark' : 'light'}.png',
+            '${captureDirectory.path}/profile-${dark ? 'dark' : 'light'}.png',
           ).writeAsBytes(png!.buffer.asUint8List());
           image.dispose();
         });

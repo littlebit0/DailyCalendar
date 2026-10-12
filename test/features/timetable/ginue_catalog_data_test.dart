@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -11,7 +11,7 @@ void main() {
     () {
       const root = 'work/university-research/catalog-f/ginue/';
       Map<String, dynamic> read(String n) =>
-          jsonDecode(File('$root$n').readAsStringSync())
+          jsonDecode(fixtureFile('$root$n').readAsStringSync())
               as Map<String, dynamic>;
       final source = read(
         'ginue-current-unambiguous-merged-source-20261008.json',
@@ -92,7 +92,7 @@ void main() {
       expect(explicit.single.title, '교육행정과학교경영');
       expect(explicit.single.section, '11');
       expect(explicit.single.professor, '구자원');
-      final nativeNotice = File(
+      final nativeNotice = fixtureFile(
         'work/university-research/catalog-g/ginue-current2026-2.html',
       ).readAsStringSync();
       expect(

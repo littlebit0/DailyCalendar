@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/core/academic/unist_academic_source.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -13,7 +13,7 @@ void main() {
       const root = 'work/university-research/catalog-f/unist/';
       Map<String, dynamic> read(String n) =>
           jsonDecode(
-                File(
+                fixtureFile(
                   n ==
                           'unist-unknown-2026-2.current-two-faculty-plans-partial-v1.json'
                       ? 'assets/timetable/unist-unknown-2026-2.json'
@@ -38,7 +38,7 @@ void main() {
         contains('학사과정'),
       );
       final calendar = UnistAcademicSource.parse(
-        File(
+        fixtureFile(
           '${root}unist-current-own-calendar-educational-rows-20261008.json',
         ).readAsStringSync(),
         2026,

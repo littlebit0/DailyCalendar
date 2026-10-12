@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -18,7 +18,8 @@ void main() {
             ? 'assets/timetable/cbnu-main-2026-2.json'
             : '$root$name';
         final data =
-            jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+            jsonDecode(fixtureFile(actual).readAsStringSync())
+                as Map<String, dynamic>;
         if (data['courses'] is List) {
           for (final c in data['courses']) {
             if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -82,7 +83,7 @@ void main() {
       };
       final closure =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-f/cbnu/'
                   'cbnu-current-closure-education-20261008.json',
                 ).readAsStringSync(),

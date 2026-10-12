@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -13,7 +13,7 @@ void main() {
       const root = 'work/university-research/catalog-r/ku/';
       final proof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}ku-sejong-current-educational-proof-v1.json',
                 ).readAsStringSync(),
               )
@@ -60,7 +60,7 @@ void main() {
       expect(proof['midtermNotice']['nativeText'], contains('별도의 휴강 없이'));
       final raw =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-r/ku/current-public-sejong-followup-v8-20261009/baseline-sejong22-18-701.json',
                 ).readAsStringSync(),
               )

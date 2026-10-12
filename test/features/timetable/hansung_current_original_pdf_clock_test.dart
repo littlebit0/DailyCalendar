@@ -1,7 +1,7 @@
 // Historical frozen-source packet regression. Latest packaged sources are
 // checked by packaged_asset_source_integrity_test and resumed_batch_changed_courses_test.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -13,7 +13,8 @@ void main() {
   Map<String, dynamic> read(String name) {
     final path = '$root$name';
     final data =
-        jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+        jsonDecode(fixtureFile(path).readAsStringSync())
+            as Map<String, dynamic>;
     for (final row in data['courses'] ?? []) {
       if (row['metadata']?.containsKey('researchOnly') == true) {
         row['metadata']['researchOnly'] = false;

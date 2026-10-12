@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,12 +8,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 const dir =
     'work/university-research/catalog-c/kmou-elecom-semester-makeup-v3-20261009';
-dynamic read(String name) => jsonDecode(File('$dir/$name').readAsStringSync());
+dynamic read(String name) =>
+    jsonDecode(fixtureFile('$dir/$name').readAsStringSync());
 void main() {
   test("Actual packaged KMOU whole native courses equal frozen v3 source", () {
     final current =
         jsonDecode(
-              File(
+              fixtureFile(
                 "assets/timetable/kmou-unknown-2026-2.json",
               ).readAsStringSync(),
             )
@@ -26,7 +27,7 @@ void main() {
   });
   final raw =
       jsonDecode(
-            File(
+            fixtureFile(
               'assets/timetable/kmou-unknown-2026-2.json',
             ).readAsStringSync(),
           )
@@ -105,7 +106,9 @@ void main() {
     expect(
       sha256
           .convert(
-            File('$dir/current2026-2-revised-grid.hwp').readAsBytesSync(),
+            fixtureFile(
+              '$dir/current2026-2-revised-grid.hwp',
+            ).readAsBytesSync(),
           )
           .toString(),
       'da96aa7e38bf2d2fd9272be8a7a9e51f7dc9260fe13955f361c0de71ec95ced1',

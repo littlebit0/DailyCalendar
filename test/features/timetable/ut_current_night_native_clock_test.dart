@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -12,7 +12,7 @@ dynamic read(String name) {
   final actual = name == 'ut-unknown-2026-2.current-night-own-50-v8.json'
       ? 'assets/timetable/ut-unknown-2026-2.json'
       : '$folder/$name';
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -44,7 +44,9 @@ void main() {
       );
       for (final e in (proof['sourceInputsSHA256'] as Map).entries) {
         expect(
-          sha256.convert(File(e.key as String).readAsBytesSync()).toString(),
+          sha256
+              .convert(fixtureFile(e.key as String).readAsBytesSync())
+              .toString(),
           e.value,
         );
       }

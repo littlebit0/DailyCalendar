@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -38,7 +38,7 @@ void main() {
       const root = 'work/university-research/catalog-f/knue/';
       final raw =
           jsonDecode(
-                File(
+                fixtureFile(
                   'assets/timetable/knue-main-2026-2.json',
                 ).readAsStringSync(),
               )
@@ -46,7 +46,7 @@ void main() {
       final dataset = UniversityDataset.fromJson(raw);
       final audit =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}knue-partial-nominal-blocks-v1-candidate-audit.json',
                 ).readAsStringSync(),
               )
@@ -64,7 +64,7 @@ void main() {
       expect(dataset.courses, hasLength(742));
       final domains =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}current26-native-classification-domain-proposal-20261008.json',
                 ).readAsStringSync(),
               )

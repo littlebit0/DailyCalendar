@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -11,7 +11,7 @@ const folder =
 const prior =
     'work/university-research/catalog-c/cnu-ordinary-reservation-v2-20261008';
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 void main() {
   final audit = read('$folder/candidate-audit.json');
   final raw = read('$folder/${audit['candidateFile']}');
@@ -23,7 +23,7 @@ void main() {
   final proofs = {for (final p in audit['proofs']) p['sourceId']: p};
   final native =
       jsonDecode(
-            File(
+            fixtureFile(
               '$prior/current-public-native-educational-catalog.json',
             ).readAsStringSync(),
           )
@@ -47,13 +47,17 @@ void main() {
     );
     expect(
       sha256
-          .convert(File(audit['baselinePath'] as String).readAsBytesSync())
+          .convert(
+            fixtureFile(audit['baselinePath'] as String).readAsBytesSync(),
+          )
           .toString(),
       audit['baselineSHA256'],
     );
     expect(
       sha256
-          .convert(File('$folder/${audit['candidateFile']}').readAsBytesSync())
+          .convert(
+            fixtureFile('$folder/${audit['candidateFile']}').readAsBytesSync(),
+          )
           .toString(),
       audit['candidateSHA256'],
     );
@@ -108,7 +112,9 @@ void main() {
       expect(source['courseId'], p['courseId']);
       expect(source['planPresent'], true);
       expect(
-        sha256.convert(File(p['sourcePlanFile']).readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile(p['sourcePlanFile']).readAsBytesSync())
+            .toString(),
         p['sourcePlanSHA256'],
       );
       expect(source, p['wholeCurrentOriginalEducationalPlan']);
@@ -200,7 +206,7 @@ void main() {
         expect(decoded.courses[e.key]!.value, e.value.value);
       }
       final path = '/private/tmp/cnu-v8-full-drive-${mode.name}.json';
-      File(path).writeAsStringSync(encoded);
+      fixtureFile(path).writeAsStringSync(encoded);
       exports.add({
         'mode': mode.name,
         'records': values.length,
@@ -210,7 +216,7 @@ void main() {
         'fullDocumentDeepEqual': true,
       });
     }
-    File(
+    fixtureFile(
       '$folder/actual-three-mode-full-drive-validation.json',
     ).writeAsStringSync(
       '${const JsonEncoder.withIndent('  ').convert(exports)}\n',

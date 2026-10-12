@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -12,7 +12,8 @@ const directory = '$root/conditional-operating-followup-v2-20261009';
 Map<String, dynamic> read(String path) {
   final actual = path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   for (final row in data['courses'] ?? []) {
     if (row['metadata']?.containsKey('researchOnly') == true) {
       row['metadata']['researchOnly'] = false;

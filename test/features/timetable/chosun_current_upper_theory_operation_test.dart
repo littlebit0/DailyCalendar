@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -11,7 +11,8 @@ void main() {
   Map<String, dynamic> read(String path) {
     final actual = path;
     final data =
-        jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+        jsonDecode(fixtureFile(actual).readAsStringSync())
+            as Map<String, dynamic>;
     if (data['courses'] is List) {
       data['researchOnly'] = false;
       for (final row in data['courses']) {
@@ -35,7 +36,7 @@ void main() {
       );
       final proof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}independent-current-20-theory-semantic-proof.json',
                 ).readAsStringSync(),
               )

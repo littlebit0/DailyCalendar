@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -12,7 +12,7 @@ void main() {
       const root = 'work/university-research/catalog-r/koreatech/';
       final originals =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       '${root}koreatech-2026-2-public-educational-rows-v1.json',
                     ).readAsStringSync(),
                   )
@@ -28,8 +28,8 @@ void main() {
       for (final campus in ['unknown']) {
         final raw =
             jsonDecode(
-                  File(
-                    'assets/timetable/koreatech-$campus-2026-2.json',
+                  fixtureFile(
+                    'work/university-research/resume-20261011/before-integration/koreatech-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;
@@ -68,7 +68,7 @@ void main() {
             expect(m.originalStartMinute, greaterThanOrEqualTo(540));
             final nativeClock =
                 jsonDecode(
-                      File(
+                      fixtureFile(
                         '${root}bulk-current-native-clock-v5-20261010/proof.json',
                       ).readAsStringSync(),
                     )

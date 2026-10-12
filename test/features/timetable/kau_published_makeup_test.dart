@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -8,10 +8,13 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   const root =
       'work/university-research/catalog-f/kau/current-whole-public-scope-followup-v2-20261008/';
-  dynamic read(String n) => jsonDecode(File('$root$n').readAsStringSync());
+  dynamic read(String n) =>
+      jsonDecode(fixtureFile('$root$n').readAsStringSync());
   final candidate =
       jsonDecode(
-            File('assets/timetable/kau-main-2026-2.json').readAsStringSync(),
+            fixtureFile(
+              'assets/timetable/kau-main-2026-2.json',
+            ).readAsStringSync(),
           )
           as Map<String, dynamic>;
   final baseline =

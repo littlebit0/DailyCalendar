@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -11,7 +11,7 @@ const folder =
 const correctedId = 'mju/unknown/2026-2/5932';
 dynamic read(String path) {
   final actual = path;
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -33,7 +33,7 @@ void main() {
       for (final input in proof['sourceInputs'] as List) {
         expect(
           sha256
-              .convert(File(input['path'] as String).readAsBytesSync())
+              .convert(fixtureFile(input['path'] as String).readAsBytesSync())
               .toString(),
           input['sha256'],
         );

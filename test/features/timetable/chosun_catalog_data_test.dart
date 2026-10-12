@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -11,7 +11,7 @@ void main() {
     () {
       const root = 'work/university-research/catalog-f/chosun/';
       Map<String, dynamic> read(String n) =>
-          jsonDecode(File('$root$n').readAsStringSync())
+          jsonDecode(fixtureFile('$root$n').readAsStringSync())
               as Map<String, dynamic>;
       final original = read(
         'chosun-future-current-education-source-20261008.json',
@@ -31,14 +31,14 @@ void main() {
       };
       final ds = UniversityDataset.fromJson({
         ...jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-f/chosun/chosun-unknown-2026-2.future-nurse-native135-partial-v2.json',
               ).readAsStringSync(),
             )
             as Map<String, dynamic>,
         'courses':
             (jsonDecode(
-                      File(
+                      fixtureFile(
                         'work/university-research/catalog-f/chosun/chosun-unknown-2026-2.future-nurse-native135-partial-v2.json',
                       ).readAsStringSync(),
                     )['courses']

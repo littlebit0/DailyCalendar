@@ -229,8 +229,11 @@ void main() {
         await tester.runAsync(() async {
           final image = await boundary.toImage();
           final png = await image.toByteData(format: ui.ImageByteFormat.png);
+          final captureDirectory = await Directory.systemTemp.createTemp(
+            'daily-ui-audit-',
+          );
           await File(
-            'work/lms-manual-completion-ui-20261012/settings-${brightness.name}.png',
+            '${captureDirectory.path}/settings-${brightness.name}.png',
           ).writeAsBytes(png!.buffer.asUint8List());
           image.dispose();
         });

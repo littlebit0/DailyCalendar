@@ -1,4 +1,4 @@
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'dart:convert';
 
 import 'package:daily/core/academic/academic_profile.dart';
@@ -12,10 +12,10 @@ import 'package:flutter_test/flutter_test.dart';
 class _Files extends CachingAssetBundle {
   @override
   Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
+      fixtureFile(key).readAsStringSync();
   @override
   Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
+      ByteData.sublistView(fixtureFile(key).readAsBytesSync());
 }
 
 void main() {
@@ -28,14 +28,14 @@ void main() {
     final courses = data.expand((d) => d.courses).toList();
     final ordinaryAudit =
         jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-c/cnu-ordinary-reservation-v1-20261008/candidate-audit.json',
               ).readAsStringSync(),
             )
             as Map;
     final latestOrdinaryAudit =
         jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-c/cnu-ordinary-reservation-v2-20261008/candidate-audit.json',
               ).readAsStringSync(),
             )
@@ -44,7 +44,7 @@ void main() {
       ...ordinaryAudit['proofs'] as List,
       ...latestOrdinaryAudit['proofs'] as List,
       ...(jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/catalog-c/cnu-ordinary-reservation-v3-20261009/candidate-audit.json',
             ).readAsStringSync(),
           )['proofs']
@@ -61,28 +61,28 @@ void main() {
         'v12',
       ])
         ...(jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-c/cnu-native-topic-versus-operation-$revision-20261009/candidate-audit.json',
               ).readAsStringSync(),
             )['proofs']
             as List),
       for (final revision in ['v14', 'v15', 'v16', 'v17'])
         ...(jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-c/cnu-full-context-review-packet-$revision-20261009/candidate-audit.json',
               ).readAsStringSync(),
             )['proofs']
             as List),
       for (final revision in ['v18', 'v19', 'v20', 'v21', 'v22'])
         ...(jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-c/cnu-full-context-review-packet-$revision-20261009/${revision == 'v21' || revision == 'v22' ? 'independent-native-topic-clock-proof' : 'candidate-audit'}.json',
               ).readAsStringSync(),
             )['proofs']
             as List),
       for (final revision in ['v23', 'v24'])
         ...(jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-c/cnu-pending-operation-context-review-$revision-20261009/candidate-audit.json',
               ).readAsStringSync(),
             )['proofs']
@@ -92,7 +92,7 @@ void main() {
       for (final revision in ['v23', 'v24'])
         for (final proof
             in jsonDecode(
-                  File(
+                  fixtureFile(
                     'work/university-research/catalog-c/cnu-pending-operation-context-review-$revision-20261009/candidate-audit.json',
                   ).readAsStringSync(),
                 )['proofs']
@@ -223,7 +223,7 @@ void main() {
       for (final campus in ['unknown', 'daedeok'])
         for (final row
             in jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/cnu-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )['courses']

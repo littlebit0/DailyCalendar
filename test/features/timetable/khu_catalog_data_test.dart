@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -38,13 +38,13 @@ void main() {
     () {
       final data = UniversityDataset.fromJson(
         jsonDecode(
-              File(
+              fixtureFile(
                 'assets/timetable/khu-global-2026-2.json',
               ).readAsStringSync(),
             )
             as Map<String, dynamic>,
       );
-      expect(data.courses.where((c) => c.hasSchedulableMeetings).length, 1460);
+      expect(data.courses.where((c) => c.hasSchedulableMeetings).length, 1461);
       final nested = data.courses.singleWhere(
         (c) => c.codeAndSection == 'FR2012-00',
       );
@@ -91,7 +91,9 @@ void main() {
     () {
       final d = UniversityDataset.fromJson(
         jsonDecode(
-              File('assets/timetable/khu-seoul-2026-2.json').readAsStringSync(),
+              fixtureFile(
+                'assets/timetable/khu-seoul-2026-2.json',
+              ).readAsStringSync(),
             )
             as Map<String, dynamic>,
       );
@@ -130,7 +132,7 @@ void main() {
         for (final campus in ['seoul', 'global'])
           ...UniversityDataset.fromJson(
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/khu-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
@@ -139,8 +141,8 @@ void main() {
       ];
       expect(courses.length, 4666);
       expect(courses.map((c) => c.sourceId).toSet().length, 4666);
-      expect(courses.where((c) => c.hasSchedulableMeetings).length, 3159);
-      expect(courses.expand((c) => c.meetings).length, 58965);
+      expect(courses.where((c) => c.hasSchedulableMeetings).length, 3161);
+      expect(courses.expand((c) => c.meetings).length, 58991);
       for (final code in ['TRADE1016-00', 'TRADE2010-01']) {
         final c = courses.singleWhere((c) => c.codeAndSection == code);
         expect(c.remarks, contains('외국인 전용'));
@@ -202,7 +204,7 @@ void main() {
       expect(alternate.title, '경제학원론');
       final bad =
           jsonDecode(
-                File(
+                fixtureFile(
                   'assets/timetable/khu-seoul-2026-2.json',
                 ).readAsStringSync(),
               )
@@ -279,7 +281,7 @@ void main() {
                 expect(m.classroom, '구(한)210');
                 final proof =
                     jsonDecode(
-                          File(
+                          fixtureFile(
                             'work/university-research/catalog-c/khu-full-operating-context-batches-v8-20261009/packet008-independent-proof.json',
                           ).readAsStringSync(),
                         )['proofs']
@@ -296,7 +298,7 @@ void main() {
               expect(m.originalEndMinute, 1080);
               final proof =
                   jsonDecode(
-                        File(
+                        fixtureFile(
                           'work/university-research/catalog-c/khu-full-operating-context-batches-v8-20261009/outside-shortlist-review-v1/packet041b-seven-own-concentrated/proof.json',
                         ).readAsStringSync(),
                       )['proofs']

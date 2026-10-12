@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -10,12 +10,12 @@ const root =
 const prior =
     'work/university-research/catalog-c/hanyang-ordinary-source-semantic-v2-20261009/';
 Map<String, dynamic> read(String p) =>
-    jsonDecode(File(p).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(p).readAsStringSync()) as Map<String, dynamic>;
 void main() {
   test(
     'current professor-specific room correction preserves original fields and does not activate SMART-F',
     () {
-      final raw = File(
+      final raw = fixtureFile(
         '${root}current-public-notice-independent-20261009.html',
       ).readAsStringSync();
       final text = raw

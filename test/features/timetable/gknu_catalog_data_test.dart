@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -37,7 +37,7 @@ void main() {
       const root = 'work/university-research/catalog-r/gknu/';
       final originals =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       '${root}gknu-glocal-2026-2-native-education-rows-v1.json',
                     ).readAsStringSync(),
                   )
@@ -53,7 +53,7 @@ void main() {
       for (final campus in ['unknown', 'yecheon']) {
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/gknu-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )

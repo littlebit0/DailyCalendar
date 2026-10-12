@@ -1,6 +1,6 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -11,14 +11,14 @@ import 'package:flutter_test/flutter_test.dart';
 Map<String, dynamic> readJson(String path) {
   if (path.endsWith('koreatech-unknown-2026-2.business-partial-v3.json')) {
     return jsonDecode(
-          File(
+          fixtureFile(
             'work/university-research/resume-batch-20261010/before-projection/koreatech-unknown-2026-2.json',
           ).readAsStringSync(),
         )
         as Map<String, dynamic>;
   }
   final data =
-      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
   if (path.endsWith('koreatech-unknown-2026-2.reservation-planned-v1.json')) {
     for (final row in data['courses']) {
       if (row['metadata']?.containsKey('researchOnly') == true) {

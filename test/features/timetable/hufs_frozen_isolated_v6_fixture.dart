@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -11,12 +11,14 @@ const folder =
 const baselineFolder =
     'work/university-research/catalog-t/hufs-late-operation-v5-20261009';
 Map<String, dynamic> read(String p) =>
-    jsonDecode(File(p).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(p).readAsStringSync()) as Map<String, dynamic>;
 void main() {
   final proofs = {
     for (final p
         in jsonDecode(
-              File('$folder/reviewed24-source-proofs.json').readAsStringSync(),
+              fixtureFile(
+                '$folder/reviewed24-source-proofs.json',
+              ).readAsStringSync(),
             )
             as List)
       p['sourceId']: p,
@@ -78,7 +80,7 @@ void main() {
       for (final entry in (validation['sourceSha256'] as Map).entries) {
         expect(
           sha256
-              .convert(File(entry.key as String).readAsBytesSync())
+              .convert(fixtureFile(entry.key as String).readAsBytesSync())
               .toString(),
           entry.value,
         );

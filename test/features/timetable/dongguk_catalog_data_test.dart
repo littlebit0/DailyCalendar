@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,7 +8,7 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 const root = 'work/university-research/catalog-w/dongguk/';
 Map<String, dynamic> read(String name) =>
     jsonDecode(
-          File(
+          fixtureFile(
             name.startsWith('dongguk-')
                 ? 'assets/timetable/${name.replaceAll('.public-export-partial-v1', '')}'
                 : '$root$name',
@@ -34,7 +34,7 @@ void main() {
       expect(calendar, contains('2026.12.14. 종강'));
       final currentProof =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/five-school-ajou-dongguk-hansung-seoultech-hknu-bulk-v2-20261010/proof.json',
                 ).readAsStringSync(),
               )

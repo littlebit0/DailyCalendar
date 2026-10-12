@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -7,7 +7,7 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 
 void main() {
   test('Batch changes retain literal source fields, dates and Drive modes', () {
@@ -16,7 +16,8 @@ void main() {
     );
     for (final entry in ledger['sources'] as List) {
       final source = read(entry['source'] as String);
-      final asset = read(entry['target'] as String);
+      // This regression audits the recorded staging operation, before later corrections.
+      final asset = read(entry['stagedFile'] as String);
       final expected = {
         for (final c in source['courses'] as List) c['sourceId']: c,
       };

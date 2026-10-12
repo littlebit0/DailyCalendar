@@ -1,6 +1,6 @@
 // Historical frozen CNU packet; latest packaged source checks remain separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -13,7 +13,7 @@ const prior =
     'work/university-research/catalog-c/cnu-ordinary-reservation-v2-20261008';
 Map<String, dynamic> read(String path) {
   final data =
-      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
   for (final row in data['courses'] ?? []) {
     if (row['metadata']?.containsKey('researchOnly') == true) {
       row['metadata']['researchOnly'] = false;
@@ -35,7 +35,7 @@ void main() {
   final proofs = {for (final p in audit['proofs']) p['sourceId']: p};
   final native =
       jsonDecode(
-            File(
+            fixtureFile(
               '$prior/current-public-native-educational-catalog.json',
             ).readAsStringSync(),
           )
@@ -59,13 +59,17 @@ void main() {
     );
     expect(
       sha256
-          .convert(File(audit['baselinePath'] as String).readAsBytesSync())
+          .convert(
+            fixtureFile(audit['baselinePath'] as String).readAsBytesSync(),
+          )
           .toString(),
       audit['baselineSHA256'],
     );
     expect(
       sha256
-          .convert(File('$folder/${audit['candidateFile']}').readAsBytesSync())
+          .convert(
+            fixtureFile('$folder/${audit['candidateFile']}').readAsBytesSync(),
+          )
           .toString(),
       audit['candidateSHA256'],
     );
@@ -126,7 +130,9 @@ void main() {
       expect(source['courseId'], p['courseId']);
       expect(source['planPresent'], true);
       expect(
-        sha256.convert(File(p['sourcePlanFile']).readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile(p['sourcePlanFile']).readAsBytesSync())
+            .toString(),
         p['sourcePlanSHA256'],
       );
       final decision = (semantic['decisions'] as List).singleWhere(

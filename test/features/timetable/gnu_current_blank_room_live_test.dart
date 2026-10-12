@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -16,7 +16,8 @@ Map<String, dynamic> read(String path) {
       ? 'assets/timetable/${path.split('/').last.split('.').first}.json'
       : path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   for (final row in data['courses'] ?? []) {
     if (row['metadata']?.containsKey('researchOnly') == true) {
       row['metadata']['researchOnly'] = false;
@@ -32,7 +33,7 @@ void main() {
       final audit = read('$directory/audit.json');
       final nativeRows =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalogs/gnu-public-course-rows.json',
                 ).readAsStringSync(),
               )

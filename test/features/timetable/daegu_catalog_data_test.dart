@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,21 +8,23 @@ import 'package:flutter_test/flutter_test.dart';
 
 const directory = 'work/university-research/catalog-c/daegu-current-20261008';
 Map<String, dynamic> read(String file) =>
-    jsonDecode(File('$directory/$file').readAsStringSync())
+    jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
         as Map<String, dynamic>;
 void main() {
   final audit = read('candidate-audit.json');
   final file = audit['candidate']['file'] as String;
   final raw =
       jsonDecode(
-            File('assets/timetable/daegu-main-2026-2.json').readAsStringSync(),
+            fixtureFile(
+              'assets/timetable/daegu-main-2026-2.json',
+            ).readAsStringSync(),
           )
           as Map<String, dynamic>;
   final courses = UniversityDataset.fromJson(raw).courses;
   final records = {for (final row in raw['courses']) row['sourceId']: row};
   final geometry =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/catalog-c/daegu-sookmyung-ssu-held-native-bulk-v1-20261010/daegu-printed-time-room-geometry-proof.json',
             ).readAsStringSync(),
           )
@@ -39,7 +41,9 @@ void main() {
       expect(raw['completionClaim'], false);
       expect(courses, hasLength(3174));
       expect(
-        sha256.convert(File('$directory/$file').readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile('$directory/$file').readAsBytesSync())
+            .toString(),
         audit['candidate']['sha256'],
       );
       expect(audit['closedStillPresent'], isEmpty);

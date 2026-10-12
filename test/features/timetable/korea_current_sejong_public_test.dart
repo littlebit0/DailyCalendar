@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -11,7 +11,7 @@ void main() {
       'work/university-research/catalog-r/ku/current-public-sejong-followup-v8-20261009/';
   dynamic read(String name) {
     final path = '$root$name';
-    final data = jsonDecode(File(path).readAsStringSync());
+    final data = jsonDecode(fixtureFile(path).readAsStringSync());
     if (data is Map && data['courses'] is List) {
       for (final row in data['courses']) {
         if (row['metadata']?.containsKey('researchOnly') == true) {
@@ -91,7 +91,7 @@ void main() {
         derived['sourceSHA256'],
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '${root}source-current-ui-regular-campus-clock-education.json',
               ).readAsBytesSync(),
             )
@@ -112,7 +112,7 @@ void main() {
         final source = read(scope['file'] as String) as Map;
         expect(
           sha256
-              .convert(File('$root${scope['file']}').readAsBytesSync())
+              .convert(fixtureFile('$root${scope['file']}').readAsBytesSync())
               .toString(),
           scope['sourceSHA256'],
         );
@@ -346,7 +346,7 @@ void main() {
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '${root}baseline-seoul3612-reviewed-v7.json',
               ).readAsBytesSync(),
             )

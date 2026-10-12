@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -36,7 +36,7 @@ void main() {
     () {
       final originals =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       'work/university-research/catalogs/gnu-public-course-rows.json',
                     ).readAsStringSync(),
                   )
@@ -47,7 +47,7 @@ void main() {
       };
       final oldIds =
           ((jsonDecode(
-                        File(
+                        fixtureFile(
                           'work/university-research/catalog-r/gnu/ordinary-weekly-faq-research-20261008/audit.json',
                         ).readAsStringSync(),
                       )
@@ -67,7 +67,7 @@ void main() {
       ]) {
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/gnu-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )

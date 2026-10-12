@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 
 void main() {
   test(
@@ -169,7 +169,9 @@ void main() {
       const root = 'work/source-validation22-20261011/';
       final corrections =
           jsonDecode(
-                File('${root}mokpo-period-corrections.json').readAsStringSync(),
+                fixtureFile(
+                  '${root}mokpo-period-corrections.json',
+                ).readAsStringSync(),
               )
               as List;
       var count = 0;

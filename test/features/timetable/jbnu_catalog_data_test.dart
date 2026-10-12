@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 const directory = 'work/university-research/catalog-c/jbnu-current-20261008';
 Map<String, dynamic> read(String file) {
   final original =
-      jsonDecode(File('$directory/$file').readAsStringSync())
+      jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
           as Map<String, dynamic>;
   if (file !=
       'jbnu-unknown-medical-document-2026-2.published-partial-20261008.json') {
@@ -17,7 +17,9 @@ Map<String, dynamic> read(String file) {
   }
   final active =
       jsonDecode(
-            File('assets/timetable/jbnu-unknown-2026-2.json').readAsStringSync(),
+            fixtureFile(
+              'assets/timetable/jbnu-unknown-2026-2.json',
+            ).readAsStringSync(),
           )
           as Map<String, dynamic>;
   final documentIds = {
@@ -33,6 +35,7 @@ Map<String, dynamic> read(String file) {
     ],
   };
 }
+
 void main() {
   final audit = read('medical-candidate-audit.json');
   final raw = read(audit['candidate']['file']);
@@ -41,8 +44,9 @@ void main() {
   test('public expansion preserves every original medical document row', () {
     final original =
         jsonDecode(
-              File('$directory/${audit['candidate']['file']}')
-                  .readAsStringSync(),
+              fixtureFile(
+                '$directory/${audit['candidate']['file']}',
+              ).readAsStringSync(),
             )
             as Map<String, dynamic>;
     expect(raw['courses'], original['courses']);
@@ -63,7 +67,9 @@ void main() {
       for (final file in a['candidates']) {
         expect(
           sha256
-              .convert(File('$directory/${file['file']}').readAsBytesSync())
+              .convert(
+                fixtureFile('$directory/${file['file']}').readAsBytesSync(),
+              )
               .toString(),
           file['sha256'],
         );
@@ -107,7 +113,7 @@ void main() {
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '$directory/${audit['candidate']['file']}',
               ).readAsBytesSync(),
             )

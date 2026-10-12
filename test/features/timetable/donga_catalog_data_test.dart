@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -14,38 +14,20 @@ const sourceDirectory =
     'work/university-research/catalog-c/donga-current-20261008';
 Map<String, dynamic> frozenRead(String name) =>
     jsonDecode(
-          File(
-            File('$directory/$name').existsSync()
+          fixtureFile(
+            fixtureFile('$directory/$name').existsSync()
                 ? '$directory/$name'
-                : File('$campusDirectory/$name').existsSync()
+                : fixtureFile('$campusDirectory/$name').existsSync()
                 ? '$campusDirectory/$name'
                 : '$sourceDirectory/$name',
           ).readAsStringSync(),
         )
         as Map<String, dynamic>;
+// Historical campus/CELL regression uses its own frozen input, not later assets.
 Map<String, dynamic> read(String name) {
-  if (name.startsWith('donga-') &&
-      name.contains('published-partial') &&
-      !name.contains('institution')) {
-    final campus = name.contains('seunghak') ? 'seunghak' : 'unknown';
-    final product =
-        jsonDecode(
-              File(
-                'assets/timetable/donga-$campus-2026-2.json',
-              ).readAsStringSync(),
-            )
-            as Map<String, dynamic>;
-    final expectedIds = {
-      for (final c in frozenRead(name)['courses'] as List) c['sourceId'],
-    };
-    return {
-      ...product,
-      'courses': (product['courses'] as List)
-          .where((c) => expectedIds.contains(c['sourceId']))
-          .toList(),
-    };
-  }
-  return frozenRead(name);
+  final data = frozenRead(name);
+  if (data['courses'] != null) markHistoricalPublication(data);
+  return data;
 }
 
 void main() {
@@ -71,7 +53,9 @@ void main() {
       final extension = read('extension-audit.json');
       final name = extension['candidate']['file'] as String;
       expect(
-        sha256.convert(File('$directory/$name').readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile('$directory/$name').readAsBytesSync())
+            .toString(),
         extension['candidate']['sha256'],
       );
       final cell = UniversityDataset.fromJson(read(name)).courses;
@@ -164,7 +148,9 @@ void main() {
         expect(
           sha256
               .convert(
-                File('$campusDirectory/${part['file']}').readAsBytesSync(),
+                fixtureFile(
+                  '$campusDirectory/${part['file']}',
+                ).readAsBytesSync(),
               )
               .toString(),
           part['sha256'],
@@ -174,7 +160,7 @@ void main() {
       expect(read('public-education-37448.json')['rows'], hasLength(89));
       final closed =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       '$sourceDirectory/closure-educational-rows.json',
                     ).readAsStringSync(),
                   )
@@ -207,7 +193,7 @@ void main() {
       expect(held, hasLength(66));
       final expanded =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       'work/university-research/catalog-c/donga-ordinary-reservation-v3-20261008/candidate-audit.json',
                     ).readAsStringSync(),
                   )['expandedObjects']
@@ -338,15 +324,15 @@ void main() {
           'research',
         );
       }
-      expect(values, hasLength(25));
-      expect(count, 481);
+      expect(values, hasLength(11));
+      expect(count, 286);
       final doc = TimetableSyncDocument.records(
         courses: values,
         schemaVersion: 2,
       );
       final json = jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
       final restored = TimetableSyncDocument.fromJson(json);
-      expect(restored.materializeClasses(), hasLength(25));
+      expect(restored.materializeClasses(), hasLength(11));
       for (final c in restored.materializeClasses()) {
         expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
       }

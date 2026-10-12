@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,7 +8,8 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 const root =
     'work/university-research/catalog-r/kaist/bioeng-current-public-grid-v4-20261009/';
 Map<String, dynamic> read(String name) =>
-    jsonDecode(File('$root$name').readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile('$root$name').readAsStringSync())
+        as Map<String, dynamic>;
 // Independently transcribed from actual original JPG, not candidate-produced expectations.
 const expected = <(String, String, String, String, String, int, int, String)>[
   (
@@ -113,11 +114,12 @@ void main() {
     () {
       final raw =
           jsonDecode(
-                File(
-                  'assets/timetable/kaist-main-2026-2.json',
+                fixtureFile(
+                  'work/university-research/catalog-r/kaist/math-room-conflict-own-clock-v7-20261009/kaist-main-2026-2.math-room-unconfirmed-own-clock-v7.json',
                 ).readAsStringSync(),
               )
               as Map<String, dynamic>;
+      markHistoricalPublication(raw);
       final prior = read('prior-full-14-course-baseline.json');
       final rows = raw['courses'] as List;
       expect(rows.sublist(0, 14), prior['courses']);
@@ -129,7 +131,7 @@ void main() {
         source['sourceImageSHA256'],
         '0234680105b7a41b15ff6f8ea89843e69e51180c58227ae0fb15677595ac88a5',
       );
-      final ugHtml = File(
+      final ugHtml = fixtureFile(
         '${root}actual-undergraduate-course-reference.html',
       ).readAsStringSync();
       final graduate = source['excludedExactGraduateCodes'] as Map;
@@ -142,7 +144,7 @@ void main() {
         ['2026-12-14', '2026-12-18'],
       ]);
       expect(
-        File('${root}actual-notice.html').readAsStringSync(),
+        fixtureFile('${root}actual-notice.html').readAsStringSync(),
         contains('대학로 291'),
       );
       final dataset = UniversityDataset.fromJson(raw);

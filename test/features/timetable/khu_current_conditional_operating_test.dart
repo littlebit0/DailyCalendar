@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -14,7 +14,8 @@ const baseline =
 Map<String, dynamic> read(String path) {
   final actual = path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   for (final row in data['courses'] ?? []) {
     if (row['metadata']?.containsKey('researchOnly') == true) {
       row['metadata']['researchOnly'] = false;
@@ -46,7 +47,9 @@ void main() {
       expect(proofs, hasLength(5));
       for (final item in (audit['inputSHA256'] as Map).entries) {
         expect(
-          sha256.convert(File(item.key as String).readAsBytesSync()).toString(),
+          sha256
+              .convert(fixtureFile(item.key as String).readAsBytesSync())
+              .toString(),
           item.value,
         );
       }

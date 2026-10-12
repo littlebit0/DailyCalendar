@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -14,7 +14,8 @@ const oldDir =
 Map<String, dynamic> read(String path) {
   final actual = path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   for (final c in data['courses'] as List? ?? []) {
     if (c['metadata']?.containsKey('researchOnly') == true) {
       c['metadata']['researchOnly'] = false;
@@ -34,7 +35,7 @@ void main() {
       for (final entry in (proof['sourceInputsSHA256'] as Map).entries) {
         expect(
           sha256
-              .convert(File(entry.key as String).readAsBytesSync())
+              .convert(fixtureFile(entry.key as String).readAsBytesSync())
               .toString(),
           entry.value,
         );
@@ -259,7 +260,7 @@ void main() {
         for (final c in restored) {
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
         }
-        File(
+        fixtureFile(
           '$dir/full-timetable-sync-${mode.name}.json',
         ).writeAsStringSync('${jsonEncode(encoded)}\n');
       }

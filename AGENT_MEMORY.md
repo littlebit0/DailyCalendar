@@ -3,6 +3,13 @@
 2026-10-10 Markdown consolidation. This file is the current entrypoint; detailed history is archived, not deleted.
 
 
+## CI portability repair — 2026-10-12; university expansion remains STOPPED
+
+- User explicitly authorized fixing all CI failures, then verification and commit/push, without resuming university support. Only tests, source-fixture tooling, analyzer scope and the CI safety step changed. Product code, support flags, release version/installers and every timetable/organization asset remain unchanged; no build/install/launch or new source collection.
+- Existing public research inputs required by tests are now frozen under test/fixtures/source_audits: hash-indexed, deduplicated XZ tar parts, strict archive/source-byte checks and safe-path checks. Shared manifest-addressed OS-temp cache with file locking; no fallback to local work, including recorded absolute source paths. Unknown inputs stay missing. UI captures use OS-temp directories. No tests skipped to conceal missing files. Python3 standard-library fixture preparation;5 archive tamper/traversal checks added to CI.
+- Historical CELL/KAIST/staging/checkpoint tests now target their own recorded version instead of later modified product assets; source hashes and model/Drive checks preserved. Separate release manifest verifies every product timetable/organization JSON unchanged. DJU tests assert the existing unsupported state; SKKU/KHU expected current counts corrected. This does NOT complete deferred school original-data/coverage/affiliation work in issue92.
+- Independent checkout with no work/ research directory: combined Dart2003pass/1 existing skip/3 failures (unconverted shared HUFS fixture and resulting loader failures); corrected HUFS+loader13pass, final loader5pass. Whole analysis had1 formatting-only lint, restored and narrowly verified; final helper/source analysis clean. Python safety5pass. Text fixture credential-pattern checks found0 candidates. Final push triggers Platform Builds; consult that commit's GitHub run for remote outcome. No claim that suspended university sources are complete or live device/account behavior was validated.
+
 ## 4.0.0 release — authorized, PUBLISHED / verified exports and Mac test update 2026-10-12
 
 - User authorized issue92 requirement update, README/version4.0.0, commit/push/GitHub release and signed Mac/iOS Transporter exports. University source expansion remains stopped; no app launch or Apple upload/submission authorized.

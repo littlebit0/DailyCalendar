@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -12,7 +12,7 @@ void main() {
       const root = 'work/university-research/catalog-f/bnue/';
       Map<String, dynamic> read(String n) =>
           jsonDecode(
-                File(
+                fixtureFile(
                   n == 'bnue-unknown-2026-2.native305-partial-v1.json'
                       ? 'assets/timetable/bnue-unknown-2026-2.json'
                       : '$root$n',

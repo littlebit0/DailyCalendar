@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -13,7 +13,7 @@ dynamic read(String path) {
   final actual = path.endsWith('/cje-unknown-2026-2.single-date-v8b.json')
       ? 'assets/timetable/cje-unknown-2026-2.json'
       : path;
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -31,7 +31,7 @@ void main() {
       final proof = read(
         '$folder/independent-one-date-native-whole-proof.json',
       );
-      final priorFile = File('$folder/prior372-whole-archive.json');
+      final priorFile = fixtureFile('$folder/prior372-whole-archive.json');
       expect(
         sha256.convert(priorFile.readAsBytesSync()).toString(),
         proof['baselineSHA256'],
@@ -39,7 +39,7 @@ void main() {
       for (final entry in (proof['sourceInputsSHA256'] as Map).entries) {
         expect(
           sha256
-              .convert(File(entry.key as String).readAsBytesSync())
+              .convert(fixtureFile(entry.key as String).readAsBytesSync())
               .toString(),
           entry.value,
         );

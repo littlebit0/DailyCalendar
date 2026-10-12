@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -15,7 +15,8 @@ Map<String, dynamic> read(String path) {
       ? 'assets/timetable/${path.split('/').last.split('.').first}.json'
       : path;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   if (data['courses'] is List) {
     data['researchOnly'] = false;
     data['productionIntegrationEnabled'] = true;
@@ -94,7 +95,7 @@ void main() {
     () {
       final proof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}independent4-native-clock-source-proof.json',
                 ).readAsStringSync(),
               )
@@ -127,7 +128,9 @@ void main() {
           expect(restored, b);
           for (final source in p['nativeSources']) {
             expect(
-              sha256.convert(File(source['file']).readAsBytesSync()).toString(),
+              sha256
+                  .convert(fixtureFile(source['file']).readAsBytesSync())
+                  .toString(),
               source['sha256'],
             );
             final raw = read(source['file']);
@@ -145,7 +148,7 @@ void main() {
           }
           expect(
             sha256
-                .convert(File(p['calendarFile']).readAsBytesSync())
+                .convert(fixtureFile(p['calendarFile']).readAsBytesSync())
                 .toString(),
             p['calendarSHA256'],
           );

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,7 +10,7 @@ const folder =
     'work/university-research/catalog-f/mju/current-ict-algorithm-direct-weekly-offering-v30-20261009';
 dynamic read(String path) {
   final actual = path;
-  final data = jsonDecode(File(actual).readAsStringSync());
+  final data = jsonDecode(fixtureFile(actual).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -56,7 +56,7 @@ void main() {
       );
       for (final x in proof['sourceInputs'] as List) {
         expect(
-          sha256.convert(File(x['path']).readAsBytesSync()).toString(),
+          sha256.convert(fixtureFile(x['path']).readAsBytesSync()).toString(),
           x['sha256'],
         );
       }

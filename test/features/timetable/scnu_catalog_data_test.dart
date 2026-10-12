@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -8,14 +8,14 @@ import 'package:flutter_test/flutter_test.dart';
 
 const directory = 'work/university-research/catalog-c/scnu-current-20261008';
 Map<String, dynamic> read(String file) =>
-    jsonDecode(File('$directory/$file').readAsStringSync())
+    jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
         as Map<String, dynamic>;
 void main() {
   final audit = read('candidate-audit.json');
   final file = audit['candidate']['file'] as String;
   final raw =
       jsonDecode(
-            File(
+            fixtureFile(
               'assets/timetable/scnu-unknown-2026-2.json',
             ).readAsStringSync(),
           )
@@ -24,7 +24,7 @@ void main() {
   final records = {for (final row in raw['courses']) row['sourceId']: row};
   final currentProof =
       jsonDecode(
-            File(
+            fixtureFile(
               'work/university-research/fifteen-school-native-room-bulk-v2-20261010/proof.json',
             ).readAsStringSync(),
           )
@@ -36,7 +36,9 @@ void main() {
   test('Native subject code, section, declared merged cells and closures', () {
     expect(courses, hasLength(1626));
     expect(
-      sha256.convert(File('$directory/$file').readAsBytesSync()).toString(),
+      sha256
+          .convert(fixtureFile('$directory/$file').readAsBytesSync())
+          .toString(),
       audit['candidate']['sha256'],
     );
     expect(audit['closedStillPresent'], isEmpty);

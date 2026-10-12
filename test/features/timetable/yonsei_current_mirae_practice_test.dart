@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -13,7 +13,7 @@ Map<String, dynamic> read(String file) {
     final campus = file.split('-')[1];
     if (campus == 'international' || campus == 'sinchon' || campus == 'mirae') {
       final frozen =
-          jsonDecode(File('$root$file').readAsStringSync())
+          jsonDecode(fixtureFile('$root$file').readAsStringSync())
               as Map<String, dynamic>;
       for (final row in frozen['courses']) {
         if (row['metadata']?.containsKey('researchOnly') == true) {
@@ -23,14 +23,15 @@ Map<String, dynamic> read(String file) {
       return frozen;
     }
     return jsonDecode(
-          File(
+          fixtureFile(
             'assets/timetable/yonsei-$campus-2026-2.json',
           ).readAsStringSync(),
         )
         as Map<String, dynamic>;
   }
   final frozen =
-      jsonDecode(File('$root$file').readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile('$root$file').readAsStringSync())
+          as Map<String, dynamic>;
   if (file.startsWith('baseline-yonsei-')) {
     for (final row in frozen['courses']) {
       if (row['metadata']?.containsKey('researchOnly') == true) {
@@ -208,7 +209,7 @@ void main() {
     () {
       final clockProof =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       '${root}current-native-clock-proof-v1.json',
                     ).readAsStringSync(),
                   )

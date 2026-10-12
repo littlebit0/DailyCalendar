@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -14,7 +14,7 @@ void main() {
           'work/university-research/catalog-w/sookmyung-expanded-public-partial-v19/';
       final proof =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}five-query-educational-proof.json',
                 ).readAsStringSync(),
               )
@@ -29,7 +29,7 @@ void main() {
       for (final source in proof['sourceFiles'] as List) {
         final snapshot =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'work/university-research/catalog-w/sookmyung/${source['file']}',
                   ).readAsStringSync(),
                 )
@@ -196,7 +196,7 @@ void main() {
       var meetingCount = 0;
       final pendingPlanProofs =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/catalog-w/sookmyung-native-clock-pending-plan-review-v20-20261009/independent4-native-clock-source-proof.json',
                 ).readAsStringSync(),
               )
@@ -209,7 +209,7 @@ void main() {
       for (final campus in ['first', 'second', 'unknown']) {
         final raw =
             jsonDecode(
-                  File(
+                  fixtureFile(
                     'assets/timetable/sookmyung-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )

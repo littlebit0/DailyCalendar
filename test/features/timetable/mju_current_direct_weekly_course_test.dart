@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -39,7 +39,8 @@ const literalDates = <String>[
 ];
 Map<String, dynamic> read(String path) {
   final actual = path;
-  return jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+  return jsonDecode(fixtureFile(actual).readAsStringSync())
+      as Map<String, dynamic>;
 }
 
 void main() {
@@ -50,7 +51,7 @@ void main() {
       for (final input in proof['sourceInputs'] as List) {
         expect(
           sha256
-              .convert(File(input['path'] as String).readAsBytesSync())
+              .convert(fixtureFile(input['path'] as String).readAsBytesSync())
               .toString(),
           input['sha256'],
         );

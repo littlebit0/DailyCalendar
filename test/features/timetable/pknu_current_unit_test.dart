@@ -1,6 +1,6 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -11,12 +11,12 @@ void main() {
   const root =
       'work/university-research/catalog-f/pknu-same-term-unit-v3-20261009/';
   dynamic read(String name) =>
-      jsonDecode(File('$root$name').readAsStringSync());
+      jsonDecode(fixtureFile('$root$name').readAsStringSync());
   final audit = read('candidate-audit.json') as Map;
   final datasets = [
     for (final name in (audit['datasets'] as Map).keys)
       jsonDecode(
-        File(
+        fixtureFile(
           "work/university-research/resume-batch-20261010/before-projection/${(name as String).split('.').first}.json",
         ).readAsStringSync(),
       ),
@@ -45,7 +45,7 @@ void main() {
   final current = {
     for (final r
         in jsonDecode(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-f/pknu-latest-rows.json',
               ).readAsStringSync(),
             )
@@ -95,7 +95,7 @@ void main() {
       expect(newIds, hasLength(1039));
       final closed =
           (jsonDecode(
-                    File(
+                    fixtureFile(
                       'work/university-research/catalog-f/pknu-course-rows.json',
                     ).readAsStringSync(),
                   )
@@ -178,7 +178,7 @@ void main() {
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 'work/university-research/catalog-f/pknu-full.xlsx',
               ).readAsBytesSync(),
             )
@@ -189,7 +189,7 @@ void main() {
       final cachedOld = {
         for (final r
             in jsonDecode(
-                  File(
+                  fixtureFile(
                     'work/university-research/catalog-f/pknu-course-rows.json',
                   ).readAsStringSync(),
                 )
@@ -367,7 +367,11 @@ void main() {
       for (final item in semantic.values) {
         expect(item['actualExamAppointmentsGenerated'], false);
         final receipt =
-            jsonDecode(File(item['sourceReceipt'] as String).readAsStringSync())
+            jsonDecode(
+                  fixtureFile(
+                    item['sourceReceipt'] as String,
+                  ).readAsStringSync(),
+                )
                 as Map;
         expect(receipt['year'], '2026');
         expect(receipt['semester'], '2');

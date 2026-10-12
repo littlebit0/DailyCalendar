@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -13,7 +13,7 @@ void main() {
           'work/university-research/catalog-c/hanyang-ordinary-source-semantic-v2-20261009/';
       final proofs =
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}independent-native-course-semantic-review.json',
                 ).readAsStringSync(),
               )
@@ -31,7 +31,7 @@ void main() {
       expect(pending['sourceId'], 'hanyang/erica/2026-2/24314');
       expect(pending['nativeViewtype'], '온오프동시');
       final audit = jsonDecode(
-        File('${root}candidate-audit.json').readAsStringSync(),
+        fixtureFile('${root}candidate-audit.json').readAsStringSync(),
       );
       expect(
         (audit['campuses'] as List).fold<int>(
@@ -64,7 +64,8 @@ void main() {
           'work/university-research/catalog-c/hanyang-ordinary-source-semantic-v2-20261009/';
       Map<String, dynamic> read(String path) {
         final data =
-            jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+            jsonDecode(fixtureFile(path).readAsStringSync())
+                as Map<String, dynamic>;
         for (final row in data['courses'] ?? []) {
           if (row['metadata']?.containsKey('researchOnly') == true) {
             row['metadata']['researchOnly'] = false;

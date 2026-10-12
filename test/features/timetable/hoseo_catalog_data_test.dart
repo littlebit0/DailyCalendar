@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -12,12 +12,14 @@ void main() {
       const root =
           'work/university-research/catalog-r/hoseo/early-regular-partial-v2/';
       final proof =
-          jsonDecode(File('${root}educational-proof.json').readAsStringSync())
+          jsonDecode(
+                fixtureFile('${root}educational-proof.json').readAsStringSync(),
+              )
               as Map;
       final raws = [
         for (final campus in ['asan', 'cheonan', 'unknown'])
           jsonDecode(
-                File(
+                fixtureFile(
                   '${root}hoseo-$campus-2026-2.early-planned.json',
                 ).readAsStringSync(),
               )

@@ -1,13 +1,13 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, dynamic> read(String path) =>
     jsonDecode(
-          File(
+          fixtureFile(
             path.startsWith('assets/timetable/') &&
-                    File(
+                    fixtureFile(
                       'work/university-research/resume-batch-20261010/before-projection/${path.split('/').last}',
                     ).existsSync()
                 ? 'work/university-research/resume-batch-20261010/before-projection/${path.split('/').last}'
@@ -22,7 +22,7 @@ void main() {
     () {
       final manifest =
           jsonDecode(
-                File(
+                fixtureFile(
                   'work/university-research/checkpoint74-source-manifest.json',
                 ).readAsStringSync(),
               )

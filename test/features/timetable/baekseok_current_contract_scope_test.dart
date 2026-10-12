@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -12,7 +12,7 @@ dynamic read(String name) {
   final path = name == 'baekseok-unknown-2026-2.contract-clock-v2.json'
       ? 'assets/timetable/baekseok-unknown-2026-2.json'
       : '$dir/$name';
-  final data = jsonDecode(File(path).readAsStringSync());
+  final data = jsonDecode(fixtureFile(path).readAsStringSync());
   if (data is Map) {
     for (final c in data['courses'] as List? ?? []) {
       if (c['metadata']?.containsKey('researchOnly') == true) {
@@ -115,14 +115,14 @@ void main() {
       expect(gridProof['actualPDFGrid75RawCellsEqualCached'], true);
       expect(
         sha256
-            .convert(File('$dir/2026_2_ear.pdf').readAsBytesSync())
+            .convert(fixtureFile('$dir/2026_2_ear.pdf').readAsBytesSync())
             .toString(),
         pdfProof['pdfSHA256'],
       );
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '$dir/bu-current-contract-2026-2-clock-crop.png',
               ).readAsBytesSync(),
             )

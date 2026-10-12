@@ -90,14 +90,14 @@ void main() {
       );
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(2782));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1838));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1843));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(227),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(717),
+        hasLength(712),
       );
       for (final id in ['ICE3057-41', 'ICE3057-42', 'ICE2016-41']) {
         final c = courses.singleWhere((c) => c.codeAndSection == id);

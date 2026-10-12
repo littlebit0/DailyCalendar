@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -9,9 +9,9 @@ import 'package:flutter_test/flutter_test.dart';
 const directory =
     'work/university-research/catalog-f/ssu/weekly-reservations-v4-20261008';
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 String hash(String path) =>
-    sha256.convert(File(path).readAsBytesSync()).toString();
+    sha256.convert(fixtureFile(path).readAsBytesSync()).toString();
 String clean(String text) {
   for (final pattern in [
     r'[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}',
@@ -72,7 +72,7 @@ void main() {
   final model = UniversityDataset.fromJson(raw);
   final classification =
       jsonDecode(
-            File(
+            fixtureFile(
               '$directory/all2219-classification-v4.json',
             ).readAsStringSync(),
           )

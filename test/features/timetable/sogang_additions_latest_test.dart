@@ -1,6 +1,6 @@
 // Historical checkpoint149 regression. Latest packaged152 checks are separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,9 +10,9 @@ import 'package:flutter_test/flutter_test.dart';
 const directory =
     'work/university-research/catalog-c/sogang-native-12hour-resolution-v3-20261008';
 Map<String, dynamic> read(String path) =>
-    jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+    jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 String fileHash(String path) =>
-    sha256.convert(File(path).readAsBytesSync()).toString();
+    sha256.convert(fixtureFile(path).readAsBytesSync()).toString();
 void main() {
   final audit = read('$directory/disambiguation-audit-v3.json');
   final candidate = read(

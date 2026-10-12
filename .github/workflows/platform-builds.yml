@@ -28,6 +28,9 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
+      - name: Test fixture archive safety
+        run: python3 -m unittest discover -s tool/tests -p test_prepare_test_fixtures.py -v
+
       - name: Test
         run: flutter test
 

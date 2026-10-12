@@ -1,6 +1,6 @@
 // Historical frozen CNU packet; latest packaged source checks remain separate.
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -11,7 +11,7 @@ const folder =
     'work/university-research/catalog-c/cnu-ordinary-reservation-v2-20261008';
 Map<String, dynamic> read(String path) {
   final data =
-      jsonDecode(File(path).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
   for (final row in data['courses'] ?? []) {
     if (row['metadata']?.containsKey('researchOnly') == true) {
       row['metadata']['researchOnly'] = false;
@@ -33,7 +33,7 @@ void main() {
   final proofs = {for (final p in audit['proofs']) p['sourceId']: p};
   final native =
       jsonDecode(
-            File(
+            fixtureFile(
               '$folder/current-public-native-educational-catalog.json',
             ).readAsStringSync(),
           )
@@ -44,7 +44,9 @@ void main() {
       expect(
         sha256
             .convert(
-              File('$folder/${audit['candidateFile']}').readAsBytesSync(),
+              fixtureFile(
+                '$folder/${audit['candidateFile']}',
+              ).readAsBytesSync(),
             )
             .toString(),
         audit['candidateSHA256'],
@@ -75,7 +77,9 @@ void main() {
       expect(
         sha256
             .convert(
-              File('$folder/baseline-cnu-daedeok-v1.json').readAsBytesSync(),
+              fixtureFile(
+                '$folder/baseline-cnu-daedeok-v1.json',
+              ).readAsBytesSync(),
             )
             .toString(),
         audit['daedeokSHA256'],
@@ -124,7 +128,7 @@ void main() {
         expect(semantic['actualWeeklySignals'], isEmpty);
         expect(
           sha256
-              .convert(File(proof['sourcePlanFile']).readAsBytesSync())
+              .convert(fixtureFile(proof['sourcePlanFile']).readAsBytesSync())
               .toString(),
           proof['sourcePlanFileSHA256'],
         );

@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -12,7 +12,8 @@ const warning =
 Map<String, dynamic> read(String p) {
   final actual = p;
   final data =
-      jsonDecode(File(actual).readAsStringSync()) as Map<String, dynamic>;
+      jsonDecode(fixtureFile(actual).readAsStringSync())
+          as Map<String, dynamic>;
   for (final c in data['courses'] as List? ?? []) {
     if (c['metadata']?.containsKey('researchOnly') == true) {
       c['metadata']['researchOnly'] = false;
@@ -30,7 +31,9 @@ void main() {
       expect(changed, hasLength(41));
       for (final e in (proof['sourceSHA256'] as Map).entries) {
         expect(
-          sha256.convert(File(e.key as String).readAsBytesSync()).toString(),
+          sha256
+              .convert(fixtureFile(e.key as String).readAsBytesSync())
+              .toString(),
           e.value,
         );
       }

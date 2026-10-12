@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 import 'package:daily/core/academic/academic_profile.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 const directory = 'work/university-research/catalog-c/swu-current-20261008';
 Map<String, dynamic> read(String file) =>
-    jsonDecode(File('$directory/$file').readAsStringSync())
+    jsonDecode(fixtureFile('$directory/$file').readAsStringSync())
         as Map<String, dynamic>;
 void main() {
   test(
@@ -47,7 +47,9 @@ void main() {
   final file = (audit['datasets'] as List).single['file'] as String;
   final raw =
       jsonDecode(
-            File('assets/timetable/swu-main-2026-2.json').readAsStringSync(),
+            fixtureFile(
+              'assets/timetable/swu-main-2026-2.json',
+            ).readAsStringSync(),
           )
           as Map<String, dynamic>;
   final courses = UniversityDataset.fromJson(raw).courses;
@@ -58,7 +60,9 @@ void main() {
       expect(audit['queryRows'], 2705);
       expect(courses, hasLength(1511));
       expect(
-        sha256.convert(File('$directory/$file').readAsBytesSync()).toString(),
+        sha256
+            .convert(fixtureFile('$directory/$file').readAsBytesSync())
+            .toString(),
         audit['datasets'][0]['sha256'],
       );
       expect(audit['finalClosureCount'], 66);

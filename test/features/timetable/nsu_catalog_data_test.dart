@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:io';
+import '../../support/source_fixture.dart';
 import 'package:crypto/crypto.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -10,7 +10,7 @@ const directory =
     'work/university-research/catalog-e/nsu-regular-partial-20261008';
 Map<String, dynamic> read(String n) =>
     jsonDecode(
-          File(
+          fixtureFile(
             n == 'nsu-unknown-2026-2.regular-partial-20261008.json'
                 ? 'work/university-research/catalog-e/nsu-two-images-semester-v2-20261009/baseline39-current-asset.json'
                 : '$directory/$n',
@@ -28,7 +28,7 @@ void main() {
       expect(
         sha256
             .convert(
-              File(
+              fixtureFile(
                 '$directory/${audit['candidate']['file']}',
               ).readAsBytesSync(),
             )
@@ -38,7 +38,7 @@ void main() {
       expect(model.courses, hasLength(39));
       final sources =
           jsonDecode(
-                File(
+                fixtureFile(
                   '$directory/pdf-independent-coordinate-education.json',
                 ).readAsStringSync(),
               )
@@ -77,7 +77,7 @@ void main() {
         final source = sources.singleWhere(
           (x) => x['department'] == department,
         );
-        final originalFile = File(
+        final originalFile = fixtureFile(
           'work/university-research/catalog-e/nsu-current-20261008/${source['sourceFileName']}',
         );
         expect(
