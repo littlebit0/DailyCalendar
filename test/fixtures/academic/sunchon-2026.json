@@ -1,0 +1,712 @@
+[
+  {
+    "schdulSeq": 2424,
+    "sysId": "SCNU",
+    "schdulTitle": "성적확인 및 정정",
+    "bgnde": "2025/12/27",
+    "endde": "2026/01/02",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2425,
+    "sysId": "SCNU",
+    "schdulTitle": "신정",
+    "bgnde": "2026/01/01",
+    "endde": "2026/01/01",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2426,
+    "sysId": "SCNU",
+    "schdulTitle": "성적 확정",
+    "bgnde": "2026/01/05",
+    "endde": "2026/01/05",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2428,
+    "sysId": "SCNU",
+    "schdulTitle": "동계 계절학기 종강",
+    "bgnde": "2026/01/16",
+    "endde": "2026/01/16",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2427,
+    "sysId": "SCNU",
+    "schdulTitle": "2025학년도 전기 졸업사정",
+    "bgnde": "2026/01/19",
+    "endde": "2026/01/30",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2429,
+    "sysId": "SCNU",
+    "schdulTitle": "동계 계절학기 성적 확정",
+    "bgnde": "2026/01/23",
+    "endde": "2026/01/23",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2458,
+    "sysId": "SCNU",
+    "schdulTitle": "2026학년도 1학기 수강신청 장바구니",
+    "bgnde": "2026/01/26",
+    "endde": "2026/01/30",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2430,
+    "sysId": "SCNU",
+    "schdulTitle": "2026-1학기 수강신청",
+    "bgnde": "2026/02/02",
+    "endde": "2026/02/06",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2431,
+    "sysId": "SCNU",
+    "schdulTitle": "2026-1학기 등록",
+    "bgnde": "2026/02/13",
+    "endde": "2026/02/20",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2459,
+    "sysId": "SCNU",
+    "schdulTitle": "신입생 수강신청",
+    "bgnde": "2026/02/19",
+    "endde": "2026/02/20",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2433,
+    "sysId": "SCNU",
+    "schdulTitle": "2025학년도 전기 학위수여식",
+    "bgnde": "2026/02/25",
+    "endde": "2026/02/25",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2463,
+    "sysId": "SCNU",
+    "schdulTitle": "대체 공휴일",
+    "bgnde": "2026/03/02",
+    "endde": "2026/03/02",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2465,
+    "sysId": "SCNU",
+    "schdulTitle": "1학기 개강",
+    "bgnde": "2026/03/03",
+    "endde": "2026/03/03",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2462,
+    "sysId": "SCNU",
+    "schdulTitle": "수강신청 정정기간",
+    "bgnde": "2026/03/03",
+    "endde": "2026/03/09",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2476,
+    "sysId": "SCNU",
+    "schdulTitle": "수업일수 1/4",
+    "bgnde": "2026/03/27",
+    "endde": "2026/03/27",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2477,
+    "sysId": "SCNU",
+    "schdulTitle": "제1학기 중간시험",
+    "bgnde": "2026/04/20",
+    "endde": "2026/04/24",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2478,
+    "sysId": "SCNU",
+    "schdulTitle": "수업일수 2/4",
+    "bgnde": "2026/04/23",
+    "endde": "2026/04/23",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2522,
+    "sysId": "SCNU",
+    "schdulTitle": "휴업일(노동절)",
+    "bgnde": "2026/05/01",
+    "endde": "2026/05/01",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2495,
+    "sysId": "SCNU",
+    "schdulTitle": "학교현장실습",
+    "bgnde": "2026/05/04",
+    "endde": "2026/05/29",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2474,
+    "sysId": "SCNU",
+    "schdulTitle": "여름학기 수강신청",
+    "bgnde": "2026/05/13",
+    "endde": "2026/05/15",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2492,
+    "sysId": "SCNU",
+    "schdulTitle": "개교기념일",
+    "bgnde": "2026/05/15",
+    "endde": "2026/05/15",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2493,
+    "sysId": "SCNU",
+    "schdulTitle": "대체공휴일",
+    "bgnde": "2026/05/25",
+    "endde": "2026/05/25",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2479,
+    "sysId": "SCNU",
+    "schdulTitle": "수업일수 3/4",
+    "bgnde": "2026/05/26",
+    "endde": "2026/05/26",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2496,
+    "sysId": "SCNU",
+    "schdulTitle": "여름학기 등록",
+    "bgnde": "2026/06/02",
+    "endde": "2026/06/05",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2494,
+    "sysId": "SCNU",
+    "schdulTitle": "제9회 전국동시지방선거",
+    "bgnde": "2026/06/03",
+    "endde": "2026/06/03",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2491,
+    "sysId": "SCNU",
+    "schdulTitle": "국·공휴일 보강일",
+    "bgnde": "2026/06/09",
+    "endde": "2026/06/15",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2473,
+    "sysId": "SCNU",
+    "schdulTitle": "응급처치 및 심폐소생술(교직)",
+    "bgnde": "2026/06/10",
+    "endde": "2026/06/12",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2480,
+    "sysId": "SCNU",
+    "schdulTitle": "제1학기 기말시험",
+    "bgnde": "2026/06/16",
+    "endde": "2026/06/22",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2526,
+    "sysId": "SCNU",
+    "schdulTitle": "제1학기 종강",
+    "bgnde": "2026/06/22",
+    "endde": "2026/06/22",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2498,
+    "sysId": "SCNU",
+    "schdulTitle": "여름학기 개강",
+    "bgnde": "2026/06/26",
+    "endde": "2026/06/26",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2528,
+    "sysId": "SCNU",
+    "schdulTitle": "1학기 성적입력 완료",
+    "bgnde": "2026/06/29",
+    "endde": "2026/06/29",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2529,
+    "sysId": "SCNU",
+    "schdulTitle": "1학기 성적열람 확인 및 성적 정정",
+    "bgnde": "2026/06/30",
+    "endde": "2026/07/05",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2530,
+    "sysId": "SCNU",
+    "schdulTitle": "1학기 성적 확정 및 확인",
+    "bgnde": "2026/07/06",
+    "endde": "2026/07/06",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2503,
+    "sysId": "SCNU",
+    "schdulTitle": "제헌절",
+    "bgnde": "2026/07/17",
+    "endde": "2026/07/17",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2504,
+    "sysId": "SCNU",
+    "schdulTitle": "2025학년도 후기 졸업사정",
+    "bgnde": "2026/07/20",
+    "endde": "2026/08/17",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2505,
+    "sysId": "SCNU",
+    "schdulTitle": "여름학기 종강",
+    "bgnde": "2026/07/29",
+    "endde": "2026/07/29",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2506,
+    "sysId": "SCNU",
+    "schdulTitle": "여름학기 성적 확정",
+    "bgnde": "2026/08/03",
+    "endde": "2026/08/03",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2531,
+    "sysId": "SCNU",
+    "schdulTitle": "장바구니 수강신청",
+    "bgnde": "2026/08/04",
+    "endde": "2026/08/06",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2508,
+    "sysId": "SCNU",
+    "schdulTitle": "제2학기 수강신청",
+    "bgnde": "2026/08/07",
+    "endde": "2026/08/13",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2507,
+    "sysId": "SCNU",
+    "schdulTitle": "제2학기 등록",
+    "bgnde": "2026/08/14",
+    "endde": "2026/08/21",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2509,
+    "sysId": "SCNU",
+    "schdulTitle": "2025학년도 후기 학위수여식",
+    "bgnde": "2026/08/25",
+    "endde": "2026/08/25",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2482,
+    "sysId": "SCNU",
+    "schdulTitle": "제2학기 수강신청 정정기간",
+    "bgnde": "2026/09/01",
+    "endde": "2026/09/07",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2481,
+    "sysId": "SCNU",
+    "schdulTitle": "제2학기 개강",
+    "bgnde": "2026/09/01",
+    "endde": "2026/09/01",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2483,
+    "sysId": "SCNU",
+    "schdulTitle": "수업일수 1/4",
+    "bgnde": "2026/09/29",
+    "endde": "2026/09/29",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2484,
+    "sysId": "SCNU",
+    "schdulTitle": "제2학기 중간시험",
+    "bgnde": "2026/10/19",
+    "endde": "2026/10/23",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2485,
+    "sysId": "SCNU",
+    "schdulTitle": "수업일수 2/4",
+    "bgnde": "2026/10/28",
+    "endde": "2026/10/28",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2510,
+    "sysId": "SCNU",
+    "schdulTitle": "동계 계절학기 수강신청",
+    "bgnde": "2026/11/11",
+    "endde": "2026/11/13",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2475,
+    "sysId": "SCNU",
+    "schdulTitle": "응급처치 및 심폐소생술(교직)",
+    "bgnde": "2026/11/18",
+    "endde": "2026/11/20",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2486,
+    "sysId": "SCNU",
+    "schdulTitle": "수업일수 3/4",
+    "bgnde": "2026/11/24",
+    "endde": "2026/11/24",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2511,
+    "sysId": "SCNU",
+    "schdulTitle": "동계 계절학기 등록",
+    "bgnde": "2026/12/01",
+    "endde": "2026/12/03",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2489,
+    "sysId": "SCNU",
+    "schdulTitle": "국·공휴일 보강일",
+    "bgnde": "2026/12/08",
+    "endde": "2026/12/11",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": 2488,
+    "sysId": "SCNU",
+    "schdulTitle": "제2학기 기말시험",
+    "bgnde": "2026/12/14",
+    "endde": "2026/12/18",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2487,
+    "sysId": "SCNU",
+    "schdulTitle": "제2학기 종강",
+    "bgnde": "2026/12/18",
+    "endde": "2026/12/18",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2512,
+    "sysId": "SCNU",
+    "schdulTitle": "2학기 성적입력 완료",
+    "bgnde": "2026/12/24",
+    "endde": "2026/12/24",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2513,
+    "sysId": "SCNU",
+    "schdulTitle": "동계 계절학기 개강",
+    "bgnde": "2026/12/24",
+    "endde": "2026/12/24",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": 2514,
+    "sysId": "SCNU",
+    "schdulTitle": "2학기 성적확인 및 정정",
+    "bgnde": "2026/12/25",
+    "endde": "2026/12/31",
+    "alldayAt": "Y",
+    "bgndeTime": "00:00:00",
+    "enddeTime": "00:00:00"
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "신정",
+    "bgnde": "2026/01/01",
+    "endde": "2026/01/01",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "3.1절",
+    "bgnde": "2026/03/01",
+    "endde": "2026/03/01",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "어린이날",
+    "bgnde": "2026/05/05",
+    "endde": "2026/05/05",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "현충일",
+    "bgnde": "2026/06/06",
+    "endde": "2026/06/06",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "광복절",
+    "bgnde": "2026/08/15",
+    "endde": "2026/08/15",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "개천절",
+    "bgnde": "2026/10/03",
+    "endde": "2026/10/03",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "한글날",
+    "bgnde": "2026/10/09",
+    "endde": "2026/10/09",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "크리스마스",
+    "bgnde": "2026/12/25",
+    "endde": "2026/12/25",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "설날연휴",
+    "bgnde": "2026/02/16",
+    "endde": "2026/02/16",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "설날",
+    "bgnde": "2026/02/17",
+    "endde": "2026/02/17",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "설날연휴",
+    "bgnde": "2026/02/18",
+    "endde": "2026/02/18",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "석가탄신일",
+    "bgnde": "2026/05/24",
+    "endde": "2026/05/24",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "추석연휴",
+    "bgnde": "2026/09/24",
+    "endde": "2026/09/24",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "추석",
+    "bgnde": "2026/09/25",
+    "endde": "2026/09/25",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "추석연휴",
+    "bgnde": "2026/09/26",
+    "endde": "2026/09/26",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  }
+]

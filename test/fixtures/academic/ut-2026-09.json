@@ -1,0 +1,23 @@
+[
+  {
+    "startDate": "2026-09-01",
+    "endDate": "2026-09-01",
+    "contents": null,
+    "cntNo": 3988,
+    "subject": "제2학기 개강일(학기개시일)"
+  },
+  {
+    "startDate": "2026-09-24",
+    "endDate": "2026-09-26",
+    "contents": null,
+    "cntNo": 3989,
+    "subject": "추석연휴"
+  },
+  {
+    "startDate": "2026-09-30",
+    "endDate": "2026-09-30",
+    "contents": null,
+    "cntNo": 3990,
+    "subject": "수업일수 1/4"
+  }
+]

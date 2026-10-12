@@ -432,12 +432,9 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     ],
   );
 
-  String _storedCategoryValue(CalendarEvent event) {
-    if (event.category.id == 'basic' || event.category.id == 'holiday') {
-      return event.category.id;
-    }
-    return event.category.label;
-  }
+  // Persist the stable ID. The existing precision extension retains the label
+  // for standalone reads; legacy label rows remain readable without migration.
+  String _storedCategoryValue(CalendarEvent event) => event.category.id;
 
   EventRecordsCompanion _companion(CalendarEvent event) {
     return EventRecordsCompanion(

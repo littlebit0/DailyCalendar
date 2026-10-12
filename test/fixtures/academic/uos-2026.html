@@ -1,0 +1,2835 @@
+<input id="year_code" name="year_code" type="hidden" value="2026"><table>
+							<caption>이 표는 월별 대학의 학사 일정을 나타내는 표입니다.</caption>
+							<colgroup>
+								<col class="w120px date01">
+								<col class="w180px date02">
+								<col>
+							</colgroup>
+
+							<tbody>
+							<tr style="display:none;">
+								<th>&nbsp;</th>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<script>
+								function listView(seq, year, month) {
+									if ($("#c" + year + month + seq).hasClass("hide")) {
+										$("#c" + year + month + seq).removeClass("hide");
+									} else {
+										$("#c" + year + month + seq).addClass("hide");
+									}
+								}
+
+								function monthSelect(year) {
+									var ms = $("#monthSelect").val();
+									var year2 = Number(year) + 1;
+									if (ms == "") {
+										$("#year_code").val(Number($("#year_code").val()));
+										jQuery("#listForm").attr("action", "/korCalendarYear2/list.do").submit();
+									} else {
+										for (var i = 1; i <= 14; i++) {
+											var it = String(i);
+											var it2 = "";
+											if (String(i).length == "1") {
+												it = "0" + i;
+											}
+											var lc = $("#in" + year + it).val();
+											if (it == '13') {
+												lc = $("#in" + (Number(year) + 1) + "01").val();
+												it2 = "01";
+											} else if (it == '14') {
+												lc = $("#in" + (Number(year) + 1) + "02").val();
+												it2 = "02";
+											}
+											$("#m" + year + it).addClass("hide");
+											$("#m" + year2 + it).addClass("hide");
+											$("#m" + ms).removeClass("hide");
+											for (var j = 0; j <= lc; j++) {
+												$("#m" + year + it + "c" + j).addClass("hide");
+												$("#m" + year + it + "cc" + j).addClass("hide");
+												$("#m" + year2 + it + "c" + j).addClass("hide");
+												$("#m" + year2 + it2 + "c" + j).addClass("hide");
+												$("#m" + year2 + it + "cc" + j).addClass("hide");
+												$("#m" + ms + "c" + j).removeClass("hide");
+												$("#m" + ms + "cc" + j).removeClass("hide");
+											}
+										}
+									}
+								}
+							</script>
+							<!--
+						<tr id="m202601">
+								<th class="th" rowspan="11">2026년<br>01월<input type="hidden" id="in202601" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202601c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>01월<input type="hidden" id="in202601" value="11">
+								</th>
+								<td class="th date02">[12-22
+									~ 01-19]
+								</td>
+								<td class="al title01">
+										<span>겨울 계절수업 [Winter session]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc0" class="">
+								<td id="c202601839" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2025-12-22 ~ 2026-01-19</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>겨울 계절수업</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202601c1" class="">
+								<td class="th date02">[12-30
+									~ 01-05]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc1" class="">
+								<td id="c202601841" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2025-12-30 ~ 2026-01-05</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>성적정정&nbsp;Grade correction</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202601c2" class="">
+								<td class="th date02">[01-12
+									~ 01-16]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 조기졸업 신청 [2026 1st semester early graduation application]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc2" class="">
+								<td id="c202601842" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-01-12 ~ 2026-01-16</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026. 1학기 조기졸업 신청</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202601c3" class="">
+								<td class="th date02">[01-19
+									~ 01-23]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 복학 신청 [2026 1st semester return to school application]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc3" class="">
+								<td id="c202601843" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-01-19 ~ 2026-01-23</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026. 1학기 복학 신청</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202601c4" class="">
+								<td class="th date02">[01-19
+									~ 01-23]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 학부 교내장학 신청(2차) [2026 1st semester undergraduate internal scholarship application (2nd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc4" class="">
+								<td id="c202601844" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-01-19 ~ 2026-01-23</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026. 1학기 학부 교내장학 신청(2차)</p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202602">
+								<th class="th" rowspan="13">2026년<br>02월<input type="hidden" id="in202602" value="13">
+								</th>
+						</tr>-->
+							<tr id="m202602c0" class="">
+								<th class="th date01" rowspan="12">2026년<br>02월<input type="hidden" id="in202602" value="13">
+								</th>
+								<td class="th date02">[02-09
+									~ 02-11]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 수강 신청 *9일: 4학년ㆍ5학년,초과학기, 10일: 3학년, 11일: 2학년 [2026 1st semester course registration * Feb. 9: 4th &amp; 5th year, extended semester; Feb. 10: 3rd year; Feb. 11: 2nd year]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc0" class="">
+								<td id="c202602845" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-02-09 ~ 2026-02-11</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026. 1학기 수강신청&nbsp;&nbsp;*9일 : 4학년,5학년,초과학기, 10일 : 3학년, 11일 : 2학년&nbsp;</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202602c1" class="">
+								<td class="th date02">[02-23
+									~ 02-23]
+								</td>
+								<td class="al title01">
+										<span>2026.1학기 신입생 및 편입생 장바구니 수강신청 [New/transfer student 1st semester course shopping cart]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc1" class="">
+								<td id="c202602846" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-02-23 ~ 2026-02-23</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026.1학기 신입생 및 편입생 장바구니 수강신청</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202602c2" class="">
+								<td class="th date02">[02-23
+									~ 02-27]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 휴학 신청 [2026 1st semester leave of absence application]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc2" class="">
+								<td id="c202602848" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-02-23 ~ 2026-02-27</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026. 1학기 휴학 신청</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202602c3" class="">
+								<td class="th date02">[02-24
+									~ 02-24]
+								</td>
+								<td class="al title01">
+										<span>2026년 2월(2025학년도 전기) 학위수여식 [Feb 2026 (2025 academic year spring) graduation ceremony]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc3" class="">
+								<td id="c202602849" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-02-24 ~ 2026-02-24</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026년 2월(2025학년도 전기) 학위수여식</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202602c4" class="">
+								<td class="th date02">[02-25
+									~ 02-26]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 수강신청 *25일: 신입생 및 편입생, 26일: 전체 [2026 1st semester course registration * Feb. 25: new/transfer students; Feb. 26: all]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc4" class="">
+								<td id="c202602847" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-02-25 ~ 2026-02-26</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026. 1학기 수강신청&nbsp; * 25일 :신입생 및 편입생, 26일 : 전체</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202602c5" class="">
+								<td class="th date02">[02-28
+									~ 02-28]
+								</td>
+								<td class="al title01">
+										<span>2학기 종료 [End of 2nd semester]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc5" class="">
+								<td id="c202602850" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-02-28 ~ 2026-02-28</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2학기 종료</p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202603">
+								<th class="th" rowspan="13">2026년<br>03월<input type="hidden" id="in202603" value="13">
+								</th>
+						</tr>-->
+							<tr id="m202603c0" class="">
+								<th class="th date01" rowspan="12">2026년<br>03월<input type="hidden" id="in202603" value="13">
+								</th>
+								<td class="th date02">[03-01
+									~ 03-01]
+								</td>
+								<td class="al title01">
+										<span>2026. 제1학기 시작 [2026 1st semester begins]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc0" class="">
+								<td id="c202603852" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 서울시립대학교</li>
+										<li>일자 : 2026-03-01 ~ 2026-03-01</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026학년도 제1학기 시작</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202603c1" class="">
+								<td class="th date02">[03-03
+									~ 03-03]
+								</td>
+								<td class="al title01">
+										<span>2026. 제1학기 개강 [2026 1st semester classes begin]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc1" class="">
+								<td id="c202603853" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-03-03 ~ 2026-03-03</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2026학년도 제1학기 개강&nbsp;</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202603c2" class="">
+								<td class="th date02">[03-03
+									~ 03-09]
+								</td>
+								<td class="al title01">
+										<span>수강신청 확인 및 변경 [Course registration confirmation and changes]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc2" class="">
+								<td id="c202603854" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-03-03 ~ 2026-03-09</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">&nbsp;수강신청 확인 및 변경 [Course registration confirmation and changes]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202603c3" class="">
+								<td class="th date02">[03-03
+									~ 03-09]
+								</td>
+								<td class="al title01">
+										<span>1학기 학부 교내장학 신청(3차) [1st semester undergraduate internal scholarship application (3rd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc3" class="">
+								<td id="c202603855" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-03-03 ~ 2026-03-09</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">1학기 학부 교내장학 신청(3차) [1st semester undergraduate internal scholarship application (3rd round)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202603c4" class="">
+								<td class="th date02">[03-18
+									~ 03-20]
+								</td>
+								<td class="al title01">
+										<span>수강신청 취소 [Course withdrawal]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc4" class="">
+								<td id="c202603856" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-03-18 ~ 2026-03-20</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수강신청 취소 [Course withdrawal]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202603c5" class="">
+								<td class="th date02">[03-30
+									~ 03-30]
+								</td>
+								<td class="al title01">
+										<span>수업일수 1/4(일반휴학 만기) [1/4 of semester (general leave of absence deadline)]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc5" class="">
+								<td id="c202603857" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-03-30 ~ 2026-03-30</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수업일수 1/4(일반휴학 만기) [1/4 of semester (general leave of absence deadline)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202604">
+								<th class="th" rowspan="3">2026년<br>04월<input type="hidden" id="in202604" value="3">
+								</th>
+						</tr>-->
+							<tr id="m202604c0" class="">
+								<th class="th date01" rowspan="2">2026년<br>04월<input type="hidden" id="in202604" value="3">
+								</th>
+								<td class="th date02">[04-27
+									~ 04-27]
+								</td>
+								<td class="al title01">
+										<span>수업일수 2/4 [2/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202604cc0" class="">
+								<td id="c202604858" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-04-27 ~ 2026-04-27</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수업일수 2/4 [2/4 of semester]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202605">
+								<th class="th" rowspan="11">2026년<br>05월<input type="hidden" id="in202605" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202605c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>05월<input type="hidden" id="in202605" value="11">
+								</th>
+								<td class="th date02">[05-01
+									~ 05-01]
+								</td>
+								<td class="al title01">
+										<span>개교기념일 [University foundation day]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc0" class="">
+								<td id="c202605859" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-05-01 ~ 2026-05-01</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">개교기념일 [University foundation day]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202605c1" class="">
+								<td class="th date02">[05-11
+									~ 05-14]
+								</td>
+								<td class="al title01">
+										<span>2학기 복수전공 신청 [2nd semester double major application]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc1" class="">
+								<td id="c202605860" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-05-11 ~ 2026-05-14</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 복수전공 신청 [2nd semester double major application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202605c2" class="">
+								<td class="th date02">[05-19
+									~ 05-25]
+								</td>
+								<td class="al title01">
+										<span>보강주간 [Make-up class week]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc2" class="">
+								<td id="c202605861" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-05-19 ~ 2026-05-25</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">보강주간 [Make-up class week]</span></p><p class="0" style="line-height: 130%; word-break: keep-all;"><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">※</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">대체수업일 </span></p><p class="0" style="line-height: 130%; word-break: keep-all;"><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">  </span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">5.1(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">금</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">⇒</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">5.22(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">금</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">), 5.5(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">화</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">⇒</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">5.19(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">화</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">),</span></p><!-- Not Allowed Attribute Filtered ( data-hjsonver="1.0" data-jsonlen="7160") --><div id="hwpEditorBoardContent" class="hwp_editor_board_content"><!--[data-hwpjson]{
+"documentPr": {
+"di": "",
+"dp": {
+"dn": "test.hwp",
+"ta": 1,
+"d1": 5,
+"d2": 1,
+"dv": 0,
+"dr": 1,
+"do": 1,
+"vj": "1.1",
+"an": "Hancom Office Hangul",
+"av": "11, 0, 0, 8969",
+"ao": "WIN",
+"ab": "32",
+"ar": "LE",
+"as": "Windows_10"
+},
+"dis": false,
+"ds": {
+"ti": "",
+"la": "ko",
+"cr": "",
+"su": "",
+"de": "",
+"cd": "2026-02-19T15:14:27.233Z",
+"md": "1601-01-01T09:00:00.000Z",
+"pd": "1601-01-01T09:00:00.000Z",
+"ke": ""
+}
+},
+"dh": {
+"do": {
+"pa": 1,
+"fo": 1,
+"en": 1,
+"pi": 1,
+"tb": 1,
+"eq": 1
+},
+"fo": [ ],
+"cd": {
+"tp": 0,
+"lc": {
+"af": false,
+"ui": false,
+"fu": false,
+"dn": false,
+"ul": false,
+"el": false,
+"at": false,
+"tq": false,
+"da": false,
+"dw": false,
+"dj": false,
+"bc": false,
+"bu": false,
+"al": false,
+"ab": false,
+"ap": false,
+"an": false,
+"aa": false,
+"ds": false,
+"de": false,
+"as": false,
+"cp": false,
+"ao": false,
+"et": false,
+"ay": false,
+"am": false,
+"a1": false,
+"bt": false,
+"av": false,
+"dh": false,
+"dp": false,
+"d1": false,
+"mf": false,
+"bl": false,
+"ag": false,
+"dg": false,
+"ae": false,
+"df": false,
+"do": false,
+"dl": false,
+"di": false,
+"d2": false,
+"d3": false,
+"ob": false,
+"d4": false,
+"ev": false,
+"d5": false,
+"d6": false,
+"a2": false,
+"dc": false
+}
+},
+"ld": {
+"pa": "",
+"pi": true,
+"fo": false
+}
+},
+"bf": {
+"01DCA1670289A1F0000000D9": {
+"id": 1,
+"td": false,
+"sh": false,
+"st": 0,
+"sc": 0,
+"si": false,
+"bt": 0,
+"bi": false,
+"cl": 0,
+"bc": false,
+"lt": 0,
+"lw": 0,
+"lc": 0,
+"rt": 0,
+"rw": 0,
+"rc": 0,
+"tt": 0,
+"tw": 0,
+"tc": 0,
+"bbt": 0,
+"bbw": 0,
+"bbc": 0,
+"dt": 1,
+"dw": 0,
+"dc": 0,
+"fi": { }
+},
+"01DCA1670289A1F0000000DA": {
+"id": 2,
+"td": false,
+"sh": false,
+"st": 0,
+"sc": 0,
+"si": false,
+"bt": 0,
+"bi": false,
+"cl": 0,
+"bc": false,
+"lt": 0,
+"lw": 0,
+"lc": 0,
+"rt": 0,
+"rw": 0,
+"rc": 0,
+"tt": 0,
+"tw": 0,
+"tc": 0,
+"bbt": 0,
+"bbw": 0,
+"bbc": 0,
+"dt": 1,
+"dw": 0,
+"dc": 0,
+"fi": {
+"wb": {
+"fc": 4294967295,
+"hc": 0,
+"al": 0,
+"hs": -1
+}
+}
+}
+},
+"cp": {
+"01DCA1670289A1F0000000DB": {
+"id": 0,
+"he": 900,
+"tc": 0,
+"sc": 4294967295,
+"uf": false,
+"uk": false,
+"sm": 0,
+"bf": "01DCA1670289A1F0000000DA",
+"f1": "함초롬돋움",
+"t1": 1,
+"f2": "함초롬돋움",
+"t2": 1,
+"f3": "함초롬돋움",
+"t3": 1,
+"f4": "함초롬돋움",
+"t4": 1,
+"f5": "함초롬돋움",
+"t5": 1,
+"f6": "함초롬돋움",
+"t6": 1,
+"f7": "함초롬돋움",
+"t7": 1,
+"r1": 85,
+"r2": 85,
+"r3": 85,
+"r4": 85,
+"r5": 85,
+"r6": 85,
+"r7": 85,
+"s1": 0,
+"s2": 0,
+"s3": 0,
+"s4": 0,
+"s5": 0,
+"s6": 0,
+"s7": 0,
+"e1": 100,
+"e2": 100,
+"e3": 100,
+"e4": 100,
+"e5": 100,
+"e6": 100,
+"e7": 100,
+"o1": 0,
+"o2": 0,
+"o3": 0,
+"o4": 0,
+"o5": 0,
+"o6": 0,
+"o7": 0,
+"it": false,
+"bo": false,
+"ut": 0,
+"us": 1,
+"uc": 0,
+"st": false,
+"ss": 1,
+"so": 0,
+"ot": 0,
+"ht": 0,
+"hc": 0,
+"hx": 0,
+"hy": 0,
+"em": false,
+"en": false,
+"su": false,
+"sb": false
+},
+"01DCA1670289A1F0000000DC": {
+"id": 1,
+"he": 1000,
+"tc": 0,
+"sc": 4294967295,
+"uf": false,
+"uk": false,
+"sm": 0,
+"bf": "01DCA1670289A1F0000000DA",
+"f1": "바탕",
+"t1": 1,
+"f2": "바탕",
+"t2": 1,
+"f3": "바탕",
+"t3": 1,
+"f4": "바탕",
+"t4": 1,
+"f5": "바탕",
+"t5": 1,
+"f6": "바탕",
+"t6": 1,
+"f7": "바탕",
+"t7": 1,
+"r1": 100,
+"r2": 100,
+"r3": 100,
+"r4": 100,
+"r5": 100,
+"r6": 100,
+"r7": 100,
+"s1": 0,
+"s2": 0,
+"s3": 0,
+"s4": 0,
+"s5": 0,
+"s6": 0,
+"s7": 0,
+"e1": 100,
+"e2": 100,
+"e3": 100,
+"e4": 100,
+"e5": 100,
+"e6": 100,
+"e7": 100,
+"o1": 0,
+"o2": 0,
+"o3": 0,
+"o4": 0,
+"o5": 0,
+"o6": 0,
+"o7": 0,
+"it": false,
+"bo": false,
+"ut": 0,
+"us": 1,
+"uc": 0,
+"st": false,
+"ss": 1,
+"so": 0,
+"ot": 0,
+"ht": 0,
+"hc": 0,
+"hx": 0,
+"hy": 0,
+"em": false,
+"en": false,
+"su": false,
+"sb": false
+}
+},
+"tp": {
+"01DCA1670289A1F0000000DD": {
+"id": 0,
+"al": false,
+"ar": false,
+"tp": [ ]
+}
+},
+"nu": { },
+"bu": { },
+"pp": {
+"01DCA1670289A1F0000000DE": {
+"id": 0,
+"ah": 1,
+"av": 0,
+"ht": 0,
+"hi": "",
+"hl": 0,
+"tp": "01DCA1670289A1F0000000DD",
+"kb": 0,
+"kn": false,
+"ko": false,
+"kk": false,
+"kl": false,
+"kp": false,
+"kw": 0,
+"co": 0,
+"fl": false,
+"st": true,
+"sl": false,
+"ae": false,
+"aa": false,
+"mi": 0,
+"ml": 0,
+"mr": 0,
+"mp": 0,
+"mn": 0,
+"lt": 0,
+"lv": 130,
+"bf": "01DCA1670289A1F0000000DA",
+"bl": 0,
+"br": 0,
+"bt": 0,
+"bb": 0,
+"bc": false,
+"bi": false
+},
+"01DCA1670289A1F0000000DF": {
+"id": 1,
+"ah": 0,
+"av": 0,
+"ht": 0,
+"hi": "",
+"hl": 0,
+"tp": "01DCA1670289A1F0000000DD",
+"kb": 0,
+"kn": true,
+"ko": false,
+"kk": false,
+"kl": false,
+"kp": false,
+"kw": 0,
+"co": 0,
+"fl": false,
+"st": true,
+"sl": false,
+"ae": false,
+"aa": false,
+"mi": 0,
+"ml": 0,
+"mr": 0,
+"mp": 0,
+"mn": 0,
+"lt": 0,
+"lv": 160,
+"bf": "01DCA1670289A1F0000000DA",
+"bl": 0,
+"br": 0,
+"bt": 0,
+"bb": 0,
+"bc": false,
+"bi": false
+}
+},
+"st": {
+"01DCA1670289A1F0000000E0": {
+"id": 0,
+"ty": 0,
+"na": "바탕글",
+"en": "Normal",
+"pp": "01DCA1670289A1F0000000DF",
+"cp": "01DCA1670289A1F0000000DC",
+"ns": "01DCA1670289A1F0000000E0",
+"li": 1042,
+"lf": false
+}
+},
+"mp": { },
+"ro": {
+"hp": "01DCA1670289A1F0000000D6",
+"01DCA1670289A1F0000000D6": {
+"np": "01DCA1670289A1F0000000D7",
+"id": 0,
+"pp": "01DCA1670289A1F0000000DE",
+"si": "01DCA1670289A1F0000000E0",
+"bf": 3,
+"ru": [
+{
+"cp": "01DCA1670289A1F0000000DB",
+"ch": [
+{
+"cc": 2,
+"ci": 1936024420,
+"co": "01DCA1670289A1F0000000D4"
+}
+,
+{
+"cc": 2,
+"ci": 1668246628,
+"co": "01DCA1670289A1F0000000D5"
+}
+,
+{
+"t": "※대체수업일 "
+}
+]
+}
+]
+},
+"01DCA1670289A1F0000000D7": {
+"np": "01DCA1670289A1F0000000D8",
+"id": -2147483648,
+"pp": "01DCA1670289A1F0000000DE",
+"si": "01DCA1670289A1F0000000E0",
+"bf": 0,
+"ru": [
+{
+"cp": "01DCA1670289A1F0000000DB",
+"ch": [
+{
+"t": "  5.1(금)⇒5.22(금), 5.5(화)⇒5.19(화),"
+}
+]
+}
+]
+},
+"01DCA1670289A1F0000000D8": {
+"np": "",
+"id": -2147483648,
+"pp": "01DCA1670289A1F0000000DE",
+"si": "01DCA1670289A1F0000000E0",
+"bf": 0,
+"ru": [
+{
+"cp": "01DCA1670289A1F0000000DB",
+"ch": [
+{
+"t": "  6.3(수)⇒5.20(수)"
+}
+]
+}
+]
+}
+},
+"sl": { },
+"cs": {
+"01DCA1670289A1F0000000D4": {
+"cc": 2,
+"ci": 1936024420,
+"td": 0,
+"tv": false,
+"sc": 1134,
+"ts": 8000,
+"ms": "",
+"os": "",
+"gl": 0,
+"gc": 0,
+"gw": false,
+"ns": 0,
+"np": 0,
+"ni": 0,
+"nt": 0,
+"ne": 0,
+"hh": false,
+"hf": false,
+"hm": false,
+"fb": false,
+"hb": false,
+"fi": false,
+"hi": false,
+"hp": false,
+"he": false,
+"sl": false,
+"lr": 0,
+"lc": 0,
+"ld": 0,
+"ls": 0,
+"pp": {
+"ls": false,
+"wi": 59528,
+"he": 84188,
+"gt": 0,
+"ml": 8504,
+"mr": 8504,
+"mt": 5668,
+"mb": 4252,
+"mh": 4252,
+"mf": 4252,
+"mg": 0
+},
+"fn": {
+"at": 0,
+"au": "",
+"ap": "",
+"ac": ")",
+"as": false,
+"ll": -1,
+"lt": 1,
+"lw": 1,
+"lc": 0,
+"sa": 850,
+"sb": 567,
+"st": 283
+,
+"nt": 0,
+"nn": 1,
+"pp": 0,
+"pb": false
+},
+"en": {
+"at": 0,
+"au": "",
+"ap": "",
+"ac": ")",
+"as": false,
+"ll": -4,
+"lt": 1,
+"lw": 1,
+"lc": 0,
+"sa": 850,
+"sb": 567,
+"st": 0
+,
+"nt": 0,
+"nn": 1,
+"pp": 0,
+"pb": false
+},
+"pb": [
+{
+"ty": 0,
+"bf": "01DCA1670289A1F0000000D9",
+"tb": true,
+"hi": false,
+"fi": false,
+"fa": 0,
+"ol": 1417,
+"or": 1417,
+"ot": 1417,
+"ob": 1417
+},
+{
+"ty": 1,
+"bf": "01DCA1670289A1F0000000D9",
+"tb": true,
+"hi": false,
+"fi": false,
+"fa": 0,
+"ol": 1417,
+"or": 1417,
+"ot": 1417,
+"ob": 1417
+},
+{
+"ty": 2,
+"bf": "01DCA1670289A1F0000000D9",
+"tb": true,
+"hi": false,
+"fi": false,
+"fa": 0,
+"ol": 1417,
+"or": 1417,
+"ot": 1417,
+"ob": 1417
+}
+],
+"mp": [ ]
+}
+,
+"01DCA1670289A1F0000000D5": {
+"cc": 2,
+"ci": 1668246628,
+"ty": 0,
+"la": 0,
+"co": 1,
+"ss": true,
+"sg": 0,
+"lt": 0,
+"lw": 0,
+"lc": 0,
+"cs": [ ]
+}
+},
+"bi": [ ],
+"bidt": { }
+}--></div><p class="0" style="line-height:130%;text-align:left;word-break:keep-all;mso-pagination:none;text-autospace:none;mso-padding-alt:0pt 0pt 0pt 0pt;"><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">  </span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">6.3(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">수</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">⇒</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">5.20(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">수</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202605c3" class="">
+								<td class="th date02">[05-25
+									~ 05-25]
+								</td>
+								<td class="al title01">
+										<span>수업일수 3/4 [3/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc3" class="">
+								<td id="c202605862" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-05-25 ~ 2026-05-25</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수업일수 3/4 [3/4 of semester]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202605c4" class="">
+								<td class="th date02">[05-26
+									~ 05-29]
+								</td>
+								<td class="al title01">
+										<span>2학기 재입학 신청 [2nd semester re-admission application]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc4" class="">
+								<td id="c202605863" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-05-26 ~ 2026-05-29</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 재입학 신청 [2nd semester re-admission application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202606">
+								<th class="th" rowspan="17">2026년<br>06월<input type="hidden" id="in202606" value="17">
+								</th>
+						</tr>-->
+							<tr id="m202606c0" class="">
+								<th class="th date01" rowspan="16">2026년<br>06월<input type="hidden" id="in202606" value="17">
+								</th>
+								<td class="th date02">[06-01
+									~ 06-04]
+								</td>
+								<td class="al title01">
+										<span>2학기 부전공 신청 [2nd semester minor application]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc0" class="">
+								<td id="c202606864" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-01 ~ 2026-06-04</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 부전공 신청 [2nd semester minor application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202606c1" class="">
+								<td class="th date02">[06-08
+									~ 06-12]
+								</td>
+								<td class="al title01">
+										<span>2학기 학부 교내장학 신청(1차) [2nd semester undergraduate internal scholarship application (1st round)]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc1" class="">
+								<td id="c202606865" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-08 ~ 2026-06-12</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 학부 교내장학 신청(1차) [2nd semester undergraduate internal scholarship application (1st round)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202606c2" class="">
+								<td class="th date02">[06-16
+									~ 06-22]
+								</td>
+								<td class="al title01">
+										<span>기말시험 [Final exams]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc2" class="">
+								<td id="c202606866" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-16 ~ 2026-06-22</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">기말시험 [Final exams]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202606c3" class="">
+								<td class="th date02">[06-23
+									~ 06-23]
+								</td>
+								<td class="al title01">
+										<span>여름방학 [Summer vacation]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc3" class="">
+								<td id="c202606867" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-23 ~ 2026-06-23</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">여름방학 [Summer vacation]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202606c4" class="">
+								<td class="th date02">[06-23
+									~ 07-17]
+								</td>
+								<td class="al title01">
+										<span>여름 계절수업 [Summer session]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc4" class="">
+								<td id="c202606868" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-23 ~ 2026-07-17</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">여름 계절수업 [Summer session]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202606c5" class="">
+								<td class="th date02">[06-29
+									~ 06-29]
+								</td>
+								<td class="al title01">
+										<span>성적제출 마감 [Grade submission deadline]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc5" class="">
+								<td id="c202606869" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-29 ~ 2026-06-29</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적제출 마감 [Grade submission deadline]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202606c6" class="">
+								<td class="th date02">[06-30
+									~ 06-30]
+								</td>
+								<td class="al title01">
+										<span>성적열람 시작 [Grade viewing begins]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc6" class="">
+								<td id="c202606870" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-30 ~ 2026-06-30</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적열람 시작 [Grade viewing begins]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202606c7" class="">
+								<td class="th date02">[06-30
+									~ 07-03]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc7" class="">
+								<td id="c202606871" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-30 ~ 2026-07-03</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적정정 [Grade correction]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202607">
+								<th class="th" rowspan="11">2026년<br>07월<input type="hidden" id="in202607" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202607c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>07월<input type="hidden" id="in202607" value="11">
+								</th>
+								<td class="th date02">[06-23
+									~ 07-17]
+								</td>
+								<td class="al title01">
+										<span>여름 계절수업 [Summer session]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc0" class="">
+								<td id="c202607868" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-23 ~ 2026-07-17</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">여름 계절수업 [Summer session]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202607c1" class="">
+								<td class="th date02">[06-30
+									~ 07-03]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc1" class="">
+								<td id="c202607871" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-06-30 ~ 2026-07-03</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적정정 [Grade correction]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202607c2" class="">
+								<td class="th date02">[07-13
+									~ 07-17]
+								</td>
+								<td class="al title01">
+										<span>2학기 조기졸업 신청 [2nd semester early graduation application]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc2" class="">
+								<td id="c202607872" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-07-13 ~ 2026-07-17</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 조기졸업 신청 [2nd semester early graduation application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202607c3" class="">
+								<td class="th date02">[07-20
+									~ 07-24]
+								</td>
+								<td class="al title01">
+										<span>2학기 복학 신청 [2nd semester return to school application]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc3" class="">
+								<td id="c202607873" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-07-20 ~ 2026-07-24</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 복학 신청 [2nd semester return to school application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202607c4" class="">
+								<td class="th date02">[07-20
+									~ 07-24]
+								</td>
+								<td class="al title01">
+										<span>2학기 학부 교내장학 신청(2차) [2nd semester undergraduate internal scholarship application (2nd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc4" class="">
+								<td id="c202607874" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-07-20 ~ 2026-07-24</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 학부 교내장학 신청(2차) [2nd semester undergraduate internal scholarship application (2nd round)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202608">
+								<th class="th" rowspan="9">2026년<br>08월<input type="hidden" id="in202608" value="9">
+								</th>
+						</tr>-->
+							<tr id="m202608c0" class="">
+								<th class="th date01" rowspan="8">2026년<br>08월<input type="hidden" id="in202608" value="9">
+								</th>
+								<td class="th date02">[08-10
+									~ 08-14]
+								</td>
+								<td class="al title01">
+										<span>2학기 수강신청*10일:4ㆍ5학년,초과, 11일:3학년, 12일:2학년, 13일:1학년, 14일:전체 [2026 2nd semester course registration, Aug.10: 4th&amp;5th year; Aug.11: 3rd year; Aug.12: 2nd year; Aug.13: 1st year; Aug.14: All students]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc0" class="">
+								<td id="c202608875" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-08-10 ~ 2026-08-14</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2학기 수강신청</p><p>*10일:4ㆍ5학년,초과, 11일:3학년, 12일:2학년, 13일:1학년, 14일:전체</p><p>&nbsp;[2026 2nd semester course registration, Aug. 10: 4th&amp;5th year, extended semester; Aug. 11: 3rd year; Aug. 12: 2nd year; Aug. 13: 1st year; Aug. 14: All students]</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202608c1" class="">
+								<td class="th date02">[08-21
+									~ 08-21]
+								</td>
+								<td class="al title01">
+										<span>2026년 8월(2025학년도 후기) 학위수여식 [Aug 2026 (2025 academic year fall) graduation ceremony]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc1" class="">
+								<td id="c202608876" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-08-21 ~ 2026-08-21</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2026년 8월(2025학년도 후기) 학위수여식 [Aug 2026 (2025 academic year fall) graduation ceremony]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202608c2" class="">
+								<td class="th date02">[08-24
+									~ 08-28]
+								</td>
+								<td class="al title01">
+										<span>2학기 휴학신청 [2nd semester leave of absence application]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc2" class="">
+								<td id="c202608877" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-08-24 ~ 2026-08-28</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 휴학신청 [2nd semester leave of absence application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202608c3" class="">
+								<td class="th date02">[08-31
+									~ 08-31]
+								</td>
+								<td class="al title01">
+										<span>1학기 종료 [End of 1st semester]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc3" class="">
+								<td id="c202608878" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-08-31 ~ 2026-08-31</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">1학기 종료 [End of 1st semester]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202609">
+								<th class="th" rowspan="13">2026년<br>09월<input type="hidden" id="in202609" value="13">
+								</th>
+						</tr>-->
+							<tr id="m202609c0" class="">
+								<th class="th date01" rowspan="12">2026년<br>09월<input type="hidden" id="in202609" value="13">
+								</th>
+								<td class="th date02">[09-01
+									~ 09-01]
+								</td>
+								<td class="al title01">
+										<span>2학기 시작 [2nd semester begins]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc0" class="">
+								<td id="c202609879" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-09-01 ~ 2026-09-01</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 시작 [2nd semester begins]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202609c1" class="">
+								<td class="th date02">[09-01
+									~ 09-01]
+								</td>
+								<td class="al title01">
+										<span>2학기 개강 [2nd semester classes begin]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc1" class="">
+								<td id="c202609880" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-09-01 ~ 2026-09-01</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 개강 [2nd semester classes begin]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202609c2" class="">
+								<td class="th date02">[09-01
+									~ 09-07]
+								</td>
+								<td class="al title01">
+										<span>수강신청 확인 및 변경 [Course registration confirmation and changes]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc2" class="">
+								<td id="c202609881" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-09-01 ~ 2026-09-07</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수강신청 확인 및 변경 [Course registration confirmation and changes]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202609c3" class="">
+								<td class="th date02">[09-01
+									~ 09-07]
+								</td>
+								<td class="al title01">
+										<span>2학기 학부 교내장학 신청(3차) [2nd semester undergraduate internal scholarship application (3rd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc3" class="">
+								<td id="c202609882" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-09-01 ~ 2026-09-07</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 학부 교내장학 신청(3차) [2nd semester undergraduate internal scholarship application (3rd round)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202609c4" class="">
+								<td class="th date02">[09-17
+									~ 09-21]
+								</td>
+								<td class="al title01">
+										<span>수강신청 취소 [Course withdrawal]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc4" class="">
+								<td id="c202609883" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-09-17 ~ 2026-09-21</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수강신청 취소 [Course withdrawal]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202609c5" class="">
+								<td class="th date02">[09-28
+									~ 09-28]
+								</td>
+								<td class="al title01">
+										<span>수업일수 1/4(일반휴학 만기) [1/4 of semester (general leave of absence deadline)]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc5" class="">
+								<td id="c202609884" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-09-28 ~ 2026-09-28</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수업일수 1/4(일반휴학 만기) [1/4 of semester (general leave of absence deadline)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202610">
+								<th class="th" rowspan="3">2026년<br>10월<input type="hidden" id="in202610" value="3">
+								</th>
+						</tr>-->
+							<tr id="m202610c0" class="">
+								<th class="th date01" rowspan="2">2026년<br>10월<input type="hidden" id="in202610" value="3">
+								</th>
+								<td class="th date02">[10-26
+									~ 10-26]
+								</td>
+								<td class="al title01">
+										<span>수업일수 2/4 [2/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202610cc0" class="">
+								<td id="c202610885" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-10-26 ~ 2026-10-26</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수업일수 2/4 [2/4 of semester]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202611">
+								<th class="th" rowspan="11">2026년<br>11월<input type="hidden" id="in202611" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202611c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>11월<input type="hidden" id="in202611" value="11">
+								</th>
+								<td class="th date02">[11-02
+									~ 11-05]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 복수전공 신청 [2027 1st semester double major application]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc0" class="">
+								<td id="c202611886" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-11-02 ~ 2026-11-05</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2027. 1학기 복수전공 신청 [2027 1st semester double major application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202611c1" class="">
+								<td class="th date02">[11-16
+									~ 11-20]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 전과, 재입학 신청 [2027 1st semester department transfer, re-admission application]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc1" class="">
+								<td id="c202611888" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-11-16 ~ 2026-11-20</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2027. 1학기 전과, 재입학 신청 [2027 1st semester department transfer,&nbsp;</span><span style="background-color: rgb(255, 255, 255); color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px;">re-admission</span><span style="background-color: rgb(255, 255, 255); color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px;">&nbsp;application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202611c2" class="">
+								<td class="th date02">[11-17
+									~ 11-23]
+								</td>
+								<td class="al title01">
+										<span>보강주간 [Make-up class week]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc2" class="">
+								<td id="c202611887" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-11-17 ~ 2026-11-23</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">보강주간 [Make-up class week]</span></p><p class="0" style="line-height:140%;mso-pagination:none;text-autospace:none;mso-padding-alt:0pt 0pt 0pt 0pt;"><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:100%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">※</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;letter-spacing:-1.2pt;font-size:9.0pt;">대체수업일</span></p><p class="0" style="line-height:140%;mso-pagination:none;text-autospace:none;mso-padding-alt:0pt 0pt 0pt 0pt;"><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;"> </span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">9.24(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">목</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">⇒</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">11.19(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">목</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">), 9.25(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">금</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">⇒</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">11.20(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">금</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">), </span></p><!-- Not Allowed Attribute Filtered ( data-hjsonver="1.0" data-jsonlen="9866") --><div id="hwpEditorBoardContent" class="hwp_editor_board_content"><!--[data-hwpjson]{
+"documentPr": {
+"di": "",
+"dp": {
+"dn": "test.hwp",
+"ta": 1,
+"d1": 5,
+"d2": 1,
+"dv": 0,
+"dr": 1,
+"do": 1,
+"vj": "1.1",
+"an": "Hancom Office Hangul",
+"av": "11, 0, 0, 8969",
+"ao": "WIN",
+"ab": "32",
+"ar": "LE",
+"as": "Windows_10"
+},
+"dis": false,
+"ds": {
+"ti": "",
+"la": "ko",
+"cr": "",
+"su": "",
+"de": "",
+"cd": "2026-02-20T10:27:46.601Z",
+"md": "1601-01-01T09:00:00.000Z",
+"pd": "1601-01-01T09:00:00.000Z",
+"ke": ""
+}
+},
+"dh": {
+"do": {
+"pa": 1,
+"fo": 1,
+"en": 1,
+"pi": 1,
+"tb": 1,
+"eq": 1
+},
+"fo": [ ],
+"cd": {
+"tp": 0,
+"lc": {
+"af": false,
+"ui": false,
+"fu": false,
+"dn": false,
+"ul": false,
+"el": false,
+"at": false,
+"tq": false,
+"da": false,
+"dw": false,
+"dj": false,
+"bc": false,
+"bu": false,
+"al": false,
+"ab": false,
+"ap": false,
+"an": false,
+"aa": false,
+"ds": false,
+"de": false,
+"as": false,
+"cp": false,
+"ao": false,
+"et": false,
+"ay": false,
+"am": false,
+"a1": false,
+"bt": false,
+"av": false,
+"dh": false,
+"dp": false,
+"d1": false,
+"mf": false,
+"bl": false,
+"ag": false,
+"dg": false,
+"ae": false,
+"df": false,
+"do": false,
+"dl": false,
+"di": false,
+"d2": false,
+"d3": false,
+"ob": false,
+"d4": false,
+"ev": false,
+"d5": false,
+"d6": false,
+"a2": false,
+"dc": false
+}
+},
+"ld": {
+"pa": "",
+"pi": true,
+"fo": false
+}
+},
+"bf": {
+"01DCA20821081C5000000005": {
+"id": 1,
+"td": false,
+"sh": false,
+"st": 0,
+"sc": 0,
+"si": false,
+"bt": 0,
+"bi": false,
+"cl": 0,
+"bc": false,
+"lt": 0,
+"lw": 0,
+"lc": 0,
+"rt": 0,
+"rw": 0,
+"rc": 0,
+"tt": 0,
+"tw": 0,
+"tc": 0,
+"bbt": 0,
+"bbw": 0,
+"bbc": 0,
+"dt": 1,
+"dw": 0,
+"dc": 0,
+"fi": { }
+},
+"01DCA20821081C5000000006": {
+"id": 2,
+"td": false,
+"sh": false,
+"st": 0,
+"sc": 0,
+"si": false,
+"bt": 0,
+"bi": false,
+"cl": 0,
+"bc": false,
+"lt": 0,
+"lw": 0,
+"lc": 0,
+"rt": 0,
+"rw": 0,
+"rc": 0,
+"tt": 0,
+"tw": 0,
+"tc": 0,
+"bbt": 0,
+"bbw": 0,
+"bbc": 0,
+"dt": 1,
+"dw": 0,
+"dc": 0,
+"fi": {
+"wb": {
+"fc": 4294967295,
+"hc": 0,
+"al": 0,
+"hs": -1
+}
+}
+}
+},
+"cp": {
+"01DCA20821081C5000000007": {
+"id": 0,
+"he": 900,
+"tc": 0,
+"sc": 4294967295,
+"uf": false,
+"uk": false,
+"sm": 0,
+"bf": "01DCA20821081C5000000006",
+"f1": "함초롬돋움",
+"t1": 1,
+"f2": "함초롬돋움",
+"t2": 1,
+"f3": "함초롬돋움",
+"t3": 1,
+"f4": "함초롬돋움",
+"t4": 1,
+"f5": "함초롬돋움",
+"t5": 1,
+"f6": "함초롬돋움",
+"t6": 1,
+"f7": "함초롬돋움",
+"t7": 1,
+"r1": 100,
+"r2": 100,
+"r3": 100,
+"r4": 100,
+"r5": 100,
+"r6": 100,
+"r7": 100,
+"s1": 0,
+"s2": 0,
+"s3": 0,
+"s4": 0,
+"s5": 0,
+"s6": 0,
+"s7": 0,
+"e1": 100,
+"e2": 100,
+"e3": 100,
+"e4": 100,
+"e5": 100,
+"e6": 100,
+"e7": 100,
+"o1": 0,
+"o2": 0,
+"o3": 0,
+"o4": 0,
+"o5": 0,
+"o6": 0,
+"o7": 0,
+"it": false,
+"bo": false,
+"ut": 0,
+"us": 1,
+"uc": 0,
+"st": false,
+"ss": 1,
+"so": 0,
+"ot": 0,
+"ht": 0,
+"hc": 0,
+"hx": 0,
+"hy": 0,
+"em": false,
+"en": false,
+"su": false,
+"sb": false
+},
+"01DCA20821081C5000000008": {
+"id": 1,
+"he": 900,
+"tc": 0,
+"sc": 4294967295,
+"uf": false,
+"uk": false,
+"sm": 0,
+"bf": "01DCA20821081C5000000006",
+"f1": "함초롬돋움",
+"t1": 1,
+"f2": "함초롬돋움",
+"t2": 1,
+"f3": "함초롬돋움",
+"t3": 1,
+"f4": "함초롬돋움",
+"t4": 1,
+"f5": "함초롬돋움",
+"t5": 1,
+"f6": "함초롬돋움",
+"t6": 1,
+"f7": "함초롬돋움",
+"t7": 1,
+"r1": 100,
+"r2": 100,
+"r3": 100,
+"r4": 100,
+"r5": 100,
+"r6": 100,
+"r7": 100,
+"s1": -12,
+"s2": -12,
+"s3": -12,
+"s4": -12,
+"s5": -12,
+"s6": -12,
+"s7": -12,
+"e1": 100,
+"e2": 100,
+"e3": 100,
+"e4": 100,
+"e5": 100,
+"e6": 100,
+"e7": 100,
+"o1": 0,
+"o2": 0,
+"o3": 0,
+"o4": 0,
+"o5": 0,
+"o6": 0,
+"o7": 0,
+"it": false,
+"bo": false,
+"ut": 0,
+"us": 1,
+"uc": 0,
+"st": false,
+"ss": 1,
+"so": 0,
+"ot": 0,
+"ht": 0,
+"hc": 0,
+"hx": 0,
+"hy": 0,
+"em": false,
+"en": false,
+"su": false,
+"sb": false
+},
+"01DCA20821081C5000000009": {
+"id": 2,
+"he": 900,
+"tc": 0,
+"sc": 4294967295,
+"uf": false,
+"uk": false,
+"sm": 0,
+"bf": "01DCA20821081C5000000006",
+"f1": "함초롬돋움",
+"t1": 1,
+"f2": "함초롬돋움",
+"t2": 1,
+"f3": "함초롬돋움",
+"t3": 1,
+"f4": "함초롬돋움",
+"t4": 1,
+"f5": "함초롬돋움",
+"t5": 1,
+"f6": "함초롬돋움",
+"t6": 1,
+"f7": "함초롬돋움",
+"t7": 1,
+"r1": 85,
+"r2": 85,
+"r3": 85,
+"r4": 85,
+"r5": 85,
+"r6": 85,
+"r7": 85,
+"s1": 0,
+"s2": 0,
+"s3": 0,
+"s4": 0,
+"s5": 0,
+"s6": 0,
+"s7": 0,
+"e1": 100,
+"e2": 100,
+"e3": 100,
+"e4": 100,
+"e5": 100,
+"e6": 100,
+"e7": 100,
+"o1": 0,
+"o2": 0,
+"o3": 0,
+"o4": 0,
+"o5": 0,
+"o6": 0,
+"o7": 0,
+"it": false,
+"bo": false,
+"ut": 0,
+"us": 1,
+"uc": 0,
+"st": false,
+"ss": 1,
+"so": 0,
+"ot": 0,
+"ht": 0,
+"hc": 0,
+"hx": 0,
+"hy": 0,
+"em": false,
+"en": false,
+"su": false,
+"sb": false
+},
+"01DCA20821081C500000000A": {
+"id": 3,
+"he": 900,
+"tc": 16711680,
+"sc": 4294967295,
+"uf": false,
+"uk": false,
+"sm": 0,
+"bf": "01DCA20821081C5000000006",
+"f1": "함초롬돋움",
+"t1": 1,
+"f2": "함초롬돋움",
+"t2": 1,
+"f3": "함초롬돋움",
+"t3": 1,
+"f4": "함초롬돋움",
+"t4": 1,
+"f5": "함초롬돋움",
+"t5": 1,
+"f6": "함초롬돋움",
+"t6": 1,
+"f7": "함초롬돋움",
+"t7": 1,
+"r1": 85,
+"r2": 85,
+"r3": 85,
+"r4": 85,
+"r5": 85,
+"r6": 85,
+"r7": 85,
+"s1": 0,
+"s2": 0,
+"s3": 0,
+"s4": 0,
+"s5": 0,
+"s6": 0,
+"s7": 0,
+"e1": 100,
+"e2": 100,
+"e3": 100,
+"e4": 100,
+"e5": 100,
+"e6": 100,
+"e7": 100,
+"o1": 0,
+"o2": 0,
+"o3": 0,
+"o4": 0,
+"o5": 0,
+"o6": 0,
+"o7": 0,
+"it": false,
+"bo": false,
+"ut": 0,
+"us": 1,
+"uc": 0,
+"st": false,
+"ss": 1,
+"so": 0,
+"ot": 0,
+"ht": 0,
+"hc": 0,
+"hx": 0,
+"hy": 0,
+"em": false,
+"en": false,
+"su": false,
+"sb": false
+},
+"01DCA20821081C500000000B": {
+"id": 4,
+"he": 1000,
+"tc": 0,
+"sc": 4294967295,
+"uf": false,
+"uk": false,
+"sm": 0,
+"bf": "01DCA20821081C5000000006",
+"f1": "바탕",
+"t1": 1,
+"f2": "바탕",
+"t2": 1,
+"f3": "바탕",
+"t3": 1,
+"f4": "바탕",
+"t4": 1,
+"f5": "바탕",
+"t5": 1,
+"f6": "바탕",
+"t6": 1,
+"f7": "바탕",
+"t7": 1,
+"r1": 100,
+"r2": 100,
+"r3": 100,
+"r4": 100,
+"r5": 100,
+"r6": 100,
+"r7": 100,
+"s1": 0,
+"s2": 0,
+"s3": 0,
+"s4": 0,
+"s5": 0,
+"s6": 0,
+"s7": 0,
+"e1": 100,
+"e2": 100,
+"e3": 100,
+"e4": 100,
+"e5": 100,
+"e6": 100,
+"e7": 100,
+"o1": 0,
+"o2": 0,
+"o3": 0,
+"o4": 0,
+"o5": 0,
+"o6": 0,
+"o7": 0,
+"it": false,
+"bo": false,
+"ut": 0,
+"us": 1,
+"uc": 0,
+"st": false,
+"ss": 1,
+"so": 0,
+"ot": 0,
+"ht": 0,
+"hc": 0,
+"hx": 0,
+"hy": 0,
+"em": false,
+"en": false,
+"su": false,
+"sb": false
+}
+},
+"tp": {
+"01DCA20821081C500000000C": {
+"id": 0,
+"al": false,
+"ar": false,
+"tp": [ ]
+}
+},
+"nu": { },
+"bu": { },
+"pp": {
+"01DCA20821081C500000000D": {
+"id": 0,
+"ah": 0,
+"av": 0,
+"ht": 0,
+"hi": "",
+"hl": 0,
+"tp": "01DCA20821081C500000000C",
+"kb": 0,
+"kn": true,
+"ko": false,
+"kk": false,
+"kl": false,
+"kp": false,
+"kw": 0,
+"co": 0,
+"fl": false,
+"st": true,
+"sl": false,
+"ae": false,
+"aa": false,
+"mi": 0,
+"ml": 0,
+"mr": 0,
+"mp": 0,
+"mn": 0,
+"lt": 0,
+"lv": 140,
+"bf": "01DCA20821081C5000000006",
+"bl": 0,
+"br": 0,
+"bt": 0,
+"bb": 0,
+"bc": false,
+"bi": false
+},
+"01DCA20821081C500000000E": {
+"id": 1,
+"ah": 0,
+"av": 0,
+"ht": 0,
+"hi": "",
+"hl": 0,
+"tp": "01DCA20821081C500000000C",
+"kb": 0,
+"kn": true,
+"ko": false,
+"kk": false,
+"kl": false,
+"kp": false,
+"kw": 0,
+"co": 0,
+"fl": false,
+"st": true,
+"sl": false,
+"ae": false,
+"aa": false,
+"mi": 0,
+"ml": 0,
+"mr": 0,
+"mp": 0,
+"mn": 0,
+"lt": 0,
+"lv": 160,
+"bf": "01DCA20821081C5000000006",
+"bl": 0,
+"br": 0,
+"bt": 0,
+"bb": 0,
+"bc": false,
+"bi": false
+}
+},
+"st": {
+"01DCA20821081C500000000F": {
+"id": 0,
+"ty": 0,
+"na": "바탕글",
+"en": "Normal",
+"pp": "01DCA20821081C500000000E",
+"cp": "01DCA20821081C500000000B",
+"ns": "01DCA20821081C500000000F",
+"li": 1042,
+"lf": false
+}
+},
+"mp": { },
+"ro": {
+"hp": "01DCA20821081C5000000002",
+"01DCA20821081C5000000002": {
+"np": "01DCA20821081C5000000003",
+"id": 0,
+"pp": "01DCA20821081C500000000D",
+"si": "01DCA20821081C500000000F",
+"bf": 3,
+"ru": [
+{
+"cp": "01DCA20821081C5000000007",
+"ch": [
+{
+"cc": 2,
+"ci": 1936024420,
+"co": "01DCA20821081C5000000000"
+}
+,
+{
+"cc": 2,
+"ci": 1668246628,
+"co": "01DCA20821081C5000000001"
+}
+,
+{
+"t": "※"
+}
+]
+}
+,
+{
+"cp": "01DCA20821081C5000000008",
+"ch": [
+{
+"t": "대체수업일"
+}
+]
+}
+]
+},
+"01DCA20821081C5000000003": {
+"np": "01DCA20821081C5000000004",
+"id": -2147483648,
+"pp": "01DCA20821081C500000000D",
+"si": "01DCA20821081C500000000F",
+"bf": 0,
+"ru": [
+{
+"cp": "01DCA20821081C5000000009",
+"ch": [
+{
+"t": " 9.24(목)⇒11.19(목), 9.25(금)⇒11.20(금), "
+}
+]
+}
+]
+},
+"01DCA20821081C5000000004": {
+"np": "",
+"id": -2147483648,
+"pp": "01DCA20821081C500000000D",
+"si": "01DCA20821081C500000000F",
+"bf": 0,
+"ru": [
+{
+"cp": "01DCA20821081C5000000009",
+"ch": [
+{
+"t": " 10.5(월)⇒11.23(월), 10.9(금)⇒"
+}
+]
+}
+,
+{
+"cp": "01DCA20821081C500000000A",
+"ch": [
+{
+"t": "11.18(수)"
+}
+]
+}
+]
+}
+},
+"sl": { },
+"cs": {
+"01DCA20821081C5000000000": {
+"cc": 2,
+"ci": 1936024420,
+"td": 0,
+"tv": false,
+"sc": 1134,
+"ts": 8000,
+"ms": "",
+"os": "",
+"gl": 0,
+"gc": 0,
+"gw": false,
+"ns": 0,
+"np": 0,
+"ni": 0,
+"nt": 0,
+"ne": 0,
+"hh": false,
+"hf": false,
+"hm": false,
+"fb": false,
+"hb": false,
+"fi": false,
+"hi": false,
+"hp": false,
+"he": false,
+"sl": false,
+"lr": 0,
+"lc": 0,
+"ld": 0,
+"ls": 0,
+"pp": {
+"ls": false,
+"wi": 59528,
+"he": 84188,
+"gt": 0,
+"ml": 8504,
+"mr": 8504,
+"mt": 5668,
+"mb": 4252,
+"mh": 4252,
+"mf": 4252,
+"mg": 0
+},
+"fn": {
+"at": 0,
+"au": "",
+"ap": "",
+"ac": ")",
+"as": false,
+"ll": -1,
+"lt": 1,
+"lw": 1,
+"lc": 0,
+"sa": 850,
+"sb": 567,
+"st": 283
+,
+"nt": 0,
+"nn": 1,
+"pp": 0,
+"pb": false
+},
+"en": {
+"at": 0,
+"au": "",
+"ap": "",
+"ac": ")",
+"as": false,
+"ll": -4,
+"lt": 1,
+"lw": 1,
+"lc": 0,
+"sa": 850,
+"sb": 567,
+"st": 0
+,
+"nt": 0,
+"nn": 1,
+"pp": 0,
+"pb": false
+},
+"pb": [
+{
+"ty": 0,
+"bf": "01DCA20821081C5000000005",
+"tb": true,
+"hi": false,
+"fi": false,
+"fa": 0,
+"ol": 1417,
+"or": 1417,
+"ot": 1417,
+"ob": 1417
+},
+{
+"ty": 1,
+"bf": "01DCA20821081C5000000005",
+"tb": true,
+"hi": false,
+"fi": false,
+"fa": 0,
+"ol": 1417,
+"or": 1417,
+"ot": 1417,
+"ob": 1417
+},
+{
+"ty": 2,
+"bf": "01DCA20821081C5000000005",
+"tb": true,
+"hi": false,
+"fi": false,
+"fa": 0,
+"ol": 1417,
+"or": 1417,
+"ot": 1417,
+"ob": 1417
+}
+],
+"mp": [ ]
+}
+,
+"01DCA20821081C5000000001": {
+"cc": 2,
+"ci": 1668246628,
+"ty": 0,
+"la": 0,
+"co": 1,
+"ss": true,
+"sg": 0,
+"lt": 0,
+"lw": 0,
+"lc": 0,
+"cs": [ ]
+}
+},
+"bi": [ ],
+"bidt": { }
+}--></div><p class="0" style="line-height:140%;mso-pagination:none;text-autospace:none;mso-padding-alt:0pt 0pt 0pt 0pt;"><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;"> </span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">10.5(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">월</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">⇒</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">11.23(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">월</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">), 10.9(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;">금</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">)</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-hansi-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;">⇒</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;color:#0000ff;">11.18(</span><span style="font-family:함초롬돋움;mso-fareast-font-family:함초롬돋움;mso-font-width:85%;font-size:9.0pt;color:#0000ff;">수</span><span lang="EN-US" style="mso-fareast-font-family:함초롬돋움;font-family:함초롬돋움;mso-ascii-font-family:함초롬돋움;mso-font-width:85%;letter-spacing:0pt;mso-text-raise:0pt;font-size:9.0pt;color:#0000ff;">)</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202611c3" class="">
+								<td class="th date02">[11-23
+									~ 11-23]
+								</td>
+								<td class="al title01">
+										<span>수업일수 3/4 [3/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc3" class="">
+								<td id="c202611889" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-11-23 ~ 2026-11-23</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">수업일수 3/4 [3/4 of semester]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202611c4" class="">
+								<td class="th date02">[11-23
+									~ 11-26]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 부전공 신청 [2027 1st semester minor application]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc4" class="">
+								<td id="c202611890" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-11-23 ~ 2026-11-26</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2027. 1학기 부전공 신청 [2027 1st semester minor application]</p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202612">
+								<th class="th" rowspan="15">2026년<br>12월<input type="hidden" id="in202612" value="15">
+								</th>
+						</tr>-->
+							<tr id="m202612c0" class="">
+								<th class="th date01" rowspan="14">2026년<br>12월<input type="hidden" id="in202612" value="15">
+								</th>
+								<td class="th date02">[12-07
+									~ 12-11]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 학부 교내장학 신청(1차) [2027 1st semester undergraduate internal scholarship application (1st round)]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc0" class="">
+								<td id="c202612891" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-07 ~ 2026-12-11</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2027. 1학기 학부 교내장학 신청(1차) [2027 1st semester undergraduate internal scholarship application (1st round)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202612c1" class="">
+								<td class="th date02">[12-15
+									~ 12-21]
+								</td>
+								<td class="al title01">
+										<span>기말시험 [Final exams]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc1" class="">
+								<td id="c202612892" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-15 ~ 2026-12-21</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">기말시험 [Final exams]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202612c2" class="">
+								<td class="th date02">[12-22
+									~ 12-22]
+								</td>
+								<td class="al title01">
+										<span>겨울방학 [Winter vacation]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc2" class="">
+								<td id="c202612893" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-22 ~ 2026-12-22</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">겨울방학 [Winter vacation]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202612c3" class="">
+								<td class="th date02">[12-22
+									~ 01-19]
+								</td>
+								<td class="al title01">
+										<span>겨울 계절수업 [Winter session]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc3" class="">
+								<td id="c202612894" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-22 ~ 2027-01-19</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">겨울 계절수업 [Winter session]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202612c4" class="">
+								<td class="th date02">[12-28
+									~ 12-28]
+								</td>
+								<td class="al title01">
+										<span>성적제출 마감 [Grade submission deadline]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc4" class="">
+								<td id="c202612895" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-28 ~ 2026-12-28</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적제출 마감 [Grade submission deadline]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202612c5" class="">
+								<td class="th date02">[12-29
+									~ 12-29]
+								</td>
+								<td class="al title01">
+										<span>성적열람 시작 [Grade viewing begins]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc5" class="">
+								<td id="c202612896" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-29 ~ 2026-12-29</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적열람 시작 [Grade viewing begins]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202612c6" class="">
+								<td class="th date02">[12-29
+									~ 01-04]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc6" class="">
+								<td id="c202612897" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-29 ~ 2027-01-04</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적정정 [Grade correction]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202701">
+								<th class="th" rowspan="11">2027년<br>01월<input type="hidden" id="in202701" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202701c0" class="">
+								<th class="th date01" rowspan="10">2027년<br>01월<input type="hidden" id="in202701" value="11">
+								</th>
+								<td class="th date02">[12-22
+									~ 01-19]
+								</td>
+								<td class="al title01">
+										<span>겨울 계절수업 [Winter session]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc0" class="">
+								<td id="c202701894" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-22 ~ 2027-01-19</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">겨울 계절수업 [Winter session]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202701c1" class="">
+								<td class="th date02">[12-29
+									~ 01-04]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc1" class="">
+								<td id="c202701897" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2026-12-29 ~ 2027-01-04</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">성적정정 [Grade correction]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202701c2" class="">
+								<td class="th date02">[01-11
+									~ 01-15]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 조기졸업 신청 [2027 1st semester early graduation application]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc2" class="">
+								<td id="c202701898" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2027-01-11 ~ 2027-01-15</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2027. 1학기 조기졸업 신청 [2027 1st semester early graduation application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202701c3" class="">
+								<td class="th date02">[01-18
+									~ 01-22]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 복학 신청 [2027 1st semester return to school application]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc3" class="">
+								<td id="c202701899" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2027-01-18 ~ 2027-01-22</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p>2027. 1학기 복학 신청 [2027 1st semester return to school application]</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202701c4" class="">
+								<td class="th date02">[01-18
+									~ 01-22]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 학부 교내장학 신청(2차) [2027 1st semester undergraduate internal scholarship application (2nd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc4" class="">
+								<td id="c202701900" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2027-01-18 ~ 2027-01-22</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2027. 1학기 학부 교내장학 신청(2차) [2027 1st semester undergraduate internal scholarship application (2nd round)]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202702">
+								<th class="th" rowspan="9">2027년<br>02월<input type="hidden" id="in202702" value="9">
+								</th>
+						</tr>-->
+							<tr id="m202702c0" class="">
+								<th class="th date01" rowspan="8">2027년<br>02월<input type="hidden" id="in202702" value="9">
+								</th>
+								<td class="th date02">[02-17
+									~ 02-24]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 수강 신청 ※ 17:4학년,18:3학년,19:2학년,23:,24:전체 [2027 1st semester course registration * Feb.17: 4th,5th year; Feb.18: 3rd year; Feb.19: 2nd year;Feb.23: 1st year; Feb.24: All students]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc0" class="">
+								<td id="c202702901" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2027-02-17 ~ 2027-02-24</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; color: rgb(33, 37, 41);"><span style="font-size: 16px;">2027. 1학기 수강 신청&nbsp;</span></span><span style="text-indent: -3.8pt; font-size: 9pt; font-family: 함초롬돋움; letter-spacing: 0pt;">※ </span><span lang="EN-US" style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">17:4</span><span style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">학년</span><span lang="EN-US" style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">,18:3</span><span style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">학년</span><span lang="EN-US" style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">,19:2</span><span style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">학년</span><span lang="EN-US" style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">,23:,1</span><span style="text-indent: -3.8pt; font-size: 9pt; font-family: &quot;고도 M&quot;; letter-spacing: -0.5pt;">학년</span></p><p class="0" style="line-height:140%;margin-left:3.8pt;text-indent:-3.8pt;mso-pagination:none;text-autospace:none;mso-padding-alt:0pt 0pt 0pt 0pt;"><span lang="EN-US" style="mso-fareast-font-family:고도 M;mso-font-width:90%;letter-spacing:-0.5pt;font-size:9.0pt;">    </span><span lang="EN-US" style="mso-fareast-font-family:고도 M;font-family:고도 M;mso-ascii-font-family:고도 M;mso-font-width:90%;letter-spacing:-0.5pt;mso-text-raise:0pt;font-size:9.0pt;">22:1</span><span style="font-family:고도 M;mso-fareast-font-family:고도 M;mso-font-width:90%;letter-spacing:-0.5pt;font-size:9.0pt;">학년 장바구니</span><span lang="EN-US" style="mso-fareast-font-family:고도 M;font-family:고도 M;mso-ascii-font-family:고도 M;mso-font-width:90%;letter-spacing:-0.5pt;mso-text-raise:0pt;font-size:9.0pt;">, 24:</span><span style="font-family:고도 M;mso-fareast-font-family:고도 M;mso-font-width:90%;letter-spacing:-0.5pt;font-size:9.0pt;">전체</span><span style="font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; color: rgb(33, 37, 41);"><span style="font-size: 16px;">&nbsp;[</span></span>2027 1st semester course registration * Feb.17: 4th year; Feb.18: 3rd year; Feb.19: 2nd year; Feb.22: 1st year course interest registration (cart); Feb.23: 1st year; Feb.24: All students]</p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202702c1" class="">
+								<td class="th date02">[02-22
+									~ 02-25]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 휴학 신청 [2027 1st semester leave of absence application]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc1" class="">
+								<td id="c202702902" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2027-02-22 ~ 2027-02-25</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2027. 1학기 휴학 신청 [2027 1st semester leave of absence application]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202702c2" class="">
+								<td class="th date02">[02-23
+									~ 02-23]
+								</td>
+								<td class="al title01">
+										<span>2027년 2월(2026학년도 전기) 학위수여식 [Feb 2027 (2026 academic year spring) graduation ceremony]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc2" class="">
+								<td id="c202702903" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2027-02-23 ~ 2027-02-23</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; color: rgb(33, 37, 41);"><span style="font-size: 16px;">2027년 2월(2026학년도 전기) 학위수여식 [Feb 2027 (2026 academic year spring) graduation ceremony]</span></span></p></li>
+									</ul>
+								</td>
+							</tr>
+							<tr id="m202702c3" class="">
+								<td class="th date02">[02-28
+									~ 02-28]
+								</td>
+								<td class="al title01">
+										<span>2학기 종료 [End of 2nd semester]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc3" class="">
+								<td id="c202702904" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+										<li>주관부서 : 교무과</li>
+										<li>일자 : 2027-02-28 ~ 2027-02-28</li>
+										<li>시간 : null시 ~ null시</li>
+										<li>내용 : <p><span style="color: rgb(33, 37, 41); font-family: &quot;Nanum Barun Gothic&quot;, sans-serif; font-size: 16px; background-color: rgb(255, 255, 255);">2학기 종료 [End of 2nd semester]</span></p></li>
+									</ul>
+								</td>
+							</tr>
+							</tbody>
+						</table>

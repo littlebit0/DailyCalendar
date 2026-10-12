@@ -193,23 +193,20 @@ class CalendarWidgetService {
     );
 
     final verifiedAt = _lmsVerifiedAt?.call();
+    final owner = _settingsRepository.dailyAccount()?.googleAccount?.email;
     snapshot['lmsVisibility'] = {
-      'ownerId': _settingsRepository
-          .dailyAccount()
-          ?.googleAccount
-          ?.email
-          .trim()
-          .toLowerCase(),
+      'ownerId': owner?.trim().toLowerCase(),
       'checkedAt': verifiedAt?.millisecondsSinceEpoch,
-      'eventIds': verifiedAt == null
-          ? <String>[]
-          : [
-              for (final event in results[1])
-                if (event.lms != null &&
-                    !event.isDeleted &&
-                    (_isEventVisible?.call(event) ?? false))
-                  event.id,
-            ],
+      // A failed/expired school session stops refreshes, not access to an
+      // owner's already synchronized events. The allowlist remains explicit.
+      'eventIds': [
+        for (final event in results[1])
+          if (event.lms != null &&
+              !event.isDeleted &&
+              event.isVisibleToOwner(owner) &&
+              (_isEventVisible?.call(event) ?? false))
+            event.id,
+      ],
     };
     try {
       await _channel!.invokeMethod<void>(

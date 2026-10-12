@@ -1,0 +1,660 @@
+{
+  "schemaVersion": 1,
+  "universityId": "inje",
+  "campus": "gimhae",
+  "campusName": "김해캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "sourceUrl": "https://globalbiz.inje.ac.kr/globalbiz/community/notice.do?articleNo=76188&mode=view",
+  "publishedDate": "2026-09-06",
+  "sourceSha256": "c72b7139011baae6c0b0179cb01ee56c11a063f4cedda9921f559db9f8e7a613",
+  "sourceRowCount": 16,
+  "courses": [
+    {
+      "sourceId": "inje/gimhae/2026/2/78225f6c3d0569fbdff0eab1",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Consumer behavior",
+      "section": "",
+      "professor": "성민",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 480,
+          "endMinute": 660,
+          "classroom": "D108"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "E6"
+      ],
+      "sourceSchedule": "월 8:00~11:00",
+      "sourceClassroom": "D108",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/b323f557115eae0c18ee1884",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "초급한국어읽기I",
+      "section": "",
+      "professor": "윤기원",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "D315"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "D7"
+      ],
+      "sourceSchedule": "월 9:00~12:00",
+      "sourceClassroom": "D315",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/1ebf9fbd1b68931c8eaab990",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "커뮤니케이션의 이해II",
+      "section": "",
+      "professor": "심영순",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "D209"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "G7"
+      ],
+      "sourceSchedule": "화 9:00~12:00",
+      "sourceClassroom": "D209",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/6568a919308602c8226bc864",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "초급한국어 쓰기I",
+      "section": "",
+      "professor": "김현정",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "D217"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "H7"
+      ],
+      "sourceSchedule": "화 9:00~12:00",
+      "sourceClassroom": "D217",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/3d437f814a3cf370ada95293",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Financial Accounting",
+      "section": "",
+      "professor": "정동진",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "E119"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "I7"
+      ],
+      "sourceSchedule": "화 9:00~12:00",
+      "sourceClassroom": "E119",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/5a298370bfc57fd1c53d4395",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Business Presentaions",
+      "section": "1",
+      "professor": "Vasila",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "D313"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "K7"
+      ],
+      "sourceSchedule": "수 9:00~12:00",
+      "sourceClassroom": "D313",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/1681265e0b36a923377e1e99",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "초급한국어 쓰기II",
+      "section": "",
+      "professor": "김현정",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "D215"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "O7"
+      ],
+      "sourceSchedule": "목 9:00~12:00",
+      "sourceClassroom": "D215",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/6274c6f0020ef91880b98e2c",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "커뮤니케이션의 이해I",
+      "section": "",
+      "professor": "심영순",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "D208"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "P7"
+      ],
+      "sourceSchedule": "목 9:00~12:00",
+      "sourceClassroom": "D208",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/3d1fcb87a4bb8164f116edf4",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "초급한국어 읽기II",
+      "section": "",
+      "professor": "윤기원",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "D308"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "C11"
+      ],
+      "sourceSchedule": "월 13:00~16:00",
+      "sourceClassroom": "D308",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/071474091cd722c8951dab95",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인제 새내기",
+      "section": "6",
+      "professor": "손정민",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "D208"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "D11"
+      ],
+      "sourceSchedule": "월 13:00~15:00",
+      "sourceClassroom": "D208",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/6127abc12ee9e28e73c6619c",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Business Presentaions",
+      "section": "2",
+      "professor": "Vasila",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "E323"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "E11"
+      ],
+      "sourceSchedule": "월 13:00~16:00",
+      "sourceClassroom": "E323",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/d45e151b6d982adfe060bbc2",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Principles of Economics",
+      "section": "",
+      "professor": "Vasila",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "D316"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "G11"
+      ],
+      "sourceSchedule": "화 13:00~16:00",
+      "sourceClassroom": "D316",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/0e49935ced4e798aa2b68520",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Principles of Managemnet",
+      "section": "",
+      "professor": "배성윤",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "D316"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "D316"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "K11",
+        "C14"
+      ],
+      "sourceSchedule": "수 13:00~14:00 / 월 16:00~18:00",
+      "sourceClassroom": "D316 / D316",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/0537a67aaec911ece519eee2",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Business Presentaions",
+      "section": "3",
+      "professor": "손정민",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "E531"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "E531"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "O11",
+        "K12"
+      ],
+      "sourceSchedule": "목 13:00~15:00 / 수 14:00~15:00",
+      "sourceClassroom": "E531 / E531",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/f9195dcdd742bf0a12668c13",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인제 새내기",
+      "section": "7",
+      "professor": "손정민",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "D109"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "I12"
+      ],
+      "sourceSchedule": "화 14:00~16:00",
+      "sourceClassroom": "D109",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "inje/gimhae/2026/2/6d5019dae7ba5f57d7196e48",
+      "universityId": "inje",
+      "campus": "gimhae",
+      "campusName": "김해캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "Financial Management",
+      "section": "",
+      "professor": "Vasila",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "D204"
+        }
+      ],
+      "departments": [
+        "글로벌경영학과"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "글로벌경영학과": ""
+      },
+      "departmentRemarks": {
+        "글로벌경영학과": "학점·이수구분·과목코드 원문 미표기"
+      },
+      "sourceCells": [
+        "M12"
+      ],
+      "sourceSchedule": "수 14:00~17:00",
+      "sourceClassroom": "D204",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    }
+  ],
+  "heldRows": [],
+  "periodEvidence": {
+    "start": "2026-09-01",
+    "end": "2026-12-21",
+    "sourceUrl": "https://www.inje.ac.kr/kor/setRoute/B_Page.asp?pCode=IF010010000&viewType=vy&setYear=2026",
+    "basis": "9/1 개강,12/15~21기말고사,12/22동계방학"
+  },
+  "completionClaim": false
+}

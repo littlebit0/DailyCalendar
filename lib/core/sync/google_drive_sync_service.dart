@@ -83,6 +83,7 @@ class GoogleDriveSyncService implements SyncService {
   final SettingsRepository _settingsRepository;
   TimetableStore get _timetableStore => _settingsRepository.timetableStore;
   (String?, String?, String?)? _timetableBootstrapIdentity;
+  (String?, String?, String?)? _academicSettingsBootstrapIdentity;
   late final PacedHttpClient _httpClient;
   final Duration _backupRestoreDelay;
   final Duration _changeSyncDelay;
@@ -919,6 +920,7 @@ class GoogleDriveSyncService implements SyncService {
     await _applyDownloadedEvents(remoteEvents);
     if (remoteSettings != null) await _applyDownloadedSettings(remoteSettings);
     await _applyDownloadedTimetable(remoteTimetable);
+    _academicSettingsBootstrapIdentity = _accountIdentity;
     await _refreshWidgets();
   }
 
@@ -1058,6 +1060,20 @@ class GoogleDriveSyncService implements SyncService {
     }
 
     _DownloadedSettings? externalSettings;
+    var didLookupSettings = false;
+    final academicProfile = _settingsRepository.load().academicProfile;
+    final academicRegister = _settingsRepository
+        .settingsSyncDocument()
+        .fields['academicProfile'];
+    final explicitlyDeletedProfile =
+        academicRegister != null && academicRegister.value == null;
+    final needsAcademicSettings =
+        _academicSettingsBootstrapIdentity != _accountIdentity &&
+        _settingsRepository.dailyAccount()?.googleAccount != null &&
+        !explicitlyDeletedProfile &&
+        (academicProfile == null ||
+            academicProfile.lmsUserId == null ||
+            academicProfile.lmsIntegrationEnabled == null);
     var needsTimetable = _timetableBootstrapIdentity != _accountIdentity;
     final externalEvents = <_DownloadedEvent>[];
     final eventIds = <String>{};
@@ -1067,7 +1083,10 @@ class GoogleDriveSyncService implements SyncService {
         continue;
       }
       if (change.fileName == _settingsFileName) {
-        externalSettings ??= await _downloadRestorableSettings(authHeaders);
+        if (!didLookupSettings) {
+          externalSettings = await _downloadRestorableSettings(authHeaders);
+          didLookupSettings = true;
+        }
         continue;
       }
       if (_eventIdFromFileName(change.fileName) == null) {
@@ -1082,6 +1101,13 @@ class GoogleDriveSyncService implements SyncService {
           await _listEventFilesForIds(authHeaders, eventIds),
         ),
       );
+    }
+    // Older clients can advance the cursor while omitting unknown LMS fields
+    // from the decoded local profile, even with a complete raw LWW register.
+    // Bootstrap incomplete academic settings once per linked session, never an
+    // explicit profile deletion. This reads no event snapshots and adds no poll.
+    if (needsAcademicSettings && !didLookupSettings) {
+      externalSettings = await _downloadRestorableSettings(authHeaders);
     }
     // A token saved by an older client may already be newer than the timetable
     // file. Bootstrap once per linked session even when that feed is empty.
@@ -1099,6 +1125,9 @@ class GoogleDriveSyncService implements SyncService {
     }
     if (needsTimetable) {
       restored = await _applyDownloadedTimetable(externalTimetable) || restored;
+    }
+    if (needsAcademicSettings) {
+      _academicSettingsBootstrapIdentity = _accountIdentity;
     }
     if (restored) {
       await _refreshWidgets();

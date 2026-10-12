@@ -10,6 +10,7 @@ import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/timetable/presentation/timetable_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -180,6 +181,41 @@ Future<void> _assertMoving(
 }
 
 void main() {
+  testWidgets(
+    'Mac quick/timetable transitions update each high-refresh tick without repainting content',
+    (tester) async {
+      await _mount(tester, TargetPlatform.macOS);
+      for (final destination in [0, -1, 0]) {
+        await _choose(tester, destination);
+        await tester.pump();
+        await tester.pump(const Duration(microseconds: 8333));
+        final incoming = _slides(
+          tester,
+        ).singleWhere((s) => s.child?.key == ValueKey<int>(destination));
+        expect(incoming.child, isA<RepaintBoundary>());
+        final boundary = tester.renderObject<RenderRepaintBoundary>(
+          find.byWidget(incoming.child!),
+        );
+        final painted = boundary.debugSymmetricPaintCount;
+        var previous = incoming.position.value.dx.abs();
+        for (var tick = 0; tick < 8; tick++) {
+          await tester.pump(const Duration(microseconds: 8333));
+          final current = _offset(tester, destination).abs();
+          expect(current, lessThan(previous));
+          previous = current;
+        }
+        expect(
+          boundary.debugSymmetricPaintCount,
+          painted,
+          reason:
+              'Slide movement reuses painted content instead of painting the full surface at120Hz',
+        );
+        await tester.pumpAndSettle();
+      }
+      await _unmount(tester);
+    },
+  );
+
   for (final platform in [
     TargetPlatform.macOS,
     TargetPlatform.windows,

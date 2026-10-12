@@ -17,6 +17,25 @@ String timetableDateKey(DateTime date) =>
 int timetableSlotStart(int minute) => minute ~/ 30 * 30;
 int timetableSlotEnd(int minute) => (minute + 29) ~/ 30 * 30;
 
+/// Distinct weekday/time/room rows for timetable information displays.
+/// This is presentation only: dated meetings remain intact for occurrences,
+/// editing, overrides and sync. A different time or room retains its own row.
+Iterable<ClassMeeting> timetableDisplayMeetings(
+  Iterable<ClassMeeting> meetings,
+) sync* {
+  final seen = <(int, int, int, String)>{};
+  for (final meeting in meetings) {
+    if (seen.add((
+      meeting.weekday,
+      meeting.startMinute,
+      meeting.endMinute,
+      meeting.classroom,
+    ))) {
+      yield meeting;
+    }
+  }
+}
+
 class ClassMeeting {
   const ClassMeeting({
     required this.id,
@@ -24,6 +43,7 @@ class ClassMeeting {
     required int startMinute,
     required int endMinute,
     this.classroom = '',
+    this.date,
   }) : originalStartMinute = startMinute,
        originalEndMinute = endMinute;
   final String id;
@@ -33,19 +53,39 @@ class ClassMeeting {
   int get startMinute => timetableSlotStart(originalStartMinute);
   int get endMinute => timetableSlotEnd(originalEndMinute);
   final String classroom;
+
+  /// An exact published teaching date. Null retains the weekly recurrence.
+  /// Date-only text preserves the calendar date across devices and time zones.
+  final String? date;
+  DateTime? get teachingDate => date == null ? null : DateTime.tryParse(date!);
+  bool occursOn(DateTime day) =>
+      date == null ? weekday == day.weekday : date == timetableDateKey(day);
+  bool get _validDate {
+    if (date == null) return true;
+    final value = teachingDate;
+    return RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(date!) &&
+        value != null &&
+        value.year >= 1900 &&
+        value.year <= 9999 &&
+        timetableDateKey(value) == date &&
+        value.weekday == weekday;
+  }
+
   bool get isValid =>
       id.isNotEmpty &&
       weekday >= 1 &&
       weekday <= 7 &&
       originalStartMinute >= 0 &&
       originalEndMinute <= 1440 &&
-      originalStartMinute < originalEndMinute;
+      originalStartMinute < originalEndMinute &&
+      _validDate;
   Map<String, Object?> toJson() => {
     'id': id,
     'weekday': weekday,
     'startMinute': originalStartMinute,
     'endMinute': originalEndMinute,
     'classroom': classroom,
+    if (date != null) 'date': date,
   };
   factory ClassMeeting.fromJson(Map<String, dynamic> json) => ClassMeeting(
     id: json['id'] as String,
@@ -53,6 +93,7 @@ class ClassMeeting {
     startMinute: json['startMinute'] as int,
     endMinute: json['endMinute'] as int,
     classroom: json['classroom'] as String? ?? '',
+    date: json['date'] as String?,
   );
 }
 
@@ -69,6 +110,7 @@ class TimetableClass {
     this.defaultMode = LectureMode.inPerson,
     this.sourceId,
     this.sourceType = 'manual',
+    this.period,
     Map<String, LectureMode> overrides = const {},
   }) : meetings = List.unmodifiable(meetings),
        overrides = Map.unmodifiable(overrides);
@@ -83,6 +125,9 @@ class TimetableClass {
   final LectureMode defaultMode;
   final String sourceType;
   final String? sourceId;
+
+  /// A published shorter teaching period, intersected with the saved term.
+  final TimetablePeriod? period;
   // Meeting identity avoids applying one block's exception to another on the same day.
   final Map<String, LectureMode> overrides;
   bool get isValid =>
@@ -92,7 +137,13 @@ class TimetableClass {
       academicYear <= 9999 &&
       semester.isNotEmpty &&
       meetings.isNotEmpty &&
-      meetings.every((m) => m.isValid) &&
+      meetings.every(
+        (m) =>
+            m.isValid &&
+            (m.date == null ||
+                period == null ||
+                period!.contains(m.teachingDate!)),
+      ) &&
       meetings.map((m) => m.id).toSet().length == meetings.length &&
       defaultMode != LectureMode.cancelled;
   String overrideKey(ClassMeeting meeting, DateTime date) =>
@@ -129,6 +180,7 @@ class TimetableClass {
     'defaultMode': defaultMode.name,
     'sourceType': sourceType,
     'sourceId': sourceId,
+    if (period != null) 'period': period!.toJson(),
     'overrides': overrides.map((k, v) => MapEntry(k, v.name)),
   };
   factory TimetableClass.fromJson(Map<String, dynamic> json) => TimetableClass(
@@ -145,6 +197,11 @@ class TimetableClass {
     defaultMode: LectureMode.values.byName(json['defaultMode'] as String),
     sourceType: json['sourceType'] as String? ?? 'manual',
     sourceId: json['sourceId'] as String?,
+    period: json['period'] == null
+        ? null
+        : TimetablePeriod.fromJson(
+            Map<String, dynamic>.from(json['period'] as Map),
+          ),
     overrides: (json['overrides'] as Map? ?? {}).map(
       (k, v) => MapEntry(k as String, LectureMode.values.byName(v as String)),
     ),
@@ -184,8 +241,11 @@ List<ClassOccurrence> classOccurrences(
   for (final date in days)
     for (final course in classes)
       for (final meeting in course.meetings)
-        if ((periodFor == null || periodFor(course)?.contains(date) == true) &&
-            meeting.weekday == date.weekday &&
+        if ((meeting.date != null ||
+                periodFor == null ||
+                periodFor(course)?.contains(date) == true) &&
+            (course.period == null || course.period!.contains(date)) &&
+            meeting.occursOn(date) &&
             (includeUnscheduled ||
                 (course.modeOn(meeting, date) != LectureMode.cancelled &&
                     course.modeOn(meeting, date) != LectureMode.video)))

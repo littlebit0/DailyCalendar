@@ -3003,6 +3003,47 @@ void _latestMergeTests() {
         );
 
     test(
+      'issue89 restored renamed category retains stable identity through SQLite edit',
+      () async {
+        await settings.saveGoogleAccount(
+          const GoogleAccount(email: 'tester@example.com'),
+        );
+        const category = EventCategory(
+          id: 'custom_original_id',
+          label: 'Renamed LMS',
+          colorValue: 0xff335577,
+        );
+        final before = settings.load();
+        await settings.save(
+          before.copyWith(categories: [...before.categories, category]),
+          changedFrom: before,
+        );
+        final data = remote();
+        final payload = data['event'] as Map;
+        payload['lms'] = metadata().toJson();
+        payload['category'] = category.id;
+        payload['categoryLabel'] = category.label;
+        payload['colorValue'] = category.colorValue;
+        drive.seed('remote-category', 'daily-sync-v2-event-merge.json', data);
+        await service.restoreNow();
+        final restored = (await repository.findById('merge'))!;
+        expect(restored.category.id, category.id);
+        expect(restored.category.label, category.label);
+        await repository.save(
+          restored.copyWith(
+            memo: 'Other device edit',
+            updatedAt: DateTime.utc(2026, 10, 12),
+          ),
+        );
+        await service.backupNow(eventIds: {'merge'}, includeSettings: false);
+        expect(
+          (drive.payload('remote-category')['event'] as Map)['category'],
+          category.id,
+        );
+      },
+    );
+
+    test(
       'LMS upload and compact deletions stay with owner while personal events still upload',
       () async {
         final own = local().copyWith(

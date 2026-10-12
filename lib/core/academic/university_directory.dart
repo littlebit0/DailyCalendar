@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
+import 'academic_profile.dart';
+
 /// Retained source groups; the picker currently offers four-year schools only.
 enum UniversityKind { fourYear, juniorCollege, cyberUniversity }
 
@@ -54,11 +56,15 @@ class University {
 
   bool get supportsSangmyung => integrationId != null;
 
-  bool get supportsAcademicFeatures => const {
-    'institution:academyinfo:0000117',
-    'institution:academyinfo:0000082',
-    'institution:academyinfo:0000023',
-  }.contains(institutionId);
+  AcademicProfile get _supportProfile => AcademicProfile(
+    universityId: institutionId,
+    universityName: institutionName,
+    schoolKind: 'fourYear',
+    campusId: id,
+  );
+
+  bool get supportsAcademicFeatures => _supportProfile.timetableSupported;
+  bool get supportsAcademicCalendar => _supportProfile.academicSourceId != null;
 
   String get displayName => campus == null || institutionName.contains(campus!)
       ? institutionName
@@ -101,6 +107,8 @@ class UniversityInstitution {
   bool get campusSelectionRequired => campuses.first.campusSelectionRequired;
   bool get supportsAcademicFeatures =>
       campuses.any((campus) => campus.supportsAcademicFeatures);
+  bool get supportsAcademicCalendar =>
+      campuses.any((campus) => campus.supportsAcademicCalendar);
 
   /// Official campus names only. Generic disclosure labels such as 본교 do not
   /// claim a physical campus name and are not replaced with a region name.

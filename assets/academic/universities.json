@@ -1271,7 +1271,7 @@
       "institutionName": "국립창원대학교",
       "campusOrder": 0,
       "sourceCampus": "본교",
-      "campusSelectionRequired": false
+      "campusSelectionRequired": true
     },
     {
       "id": "academyinfo:0003297",
@@ -1286,7 +1286,7 @@
       "institutionName": "국립창원대학교",
       "campusOrder": 1,
       "sourceCampus": "제2캠퍼스",
-      "campusSelectionRequired": false
+      "campusSelectionRequired": true
     },
     {
       "id": "academyinfo:0003298",
@@ -1301,7 +1301,7 @@
       "institutionName": "국립창원대학교",
       "campusOrder": 2,
       "sourceCampus": "제3캠퍼스",
-      "campusSelectionRequired": false
+      "campusSelectionRequired": true
     },
     {
       "id": "academyinfo:0000034",
@@ -6628,7 +6628,7 @@
         "https://m.academyinfo.go.kr/intro/intro0350/intro.do",
         "https://www.changwon.ac.kr/eduhub/main.do"
       ],
-      "campusSelectionRequired": false
+      "campusSelectionRequired": true
     },
     {
       "id": "institution:academyinfo:0000100",
@@ -6838,7 +6838,8 @@
       "고려대학교",
       "동국대학교",
       "연세대학교",
-      "한양대학교"
+      "한양대학교",
+      "국립창원대학교"
     ],
     "notes": "Selection offers four-year universities only, excluding the listed military/theological institutions and LH school. Junior/cyber source rows, original campus IDs and stored profiles remain valid for legacy lookup. No automatic profile migration or cloud rewrite.",
     "theologicalEvidenceUrls": [
@@ -6853,6 +6854,7 @@
     ],
     "excludedAdditionalNames": [
       "LH토지주택대학교"
-    ]
+    ],
+    "changwonAcademicEvidenceUrl": "https://www.gc.ac.kr/CW0301/101014.asp?mi=101014"
   }
 }

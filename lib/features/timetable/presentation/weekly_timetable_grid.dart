@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/localization/app_localizations.dart';
-import '../../../core/theme/event_completion_palette.dart';
+import '../../../core/theme/event_completion_style.dart';
 import '../domain/timetable.dart';
 
 /// A semester timetable whose weekdays always fit the available width.
@@ -446,7 +446,7 @@ class _ClassBlock extends StatelessWidget {
                     decoration: cancelled
                         ? TextDecoration.lineThrough
                         : TextDecoration.none,
-                    decorationColor: palette.strike,
+                    decorationColor: calendarEventStrikeColor(context),
                   );
                   return ClipRect(
                     child: Stack(

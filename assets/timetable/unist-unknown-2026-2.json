@@ -1,0 +1,1075 @@
+{
+  "schemaVersion": 2,
+  "universityId": "unist",
+  "institutionId": "institution:academyinfo:0000250",
+  "campus": "unknown",
+  "campusName": "캠퍼스 미확인",
+  "academicYear": 2026,
+  "semester": "2",
+  "sourceUrl": "https://cse.unist.ac.kr/cse/research/lab.do?article.offset=20&articleLimit=10&mode=list",
+  "sourceUrls": [
+    "https://websec-lab.github.io/courses/2026f-uni111/",
+    "https://websec-lab.github.io/courses/2026f-cse480/"
+  ],
+  "candidateRevision": "current-two-faculty-plans-partial-v1",
+  "publishedDate": "2026-10-08",
+  "publishedDateMeaning": "sourceSnapshotRetrievalDate",
+  "sourcePublicationDateUnpublished": true,
+  "termStartDate": "2026-08-31",
+  "termEndDate": "2026-12-18",
+  "completionClaim": false,
+  "courses": [
+    {
+      "sourceId": "https://websec-lab.github.io/courses/2026f-uni111/#course",
+      "referenceKind": "internalDocumentLocator",
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "unknown",
+      "courseCode": "UNI111",
+      "courseName": "Introduction to CSE",
+      "section": "",
+      "professor": "Seongil Wi",
+      "credits": null,
+      "classification": "",
+      "departments": [
+        "Computer Science and Engineering"
+      ],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {
+        "Computer Science and Engineering": "공개 교수 운영 계획, 실제 출석/개별 변경 미확인. 교수 수업 페이지의 실제 게시일은 미공개이며 자료 기준일2026-10-08은 직접 확인·수집일입니다.  공식 컴퓨터공학과의 교원·연구실 공개 링크로 확인된 교수 연구실에서 현재2026 Fall 날짜별 수업 계획을 직접 게시했습니다. 중앙 전체 개설강좌 수집이 아니며 두 공개 강좌 범위입니다. 내부 원문 문서 위치 식별자는 수강신청 분반번호가 아닙니다. 과목코드는 현재 수업표의 실제 UNI111/CSE480이며 분반·학점·이수구분은 이 공개 수업 계획에 미공개로 빈 값/미확인입니다. 학부 scope는 UNI111 원문 First-year students, CSE480 공식 학사과정 교과목안내 컴퓨터공학특론Ⅰ로 직접 확인했습니다. 교수 Seongil Wi의 역할은 UNI111 Coordinator/CSE480 Instructor이며 UNI111 날짜별 여러 교수·특강연사는 원문 metadata와 아래 교육 비고에 별도로 보존합니다. source 방식은 따로 보존하고 사용자 강의방식3종을 덮어쓰지 않습니다. 실104-E206/106-T205는 수업 페이지 실제 교육실 표기이며 교수 사무실과 구분했습니다. 물리 캠퍼스 mapping 직접근거는 미확인으로 unknown입니다. 자체 정상공개 현행 CMS달력8월31일 개강·12월18일 종강·10월19~23일중간·12월14~18일기말을 직접 대조했습니다. 오래된 학생교류fact sheet의학사기간은 현재달력과 일치하나 권장학기 curriculum을 현재 개설표로 전용하지 않습니다. 오래된freshman PDFURL은 정상200 HTML리다이렉트여서 현재PDF 날짜증거로 재사용하지 않습니다. 날짜는 각 교수 원문에 직접 게시된 실제 ISO/표시날짜만 사용하며 주간반복 추가를 만들지 않습니다. 명시No class·CSE480 9월15일녹화 No offline 및12월17일Final Exam(별도시험clock/room 미명시)은 원문으로 보존하고 일정에서보류합니다. 일정은 공개 수업계획이며 실제출석·현재중앙폐강완전대조는 미확인입니다. 현재 원문 UNI111 Fall 2026 / A first-year tour of computer science and engineering, from systems and HCI to AI and security, taught by the CSE faculty. Wednesdays 4:00–5:15 pm, Room 104-E206 .. 날짜별 교육용 원문 비고: 2026-09-02 Orientation Prof. Seongil Wi  ; 2026-09-09 Computer Systems Prof. Ranggi Hwang  ; 2026-09-16 Computer Systems Prof. Ranggi Hwang  ; 2026-09-23 Human-Computer Interaction Prof. Seongkook Heo  ; 2026-09-30 Human-Computer Interaction Prof. Seongkook Heo  ; 2026-10-07 Data Science Prof. Junghoon Kim  ; 2026-10-14 Alumni Career Seminar Injung Chung, Prof. Myeonggyun Han  Given in Korean, with real-time English translation.; 2026-10-21   No class (Midterm exam period) ; 2026-10-28 Programming Languages and Software Engineering Prof. Jooyong Yi  ; 2026-11-04 Programming Languages and Software Engineering Prof. Jaemin Hong  ; 2026-11-11 Artificial Intelligence Prof. Taesik Gong  ; 2026-11-18 Artificial Intelligence Prof. Taesik Gong  ; 2026-11-25 Computer Security Prof. Minkyung Park  ; 2026-12-02 Faculty Q&A Panel Prof. Jooyong Yi, Prof. Hyungon Moon, Prof. Seongkook Heo, Prof. Taehwan Kim  Given in Korean, with real-time English translation.; 2026-12-09 Computer Security Prof. Minkyung Park  ; 2026-12-16   No class (Final exam period) "
+      },
+      "sourceSchedule": "Wednesdays, 4:00–5:15 pm",
+      "sourceClassroom": "104-E206",
+      "period": {
+        "startDate": "2026-09-02",
+        "endDate": "2026-12-09"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1035,
+          "classroom": "104-E206"
+        }
+      ],
+      "sourceEducation": {
+        "currentFacultyPlan": {
+          "sourceId": "https://websec-lab.github.io/courses/2026f-uni111/#course",
+          "referenceKind": "internalDocumentLocator",
+          "sourceUrl": "https://websec-lab.github.io/courses/2026f-uni111/",
+          "sourceSHA256": "fcad6b050ebbd4b1d2ff1a9ce02855dd6af7c80625951f71afc7bb576f654c81",
+          "status": 200,
+          "nativeCourseHeading": "UNI111 Fall 2026",
+          "nativeCourseCode": "UNI111",
+          "nativeCourseTitle": "Introduction to CSE",
+          "nativeCourseIntroClockRoomText": "A first-year tour of computer science and engineering, from systems and HCI to AI and security, taught by the CSE faculty. Wednesdays 4:00–5:15 pm, Room 104-E206 .",
+          "nativeFacts": {
+            "Time": "Wednesdays, 4:00–5:15 pm",
+            "Location": "Room E206, Building 104",
+            "For": "First-year students"
+          },
+          "nativeProfessor": "Seongil Wi",
+          "nativeProfessorRole": "Coordinator",
+          "nativeSection": "",
+          "nativeCredits": null,
+          "nativeClassification": "",
+          "nativeRoom": "104-E206",
+          "startMinute": 960,
+          "endMinute": 1035,
+          "educationDateRows": [
+            {
+              "nativeISODate": "2026-09-02",
+              "nativeDisplayDate": "Sep 2",
+              "nativeTopic": "Orientation",
+              "nativeFaculty": [
+                "Prof. Seongil Wi"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-09-09",
+              "nativeDisplayDate": "Sep 9",
+              "nativeTopic": "Computer Systems",
+              "nativeFaculty": [
+                "Prof. Ranggi Hwang"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-09-16",
+              "nativeDisplayDate": "Sep 16",
+              "nativeTopic": "Computer Systems",
+              "nativeFaculty": [
+                "Prof. Ranggi Hwang"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-09-23",
+              "nativeDisplayDate": "Sep 23",
+              "nativeTopic": "Human-Computer Interaction",
+              "nativeFaculty": [
+                "Prof. Seongkook Heo"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-09-30",
+              "nativeDisplayDate": "Sep 30",
+              "nativeTopic": "Human-Computer Interaction",
+              "nativeFaculty": [
+                "Prof. Seongkook Heo"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-10-07",
+              "nativeDisplayDate": "Oct 7",
+              "nativeTopic": "Data Science",
+              "nativeFaculty": [
+                "Prof. Junghoon Kim"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-10-14",
+              "nativeDisplayDate": "Oct 14",
+              "nativeTopic": "Alumni Career Seminar",
+              "nativeFaculty": [
+                "Injung Chung",
+                "Prof. Myeonggyun Han"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [
+                "Given in Korean, with real-time English translation."
+              ],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-10-21",
+              "nativeDisplayDate": "Oct 21",
+              "nativeTopic": "",
+              "nativeFaculty": [],
+              "nativeNoClassText": "No class (Midterm exam period)",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "noClass",
+              "heldReasons": [
+                "explicitNoClass"
+              ],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-10-28",
+              "nativeDisplayDate": "Oct 28",
+              "nativeTopic": "Programming Languages and Software Engineering",
+              "nativeFaculty": [
+                "Prof. Jooyong Yi"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-11-04",
+              "nativeDisplayDate": "Nov 4",
+              "nativeTopic": "Programming Languages and Software Engineering",
+              "nativeFaculty": [
+                "Prof. Jaemin Hong"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-11-11",
+              "nativeDisplayDate": "Nov 11",
+              "nativeTopic": "Artificial Intelligence",
+              "nativeFaculty": [
+                "Prof. Taesik Gong"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-11-18",
+              "nativeDisplayDate": "Nov 18",
+              "nativeTopic": "Artificial Intelligence",
+              "nativeFaculty": [
+                "Prof. Taesik Gong"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-11-25",
+              "nativeDisplayDate": "Nov 25",
+              "nativeTopic": "Computer Security",
+              "nativeFaculty": [
+                "Prof. Minkyung Park"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-12-02",
+              "nativeDisplayDate": "Dec 2",
+              "nativeTopic": "Faculty Q&A Panel",
+              "nativeFaculty": [
+                "Prof. Jooyong Yi",
+                "Prof. Hyungon Moon",
+                "Prof. Seongkook Heo",
+                "Prof. Taehwan Kim"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [
+                "Given in Korean, with real-time English translation."
+              ],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-12-09",
+              "nativeDisplayDate": "Dec 9",
+              "nativeTopic": "Computer Security",
+              "nativeFaculty": [
+                "Prof. Minkyung Park"
+              ],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 3
+            },
+            {
+              "nativeISODate": "2026-12-16",
+              "nativeDisplayDate": "Dec 16",
+              "nativeTopic": "",
+              "nativeFaculty": [],
+              "nativeNoClassText": "No class (Final exam period)",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "noClass",
+              "heldReasons": [
+                "explicitNoClass"
+              ],
+              "weekday": 3
+            }
+          ],
+          "actualAttendanceConfirmed": false,
+          "rawBodySaved": false
+        },
+        "referenceKind": "internalDocumentLocator",
+        "wholeSchoolCompletionClaim": false,
+        "actualAttendanceConfirmed": false,
+        "campusPhysicalProof": false,
+        "latestWholeClosureCompared": false
+      }
+    },
+    {
+      "sourceId": "https://websec-lab.github.io/courses/2026f-cse480/#course",
+      "referenceKind": "internalDocumentLocator",
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "unknown",
+      "courseCode": "CSE480",
+      "courseName": "Web Security",
+      "section": "",
+      "professor": "Seongil Wi",
+      "credits": null,
+      "classification": "",
+      "departments": [
+        "Computer Science and Engineering"
+      ],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {
+        "Computer Science and Engineering": "공개 교수 운영 계획, 실제 출석/개별 변경 미확인. 교수 수업 페이지의 실제 게시일은 미공개이며 자료 기준일2026-10-08은 직접 확인·수집일입니다.  공식 컴퓨터공학과의 교원·연구실 공개 링크로 확인된 교수 연구실에서 현재2026 Fall 날짜별 수업 계획을 직접 게시했습니다. 중앙 전체 개설강좌 수집이 아니며 두 공개 강좌 범위입니다. 내부 원문 문서 위치 식별자는 수강신청 분반번호가 아닙니다. 과목코드는 현재 수업표의 실제 UNI111/CSE480이며 분반·학점·이수구분은 이 공개 수업 계획에 미공개로 빈 값/미확인입니다. 학부 scope는 UNI111 원문 First-year students, CSE480 공식 학사과정 교과목안내 컴퓨터공학특론Ⅰ로 직접 확인했습니다. 교수 Seongil Wi의 역할은 UNI111 Coordinator/CSE480 Instructor이며 UNI111 날짜별 여러 교수·특강연사는 원문 metadata와 아래 교육 비고에 별도로 보존합니다. source 방식은 따로 보존하고 사용자 강의방식3종을 덮어쓰지 않습니다. 실104-E206/106-T205는 수업 페이지 실제 교육실 표기이며 교수 사무실과 구분했습니다. 물리 캠퍼스 mapping 직접근거는 미확인으로 unknown입니다. 자체 정상공개 현행 CMS달력8월31일 개강·12월18일 종강·10월19~23일중간·12월14~18일기말을 직접 대조했습니다. 오래된 학생교류fact sheet의학사기간은 현재달력과 일치하나 권장학기 curriculum을 현재 개설표로 전용하지 않습니다. 오래된freshman PDFURL은 정상200 HTML리다이렉트여서 현재PDF 날짜증거로 재사용하지 않습니다. 날짜는 각 교수 원문에 직접 게시된 실제 ISO/표시날짜만 사용하며 주간반복 추가를 만들지 않습니다. 명시No class·CSE480 9월15일녹화 No offline 및12월17일Final Exam(별도시험clock/room 미명시)은 원문으로 보존하고 일정에서보류합니다. 일정은 공개 수업계획이며 실제출석·현재중앙폐강완전대조는 미확인입니다. 현재 원문 CSE480 Special Topic in CSE I Fall 2026 / Learn real web attacks by conducting them yourself in weekly hands-on labs. Tuesdays & Thursdays 2:30–3:45 pm, Room 106-T205.. 날짜별 교육용 원문 비고: 2026-09-01 Introduction   ; 2026-09-03 Lab #0 Preparation   ; 2026-09-08 Security & Web Programming Basic   ; 2026-09-10 Lab #1 HTML, JavaScript, and PHP   ; 2026-09-15 SQL Injection   No offline class / A recorded lecture video will be provided; 2026-09-17 Lab #2 SQL Injection   Assignment 1 out / (Optional) Lab #3: SQL 101; 2026-09-22 Lab #4 Advanced SQL Injection   ; 2026-09-24   No class (Chuseok holiday) ; 2026-09-29 HTTPS   ; 2026-10-01 Same Origin Policy & Cookie   ; 2026-10-06 Reflected XSS, Stored XSS   Assignment 2 out; 2026-10-08 Lab #5 Reflected XSS, Stored XSS   ; 2026-10-13 Client-side XSS, Universal XSS   ; 2026-10-15 Lab #6 Client-side XSS   ; 2026-10-20   No class (Midterm week) ; 2026-10-22   No class (Midterm week) ; 2026-10-27 Cross-site Request Forgery   Assignment 3 out; 2026-10-29 Lab #7 Cross-site Request Forgery   ; 2026-11-03 Shell Code Injection and File Inclusion   ; 2026-11-05 Lab #8 Shell Code Injection and File Inclusion   ; 2026-11-10 Property-Oriented Programming   ; 2026-11-12 Lab #9 Property-Oriented Programming   ; 2026-11-17 Content Security Policy   ; 2026-11-19 Lab #10 Content Security Policy   Assignment 4 out; 2026-11-24 Unrestricted File Upload   ; 2026-11-26 Lab #11 Unrestricted File Upload   ; 2026-12-01 Tracking, Phishing   ; 2026-12-03 XS-Leaks, 2nd Factor Authentication   ; 2026-12-08 AI Security   ; 2026-12-10 Guest Lecture   ; 2026-12-15   No class (Final week) ; 2026-12-17 Final Exam   "
+      },
+      "sourceSchedule": "Tuesdays & Thursdays 2:30–3:45 pm",
+      "sourceClassroom": "106-T205",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-10"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 945,
+          "classroom": "106-T205"
+        }
+      ],
+      "sourceEducation": {
+        "currentFacultyPlan": {
+          "sourceId": "https://websec-lab.github.io/courses/2026f-cse480/#course",
+          "referenceKind": "internalDocumentLocator",
+          "sourceUrl": "https://websec-lab.github.io/courses/2026f-cse480/",
+          "sourceSHA256": "c0c7ae25cbc66a5ba513b5c7452ddff970b3f462575f3956fa5c1ac1190b6b7d",
+          "status": 200,
+          "nativeCourseHeading": "CSE480 Special Topic in CSE I Fall 2026",
+          "nativeCourseCode": "CSE480",
+          "nativeCourseTitle": "Web Security",
+          "nativeCourseIntroClockRoomText": "Learn real web attacks by conducting them yourself in weekly hands-on labs. Tuesdays & Thursdays 2:30–3:45 pm, Room 106-T205.",
+          "nativeFacts": {
+            "Time": "Tuesdays & Thursdays 2:30–3:45 pm",
+            "Location": "Room T205, Building 106 Offline course"
+          },
+          "nativeProfessor": "Seongil Wi",
+          "nativeProfessorRole": "Instructor",
+          "nativeSection": "",
+          "nativeCredits": null,
+          "nativeClassification": "",
+          "nativeRoom": "106-T205",
+          "startMinute": 870,
+          "endMinute": 945,
+          "educationDateRows": [
+            {
+              "nativeISODate": "2026-09-01",
+              "nativeDisplayDate": "Sep 1 Tue",
+              "nativeTopic": "Introduction",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-09-03",
+              "nativeDisplayDate": "Sep 3 Thu",
+              "nativeTopic": "Lab #0 Preparation",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-09-08",
+              "nativeDisplayDate": "Sep 8 Tue",
+              "nativeTopic": "Security & Web Programming Basic",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-09-10",
+              "nativeDisplayDate": "Sep 10 Thu",
+              "nativeTopic": "Lab #1 HTML, JavaScript, and PHP",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-09-15",
+              "nativeDisplayDate": "Sep 15 Tue",
+              "nativeTopic": "SQL Injection",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [
+                "No offline class",
+                "A recorded lecture video will be provided"
+              ],
+              "nativeDeliveryException": "Online / recorded lecture video",
+              "nativeKind": "class",
+              "heldReasons": [
+                "explicitRecordedVideoNoOfflineClockAllocation"
+              ],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-09-17",
+              "nativeDisplayDate": "Sep 17 Thu",
+              "nativeTopic": "Lab #2 SQL Injection",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [
+                "Assignment 1 out",
+                "(Optional) Lab #3: SQL 101"
+              ],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-09-22",
+              "nativeDisplayDate": "Sep 22 Tue",
+              "nativeTopic": "Lab #4 Advanced SQL Injection",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-09-24",
+              "nativeDisplayDate": "Sep 24 Thu",
+              "nativeTopic": "",
+              "nativeFaculty": [],
+              "nativeNoClassText": "No class (Chuseok holiday)",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "noClass",
+              "heldReasons": [
+                "explicitNoClass"
+              ],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-09-29",
+              "nativeDisplayDate": "Sep 29 Tue",
+              "nativeTopic": "HTTPS",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-10-01",
+              "nativeDisplayDate": "Oct 1 Thu",
+              "nativeTopic": "Same Origin Policy & Cookie",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-10-06",
+              "nativeDisplayDate": "Oct 6 Tue",
+              "nativeTopic": "Reflected XSS, Stored XSS",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [
+                "Assignment 2 out"
+              ],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-10-08",
+              "nativeDisplayDate": "Oct 8 Thu",
+              "nativeTopic": "Lab #5 Reflected XSS, Stored XSS",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-10-13",
+              "nativeDisplayDate": "Oct 13 Tue",
+              "nativeTopic": "Client-side XSS, Universal XSS",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-10-15",
+              "nativeDisplayDate": "Oct 15 Thu",
+              "nativeTopic": "Lab #6 Client-side XSS",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-10-20",
+              "nativeDisplayDate": "Oct 20 Tue",
+              "nativeTopic": "",
+              "nativeFaculty": [],
+              "nativeNoClassText": "No class (Midterm week)",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "noClass",
+              "heldReasons": [
+                "explicitNoClass"
+              ],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-10-22",
+              "nativeDisplayDate": "Oct 22 Thu",
+              "nativeTopic": "",
+              "nativeFaculty": [],
+              "nativeNoClassText": "No class (Midterm week)",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "noClass",
+              "heldReasons": [
+                "explicitNoClass"
+              ],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-10-27",
+              "nativeDisplayDate": "Oct 27 Tue",
+              "nativeTopic": "Cross-site Request Forgery",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [
+                "Assignment 3 out"
+              ],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-10-29",
+              "nativeDisplayDate": "Oct 29 Thu",
+              "nativeTopic": "Lab #7 Cross-site Request Forgery",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-11-03",
+              "nativeDisplayDate": "Nov 3 Tue",
+              "nativeTopic": "Shell Code Injection and File Inclusion",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-11-05",
+              "nativeDisplayDate": "Nov 5 Thu",
+              "nativeTopic": "Lab #8 Shell Code Injection and File Inclusion",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-11-10",
+              "nativeDisplayDate": "Nov 10 Tue",
+              "nativeTopic": "Property-Oriented Programming",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-11-12",
+              "nativeDisplayDate": "Nov 12 Thu",
+              "nativeTopic": "Lab #9 Property-Oriented Programming",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-11-17",
+              "nativeDisplayDate": "Nov 17 Tue",
+              "nativeTopic": "Content Security Policy",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-11-19",
+              "nativeDisplayDate": "Nov 19 Thu",
+              "nativeTopic": "Lab #10 Content Security Policy",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [
+                "Assignment 4 out"
+              ],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-11-24",
+              "nativeDisplayDate": "Nov 24 Tue",
+              "nativeTopic": "Unrestricted File Upload",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-11-26",
+              "nativeDisplayDate": "Nov 26 Thu",
+              "nativeTopic": "Lab #11 Unrestricted File Upload",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-12-01",
+              "nativeDisplayDate": "Dec 1 Tue",
+              "nativeTopic": "Tracking, Phishing",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-12-03",
+              "nativeDisplayDate": "Dec 3 Thu",
+              "nativeTopic": "XS-Leaks, 2nd Factor Authentication",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-12-08",
+              "nativeDisplayDate": "Dec 8 Tue",
+              "nativeTopic": "AI Security",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-12-10",
+              "nativeDisplayDate": "Dec 10 Thu",
+              "nativeTopic": "Guest Lecture",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "class",
+              "heldReasons": [],
+              "weekday": 4
+            },
+            {
+              "nativeISODate": "2026-12-15",
+              "nativeDisplayDate": "Dec 15 Tue",
+              "nativeTopic": "",
+              "nativeFaculty": [],
+              "nativeNoClassText": "No class (Final week)",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "noClass",
+              "heldReasons": [
+                "explicitNoClass"
+              ],
+              "weekday": 2
+            },
+            {
+              "nativeISODate": "2026-12-17",
+              "nativeDisplayDate": "Dec 17 Thu",
+              "nativeTopic": "Final Exam",
+              "nativeFaculty": [],
+              "nativeNoClassText": "",
+              "nativeEducationNotes": [],
+              "nativeDeliveryException": "",
+              "nativeKind": "exam",
+              "heldReasons": [
+                "nativeFinalExamClockRoomNotSeparatelyPublished"
+              ],
+              "weekday": 4
+            }
+          ],
+          "actualAttendanceConfirmed": false,
+          "rawBodySaved": false
+        },
+        "referenceKind": "internalDocumentLocator",
+        "wholeSchoolCompletionClaim": false,
+        "actualAttendanceConfirmed": false,
+        "campusPhysicalProof": false,
+        "latestWholeClosureCompared": false
+      }
+    }
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}

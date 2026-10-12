@@ -14,6 +14,7 @@ class EventDraft {
     this.allDay = false,
     this.category = EventCategory.other,
     this.colorValue,
+    this.categoryChanged = true,
     int? reminderMinutesBefore = 60,
     List<int>? reminderMinutesBeforeList,
     this.recurrence = const RecurrenceRule(),
@@ -38,6 +39,9 @@ class EventDraft {
   final bool allDay;
   final EventCategory category;
   final int? colorValue;
+
+  /// False when an editor saves without explicitly selecting a category.
+  final bool categoryChanged;
   final List<int> reminderMinutesBeforeList;
   final RecurrenceRule recurrence;
   final bool showDday;
@@ -119,6 +123,7 @@ class EventDraft {
       allDay: allDay ?? this.allDay,
       category: category ?? this.category,
       colorValue: colorValue ?? this.colorValue,
+      categoryChanged: categoryChanged,
       reminderMinutesBeforeList: nextReminderMinutes,
       recurrence: recurrence ?? this.recurrence,
       showDday: showDday ?? this.showDday,

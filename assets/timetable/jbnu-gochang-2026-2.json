@@ -1,0 +1,940 @@
+{
+  "schemaVersion": 2,
+  "universityId": "jbnu",
+  "campus": "gochang",
+  "campusName": "고창캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-10-08",
+  "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+  "courses": [
+    {
+      "sourceId": "jbnu-2026-2-UKTH004-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UKTH004",
+      "section": "1",
+      "courseName": "건축계획",
+      "professor": "신병욱",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥학과"
+      ],
+      "departmentCredits": {
+        "한옥학과": 3
+      },
+      "departmentClassifications": {
+        "한옥학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B",
+      "sourceClassroom": "고창:공학관 101 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "고창:공학관 101"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UKTH004",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "건축계획",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "신병욱",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B",
+        "DONG_RMNM_CN": "고창:공학관 101 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥학과 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UHKR032-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UHKR032",
+      "section": "1",
+      "courseName": "건축문화유산론",
+      "professor": "박정민",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥건축학과"
+      ],
+      "departmentCredits": {
+        "한옥건축학과": 3
+      },
+      "departmentClassifications": {
+        "한옥건축학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥건축학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+      "sourceClassroom": "고창:공학관 312 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥건축학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UHKR032",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "건축문화유산론",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "박정민",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+        "DONG_RMNM_CN": "고창:공학관 312 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥건축학 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 화 12-A, 화 12-B, 화 13-A, 화 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UKTH016-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UKTH016",
+      "section": "2",
+      "courseName": "디지털건축 2",
+      "professor": "신병욱",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥학과"
+      ],
+      "departmentCredits": {
+        "한옥학과": 3
+      },
+      "departmentClassifications": {
+        "한옥학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+      "sourceClassroom": "고창:공학관 311 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 780,
+          "endMinute": 1020,
+          "classroom": "고창:공학관 311"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UKTH016",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "디지털건축 2",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "신병욱",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+        "DONG_RMNM_CN": "고창:공학관 311 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥학과 1",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UHKR031-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UHKR031",
+      "section": "1",
+      "courseName": "졸업작품 2",
+      "professor": "김진수",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥건축학과"
+      ],
+      "departmentCredits": {
+        "한옥건축학과": 3
+      },
+      "departmentClassifications": {
+        "한옥건축학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥건축학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+      "sourceClassroom": "고창:공학관 312 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 780,
+          "endMinute": 1020,
+          "classroom": "고창:공학관 312"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥건축학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UHKR031",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "졸업작품 2",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "김진수",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+        "DONG_RMNM_CN": "고창:공학관 312 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥건축학 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UHKR003-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UHKR003",
+      "section": "1",
+      "courseName": "측량학",
+      "professor": "최종만",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥건축학과"
+      ],
+      "departmentCredits": {
+        "한옥건축학과": 3
+      },
+      "departmentClassifications": {
+        "한옥건축학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥건축학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+      "sourceClassroom": "고창:공학관 312 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥건축학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UHKR003",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "측량학",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최종만",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+        "DONG_RMNM_CN": "고창:공학관 312 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥건축학 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 수 12-A, 수 12-B, 수 13-A, 수 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UKTH010-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UKTH010",
+      "section": "2",
+      "courseName": "한옥건축시공실습 2",
+      "professor": "김진수",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥학과"
+      ],
+      "departmentCredits": {
+        "한옥학과": 3
+      },
+      "departmentClassifications": {
+        "한옥학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B,토 4-A,토 4-B",
+      "sourceClassroom": "고창:공학관 318 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "고창:공학관 318"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UKTH010",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "한옥건축시공실습 2",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "김진수",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B,토 4-A,토 4-B",
+        "DONG_RMNM_CN": "고창:공학관 318 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥학과 1",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UKTH012-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UKTH012",
+      "section": "2",
+      "courseName": "한옥건축시공실습 4",
+      "professor": "한진석",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥학과"
+      ],
+      "departmentCredits": {
+        "한옥학과": 3
+      },
+      "departmentClassifications": {
+        "한옥학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+      "sourceClassroom": "고창:공학관 320 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 780,
+          "endMinute": 1020,
+          "classroom": "고창:공학관 320"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UKTH012",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "한옥건축시공실습 4",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "한진석",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+        "DONG_RMNM_CN": "고창:공학관 320 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥학과 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UKTH014-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UKTH014",
+      "section": "2",
+      "courseName": "한옥건축시공실습 6",
+      "professor": "한진석",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥학과"
+      ],
+      "departmentCredits": {
+        "한옥학과": 3
+      },
+      "departmentClassifications": {
+        "한옥학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B,토 4-A,토 4-B",
+      "sourceClassroom": "고창:공학관 320 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "고창:공학관 320"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UKTH014",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "한옥건축시공실습 6",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "한진석",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B,토 4-A,토 4-B",
+        "DONG_RMNM_CN": "고창:공학관 320 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UKTH025-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UKTH025",
+      "section": "1",
+      "courseName": "한옥보수관리기술",
+      "professor": "최종만",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥학과"
+      ],
+      "departmentCredits": {
+        "한옥학과": 3
+      },
+      "departmentClassifications": {
+        "한옥학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B",
+      "sourceClassroom": "고창:공학관 101 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "고창:공학관 101"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UKTH025",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "한옥보수관리기술",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최종만",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B",
+        "DONG_RMNM_CN": "고창:공학관 101 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UHKR034-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UHKR034",
+      "section": "1",
+      "courseName": "한옥인테리어",
+      "professor": "이동익",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥건축학과"
+      ],
+      "departmentCredits": {
+        "한옥건축학과": 3
+      },
+      "departmentClassifications": {
+        "한옥건축학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥건축학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B,토 4-A,토 4-B",
+      "sourceClassroom": "고창:공학관 312 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "고창:공학관 312"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥건축학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UHKR034",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "한옥인테리어",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "이동익",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B,토 4-A,토 4-B",
+        "DONG_RMNM_CN": "고창:공학관 312 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥건축학 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": null,
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "Y"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UHKR033-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "gochang",
+      "nativeCampusAliases": [
+        "고창"
+      ],
+      "courseCode": "UHKR033",
+      "section": "1",
+      "courseName": "한옥전통조경",
+      "professor": "오준영",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "한옥건축학과"
+      ],
+      "departmentCredits": {
+        "한옥건축학과": 3
+      },
+      "departmentClassifications": {
+        "한옥건축학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한옥건축학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+      "sourceClassroom": "고창:공학관 312 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "한옥건축학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UHKR033",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "한옥전통조경",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "오준영",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+        "DONG_RMNM_CN": "고창:공학관 312 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "한옥건축학 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "일괄제어",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 월 12-A, 월 12-B, 월 13-A, 월 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    }
+  ],
+  "sourceCatalogFamilies": [
+    "native undergraduate public code-section offerings with source-backed halfslot grid"
+  ],
+  "sourceUniqueActualOfferingCountVerified": false,
+  "completionClaim": false,
+  "researchOnly": false,
+  "wholeUniversityCatalogComplete": false,
+  "wholeOperatingVerified": false,
+  "wholeSchoolCourseCoverageComplete": false,
+  "sourceRowCount": 11,
+  "clockEvidence": {
+    "url": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+    "sha256": "9acfc27e0a122fe120c742412c72e4807558cbc145d6967f90ddfee246f06e80",
+    "page": 16,
+    "officialDistributionYear": 2026,
+    "exampleScreenshotYear": 2024,
+    "gridMinutes": 30,
+    "supportedStartLabels": [
+      "0-A",
+      "0-B",
+      "1-A",
+      "1-B",
+      "10-A",
+      "10-B",
+      "11-A",
+      "11-B",
+      "2-A",
+      "2-B",
+      "3-A",
+      "3-B",
+      "4-A",
+      "4-B",
+      "5-A",
+      "5-B",
+      "6-A",
+      "6-B",
+      "7-A",
+      "7-B",
+      "8-A",
+      "8-B",
+      "9-A",
+      "9-B"
+    ]
+  },
+  "periodEvidence": {
+    "url": "https://www.jbnu.ac.kr/mobile/academic/schedule.do",
+    "sha256": "ed6b29cf13bd2284822b15ad0a1d9724058f8f8efa85cd0afce779c4dcfadbd0",
+    "startTitle": "제2학기 개강",
+    "endTitle": "제2학기 종강, 기말시험 완료"
+  },
+  "coverage": "Native whole-public undergraduate query minus33 medically ambiguous identities held to preserve existing dated document. Unconfirmed late halfslots remain searchable but unscheduled. Whole operating completion not established.",
+  "productionIntegrationEnabled": true
+}

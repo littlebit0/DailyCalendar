@@ -950,6 +950,7 @@ private final class DailyAppLockPrivacy {
 class MainFlutterWindow: NSWindow {
   private var siriEventChangesBridge: DailySiriEventChangesBridge?
   private var signalVoiceBridge: DailySignalVoiceBridge?
+  private var passwordInputBridge: DailyPasswordInputBridge?
 
   override func awakeFromNib() {
     let flutterViewController = FlutterViewController()
@@ -959,6 +960,9 @@ class MainFlutterWindow: NSWindow {
     self.setFrame(windowFrame, display: true)
 
     RegisterGeneratedPlugins(registry: flutterViewController)
+    passwordInputBridge = DailyPasswordInputBridge(
+      messenger: flutterViewController.engine.binaryMessenger, window: self
+    )
     DailyNativeNotifications.register(with: flutterViewController)
     DailyMacAlarms.register(with: flutterViewController)
     DailyMapLauncher.register(with: flutterViewController)
@@ -976,6 +980,84 @@ class MainFlutterWindow: NSWindow {
     DailyNotificationCenterDelegate.install()
 
     super.awakeFromNib()
+  }
+}
+
+// Restricts only the focused Daily password editor, not global keyboard settings.
+private final class DailyPasswordInputBridge {
+  private let channel: FlutterMethodChannel
+  private weak var window: NSWindow?
+  private var requested = false
+  private var context: NSTextInputContext?
+  private var previousLocales: [String]?
+  private var previousSource: NSTextInputSourceIdentifier?
+  private var observers: [NSObjectProtocol] = []
+
+  init(messenger: FlutterBinaryMessenger, window: NSWindow) {
+    self.window = window
+    channel = FlutterMethodChannel(name: "daily/password_input", binaryMessenger: messenger)
+    channel.setMethodCallHandler { [weak self] call, result in
+      guard let self else { result(false); return }
+      guard call.method == "setEnglishInput" else {
+        result(FlutterMethodNotImplemented); return
+      }
+      guard let enabled = call.arguments as? Bool else {
+        result(FlutterError(code: "invalid_password_input_mode", message: nil, details: nil)); return
+      }
+      requested = enabled
+      if enabled {
+        result(apply())
+      } else {
+        restore()
+        result(true)
+      }
+    }
+    let center = NotificationCenter.default
+    observers.append(center.addObserver(forName: NSWindow.didResignKeyNotification, object: window, queue: .main) { [weak self] _ in
+      self?.restore()
+    })
+    observers.append(center.addObserver(forName: NSWindow.didBecomeKeyNotification, object: window, queue: .main) { [weak self] _ in
+      guard let self, requested else { return }
+      _ = apply()
+    })
+    observers.append(center.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: .main) { [weak self] _ in
+      self?.requested = false
+      self?.restore()
+    })
+  }
+
+  private func apply() -> Bool {
+    guard requested, let window, window.isKeyWindow,
+          let editor = window.firstResponder as? NSTextView,
+          let active = editor.inputContext else { return false }
+    if context === active { return true }
+    restore()
+    context = active
+    previousLocales = active.allowedInputSourceLocales
+    previousSource = active.selectedKeyboardInputSource
+    active.allowedInputSourceLocales = ["en"]
+    // English layouts are selected from those offered by this input context.
+    // The locale restriction remains active when a language-toggle key is used.
+    if let source = active.keyboardInputSources?.first(where: {
+      $0 == "com.apple.keylayout.ABC" || $0 == "com.apple.keylayout.US"
+    }) {
+      active.selectedKeyboardInputSource = source
+    }
+    return true
+  }
+
+  private func restore() {
+    guard let active = context else { return }
+    active.allowedInputSourceLocales = previousLocales
+    if let source = previousSource { active.selectedKeyboardInputSource = source }
+    context = nil
+    previousLocales = nil
+    previousSource = nil
+  }
+
+  deinit {
+    observers.forEach(NotificationCenter.default.removeObserver)
+    restore()
   }
 }
 
@@ -1002,17 +1084,29 @@ private final class DailyLmsCookieStore {
             let host = args["host"] as? String, hosts.contains(host) else {
         result(FlutterError(code: "invalid_school", message: nil, details: nil)); return
       }
+      if call.method == "canStartHeadless" {
+        // flutter_inappwebview 1.1.2 attaches a new headless wrapper to this
+        // exact parent. Its registry is internal, so an unattached view cannot
+        // be safely found by a public API. Defer without activating a window.
+        result(NSApplication.shared.mainWindow?.contentView != nil)
+        return
+      }
       if call.method == "bind" {
         guard let marker = args["marker"] as? String, marker.count >= 32,
               marker.count <= 160 else {
           result(FlutterError(code: "invalid_marker", message: nil, details: nil)); return
         }
         let candidates = schoolViews(host: host)
+        guard !candidates.isEmpty else {
+          result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
+        }
         let group = DispatchGroup()
         var matches: [WKWebsiteDataStore] = []
+        var scriptFailures = 0
         for view in candidates {
           group.enter()
           view.evaluateJavaScript("window.name") { name, error in
+            if error != nil { scriptFailures += 1 }
             if error == nil, name as? String == marker,
                view.url?.host == host, !view.configuration.websiteDataStore.isPersistent {
               matches.append(view.configuration.websiteDataStore)
@@ -1022,7 +1116,9 @@ private final class DailyLmsCookieStore {
         }
         group.notify(queue: .main) {
           guard matches.count == 1, let store = matches.first else {
-            result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
+            let code = matches.count > 1 ? "school_view_ambiguous"
+              : scriptFailures > 0 ? "school_script_unavailable" : "school_marker_missing"
+            result(FlutterError(code: code, message: nil, details: nil)); return
           }
           stores[host] = store
           result(true)

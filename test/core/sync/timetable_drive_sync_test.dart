@@ -5,7 +5,9 @@ import 'package:crypto/crypto.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/notifications/notification_service.dart';
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/core/settings/settings_repository.dart';
+import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/sync/google_drive_sync_service.dart';
 import 'package:daily/features/events/data/app_database.dart';
@@ -53,6 +55,8 @@ void main() {
           universityName: '상명대학교',
           schoolKind: 'fourYear',
           campus: '천안캠퍼스',
+          lmsUserId: 'student-42',
+          lmsIntegrationEnabled: true,
         );
         await source.settings.saveAcademicProfile(
           cheonan,
@@ -68,6 +72,11 @@ void main() {
         final target = await _Device.create(drive);
         await target.service.restoreNow();
         expect(target.settings.load().academicProfile, cheonan);
+        expect(target.settings.load().academicProfile!.lmsUserId, 'student-42');
+        expect(
+          target.settings.load().academicProfile!.lmsIntegrationEnabled,
+          isTrue,
+        );
         expect(
           target.settings.load().academicProfile!.timetableCampus,
           'cheonan',
@@ -90,6 +99,386 @@ void main() {
       },
     );
   }
+
+  test(
+    'a saved cursor cannot strand a preexisting academic profile on a new client',
+    () async {
+      final drive = _TimetableDrive();
+      final source = await _Device.create(drive);
+      const profile = AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+        lmsCategoryId: 'course-work',
+        lmsUserId: 'student-42',
+        lmsIntegrationEnabled: true,
+      );
+      await source.settings.saveAcademicProfile(
+        profile,
+        expectedGoogleEmail: source.auth.email,
+      );
+      await source.service.syncPendingChangesNow();
+      final target = await _Device.create(drive);
+      await target.settings.saveDriveChangePageToken(
+        accountEmail: target.auth.email,
+        pageToken: drive.cursor,
+      );
+      drive.requests.clear();
+      drive.writes.clear();
+
+      await target.service.checkForRemoteChangesNow();
+
+      expect(target.settings.load().academicProfile, profile);
+      expect(target.settings.load().academicProfile!.lmsUserId, 'student-42');
+      expect(
+        target.settings.load().academicProfile!.lmsIntegrationEnabled,
+        isTrue,
+      );
+      expect(drive.writes, isEmpty);
+      expect(await target.events.deletionRecords(), isEmpty);
+      final settingsReads = drive.requests
+          .where(
+            (r) => (r.url.queryParameters['q'] ?? '').contains(
+              'daily-sync-v2-settings.json',
+            ),
+          )
+          .length;
+      expect(settingsReads, 1);
+      await target.service.checkForRemoteChangesNow();
+      expect(
+        drive.requests
+            .where(
+              (r) => (r.url.queryParameters['q'] ?? '').contains(
+                'daily-sync-v2-settings.json',
+              ),
+            )
+            .length,
+        settingsReads,
+      );
+    },
+  );
+
+  test(
+    'old decoded profile restores new LMS fields beyond its cursor without losing pending settings',
+    () async {
+      final drive = _TimetableDrive();
+      final source = await _Device.create(drive);
+      const profile = AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+        lmsCategoryId: 'course-work',
+        lmsUserId: 'student-42',
+        lmsIntegrationEnabled: true,
+      );
+      await source.settings.saveAcademicProfile(
+        profile,
+        expectedGoogleEmail: source.auth.email,
+      );
+      await source.service.syncPendingChangesNow();
+      final target = await _Device.create(drive);
+      // The old decoder wrote only fields it understood into the local profile,
+      // while mergeSettingsSyncDocument retained the complete raw LWW register.
+      final decodedByOldClient = Map<String, Object?>.from(profile.toJson())
+        ..remove('lmsUserId')
+        ..remove('lmsIntegrationEnabled');
+      await target.preferences.setString(
+        'academicProfile.v1',
+        jsonEncode(decodedByOldClient),
+      );
+      await target.preferences.setString(
+        'settingsSyncDocument.v1',
+        jsonEncode(
+          drive.payload('daily-sync-v2-settings.json')['fieldRevisions'],
+        ),
+      );
+      await target.settings.save(
+        target.settings.load().copyWith(themeMode: AppThemeMode.dark),
+      );
+      await target.settings.saveDriveChangePageToken(
+        accountEmail: target.auth.email,
+        pageToken: drive.cursor,
+      );
+      expect(target.settings.load().academicProfile!.lmsUserId, isNull);
+      expect(
+        target.settings.load().academicProfile!.lmsIntegrationEnabled,
+        isNull,
+      );
+      expect(target.settings.hasPendingSettingsSync, isTrue);
+      drive.requests.clear();
+      drive.writes.clear();
+
+      await target.service.checkForRemoteChangesNow();
+
+      expect(target.settings.load().academicProfile, profile);
+      expect(target.settings.load().themeMode, AppThemeMode.dark);
+      expect(target.settings.hasPendingSettingsSync, isTrue);
+      expect(drive.writes, isEmpty);
+      await target.service.checkForRemoteChangesNow();
+      expect(
+        drive.requests.where(
+          (r) => (r.url.queryParameters['q'] ?? '').contains(
+            'daily-sync-v2-settings.json',
+          ),
+        ),
+        hasLength(1),
+      );
+      await target.service.syncPendingChangesNow();
+      expect(target.settings.hasPendingSettingsSync, isFalse);
+      final uploaded =
+          drive.payload('daily-sync-v2-settings.json')['settings'] as Map;
+      expect(uploaded['academicProfile'], profile.toJson());
+      expect(uploaded['themeMode'], 'dark');
+    },
+  );
+
+  test(
+    'an unconnected academic profile checks absent remote settings only once',
+    () async {
+      final drive = _TimetableDrive();
+      final device = await _Device.create(drive);
+      const profile = AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+      );
+      await device.settings.saveAcademicProfile(
+        profile,
+        expectedGoogleEmail: device.auth.email,
+      );
+      await device.settings.saveDriveChangePageToken(
+        accountEmail: device.auth.email,
+        pageToken: drive.cursor,
+      );
+      await device.service.checkForRemoteChangesNow();
+      await device.service.checkForRemoteChangesNow();
+      expect(device.settings.load().academicProfile, profile);
+      expect(device.settings.hasPendingSettingsSync, isTrue);
+      expect(drive.writes, isEmpty);
+      expect(
+        drive.requests.where(
+          (r) => (r.url.queryParameters['q'] ?? '').contains(
+            'daily-sync-v2-settings.json',
+          ),
+        ),
+        hasLength(1),
+      );
+    },
+  );
+
+  test(
+    'missing remote academic data is checked once and creates no deletion',
+    () async {
+      final drive = _TimetableDrive();
+      final device = await _Device.create(drive);
+      await device.settings.saveDriveChangePageToken(
+        accountEmail: device.auth.email,
+        pageToken: drive.cursor,
+      );
+      await device.service.checkForRemoteChangesNow();
+      await device.service.checkForRemoteChangesNow();
+      expect(device.settings.load().academicProfile, isNull);
+      expect(
+        device.settings.settingsSyncDocument().fields.containsKey(
+          'academicProfile',
+        ),
+        isFalse,
+      );
+      expect(drive.writes, isEmpty);
+      expect(
+        drive.requests.where(
+          (r) => (r.url.queryParameters['q'] ?? '').contains(
+            'daily-sync-v2-settings.json',
+          ),
+        ),
+        hasLength(1),
+      );
+    },
+  );
+
+  test(
+    'explicit newer academic deletion is not undone by an older Drive profile',
+    () async {
+      final drive = _TimetableDrive();
+      final source = await _Device.create(drive);
+      const profile = AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+      );
+      await source.settings.saveAcademicProfile(
+        profile,
+        expectedGoogleEmail: source.auth.email,
+      );
+      await source.service.syncPendingChangesNow();
+      final target = await _Device.create(drive);
+      await target.service.restoreNow();
+      await target.settings.save(
+        target.settings.load().copyWith(clearAcademicProfile: true),
+      );
+      await target.settings.saveDriveChangePageToken(
+        accountEmail: target.auth.email,
+        pageToken: drive.cursor,
+      );
+      drive.requests.clear();
+      drive.writes.clear();
+      await target.service.checkForRemoteChangesNow();
+      expect(target.settings.load().academicProfile, isNull);
+      expect(
+        target.settings.settingsSyncDocument().fields['academicProfile']!.value,
+        isNull,
+      );
+      expect(drive.writes, isEmpty);
+      expect(
+        drive.requests.where(
+          (r) => (r.url.queryParameters['q'] ?? '').contains(
+            'daily-sync-v2-settings.json',
+          ),
+        ),
+        isEmpty,
+      );
+      // Even an explicit full restore still respects the deletion's newer LWW
+      // revision instead of interpreting null as missing configuration.
+      await target.service.restoreNow();
+      expect(target.settings.load().academicProfile, isNull);
+    },
+  );
+
+  test(
+    'same-account Drive restores completed LMS source data without a local LMS session',
+    () async {
+      final drive = _TimetableDrive();
+      final source = await _Device.create(drive);
+      const profile = AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+        lmsCategoryId: 'course-work',
+        lmsUserId: 'student-42',
+        lmsIntegrationEnabled: true,
+      );
+      await source.settings.saveAcademicProfile(
+        profile,
+        expectedGoogleEmail: source.auth.email,
+      );
+      final metadata = LmsEventMetadata(
+        schoolId: 'smu',
+        ownerId: source.auth.email,
+        lmsUserId: 'student-42',
+        courseId: 'course-123',
+        courseTitle: '자료구조',
+        activityType: 'assignment',
+        activityId: 'activity-456',
+        sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=456',
+        dueAt: DateTime.utc(2026, 9, 29, 14, 59),
+        submissionStatus: '채점 필요',
+        sourceCompleted: true,
+      );
+      final event = CalendarEvent(
+        id: 'lms:stable-source-identity',
+        title: '제출한 과제',
+        memo: '기기 A 개인 메모',
+        startAt: DateTime(2026, 9, 29),
+        endAt: DateTime(2026, 9, 30),
+        allDay: true,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        completed: true,
+        lms: metadata,
+        createdAt: DateTime.utc(2026, 9, 26),
+        updatedAt: DateTime.utc(2026, 9, 28),
+        syncStatus: 'pending',
+      );
+      await source.events.save(event);
+      await source.service.syncPendingChangesNow();
+      final uploadedBefore = drive.files.map(
+        (id, file) => MapEntry(id, jsonEncode(file.data)),
+      );
+      final target = await _Device.create(drive);
+      expect(await target.events.allEventsForSync(), isEmpty);
+      drive.writes.clear();
+
+      await target.service.syncNow();
+
+      expect(target.settings.load().academicProfile, profile);
+      expect(target.settings.load().academicProfile!.lmsUserId, 'student-42');
+      expect(
+        target.settings.load().academicProfile!.lmsIntegrationEnabled,
+        isTrue,
+      );
+      final restored = (await target.events.allEventsForSync()).single;
+      expect(restored.id, event.id);
+      expect(restored.lms, metadata);
+      expect(restored.completed, isTrue);
+      expect(restored.memo, event.memo);
+      expect(await target.events.deletionRecords(), isEmpty);
+      expect(drive.writes, isEmpty);
+      expect(
+        drive.files.map((id, file) => MapEntry(id, jsonEncode(file.data))),
+        uploadedBefore,
+      );
+      await target.service.syncNow();
+      expect(await target.events.allEventsForSync(), hasLength(1));
+      expect(drive.writes, isEmpty);
+
+      // A later verified LMS withdrawal must travel as explicit false values.
+      // B still has an older pending completed snapshot; it must not send that
+      // stale state back over A's newer source result during backup-first sync.
+      final withdrawnMetadata = metadata.copyWith(
+        submissionStatus: '미제출',
+        sourceCompleted: false,
+      );
+      await source.events.save(
+        event.copyWith(
+          lms: withdrawnMetadata,
+          completed: false,
+          updatedAt: event.updatedAt.add(const Duration(hours: 2)),
+          syncStatus: 'pending',
+        ),
+      );
+      await source.service.syncPendingChangesNow();
+      await target.events.save(
+        restored.copyWith(
+          updatedAt: event.updatedAt.add(const Duration(hours: 1)),
+          syncStatus: 'pending',
+        ),
+      );
+      drive.writes.clear();
+      await target.service.syncNow();
+      final reconciled = (await target.events.allEventsForSync()).single;
+      expect(reconciled.id, event.id);
+      expect(reconciled.completed, isFalse);
+      expect(reconciled.lms, withdrawnMetadata);
+      expect(reconciled.memo, event.memo);
+      expect(reconciled.syncStatus, 'synced');
+      final remoteEvent =
+          drive.payload('daily-sync-v2-event-${event.id}.json')['event'] as Map;
+      expect(remoteEvent['completed'], isFalse);
+      expect((remoteEvent['lms'] as Map)['sourceCompleted'], isFalse);
+      expect(drive.writes, isEmpty);
+      expect(await target.events.deletionRecords(), isEmpty);
+      // Manual completion provenance travels with the event, never credentials.
+      final manual = withdrawnMetadata.copyWith(manuallyCompleted: true);
+      await source.events.save(
+        event.copyWith(
+          completed: true,
+          lms: manual,
+          updatedAt: event.updatedAt.add(const Duration(hours: 3)),
+          syncStatus: 'pending',
+        ),
+      );
+      await source.service.syncPendingChangesNow();
+      await target.service.syncNow();
+      final manualRestored = (await target.events.allEventsForSync()).single;
+      expect(manualRestored.completed, isTrue);
+      expect(manualRestored.lms, manual);
+      expect(manualRestored.lms!.sourceCompleted, isFalse);
+      final payload =
+          drive.payload('daily-sync-v2-event-${event.id}.json')['event'] as Map;
+      expect((payload['lms'] as Map)['manuallyCompleted'], isTrue);
+      expect((payload['lms'] as Map).containsKey('password'), isFalse);
+    },
+  );
 
   test(
     'account switching isolates academic profile uploads and retains offline edits',
@@ -289,6 +678,72 @@ void main() {
         (drive.payload(_timetableFile)['document'] as Map)['activeTerm'],
         isNull,
       );
+    },
+  );
+
+  test(
+    'exact dated sessions upload and restore without becoming weekly',
+    () async {
+      final drive = _TimetableDrive();
+      final source = await _Device.create(drive);
+      final course = TimetableClass(
+        id: 'dated-summer',
+        title: '여름 집중 수업',
+        academicYear: 2026,
+        semester: '2',
+        meetings: const [
+          ClassMeeting(
+            id: 'session-1',
+            weekday: 2,
+            startMinute: 780,
+            endMinute: 960,
+            date: '2026-06-23',
+          ),
+        ],
+      );
+      await source.store.setTermPeriod(
+        2026,
+        '2',
+        TimetablePeriod(
+          start: DateTime(2026, 8, 31),
+          end: DateTime(2026, 12, 18),
+        ),
+      );
+      await source.store.save(course);
+      await source.service.syncPendingChangesNow();
+      final payload = drive.payload(_timetableFile);
+      expect(
+        payload['schemaVersion'],
+        2,
+      ); // Drive AppData envelope is unchanged.
+      expect((payload['document'] as Map)['schemaVersion'], 2);
+      final target = await _Device.create(drive);
+      await target.service.restoreNow();
+      expect(target.store.classes.single.meetings.single.date, '2026-06-23');
+      final days = [
+        DateTime(2026, 6, 23),
+        DateTime(2026, 6, 30),
+        DateTime(2026, 9, 1),
+      ];
+      expect(
+        classOccurrences(
+          target.store.classes,
+          days,
+          periodFor: (c) => target.store.periodFor(c.academicYear, c.semester),
+        ).map((o) => o.date),
+        [DateTime(2026, 6, 23)],
+      );
+      expect(await target.events.allEventsForSync(), isEmpty);
+      await target.store.setOverride(
+        course.id,
+        'session-1',
+        DateTime(2026, 6, 23),
+        LectureMode.cancelled,
+      );
+      await target.service.syncPendingChangesNow();
+      await source.service.checkForRemoteChangesNow();
+      expect(source.store.classes.single.meetings.single.date, '2026-06-23');
+      expect(classOccurrences(source.store.classes, days), isEmpty);
     },
   );
 

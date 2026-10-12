@@ -10,6 +10,7 @@ import '../core/localization/app_localizations.dart';
 import '../core/migration/todo_database_migration_service.dart';
 import '../core/settings/app_settings.dart';
 import 'daily_app.dart';
+import '../core/diagnostics/startup_timing.dart';
 import 'daily_theme.dart';
 
 class DailyBootstrap extends ConsumerStatefulWidget {
@@ -54,7 +55,10 @@ class _DailyBootstrapState extends ConsumerState<DailyBootstrap> {
       _error = null;
     });
     try {
-      await _migrationService.migrateIfNeeded();
+      await StartupTiming.measure(
+        StartupStage.migration,
+        _migrationService.migrateIfNeeded,
+      );
       if (!mounted) return;
       _startupStopwatch.stop();
       unawaited(

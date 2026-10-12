@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "universityId": "pnu",
+  "campus": "multiple",
+  "campusName": "여러 캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-10-06",
+  "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
+  "courses": [
+    {
+      "sourceId": "pnu/multiple/2026/2/FE3400102/001",
+      "universityId": "pnu",
+      "campus": "multiple",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FE3400102",
+      "section": "001",
+      "courseName": "식품자원경제학캡스톤디자인",
+      "professor": "김남훈 외 3명",
+      "credits": 3.0,
+      "sourceSchedule": "금 13:30-16:30 602-201, 금 13:30-16:30 밀양M03-3262",
+      "sourceClassroom": "602-201 / 밀양M03-3262",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 810,
+          "endMinute": 990,
+          "classroom": "602-201 / 밀양M03-3262"
+        }
+      ],
+      "departments": [
+        "식품자원경제학과"
+      ],
+      "departmentCredits": {
+        "식품자원경제학과": 3.0
+      },
+      "departmentClassifications": {
+        "식품자원경제학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "식품자원경제학과": "CAPSTONE DESIGN · 식품자원경제학캡스톤디자인 제한사항: 수강가능"
+      }
+    }
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "completionClaim": false,
+  "wholeOperatingVerified": false
+}

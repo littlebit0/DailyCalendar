@@ -1,0 +1,4986 @@
+{
+  "schemaVersion": 1,
+  "universityId": "pnu",
+  "campus": "shared",
+  "campusName": "온라인·외부·위치 미지정",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-10-06",
+  "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
+  "courses": [
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1101248/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1101248",
+      "section": "001",
+      "courseName": "AI와 인간: 거울 속의 기계가 던지는 윤리적 질문들",
+      "professor": "김현수",
+      "credits": 3.0,
+      "sourceSchedule": "토 13:00-16:00(외부)KNU10 온라인강의",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "윤리교육과"
+      ],
+      "departmentCredits": {
+        "윤리교육과": 3.0
+      },
+      "departmentClassifications": {
+        "윤리교육과": "효원창의교양"
+      },
+      "departmentRemarks": {
+        "윤리교육과": "KNU10,원격(비실시간) · AI와 인간: 거울 속의 기계가 던지는 윤리적 질문들 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1101227/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1101227",
+      "section": "001",
+      "courseName": "브릿지기초수학",
+      "professor": "최영준",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)https://app.pulle양산Yca밀양Mpus.co밀양M/login/pusan",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(비실시간) · 브릿지기초수학 제한사항: 효원브릿지 소영역의 교과목은 1학년만 이수하여야 합니다.(재이수자는 예외)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1101246/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1101246",
+      "section": "001",
+      "courseName": "효원사회봉사",
+      "professor": "하상복",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원창의교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "효원사회봉사 제한사항: ① 효원사회봉사(Ⅰ), 효원사회봉사(Ⅱ) 중 한 과목이라도 이수를 했으면 수강 불가(효원사회봉사(Ⅰ,Ⅱ 대체과목)), ② 2026학번 이전(~2025학번) 학생이 수강 시 일반선택 학점으로 교과구분정정 필요(2026학번은 효원창의교양 학점으로 인정)(교양교과목 수강지도 지침 참고)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200700/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200700",
+      "section": "001",
+      "courseName": "브릿지기초기하",
+      "professor": "최영준",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)https://app.pulle양산Yca밀양Mpus.co밀양M/login/pusan",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "브릿지기초기하 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200701/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200701",
+      "section": "001",
+      "courseName": "브릿지기초미적분",
+      "professor": "최영준",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)https://app.pulle양산Yca밀양Mpus.co밀양M/login/pusan",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "브릿지기초미적분 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200702/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200702",
+      "section": "001",
+      "courseName": "브릿지기초확률과통계",
+      "professor": "최영준",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)https://app.pulle양산Yca밀양Mpus.co밀양M/login/pusan",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "브릿지기초확률과통계 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200703/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200703",
+      "section": "001",
+      "courseName": "브릿지기초물리(I)",
+      "professor": "양임정 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)plato.pusan.ac.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(비실시간) · 브릿지기초물리(I) 제한사항: 효원브릿지 소영역의 교과목은 1학년만 이수하여야 합니다.(재이수자는 예외)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200704/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200704",
+      "section": "001",
+      "courseName": "브릿지기초물리(II)",
+      "professor": "정광식",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)plato.pusan.ac.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(비실시간) · 브릿지기초물리(II) 제한사항: 효원브릿지 소영역의 교과목은 1학년만 이수하여야 합니다.(재이수자는 예외)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200705/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200705",
+      "section": "001",
+      "courseName": "브릿지기초화학",
+      "professor": "임만호 외 5명",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)plato.pusan.ac.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(비실시간) · 브릿지기초화학 제한사항: 효원브릿지 소영역의 교과목은 1학년만 이수하여야 합니다.(재이수자는 예외)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200782/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200782",
+      "section": "001",
+      "courseName": "브릿지기초논리",
+      "professor": "조창오 외 2명",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00(50)(외부)plato.pusan.ac.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 1.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원균형교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(비실시간) · 브릿지기초논리 제한사항: 효원브릿지 소영역의 교과목은 1학년만 이수하여야 합니다.(재이수자는 예외)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/ZF1200165/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200165",
+      "section": "001",
+      "courseName": "기후변화의이해",
+      "professor": "이준이",
+      "credits": 3.0,
+      "sourceSchedule": "금 사이버수업",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "기후과학연구소"
+      ],
+      "departmentCredits": {
+        "기후과학연구소": 3.0
+      },
+      "departmentClassifications": {
+        "기후과학연구소": "효원창의교양"
+      },
+      "departmentRemarks": {
+        "기후과학연구소": "MOOC · 기후변화의이해 제한사항 : 없음 · 원격(비실시간) · 비동기 사이버수업: 금 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101030/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101030",
+      "section": "001",
+      "courseName": "트랜스미디어스토리텔링",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00-21:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 트랜스미디어스토리텔링 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101050/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101050",
+      "section": "001",
+      "courseName": "디지털 스토리텔링과 게임",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "목 17:30(50)(외부)knu10.or.kr, 토 14:00(50)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10 · 디지털 스토리텔링과 게임 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101054/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101054",
+      "section": "001",
+      "courseName": "비유와 우화로 보는 철학 산책",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00-22:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 비유와 우화로 보는 철학 산책 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101121/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101121",
+      "section": "001",
+      "courseName": "동양의고전",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "수 16:00(50)(외부)knu10.or.kr, 토 14:00-17:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10 · 동양의고전 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101122/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101122",
+      "section": "001",
+      "courseName": "세계종교입문",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "목 14:00-17:00(외부)knu10.or.kr, 토 14:00-17:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10 · 세계종교입문 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101123/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101123",
+      "section": "001",
+      "courseName": "빅데이터,인공지능과예술",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "금 18:30(50)(외부)knu10.or.kr, 토 14:00(50)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10 · 빅데이터,인공지능과예술 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101125/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101125",
+      "section": "001",
+      "courseName": "빅데이터이해및활용",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 빅데이터이해및활용 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101127/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101127",
+      "section": "001",
+      "courseName": "세계의문화유산",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00-21:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 세계의문화유산 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101128/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101128",
+      "section": "001",
+      "courseName": "양명학,돌봄과공생의길",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00-21:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 양명학,돌봄과공생의길 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101129/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101129",
+      "section": "001",
+      "courseName": "알기쉬운기업살림살이(창업·벤처)",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00-22:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 알기쉬운기업살림살이(창업·벤처) 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101135/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101135",
+      "section": "001",
+      "courseName": "전염병과인류의역사",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00-13:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 전염병과인류의역사 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101172/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101172",
+      "section": "001",
+      "courseName": "능력검정한국사따라가기",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 능력검정한국사따라가기 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101175/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101175",
+      "section": "001",
+      "courseName": "자기조절",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00-21:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 자기조절 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101192/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101192",
+      "section": "001",
+      "courseName": "컴퓨팅사고력",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00-13:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 컴퓨팅사고력 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101193/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101193",
+      "section": "001",
+      "courseName": "경영정보론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 11:00-14:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 경영정보론 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101194/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101194",
+      "section": "001",
+      "courseName": "수목치료학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 11:00-14:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 수목치료학 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101195/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101195",
+      "section": "001",
+      "courseName": "지방자치와 법",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 11:00-14:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 지방자치와 법 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101198/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101198",
+      "section": "001",
+      "courseName": "디지털 리터러시와 인문적 사고",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "화 14:00-17:00(외부)knu10.or.kr, 토 14:00-17:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10 · 디지털 리터러시와 인문적 사고 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101200/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101200",
+      "section": "001",
+      "courseName": "생활구강건강관리",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "금 10:00(50)(외부)knu10.or.kr, 토 14:00-17:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10 · 생활구강건강관리 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101203/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101203",
+      "section": "001",
+      "courseName": "디지털시대 로컬문화 큐레이팅",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00-18:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 디지털시대 로컬문화 큐레이팅 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101204/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101204",
+      "section": "001",
+      "courseName": "예술 감성과 미학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00-18:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 예술 감성과 미학 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101205/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101205",
+      "section": "001",
+      "courseName": "SNS와 유튜브론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · SNS와 유튜브론 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101207/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101207",
+      "section": "001",
+      "courseName": "화훼산업론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 화훼산업론 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101208/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101208",
+      "section": "001",
+      "courseName": "마이클샌델이 다시 쓰는 정의란 무엇인가",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "토 17:00(50)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 마이클샌델이 다시 쓰는 정의란 무엇인가 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101256/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101256",
+      "section": "001",
+      "courseName": "간호학개론",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 17:00(100)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 간호학개론 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101258/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101258",
+      "section": "001",
+      "courseName": "공대생을 위한 기초물리학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00-21:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 공대생을 위한 기초물리학 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101259/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101259",
+      "section": "001",
+      "courseName": "글로벌시대의 세계시민",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00-13:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 글로벌시대의 세계시민 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101260/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101260",
+      "section": "001",
+      "courseName": "사회적 가치와 개인의 자유",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00-21:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 사회적 가치와 개인의 자유 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101284/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101284",
+      "section": "001",
+      "courseName": "평화공공외교론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 17:00-20:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 평화공공외교론 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101285/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101285",
+      "section": "001",
+      "courseName": "스포츠인문학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00-22:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 스포츠인문학 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101287/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101287",
+      "section": "001",
+      "courseName": "탄소중립을실현하기위한화학,공학및경제학의융합",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 탄소중립을실현하기위한화학,공학및경제학의융합 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1101288/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1101288",
+      "section": "001",
+      "courseName": "음성데이터의 특성과 처리: 기초 음성학과 음향 분석",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "수 17:00(75)(외부)knu10.or.kr, 목 17:00(75)(외부)knu10.or.kr, 토 14:00-17:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10 · 음성데이터의 특성과 처리: 기초 음성학과 음향 분석 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200623/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200623",
+      "section": "001",
+      "courseName": "국제화시대의언어",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 12:00-15:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 국제화시대의언어 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200624/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200624",
+      "section": "001",
+      "courseName": "평화사상과통일의길",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 12:00(100)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 평화사상과통일의길 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200627/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200627",
+      "section": "001",
+      "courseName": "한옥개론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 한옥개론 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200629/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200629",
+      "section": "001",
+      "courseName": "환경문제와윤리",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 17:00(100)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 환경문제와윤리 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200651/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200651",
+      "section": "001",
+      "courseName": "다문화사회의이해",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00-13:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 다문화사회의이해 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200652/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200652",
+      "section": "001",
+      "courseName": "여행과문화",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00-13:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 여행과문화 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200659/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200659",
+      "section": "001",
+      "courseName": "분쟁의 세계지리",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00-18:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 분쟁의 세계지리 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200662/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200662",
+      "section": "001",
+      "courseName": "중국고대철학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 중국고대철학 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200666/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200666",
+      "section": "001",
+      "courseName": "심리학 START",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00-21:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 심리학 START 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200668/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200668",
+      "section": "001",
+      "courseName": "우주로의 여행",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00-22:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 우주로의 여행 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200684/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200684",
+      "section": "001",
+      "courseName": "고사와 성어의 탐구",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 12:00(100)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 고사와 성어의 탐구 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200685/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200685",
+      "section": "001",
+      "courseName": "무역실무",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 17:00-20:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 무역실무 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200686/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200686",
+      "section": "001",
+      "courseName": "불교가 묻고 내가 답한다",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00-22:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 불교가 묻고 내가 답한다 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200687/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200687",
+      "section": "001",
+      "courseName": "심리학의 이해",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 11:00-14:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 심리학의 이해 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200689/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200689",
+      "section": "001",
+      "courseName": "한국지형여행",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00-22:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 한국지형여행 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200729/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200729",
+      "section": "001",
+      "courseName": "산업경영의이해",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 12:00(100)(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 산업경영의이해 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200730/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200730",
+      "section": "001",
+      "courseName": "도시개발론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 도시개발론 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200754/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200754",
+      "section": "001",
+      "courseName": "에듀테크의이해",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00-18:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 에듀테크의이해 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200756/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200756",
+      "section": "001",
+      "courseName": "로마문화와함께배우는교양라틴어",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00-22:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 로마문화와함께배우는교양라틴어 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/EA1200758/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "EA1200758",
+      "section": "001",
+      "courseName": "리더십",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00-19:00(외부)knu10.or.kr",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "KNU10,원격(비실시간) · 리더십 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101059/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101059",
+      "section": "001",
+      "courseName": "장기현장실습(I)",
+      "professor": "지상현",
+      "credits": 18.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 18.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "장기현장실습(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101060/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101060",
+      "section": "001",
+      "courseName": "장기현장실습(III)",
+      "professor": "지상현",
+      "credits": 9.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 9.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "장기현장실습(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101061/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101061",
+      "section": "001",
+      "courseName": "장기현장실습(II)",
+      "professor": "지상현",
+      "credits": 12.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 12.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "장기현장실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101062/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101062",
+      "section": "001",
+      "courseName": "국외장기현장실습(II)",
+      "professor": "지상현",
+      "credits": 12.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 12.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "국외장기현장실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101063/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101063",
+      "section": "001",
+      "courseName": "국외장기현장실습(I)",
+      "professor": "지상현",
+      "credits": 18.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 18.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "국외장기현장실습(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101064/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101064",
+      "section": "001",
+      "courseName": "단기현장실습기초(I)",
+      "professor": "지상현",
+      "credits": 6.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 6.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "단기현장실습기초(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101065/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101065",
+      "section": "001",
+      "courseName": "단기현장실습심화(I)",
+      "professor": "지상현",
+      "credits": 6.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 6.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "단기현장실습심화(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101066/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101066",
+      "section": "001",
+      "courseName": "단기현장실습심화(II)",
+      "professor": "지상현",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 3.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "단기현장실습심화(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101067/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101067",
+      "section": "001",
+      "courseName": "국외단기현장실습기초(I)",
+      "professor": "지상현",
+      "credits": 6.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 6.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "국외단기현장실습기초(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101068/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101068",
+      "section": "001",
+      "courseName": "국외단기현장실습기초(II)",
+      "professor": "지상현",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 3.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "국외단기현장실습기초(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101069/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101069",
+      "section": "001",
+      "courseName": "국외단기현장실습심화(I)",
+      "professor": "지상현",
+      "credits": 6.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 6.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "국외단기현장실습심화(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101070/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101070",
+      "section": "001",
+      "courseName": "국외단기현장실습심화(II)",
+      "professor": "지상현",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 3.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "국외단기현장실습심화(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101071/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101071",
+      "section": "001",
+      "courseName": "국외장기현장실습(III)",
+      "professor": "지상현",
+      "credits": 9.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 9.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "국외장기현장실습(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/TS1101072/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TS1101072",
+      "section": "001",
+      "courseName": "단기현장실습기초(II)",
+      "professor": "지상현",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "현장실습지원센터 (+82|051-510-1000)"
+      ],
+      "departmentCredits": {
+        "현장실습지원센터 (+82|051-510-1000)": 3.0
+      },
+      "departmentClassifications": {
+        "현장실습지원센터 (+82|051-510-1000)": "일반선택"
+      },
+      "departmentRemarks": {
+        "현장실습지원센터 (+82|051-510-1000)": "단기현장실습기초(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PR1100850/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PR1100850",
+      "section": "001",
+      "courseName": "대학홍보봉사(I)",
+      "professor": "남유진",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "홍보실"
+      ],
+      "departmentCredits": {
+        "홍보실": 1.0
+      },
+      "departmentClassifications": {
+        "홍보실": "일반선택"
+      },
+      "departmentRemarks": {
+        "홍보실": "대학홍보봉사(I) 제한사항: 부산대학교 홍보대사로 활동 중인 학생이 수강하는 교과목입니다."
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PR1100852/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PR1100852",
+      "section": "001",
+      "courseName": "대학홍보봉사(III)",
+      "professor": "남유진",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "홍보실"
+      ],
+      "departmentCredits": {
+        "홍보실": 1.0
+      },
+      "departmentClassifications": {
+        "홍보실": "일반선택"
+      },
+      "departmentRemarks": {
+        "홍보실": "대학홍보봉사(III) 제한사항: 부산대학교 홍보대사로 활동 중인 학생이 수강하는 교과목입니다."
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CH1101279/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CH1101279",
+      "section": "001",
+      "courseName": "대학언론봉사(I)",
+      "professor": "정혜진",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "부산대언론사"
+      ],
+      "departmentCredits": {
+        "부산대언론사": 2.0
+      },
+      "departmentClassifications": {
+        "부산대언론사": "일반선택"
+      },
+      "departmentRemarks": {
+        "부산대언론사": "대학언론봉사(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CS1200498/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CS1200498",
+      "section": "001",
+      "courseName": "지역사회봉사(I)",
+      "professor": "이태경",
+      "credits": 2.0,
+      "sourceSchedule": "토 09:00(100)(외부)각종 멘토링 활동장소",
+      "sourceClassroom": "(외부)각종 멘토링 활동장소",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 540,
+          "endMinute": 640,
+          "classroom": "(외부)각종 멘토링 활동장소"
+        }
+      ],
+      "departments": [
+        "지역사회기여센터"
+      ],
+      "departmentCredits": {
+        "지역사회기여센터": 2.0
+      },
+      "departmentClassifications": {
+        "지역사회기여센터": "일반선택"
+      },
+      "departmentRemarks": {
+        "지역사회기여센터": "지역사회봉사(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CS1200498/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CS1200498",
+      "section": "002",
+      "courseName": "지역사회봉사(I)",
+      "professor": "서지민",
+      "credits": 2.0,
+      "sourceSchedule": "토 11:00(100)(외부)각종 멘토링 활동장소",
+      "sourceClassroom": "(외부)각종 멘토링 활동장소",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "(외부)각종 멘토링 활동장소"
+        }
+      ],
+      "departments": [
+        "지역사회기여센터"
+      ],
+      "departmentCredits": {
+        "지역사회기여센터": 2.0
+      },
+      "departmentClassifications": {
+        "지역사회기여센터": "일반선택"
+      },
+      "departmentRemarks": {
+        "지역사회기여센터": "지역사회봉사(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CS1200498/003",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CS1200498",
+      "section": "003",
+      "courseName": "지역사회봉사(I)",
+      "professor": "이연선",
+      "credits": 2.0,
+      "sourceSchedule": "토 13:00(100)(외부)각종 멘토링 활동장소",
+      "sourceClassroom": "(외부)각종 멘토링 활동장소",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "(외부)각종 멘토링 활동장소"
+        }
+      ],
+      "departments": [
+        "지역사회기여센터"
+      ],
+      "departmentCredits": {
+        "지역사회기여센터": 2.0
+      },
+      "departmentClassifications": {
+        "지역사회기여센터": "일반선택"
+      },
+      "departmentRemarks": {
+        "지역사회기여센터": "지역사회봉사(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CS1200499/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CS1200499",
+      "section": "001",
+      "courseName": "지역사회봉사(II)",
+      "professor": "이태경",
+      "credits": 2.0,
+      "sourceSchedule": "일 09:00(100)(외부)각종 멘토링 활동장소",
+      "sourceClassroom": "(외부)각종 멘토링 활동장소",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 7,
+          "startMinute": 540,
+          "endMinute": 640,
+          "classroom": "(외부)각종 멘토링 활동장소"
+        }
+      ],
+      "departments": [
+        "지역사회기여센터"
+      ],
+      "departmentCredits": {
+        "지역사회기여센터": 2.0
+      },
+      "departmentClassifications": {
+        "지역사회기여센터": "일반선택"
+      },
+      "departmentRemarks": {
+        "지역사회기여센터": "지역사회봉사(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CS1200499/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CS1200499",
+      "section": "002",
+      "courseName": "지역사회봉사(II)",
+      "professor": "서지민",
+      "credits": 2.0,
+      "sourceSchedule": "일 11:00(100)(외부)각종 멘토링 활동장소",
+      "sourceClassroom": "(외부)각종 멘토링 활동장소",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 7,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "(외부)각종 멘토링 활동장소"
+        }
+      ],
+      "departments": [
+        "지역사회기여센터"
+      ],
+      "departmentCredits": {
+        "지역사회기여센터": 2.0
+      },
+      "departmentClassifications": {
+        "지역사회기여센터": "일반선택"
+      },
+      "departmentRemarks": {
+        "지역사회기여센터": "지역사회봉사(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CS1200499/003",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CS1200499",
+      "section": "003",
+      "courseName": "지역사회봉사(II)",
+      "professor": "이연선",
+      "credits": 2.0,
+      "sourceSchedule": "일 13:00(100)(외부)각종 멘토링 활동장소",
+      "sourceClassroom": "(외부)각종 멘토링 활동장소",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 7,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "(외부)각종 멘토링 활동장소"
+        }
+      ],
+      "departments": [
+        "지역사회기여센터"
+      ],
+      "departmentCredits": {
+        "지역사회기여센터": 2.0
+      },
+      "departmentClassifications": {
+        "지역사회기여센터": "일반선택"
+      },
+      "departmentRemarks": {
+        "지역사회기여센터": "지역사회봉사(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003112/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003112",
+      "section": "001",
+      "courseName": "인공지능이해",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "인공지능이해 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003116/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003116",
+      "section": "001",
+      "courseName": "CAN 통신",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 1.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "CAN 통신 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003121/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003121",
+      "section": "001",
+      "courseName": "스마트 모빌리티 네트워크프로토콜 분석",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 1.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "스마트 모빌리티 네트워크프로토콜 분석 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003122/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003122",
+      "section": "001",
+      "courseName": "극저온에너지 저장(CCS) 기술",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "극저온에너지 저장(CCS) 기술 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003123/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003123",
+      "section": "001",
+      "courseName": "전기회로시스템",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "전기회로시스템 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003125/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003125",
+      "section": "001",
+      "courseName": "프로펠러설계생산",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "프로펠러설계생산 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003130/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003130",
+      "section": "001",
+      "courseName": "선박건조로봇",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 1.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "선박건조로봇 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003131/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003131",
+      "section": "001",
+      "courseName": "선박용접기술",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 1.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "선박용접기술 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003132/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003132",
+      "section": "001",
+      "courseName": "실해역 선박운항개요",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 1.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "실해역 선박운항개요 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003136/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003136",
+      "section": "001",
+      "courseName": "AI기반 육상 스마트 모빌리티 부품 품질보증 체계",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "AI기반 육상 스마트 모빌리티 부품 품질보증 체계 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003139/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003139",
+      "section": "001",
+      "courseName": "미래차 제조공학",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "미래차 제조공학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003140/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003140",
+      "section": "001",
+      "courseName": "친환경 차량 동력 시스템",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 3.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "친환경 차량 동력 시스템 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003142/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003142",
+      "section": "001",
+      "courseName": "우주 공정 기초",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 3.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "우주 공정 기초 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003153/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003153",
+      "section": "001",
+      "courseName": "기초회전익공기역학",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "기초회전익공기역학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003193/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003193",
+      "section": "001",
+      "courseName": "전기추진시스템 시뮬레이션",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "전기추진시스템 시뮬레이션 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/FM2003199/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FM2003199",
+      "section": "001",
+      "courseName": "미래육상모빌리티 제품 원가절감",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미래모빌리티전공"
+      ],
+      "departmentCredits": {
+        "미래모빌리티전공": 2.0
+      },
+      "departmentClassifications": {
+        "미래모빌리티전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "미래모빌리티전공": "미래육상모빌리티 제품 원가절감 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003214/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003214",
+      "section": "001",
+      "courseName": "선박의 디지털트윈",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공필수"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "선박의 디지털트윈 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003216/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003216",
+      "section": "001",
+      "courseName": "DNA의 이해",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공필수"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "DNA의 이해 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003234/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003234",
+      "section": "001",
+      "courseName": "극지해역에서의 선박운항",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "극지해역에서의 선박운항 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003235/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003235",
+      "section": "001",
+      "courseName": "해운 탄소중립 실현을 위한 선박대기오염저감 장치기술",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "해운 탄소중립 실현을 위한 선박대기오염저감 장치기술 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003240/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003240",
+      "section": "001",
+      "courseName": "스마트국제마케팅",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "스마트국제마케팅 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003243/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003243",
+      "section": "001",
+      "courseName": "해상운송물류론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "해상운송물류론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003252/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003252",
+      "section": "001",
+      "courseName": "해양모빌리티 기술 및 산업 개론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "해양모빌리티 기술 및 산업 개론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003254/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003254",
+      "section": "001",
+      "courseName": "글로벌 해사협상과 해양모빌리티",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "글로벌 해사협상과 해양모빌리티 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003258/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003258",
+      "section": "001",
+      "courseName": "국제물류PBLⅡ",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "국제물류PBLⅡ 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MFI2003653/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MFI2003653",
+      "section": "001",
+      "courseName": "물류비즈니스PBL",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "해양미래산업전공"
+      ],
+      "departmentCredits": {
+        "해양미래산업전공": 3.0
+      },
+      "departmentClassifications": {
+        "해양미래산업전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "해양미래산업전공": "물류비즈니스PBL 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003267/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003267",
+      "section": "001",
+      "courseName": "AX머신러닝",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "AX머신러닝 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003268/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003268",
+      "section": "001",
+      "courseName": "AX딥러닝",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "AX딥러닝 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003269/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003269",
+      "section": "001",
+      "courseName": "AX정보보호론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "AX정보보호론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003272/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003272",
+      "section": "001",
+      "courseName": "AX모바일프로그래밍",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "AX모바일프로그래밍 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003275/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003275",
+      "section": "001",
+      "courseName": "AX자연언어처리",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "AX자연언어처리 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003282/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003282",
+      "section": "001",
+      "courseName": "AX웹프로그래밍",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "AX웹프로그래밍 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003284/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003284",
+      "section": "001",
+      "courseName": "임베디드AI",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "임베디드AI 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/AII2003285/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AII2003285",
+      "section": "001",
+      "courseName": "AX초거대언어모델",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI혁신전공"
+      ],
+      "departmentCredits": {
+        "AI혁신전공": 3.0
+      },
+      "departmentClassifications": {
+        "AI혁신전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "AI혁신전공": "AX초거대언어모델 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400165/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400165",
+      "section": "001",
+      "courseName": "가정의학임상실습(II)",
+      "professor": "탁영진 외 4명",
+      "credits": 3.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "가정의학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400167/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400167",
+      "section": "001",
+      "courseName": "감염내과학임상실습(II)",
+      "professor": "이신원 외 6명",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "감염내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400169/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400169",
+      "section": "001",
+      "courseName": "내분비내과학 임상실습(II)",
+      "professor": "김상수 외 6명",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "내분비내과학 임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400172/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400172",
+      "section": "001",
+      "courseName": "류마티스내과학임상실습(II)",
+      "professor": "이승근 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "류마티스내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400174/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400174",
+      "section": "001",
+      "courseName": "산부인과학임상실습(II)",
+      "professor": "이슬 외 8명",
+      "credits": 5.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 5.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "산부인과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400176/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400176",
+      "section": "001",
+      "courseName": "소아청소년과학임상실습(II)",
+      "professor": "박경희 외 13명",
+      "credits": 5.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 5.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "소아청소년과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400178/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400178",
+      "section": "001",
+      "courseName": "소화기내과학임상실습(II)",
+      "professor": "김광하 외 13명",
+      "credits": 2.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "소화기내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400180/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400180",
+      "section": "001",
+      "courseName": "순환기내과학임상실습(II)",
+      "professor": "이혜원 외 10명",
+      "credits": 2.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "순환기내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400182/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400182",
+      "section": "001",
+      "courseName": "신경과학임상실습(II)",
+      "professor": "김지영 외 16명",
+      "credits": 2.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "신경과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400184/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400184",
+      "section": "001",
+      "courseName": "신장내과학임상실습(II)",
+      "professor": "성은영 외 7명",
+      "credits": 2.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "신장내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400186/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400186",
+      "section": "001",
+      "courseName": "영상의학임상실습(II)",
+      "professor": "이지원 외 16명",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "영상의학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400188/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400188",
+      "section": "001",
+      "courseName": "외과학임상실습(II)",
+      "professor": "김대환 외 21명",
+      "credits": 4.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "외과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400191/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400191",
+      "section": "001",
+      "courseName": "응급의학임상실습(II)",
+      "professor": "염석란 외 8명",
+      "credits": 2.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "응급의학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400193/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400193",
+      "section": "001",
+      "courseName": "일반내과학임상실습(II)",
+      "professor": "유대곤",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "일반내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400196/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400196",
+      "section": "001",
+      "courseName": "정신건강의학임상실습(II)",
+      "professor": "문은수 외 4명",
+      "credits": 4.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "정신건강의학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400198/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400198",
+      "section": "001",
+      "courseName": "진단검사의학임상실습(II)",
+      "professor": "신경화 외 7명",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "진단검사의학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400200/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400200",
+      "section": "001",
+      "courseName": "혈액종양내과학임상실습(II)",
+      "professor": "최영진 외 2명",
+      "credits": 1.0,
+      "sourceSchedule": "월 09:00-09:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 570,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "혈액종양내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400202/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400202",
+      "section": "001",
+      "courseName": "호흡기내과학임상실습(II)",
+      "professor": "엄중섭 외 12명",
+      "credits": 2.0,
+      "sourceSchedule": "월 08:30-11:30(외부)병원실습",
+      "sourceClassroom": "(외부)병원실습",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "(외부)병원실습"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "호흡기내과학임상실습(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400205/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400205",
+      "section": "001",
+      "courseName": "임상의학종합과정(II)",
+      "professor": "이재혁",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "임상의학종합과정(II) 제한사항: 의학과3학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400210/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400210",
+      "section": "001",
+      "courseName": "선택심화실습",
+      "professor": "임선주 외 53명",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "선택심화실습 제한사항: 의학과4학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400211/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400211",
+      "section": "001",
+      "courseName": "임상의학종합과정(IV)",
+      "professor": "임선주 외 53명",
+      "credits": 9.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 9.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "임상의학종합과정(IV) 제한사항: 의학과4학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400212/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400212",
+      "section": "001",
+      "courseName": "임상의학종합과정(V)",
+      "professor": "유지호 외 69명",
+      "credits": 9.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 9.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "임상의학종합과정(V) 제한사항: 의학과4학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400470/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400470",
+      "section": "001",
+      "courseName": "마취통증의학심화과정",
+      "professor": "이현정 외 12명",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "의학과": "마취통증의학심화과정 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3400479/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400479",
+      "section": "001",
+      "courseName": "의사학",
+      "professor": "이현정 외 3명",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "의학과": "의사학 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3600124/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3600124",
+      "section": "001",
+      "courseName": "드라마속외과의의도전과도약",
+      "professor": "손경모 외 4명",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "의학과": "드라마속외과의의도전과도약 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MD3600137/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3600137",
+      "section": "001",
+      "courseName": "기본의학종합과정",
+      "professor": "주종길",
+      "credits": 7.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 7.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "기본의학종합과정 제한사항: 의학과2학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PM2001308/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM2001308",
+      "section": "002",
+      "courseName": "의료와사회",
+      "professor": "김성수 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "수 13:30(100)(외부)모듈러강의실",
+      "sourceClassroom": "(외부)모듈러강의실",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 910,
+          "classroom": "(외부)모듈러강의실"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 2.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "의료와사회 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PM3300740/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3300740",
+      "section": "002",
+      "courseName": "사회봉사",
+      "professor": "윤소정",
+      "credits": 1.0,
+      "sourceSchedule": "수 10:30(100)(외부)모듈러강의실",
+      "sourceClassroom": "(외부)모듈러강의실",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 730,
+          "classroom": "(외부)모듈러강의실"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 1.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "사회봉사 제한사항: 의예과2학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PM3500158/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500158",
+      "section": "002",
+      "courseName": "세포조절",
+      "professor": "배재호 외 13명",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:00(100)(외부)모듈러강의실",
+      "sourceClassroom": "(외부)모듈러강의실",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "(외부)모듈러강의실"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "세포조절 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PM3500159/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500159",
+      "section": "002",
+      "courseName": "인체대사",
+      "professor": "이상율 외 8명",
+      "credits": 3.0,
+      "sourceSchedule": "목 10:00(100)(외부)모듈러강의실",
+      "sourceClassroom": "(외부)모듈러강의실",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "(외부)모듈러강의실"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "인체대사 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PM3500160/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500160",
+      "section": "002",
+      "courseName": "인체구조(I)",
+      "professor": "오세옥 외 7명",
+      "credits": 4.0,
+      "sourceSchedule": "월 13:30-16:30(외부)모듈러강의실",
+      "sourceClassroom": "(외부)모듈러강의실",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 990,
+          "classroom": "(외부)모듈러강의실"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 4.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "인체구조(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/PM3500161/002",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500161",
+      "section": "002",
+      "courseName": "인체구조(II)",
+      "professor": "오세옥 외 8명",
+      "credits": 5.0,
+      "sourceSchedule": "목 13:00-17:00(외부)모듈러강의실",
+      "sourceClassroom": "(외부)모듈러강의실",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 1020,
+          "classroom": "(외부)모듈러강의실"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 5.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "인체구조(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MU2001423/101",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MU2001423",
+      "section": "101",
+      "courseName": "ORCHESTRA(IV)",
+      "professor": "김진연",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "관현악전공"
+      ],
+      "departmentCredits": {
+        "관현악전공": 2.0
+      },
+      "departmentClassifications": {
+        "관현악전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "관현악전공": "ORCHESTRA(IV) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MU2001425/101",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MU2001425",
+      "section": "101",
+      "courseName": "ORCHESTRA(VI)",
+      "professor": "김진연",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "관현악전공"
+      ],
+      "departmentCredits": {
+        "관현악전공": 2.0
+      },
+      "departmentClassifications": {
+        "관현악전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "관현악전공": "ORCHESTRA(VI) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/MU2001427/101",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MU2001427",
+      "section": "101",
+      "courseName": "ORCHESTRA(VIII)",
+      "professor": "김진연",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "관현악전공"
+      ],
+      "departmentCredits": {
+        "관현악전공": 2.0
+      },
+      "departmentClassifications": {
+        "관현악전공": "전공필수"
+      },
+      "departmentRemarks": {
+        "관현악전공": "ORCHESTRA(VIII) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/SB2002015/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SB2002015",
+      "section": "001",
+      "courseName": "빅데이터와이차전지진단",
+      "professor": "권성현",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "이차전지융합전공"
+      ],
+      "departmentCredits": {
+        "이차전지융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "이차전지융합전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "이차전지융합전공": "원격(비실시간) · 빅데이터와이차전지진단 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/SB2002022/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SB2002022",
+      "section": "001",
+      "courseName": "알기쉬운이차전지이야기",
+      "professor": "권성현",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "이차전지융합전공"
+      ],
+      "departmentCredits": {
+        "이차전지융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "이차전지융합전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "이차전지융합전공": "MOOC · 알기쉬운이차전지이야기 제한사항 : 없음 · 원격(비실시간)"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001747/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001747",
+      "section": "001",
+      "courseName": "촉매와 수소생산기술",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "촉매와 수소생산기술 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001750/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001750",
+      "section": "001",
+      "courseName": "수소저장 부품공학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "수소저장 부품공학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001751/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001751",
+      "section": "001",
+      "courseName": "수소저장 및 이송공정",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "수소저장 및 이송공정 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001752/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001752",
+      "section": "001",
+      "courseName": "에너지 고체화학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "에너지 고체화학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001754/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001754",
+      "section": "001",
+      "courseName": "에너지 변환기술",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "에너지 변환기술 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001755/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001755",
+      "section": "001",
+      "courseName": "배터리 소재공학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "배터리 소재공학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001756/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001756",
+      "section": "001",
+      "courseName": "E-에너지 전력변환공학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "E-에너지 전력변환공학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001770/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001770",
+      "section": "001",
+      "courseName": "수소에너지 활용시스템",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "수소에너지 활용시스템 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001771/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001771",
+      "section": "001",
+      "courseName": "에너지 나노소재 공학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "에너지 나노소재 공학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/CE2001773/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CE2001773",
+      "section": "001",
+      "courseName": "E-에너지 전력변환응용",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "클린에너지전공"
+      ],
+      "departmentCredits": {
+        "클린에너지전공": 3.0
+      },
+      "departmentClassifications": {
+        "클린에너지전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "클린에너지전공": "E-에너지 전력변환응용 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/DX2003293/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DX2003293",
+      "section": "001",
+      "courseName": "디지털인문학으로읽는한국경제사",
+      "professor": "김영록 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "DX융합전공"
+      ],
+      "departmentCredits": {
+        "DX융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "DX융합전공": "전공필수"
+      },
+      "departmentRemarks": {
+        "DX융합전공": "원격(비실시간) · 디지털인문학으로읽는한국경제사 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/DX2003847/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DX2003847",
+      "section": "001",
+      "courseName": "DX융합고고학(I)",
+      "professor": "구숙현 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "DX융합전공"
+      ],
+      "departmentCredits": {
+        "DX융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "DX융합전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "DX융합전공": "원격(비실시간) · DX융합고고학(I) 제한사항: 고고학과전학년수강불가"
+      }
+    },
+    {
+      "sourceId": "pnu/shared/2026/2/DX2003848/001",
+      "universityId": "pnu",
+      "campus": "shared",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DX2003848",
+      "section": "001",
+      "courseName": "디지털자료로보는부산의역사",
+      "professor": "정영현 외 3명",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "DX융합전공"
+      ],
+      "departmentCredits": {
+        "DX융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "DX융합전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "DX융합전공": "원격(비실시간) · 디지털자료로보는부산의역사 제한사항: 사학과전학년수강불가"
+      }
+    }
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "completionClaim": false,
+  "wholeOperatingVerified": false
+}

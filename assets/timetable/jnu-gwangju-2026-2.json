@@ -136900,5 +136900,9 @@
         }
       ]
     }
-  ]
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "completionClaim": false,
+  "wholeOperatingVerified": false
 }

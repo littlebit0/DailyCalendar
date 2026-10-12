@@ -1,0 +1,61 @@
+{
+  "icon": "success",
+  "title": "",
+  "message": "",
+  "data": [
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 83,
+      "ttl": "박사학위청구논문 심사신청",
+      "etc1Cn": "2026.09.21",
+      "etc3Cn": "2026.10.02",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 58,
+      "ttl": "수업일수 1/3선, 장기결석 면담",
+      "etc1Cn": "2026.10.08",
+      "etc3Cn": "2026.10.08",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 84,
+      "ttl": "석사학위청구논문 심사신청",
+      "etc1Cn": "2026.10.12",
+      "etc3Cn": "2026.10.23",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 59,
+      "ttl": "2학기 중간 수업평가",
+      "etc1Cn": "2026.10.12",
+      "etc3Cn": "2026.10.16",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 60,
+      "ttl": "수업일수 1/2선, 장기결석 면담, 수업점검",
+      "etc1Cn": "2026.10.28",
+      "etc3Cn": "2026.10.28",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 61,
+      "ttl": "2학기 중간시험 종료일",
+      "etc1Cn": "2026.10.30",
+      "etc3Cn": "2026.10.30",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    }
+  ]
+}

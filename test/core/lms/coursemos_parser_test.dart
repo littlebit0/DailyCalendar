@@ -54,6 +54,7 @@ void main() {
       ]);
       expect(result.activities.first.dueAt, DateTime.utc(2026, 10, 31, 14, 59));
       expect(result.activities.first.submissionStatus, '미제출');
+      expect(result.activities.first.sourceCompleted, isFalse);
     },
   );
 
@@ -68,6 +69,49 @@ void main() {
     expect(result.activities.last.dueAt, DateTime.utc(2026, 9, 28, 14, 59));
     expect(
       result.activities.every((activity) => activity.submissionStatus == null),
+      isTrue,
+    );
+  });
+
+  test(
+    'assignment completion uses explicit submission state, never the grade',
+    () {
+      final source = fixture('assignment-single');
+      final submitted = assignments(source.replaceFirst('미제출', '채점 필요'));
+      expect(submitted.activities.single.sourceCompleted, isTrue);
+      expect(submitted.activities.single.submissionStatus, '채점 필요');
+      final completed = assignments(source.replaceFirst('미제출', '제출 완료'));
+      expect(completed.activities.single.sourceCompleted, isTrue);
+      expect(completed.activities.single.submissionStatus, '제출 완료');
+
+      for (final status in ['채점되지 않음', '100 / 100', '제출 여부 확인 중', '']) {
+        expect(
+          assignments(
+            source.replaceFirst('미제출', status),
+          ).activities.single.sourceCompleted,
+          isNull,
+        );
+      }
+      expect(
+        assignments(
+          source.replaceFirst('—', '100 / 100'),
+        ).activities.single.sourceCompleted,
+        isFalse,
+      );
+      for (final status in ['미제출', '제출 안 함', 'Draft (not submitted)']) {
+        expect(CoursemosParser.parseAssignmentCompletion(status), isFalse);
+      }
+      expect(
+        CoursemosParser.parseAssignmentCompletion(' Submitted for grading '),
+        isTrue,
+      );
+    },
+  );
+
+  test('quiz grades do not imply an attempt was submitted', () {
+    final parsed = quizzes(fixture('quizzes'));
+    expect(
+      parsed.activities.every((item) => item.sourceCompleted == null),
       isTrue,
     );
   });

@@ -21,6 +21,7 @@ import '../features/onboarding/presentation/welcome_page.dart';
 import '../features/onboarding/presentation/update_features_gate.dart';
 import '../core/weather/weather_widgets.dart';
 import '../core/sync/startup_sync_gate.dart';
+import '../core/diagnostics/startup_timing.dart';
 import '../core/sync/google_drive_auth_service.dart';
 import 'daily_theme.dart';
 
@@ -678,6 +679,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
   Future<bool>? _syncStartOperation;
   Timer? _syncRestoreRetryTimer;
   var _syncRestoreRetryIndex = 0;
+  bool _syncRestoreRetryable = true;
+  Future<void>? _academicRefreshOperation;
   ValueNotifier<int>? _settingsRevisionNotifier;
   VoidCallback? _settingsRevisionListener;
   Future<void>? _siriChangeProcessing;
@@ -697,6 +700,9 @@ class _AppHomeState extends ConsumerState<_AppHome>
         ref.read(settingsRepositoryProvider).dailyAccount()?.googleAccount !=
         null;
     _startupGateOpen = !_requiresStartupSync;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) StartupTiming.firstCalendarFrame();
+    });
     WidgetsBinding.instance.addObserver(this);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
@@ -951,6 +957,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
     });
     return StartupSyncGate(
       requiredAtStartup: _requiresStartupSync,
+      showLocalImmediately: true,
+      syncStatus: ref.read(googleDriveSyncServiceProvider).statusNotifier,
       synchronize: _synchronizeStartup,
       onContinue: () {
         _startupGateOpen = true;
@@ -973,10 +981,19 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   Future<void> _runStartupSync() async {
+    unawaited(
+      StartupTiming.measure(
+        StartupStage.localCalendar,
+        _primeLocalCalendar,
+      ).catchError((_) {}),
+    );
     await _tryStartSyncIfConnected(startup: true);
     if (!mounted) return;
     _refreshSettingsState();
     ref.invalidate(eventsInRangeProvider);
+  }
+
+  Future<void> _primeLocalCalendar() async {
     // Prime the actual stream providers used by the initial month/quick view,
     // week and selected-day sidebar, not a separate throwaway database query.
     final monday = ref.read(appSettingsProvider).weekStartsOnMonday;
@@ -1045,7 +1062,19 @@ class _AppHomeState extends ConsumerState<_AppHome>
     }
   }
 
-  Future<void> _refreshAcademicCalendars() async {
+  Future<void> _refreshAcademicCalendars() {
+    final running = _academicRefreshOperation;
+    if (running != null) return running;
+    final operation = _refreshAcademicCalendarsImpl();
+    _academicRefreshOperation = operation;
+    return operation.whenComplete(() {
+      if (identical(_academicRefreshOperation, operation)) {
+        _academicRefreshOperation = null;
+      }
+    });
+  }
+
+  Future<void> _refreshAcademicCalendarsImpl() async {
     if (!mounted) return;
     final lms = ref.read(lmsControllerProvider);
     final foreground =
@@ -1054,7 +1083,13 @@ class _AppHomeState extends ConsumerState<_AppHome>
     lms.setForeground(foreground);
     // After the main Drive phase; it must not hold the startup gate open.
     // The private native browser needs an active application window.
-    if (foreground) await lms.refresh();
+    if (foreground) {
+      try {
+        await StartupTiming.measure(StartupStage.lms, () => lms.refresh());
+      } on Object {
+        // LMS failure must not prevent independent academic refresh.
+      }
+    }
     if (!mounted) return;
     // Do not instantiate network/import services for users without a subscription.
     try {
@@ -1062,7 +1097,10 @@ class _AppHomeState extends ConsumerState<_AppHome>
       if (!store.load().values.any((subscription) => subscription.enabled)) {
         return;
       }
-      await ref.read(academicCalendarServiceProvider).refreshIfDue();
+      await StartupTiming.measure(
+        StartupStage.academic,
+        ref.read(academicCalendarServiceProvider).refreshIfDue,
+      );
       if (mounted) _refreshSettingsState();
     } on Object {
       // Source errors are reported in academic settings, not as a startup failure.
@@ -1085,7 +1123,10 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
     try {
       final auth = ref.read(googleDriveAuthServiceProvider);
-      final account = await auth.restorePreviousSignIn();
+      final account = await StartupTiming.measure(
+        StartupStage.accountRestore,
+        auth.restorePreviousSignIn,
+      );
       ensureCurrentAccount();
       var dailyAccount = settingsRepository.dailyAccount();
       if (account != null && !settingsRepository.hasStoredDailyAccount) {
@@ -1120,16 +1161,17 @@ class _AppHomeState extends ConsumerState<_AppHome>
         }
         return false;
       }
-      if (startup) {
-        _listenForSyncedSettings();
-        await ref.read(syncServiceProvider).start();
-        ensureCurrentAccount();
-        _servicesStarted = true;
-      } else {
-        _startPostLoginServices();
-      }
+      _listenForSyncedSettings();
+      await StartupTiming.measure(
+        StartupStage.drive,
+        ref.read(syncServiceProvider).start,
+      );
+      ensureCurrentAccount();
+      _servicesStarted = true;
+      _syncRestoreRetryable = true;
       return true;
-    } on Object {
+    } on Object catch (error) {
+      _syncRestoreRetryable = error is! GoogleDriveAuthException;
       if (startup) rethrow;
       // Google Drive sync is optional; local calendar use stays available.
       return false;
@@ -1141,6 +1183,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
         !_startupGateOpen ||
         _startupOperation != null ||
         _servicesStarted ||
+        !_syncRestoreRetryable ||
         _syncRestoreRetryTimer != null) {
       return;
     }
@@ -1159,25 +1202,6 @@ class _AppHomeState extends ConsumerState<_AppHome>
         _startSyncIfConnected();
       }
     });
-  }
-
-  void _startPostLoginServices() {
-    _listenForSyncedSettings();
-    if (_servicesStarted) {
-      unawaited(
-        Future.microtask(() async {
-          await _syncGoogleDriveSnapshot();
-        }).catchError((_) {}),
-      );
-      return;
-    }
-    _servicesStarted = true;
-    unawaited(
-      Future.microtask(() async {
-        await ref.read(syncServiceProvider).start();
-        _refreshSettingsState();
-      }).catchError((_) {}),
-    );
   }
 
   void _listenForSyncedSettings() {
@@ -1199,11 +1223,6 @@ class _AppHomeState extends ConsumerState<_AppHome>
         await ref.read(googleDriveSyncServiceProvider).syncPendingChangesNow();
       }).catchError((_) {}),
     );
-  }
-
-  Future<void> _syncGoogleDriveSnapshot() async {
-    await ref.read(googleDriveSyncServiceProvider).syncOnResume();
-    _refreshSettingsState();
   }
 
   void _refreshSettingsState() {

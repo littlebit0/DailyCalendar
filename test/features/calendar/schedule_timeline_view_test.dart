@@ -85,12 +85,8 @@ void main() {
         expect(text.style!.decoration, isNot(TextDecoration.lineThrough));
         expect(titleStyle.decoration, TextDecoration.lineThrough);
         expect(
-          _contrast(titleStyle.decorationColor!, background),
-          greaterThanOrEqualTo(3),
-        );
-        expect(
-          _contrast(titleStyle.decorationColor!, titleStyle.color!),
-          greaterThanOrEqualTo(3),
+          titleStyle.decorationColor,
+          brightness == Brightness.dark ? Colors.white : Colors.black,
         );
         expect(event.colorValue, color.toARGB32());
       }
@@ -669,6 +665,7 @@ void main() {
     final style = tester.widget<Text>(find.text('완료 일정')).style!;
     expect(style.decoration, TextDecoration.lineThrough);
     expect(style.decorationStyle, TextDecorationStyle.solid);
+    expect(style.decorationColor, Colors.white);
     expect(style.decorationThickness, inExclusiveRange(1.4, 3));
     final eventContainer = tester.widget<Container>(
       find
@@ -678,14 +675,6 @@ void main() {
     final background = (eventContainer.decoration! as BoxDecoration).color!;
     expect(background.a, 1);
     expect(_contrast(style.color!, background), greaterThanOrEqualTo(4.5));
-    expect(
-      _contrast(style.decorationColor!, background),
-      greaterThanOrEqualTo(3),
-    );
-    expect(
-      _contrast(style.decorationColor!, style.color!),
-      greaterThanOrEqualTo(3),
-    );
   });
 
   testWidgets('schedule event can be long-pressed and dropped on another day', (

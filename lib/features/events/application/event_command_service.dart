@@ -58,7 +58,10 @@ class EventCommandService {
     return event;
   }
 
-  Future<void> save(CalendarEvent event) async {
+  Future<void> save(
+    CalendarEvent event, {
+    bool preserveCategory = false,
+  }) async {
     final stopwatch = Stopwatch()..start();
     var updated = event
         .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
@@ -66,6 +69,12 @@ class EventCommandService {
     CalendarEvent? existing;
     try {
       existing = await _repository.findById(updated.id);
+      if (preserveCategory && existing != null) {
+        updated = updated.copyWith(
+          category: _resolveStoredCategory(existing.category),
+          colorValue: existing.colorValue,
+        );
+      }
       if (existing?.lms != null || event.lms != null) {
         if (existing == null ||
             existing.isDeleted ||
@@ -82,7 +91,15 @@ class EventCommandService {
             // The editor may have opened before the LMS refreshed its title,
             // deadline or status. Only personal editor fields come from it.
             return _withLmsSource(
-              edited.copyWith(completed: latest.completed),
+              edited.copyWith(
+                completed: latest.completed,
+                category: preserveCategory
+                    ? _resolveStoredCategory(latest.category)
+                    : edited.category,
+                colorValue: preserveCategory
+                    ? latest.colorValue
+                    : edited.colorValue,
+              ),
               latest,
             ).copyWith(
               updatedAt: _nextLmsChange(latest),
@@ -158,7 +175,8 @@ class EventCommandService {
         );
         return;
       }
-      if (source.completed == completed) {
+      if (source.completed == completed &&
+          (source.lms == null || source.lms!.manuallyCompleted == completed)) {
         return;
       }
       var updated = source.copyWith(
@@ -178,6 +196,7 @@ class EventCommandService {
             if (latest.isDeleted || !_isCurrentOwner(latest)) return latest;
             return latest.copyWith(
               completed: completed,
+              lms: latest.lms?.copyWith(manuallyCompleted: completed),
               updatedAt: _nextLmsChange(latest),
               syncStatus: 'pending',
             );
@@ -307,6 +326,9 @@ class EventCommandService {
                 imported = source.copyWith(
                   category: destination,
                   colorValue: destination?.colorValue,
+                  completed: preserveLmsSource
+                      ? source.completed
+                      : source.lms?.sourceCompleted ?? source.completed,
                 );
                 return imported;
               }
@@ -323,6 +345,20 @@ class EventCommandService {
                       .copyWith(
                         category: destination,
                         colorValue: destination?.colorValue,
+                        // User completion wins over a negative school state.
+                        // Read its provenance in this transaction, not from
+                        // the possibly stale snapshot prepared by the fetch.
+                        lms: preserveLmsSource
+                            ? latest.lms
+                            : source.lms?.copyWith(
+                                manuallyCompleted:
+                                    latest.lms?.manuallyCompleted ?? false,
+                              ),
+                        completed: preserveLmsSource
+                            ? latest.completed
+                            : latest.lms?.manuallyCompleted == true
+                            ? true
+                            : source.lms?.sourceCompleted ?? latest.completed,
                         createdAt: latest.createdAt,
                         updatedAt: _nextLmsChange(latest),
                         syncStatus: 'pending',
@@ -339,14 +375,25 @@ class EventCommandService {
       if (isCurrent != null && !isCurrent()) break;
       if (imported.isDeleted || !_isCurrentOwner(imported)) continue;
       try {
-        await _notificationService.scheduleEventReminder(imported);
+        if (imported.lms != null && imported.completed) {
+          await _notificationService.cancelEventReminder(
+            imported.id,
+            reminderMinutesBeforeList: imported.reminderMinutesBeforeList,
+          );
+        } else {
+          await _notificationService.scheduleEventReminder(imported);
+        }
       } on Object {
         // Import must preserve the event even if notification scheduling fails.
       }
       if (isCurrent != null && !isCurrent()) break;
       if (!_isCurrentOwner(imported)) break;
       try {
-        await _alarmService.scheduleEventAlarm(imported);
+        if (imported.lms != null && imported.completed) {
+          await _alarmService.cancelEventAlarm(imported.id);
+        } else {
+          await _alarmService.scheduleEventAlarm(imported);
+        }
       } on Object {
         // Imported events do not enable alarms by default; keep this best-effort.
       }
@@ -438,6 +485,20 @@ class EventCommandService {
     } on Object {
       // Widget refresh is best-effort and must not fail calendar mutations.
     }
+  }
+
+  EventCategory _resolveStoredCategory(EventCategory category) {
+    final categories = _settingsRepository.load().categories;
+    final exact = categories.where((c) => c.id == category.id).firstOrNull;
+    if (exact != null) return exact;
+    final legacy = categories
+        .where(
+          (c) =>
+              c.label == category.label &&
+              EventCategory.fromStored(c.label).id == category.id,
+        )
+        .toList();
+    return legacy.length == 1 ? legacy.single : category;
   }
 
   bool _isCurrentOwner(CalendarEvent event) => event.isVisibleToOwner(

@@ -18194,8 +18194,31 @@
       },
       "sourceSchedule": "월8월9수8수9",
       "sourceClassroom": "3공503\n3공503\n3공503",
-      "scheduleStatus": "unrecognized",
-      "schedules": []
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "bulkCurrentReservationReview": {
+        "actualAttendanceConfirmed": false,
+        "sourceAllLocationsPreserved": true,
+        "unknownRoomKeptBlank": true,
+        "dateGenerationKind": "sourceOwnSemesterBoundedWeeklyPlan"
+      }
     },
     {
       "sourceId": "jnu-yeosu-2026-2-HME8006-1",
@@ -28163,5 +28186,9 @@
         }
       ]
     }
-  ]
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "completionClaim": false,
+  "wholeOperatingVerified": false
 }

@@ -1,4 +1,5 @@
 import 'dart:io';
+import '../../../core/diagnostics/startup_timing.dart';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -59,6 +60,8 @@ class AppDatabase extends _$AppDatabase {
     )
   ''';
 
+  final _openClock = Stopwatch()..start();
+
   AppDatabase() : super(_openConnection());
 
   AppDatabase.forTesting(super.executor);
@@ -69,6 +72,13 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration {
     return MigrationStrategy(
+      beforeOpen: (_) async {
+        _openClock.stop();
+        StartupTiming.mark(
+          StartupStage.database,
+          durationUs: _openClock.elapsedMicroseconds,
+        );
+      },
       onCreate: (migrator) async {
         await migrator.createAll();
         await customStatement(createDeletionTable);

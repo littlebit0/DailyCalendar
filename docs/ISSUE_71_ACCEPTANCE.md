@@ -1,3 +1,8 @@
+> Superseded by issue #90 (2026-10-12): local migration and account scoping remain
+> required, but the local calendar no longer waits for external Drive sync.
+> Remote changes arrive in the background with status and retry. Remote-first
+> cold-start expectations below are historical, not current acceptance.
+
 # Issue 71: Startup Sync Gate
 
 ## Behavior

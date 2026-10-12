@@ -178,6 +178,7 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
                         if (mounted) setState(() => _visibleHost = uri?.host);
                       },
                       onLoadStop: (_, url) {
+                        widget.session.pageLoadFinished();
                         final uri = url?.uriValue;
                         if (uri != null &&
                             uri.path == '/' &&
@@ -192,6 +193,9 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
                           _navigate(action),
                       onCreateWindow: (_, request) => _openPopup(request),
                       onReceivedError: (_, request, _) {
+                        if (request.isForMainFrame == true) {
+                          widget.session.pageLoadFailed();
+                        }
                         if (request.isForMainFrame == true && mounted) {
                           setState(() => _message = '학교 로그인창을 불러오지 못했습니다.');
                         }

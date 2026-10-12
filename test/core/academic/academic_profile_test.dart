@@ -52,7 +52,67 @@ class _FailPreferences extends InMemorySharedPreferencesStore {
 }
 
 void main() {
+  test(
+    'SCH calendar source survives profile restore and rejects other campuses',
+    () {
+      for (final id in [
+        'institution:academyinfo:0000142',
+        'academyinfo:0000142',
+      ]) {
+        final profile = AcademicProfile(
+          universityId: id,
+          universityName: '순천향대학교',
+          schoolKind: 'fourYear',
+        );
+        expect(
+          AcademicProfile.fromJson(profile.toJson()).academicSourceId,
+          'sch',
+        );
+        expect(profile.timetableUniversity, 'sch');
+      }
+      expect(
+        const AcademicProfile(
+          universityId: 'institution:academyinfo:0000142',
+          universityName: '순천향대학교',
+          schoolKind: 'fourYear',
+          campusId: 'academyinfo:0000117',
+        ).academicSourceId,
+        isNull,
+      );
+    },
+  );
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test('Changwon keeps one institution with independent campus dates', () {
+    const main = AcademicProfile(
+      universityId: 'institution:academyinfo:0000028',
+      universityName: '국립창원대학교',
+      schoolKind: 'fourYear',
+    );
+    const branch = AcademicProfile(
+      universityId: 'institution:academyinfo:0000028',
+      campusId: 'academyinfo:0003297',
+      universityName: '국립창원대학교',
+      schoolKind: 'fourYear',
+      campus: '거창캠퍼스',
+    );
+    const legacy = AcademicProfile(
+      universityId: 'academyinfo:0003297',
+      universityName: '국립창원대학교',
+      schoolKind: 'fourYear',
+    );
+    const namhae = AcademicProfile(
+      universityId: 'institution:academyinfo:0000028',
+      campusId: 'academyinfo:0003298',
+      universityName: '국립창원대학교',
+      schoolKind: 'fourYear',
+    );
+    expect(main.academicSourceId, 'changwon');
+    expect(branch.academicSourceId, 'changwon-geochang');
+    expect(legacy.academicSourceId, 'changwon-geochang');
+    expect(namhae.academicSourceId, 'changwon-namhae');
+  });
+
   setUp(() {
     SharedPreferences.setMockInitialValues({});
     FlutterSecureStorage.setMockInitialValues({});
@@ -141,6 +201,29 @@ void main() {
       {..._seoul.toJson(), 'campus': 3},
     ]) {
       expect(() => AcademicProfile.fromJson(invalid), throwsFormatException);
+    }
+  });
+
+  test('KMOU calendar and timetable require the saved university identity', () {
+    for (final universityId in [
+      'institution:academyinfo:0000033',
+      'academyinfo:0000033',
+    ]) {
+      final profile = AcademicProfile(
+        universityId: universityId,
+        universityName: '국립한국해양대학교',
+        schoolKind: 'fourYear',
+      );
+      expect(profile.academicSourceId, 'kmou');
+      expect(profile.timetableUniversity, 'kmou');
+      expect(profile.timetableCampus, 'unknown');
+      expect(
+        AcademicProfile.fromJson({
+          ...profile.toJson(),
+          'campusId': 'academyinfo:0000012',
+        }).academicSourceId,
+        isNull,
+      );
     }
   });
 
@@ -369,6 +452,294 @@ void main() {
       expect(repo.dailyAccount(), isNull);
       expect(repo.hasPendingSettingsSync, isFalse);
       expect(repo.settingsSyncDocument().fields, isEmpty);
+    },
+  );
+
+  test(
+    'queued LMS connection merges into the latest category instead of a stale profile',
+    () async {
+      final backend = _FailPreferences();
+      SharedPreferencesStorePlatform.instance = backend;
+      SharedPreferences.resetStatic();
+      final repo = await repository();
+      await repo.saveAcademicProfile(
+        _seoul,
+        expectedGoogleEmail: 'student@example.com',
+      );
+      backend.pauseKey = 'flutter.weekStartsOnMonday';
+      final blocked = repo.save(repo.load().copyWith(weekStartsOnMonday: true));
+      await backend.writeStarted.future;
+      final category = repo.saveAcademicProfile(
+        _seoul.withLmsCategory('new-category'),
+        expectedGoogleEmail: 'student@example.com',
+      );
+      final connection = repo.updateLmsConnection(
+        expectedGoogleEmail: 'student@example.com',
+        expectedSchoolId: 'smu',
+        userId: 'student-42',
+        enabled: true,
+      );
+      backend.continueWrite.complete();
+      await blocked;
+      await category;
+      expect(await connection, isTrue);
+      final profile = repo.load().academicProfile!;
+      expect(profile.lmsCategoryId, 'new-category');
+      expect(profile.lmsUserId, 'student-42');
+      expect(profile.lmsIntegrationEnabled, isTrue);
+      expect(
+        repo.settingsSyncDocument().fields['academicProfile']!.value,
+        profile.toJson(),
+      );
+      expect(
+        await repo.updateLmsConnection(
+          expectedGoogleEmail: 'student@example.com',
+          expectedSchoolId: 'smu',
+          userId: 'student-42',
+          enabled: true,
+        ),
+        isFalse,
+      );
+      expect(
+        await repo.updateLmsConnection(
+          expectedGoogleEmail: 'student@example.com',
+          expectedSchoolId: 'smu',
+          expectedLmsUserId: 'student-42',
+          enabled: false,
+        ),
+        isTrue,
+      );
+      expect(repo.load().academicProfile!.lmsUserId, 'student-42');
+      expect(repo.load().academicProfile!.lmsCategoryId, 'new-category');
+    },
+  );
+
+  test(
+    'queued automatic LMS connection cannot overwrite a newly selected principal',
+    () async {
+      final backend = _FailPreferences();
+      SharedPreferencesStorePlatform.instance = backend;
+      SharedPreferences.resetStatic();
+      final repo = await repository();
+      await repo.saveAcademicProfile(
+        _seoul.withLmsConnection(userId: 'old-user', enabled: true),
+        expectedGoogleEmail: 'student@example.com',
+      );
+      backend.pauseKey = 'flutter.weekStartsOnMonday';
+      final blocked = repo.save(repo.load().copyWith(weekStartsOnMonday: true));
+      await backend.writeStarted.future;
+      final interactiveLogin = repo.updateLmsConnection(
+        expectedGoogleEmail: 'student@example.com',
+        expectedSchoolId: 'smu',
+        userId: 'new-user',
+        expectedLmsUserId: 'old-user',
+        allowPrincipalChange: true,
+        enabled: true,
+      );
+      final staleAutomaticSession = repo.updateLmsConnection(
+        expectedGoogleEmail: 'student@example.com',
+        expectedSchoolId: 'smu',
+        userId: 'old-user',
+        expectedLmsUserId: 'old-user',
+        enabled: true,
+      );
+      backend.continueWrite.complete();
+      await blocked;
+      expect(await interactiveLogin, isTrue);
+      expect(await staleAutomaticSession, isFalse);
+      expect(repo.load().academicProfile!.lmsUserId, 'new-user');
+      expect(repo.load().academicProfile!.lmsIntegrationEnabled, isTrue);
+    },
+  );
+
+  test(
+    'queued automatic LMS connection cannot undo an explicit disconnect',
+    () async {
+      final backend = _FailPreferences();
+      SharedPreferencesStorePlatform.instance = backend;
+      SharedPreferences.resetStatic();
+      final repo = await repository();
+      await repo.saveAcademicProfile(
+        _seoul.withLmsConnection(userId: 'student-42', enabled: true),
+        expectedGoogleEmail: 'student@example.com',
+      );
+      backend.pauseKey = 'flutter.weekStartsOnMonday';
+      final blocked = repo.save(repo.load().copyWith(weekStartsOnMonday: true));
+      await backend.writeStarted.future;
+      final disconnect = repo.updateLmsConnection(
+        expectedGoogleEmail: 'student@example.com',
+        expectedSchoolId: 'smu',
+        expectedLmsUserId: 'student-42',
+        enabled: false,
+      );
+      final staleAutomaticSession = repo.updateLmsConnection(
+        expectedGoogleEmail: 'student@example.com',
+        expectedSchoolId: 'smu',
+        userId: 'student-42',
+        expectedLmsUserId: 'student-42',
+        enabled: true,
+      );
+      backend.continueWrite.complete();
+      await blocked;
+      expect(await disconnect, isTrue);
+      expect(await staleAutomaticSession, isFalse);
+      expect(repo.load().academicProfile!.lmsIntegrationEnabled, isFalse);
+      expect(repo.load().academicProfile!.lmsUserId, 'student-42');
+      expect(
+        await repo.updateLmsConnection(
+          expectedGoogleEmail: 'student@example.com',
+          expectedSchoolId: 'smu',
+          userId: 'student-42',
+          expectedLmsUserId: 'student-42',
+          allowPrincipalChange: true,
+          enabled: true,
+        ),
+        isTrue,
+      );
+      expect(repo.load().academicProfile!.lmsIntegrationEnabled, isTrue);
+    },
+  );
+
+  test(
+    'queued LMS connection cannot restore the school changed by the user',
+    () async {
+      final backend = _FailPreferences();
+      SharedPreferencesStorePlatform.instance = backend;
+      SharedPreferences.resetStatic();
+      final repo = await repository();
+      await repo.saveAcademicProfile(
+        _seoul,
+        expectedGoogleEmail: 'student@example.com',
+      );
+      backend.pauseKey = 'flutter.weekStartsOnMonday';
+      final blocked = repo.save(repo.load().copyWith(weekStartsOnMonday: true));
+      await backend.writeStarted.future;
+      final school = repo.saveAcademicProfile(
+        _other,
+        expectedGoogleEmail: 'student@example.com',
+      );
+      final connection = repo.updateLmsConnection(
+        expectedGoogleEmail: 'student@example.com',
+        expectedSchoolId: 'smu',
+        userId: 'student-42',
+        enabled: true,
+      );
+      backend.continueWrite.complete();
+      await blocked;
+      await school;
+      expect(await connection, isFalse);
+      expect(repo.load().academicProfile, _other);
+      expect(
+        repo.settingsSyncDocument().fields['academicProfile']!.value,
+        _other.toJson(),
+      );
+    },
+  );
+
+  test('queued LMS connection cannot cross a Google account switch', () async {
+    final backend = _FailPreferences();
+    SharedPreferencesStorePlatform.instance = backend;
+    SharedPreferences.resetStatic();
+    final repo = await repository();
+    await repo.saveAcademicProfile(
+      _seoul,
+      expectedGoogleEmail: 'student@example.com',
+    );
+    backend.pauseKey = 'flutter.weekStartsOnMonday';
+    final blocked = repo.save(repo.load().copyWith(weekStartsOnMonday: true));
+    await backend.writeStarted.future;
+    final account = repo.saveGoogleAccount(
+      const GoogleAccount(email: 'other@example.com'),
+    );
+    final rejected = expectLater(
+      repo.updateLmsConnection(
+        expectedGoogleEmail: 'student@example.com',
+        expectedSchoolId: 'smu',
+        userId: 'student-42',
+        enabled: true,
+      ),
+      throwsStateError,
+    );
+    backend.continueWrite.complete();
+    await blocked;
+    await account;
+    await rejected;
+    expect(repo.load().academicProfile, isNull);
+    expect(
+      repo.settingsSyncDocument().fields.containsKey('academicProfile'),
+      isFalse,
+    );
+    await repo.saveGoogleAccount(
+      const GoogleAccount(email: 'student@example.com'),
+    );
+    expect(repo.load().academicProfile, _seoul);
+  });
+
+  test(
+    'queued LMS connection is rejected after settings reset invalidates its generation',
+    () async {
+      final backend = _FailPreferences();
+      SharedPreferencesStorePlatform.instance = backend;
+      SharedPreferences.resetStatic();
+      final repo = await repository();
+      await repo.saveAcademicProfile(
+        _seoul,
+        expectedGoogleEmail: 'student@example.com',
+      );
+      backend.pauseKey = 'flutter.weekStartsOnMonday';
+      final blocked = repo.save(repo.load().copyWith(weekStartsOnMonday: true));
+      await backend.writeStarted.future;
+      final rejected = expectLater(
+        repo.updateLmsConnection(
+          expectedGoogleEmail: 'student@example.com',
+          expectedSchoolId: 'smu',
+          userId: 'student-42',
+          enabled: true,
+        ),
+        throwsStateError,
+      );
+      final reset = repo.resetAll();
+      backend.continueWrite.complete();
+      await blocked;
+      await rejected;
+      await reset;
+      expect(repo.load().academicProfile, isNull);
+      expect(
+        repo.settingsSyncDocument().fields.containsKey('academicProfile'),
+        isFalse,
+      );
+    },
+  );
+
+  test(
+    'failed LMS connection revision write restores the whole profile and outbox',
+    () async {
+      final backend = _FailPreferences();
+      SharedPreferencesStorePlatform.instance = backend;
+      SharedPreferences.resetStatic();
+      final repo = await repository();
+      await repo.saveAcademicProfile(
+        _seoul.withLmsCategory('keep-category'),
+        expectedGoogleEmail: 'student@example.com',
+      );
+      await repo.acknowledgeSettingsSyncDocument(repo.settingsSyncDocument());
+      final before = repo.load().academicProfile;
+      final document = repo.settingsSyncDocument().toJson();
+      final revision = repo.settingsSyncRevision;
+      backend.failKey = 'flutter.settingsSyncDocument.v1';
+      await expectLater(
+        repo.updateLmsConnection(
+          expectedGoogleEmail: 'student@example.com',
+          expectedSchoolId: 'smu',
+          userId: 'student-42',
+          enabled: true,
+        ),
+        throwsStateError,
+      );
+      expect(repo.load().academicProfile, before);
+      expect(repo.settingsSyncDocument().toJson(), document);
+      expect(repo.settingsSyncRevision, revision);
+      expect(repo.hasPendingSettingsSync, isFalse);
     },
   );
 

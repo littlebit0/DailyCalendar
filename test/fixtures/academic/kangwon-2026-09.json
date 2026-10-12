@@ -1,0 +1,61 @@
+{
+  "icon": "success",
+  "title": "",
+  "message": "",
+  "data": [
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 81,
+      "ttl": "학위논문제출 자격 <전공시험>",
+      "etc1Cn": "2026.09.01",
+      "etc3Cn": "2026.09.10",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 56,
+      "ttl": "2학기 수강신청 변경 및 취소",
+      "etc1Cn": "2026.09.01",
+      "etc3Cn": "2026.09.07",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 55,
+      "ttl": "2학기 개강",
+      "etc1Cn": "2026.09.01",
+      "etc3Cn": "2026.09.01",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 82,
+      "ttl": "학위논문제출 자격 <외국어시험>",
+      "etc1Cn": "2026.09.11",
+      "etc3Cn": "2026.09.11",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 57,
+      "ttl": "KNU 대동제(춘천)",
+      "etc1Cn": "2026.09.15",
+      "etc3Cn": "2026.09.17",
+      "cd1Vl": 1,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 83,
+      "ttl": "박사학위청구논문 심사신청",
+      "etc1Cn": "2026.09.21",
+      "etc3Cn": "2026.10.02",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    }
+  ]
+}

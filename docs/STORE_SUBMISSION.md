@@ -1,3 +1,30 @@
+# 4.0.0 Transporter export — 2026-10-12
+
+- iOS: `dist/transporter-upload/4.0.0/Daily-iOS-AppStore-4.0.0-build-4.0.0.ipa`
+- macOS: `dist/transporter-upload/4.0.0/Daily-macOS-AppStore-4.0.0-build-4.0.0.pkg`
+- Both apps and widgets: version/build `4.0.0`; production IDs `com.littlebit0.daily` / `com.littlebit0.daily.widgets`, team `A6Y73X2ZLS` unchanged.
+- Xcode Release archive and app-store-connect export succeeded. Distribution signatures, installer signature, arm64 iOS/universal macOS and absent debug entitlements verified. SHA256/bytes: local `verification.json` beside files.
+- Files generated only: no Transporter upload, Apple submission or store-publication claim. Signing profiles, exports, private logs remain outside Git.
+- [Korean update and promotion copy](STORE_TEXT_4.0.0_KO.md) · [Release scope and verification limits](RELEASE_NOTES_4.0.0.md).
+
+# 3.6.0 Transporter export — 2026-09-26
+
+- Source release: `v3.6.0`, commit `8056934`.
+- Exported locally with `app-store-connect`, `destination=export`; **not uploaded
+  to Apple and not submitted for review**.
+- iOS: `dist/transporter-upload/3.6.0/Daily-iOS-AppStore-3.6.0-build-3.6.0.ipa`
+- macOS: `dist/transporter-upload/3.6.0/Daily-macOS-AppStore-3.6.0-build-3.6.0.pkg`
+- Both apps and widgets report version/build `3.6.0`; bundle IDs are
+  `com.littlebit0.daily` and `com.littlebit0.daily.widgets`.
+- Verified distribution signatures, package installer signature, and absence of
+  debug task entitlements. iOS is arm64; macOS app and widget are arm64/x86_64.
+- SHA256 and signature/version evidence: local `verification.json` beside exports.
+  Signed exports, profiles, certificates and signing logs remain outside Git.
+- Korean What's New and 98-character promotional text: [store copy](STORE_TEXT_3.6.0_KO.md).
+- Public GitHub IPA/DMG are unsigned installers and are separate from these exports.
+
+The following sections preserve earlier preparation and platform setup history.
+
 # Daily Apple App Store Submission
 
 ## Current Preparation: 3.5.0

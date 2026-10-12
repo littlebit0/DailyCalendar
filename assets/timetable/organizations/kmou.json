@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "university": "kmou",
+  "mappings": [
+    {
+      "college": "해양과학기술융합대학",
+      "department": "전기전자공학전공",
+      "sourceLabel": "전기전자공학전공 1학년",
+      "sourceUrl": "https://kmou.ac.kr/data/2026_kmou_susi_i.pdf",
+      "evidence": "Official2026 admissions college-contact table lists 전자전기정보공학부 and both exact majors under 해양과학기술융합대학; source grade association preserved.",
+      "sourceFile": "assets/timetable/kmou-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양과학기술융합대학",
+      "department": "전기전자공학전공",
+      "sourceLabel": "전기전자공학전공 2학년",
+      "sourceUrl": "https://kmou.ac.kr/data/2026_kmou_susi_i.pdf",
+      "evidence": "Official2026 admissions college-contact table lists 전자전기정보공학부 and both exact majors under 해양과학기술융합대학; source grade association preserved.",
+      "sourceFile": "assets/timetable/kmou-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양과학기술융합대학",
+      "department": "전기전자공학전공",
+      "sourceLabel": "전기전자공학전공 3학년",
+      "sourceUrl": "https://kmou.ac.kr/data/2026_kmou_susi_i.pdf",
+      "evidence": "Official2026 admissions college-contact table lists 전자전기정보공학부 and both exact majors under 해양과학기술융합대학; source grade association preserved.",
+      "sourceFile": "assets/timetable/kmou-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양과학기술융합대학",
+      "department": "전자정보통신공학전공",
+      "sourceLabel": "전자정보통신공학전공 1학년",
+      "sourceUrl": "https://kmou.ac.kr/data/2026_kmou_susi_i.pdf",
+      "evidence": "Official2026 admissions college-contact table lists 전자전기정보공학부 and both exact majors under 해양과학기술융합대학; source grade association preserved.",
+      "sourceFile": "assets/timetable/kmou-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양과학기술융합대학",
+      "department": "전자정보통신공학전공",
+      "sourceLabel": "전자정보통신공학전공 2학년",
+      "sourceUrl": "https://kmou.ac.kr/data/2026_kmou_susi_i.pdf",
+      "evidence": "Official2026 admissions college-contact table lists 전자전기정보공학부 and both exact majors under 해양과학기술융합대학; source grade association preserved.",
+      "sourceFile": "assets/timetable/kmou-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양과학기술융합대학",
+      "department": "전자정보통신공학전공",
+      "sourceLabel": "전자정보통신공학전공 3학년",
+      "sourceUrl": "https://kmou.ac.kr/data/2026_kmou_susi_i.pdf",
+      "evidence": "Official2026 admissions college-contact table lists 전자전기정보공학부 and both exact majors under 해양과학기술융합대학; source grade association preserved.",
+      "sourceFile": "assets/timetable/kmou-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    }
+  ],
+  "courseOwners": []
+}

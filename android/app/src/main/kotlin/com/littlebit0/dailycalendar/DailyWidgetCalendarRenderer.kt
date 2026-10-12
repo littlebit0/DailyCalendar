@@ -40,7 +40,7 @@ internal object DailyWidgetCalendarRenderer {
 
     fun render(
         context: Context, days: List<JSONObject>, width: Int, height: Int,
-        primary: Int, muted: Int, accent: Int, sunday: Int, saturday: Int, surface: Int,
+        primary: Int, muted: Int, accent: Int, sunday: Int, saturday: Int, surface: Int, completionStrike: Int,
     ): Bitmap {
         val scale = context.resources.displayMetrics.density.coerceAtMost(2f)
         val bitmap = Bitmap.createBitmap((width * scale).toInt(), (height * scale).toInt(), Bitmap.Config.ARGB_8888)
@@ -81,7 +81,7 @@ internal object DailyWidgetCalendarRenderer {
             val label = TextUtils.ellipsize(bar.event.optString("title"), paint, (rect.width() - 4).coerceAtLeast(0f), TextUtils.TruncateAt.END).toString()
             canvas.drawText(label, rect.left + 2, rect.top + 10, paint)
             if (bar.event.optBoolean("completed")) {
-                paint.color = colors.strike
+                paint.color = completionStrike
                 paint.strokeWidth = DailyCompletionContrast.strokeWidth(paint.textSize)
                 val lineY = rect.top + 10 - paint.textSize * .3f
                 canvas.drawLine(rect.left + 2, lineY, rect.left + 2 + paint.measureText(label), lineY, paint)

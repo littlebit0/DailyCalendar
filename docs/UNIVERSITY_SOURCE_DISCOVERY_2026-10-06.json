@@ -1,0 +1,1172 @@
+{
+  "checkedAt": "2026-10-06",
+  "note": "Public homepage link discovery only; linksFound is not implementation or completeness verification. Empty links do not prove that a school has no public source. discoveryHost candidates originate in the target roster.",
+  "universities": [
+    {
+      "name": "가천대학교",
+      "requestedUrl": "https://www.gachon.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.gachon.ac.kr/",
+      "pageTitle": "가천대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "가톨릭대학교",
+      "requestedUrl": "https://www.catholic.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.catholic.ac.kr:443/ko/index.do",
+      "pageTitle": "가톨릭대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.catholic.ac.kr:443/ko/support/calendar2024_list.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "강원대학교",
+      "requestedUrl": "https://www.kangwon.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kangwon.ac.kr/ko/index.do",
+      "pageTitle": "강원대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.kangwon.ac.kr/ko/conts/713/directory.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "건국대학교",
+      "requestedUrl": "https://www.konkuk.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "state": "requestFailed",
+      "error": "HTTPError: HTTP Error 302: The HTTP server returned a redirect error that would lead to an infinite loop.\nThe last 30x error message was:\n"
+    },
+    {
+      "name": "경기대학교",
+      "requestedUrl": "https://www.kyonggi.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kyonggi.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "경북대학교",
+      "requestedUrl": "https://www.knu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.knu.ac.kr/wbbs/wbbs/main/main.action",
+      "pageTitle": "경북대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.knu.ac.kr/wbbs/wbbs/user/yearSchedule/index.action?menu_idx=43"
+        },
+        {
+          "feature": "timetable",
+          "label": "수업시간/강의계획서",
+          "url": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "경상국립대학교",
+      "requestedUrl": "https://www.gnu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.gnu.ac.kr/intro/www/",
+      "pageTitle": "경상국립대학교-인트로",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "경인교육대학교",
+      "requestedUrl": "https://www.ginue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.ginue.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "경희대학교",
+      "requestedUrl": "https://www.khu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.khu.ac.kr/kor/user/main/view.do",
+      "pageTitle": "경희대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": [
+        {
+          "url": "https://www.khu.ac.kr/kor/user/bbs/BMSR00040/list.do?menuNo=200316",
+          "status": 200
+        },
+        {
+          "url": "https://www.khu.ac.kr/kor/user/contents/view.do?menuNo=200295",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "name": "계명대학교",
+      "requestedUrl": "https://www.kmu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kmu.ac.kr/",
+      "pageTitle": "계명대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.kmu.ac.kr/uni/main/page.jsp?mnu_uid=3373&"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의시간표 조회",
+          "url": "https://edward.kmu.ac.kr/nx/index_external.html?bWVudUlkPU01MDU3MDQ="
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "고려대학교",
+      "requestedUrl": "https://www.korea.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.korea.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "공주교육대학교",
+      "requestedUrl": "https://www.gjue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.gjue.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "광운대학교",
+      "requestedUrl": "https://www.kw.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kw.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "광주과학기술원",
+      "requestedUrl": "https://www.gist.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.gist.ac.kr/kr/main.html",
+      "pageTitle": "GIST",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.gist.ac.kr/kr/html/sub05/0501.html"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "광주교육대학교",
+      "requestedUrl": "https://www.gnue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.gnue.ac.kr/",
+      "pageTitle": "광주교육대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립경국대학교",
+      "requestedUrl": "https://www.gknu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.gknu.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립공주대학교",
+      "requestedUrl": "https://www.kongju.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kongju.ac.kr/",
+      "pageTitle": "공주대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립군산대학교",
+      "requestedUrl": "https://www.kunsan.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kunsan.ac.kr:443/index.kunsan?sso=ok",
+      "pageTitle": "국립군산대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립금오공과대학교",
+      "requestedUrl": "https://www.kumoh.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kumoh.ac.kr/ko/index.do?sso=ok",
+      "pageTitle": "국립금오공과대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.kumoh.ac.kr/ko/schedule.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "국립목포대학교",
+      "requestedUrl": "https://www.mokpo.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.mokpo.ac.kr/",
+      "pageTitle": "국립목포대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립목포해양대학교",
+      "requestedUrl": "https://www.mmu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "state": "requestFailed",
+      "error": "URLError: <urlopen error [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:1129)>"
+    },
+    {
+      "name": "국립부경대학교",
+      "requestedUrl": "https://www.pknu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.pknu.ac.kr/intro.html",
+      "pageTitle": "국립부경대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립순천대학교",
+      "requestedUrl": "https://www.scnu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.scnu.ac.kr/",
+      "pageTitle": "국립순천대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립창원대학교",
+      "requestedUrl": "https://www.changwon.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.changwon.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립한국교통대학교",
+      "requestedUrl": "https://www.ut.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.ut.ac.kr/",
+      "pageTitle": "국립한국교통대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.ut.ac.kr/prog/schedule/kor/sub05_01/1/scheduleList.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "국립한국해양대학교",
+      "requestedUrl": "https://www.kmou.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kmou.ac.kr/",
+      "pageTitle": "국립한국해양대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국립한밭대학교",
+      "requestedUrl": "https://www.hanbat.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.hanbat.ac.kr/",
+      "pageTitle": "국립한밭대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "국민대학교",
+      "requestedUrl": "https://www.kookmin.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kookmin.ac.kr/user/index.do",
+      "pageTitle": "국민대학교 대표 홈페이지",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.kookmin.ac.kr/user/scGuid/scSchedule/index.do"
+        },
+        {
+          "feature": "timetable",
+          "label": "수업시간표",
+          "url": "https://www.kookmin.ac.kr/comm/menu/user/9cc1a72c81e16567bc6a8cfbd57d625f/content/index.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "남서울대학교",
+      "requestedUrl": "https://www.nsu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.namseoul.net/mainIntro/intro.do",
+      "pageTitle": "남서울대학교 입학안내",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "단국대학교",
+      "requestedUrl": "https://www.dankook.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.dankook.ac.kr/web/kor/home",
+      "pageTitle": "홈 - 단국대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.dankook.ac.kr/web/kor/-2014-"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의시간표(죽전)",
+          "url": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl.do"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의시간표(천안)",
+          "url": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl2.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "대구경북과학기술원",
+      "requestedUrl": "https://www.dgist.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "state": "requestFailed",
+      "error": "URLError: <urlopen error [Errno 54] Connection reset by peer>"
+    },
+    {
+      "name": "대구교육대학교",
+      "requestedUrl": "https://www.dnue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.dnue.ac.kr/kor/intro.do;jsessionid=8619EF0650A109DED9FD8DF561CC812E.tomcat1",
+      "pageTitle": "대구교육대학교대구교육대학교 인트로",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "대구대학교",
+      "requestedUrl": "https://www.daegu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.daegu.ac.kr/main",
+      "pageTitle": "대구대학교 + 메인 페이지",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정 더보기",
+          "url": "https://www.daegu.ac.kr/schedule/detail?schedule_info_seq=1"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "동국대학교",
+      "requestedUrl": "https://www.dongguk.edu/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.dongguk.edu/main",
+      "pageTitle": "동국대학교 메인페이지",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "# 학사일정",
+          "url": "https://search.dongguk.edu/search.do?kwd=학사일정&lang=ko"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.dongguk.edu/schedule/detail?schedule_info_seq=22"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의계획서",
+          "url": "https://support.dongguk.edu/unis/index.do?t=6544684B636D786A4E6B4A46566E63355A45394D536D78524E44526F647A3039"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "동아대학교",
+      "requestedUrl": "https://www.donga.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.donga.ac.kr/",
+      "pageTitle": "DONGA",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "동의대학교",
+      "requestedUrl": "https://www.deu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.deu.ac.kr/www/index.do",
+      "pageTitle": "동의대학교 대표",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.deu.ac.kr/www/scheduleList.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "명지대학교",
+      "requestedUrl": "https://www.mju.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.mju.ac.kr/sites/mjukr/intro/intro.html",
+      "pageTitle": "명지대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "백석대학교",
+      "requestedUrl": "https://www.bu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.bu.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "부산교육대학교",
+      "requestedUrl": "https://www.bnue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.bnue.ac.kr/home/main;jsessionid=A5CD68D4793A2DB57EEDAC6C17657015.tomcat2",
+      "pageTitle": "부산교육대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.bnue.ac.kr/calendar/life01"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "부산대학교",
+      "requestedUrl": "https://www.pusan.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.pusan.ac.kr/index.jsp",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "삼육대학교",
+      "requestedUrl": "https://www.syu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.syu.ac.kr/",
+      "pageTitle": "삼육대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.syu.ac.kr/academic/major-schedule/"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "서강대학교",
+      "requestedUrl": "https://www.sogang.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.sogang.ac.kr/ko/home",
+      "pageTitle": "서강대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "서경대학교",
+      "requestedUrl": "https://www.skuniv.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.skuniv.ac.kr/intro",
+      "pageTitle": "서경대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "서울과학기술대학교",
+      "requestedUrl": "https://www.seoultech.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.seoultech.ac.kr/",
+      "pageTitle": "서울과학기술대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.seoultech.ac.kr/life/sch"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.seoultech.ac.kr/life/sch/common/"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "서울교육대학교",
+      "requestedUrl": "https://www.snue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.snue.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "서울대학교",
+      "requestedUrl": "https://www.snu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "state": "requestFailed",
+      "error": "URLError: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>"
+    },
+    {
+      "name": "서울시립대학교",
+      "requestedUrl": "https://www.uos.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.uos.ac.kr/",
+      "pageTitle": "서울시립대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "서울여자대학교",
+      "requestedUrl": "https://www.swu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.swu.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "성균관대학교",
+      "requestedUrl": "https://www.skku.edu/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.skku.edu/skku/index.do",
+      "pageTitle": "성균관대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.skku.edu/skku/edu/bachelor/ca_de_schedule.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "성신여자대학교",
+      "requestedUrl": "https://www.sungshin.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.sungshin.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "세종대학교",
+      "requestedUrl": "https://www.sejong.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.sejong.ac.kr/kor/index.do",
+      "pageTitle": "세종대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.sejong.ac.kr/kor/academics/academic-calendar.do"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의시간표/수업계획서",
+          "url": "https://sjpt.sejong.ac.kr/app/ext/SueOpenTimeQ.jsp"
+        },
+        {
+          "feature": "timetable",
+          "label": "수강편람",
+          "url": "https://www.sejong.ac.kr/kor/intro/notice3.do?mode=view&articleNo=891086&article.offset=0&articleLimit=10"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "수원대학교",
+      "requestedUrl": "https://www.suwon.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.suwon.ac.kr/",
+      "pageTitle": "수원대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "숙명여자대학교",
+      "requestedUrl": "https://www.sookmyung.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.sookmyung.ac.kr:443/kr/index.do",
+      "pageTitle": "숙명여자대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.sookmyung.ac.kr:443/kr/university-life/academic-calendar.do"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정 더보기",
+          "url": "https://www.sookmyung.ac.kr:443/kr/university-life/academic-calendar.do?mode=list"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의시간표 조회",
+          "url": "https://smap.sookmyung.ac.kr:8443/sap/bc/webdynpro/sap/zcmw2237?sap-language=KO"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "순천향대학교",
+      "requestedUrl": "https://www.sch.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.sch.ac.kr/",
+      "pageTitle": "순천향대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "숭실대학교",
+      "requestedUrl": "https://www.ssu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://ssu.ac.kr/",
+      "pageTitle": "숭실대학교 - 숭실대학교에 오신 것을 환영합니다.",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://ssu.ac.kr/%ed%95%99%ec%82%ac/%ed%95%99%ec%82%ac%ec%9d%bc%ec%a0%95/"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "아주대학교",
+      "requestedUrl": "https://www.ajou.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.ajou.ac.kr/kr/index.do",
+      "pageTitle": "아주대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.ajou.ac.kr/kr/bachelor/schedule.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "연세대학교",
+      "requestedUrl": "https://www.yonsei.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.yonsei.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "영남대학교",
+      "requestedUrl": "https://www.yu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "state": "requestFailed",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "name": "용인대학교",
+      "requestedUrl": "https://www.yongin.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.yongin.ac.kr/",
+      "pageTitle": "메인\r\n\t\r\n - 용인대학교",
+      "links": [
+        {
+          "feature": "timetable",
+          "label": "학사\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t\t\t2026학년도 2학기 종합강의시간표 안내[09.08.]",
+          "url": "https://www.yongin.ac.kr/cmn/board/SYSTEM_DEFAULT000001/6761noticeDetail.do?currentMenuNo=106100000"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정 전체보기",
+          "url": "https://www.yongin.ac.kr/cmn/wvtex/nibr/academic/academicMain.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "울산과학기술원",
+      "requestedUrl": "https://www.unist.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.unist.ac.kr/unist/index.do",
+      "pageTitle": "UNIST",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.unist.ac.kr/unist/education/academic/schedule.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "울산대학교",
+      "requestedUrl": "https://www.ulsan.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.ulsan.ac.kr/kor/Main.do",
+      "pageTitle": "울산대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "http://www.ulsan.ac.kr/kor/CMS/ScheduleMgr/MonthList.do?mCode=MN080"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.ulsan.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN080"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "인천대학교",
+      "requestedUrl": "https://www.inu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.inu.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "인하대학교",
+      "requestedUrl": "https://www.inha.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.inha.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "전남대학교",
+      "requestedUrl": "https://www.jnu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.jnu.ac.kr/jnumain.aspx",
+      "pageTitle": "전남대학교에 오신 것을 환영합니다.",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.jnu.ac.kr/WebApp/web/HOM/TOP/Schedule300.aspx?type=1"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정 더보기",
+          "url": "https://www.jnu.ac.kr/WebApp/web/HOM/TOP/Schedule300.aspx"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "전북대학교",
+      "requestedUrl": "https://www.jbnu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.jbnu.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "전주교육대학교",
+      "requestedUrl": "https://www.jnue.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.jnue.kr/",
+      "pageTitle": "전주교육대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "제주대학교",
+      "requestedUrl": "https://www.jejunu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.jejunu.ac.kr/",
+      "pageTitle": "제주대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.jejunu.ac.kr/admission/eduguide/degree/academyschedule/academic.htm"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://cms.jejunu.ac.kr/admission/eduguide/degree/academyschedule/academic.htm"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "조선대학교",
+      "requestedUrl": "https://www.chosun.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "state": "requestFailed",
+      "error": "URLError: <urlopen error [Errno 54] Connection reset by peer>"
+    },
+    {
+      "name": "중앙대학교",
+      "requestedUrl": "https://www.cau.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.cau.ac.kr/index.do",
+      "pageTitle": "중앙대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.cau.ac.kr/cms/FR_CON/index.do?MENU_ID=590"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의시간표",
+          "url": "https://mportal.cau.ac.kr/std/usk/sUskSif001/search.do"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "진주교육대학교",
+      "requestedUrl": "https://www.cue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "state": "requestFailed",
+      "error": "HTTPError: HTTP Error 500: Internal Server Error"
+    },
+    {
+      "name": "청주교육대학교",
+      "requestedUrl": "https://www.cje.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.cje.ac.kr/web/main.do?screenTp=USER",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "춘천교육대학교",
+      "requestedUrl": "https://www.cnue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.cnue.ac.kr/portal/index.do",
+      "pageTitle": "석우포털",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "충남대학교",
+      "requestedUrl": "https://www.cnu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.cnu.ac.kr/",
+      "pageTitle": "충남대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "충북대학교",
+      "requestedUrl": "https://www.chungbuk.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.chungbuk.ac.kr/",
+      "pageTitle": "Redirect",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "포항공과대학교",
+      "requestedUrl": "https://www.postech.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.postech.ac.kr/kor/index.do",
+      "pageTitle": "가치창출대학 POSTECH",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.postech.ac.kr/kor/college-life/academic_schedule.do"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.postech.ac.kr/kor/search.do?qt=%ED%95%99%EC%82%AC%EC%9D%BC%EC%A0%95"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "한경국립대학교",
+      "requestedUrl": "https://www.hknu.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.hknu.ac.kr/",
+      "pageTitle": "한경대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한국공학대학교",
+      "requestedUrl": "https://www.tukorea.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.tukorea.ac.kr/intro/index.html",
+      "pageTitle": "한국공학대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한국과학기술원",
+      "requestedUrl": "https://www.kaist.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kaist.ac.kr/",
+      "pageTitle": "KAIST",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한국교원대학교",
+      "requestedUrl": "https://www.knue.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.knue.ac.kr/",
+      "pageTitle": "",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한국기술교육대학교",
+      "requestedUrl": "https://www.koreatech.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.koreatech.ac.kr/",
+      "pageTitle": "한국기술교육대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한국외국어대학교",
+      "requestedUrl": "https://www.hufs.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.hufs.ac.kr/sites/hufs/index.html",
+      "pageTitle": "index",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한국항공대학교",
+      "requestedUrl": "https://www.kau.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.kau.ac.kr/",
+      "pageTitle": "한국항공대학교",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한성대학교",
+      "requestedUrl": "https://www.hansung.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.hansung.ac.kr/",
+      "pageTitle": "site move",
+      "links": [],
+      "state": "needsMenuInspection",
+      "inspectedMenus": []
+    },
+    {
+      "name": "한양대학교",
+      "requestedUrl": "https://www.hanyang.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.hanyang.ac.kr/home",
+      "pageTitle": "한양대 - 한양대학교",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.hanyang.ac.kr/-33"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.hanyang.ac.kr/-93"
+        },
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.hanyang.ac.kr/web/www/-33"
+        }
+      ],
+      "state": "linksFound"
+    },
+    {
+      "name": "호서대학교",
+      "requestedUrl": "https://www.hoseo.ac.kr/",
+      "checkedAt": "2026-10-06",
+      "status": 200,
+      "finalUrl": "https://www.hoseo.ac.kr/Home/Main.mbz",
+      "pageTitle": ":: 호서대학교 ::",
+      "links": [
+        {
+          "feature": "academicCalendar",
+          "label": "학사일정",
+          "url": "https://www.hoseo.ac.kr/Home/Contents.mbz?action=MAPP_2405312496"
+        },
+        {
+          "feature": "timetable",
+          "label": "강의시간표",
+          "url": "https://www.hoseo.ac.kr/Home/Contents.mbz?action=MAPP_1708230096"
+        }
+      ],
+      "state": "linksFound"
+    }
+  ]
+}

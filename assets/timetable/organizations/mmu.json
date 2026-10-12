@@ -1,0 +1,150 @@
+{
+  "schemaVersion": 1,
+  "university": "mmu",
+  "mappings": [
+    {
+      "college": "해사대학",
+      "department": "기관시스템공학부",
+      "sourceLabel": "기관시스템공학부",
+      "sourceUrl": "https://mobility.mmu.ac.kr/admission/contents/naval",
+      "evidence": "Official university admission college overview lists this exact department under 해사대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양공과대학",
+      "department": "조선해양공학과",
+      "sourceLabel": "조선해양공학과",
+      "sourceUrl": "https://mobility.mmu.ac.kr/upload/pdf/873/79623a54d0bd4761b2a1c7f25af7e9b7.pdf",
+      "evidence": "Official 2026 transfer admission table explicitly places department under 해양공과대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": null,
+      "department": "첨단해양모빌리티학과",
+      "sourceLabel": "첨단해양모빌리티학과",
+      "sourceUrl": "https://www.mmu.ac.kr/main/board/302/1/read/89163",
+      "evidence": "Original public timetable retains an explicit named academic department/faculty/major association in departments. Official organization sources inspected but exact college affiliation remains unconfirmed; preserve association only under collegeKnown=false. No year/general/admin/OCR heading inferred.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": false
+    },
+    {
+      "college": "해양공과대학",
+      "department": "컴퓨터공학과",
+      "sourceLabel": "컴퓨터공학과",
+      "sourceUrl": "https://mobility.mmu.ac.kr/upload/pdf/873/79623a54d0bd4761b2a1c7f25af7e9b7.pdf",
+      "evidence": "Official 2026 transfer admission table explicitly places department under 해양공과대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해사대학",
+      "department": "항해정보시스템학부",
+      "sourceLabel": "항해정보시스템학부",
+      "sourceUrl": "https://mobility.mmu.ac.kr/admission/contents/naval",
+      "evidence": "Official university admission college overview lists this exact department under 해사대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해사대학",
+      "department": "항해학부",
+      "sourceLabel": "항해학부",
+      "sourceUrl": "https://mobility.mmu.ac.kr/admission/contents/naval",
+      "evidence": "Official university admission college overview lists this exact department under 해사대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해사대학",
+      "department": "해군사관학부",
+      "sourceLabel": "해군사관학부",
+      "sourceUrl": "https://mobility.mmu.ac.kr/admission/contents/naval",
+      "evidence": "Official university admission college overview lists this exact department under 해사대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해사대학",
+      "department": "해상운송학부",
+      "sourceLabel": "해상운송학부",
+      "sourceUrl": "https://mobility.mmu.ac.kr/admission/contents/naval",
+      "evidence": "Official university admission college overview lists this exact department under 해사대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양공과대학",
+      "department": "해양건설공학과",
+      "sourceLabel": "해양건설공학과",
+      "sourceUrl": "https://mobility.mmu.ac.kr/upload/pdf/873/79623a54d0bd4761b2a1c7f25af7e9b7.pdf",
+      "evidence": "Official 2026 transfer admission table explicitly places department under 해양공과대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해사대학",
+      "department": "해양경찰학부",
+      "sourceLabel": "해양경찰학부",
+      "sourceUrl": "https://mobility.mmu.ac.kr/admission/contents/naval",
+      "evidence": "Official university admission college overview lists this exact department under 해사대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해사대학",
+      "department": "해양메카트로닉스학부",
+      "sourceLabel": "해양메카트로닉스학부",
+      "sourceUrl": "https://mobility.mmu.ac.kr/admission/contents/naval",
+      "evidence": "Official university admission college overview lists this exact department under 해사대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양공과대학",
+      "department": "해양스포츠학과",
+      "sourceLabel": "해양스포츠학과",
+      "sourceUrl": "https://mobility.mmu.ac.kr/upload/pdf/873/79623a54d0bd4761b2a1c7f25af7e9b7.pdf",
+      "evidence": "Official 2026 transfer admission table explicitly places department under 해양공과대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "해양공과대학",
+      "department": "환경·생명공학과",
+      "sourceLabel": "환경·생명공학과",
+      "sourceUrl": "https://mobility.mmu.ac.kr/upload/pdf/873/79623a54d0bd4761b2a1c7f25af7e9b7.pdf",
+      "evidence": "Official 2026 transfer admission table explicitly places department under 해양공과대학.",
+      "sourceFile": "assets/timetable/mmu-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    }
+  ],
+  "courseOwners": []
+}

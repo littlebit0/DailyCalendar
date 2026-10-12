@@ -1,0 +1,2382 @@
+{
+  "checkedAt": "2026-10-11",
+  "logos": {
+    "institution:academyinfo:0002748": {
+      "name": "가야대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0002748.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030022&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0002748",
+      "sha256": "0023049a52ab557a186418729dc68a8a7690b8ffa52010fe167d3289e6f3386f",
+      "size": [
+        82,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000063": {
+      "name": "가천대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000063.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005616&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000063",
+      "sha256": "8268c3388d6c1c0114abcf3229bc29cb59a32902f6e2d9a442f0fb1e82e473e5",
+      "size": [
+        86,
+        66
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000072": {
+      "name": "가톨릭관동대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000072.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008293&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000072",
+      "sha256": "de4d7d527fdcb0190b6d22b637f0c5f7806df65c6b051fbb21476cc6a0288b90",
+      "size": [
+        117,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000215": {
+      "name": "가톨릭꽃동네대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000215.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005723&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000215",
+      "sha256": "1a45bc4d4428a0c71daf8e6a94fa65914112d6a693f718507c81db57c9386261",
+      "size": [
+        113,
+        113
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000046": {
+      "name": "가톨릭대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000046.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030000&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000046",
+      "sourceCropPixels": [
+        0,
+        0,
+        1181,
+        768
+      ],
+      "sha256": "c101f8c12512f4c314078075d42876c3234cd589df022e7dbafd653c8a80058e",
+      "size": [
+        192,
+        143
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000051": {
+      "name": "강남대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000051.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009057&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000051",
+      "sha256": "a24dfde5d98d078e66c48a1361eb95902abd22fa1dd9ddd7e7971737ba1bbd0a",
+      "size": [
+        84,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000079": {
+      "name": "강서대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000079.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009091&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000079",
+      "sha256": "399b592d58548b4248668059c1617d68f4c418620c55cd69000d0c10187e9851",
+      "size": [
+        190,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000003": {
+      "name": "강원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000003.png",
+      "url": "https://www.kangwon.ac.kr/assets/ko/images/sub/symbol1.webp",
+      "sha256": "2e2999d35795a43a75aea66f686156b4fbc811efeea95a52cea83862bf6767ef",
+      "size": [
+        192,
+        73
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000052": {
+      "name": "건국대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000052.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005771&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000052",
+      "sha256": "d085c08dafde37c8bcee3f1cedc85c6be26c23d8fa067a474f5b6fa31f728544",
+      "size": [
+        110,
+        110
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000054": {
+      "name": "건양대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000054.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030002&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000054",
+      "sha256": "c513ebd3bdaed481e9f36770e3aaad1a9998dddf94755d4958b8c7019794b81a",
+      "size": [
+        192,
+        167
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000056": {
+      "name": "경기대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000056.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009028&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000056",
+      "sha256": "a38fe13a7ab80c399aadbdc760feed39404342ff5ef6d2d07e23ee500061601d",
+      "size": [
+        192,
+        132
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000059": {
+      "name": "경남대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000059.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000007394&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000059",
+      "sha256": "16a02e45444870c9906906ba14a9a786f31f9a82b83bba3d95f04b36acf8d5d3",
+      "size": [
+        127,
+        159
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000060": {
+      "name": "경동대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000060.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030023&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000060",
+      "sourceCropPixels": [
+        0,
+        0,
+        86,
+        57
+      ],
+      "sha256": "8c68cb6c694b6e8cb859d96e53b90cc7e336c0b92ecf74615a6168ef67f14a00",
+      "size": [
+        49,
+        54
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000005": {
+      "name": "경북대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000005.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009096&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000005",
+      "sha256": "267d6f9966a4b5e1dc415d10573bc2bbb03603b2d1c677cf3d0cad5d8749f6f4",
+      "size": [
+        83,
+        81
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000007": {
+      "name": "경상국립대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000007.png",
+      "url": "https://m.academyinfo.go.kr/image/schlInfoJspImgLoad.do?paramUrl=/infofile/PDF_UPLOAD/ANNOUNCE/d5752d88-ee0e-4d9e-b650-382f2c819d38&refParamUrl=/infofile/PDF_UPLOAD/ANNOUNCE/d5752d88-ee0e-4d9e-b650-382f2c819d38",
+      "sha256": "d8497bcd3086fde96b007c699bb0da0e793f15b72570453fcfdc83f331699926",
+      "size": [
+        179,
+        180
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000062": {
+      "name": "경성대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000062.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009109&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000062",
+      "sha256": "a28c102854f9b71613bec2ab58aabda2f9b352e475a01ac8a9890ed3c94ae48f",
+      "size": [
+        79,
+        78
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000244": {
+      "name": "경운대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000244.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009221&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000244",
+      "sha256": "3c4ac5d038925479c23f9b0a20f5c2ae4443a5aba6853f4822bbf66c4b7cbd94",
+      "size": [
+        108,
+        86
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000256": {
+      "name": "경인교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000256.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030012&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000256",
+      "sha256": "24a423a63ac6a53442a3ba31c54cd33e3dfc45057a35dd176dc3f01d6fc5ce05",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000064": {
+      "name": "경일대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000064.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005502&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000064",
+      "sha256": "a201eaea1634dd8f560649c3e8de8e2d0ba9de3b97f61a95fc648049ae8e2c72",
+      "size": [
+        173,
+        173
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000066": {
+      "name": "경희대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000066.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005454&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000066",
+      "sha256": "ea731143e20b973e64fd7892248fc0a2a2cedee866e36411e6eb6b9125aae0b2",
+      "size": [
+        192,
+        155
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000068": {
+      "name": "계명대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000068.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009119&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000068",
+      "sha256": "2d74b5f0b9fddaa109ba6a683659810f4e2fb49d1cf40df9a3bde9bf1255d772",
+      "size": [
+        192,
+        144
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000069": {
+      "name": "고려대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000069.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006263&fileSn=4",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000069",
+      "sha256": "7ae2094cdd3c08bdc0a1e7950f4a27e92e784fe56a247fd3f5bb6fa1b1bb5ab5",
+      "size": [
+        143,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000071": {
+      "name": "고신대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000071.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009066&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000071",
+      "sha256": "1dc4dcceaef5d2b2400e5d56212ac20552a592f7eb9646446578d9acb3ed1be3",
+      "size": [
+        71,
+        71
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000251": {
+      "name": "공주교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000251.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009256&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000251",
+      "sha256": "9fa1ef8cdfc02d35bb57c22306160e672ce22bf3e1d4fd0c6bc370f6178f33fb",
+      "size": [
+        83,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000073": {
+      "name": "광신대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000073.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009082&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000073",
+      "sha256": "3289480a975c51e4e56e49cffbfbf6c41755391c07982b32527a5cb8d3c781fa",
+      "size": [
+        83,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000074": {
+      "name": "광운대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000074.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008561&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000074",
+      "sha256": "e044b8ec4972c74b1e062eeaceb849d707c0e2816593ed9cfb27c257dfe0ebe8",
+      "size": [
+        191,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000381": {
+      "name": "광주과학기술원",
+      "asset": "assets/academic/logos/institution-academyinfo-0000381.png",
+      "url": "https://ewww.gist.ac.kr/kr/img/sub01/01030301_img01.png",
+      "sha256": "d19d61a16984bc7b541d40db3e50b79839d7c8adef9345e916bec574b1e5dd1a",
+      "size": [
+        148,
+        137
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000252": {
+      "name": "광주교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000252.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005468&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000252",
+      "sha256": "452317e350974cb880c4ae182a9449210dcf0f25aba96396d5d070cf97a1a257",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000231": {
+      "name": "광주대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000231.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009148&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000231",
+      "sha256": "bef005f437c24b0db1b3c6cef47e61b2ea051c182f4247633cfe0ccb038d8a5b",
+      "size": [
+        79,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000076": {
+      "name": "광주여자대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000076.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005832&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000076",
+      "sha256": "c201b1ac2d74b6ae74df2d792ed448d08e283cfcb168caaabf7169d74f2fceb2",
+      "size": [
+        93,
+        90
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000021": {
+      "name": "국립경국대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000021.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009111&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000021",
+      "sha256": "46125dbf22351b7017cbac2476c42a6a04764cf9d5231956fdada73438472741",
+      "size": [
+        84,
+        84
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000008": {
+      "name": "국립공주대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000008.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009105&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000008",
+      "sha256": "571a8b0fbf919df0dc4160df30a82c158fe2224d0db9481c080274081aec46f1",
+      "size": [
+        75,
+        79
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000009": {
+      "name": "국립군산대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000009.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005655&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000009",
+      "sha256": "4e35688d47bb60515439b12cc60fe629b4cd330cf67b6e2d09fafa5d2e910b7f",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000010": {
+      "name": "국립금오공과대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000010.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009110&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000010",
+      "sourceCropPixels": [
+        0,
+        0,
+        85,
+        44
+      ],
+      "sha256": "1a3b5a466ee890efcb4cc71e81ad8653cffb40885afd5d9b294b694cfaed44f8",
+      "size": [
+        41,
+        36
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000011": {
+      "name": "국립목포대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000011.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009118&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000011",
+      "sha256": "7a613291156b0379f60baeed6576870b58bcf3674a5c2d0f4600ff8c03566974",
+      "size": [
+        192,
+        143
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000012": {
+      "name": "국립목포해양대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000012.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009069&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000012",
+      "sha256": "5506fdf85cf646fef85bdcd7f99133f9bde4e0038549566a509f074dd0c9f62f",
+      "size": [
+        82,
+        80
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000013": {
+      "name": "국립부경대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000013.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009059&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000013",
+      "sha256": "bd14f21ec69ff3d971610507bf53f8d6c817fb73daa4a56c17908060a878c301",
+      "size": [
+        85,
+        69
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000020": {
+      "name": "국립순천대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000020.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009287&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000020",
+      "sha256": "f4bd925bbdb7b0e48cc1b6df2b3a2c5f0f191b6bbe199d3fd9489715e778df9a",
+      "size": [
+        85,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000028": {
+      "name": "국립창원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000028.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009032&fileSn=2",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000028",
+      "sha256": "1079592b15cab93ec6004dd61d23c63b45defd4bb229f1b9940cecc9d0e30d9c",
+      "size": [
+        143,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000034": {
+      "name": "국립한국교통대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000034.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005409&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000034",
+      "sha256": "8dc8656d99dbadbcb8ee1ed4869e175a8524b35473408fb65c7c47cfe4bfbe7f",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000033": {
+      "name": "국립한국해양대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000033.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000007294&fileSn=2",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000033",
+      "sha256": "52fd568fb8864bf555f6832a76f3c99ee4915b6513ec42f9dc45f1addb3e7dff",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000039": {
+      "name": "국립한밭대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000039.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009275&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000039",
+      "sha256": "cbdf7a2f587764e25ab07545fbff821d488e8bcdf75250a49a4b7be8d7fd15f6",
+      "size": [
+        78,
+        78
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000078": {
+      "name": "국민대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000078.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009092&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000078",
+      "sha256": "8e60ffb2be45bb5654104c529a9ab8bc0da9ecaf424bf2bbbd59ccfa0405fe2d",
+      "size": [
+        98,
+        98
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000080": {
+      "name": "극동대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000080.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009088&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000080",
+      "sha256": "4686eddbf61129d1aea884cc8fd2147019722f28f6df843ffc3c148d154fcd99",
+      "size": [
+        85,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000224": {
+      "name": "금강대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000224.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005772&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000224",
+      "sha256": "55924917683f41411f3aeb95fbbc70d7133a16700e05062036cb54f2cec1bf1a",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000241": {
+      "name": "김천대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000241.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009242&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000241",
+      "sha256": "25e29824f358d7ad81e3eae646588bec1cc04a61c3549579d295d20229484f87",
+      "size": [
+        110,
+        110
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000081": {
+      "name": "나사렛대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000081.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009086&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000081",
+      "sha256": "4942a0a8eb662760f3ce670400847c1bc84ca1c04f9beac5d174a117b1a496c5",
+      "size": [
+        81,
+        81
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000216": {
+      "name": "남부대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000216.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005638&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000216",
+      "sha256": "56fc21aa5a9c8dba087459dc0b2c32c61fdf7d9ba8ce482d5e6c21033d56c8ba",
+      "size": [
+        62,
+        75
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000245": {
+      "name": "남서울대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000245.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009248&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000245",
+      "sourceCropPixels": [
+        0,
+        0,
+        526,
+        454
+      ],
+      "sha256": "f622e426bd0e311d097b0a16e9f6510bb71cca03359b6a0879bf625d856bbd5b",
+      "size": [
+        192,
+        182
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000082": {
+      "name": "단국대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000082.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009085&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000082",
+      "sourceCropPixels": [
+        0,
+        0,
+        85,
+        47
+      ],
+      "sha256": "348b7feacc5d1db2dfc718655e63f03222cd357e6f737fad6e2cbc214fdfb6ef",
+      "size": [
+        46,
+        23
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000088": {
+      "name": "대구가톨릭대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000088.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009076&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000088",
+      "sha256": "ffb8a9389044267b8b8d8c8592f43cb87f1d4c93be0e7d78a2079b346b61b41c",
+      "size": [
+        76,
+        74
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000382": {
+      "name": "대구경북과학기술원",
+      "asset": "assets/academic/logos/institution-academyinfo-0000382.png",
+      "url": "https://m.academyinfo.go.kr/image/schlInfoJspImgLoad.do?paramUrl=/infofile/PDF_UPLOAD/ANNOUNCE/201109161433540.jpg&refParamUrl=/infofile/PDF_UPLOAD/ANNOUNCE/201109161433540.jpg",
+      "identityNote": "Existing actual school graphic",
+      "sha256": "e4e45b8a4d2c6801bc79717efadde7798e5566f56e76b8f9f5f80925588c71c0",
+      "size": [
+        169,
+        40
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000253": {
+      "name": "대구교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000253.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009249&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000253",
+      "sha256": "289c6d4569e98e552289eb238541f576fdbed81fe6b79fae0dbe0e59c9aa3870",
+      "size": [
+        192,
+        191
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000084": {
+      "name": "대구대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000084.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000007361&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000084",
+      "sha256": "27b56912fc4c04aaccb4d7adba94de579a22d8064d9830e5f7ce76468eb254ab",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000087": {
+      "name": "대구예술대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000087.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005420&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000087",
+      "sourceCropPixels": [
+        0,
+        0,
+        200,
+        161
+      ],
+      "sha256": "61cb2af1b6bcb3bd7e2c5b426ae814d6b5311b7c73a331f5153403439fb1c902",
+      "size": [
+        192,
+        153
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000061": {
+      "name": "대구한의대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000061.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006267&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000061",
+      "sha256": "8db3fef0541ca6486e6cf008c1029191472dcf5a0a065fbc87a134f6f4f382d6",
+      "size": [
+        188,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000093": {
+      "name": "대신대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000093.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005554&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000093",
+      "sha256": "c621c752385a3d2771dc4a642505a5ca28b0d96434ba16248d98c36db4c95508",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000095": {
+      "name": "대전대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000095.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005941&fileSn=4",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000095",
+      "sha256": "01b2d9e9e1a8af9722bac7d908b2f05a54bd9312a0d0f4c2074d431301bef83f",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000097": {
+      "name": "대진대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000097.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009065&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000097",
+      "sha256": "b1e547785ce05b58e5e091b88cb8dc13a0045fa4af60681b58a8485939129cc6",
+      "size": [
+        79,
+        80
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000099": {
+      "name": "덕성여자대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000099.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009124&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000099",
+      "sha256": "fa19618da8e73308fd9db7f88c3e229c41e39969a61aa4964934c116a6c9f762",
+      "size": [
+        84,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000100": {
+      "name": "동국대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000100.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006224&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000100",
+      "sourceCropPixels": [
+        402,
+        0,
+        600,
+        187
+      ],
+      "sha256": "c7016cb1522e58cb5bfe1f7bb5a00b5fe4e205cc481df6ee4ffdf14e5a67ccf5",
+      "size": [
+        192,
+        181
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000102": {
+      "name": "동덕여자대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000102.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005943&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000102",
+      "sha256": "985d6d78166c75069255b9665c6f82520ecc403d45e9b35833bcf38dfd7efb41",
+      "size": [
+        80,
+        80
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000235": {
+      "name": "동명대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000235.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005500&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000235",
+      "sha256": "90bc2dd1b06e9c83f513f084d85f64a24de3e5fe4e65b52fd0ae4064d8973c81",
+      "size": [
+        189,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000103": {
+      "name": "동서대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000103.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000007370&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000103",
+      "sha256": "4c79fc9f12aebdc7d773e125fc91349c6abd1ded0c493c02181764ae259c66d6",
+      "size": [
+        83,
+        81
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000104": {
+      "name": "동신대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000104.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005797&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000104",
+      "sha256": "e5ef7759ac1ad075a0be1ff2fc78d12e8e4ec562fdccb0b7bc6e9a3bfdc10f0b",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000105": {
+      "name": "동아대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000105.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009103&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000105",
+      "sha256": "8983e2c249ca57fdfea3238b4d0b1acba28e41d8332323047bdc0f9f3fdc1092",
+      "size": [
+        84,
+        84
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000106": {
+      "name": "동양대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000106.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005579&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000106",
+      "sha256": "00a14dc7be3e8f14b09cc99f37d71ff0a498a0d6a9c4a4c5c5376c51b4746446",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000107": {
+      "name": "동의대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000107.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009024&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000107",
+      "sha256": "e74edba97a21b20a0d1a830bd5603f16acee0c7a74cc8c0d8d58346668b6d6be",
+      "size": [
+        91,
+        92
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000108": {
+      "name": "루터대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000108.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005910&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000108",
+      "sha256": "f2448befdabc99c22e4f8fb13c806e1a81de660db7b6306a7b7bc986386f1ca8",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000109": {
+      "name": "명지대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000109.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000040133&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000109",
+      "sha256": "c17e35bbe9e72beef8df09788fd29d8512fd20ceb9183c9649a2c4dd78afd5b8",
+      "size": [
+        84,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000112": {
+      "name": "목원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000112.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008141&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000112",
+      "sha256": "49157e7c6c7b2e4970eb4a7dfb3abade4c88f690a3257e81d653c96c311759dd",
+      "size": [
+        99,
+        117
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000221": {
+      "name": "목포가톨릭대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000221.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009127&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000221",
+      "sha256": "dbc60d02bd6f13e74c260ab50d82c480651b5115335171951b6eb1741630d2bd",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000113": {
+      "name": "배재대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000113.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005622&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000113",
+      "sha256": "9bce417484ac340df8da7d745b1164844b896ce50aef0ea942aaaab456301957",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000178": {
+      "name": "백석대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000178.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009188&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000178",
+      "sha256": "61eab432538a7e0f4e437391f4984a7e23d6779f33bc14738e1c8ce1097f2ab1",
+      "size": [
+        105,
+        106
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000114": {
+      "name": "부산가톨릭대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000114.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009051&fileSn=2",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000114",
+      "sha256": "b0932c89b57054078425258c998f05a736eec93434d1db1b37e6eefcfcf3230f",
+      "size": [
+        113,
+        112
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000254": {
+      "name": "부산교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000254.png",
+      "url": "https://www.bnue.ac.kr/resources/custom/images/main/sub/bnue_signa.png",
+      "sourceCropPixels": [
+        0,
+        0,
+        193,
+        182
+      ],
+      "sha256": "b32b91b1178a39e70a03bc1be9e5b2f2e50237dce397ec2e2b30d21c3c954daa",
+      "size": [
+        192,
+        62
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000014": {
+      "name": "부산대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000014.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009081&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000014",
+      "sha256": "a0d9ea89a1322e09a8167f7fcddac23607df44e462ba9c301c46fd5e21a737e7",
+      "size": [
+        81,
+        80
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000115": {
+      "name": "부산외국어대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000115.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005745&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000115",
+      "sha256": "a280d7f7ad61fb2060455afc51e3309775a7c7efdf0f037e11e182d32da4396c",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000116": {
+      "name": "삼육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000116.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009040&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000116",
+      "sourceCropPixels": [
+        0,
+        0,
+        300,
+        174
+      ],
+      "sha256": "8f73ef2d18f95055cfd0eb5f1f7cde228c0aa9ba5d7a981575af20e10c017bf2",
+      "size": [
+        126,
+        126
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000117": {
+      "name": "상명대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000117.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009126&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000117",
+      "sha256": "cdfabecae4ad6ea75a7897bc987cc5e3d856bad2235de23af08d05f6cb8441a6",
+      "size": [
+        62,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000119": {
+      "name": "상지대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000119.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008794&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000119",
+      "sha256": "43d98d9ba8ce0e05e88e7523eb09b3665babc73e9a8c93271fb1e1cd99856e10",
+      "size": [
+        190,
+        131
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000120": {
+      "name": "서강대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000120.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009233&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000120",
+      "sha256": "6d4265e4acf64e85214ac841103815d9794afb30eb58aea8543c88aa582ccbde",
+      "size": [
+        57,
+        81
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000121": {
+      "name": "서경대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000121.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009236&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000121",
+      "sourceCropPixels": [
+        0,
+        0,
+        940,
+        563
+      ],
+      "sha256": "486f8fe55961b6dc808cc3c92f4d3a9b5dc7951cccc5ec7b8d24b52fb5df8422",
+      "size": [
+        192,
+        126
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000036": {
+      "name": "서울과학기술대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000036.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006342&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000036",
+      "sha256": "a4583b4a9d34a4a483252d729426155b3ade6f6d701397abf51be07b11ec2769",
+      "size": [
+        192,
+        191
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000255": {
+      "name": "서울교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000255.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005643&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000255",
+      "sha256": "cbca45dfa7bd57269562f8e36a3b06b0752308f3607f7dca9a65d4f477303790",
+      "size": [
+        192,
+        187
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000098": {
+      "name": "서울기독대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000098.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005565&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000098",
+      "sha256": "24fa895c664675cb9b5ddbc7f1d8e161c698d616afd567478c7facaef3d6c67e",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000019": {
+      "name": "서울대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000019.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005744&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000019",
+      "sha256": "fab6e7901b7fba61e476eef4c47482b728a5aee00d4a75b1f4876156b02afa15",
+      "size": [
+        180,
+        187
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000040": {
+      "name": "서울시립대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000040.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009231&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000040",
+      "sha256": "f44151d904245ca670bab12adb38a9b9cbc3fc57e63b47145418a1ec94de137f",
+      "size": [
+        75,
+        81
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000126": {
+      "name": "서울여자대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000126.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009227&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000126",
+      "sha256": "10392070f618393bb98b83e10c6d9645e0dca558b141f8771c80806692bc0e6d",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000205": {
+      "name": "서울한영대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000205.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005697&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000205",
+      "sha256": "a9286c20884918d86725de5456f27b17638ebf75ef53da314c77d83e4ce3e702",
+      "size": [
+        182,
+        183
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000128": {
+      "name": "서원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000128.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009210&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000128",
+      "sha256": "c71704fa473542b6b80a450478511eb9b2a86782d04e91668d91f4ea5a3fef0f",
+      "size": [
+        160,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000129": {
+      "name": "선문대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000129.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009213&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000129",
+      "sha256": "d38cdf6758b2fdfaf8b8d6e247cea668e96820b4c13d840689988be104ae978b",
+      "size": [
+        111,
+        111
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000131": {
+      "name": "성결대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000131.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009214&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000131",
+      "sha256": "9f01e0e5053d9c7809eeae03bec0a22edce60a1d89926b4dbc555e87674cf42d",
+      "size": [
+        83,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000132": {
+      "name": "성공회대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000132.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008033&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000132",
+      "sha256": "c8c458f235169967f6a3534f633eb28dc2785890f845c6d463f79cdbc92026ef",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000133": {
+      "name": "성균관대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000133.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009217&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000133",
+      "sha256": "4912600b417ba3697d5fafc1e52ab1528665175bdf18b7fb372e0af2b74928a9",
+      "size": [
+        192,
+        189
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000136": {
+      "name": "성신여자대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000136.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005938&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000136",
+      "sourceCropPixels": [
+        0,
+        0,
+        113,
+        72
+      ],
+      "sha256": "47ef4f782addeb0957cdc7920e96588565340b5718a57d8f2eb356dab6592a62",
+      "size": [
+        65,
+        64
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000137": {
+      "name": "세명대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000137.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005543&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000137",
+      "sha256": "e80e1a704e719763859dbccbd6a2bc8cfba1e26a3febe6b241bc3490a396e546",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000138": {
+      "name": "세종대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000138.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005725&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000138",
+      "sha256": "2e3469c1be869ec5ca0f1d1f0ff7a6abdb50798d73529de9dc33d81b0a4c3b60",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000092": {
+      "name": "세한대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000092.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030006&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000092",
+      "sha256": "9803f172f9e47fabe292e2645be94e3586d28f9020519eb686150aa89c896b6e",
+      "size": [
+        192,
+        143
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000243": {
+      "name": "송원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000243.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006285&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000243",
+      "sourceCropPixels": [
+        0,
+        0,
+        401,
+        217
+      ],
+      "sha256": "6225c150ce06b6afd997f800cf87b72d5150b0fe8cb6a75e98d37cbf33e1db93",
+      "size": [
+        192,
+        105
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000140": {
+      "name": "수원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000140.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009246&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000140",
+      "sha256": "65a3dc93e5ac691008f7bcbc08029633696a8968bc63a856e39201c16d9135af",
+      "size": [
+        192,
+        191
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000141": {
+      "name": "숙명여자대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000141.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009271&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000141",
+      "sha256": "a2f283f856f8bf8e9a1606c63451998f1b01fcc59ae6ef209ee009d304d89a12",
+      "size": [
+        71,
+        81
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000142": {
+      "name": "순천향대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000142.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009273&fileSn=2",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000142",
+      "sourceCropPixels": [
+        0,
+        0,
+        823,
+        385
+      ],
+      "sha256": "058b3145c652365e092c4579752248fda06b52a98de697935f5fc18df5404f90",
+      "size": [
+        192,
+        74
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000143": {
+      "name": "숭실대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000143.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000007310&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000143",
+      "sourceCropPixels": [
+        0,
+        0,
+        146,
+        69
+      ],
+      "sha256": "26bcc8860d956b130fd9dbc07c3dde292526bd8183ea73ee1a378b77160ae4de",
+      "size": [
+        116,
+        49
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000065": {
+      "name": "신경주대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000065.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009113&fileSn=2",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000065",
+      "sha256": "96bb6117221c5dc0c11a90a1c93a1cc70bf0bf308be1de455a93ab6178a31233",
+      "size": [
+        154,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000144": {
+      "name": "신라대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000144.png",
+      "url": "https://www.silla.ac.kr/ko/_Img/About/logoui01_img02.png",
+      "sha256": "b494a3ae6fc2784196b2c1a27250c94e30573cc4e77554013f3f44ad3e3bdfe8",
+      "size": [
+        152,
+        152
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0002712": {
+      "name": "신한대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0002712.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030014&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0002712",
+      "sourceCropPixels": [
+        0,
+        0,
+        464,
+        299
+      ],
+      "sha256": "869581c918edae88c8bf2b21232209e6b4acf71ae5c031fc73da249e192207f3",
+      "size": [
+        192,
+        190
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000146": {
+      "name": "아주대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000146.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005417&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000146",
+      "sha256": "c2e85cc1c17d47857e3c0c7e681da2dbc4eb7791bb3f25277e89dd70a7f647c0",
+      "size": [
+        174,
+        173
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000147": {
+      "name": "안양대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000147.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030015&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000147",
+      "sourceCropPixels": [
+        0,
+        0,
+        556,
+        486
+      ],
+      "sha256": "82e9125ff5376f9fbc0d5c1b0c08c66c6f7be6a75be2f5847e2b22cde86d4012",
+      "size": [
+        192,
+        152
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000149": {
+      "name": "연세대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000149.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008569&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000149",
+      "sha256": "c50c593f933bb653e7f1f498c0ad3d777bc4d6bfa322529646db6119098ced0c",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000151": {
+      "name": "영남대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000151.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000007282&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000151",
+      "sha256": "8012d685785176bb81d717f17a290df21885d14788cecc35744d4365e2078059",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0003193": {
+      "name": "영산대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0003193.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005691&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0003193",
+      "sha256": "16ef66fe9f65c31069adf714d25080a7ee0d614109a941dfe29a058d29748a6a",
+      "size": [
+        192,
+        88
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000228": {
+      "name": "예수대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000228.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009153&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000228",
+      "sha256": "217b2f7d6b67a79731bf66fa5c8a66d99e951cc9345e826f53a77bef5a0ea19d",
+      "size": [
+        95,
+        72
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000218": {
+      "name": "예원예술대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000218.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030013&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000218",
+      "sha256": "ccf7e531cd40cc526b952739747b2d9ca3653a874f0eddc0d1fd28d93abae8c8",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000156": {
+      "name": "용인대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000156.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005536&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000156",
+      "sourceCropPixels": [
+        0,
+        0,
+        240,
+        172
+      ],
+      "sha256": "e2e4e2a34af57f1a41f418d5381fde845634efcad22d6944576908ea2c52e4d6",
+      "size": [
+        192,
+        149
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000157": {
+      "name": "우석대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000157.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009257&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000157",
+      "sha256": "d70f409c545c8dc6df6cdd86a3bb2f6141749039576af9e3874a5a8b8911d308",
+      "size": [
+        82,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000240": {
+      "name": "우송대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000240.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009247&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000240",
+      "sourceCropPixels": [
+        0,
+        0,
+        85,
+        48
+      ],
+      "sha256": "b3fd6e6a1ece5b193e454685ace963b31bae6c8e0342a1579e1f203fa7e29628",
+      "size": [
+        74,
+        23
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000250": {
+      "name": "울산과학기술원",
+      "asset": "assets/academic/logos/institution-academyinfo-0000250.png",
+      "url": "https://www.unist.ac.kr/_res/unist/unist/img/content/img-ui-down03.png",
+      "sha256": "2d436ac8dc88fccc76b87ad5aee34134d6c2c1a776531f90196611f8ea3eb17d",
+      "size": [
+        140,
+        140
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000158": {
+      "name": "울산대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000158.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009263&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000158",
+      "sha256": "1d5a328053e71aa5b64780323db26c7aa570187221037978494c887c64ffbc17",
+      "size": [
+        80,
+        66
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000159": {
+      "name": "원광대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000159.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009265&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000159",
+      "sha256": "23a8911eb128b7842a1025eb30c889f2c0114a7b3399eab3befe997e05319736",
+      "size": [
+        81,
+        81
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000160": {
+      "name": "위덕대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000160.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009147&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000160",
+      "sha256": "336945a88afdcb680aa6144d319f7283ca1443b8072c07153b271aa0e39ca036",
+      "size": [
+        85,
+        83
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000154": {
+      "name": "유원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000154.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005487&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000154",
+      "sha256": "4432352388a77e5db76d9ba6f312efc7d1e36ef9c702edb2adbd0bee4caea64c",
+      "size": [
+        113,
+        113
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000161": {
+      "name": "을지대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000161.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009152&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000161",
+      "sha256": "1ad273507ee5036ea3cf41a467c91298d79d043ad3cc79e6427baec962e32c9f",
+      "size": [
+        191,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000163": {
+      "name": "이화여자대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000163.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009155&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000163",
+      "sha256": "3bd06eb1e014140c82c4406f054255e02c5c77c496e434f03cd097c21ec61fdf",
+      "size": [
+        80,
+        80
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000164": {
+      "name": "인제대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000164.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000030038&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000164",
+      "sha256": "85c6a2dcf0408a12e1d2026d6de14de5cec213643215506e7b53d8036109a07b",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000168": {
+      "name": "인천가톨릭대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000168.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005928&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000168",
+      "sha256": "419e7658fc2de1137c9c556e26207c666e3a209c504b82fc6a38d3261e4f554a",
+      "size": [
+        189,
+        189
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0002660": {
+      "name": "인천대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0002660.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008502&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0002660",
+      "sha256": "710130bff83281f0cfcb98bd54f782c47a49ae324334132aae0e5ca179aa9480",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000169": {
+      "name": "인하대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000169.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005422&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000169",
+      "sha256": "b215b786bd440c6f978e61dface06be6d348b1cbbf9ccb5cec81ae12cc9530f5",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000023": {
+      "name": "전남대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000023.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005493&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000023",
+      "sha256": "afae3ffa37e42ac8c2443991aed233ba236d431da9bb100d09e3208ecd92c1c7",
+      "size": [
+        191,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000025": {
+      "name": "전북대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000025.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009019&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000025",
+      "sha256": "311ccff36167ff361fb3fd850c2e15d91f89bf01c9d3361b4690b52ce85b8fcd",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000258": {
+      "name": "전주교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000258.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005476&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000258",
+      "sha256": "bf46ff0ddbfdf7b6962a9754d67aa55f11d6e1559230779a97de5acb9212ed02",
+      "size": [
+        186,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000171": {
+      "name": "전주대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000171.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009135&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000171",
+      "sha256": "37ea02634cb2d276b4949b6d053f9855d7613b3b084426b286f5aea9a646cfb9",
+      "size": [
+        38,
+        70
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000288": {
+      "name": "정석대학",
+      "status": "unavailable",
+      "reason": "Actual university mark not acquired; user approved no logo pending original. No corporate substitution."
+    },
+    "institution:academyinfo:0000248": {
+      "name": "제주국제대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000248.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000007276&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000248",
+      "sha256": "092b971dba2ff9c52a5fcd4120c77b1705c84276f1e45e4ef3cc31c66c4d0763",
+      "size": [
+        87,
+        87
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000027": {
+      "name": "제주대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000027.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006250&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000027",
+      "sha256": "6aa329dc54147a73ab1093b80a19c5ddccd2797909373c6e1597431353b1a2d3",
+      "size": [
+        135,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000172": {
+      "name": "조선대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000172.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009141&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000172",
+      "sha256": "91a9a2d605604d57fe179a709c47e08c78ed2644ffddb7c80bffcd5d78ca7064",
+      "size": [
+        88,
+        87
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000173": {
+      "name": "중부대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000173.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006245&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000173",
+      "sha256": "770cb6cee4d589ea3d1e3464a497f14e86581e0a4c13ea45c2d09ffe183cc0bd",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000175": {
+      "name": "중앙대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000175.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009165&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000175",
+      "sha256": "096fc8837e4aa2024faa2890a57c3f72b5767ef82906ab6f273568c64bd64d63",
+      "size": [
+        79,
+        67
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000239": {
+      "name": "중원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000239.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008575&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000239",
+      "sha256": "8d43ade76c8964e1e7058c3fa5d61b4a2555ec89af046e5e74fbfff71ec1cb37",
+      "size": [
+        113,
+        113
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000260": {
+      "name": "진주교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000260.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005758&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000260",
+      "sourceCropPixels": [
+        0,
+        143,
+        596,
+        651
+      ],
+      "sha256": "08662aacc0f14fbc96debeb97a7a0d17caee280036fc8d8a8e25f76be12aaac7",
+      "size": [
+        192,
+        164
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000187": {
+      "name": "차의과학대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000187.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005397&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000187",
+      "sha256": "3feb8b07b270a8321a89bdd766960af3cbad5a966c1ff70898fd1a14731d97ba",
+      "size": [
+        192,
+        191
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000249": {
+      "name": "창신대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000249.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006053&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000249",
+      "sha256": "64669a33c1687f227bb7e0eaede6b7b69fe987cd2eb32b8d241a8d174352bed6",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000284": {
+      "name": "청운대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000284.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009225&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000284",
+      "sha256": "b41ce8234455d112672b3600d6ada9a4fc668cb6ca07511b263103c8c5984c97",
+      "size": [
+        83,
+        68
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000261": {
+      "name": "청주교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000261.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005469&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000261",
+      "sha256": "5bda82b38af019557bd68687172284c44b62928024522a1bab76564fa14b4130",
+      "size": [
+        149,
+        150
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000179": {
+      "name": "청주대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000179.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009190&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000179",
+      "sourceCropPixels": [
+        0,
+        0,
+        93,
+        52
+      ],
+      "sha256": "6141ae3872f6a615767145a86474c2e313596840f61fa169d216ff781d051408",
+      "size": [
+        50,
+        51
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000246": {
+      "name": "초당대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000246.png",
+      "url": "https://www.cdu.ac.kr/mod/page/downloadFile.do?FILE_NO=156401757960825&TRGET_NO=156334763598345&MID=KR_01030200",
+      "sourceCropPixels": [
+        5,
+        399,
+        38,
+        450
+      ],
+      "sha256": "b3a052025950cc8e5920d70d9648ac5d549b84c8add33de7e00b662e0a47a6d0",
+      "size": [
+        33,
+        49
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000181": {
+      "name": "추계예술대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000181.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005862&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000181",
+      "sourceCropPixels": [
+        0,
+        0,
+        239,
+        312
+      ],
+      "sha256": "8e474474188624bcc103ec30d92c871296d34c6552ebdac0cd76e9078101cc99",
+      "size": [
+        175,
+        178
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000262": {
+      "name": "춘천교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000262.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008198&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000262",
+      "sha256": "8eed33713b34144bdd42d1c9e5b3aada2bbdcd8625f0f690370c9fc278c6ba61",
+      "size": [
+        192,
+        166
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000029": {
+      "name": "충남대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000029.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009058&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000029",
+      "sha256": "4032223fcb76a20bf90408456ececbf376e4c0dd429be63aea2b20d488310e55",
+      "size": [
+        192,
+        180
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000030": {
+      "name": "충북대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000030.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009042&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000030",
+      "sourceCropPixels": [
+        0,
+        0,
+        479,
+        383
+      ],
+      "sha256": "5213a2f360c05ec1ac1b8759aef5601d24c33b70fa4c1e8a274b2ecdd68b9b7d",
+      "size": [
+        159,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000184": {
+      "name": "칼빈대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000184.png",
+      "url": "https://cdn.imweb.me/thumbnail/20221010/5604b164421b9.png",
+      "identityNote": "Existing actual school graphic",
+      "sha256": "37e4b23c71b14e370c5363b77bc40ef8ed57cd51ce3e7d2e70b1cc10e6f0bfae",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000186": {
+      "name": "평택대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000186.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005736&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000186",
+      "sha256": "aa5731e92491357fecbbee19cd5fedf974431509406da61be1c01c7e77d77aa6",
+      "size": [
+        189,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000188": {
+      "name": "포항공과대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000188.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005850&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000188",
+      "sha256": "d12cdb6fd4c9f9dde8b9fbab46c6593a893ee644c039f21606e3ad8425abbd0e",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000037": {
+      "name": "한경국립대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000037.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005962&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000037",
+      "sourceCropPixels": [
+        0,
+        0,
+        1300,
+        724
+      ],
+      "sha256": "011534d0e19aece8b4910bd85fa48e7b910c874807fdace9038ebc815e323c25",
+      "size": [
+        192,
+        159
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000247": {
+      "name": "한국공학대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000247.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008170&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000247",
+      "sourceCropPixels": [
+        0,
+        0,
+        1616,
+        928
+      ],
+      "sha256": "eb80d59c10319d2a151fbe0f82c19d3217926fc116f9bc6e4914bcf668b7e0eb",
+      "size": [
+        167,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000374": {
+      "name": "한국과학기술원",
+      "asset": "assets/academic/logos/institution-academyinfo-0000374.png",
+      "url": "https://www.kaist.ac.kr/kr/img/content/sub01/sym_new_02.gif",
+      "sourceCropPixels": [
+        0,
+        0,
+        375,
+        222
+      ],
+      "sha256": "509cb3d8149c87e3bc7d395474ce904f71bf609b2c4a524dc2df93c08d1ebae5",
+      "size": [
+        134,
+        133
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000031": {
+      "name": "한국교원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000031.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000008559&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000031",
+      "sha256": "4299fd4c31d61c39744b3f0bf454ad92d3ab2b808c79dc6e145dc89172d42c5d",
+      "size": [
+        192,
+        176
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000189": {
+      "name": "한국기술교육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000189.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005670&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000189",
+      "sourceCropPixels": [
+        0,
+        0,
+        113,
+        81
+      ],
+      "sha256": "80834631143ae9d2ebcd55be42920543fd0ac7f2849465381a127c48cac63672",
+      "size": [
+        57,
+        71
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000273": {
+      "name": "한국방송통신대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000273.png",
+      "url": "https://www.knou.ac.kr/sites/knou/images/logo-header25.png",
+      "sourceCropPixels": [
+        0,
+        0,
+        89,
+        63
+      ],
+      "sha256": "4f874b1478c7697540e82c678bb7315bab3a237d8ffafb5a2e9bc95d111c6975",
+      "size": [
+        89,
+        63
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000191": {
+      "name": "한국성서대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000191.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009170&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000191",
+      "sha256": "c9f379ede4ec4b8c39a1c770a5572bd1d3005bfed68cfaabde65e9d5ec0c5b93",
+      "size": [
+        79,
+        79
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0003139": {
+      "name": "한국에너지공과대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0003139.png",
+      "url": "https://www.kentech.ac.kr/resources/sites/eng/download/UI_Emblem.zip",
+      "sourceCropPixels": [
+        0,
+        0,
+        2481,
+        1930
+      ],
+      "sha256": "a11016b93fb736e5b047c225995d439a798816b6074d4a8aae3bbb100ba3cd7a",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000383": {
+      "name": "한국예술종합학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000383.png",
+      "url": "https://www.karts.ac.kr/templates/images/common/k.png",
+      "identityNote": "Existing actual school graphic",
+      "sha256": "8d834dd3a4c1a8d6b822d9c84d80bfe8b87d380518f95769c43f2e8218a24d05",
+      "size": [
+        50,
+        27
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000192": {
+      "name": "한국외국어대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000192.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009172&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000192",
+      "sha256": "eef7fabbd4bfc0defce64d122b84af9557cb0300b1a9cf71e2362a10ac2a1bdd",
+      "size": [
+        110,
+        110
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0003022": {
+      "name": "한국전통문화대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0003022.png",
+      "url": "https://www.knuh.ac.kr/img/kr/sub1/ui_img03.jpg",
+      "sourceCropPixels": [
+        72,
+        0,
+        281,
+        160
+      ],
+      "sha256": "f706c7dcf46e11b99c6c18860508d08f5379eeb620b6cbf38f79e4b255cef359",
+      "size": [
+        181,
+        148
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000032": {
+      "name": "한국체육대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000032.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005624&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000032",
+      "sha256": "3ecd427501ac4c5f6da4533e6e8992e78ce95a07d4daa91b02562200d16d1b97",
+      "size": [
+        78,
+        78
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000194": {
+      "name": "한국항공대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000194.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005575&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000194",
+      "sha256": "72b45a1a162e358e4da5af013204fb8b047e9b32914106d2a857b4d9613d3d93",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000195": {
+      "name": "한남대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000195.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006309&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000195",
+      "sha256": "37c6b8a6e5dcbea4bef79f3a5c76bbc0c311a7e548c25cb388b5b973bae75ec5",
+      "size": [
+        110,
+        110
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000196": {
+      "name": "한동대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000196.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009182&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000196",
+      "sha256": "457836a3fad5b40fdee85a3147e92423441b926e8b1be6b8d22396685140cc50",
+      "size": [
+        78,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000197": {
+      "name": "한라대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000197.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006688&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000197",
+      "sourceCropPixels": [
+        0,
+        0,
+        230,
+        150
+      ],
+      "sha256": "20589735be7cb5e69c7a51ec688e03daef2542d8aa43e44884b28f86f46311bb",
+      "size": [
+        155,
+        126
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000198": {
+      "name": "한림대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000198.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009184&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000198",
+      "sha256": "60df6fe8b4458ca8e2be35bed653e3e36004f724086c51a244016a106bb054b6",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000199": {
+      "name": "한서대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000199.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009125&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000199",
+      "sha256": "44586aaeb8d83af41b75986b857a9b29474bd17e71a28fc016eb8ddc5d86e6c6",
+      "size": [
+        81,
+        84
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000200": {
+      "name": "한성대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000200.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005904&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000200",
+      "sha256": "3fc0d65d5aa8c23ef25e04a093c52226f98877eec86828b47024d6f43ad3e19d",
+      "size": [
+        192,
+        181
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000201": {
+      "name": "한세대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000201.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009185&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000201",
+      "sha256": "6876e99c353f5066253979d226bfd0a40bcde827f4924780b94837da898543d8",
+      "size": [
+        85,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000202": {
+      "name": "한신대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000202.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009180&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000202",
+      "sha256": "2f3db3fae320606d172347bb73aeb8026982b186b57a6aa92a22381c9c89b54b",
+      "size": [
+        82,
+        82
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000203": {
+      "name": "한양대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000203.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000006349&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000203",
+      "sha256": "31f3da95ec6079d44021f0c267791b6c806a3afdde5a381b9d61673267e5d64f",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000207": {
+      "name": "협성대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000207.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009204&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000207",
+      "sha256": "62bcee7e20639090966031ff369f7ef6b5e21d7c1b1219d3836f5e784976d514",
+      "size": [
+        100,
+        100
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000208": {
+      "name": "호남대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000208.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005605&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000208",
+      "sha256": "0c8327d89f9c524934012aeb81d318744c5f786617d83665acfe32a496a36872",
+      "size": [
+        160,
+        148
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000211": {
+      "name": "호서대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000211.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009167&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000211",
+      "sha256": "c740cc7e13a77fe1cfe185d78af797893289ee5052337950e6ff4075ecd8bc18",
+      "size": [
+        73,
+        73
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000282": {
+      "name": "호원대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000282.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000005607&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000282",
+      "sha256": "56258abb226a62fe927cd818cc95381a558a19a89c2681a85ea63e95266c30e0",
+      "size": [
+        192,
+        192
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000212": {
+      "name": "홍익대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000212.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009143&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000212",
+      "sha256": "90d16ca5e8df8f1fc9533405a11de9568e844b9abc2edb8b47974ccb9c08fa23",
+      "size": [
+        85,
+        85
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:academyinfo:0000233": {
+      "name": "화성의과학대학교",
+      "asset": "assets/academic/logos/institution-academyinfo-0000233.png",
+      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009264&fileSn=1",
+      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000233",
+      "sourceCropPixels": [
+        0,
+        0,
+        110,
+        70
+      ],
+      "sha256": "53b7424246fab9cf48d27460a2561d90edfaabd8ea3508df6a28f478e78d4927",
+      "size": [
+        110,
+        70
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:special:knpu": {
+      "name": "경찰대학",
+      "asset": "assets/academic/logos/institution-special-knpu.png",
+      "url": "https://www.police.ac.kr/pds/contents/police/symbolmark_jpg.zip",
+      "identityNote": "Existing actual school graphic",
+      "sha256": "7e403035b4561e6b698ec35b0f523b0222bdcb81ffc083d42b1e1bec0539e81c",
+      "size": [
+        63,
+        63
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    },
+    "institution:careernet:11d7e932cd189d28": {
+      "name": "삼성전자공과대학교",
+      "asset": "assets/academic/logos/institution-careernet-11d7e932cd189d28.png",
+      "url": "https://ssit.ac.kr/static/img/ssit_ci.4408ad89.png",
+      "sourceCropPixels": [
+        0,
+        0,
+        59,
+        59
+      ],
+      "sha256": "a2a4322c709233104a97709ae6ccbdf7677b47099984f3047af33dc7679a2990",
+      "size": [
+        56,
+        56
+      ],
+      "presentation": "standalone school symbol or crest; attached university name excluded"
+    }
+  },
+  "whiteLogoTint": "SSIT official white monochrome mark rendered in Samsung blue on white tile",
+  "presentationPolicy": "Separate school-name text excluded; lettering originally inside a crest allowed. White rounded tile. Jungseok intentionally has no logo pending authentic original."
+}

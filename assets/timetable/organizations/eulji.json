@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "university": "eulji",
+  "mappings": [
+    {
+      "campus": "seongnam",
+      "sourceLabel": "임상병리학과",
+      "department": "임상병리학과",
+      "college": "보건과학대학",
+      "sourceUrl": "https://www.eulji.ac.kr/",
+      "evidence": "현재공식main학과소개 해당cont__title 아래exact학과열거. 의료공학/장례지도는바이오융합대학(23학번)구학과명이고의료공학전공/장례산업전공다른표제로임의rename안함. 원시간표sourceGrade로입학학번을추정하지않음.",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/eulji-official-parent-headings.json"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "방사선학과",
+      "department": "방사선학과",
+      "college": "보건과학대학",
+      "sourceUrl": "https://www.eulji.ac.kr/",
+      "evidence": "현재공식main학과소개 해당cont__title 아래exact학과열거. 의료공학/장례지도는바이오융합대학(23학번)구학과명이고의료공학전공/장례산업전공다른표제로임의rename안함. 원시간표sourceGrade로입학학번을추정하지않음.",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/eulji-official-parent-headings.json"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "의료공학과",
+      "department": "의료공학과",
+      "college": "바이오융합대학",
+      "sourceUrl": "https://www.eulji.ac.kr/",
+      "evidence": "현재공식main학과소개 해당cont__title 아래exact학과열거. 의료공학/장례지도는바이오융합대학(23학번)구학과명이고의료공학전공/장례산업전공다른표제로임의rename안함. 원시간표sourceGrade로입학학번을추정하지않음.",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/eulji-official-parent-headings.json"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "장례지도학과",
+      "department": "장례지도학과",
+      "college": "바이오융합대학",
+      "sourceUrl": "https://www.eulji.ac.kr/",
+      "evidence": "현재공식main학과소개 해당cont__title 아래exact학과열거. 의료공학/장례지도는바이오융합대학(23학번)구학과명이고의료공학전공/장례산업전공다른표제로임의rename안함. 원시간표sourceGrade로입학학번을추정하지않음.",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/eulji-official-parent-headings.json"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "시각디자인전공",
+      "department": "시각디자인전공",
+      "college": "미래융합대학",
+      "officialGroups": [
+        "전공통합학부"
+      ],
+      "sourceUrl": "https://www.eulji.ac.kr/",
+      "evidence": "Official academic navigation repeats exact 시각디자인전공 under 전공통합학부(25학번) and 미래융합대학(24학번). User explicitly approved both affiliation paths selecting same courses; do not infer admission year from timetable grades or duplicate course objects.",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/eulji-official-parent-headings.json"
+    }
+  ],
+  "courseOwners": []
+}

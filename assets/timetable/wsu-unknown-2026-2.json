@@ -1,0 +1,859 @@
+{
+  "schemaVersion": 1,
+  "universityId": "wsu",
+  "campus": "unknown",
+  "campusName": "캠퍼스 미표기",
+  "academicYear": 2026,
+  "semester": "2",
+  "sourceUrl": "https://it.wsu.ac.kr/board/read.jsp?code=it0301&id=268263",
+  "publishedDate": "2026-07-21",
+  "sourceSha256": "7a6dccc46e55269481b877f93b2389e3b50d087c06c27c7647120d0c3c46ba24",
+  "sourceRowCount": 19,
+  "courses": [
+    {
+      "sourceId": "wsu/unknown/2026/2/e9350dcf339061e70a5ed806",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "EnglishforWorldCitizenship2",
+      "section": "010",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": ""
+        },
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 2
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "교양"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "월 10:30~12:00 / 목 13:00~14:30",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/191aeafd1937f01b8fbe475d",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AI기반실용대학글쓰기",
+      "section": "",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": ""
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 2
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "교양"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "화 09:00~10:30 / 목 09:00~10:30",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/c76c810e938a497f241fbf23",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "자아발견과비전탐색2",
+      "section": "001",
+      "professor": "김영호",
+      "credits": 1,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 1
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "교양"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "화 13:00~14:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/6727b8e4bda4d979c18d5edb",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "객체지향프로그래밍",
+      "section": "001",
+      "professor": "왕중민",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "월 14:00~17:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/f76a0eedf740b2c7f8dc7d64",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "객체지향프로그래밍",
+      "section": "002",
+      "professor": "유승선",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "금 09:00~12:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/64344ab445875a0feb4ea44c",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "모바일앱실습",
+      "section": "001",
+      "professor": "김태원",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 750,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 2
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "목 10:30~12:30",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/64dbe37361b154735ffad53f",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "모바일앱실습",
+      "section": "002",
+      "professor": "김태원",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 2
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "목 14:30~16:30",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/bfc26a39659cdef31d9bf29d",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "클라우드환경운영체제이해",
+      "section": "001",
+      "professor": "조석형",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 2
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "화 14:00~16:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/f964ad2704bf37aa062577eb",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "클라우드환경운영체제이해",
+      "section": "002",
+      "professor": "조석형",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 2
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "1학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "수 10:00~12:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/ba1180245a6356a0d140e0c3",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "EnglishforWorldCitizenship4",
+      "section": "025",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": ""
+        },
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 2
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "교양"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "2학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "화 16:30~18:00 / 목 15:00~16:30",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/04a258293793a3054232a3bc",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "우송비트프로그래밍&AI입문",
+      "section": "001",
+      "professor": "최창민",
+      "credits": 6,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 1140,
+          "endMinute": 1320,
+          "classroom": ""
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1140,
+          "endMinute": 1320,
+          "classroom": ""
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1140,
+          "endMinute": 1320,
+          "classroom": ""
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1140,
+          "endMinute": 1320,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 6
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "2학년; 필수 졸업요건; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "월 19:00~22:00 / 화 19:00~22:00 / 수 19:00~22:00 / 목 19:00~22:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/7bee34d9e5b5d4857cfdce6f",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AI시대소프트웨어공학",
+      "section": "001",
+      "professor": "김영호",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "2학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "목 09:00~12:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/cbd7bbf61ca2585246c58689",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "SW·AI창업환경분석과사업타당성조사",
+      "section": "001",
+      "professor": "김동혁",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "트랙"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "2학년; SW·AI비즈니스창업융합부전공트랙 신청자만 수강 가능; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "금 09:00~12:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/e8335555860e9e222e50224e",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AI활용메타버스기술",
+      "section": "001",
+      "professor": "김영호",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "3학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "화 09:00~12:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/43172f8f0ad0879d0788f5b6",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "머신러닝",
+      "section": "001",
+      "professor": "양현식",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "3학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "수 14:00~17:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/0823472faa34d4a5afea921c",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "안드로이드프로그래밍응용",
+      "section": "001",
+      "professor": "소진",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "3학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "목 14:00~17:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/f2fc9e1ff89175e074b1b28b",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AI창의융합캡스톤디자인",
+      "section": "001",
+      "professor": "임승철",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "4학년; IT융합학부 컴퓨터정보·보안전공 개설 과목으로 수강신청; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "금 10:00~13:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/410544419664034c15eb27ec",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능프로젝트",
+      "section": "001",
+      "professor": "양현식",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "전공"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "4학년; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "목 14:00~17:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    },
+    {
+      "sourceId": "wsu/unknown/2026/2/5e79dc83a6868d4d60076766",
+      "universityId": "wsu",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미표기",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AI와메타버스융합실무",
+      "section": "001",
+      "professor": "소진",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": ""
+        }
+      ],
+      "departments": [
+        "컴퓨터·소프트웨어전공"
+      ],
+      "departmentCredits": {
+        "컴퓨터·소프트웨어전공": 3
+      },
+      "departmentClassifications": {
+        "컴퓨터·소프트웨어전공": "트랙"
+      },
+      "departmentRemarks": {
+        "컴퓨터·소프트웨어전공": "3학년; 비즈니스창업융합부전공트랙; 분반 교차신청 불가; 강의실·과목코드 원문 미표기"
+      },
+      "sourcePages": [
+        2
+      ],
+      "sourceSchedule": "목 09:00~12:00",
+      "sourceClassroom": "",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      }
+    }
+  ],
+  "heldRows": [
+    "IoT자율주행실무(원문17;00 오기)",
+    "온라인/시각미정/사전폐강/일반교양제목만인행"
+  ],
+  "periodEvidence": {
+    "start": "2026-09-01",
+    "end": "2026-12-14",
+    "sourceUrl": "https://www.wsu.ac.kr/page/haksa_list.jsp",
+    "scope": "학부2학기개강~종강; 보강15~18제외"
+  },
+  "completionClaim": false
+}

@@ -346,7 +346,7 @@ enum DailyWallpaperRenderer {
                UIColor.dailyPalette(colors.foreground),
                weight: .medium, alignment: centered ? .center : .left)
           if segment.event.completed {
-            UIColor.dailyPalette(colors.strike).setStroke()
+            (dark ? UIColor.white : UIColor.black).setStroke()
             let line = UIBezierPath()
             line.move(to: CGPoint(x: frame.minX + 2 * scale, y: frame.midY))
             line.addLine(to: CGPoint(x: frame.maxX - 2 * scale, y: frame.midY))

@@ -193,6 +193,80 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+  testWidgets('dated grid and editor retain one exact teaching date', (
+    tester,
+  ) async {
+    final repo = await settings();
+    final date = DateTime.now();
+    final course = TimetableClass(
+      id: 'dated',
+      title: '날짜 지정 수업',
+      academicYear: date.year,
+      semester: '2',
+      meetings: [
+        ClassMeeting(
+          id: 'session',
+          weekday: date.weekday,
+          startMinute: 540,
+          endMinute: 590,
+          date: timetableDateKey(date),
+        ),
+      ],
+    );
+    final store = repo.timetableStore;
+    await store.save(course);
+    await store.selectTerm(date.year, '2');
+    await tester.pumpWidget(app(repo, const TimetablePage()));
+    await tester.pumpAndSettle();
+    WeeklyTimetableGrid grid() =>
+        tester.widget(find.byType(WeeklyTimetableGrid));
+    expect(grid().showDates, isTrue);
+    expect(
+      grid().occurrences.single.date,
+      DateTime(date.year, date.month, date.day),
+    );
+    await tester.tap(find.byTooltip('다음 주'));
+    await tester.pumpAndSettle();
+    expect(grid().occurrences, isEmpty);
+    await tester.pumpWidget(
+      app(
+        repo,
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: () => showClassEditor(context, store, course: course),
+            child: const Text('수정 열기'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('수정 열기'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(
+      find.text('${timetableDateKey(date)} 09:00 – 10:00'),
+    );
+    await tester.tap(find.text('${timetableDateKey(date)} 09:00 – 10:00'));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .widget<DropdownButtonFormField<int>>(
+            find.byType(DropdownButtonFormField<int>),
+          )
+          .onChanged,
+      isNull,
+    );
+    await tester.tap(find.widgetWithText(FilledButton, '저장').last);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byKey(const ValueKey('class-title')), '제목 수정');
+    await tester.ensureVisible(find.byKey(const ValueKey('class-save')));
+    await tester.tap(find.byKey(const ValueKey('class-save')));
+    await tester.pumpAndSettle();
+    expect(store.classes.single.title, '제목 수정');
+    expect(store.classes.single.meetings.single.date, timetableDateKey(date));
+    expect(store.classes.single.meetings.single.originalEndMinute, 590);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('manual class persists after leaving editor', (tester) async {
     final repo = await settings();
     await tester.pumpWidget(app(repo, const TimetablePage()));
@@ -577,6 +651,167 @@ void main() {
           'dku/cheonan': 2562,
           'jnu/gwangju': 3166,
           'jnu/yeosu': 696,
+          'snu/main': 3744,
+          'ajou/main': 2237,
+          'cau/seoul': 2408,
+          'cau/davinci': 1589,
+          'inha/main': 2777,
+          'pnu/busan': 3487,
+          'pnu/miryang': 214,
+          'pnu/multiple': 1,
+          'pnu/shared': 170,
+          'pnu/yangsan': 183,
+          'sejong/main': 2645,
+          'yongin/main': 957,
+          'kmu/seongseo': 2829,
+          'kmu/daemyeong': 330,
+          'kmu/other': 7,
+          'kookmin/main': 2941,
+          'knu/daegu': 3117,
+          'knu/sangju': 497,
+          'knu/dongin': 26,
+          'knu/downtown': 2,
+          'knu/unassigned': 205,
+          'kangwon/chuncheon': 2902,
+          'kangwon/samcheok': 670,
+          'kangwon/dogye': 396,
+          'kangwon/gangneung': 1293,
+          'kangwon/wonju': 500,
+          'uos/main': 2112,
+          'seoultech/main': 1990,
+          'hansung/main': 1489,
+          'hufs/seoul': 1823,
+          'hufs/global': 1549,
+          'mokpo/dorim': 718,
+          'mokpo/damyang': 18,
+          'mokpo/unknown': 571,
+          'kwangwoon/unknown': 1261,
+          'skku/humanities': 1470,
+          'skku/naturalScience': 1265,
+          'skku/icampus': 47,
+          'cnu/daedeok': 1,
+          'cnu/unknown': 3887,
+          'sch/unknown': 2598,
+          'sogang/unknown': 1541,
+          'catholic/unknown': 373,
+          'catholic/songsim': 1086,
+          'gachon/global': 3242,
+          'gachon/medical': 567,
+          'dgist/unknown': 569,
+          'gist/main': 407,
+          'baekseok/unknown': 2571,
+          'postech/main': 418,
+          'kyonggi/suwon': 1640,
+          'khu/seoul': 2624,
+          'khu/global': 2042,
+          'hknu/anseong': 1216,
+          'hknu/pyeongtaek': 277,
+          'kunsan/unknown': 1714,
+          'kunsan/saemangeum': 4,
+          'knue/main': 742,
+          'tuk/first': 824,
+          'tuk/unknown': 607,
+          'swu/main': 1511,
+          'gnu/gajwa': 3721,
+          'gnu/chilam': 669,
+          'gnu/tongyeong': 273,
+          'gnu/changwon': 27,
+          'gnu/naedong': 1,
+          'gnu/unknown': 151,
+          'ssu/main': 2219,
+          'changwon/unknown': 1754,
+          'gknu/unknown': 22,
+          'gknu/yecheon': 2,
+          'kongju/cheonan': 743,
+          'daegu/main': 3174,
+          'cbnu/main': 14,
+          'koreatech/unknown': 791,
+          'hanbat/daejeon': 1675,
+          'hanbat/sejong': 23,
+          'pknu/daeyeon': 2415,
+          'pknu/unknown': 305,
+          'jeju/ara': 768,
+          'jeju/sara': 49,
+          'jeju/unknown': 2278,
+          'kumoh/yangho': 884,
+          'kumoh/unknown': 73,
+          'inu/songdo': 2043,
+          'inu/michuhol': 141,
+          'inu/multiple': 2,
+          'inu/unknown': 251,
+          'scnu/unknown': 1626,
+          'ulsan/main': 23,
+          'mju/humanities': 89,
+          'mju/natural': 97,
+          'sku/main': 512,
+          'sku/unknown': 1186,
+          'syu/main': 1391,
+          'yonsei/sinchon': 2427,
+          'yonsei/international': 879,
+          'yonsei/mirae': 1218,
+          'yonsei/unknown': 186,
+          'donga/seunghak': 38,
+          'donga/unknown': 42,
+          'mmu/unknown': 634,
+          'kau/main': 83,
+          'jbnu/unknown': 266,
+          'korea/seoul': 3612,
+          'korea/sejong': 1727,
+          'jnue/unknown': 380,
+          'ginue/incheon': 29,
+          'ginue/gyeonggi': 136,
+          'gjue/unknown': 464,
+          'gnue/unknown': 251,
+          'sungshin/sujeong': 12,
+          'sungshin/unjung': 17,
+          'dongguk/seoul': 2359,
+          'dongguk/ilsan': 146,
+          'dongguk/unknown': 38,
+          'kmou/unknown': 173,
+          'yu/unknown': 60,
+          'dnue/unknown': 543,
+          'ut/unknown': 70,
+          'nsu/unknown': 97,
+          'bnue/unknown': 305,
+          'kaist/main': 86,
+          'hanyang/seoul': 2805,
+          'hanyang/erica': 2156,
+          'sookmyung/first': 756,
+          'sookmyung/second': 171,
+          'sookmyung/unknown': 558,
+          'hoseo/asan': 43,
+          'hoseo/cheonan': 39,
+          'hoseo/unknown': 2417,
+          'chosun/unknown': 135,
+          'suwon/unknown': 2334,
+          'unist/unknown': 2,
+          'konkuk/unknown': 206,
+          'mju/unknown': 74,
+          'kongju/singwan': 1093,
+          'kongju/yesan': 320,
+          'kongju/unknown': 519,
+          'cje/unknown': 372,
+          'eulji/seongnam': 260,
+          'eulji/uijeongbu': 7,
+          'ewha/unknown': 2573,
+          'hongik/sejong': 1090,
+          'hongik/seoul': 2481,
+          'iccu/songdo': 265,
+          'inje/gimhae': 16,
+          'wsu/unknown': 121,
+          'hansei/main': 685,
+          'hyupsung/main': 963,
+          'sangji/main': 1307,
+          'sungkyul/main': 1083,
+          'nambu/main': 609,
+          'pcu/main': 1486,
+          'kangnam/main': 1416,
+          'sunmoon/unknown': 10,
+          'jbnu/gochang': 11,
+          'jbnu/iksan': 129,
+          'jbnu/jeonju': 3137,
+          'jbnu/namwon': 21,
+          'jbnu/saemangeum': 7,
         },
       );
       for (final dataset in datasets) {

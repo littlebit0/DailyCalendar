@@ -870,7 +870,7 @@ private struct DailyCompletionModifier: ViewModifier {
     if systemManaged {
       // Accessory widgets are composited/tinted by the Lock Screen. Its actual
       // wallpaper is unavailable, so use the OS foreground and native line.
-      content.foregroundStyle(.primary).strikethrough(completed)
+      content.foregroundStyle(.primary).strikethrough(completed, color: colorScheme == .dark ? .white : .black)
     } else {
       let surface = colorScheme == .dark ? 0xff000000 : 0xffffffff
       let background = DailyEventPalette.blend(category, on: surface, alpha: backgroundAlpha)
@@ -882,7 +882,7 @@ private struct DailyCompletionModifier: ViewModifier {
         .overlay {
           if completed {
             Rectangle()
-              .fill(Color.daily(argb: colors.strike))
+              .fill(colorScheme == .dark ? Color.white : Color.black)
               .frame(height: strikeThickness)
               .allowsHitTesting(false)
               .accessibilityHidden(true)

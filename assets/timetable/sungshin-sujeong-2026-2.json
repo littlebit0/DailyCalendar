@@ -1,0 +1,3770 @@
+{
+  "schemaVersion": 2,
+  "universityId": "sungshin",
+  "campus": "sujeong",
+  "campusName": "수정캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-08-13",
+  "sourceUrl": "https://sungshin.ac.kr/bbs/main_eng/4941/158286/artclView.do",
+  "researchOnly": false,
+  "completionClaim": false,
+  "courses": [
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row6",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS103300",
+      "section": "3",
+      "courseName": "진로설계",
+      "professor": "",
+      "classification": "",
+      "credits": 2.0,
+      "departments": [
+        "인재개발팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "금/2-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: 한국어 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 6,
+          "values": {
+            "No": 3,
+            "개설학과전공": "인재개발팀",
+            "학수번호": "SS103300",
+            "교과목명": "진로설계",
+            "분반": 3,
+            "학점/이론/실습": "2.0/1.0/1.0",
+            "시간표": "금/2-3",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "한국어 "
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "한국어 ",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row7",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS104800",
+      "section": "1",
+      "courseName": "Global Cultural Studies",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "수/1-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 영어 / 외국인 전용; 수강안내 및 지정내용: 영어",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 7,
+          "values": {
+            "No": 4,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "SS104800",
+            "교과목명": "Global Cultural Studies",
+            "분반": 1,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "수/1-3",
+            "강의언어": "영어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "영어"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "영어",
+        "sourceNativeRestrictions": "영어",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row8",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS100800",
+      "section": "1",
+      "courseName": "International Seminar: Korean and Global Affairs",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "금/7-9",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 영어 / 외국인 전용; 수강안내 및 지정내용: 영어",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 8,
+          "values": {
+            "No": 5,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "SS100800",
+            "교과목명": "International Seminar: Korean and Global Affairs",
+            "분반": 1,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "금/7-9",
+            "강의언어": "영어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "영어"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "영어",
+        "sourceNativeRestrictions": "영어",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row9",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS084300",
+      "section": "2",
+      "courseName": "한국 사회 및 문화의 이해",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "금/7-9",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 영어 / 외국인 전용; 수강안내 및 지정내용: 영어",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 950,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 9,
+          "values": {
+            "No": 6,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "SS084300",
+            "교과목명": "한국 사회 및 문화의 이해",
+            "분반": 2,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "금/7-9",
+            "강의언어": "영어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "영어"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "영어",
+        "sourceNativeRestrictions": "영어",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row13",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "KS002000",
+      "section": "4",
+      "courseName": "초급 한국어(읽기와 쓰기)",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "금/4-6",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 1급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 13,
+          "values": {
+            "No": 10,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "KS002000",
+            "교과목명": "초급 한국어(읽기와 쓰기)",
+            "분반": 4,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "금/4-6",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 1급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 1급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row17",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "KS002100",
+      "section": "4",
+      "courseName": "중급 한국어(읽기와 쓰기)",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "수/1-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 2급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 17,
+          "values": {
+            "No": 14,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "KS002100",
+            "교과목명": "중급 한국어(읽기와 쓰기)",
+            "분반": 4,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "수/1-3",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 2급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 2급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row19",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "KS002600",
+      "section": "2",
+      "courseName": "고급 한국어(읽기와 쓰기)",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "월/1-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 3급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 19,
+          "values": {
+            "No": 16,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "KS002600",
+            "교과목명": "고급 한국어(읽기와 쓰기)",
+            "분반": 2,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "월/1-3",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 3급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 3급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row20",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "KS002700",
+      "section": "1",
+      "courseName": "국제학생을 위한 실용 한국어 어휘와 문법",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "금/1-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 2급, 3급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 20,
+          "values": {
+            "No": 17,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "KS002700",
+            "교과목명": "국제학생을 위한 실용 한국어 어휘와 문법",
+            "분반": 1,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "금/1-3",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 2급, 3급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 2급, 3급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row22",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS113300",
+      "section": "1",
+      "courseName": "대학 한국어(학술적 글쓰기)",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "월/1-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 3급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 22,
+          "values": {
+            "No": 19,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "SS113300",
+            "교과목명": "대학 한국어(학술적 글쓰기)",
+            "분반": 1,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "월/1-3",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 3급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 3급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row26",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS113400",
+      "section": "4",
+      "courseName": "초급 한국어(듣기와 말하기)",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "수/1-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 1급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 26,
+          "values": {
+            "No": 23,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "SS113400",
+            "교과목명": "초급 한국어(듣기와 말하기)",
+            "분반": 4,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "수/1-3",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 1급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 1급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row30",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS113500",
+      "section": "4",
+      "courseName": "중급 한국어(듣기와 말하기)",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "월/1-3",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 2급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 650,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 30,
+          "values": {
+            "No": 27,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "SS113500",
+            "교과목명": "중급 한국어(듣기와 말하기)",
+            "분반": 4,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "월/1-3",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 2급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 2급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    },
+    {
+      "sourceId": "sungshin/sujeong/2026-2/112810-Sheet1-row32",
+      "campus": "sujeong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SS117400",
+      "section": "2",
+      "courseName": "고급 한국어(듣기와 말하기)",
+      "professor": "",
+      "classification": "",
+      "credits": 3.0,
+      "departments": [
+        "국제교류지원팀"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "금/4-6",
+      "sourceClassroom": "",
+      "remarks": "공개 예약 계획, 실제 등교·집중이수/온라인 운영 날짜 미확인. 외국인 전용 학부 공개 과목의 원문 학수번호·숫자 분반·학점/이론/실습·언어·지정내용·수정/운정 캠퍼스를 보존합니다. 교수·강의실·개설분반 이수구분은 미공개입니다. 2026-2 학부 안내 p5의 개별 공표 요일별 수업일만 예약하며 일반 주간 반복이나 별도 보강을 만들지 않습니다. 12/8 이후 공식 기말고사/성적평가 기간 예약은 보류합니다. 중간고사 개별 시행 날짜와 실제 수업/시험 구분은 미확인입니다. 10/16 입학전형으로 대면수업 불가 가능성이 공지되어 방식/보강 미확인인 해당 예약은 보류합니다. 집중이수제 8주 대상 여부·개별 운영·시험·보강·최신 시간표 변경은 미확인입니다. 1차/2차 공개 폐강 목록과 대조했으나 별도 학과 폐강·최신 전체 폐강 여부는 미확인입니다. 수업 방식은 미지정으로 사용자의 선택을 유지합니다. 강의언어: 한국어 / 외국인 전용; 수강안내 및 지정내용: TOPIK 3급",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 770,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": ""
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 890,
+          "classroom": ""
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "metadata": {
+        "originalEducationalRecord": {
+          "excelRow": 32,
+          "values": {
+            "No": 29,
+            "개설학과전공": "국제교류지원팀",
+            "학수번호": "SS117400",
+            "교과목명": "고급 한국어(듣기와 말하기)",
+            "분반": 2,
+            "학점/이론/실습": "3.0/3.0/0.0",
+            "시간표": "금/4-6",
+            "강의언어": "한국어",
+            "캠퍼스": "수정",
+            "수강안내 및 지정내용": "TOPIK 3급"
+          }
+        },
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "sourceClassificationPublished": false,
+        "sourceProfessorPublished": false,
+        "sourceRoomPublished": false,
+        "actualAttendanceConfirmed": false,
+        "deliveryModeStatus": "unknown-user-choice",
+        "publishedCampus": "수정",
+        "eligibilityScope": "외국인 전용",
+        "sourceNativeLanguage": "한국어",
+        "sourceNativeRestrictions": "TOPIK 3급",
+        "currentWholeClosureVerified": false,
+        "publishedClosureMatch": false,
+        "individualIntensiveScopeVerified": false,
+        "individualMidtermDatesVerified": false,
+        "researchOnly": false,
+        "internalIdKind": "source-document-sheet-native-row",
+        "reservationBasis": "current-undergraduate-guide-p5-native-date-cells"
+      }
+    }
+  ],
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}

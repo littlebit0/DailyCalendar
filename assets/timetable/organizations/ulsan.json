@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "university": "ulsan",
+  "mappings": [
+    {
+      "college": "아산아너스칼리지",
+      "department": "자율전공학부",
+      "sourceLabel": "자율전공학부",
+      "sourceUrl": "https://cge.ulsan.ac.kr/cge/6895",
+      "evidence": "Official college-specific tab list / college-row curriculum table gives exact department affiliation; association only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/ulsan-more-6e5d43b5ec47.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    }
+  ],
+  "courseOwners": []
+}

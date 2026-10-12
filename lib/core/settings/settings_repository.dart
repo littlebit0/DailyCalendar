@@ -269,47 +269,104 @@ class SettingsRepository {
       }
     }
 
+    return _enqueueSettingsMutation(
+      () => _saveAcademicProfile(profile, validate: validate),
+    );
+  }
+
+  /// Update only LMS connection fields after queued school/category edits have
+  /// committed. A finished login must not replace a newer profile snapshot.
+  Future<bool> updateLmsConnection({
+    required String expectedGoogleEmail,
+    required String expectedSchoolId,
+    String? userId,
+    String? expectedLmsUserId,
+    bool allowPrincipalChange = false,
+    bool allowReenable = false,
+    required bool enabled,
+  }) {
+    final generation = _settingsMutationGeneration;
+    final owner = expectedGoogleEmail.trim().toLowerCase();
+    void validate() {
+      if (owner.isEmpty ||
+          generation != _settingsMutationGeneration ||
+          dailyAccount()?.googleAccount?.email.trim().toLowerCase() != owner) {
+        throw StateError('LMS connection account changed');
+      }
+    }
+
+    var changed = false;
     return _enqueueSettingsMutation(() async {
       validate();
-      final keys = [
-        _academicProfileKey,
-        _settingsSyncDocumentKey,
-        _settingsSyncPendingKey,
-        _settingsSyncRevisionKey,
-      ];
-      final before = {for (final key in keys) key: _preferences.get(key)};
-      try {
-        final current = load();
-        await _saveSettings(
-          current.copyWith(academicProfile: profile),
-          markSyncPending: true,
-          changedFrom: current,
-        );
-        validate();
-        if (load().academicProfile != profile ||
-            !hasPendingSettingsSync && current.academicProfile != profile) {
-          throw StateError('Academic profile persistence incomplete');
-        }
-      } catch (_) {
-        for (final entry in before.entries) {
-          try {
-            switch (entry.value) {
-              case null:
-                await _preferences.remove(entry.key);
-              case String value:
-                await _preferences.setString(entry.key, value);
-              case int value:
-                await _preferences.setInt(entry.key, value);
-              case bool value:
-                await _preferences.setBool(entry.key, value);
-            }
-          } catch (_) {
-            /* Preserve the original failure after best-effort rollback. */
-          }
-        }
-        rethrow;
+      final current = load().academicProfile;
+      if (current == null || current.timetableUniversity != expectedSchoolId) {
+        return;
       }
-    });
+      // A restored/automatic session must not overwrite a principal selected
+      // by another device while this mutation waited in the settings queue.
+      // Only a completed, explicit school login may replace that selection.
+      if (!allowPrincipalChange &&
+          (current.lmsUserId != expectedLmsUserId ||
+              (enabled &&
+                  current.lmsIntegrationEnabled == false &&
+                  !allowReenable))) {
+        return;
+      }
+      if (userId != null && userId.trim().isEmpty) {
+        throw ArgumentError.value(userId, 'userId', 'Must not be empty');
+      }
+      final next = current.withLmsConnection(userId: userId, enabled: enabled);
+      if (next == current) return;
+      await _saveAcademicProfile(next, validate: validate);
+      changed = true;
+    }).then((_) => changed);
+  }
+
+  /// Caller already owns the settings mutation queue. Keep profile and its
+  /// Drive revision together without nesting another queued operation.
+  Future<void> _saveAcademicProfile(
+    AcademicProfile profile, {
+    required void Function() validate,
+  }) async {
+    validate();
+    final keys = [
+      _academicProfileKey,
+      _settingsSyncDocumentKey,
+      _settingsSyncPendingKey,
+      _settingsSyncRevisionKey,
+    ];
+    final before = {for (final key in keys) key: _preferences.get(key)};
+    try {
+      final current = load();
+      await _saveSettings(
+        current.copyWith(academicProfile: profile),
+        markSyncPending: true,
+        changedFrom: current,
+      );
+      validate();
+      if (load().academicProfile != profile ||
+          !hasPendingSettingsSync && current.academicProfile != profile) {
+        throw StateError('Academic profile persistence incomplete');
+      }
+    } catch (_) {
+      for (final entry in before.entries) {
+        try {
+          switch (entry.value) {
+            case null:
+              await _preferences.remove(entry.key);
+            case String value:
+              await _preferences.setString(entry.key, value);
+            case int value:
+              await _preferences.setInt(entry.key, value);
+            case bool value:
+              await _preferences.setBool(entry.key, value);
+          }
+        } catch (_) {
+          /* Preserve the original failure after best-effort rollback. */
+        }
+      }
+      rethrow;
+    }
   }
 
   Future<void> _saveSettings(

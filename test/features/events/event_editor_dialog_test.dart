@@ -9,6 +9,140 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  const school = EventCategory(
+    id: 'custom_original_id',
+    label: 'LMS renamed',
+    colorValue: 0xff336699,
+  );
+  for (final type in [
+    'assignment',
+    'quiz',
+    'exam',
+    'lecture',
+    'elearning',
+    'calendar',
+  ]) {
+    testWidgets('issue89 $type preserves category without selection', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(900, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final event = _eventWithEndBeforeStart().copyWith(
+        category: school,
+        lms: LmsEventMetadata(
+          schoolId: 'smu',
+          ownerId: 'student@example.com',
+          lmsUserId: '42',
+          courseId: '123',
+          courseTitle: 'course',
+          activityType: switch (type) {
+            'exam' => 'quiz',
+            'elearning' => 'lecture',
+            _ => type,
+          },
+          activityId: '456',
+          sourceUrl: 'https://ecampus.smu.ac.kr/mod/quiz/view.php?id=456',
+        ),
+      );
+      EventDraft? saved;
+      await tester.pumpWidget(
+        _DialogHost(
+          builder: (_) => EventEditorDialog(
+            initialDate: event.startAt,
+            event: event,
+            categories: const [EventCategory.basic, school],
+          ),
+          onSaved: (draft) => saved = draft,
+        ),
+      );
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<DropdownButtonFormField<EventCategory>>(
+              find.byType(DropdownButtonFormField<EventCategory>),
+            )
+            .initialValue,
+        school,
+      );
+      await tester.enterText(find.byType(TextField).first, 'personal memo');
+      await tester.tap(find.text('저장'));
+      await tester.pumpAndSettle();
+      expect(saved!.category.id, school.id);
+      expect(saved!.categoryChanged, isFalse);
+    });
+  }
+
+  testWidgets('issue89 missing category blocks save until explicit selection', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(900, 1000));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    EventDraft? saved;
+    await tester.pumpWidget(
+      _DialogHost(
+        builder: (_) => EventEditorDialog(
+          initialDate: DateTime(2026, 9, 1),
+          event: _eventWithEndBeforeStart().copyWith(category: school),
+          categories: const [EventCategory.basic],
+        ),
+        onSaved: (draft) => saved = draft,
+      ),
+    );
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+    expect(saved, isNull);
+    expect(find.textContaining('기존 분류가 없습니다.'), findsWidgets);
+    await tester.tap(find.byType(DropdownButtonFormField<EventCategory>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('기본').last);
+    await tester.pumpAndSettle();
+    // This fixture has invalid bounds; selecting must resolve only the category.
+    expect(
+      tester
+          .widget<DropdownButtonFormField<EventCategory>>(
+            find.byType(DropdownButtonFormField<EventCategory>),
+          )
+          .initialValue,
+      EventCategory.basic,
+    );
+    await tester.tap(find.text('취소'));
+    await tester.pumpAndSettle();
+  });
+
+  testWidgets('issue89 legacy label maps only to matching live category', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(900, 1000));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    await tester.pumpWidget(
+      _DialogHost(
+        builder: (_) => EventEditorDialog(
+          initialDate: DateTime(2026, 9, 1),
+          event: _eventWithEndBeforeStart().copyWith(
+            category: EventCategory.fromStored(school.label),
+          ),
+          categories: const [EventCategory.basic, school],
+        ),
+        onSaved: (_) {},
+      ),
+    );
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .widget<DropdownButtonFormField<EventCategory>>(
+            find.byType(DropdownButtonFormField<EventCategory>),
+          )
+          .initialValue,
+      school,
+    );
+    await tester.tap(find.text('취소'));
+    await tester.pumpAndSettle();
+  });
+
   testWidgets(
     'LMS point deadline editor saves personal fields without changing school source',
     (tester) async {

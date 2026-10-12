@@ -22,6 +22,11 @@ void main() {
     directory = await UniversityDirectory.load(bundle: _DirectoryBundle());
   });
 
+  test('KMOU advertises the existing official academic calendar integration', () {
+    final school = directory.byId('academyinfo:0000033')!;
+    expect(school.supportsAcademicCalendar, isTrue);
+  });
+
   test('sourced national corpus is complete and uniquely identified', () {
     expect(directory.dataYear, 2026);
     expect(directory.checkedAt, '2026-09-26');
@@ -205,7 +210,7 @@ void main() {
             .where((school) => school.campusSelectionRequired)
             .map((school) => school.name)
             .toSet(),
-        {'건국대학교', '고려대학교', '동국대학교', '연세대학교', '한양대학교'},
+        {'건국대학교', '고려대학교', '국립창원대학교', '동국대학교', '연세대학교', '한양대학교'},
       );
       final expected = {
         '상명대학교': '서울 / 천안',

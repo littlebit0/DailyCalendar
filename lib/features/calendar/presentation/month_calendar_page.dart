@@ -1404,7 +1404,9 @@ class _OrderedCalendarSwitcherState extends State<_OrderedCalendarSwitcher> {
           );
           return SlideTransition(
             position: animation.drive(Tween(begin: offset, end: Offset.zero)),
-            child: child,
+            // Moving the layer must not repaint the complete quick-view or
+            // timetable surface at every display tick (120/144 Hz on desktop).
+            child: RepaintBoundary(key: child.key, child: child),
           );
         },
         child: widget.child,
@@ -7625,19 +7627,22 @@ class _WeekDayPanel extends ConsumerWidget {
               children: [
                 Row(
                   children: [
-                    Text(
-                      key: ValueKey(
-                        'week-list-weekday-${day.year}-${day.month}-${day.day}',
-                      ),
-                      DateFormat.E(
-                        Localizations.localeOf(context).toLanguageTag(),
-                      ).format(day),
-                      style: TextStyle(
-                        color: color,
-                        fontWeight: FontWeight.w800,
+                    Expanded(
+                      child: Text(
+                        key: ValueKey(
+                          'week-list-weekday-${day.year}-${day.month}-${day.day}',
+                        ),
+                        DateFormat.E(
+                          Localizations.localeOf(context).toLanguageTag(),
+                        ).format(day),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: color,
+                          fontWeight: FontWeight.w800,
+                        ),
                       ),
                     ),
-                    const Spacer(),
                     Text(
                       '${day.month}/${day.day}',
                       style: TextStyle(

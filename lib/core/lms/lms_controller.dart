@@ -9,6 +9,7 @@ import '../settings/settings_repository.dart';
 import 'lms_models.dart';
 import 'lms_sync_service.dart';
 import 'lms_web_session.dart';
+import 'lms_credentials_store.dart';
 
 /// Coordinates one school browser with the current Daily account. Merely reading
 /// this controller never starts a browser or a network request.
@@ -18,7 +19,11 @@ class LmsController extends ChangeNotifier {
     required EventRepository repository,
     required EventCommandService commands,
     LmsWebSession Function(String owner, String school)? createSession,
-  }) : _settings = settings,
+    FutureOr<void> Function()? onIntegrationChanged,
+    LmsCredentialsStore? credentialsStore,
+  }) : _credentials = credentialsStore ?? LmsCredentialsStore(),
+       _settings = settings,
+       _onIntegrationChanged = onIntegrationChanged,
        _createSession =
            createSession ??
            ((owner, school) =>
@@ -44,7 +49,54 @@ class LmsController extends ChangeNotifier {
     sync.addListener(_notify);
   }
 
+  final LmsCredentialsStore _credentials;
+  final _automaticAttempts = <String>{};
+  bool automaticLoginPaused = false;
+  String? _credentialKey;
+  String? _localLoginUsername;
+  bool _localLoginLoading = false;
+  bool _localLoginReadFailed = false;
+  int _credentialRevision = 0;
+
+  String? get localLoginUsername =>
+      _credentialKey == _desiredKey ? _localLoginUsername : null;
+  bool get localLoginLoading =>
+      _credentialKey == _desiredKey && _localLoginLoading;
+  bool get localLoginReadFailed =>
+      _credentialKey == _desiredKey && _localLoginReadFailed;
+
+  /// Read device-local identity without exposing passwords or starting login.
+  Future<void> loadLocalLoginInfo() async {
+    final key = _desiredKey;
+    final revision = ++_credentialRevision;
+    if (_credentialKey != key) _localLoginUsername = null;
+    _credentialKey = key;
+    _localLoginReadFailed = false;
+    _localLoginLoading = key != null;
+    _notify();
+    if (key == null) return;
+    final owner = _settings.dailyAccount()!.googleAccount!.email;
+    final school = schoolId!;
+    bool valid() =>
+        !_disposed && revision == _credentialRevision && key == _desiredKey;
+    try {
+      final stored = await _credentials.read(owner, school);
+      if (!valid()) return;
+      _localLoginUsername = stored?.username;
+      automaticLoginPaused = stored?.paused ?? false;
+    } catch (_) {
+      if (!valid()) return;
+      _localLoginReadFailed = true;
+    } finally {
+      if (valid()) {
+        _localLoginLoading = false;
+        _notify();
+      }
+    }
+  }
+
   final SettingsRepository _settings;
+  final FutureOr<void> Function()? _onIntegrationChanged;
   final LmsWebSession Function(String, String) _createSession;
   late final LmsSyncService sync;
   LmsWebSession? _session;
@@ -56,18 +108,27 @@ class LmsController extends ChangeNotifier {
   bool _stored = false;
   bool _disconnecting = false;
   bool _queuedForce = false;
+  bool _forceCurrentRefresh = false;
+  bool _networkRefreshStarted = false;
   Future<void>? _operation;
   Future<void>? _disconnectOperation;
   Timer? _timer;
   bool _foreground = false;
+  bool _preparingLogin = false;
+  bool _configuringAutomaticLogin = false;
+  bool? _configuredIntegrationEnabled;
+  String? _configuredLmsUserId;
 
   String? get schoolId => _settings.load().academicProfile?.timetableUniversity;
   // Only the adapter verified against actual authenticated responses is enabled.
-  bool get supported => schoolId == 'smu';
+  static bool supportsSchool(String? schoolId) => schoolId == 'smu';
+  bool get supported => supportsSchool(schoolId);
   bool get restoring => _restoring || _disconnecting;
   bool get connected =>
       !_disconnecting &&
+      _settings.load().academicProfile?.lmsIntegrationEnabled != false &&
       _key == _desiredKey &&
+      _matchesSelectedPrincipal(_session?.principalId ?? _restoredPrincipal) &&
       (_stored || _session?.isAuthenticated == true);
   bool get needsLogin => sync.state == LmsSyncState.needsLogin;
   LmsWebSession? get session => _session;
@@ -84,6 +145,7 @@ class LmsController extends ChangeNotifier {
     if (_disconnecting ||
         current == null ||
         principal == null ||
+        !_matchesSelectedPrincipal(principal) ||
         _desiredKey != _key) {
       return null;
     }
@@ -96,14 +158,31 @@ class LmsController extends ChangeNotifier {
     );
   }
 
-  bool isEventVisible(CalendarEvent event) =>
-      !(event.lms != null && restoring) && sync.isEventVisible(event);
+  bool isEventVisible(CalendarEvent event) => sync.isEventVisible(event);
 
   /// Called synchronously as soon as account/profile settings change, so stale
   /// in-flight results and cached rows stop being eligible before any await.
   void settingsChanged() {
-    if (_key == _desiredKey) return;
+    final profile = _settings.load().academicProfile;
+    final enabled = profile?.lmsIntegrationEnabled;
+    final selected = profile?.lmsUserId;
+    if (_key == _desiredKey &&
+        _configuredIntegrationEnabled == enabled &&
+        _configuredLmsUserId == selected) {
+      return;
+    }
+    _configuredIntegrationEnabled = enabled;
+    _configuredLmsUserId = selected;
     _generation++;
+    if (_credentialKey != _desiredKey) {
+      _credentialRevision++;
+      _credentialKey = null;
+      _localLoginUsername = null;
+      _localLoginLoading = false;
+      _localLoginReadFailed = false;
+      unawaited(loadLocalLoginInfo());
+    }
+    automaticLoginPaused = false;
     _restoredPrincipal = null;
     _stored = false;
     _restoring = false;
@@ -127,7 +206,14 @@ class LmsController extends ChangeNotifier {
     if (_disposed || _disconnecting) return Future.value();
     final running = _operation;
     if (running != null) {
-      _queuedForce = _queuedForce || force;
+      // A force request before collection starts belongs to the upcoming
+      // snapshot. Once collection has started, retain the trailing refresh:
+      // the user's newly submitted quiz may postdate an already-read page.
+      if (force && !_networkRefreshStarted) {
+        _forceCurrentRefresh = true;
+      } else {
+        _queuedForce = _queuedForce || force;
+      }
       return running.then<void>((_) async {
         if (_disposed || _disconnecting) return;
         final forceAgain = _queuedForce;
@@ -137,6 +223,8 @@ class LmsController extends ChangeNotifier {
         }
       });
     }
+    _forceCurrentRefresh = force;
+    _networkRefreshStarted = false;
     final operation = _refresh(force: force).catchError((Object error) {
       if (_disposed) return;
       _restoring = false;
@@ -153,7 +241,112 @@ class LmsController extends ChangeNotifier {
     });
   }
 
+  Future<void> saveAutomaticLogin(String username, String password) async {
+    final owner = _settings.dailyAccount()?.googleAccount?.email;
+    final school = schoolId;
+    if (owner == null || !supported || school == null) return;
+    await _credentials.save(
+      owner,
+      school,
+      LmsLocalCredentials(username, password),
+    );
+    if (_disposed || _desiredKey != '${normalizeLmsOwner(owner)}|$school') {
+      return;
+    }
+    _credentialRevision++;
+    _credentialKey = _desiredKey;
+    _localLoginUsername = username.trim();
+    _localLoginLoading = false;
+    _localLoginReadFailed = false;
+    _automaticAttempts.remove(_desiredKey);
+    automaticLoginPaused = false;
+    _notify();
+    _configuringAutomaticLogin = true;
+    try {
+      await refresh(force: true);
+    } finally {
+      _configuringAutomaticLogin = false;
+    }
+  }
+
+  Future<void> removeAutomaticLogin() async {
+    final owner = _settings.dailyAccount()?.googleAccount?.email;
+    final school = schoolId;
+    if (owner == null || school == null) return;
+    await _credentials.delete(owner, school);
+    if (_disposed || _desiredKey != '${normalizeLmsOwner(owner)}|$school') {
+      return;
+    }
+    _credentialRevision++;
+    _credentialKey = _desiredKey;
+    _localLoginUsername = null;
+    _localLoginLoading = false;
+    _localLoginReadFailed = false;
+    automaticLoginPaused = false;
+    _notify();
+  }
+
+  Future<bool> _tryAutomaticLogin(
+    LmsWebSession current,
+    bool Function() valid,
+  ) async {
+    final key = _desiredKey;
+    if (_preparingLogin ||
+        key == null ||
+        !valid() ||
+        _automaticAttempts.contains(key)) {
+      return false;
+    }
+    LmsLocalCredentials? credentials;
+    try {
+      credentials = await _credentials.read(current.ownerId, current.schoolId);
+    } catch (_) {
+      return false;
+    } // Keychain failure must not destroy normal session/cache.
+    if (!valid() || credentials == null) return false;
+    automaticLoginPaused = credentials.paused;
+    if (credentials.paused) return false;
+    _automaticAttempts.add(
+      key,
+    ); // Never automatically repeat a login this process.
+    _restoring = true;
+    _notify();
+    final success = await current.loginAutomatically(
+      credentials,
+      expectedPrincipal: _settings.load().academicProfile?.lmsUserId,
+    );
+    if (!valid()) return false;
+    if (!success) {
+      await _credentials.save(
+        current.ownerId,
+        current.schoolId,
+        LmsLocalCredentials(
+          credentials.username,
+          credentials.password,
+          paused: true,
+        ),
+      );
+      if (!valid()) return false;
+      automaticLoginPaused = true;
+      sync.markRestoreFailed(authenticationRequired: true);
+      return false;
+    }
+    _stored = current.isAuthenticated;
+    _restoredPrincipal = current.principalId;
+    await _saveConnection(current, enabled: true);
+    if (!valid()) return false;
+    _restoring = false;
+    _networkRefreshStarted = true;
+    await sync.refresh(force: true);
+    if (valid() && sync.state == LmsSyncState.ready) {
+      current.acknowledgeSuccessfulRefresh();
+    }
+    return true;
+  }
+
   Future<void> _refresh({required bool force}) async {
+    await loadLocalLoginInfo();
+    if (_disposed || _disconnecting) return;
     await sync.applyConfiguredCategory();
     final desired = _desiredKey;
     if (_key != desired) {
@@ -183,6 +376,18 @@ class LmsController extends ChangeNotifier {
     }
     final current = _session;
     if (current == null || current.isLoginVisible) return;
+    _configuredIntegrationEnabled = _settings
+        .load()
+        .academicProfile
+        ?.lmsIntegrationEnabled;
+    _configuredLmsUserId = _settings.load().academicProfile?.lmsUserId;
+    if (_configuredIntegrationEnabled == false && !_configuringAutomaticLogin) {
+      _stored = false;
+      if (!_preparingLogin) await current.close();
+      // prepareLogin only creates a handle. Reconnection becomes enabled after
+      // the user's official login has actually verified a principal.
+      return;
+    }
     final generation = _generation;
     bool valid() =>
         !_disposed &&
@@ -192,20 +397,69 @@ class LmsController extends ChangeNotifier {
     _restoring = !current.isAuthenticated;
     _notify();
     try {
+      if (current.isAuthenticated &&
+          !_matchesSelectedPrincipal(current.principalId)) {
+        _stored = false;
+        _restoredPrincipal = _configuredLmsUserId;
+        await current.close();
+        if (valid()) sync.markRestoreFailed(authenticationRequired: true);
+        return;
+      }
       if (!current.isAuthenticated) {
         final stored = await current.hasStoredSession();
         if (!valid()) return;
         _stored = stored;
-        if (!stored) return;
         _restoredPrincipal = current.storedPrincipalId;
+        if (!_matchesSelectedPrincipal(_restoredPrincipal)) {
+          _stored = false;
+          _restoredPrincipal = _configuredLmsUserId;
+          sync.markRestoreFailed(authenticationRequired: true);
+          if (!stored) await _tryAutomaticLogin(current, valid);
+          return;
+        }
+        if (!stored) {
+          sync.markRestoreFailed(authenticationRequired: true);
+          await _tryAutomaticLogin(current, valid);
+          return;
+        }
         if (!valid()) return;
         await current.prepare();
       }
       if (!valid()) return;
       _stored = current.isAuthenticated;
       _restoredPrincipal = current.principalId ?? _restoredPrincipal;
+      if (current.isAuthenticated) {
+        await _saveConnection(current, enabled: true);
+      }
+      if (!valid()) return;
       _restoring = false;
-      await sync.refresh(force: force);
+      _networkRefreshStarted = true;
+      await sync.refresh(force: force || _forceCurrentRefresh);
+      if (valid() && sync.state == LmsSyncState.ready) {
+        current.acknowledgeSuccessfulRefresh();
+      }
+      if (!valid() || sync.state != LmsSyncState.needsLogin) return;
+      // fetchHtml requests recovery only after a previously authenticated GET
+      // was rejected. The session consumes that request once, using only its
+      // own saved cookies and verified root identity, never SSO credentials.
+      _restoring = true;
+      _notify();
+      final recovered = await current.recoverAuthentication();
+      if (!valid()) return;
+      _stored = current.isAuthenticated;
+      _restoredPrincipal = current.principalId ?? _restoredPrincipal;
+      _restoring = false;
+      if (recovered) {
+        await _saveConnection(current, enabled: true);
+        if (valid()) await sync.refresh(force: true);
+        if (valid() && sync.state == LmsSyncState.ready) {
+          current.acknowledgeSuccessfulRefresh();
+        }
+        if (valid()) _stored = current.isAuthenticated;
+      }
+      if (valid() && sync.state == LmsSyncState.needsLogin) {
+        await _tryAutomaticLogin(current, valid);
+      }
     } catch (error) {
       if (valid()) {
         final expired =
@@ -213,6 +467,13 @@ class LmsController extends ChangeNotifier {
             error.code == LmsWebSessionError.authenticationRequired;
         if (expired) _stored = false;
         sync.markRestoreFailed(authenticationRequired: expired);
+        if (expired) {
+          try {
+            await _tryAutomaticLogin(current, valid);
+          } catch (_) {
+            if (valid()) sync.markRestoreFailed();
+          }
+        }
       }
     } finally {
       if (valid()) {
@@ -223,9 +484,14 @@ class LmsController extends ChangeNotifier {
   }
 
   /// Prepares the account-scoped object; the caller alone presents the visible
-  /// official school login. No credentials are filled or submitted by Daily.
+  /// official school login. Automatic credential submission is suppressed here.
   Future<LmsWebSession?> prepareLogin() async {
-    await refresh();
+    _preparingLogin = true;
+    try {
+      await refresh();
+    } finally {
+      _preparingLogin = false;
+    }
     if (_disposed || _key != _desiredKey) return null;
     return _session;
   }
@@ -240,6 +506,16 @@ class LmsController extends ChangeNotifier {
     _generation++;
     _restoredPrincipal = loginSession.principalId;
     _stored = true;
+    await _saveConnection(
+      loginSession,
+      enabled: true,
+      allowPrincipalChange: true,
+    );
+    if (_disposed ||
+        !identical(loginSession, _session) ||
+        _key != _desiredKey) {
+      return;
+    }
     sync.invalidateSession();
     await refresh(force: true);
   }
@@ -264,12 +540,74 @@ class LmsController extends ChangeNotifier {
     _key = null;
     sync.invalidateSession();
     try {
-      await current?.disconnect();
-      await current?.retire();
+      try {
+        if (current != null) await _saveConnection(current, enabled: false);
+      } finally {
+        try {
+          if (current != null) {
+            await _credentials.delete(current.ownerId, current.schoolId);
+            if (_desiredKey == '${current.ownerId}|${current.schoolId}') {
+              _credentialRevision++;
+              _credentialKey = _desiredKey;
+              _localLoginUsername = null;
+              _localLoginLoading = false;
+              _localLoginReadFailed = false;
+            }
+          }
+        } finally {
+          try {
+            await current?.disconnect();
+          } finally {
+            await current?.retire();
+          }
+        }
+      }
     } finally {
       _disconnecting = false;
       _notify();
     }
+  }
+
+  Future<void> _saveConnection(
+    LmsWebSession current, {
+    required bool enabled,
+    bool allowPrincipalChange = false,
+  }) async {
+    final owner = _settings.dailyAccount()?.googleAccount?.email;
+    final profile = _settings.load().academicProfile;
+    if (owner == null ||
+        normalizeLmsOwner(owner) != current.ownerId ||
+        profile?.timetableUniversity != current.schoolId ||
+        (enabled && !current.isAuthenticated) ||
+        (!allowPrincipalChange &&
+            enabled &&
+            !_matchesSelectedPrincipal(current.principalId))) {
+      return;
+    }
+    final principal = enabled ? current.principalId : null;
+    final next = profile!.withLmsConnection(
+      userId: principal,
+      enabled: enabled,
+    );
+    if (next == profile) return;
+    _configuredIntegrationEnabled = enabled;
+    _configuredLmsUserId = next.lmsUserId;
+    final changed = await _settings.updateLmsConnection(
+      expectedGoogleEmail: owner,
+      expectedSchoolId: current.schoolId,
+      userId: principal,
+      enabled: enabled,
+      expectedLmsUserId: profile.lmsUserId,
+      allowPrincipalChange: allowPrincipalChange,
+      allowReenable: _configuringAutomaticLogin,
+    );
+    if (_disposed || !changed) return;
+    await _onIntegrationChanged?.call();
+  }
+
+  bool _matchesSelectedPrincipal(String? principal) {
+    final selected = _settings.load().academicProfile?.lmsUserId;
+    return selected == null || principal == selected;
   }
 
   void _notify() {
@@ -291,19 +629,15 @@ class LmsController extends ChangeNotifier {
 /// A presentation-only reference keeps widget export independent of the command
 /// service graph. It cannot create an LMS controller while commands are running.
 class LmsPresentationState {
+  LmsPresentationState({bool Function(CalendarEvent)? cachedVisibility})
+    : _cachedVisibility = cachedVisibility;
+  final bool Function(CalendarEvent)? _cachedVisibility;
   LmsController? controller;
 
   bool isEventVisible(CalendarEvent event) =>
       controller?.isEventVisible(event) ??
+      _cachedVisibility?.call(event) ??
       (event.lms == null && !event.id.startsWith('lms:'));
 
-  DateTime? get verifiedAt {
-    final current = controller;
-    if (current == null ||
-        current.restoring ||
-        current.sync.state != LmsSyncState.ready) {
-      return null;
-    }
-    return current.sync.lastSuccess;
-  }
+  DateTime? get verifiedAt => controller?.sync.lastSuccess;
 }

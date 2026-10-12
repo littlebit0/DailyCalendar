@@ -48,6 +48,11 @@ class LmsSyncResult {
     required this.updated,
     required this.deleted,
     required this.unchanged,
+    this.learningActivities = 0,
+    this.unresolvedLearningActivities = 0,
+    this.excludedLearningActivities = 0,
+    this.failedLearningCourses = 0,
+    this.unresolvedQuizStatuses = 0,
   });
   final int courses,
       activities,
@@ -56,11 +61,19 @@ class LmsSyncResult {
       updated,
       deleted,
       unchanged;
+  final int unresolvedQuizStatuses;
+  final int learningActivities;
+  final int unresolvedLearningActivities;
+  final int excludedLearningActivities;
+  final int failedLearningCourses;
+  bool get learningCoverageIncomplete =>
+      unresolvedLearningActivities > 0 || failedLearningCourses > 0;
 }
 
 typedef LmsFetchHtml = Future<LmsHtmlPage> Function(Uri url);
 
-/// A complete read of the dashboard and both indexes precedes every mutation.
+/// A complete read of the dashboard and both required indexes precedes every
+/// mutation. Learning reports supplement that snapshot with confirmed rows only.
 /// Authentication, lifecycle scheduling and browser ownership stay with the host.
 class LmsSyncService extends ChangeNotifier {
   LmsSyncService({
@@ -73,6 +86,7 @@ class LmsSyncService extends ChangeNotifier {
     DateTime Function()? now,
     Future<void> Function(Duration duration)? wait,
     CoursemosParser parser = const CoursemosParser(),
+    CoursemosLearningParser learningParser = const CoursemosLearningParser(),
   }) : _settings = settings,
        _repository = repository,
        _commands = commands,
@@ -81,7 +95,8 @@ class LmsSyncService extends ChangeNotifier {
        _isAuthenticationError = isAuthenticationError ?? ((_) => false),
        _now = now ?? DateTime.now,
        _wait = wait ?? Future<void>.delayed,
-       _parser = parser;
+       _parser = parser,
+       _learningParser = learningParser;
 
   final SettingsRepository _settings;
   final EventRepository _repository;
@@ -92,8 +107,9 @@ class LmsSyncService extends ChangeNotifier {
   final DateTime Function() _now;
   final Future<void> Function(Duration) _wait;
   final CoursemosParser _parser;
+  final CoursemosLearningParser _learningParser;
 
-  static const requestSpacing = Duration(milliseconds: 400);
+  static const requestSpacing = Duration(milliseconds: 100);
   static const refreshInterval = Duration(minutes: 5);
   LmsSyncState _state = LmsSyncState.idle;
   LmsSyncState get state => _state;
@@ -110,8 +126,7 @@ class LmsSyncService extends ChangeNotifier {
   int _epoch = 0;
   int _activeEpoch = 0;
   int _failures = 0;
-  DateTime? _lastResponseAt;
-  Set<String>? _visibleIds;
+  DateTime? _lastRequestAt;
   bool _disposed = false;
 
   static String eventId(LmsEventMetadata metadata) =>
@@ -132,24 +147,62 @@ class LmsSyncService extends ChangeNotifier {
     if (!_current(session, epoch)) throw const _Cancelled();
   }
 
-  /// No LMS cache is shown during initial restoration or an active fresh read.
-  /// A failed network/parse read may show the same verified owner's last data.
+  /// Authentication controls fresh reads, never the lifetime of an owner's cache.
+  /// A fresh device can display Drive-restored data before school reauthentication.
   bool isEventVisible(CalendarEvent event) {
-    final owner = _settings.dailyAccount()?.googleAccount?.email;
-    if (!event.isVisibleToOwner(owner)) return false;
-    if (event.lms == null) return true;
+    final profile = _settings.load().academicProfile;
     final session = _readSession();
-    if (session == null ||
-        !_ownerMatches(session) ||
-        _displaySession?.sameAs(session) != true ||
-        (_state != LmsSyncState.ready && _state != LmsSyncState.fallback)) {
-      return false;
-    }
-    return _managed(event, session) &&
-        (_visibleIds == null || _visibleIds!.contains(event.id));
+    final validSession = session != null && _ownerMatches(session)
+        ? session
+        : null;
+    return isCachedEventVisible(
+      event,
+      owner: _settings.dailyAccount()?.googleAccount?.email,
+      school: profile != null
+          ? profile.timetableUniversity
+          : validSession?.schoolId,
+      principal: profile?.lmsUserId ?? validSession?.lmsUserId,
+      hasProfile: profile != null,
+    );
   }
 
-  bool _managed(CalendarEvent event, LmsSyncSession session) {
+  static bool isCachedEventVisible(
+    CalendarEvent event, {
+    required String? owner,
+    required String? school,
+    required String? principal,
+    required bool hasProfile,
+  }) {
+    if (!event.isVisibleToOwner(owner)) return false;
+    final metadata = event.lms;
+    if (metadata == null) return true;
+    if (hasProfile && school == null) return false;
+    if (school != null && metadata.schoolId != school) return false;
+    return principal == null || metadata.lmsUserId == principal;
+  }
+
+  DateTime? _cachedSuccess() {
+    final profile = _settings.load().academicProfile;
+    final session = _readSession();
+    final validSession = session != null && _ownerMatches(session)
+        ? session
+        : null;
+    final owner = _settings.dailyAccount()?.googleAccount?.email;
+    final school = profile != null
+        ? profile.timetableUniversity
+        : validSession?.schoolId;
+    final principal = profile?.lmsUserId ?? validSession?.lmsUserId;
+    if (owner == null || school == null || principal == null) return null;
+    return _settings.lmsLastSuccess(
+      ownerId: owner,
+      schoolId: school,
+      lmsUserId: principal,
+    );
+  }
+
+  // Report coverage is incomplete even when some lecture rows are verified.
+  // Never extend this predicate to lectures: absence is not deletion evidence.
+  bool _prunable(CalendarEvent event, LmsSyncSession session) {
     final metadata = event.lms;
     return metadata != null &&
         metadata.provider == 'coursemos' &&
@@ -167,20 +220,20 @@ class LmsSyncService extends ChangeNotifier {
         : LmsSyncState.idle;
     _displaySession = null;
     _lastSession = null;
-    _visibleIds = null;
     _activities = const [];
     _failures = 0;
     retryAfter = null;
-    lastSuccess = null;
+    lastSuccess = _cachedSuccess();
     lastResult = null;
     errorCode = null;
     _notify();
   }
 
   /// The host may supply a previously verified, locally retained principal only
-  /// after browser restoration failed. An explicit login failure hides its cache.
+  /// after browser restoration failed. Authentication failures retain its cache.
   void markRestoreFailed({bool authenticationRequired = false}) {
     _epoch++;
+    lastSuccess = _cachedSuccess();
     final session = _readSession();
     if (session == null || !_ownerMatches(session) || authenticationRequired) {
       _state = LmsSyncState.needsLogin;
@@ -193,7 +246,6 @@ class LmsSyncService extends ChangeNotifier {
       errorCode = 'unsupported';
     } else {
       if (_lastSession?.sameAs(session) != true) {
-        _visibleIds = null;
         _activities = const [];
         lastSuccess = _settings.lmsLastSuccess(
           ownerId: session.ownerId,
@@ -236,7 +288,6 @@ class LmsSyncService extends ChangeNotifier {
       return Future.value();
     }
     if (_lastSession?.sameAs(session) != true) {
-      _visibleIds = null;
       _activities = const [];
       _failures = 0;
       retryAfter = null;
@@ -281,12 +332,16 @@ class LmsSyncService extends ChangeNotifier {
 
   Future<LmsHtmlPage> _read(Uri url, LmsSyncSession session, int epoch) async {
     _check(session, epoch);
-    final previous = _lastResponseAt;
+    final previous = _lastRequestAt;
     if (previous != null) {
       final remaining = requestSpacing - _now().difference(previous);
       if (remaining > Duration.zero) await _wait(remaining);
     }
     _check(session, epoch);
+    // Pace request starts, not responses: a slow server already provides the
+    // required separation. Reads remain strictly sequential.
+    _lastRequestAt = _now();
+    final clock = Stopwatch()..start();
     try {
       final page = await _fetchHtml(url);
       _check(session, epoch);
@@ -295,7 +350,19 @@ class LmsSyncService extends ChangeNotifier {
       }
       return page;
     } finally {
-      _lastResponseAt = _now();
+      final kind = switch (url.path) {
+        '/course/view.php' => 'course',
+        '/mod/quiz/view.php' => 'quizStatus',
+        '/mod/quiz/index.php' => 'quizIndex',
+        '/mod/assign/index.php' => 'assignmentIndex',
+        '/report/ubcompletion/user_progress.php' => 'learning',
+        _ => 'dashboard',
+      };
+      if (!kReleaseMode) {
+        debugPrint(
+          'Daily.lms stage=read kind=$kind duration_us=${clock.elapsedMicroseconds}',
+        );
+      }
     }
   }
 
@@ -308,6 +375,10 @@ class LmsSyncService extends ChangeNotifier {
       );
       final courses = _parser.courses(dashboard);
       final fetched = <CoursemosActivity>[];
+      var unresolvedLearningActivities = 0;
+      var excludedLearningActivities = 0;
+      var failedLearningCourses = 0;
+      var unresolvedQuizStatuses = 0;
       for (final course in courses) {
         for (final type in const ['assignment', 'quiz']) {
           final module = type == 'assignment' ? 'assign' : 'quiz';
@@ -316,13 +387,101 @@ class LmsSyncService extends ChangeNotifier {
             session,
             epoch,
           );
-          fetched.addAll(
-            _parser.activities(page, course: course, type: type).activities,
+          final activities = _parser
+              .activities(page, course: course, type: type)
+              .activities;
+          for (final activity in activities) {
+            if (type != 'quiz') {
+              fetched.add(activity);
+              continue;
+            }
+            CoursemosQuizStatus? status;
+            try {
+              final detail = await _read(activity.url, session, epoch);
+              status = _parser.quizStatus(
+                detail,
+                activity: activity,
+                now: _now(),
+              );
+            } on _Cancelled {
+              rethrow;
+            } on Object catch (error) {
+              _check(session, epoch);
+              if (_authenticationFailure(error)) rethrow;
+            }
+            if (status == null) unresolvedQuizStatuses++;
+            fetched.add(
+              CoursemosActivity(
+                id: activity.id,
+                title: activity.title,
+                course: activity.course,
+                type: activity.type,
+                url: activity.url,
+                openAt: activity.openAt,
+                dueAt: activity.dueAt,
+                sourceCompleted: status?.completed,
+                submissionStatus: status?.label,
+              ),
+            );
+          }
+        }
+        try {
+          final page = await _read(
+            session.baseUrl.resolve(
+              '/report/ubcompletion/user_progress.php?id=${course.id}',
+            ),
+            session,
+            epoch,
           );
+          var learning = _learningParser.parse(page, course: course);
+          if (learning.unresolvedRowCount > 0) {
+            try {
+              final coursePage = await _read(course.url, session, epoch);
+              learning = _learningParser.recoverFromCourse(
+                coursePage,
+                report: learning,
+              );
+            } on _Cancelled {
+              rethrow;
+            } on Object catch (error) {
+              _check(session, epoch);
+              if (_authenticationFailure(error)) rethrow;
+              // Keep the verified report subset and explicit unresolved count.
+            }
+          }
+          fetched.addAll(learning.activities);
+          unresolvedLearningActivities += learning.unresolvedRowCount;
+          excludedLearningActivities += learning.excludedNonAttendanceCount;
+          // An empty table has no independently verified empty marker. Report
+          // it as unavailable rather than silently claiming complete coverage.
+          if (!learning.coverageComplete && learning.rows.isEmpty) {
+            failedLearningCourses++;
+          }
+        } on _Cancelled {
+          rethrow;
+        } on Object catch (error) {
+          _check(session, epoch);
+          if (_authenticationFailure(error)) rethrow;
+          failedLearningCourses++;
         }
       }
       _check(session, epoch);
-      final result = await _apply(session, epoch, courses.length, fetched);
+      final applyClock = Stopwatch()..start();
+      final result = await _apply(
+        session,
+        epoch,
+        courses,
+        fetched,
+        unresolvedLearningActivities: unresolvedLearningActivities,
+        excludedLearningActivities: excludedLearningActivities,
+        failedLearningCourses: failedLearningCourses,
+        unresolvedQuizStatuses: unresolvedQuizStatuses,
+      );
+      if (!kReleaseMode) {
+        debugPrint(
+          'Daily.lms stage=apply duration_us=${applyClock.elapsedMicroseconds}',
+        );
+      }
       _check(session, epoch);
       final checkedAt = _now().toUtc();
       await _settings.saveLmsLastSuccess(
@@ -355,9 +514,7 @@ class LmsSyncService extends ChangeNotifier {
         }
         return null;
       }
-      final authentication =
-          _isAuthenticationError(error) ||
-          (error is CoursemosParseException && error.authenticationRequired);
+      final authentication = _authenticationFailure(error);
       _state = authentication ? LmsSyncState.needsLogin : LmsSyncState.fallback;
       _displaySession = authentication ? null : session;
       errorCode = authentication
@@ -376,6 +533,10 @@ class LmsSyncService extends ChangeNotifier {
       if (!_disposed && epoch == _epoch) _notify();
     }
   }
+
+  bool _authenticationFailure(Object error) =>
+      _isAuthenticationError(error) ||
+      (error is CoursemosParseException && error.authenticationRequired);
 
   EventCategory? _configuredCategory() {
     final settings = _settings.load();
@@ -459,9 +620,13 @@ class LmsSyncService extends ChangeNotifier {
   Future<LmsSyncResult> _apply(
     LmsSyncSession session,
     int epoch,
-    int courseCount,
-    List<CoursemosActivity> activities,
-  ) async {
+    List<CoursemosCourse> courses,
+    List<CoursemosActivity> activities, {
+    required int unresolvedLearningActivities,
+    required int excludedLearningActivities,
+    required int failedLearningCourses,
+    required int unresolvedQuizStatuses,
+  }) async {
     final previous = await _repository.allEventsForSync();
     _check(session, epoch);
     final deviceId = await _settings.deviceId();
@@ -472,6 +637,27 @@ class LmsSyncService extends ChangeNotifier {
     for (final activity in activities) {
       final due = activity.dueAt;
       if (due == null) continue;
+      var activityId = activity.id;
+      if (activity.type == 'lecture') {
+        final aliases = previous.where((event) {
+          final source = event.lms;
+          return source != null &&
+              !event.isDeleted &&
+              source.schoolId == session.schoolId &&
+              source.ownerId == session.ownerId &&
+              source.lmsUserId == session.lmsUserId &&
+              source.courseId == activity.course.id &&
+              source.activityType == 'lecture' &&
+              event.title == '[${activity.course.title}] ${activity.title}' &&
+              source.openAt == activity.openAt &&
+              source.dueAt == due &&
+              source.requiredLearningSeconds ==
+                  activity.requiredLearningSeconds &&
+              (activity.id.startsWith('report:cm:') ||
+                  source.activityId.startsWith('report:cm:'));
+        }).toList();
+        if (aliases.length == 1) activityId = aliases.single.lms!.activityId;
+      }
       final metadata = LmsEventMetadata(
         schoolId: session.schoolId,
         ownerId: session.ownerId,
@@ -479,10 +665,16 @@ class LmsSyncService extends ChangeNotifier {
         courseId: activity.course.id,
         courseTitle: activity.course.title,
         activityType: activity.type,
-        activityId: activity.id,
+        activityId: activityId,
         sourceUrl: activity.url.toString(),
+        openAt: activity.openAt,
         dueAt: due,
         submissionStatus: activity.submissionStatus,
+        sourceCompleted: activity.sourceCompleted,
+        requiredLearningSeconds: activity.requiredLearningSeconds,
+        learnedSeconds: activity.learnedSeconds,
+        attendanceStatus: activity.attendanceStatus,
+        progressPercent: activity.progressPercent,
       );
       candidates.add(
         CalendarEvent(
@@ -495,6 +687,7 @@ class LmsSyncService extends ChangeNotifier {
           colorValue: category.colorValue,
           url: metadata.sourceUrl,
           lms: metadata,
+          completed: metadata.sourceCompleted ?? false,
           createdAt: now,
           updatedAt: now,
           deviceId: deviceId,
@@ -521,9 +714,14 @@ class LmsSyncService extends ChangeNotifier {
             (local.category.id == destination.id &&
                 local.category.label == destination.label &&
                 local.colorValue == destination.colorValue);
+        final sourceCompleted = incoming.lms!.sourceCompleted;
+        final completionMatches = local.lms?.manuallyCompleted == true
+            ? local.completed
+            : sourceCompleted == null || local.completed == sourceCompleted;
         if (!local.isDeleted &&
             _sameSource(local, incoming) &&
-            categoryMatches) {
+            categoryMatches &&
+            completionMatches) {
           unchanged.add(incoming.id);
           return null;
         }
@@ -545,11 +743,30 @@ class LmsSyncService extends ChangeNotifier {
     if (saved.length + unchanged.length != candidates.length) {
       throw StateError('LMS event write incomplete');
     }
-    final desiredIds = candidates.map((event) => event.id).toSet();
+    // Only complete indexes for courses actually read establish absence. A
+    // disappeared/filtered course and an item with an unset deadline are not
+    // evidence that an existing source item was deleted.
+    final desiredIds = <String>{
+      for (final activity in activities)
+        eventId(
+          LmsEventMetadata(
+            schoolId: session.schoolId,
+            ownerId: session.ownerId,
+            lmsUserId: session.lmsUserId,
+            courseId: activity.course.id,
+            courseTitle: activity.course.title,
+            activityType: activity.type,
+            activityId: activity.id,
+            sourceUrl: activity.url.toString(),
+          ),
+        ),
+    };
+    final readCourseIds = courses.map((course) => course.id).toSet();
     var deleted = 0;
     for (final event in previous) {
       if (!event.isDeleted &&
-          _managed(event, session) &&
+          _prunable(event, session) &&
+          readCourseIds.contains(event.lms!.courseId) &&
           !desiredIds.contains(event.id)) {
         _check(session, epoch);
         await _commands.delete(
@@ -560,9 +777,8 @@ class LmsSyncService extends ChangeNotifier {
         deleted++;
       }
     }
-    _visibleIds = desiredIds;
     return LmsSyncResult(
-      courses: courseCount,
+      courses: courses.length,
       activities: activities.length,
       unscheduled: activities
           .where((activity) => activity.dueAt == null)
@@ -571,6 +787,13 @@ class LmsSyncService extends ChangeNotifier {
       updated: saved.difference(added).length,
       deleted: deleted,
       unchanged: unchanged.length,
+      learningActivities: activities
+          .where((activity) => activity.type == 'lecture')
+          .length,
+      unresolvedLearningActivities: unresolvedLearningActivities,
+      excludedLearningActivities: excludedLearningActivities,
+      failedLearningCourses: failedLearningCourses,
+      unresolvedQuizStatuses: unresolvedQuizStatuses,
     );
   }
 
@@ -581,7 +804,7 @@ class LmsSyncService extends ChangeNotifier {
       !local.allDay &&
       !local.isRecurring &&
       local.url == incoming.url &&
-      local.lms == incoming.lms;
+      local.lms?.copyWith(manuallyCompleted: false) == incoming.lms;
 
   void _notify() {
     if (!_disposed) notifyListeners();

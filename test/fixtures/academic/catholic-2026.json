@@ -1,0 +1,516 @@
+{
+  "data": [
+    {
+      "cSeq": 1784,
+      "siteId": "ko",
+      "beginDt": 1766329200000,
+      "endDt": 1768230000000,
+      "content": "계절학기 수업",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 1787,
+      "siteId": "ko",
+      "beginDt": 1767538800000,
+      "endDt": 1767538800000,
+      "content": "시무미사",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 1788,
+      "siteId": "ko",
+      "beginDt": 1767538800000,
+      "endDt": 1767884400000,
+      "content": "복학원 제출기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 1789,
+      "siteId": "ko",
+      "beginDt": 1769958000000,
+      "endDt": 1770908400000,
+      "content": "휴학원 제출기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 1790,
+      "siteId": "ko",
+      "beginDt": 1770044400000,
+      "endDt": 1770217200000,
+      "content": "수강신청",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 1791,
+      "siteId": "ko",
+      "beginDt": 1770822000000,
+      "endDt": 1770822000000,
+      "content": "봄 학위수여식",
+      "campus": "성의"
+    },
+    {
+      "cSeq": 1792,
+      "siteId": "ko",
+      "beginDt": 1771426800000,
+      "endDt": 1771426800000,
+      "content": "봄 학위수여식",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 1793,
+      "siteId": "ko",
+      "beginDt": 1771513200000,
+      "endDt": 1771945200000,
+      "content": "재학생 등록기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 1794,
+      "siteId": "ko",
+      "beginDt": 1771945200000,
+      "endDt": 1771945200000,
+      "content": "봄 학위수여식",
+      "campus": "성신"
+    },
+    {
+      "cSeq": 1795,
+      "siteId": "ko",
+      "beginDt": 1772118000000,
+      "endDt": 1772118000000,
+      "content": "교수회의",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2820,
+      "siteId": "ko",
+      "beginDt": 1772463600000,
+      "endDt": 1772463600000,
+      "content": "1학기 개시일 / 신입생 입학미사",
+      "campus": "성심,성의,성신"
+    },
+    {
+      "cSeq": 2821,
+      "siteId": "ko",
+      "beginDt": 1772463600000,
+      "endDt": 1772463600000,
+      "content": " 수강신청 변경기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2822,
+      "siteId": "ko",
+      "beginDt": 1772636400000,
+      "endDt": 1772636400000,
+      "content": "교수회의",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2823,
+      "siteId": "ko",
+      "beginDt": 1773068400000,
+      "endDt": 1773327600000,
+      "content": "추가 등록기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2824,
+      "siteId": "ko",
+      "beginDt": 1773241200000,
+      "endDt": 1773241200000,
+      "content": "개강미사",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2825,
+      "siteId": "ko",
+      "beginDt": 1774796400000,
+      "endDt": 1774796400000,
+      "content": "수업일수 1/4",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2826,
+      "siteId": "ko",
+      "beginDt": 1775055600000,
+      "endDt": 1775401200000,
+      "content": "신학과 성주간 전례실습",
+      "campus": "성신"
+    },
+    {
+      "cSeq": 2827,
+      "siteId": "ko",
+      "beginDt": 1775314800000,
+      "endDt": 1775314800000,
+      "content": "주님부활대축일",
+      "campus": "성심,성의,성신"
+    },
+    {
+      "cSeq": 2828,
+      "siteId": "ko",
+      "beginDt": 1775401200000,
+      "endDt": 1775401200000,
+      "content": "부활절 휴가",
+      "campus": "성심,성의,성신"
+    },
+    {
+      "cSeq": 2829,
+      "siteId": "ko",
+      "beginDt": 1775746800000,
+      "endDt": 1775746800000,
+      "content": " 의학과 White Coat Ceremony",
+      "campus": "성의"
+    },
+    {
+      "cSeq": 2830,
+      "siteId": "ko",
+      "beginDt": 1776610800000,
+      "endDt": 1776956400000,
+      "content": "중간고사",
+      "campus": "성신"
+    },
+    {
+      "cSeq": 2831,
+      "siteId": "ko",
+      "beginDt": 1776697200000,
+      "endDt": 1777215600000,
+      "content": "중간고사",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2832,
+      "siteId": "ko",
+      "beginDt": 1777215600000,
+      "endDt": 1777215600000,
+      "content": "수업일수 1/2",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2835,
+      "siteId": "ko",
+      "beginDt": 1778684400000,
+      "endDt": 1778684400000,
+      "content": "간호대학 나이팅게일 선서식",
+      "campus": "성의"
+    },
+    {
+      "cSeq": 2836,
+      "siteId": "ko",
+      "beginDt": 1779202800000,
+      "endDt": 1779289200000,
+      "content": "아우름제 축제",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2837,
+      "siteId": "ko",
+      "beginDt": 1779375600000,
+      "endDt": 1779375600000,
+      "content": "개교기념미사",
+      "campus": "성심,성신"
+    },
+    {
+      "cSeq": 2838,
+      "siteId": "ko",
+      "beginDt": 1779375600000,
+      "endDt": 1779375600000,
+      "content": "아람제",
+      "campus": "성신"
+    },
+    {
+      "cSeq": 2839,
+      "siteId": "ko",
+      "beginDt": 1779634800000,
+      "endDt": 1779634800000,
+      "content": "수업일수 3/4",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2840,
+      "siteId": "ko",
+      "beginDt": 1779634800000,
+      "endDt": 1779634800000,
+      "content": "개교기념일",
+      "campus": "성심,성의,성신"
+    },
+    {
+      "cSeq": 2841,
+      "siteId": "ko",
+      "beginDt": 1779894000000,
+      "endDt": 1779980400000,
+      "content": "CAMEAD 학생 축제",
+      "campus": "성의"
+    },
+    {
+      "cSeq": 2842,
+      "siteId": "ko",
+      "beginDt": 1780066800000,
+      "endDt": 1780066800000,
+      "content": "세교정 한마음 친교 등반대회",
+      "campus": "성심,성의,성신"
+    },
+    {
+      "cSeq": 2843,
+      "siteId": "ko",
+      "beginDt": 1781449200000,
+      "endDt": 1781794800000,
+      "content": "기말고사",
+      "campus": "성신"
+    },
+    {
+      "cSeq": 2844,
+      "siteId": "ko",
+      "beginDt": 1781535600000,
+      "endDt": 1782054000000,
+      "content": "기말고사",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2845,
+      "siteId": "ko",
+      "beginDt": 1781794800000,
+      "endDt": 1781794800000,
+      "content": "교수회의",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2846,
+      "siteId": "ko",
+      "beginDt": 1782054000000,
+      "endDt": 1782054000000,
+      "content": "여름방학",
+      "campus": "성신"
+    },
+    {
+      "cSeq": 2847,
+      "siteId": "ko",
+      "beginDt": 1782140400000,
+      "endDt": 1782140400000,
+      "content": "여름방학",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2848,
+      "siteId": "ko",
+      "beginDt": 1782140400000,
+      "endDt": 1783868400000,
+      "content": "계절학기 수업",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2849,
+      "siteId": "ko",
+      "beginDt": 1782658800000,
+      "endDt": 1782658800000,
+      "content": "1학기 성적제출 마감",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2850,
+      "siteId": "ko",
+      "beginDt": 1782745200000,
+      "endDt": 1782918000000,
+      "content": "1학기 성적확인 및 오류정정(성심)",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2866,
+      "siteId": "ko",
+      "beginDt": 1783263600000,
+      "endDt": 1783609200000,
+      "content": "복학원 제출기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2867,
+      "siteId": "ko",
+      "beginDt": 1785769200000,
+      "endDt": 1786028400000,
+      "content": "재학생 수강신청",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2868,
+      "siteId": "ko",
+      "beginDt": 1786287600000,
+      "endDt": 1787842800000,
+      "content": "휴학원 제출기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2869,
+      "siteId": "ko",
+      "beginDt": 1786978800000,
+      "endDt": 1786978800000,
+      "content": "의학과 학기 개시일",
+      "campus": "성의"
+    },
+    {
+      "cSeq": 2870,
+      "siteId": "ko",
+      "beginDt": 1787065200000,
+      "endDt": 1787065200000,
+      "content": "가을 학위수여식 (대학원)",
+      "campus": "성의,성신"
+    },
+    {
+      "cSeq": 2871,
+      "siteId": "ko",
+      "beginDt": 1787151600000,
+      "endDt": 1787151600000,
+      "content": "가을 학위수여식",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2872,
+      "siteId": "ko",
+      "beginDt": 1787497200000,
+      "endDt": 1787842800000,
+      "content": "재학생 등록기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2873,
+      "siteId": "ko",
+      "beginDt": 1788102000000,
+      "endDt": 1788102000000,
+      "content": "2학기 개시일",
+      "campus": "성심,성의,성신"
+    },
+    {
+      "cSeq": 2874,
+      "siteId": "ko",
+      "beginDt": 1788102000000,
+      "endDt": 1788447600000,
+      "content": "수강신청 변경기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2875,
+      "siteId": "ko",
+      "beginDt": 1788361200000,
+      "endDt": 1788361200000,
+      "content": "교수회의",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2876,
+      "siteId": "ko",
+      "beginDt": 1788706800000,
+      "endDt": 1789052400000,
+      "content": "추가 등록기간",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2877,
+      "siteId": "ko",
+      "beginDt": 1788879600000,
+      "endDt": 1788879600000,
+      "content": "개강미사",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2878,
+      "siteId": "ko",
+      "beginDt": 1790262000000,
+      "endDt": 1790262000000,
+      "content": "수업일수 1/4",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2879,
+      "siteId": "ko",
+      "beginDt": 1792335600000,
+      "endDt": 1792681200000,
+      "content": "중간고사",
+      "campus": "성심,성신"
+    },
+    {
+      "cSeq": 2880,
+      "siteId": "ko",
+      "beginDt": 1792335600000,
+      "endDt": 1792681200000,
+      "content": "신학과 선교실습",
+      "campus": "성의"
+    },
+    {
+      "cSeq": 2881,
+      "siteId": "ko",
+      "beginDt": 1792681200000,
+      "endDt": 1792681200000,
+      "content": "수업일수 1/2",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2882,
+      "siteId": "ko",
+      "beginDt": 1793545200000,
+      "endDt": 1793545200000,
+      "content": "위령의 날",
+      "campus": "성심,성의,성신"
+    },
+    {
+      "cSeq": 2883,
+      "siteId": "ko",
+      "beginDt": 1795100400000,
+      "endDt": 1795100400000,
+      "content": "수업일수 3/4",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2884,
+      "siteId": "ko",
+      "beginDt": 1796914800000,
+      "endDt": 1796914800000,
+      "content": "종강미사",
+      "campus": "성신"
+    },
+    {
+      "cSeq": 2885,
+      "siteId": "ko",
+      "beginDt": 1797174000000,
+      "endDt": 1797519600000,
+      "content": "기말고사",
+      "campus": "성심,성신"
+    },
+    {
+      "cSeq": 2886,
+      "siteId": "ko",
+      "beginDt": 1797519600000,
+      "endDt": 1797519600000,
+      "content": "교수회의",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2887,
+      "siteId": "ko",
+      "beginDt": 1797778800000,
+      "endDt": 1797778800000,
+      "content": "겨울방학",
+      "campus": "성심,성신"
+    },
+    {
+      "cSeq": 2888,
+      "siteId": "ko",
+      "beginDt": 1797778800000,
+      "endDt": 1799679600000,
+      "content": "계절학기 수업",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2889,
+      "siteId": "ko",
+      "beginDt": 1798124400000,
+      "endDt": 1798124400000,
+      "content": "2학기 성적제출 마감",
+      "campus": "성심"
+    },
+    {
+      "cSeq": 2890,
+      "siteId": "ko",
+      "beginDt": 1798383600000,
+      "endDt": 1798556400000,
+      "content": "2학기 성적확인 및 오류정정",
+      "campus": "성심"
+    }
+  ]
+}

@@ -1,0 +1,966 @@
+{
+  "scope": [
+    "academicCalendar",
+    "timetable"
+  ],
+  "lmsExcluded": true,
+  "preserveExisting": [
+    "smu"
+  ],
+  "targets": [
+    {
+      "requestedName": "가천대",
+      "name": "가천대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000063"
+      ],
+      "campusIds": [
+        "academyinfo:0000063"
+      ],
+      "discoveryHost": "gachon.ac.kr"
+    },
+    {
+      "requestedName": "가톨릭대",
+      "name": "가톨릭대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000046"
+      ],
+      "campusIds": [
+        "academyinfo:0000046",
+        "academyinfo:0000048",
+        "academyinfo:0000049"
+      ],
+      "discoveryHost": "catholic.ac.kr"
+    },
+    {
+      "requestedName": "강원대",
+      "name": "강원대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000003"
+      ],
+      "campusIds": [
+        "academyinfo:0000003",
+        "academyinfo:0000004",
+        "academyinfo:0003363",
+        "academyinfo:0003364"
+      ],
+      "discoveryHost": "kangwon.ac.kr"
+    },
+    {
+      "requestedName": "건국대",
+      "name": "건국대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000052"
+      ],
+      "campusIds": [
+        "academyinfo:0000052",
+        "academyinfo:0000053"
+      ],
+      "discoveryHost": "konkuk.ac.kr"
+    },
+    {
+      "requestedName": "경기대",
+      "name": "경기대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000056"
+      ],
+      "campusIds": [
+        "academyinfo:0000056",
+        "academyinfo:0000058"
+      ],
+      "discoveryHost": "kyonggi.ac.kr"
+    },
+    {
+      "requestedName": "경북대",
+      "name": "경북대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000005"
+      ],
+      "campusIds": [
+        "academyinfo:0000005"
+      ],
+      "discoveryHost": "knu.ac.kr"
+    },
+    {
+      "requestedName": "경상국립대",
+      "name": "경상국립대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000007"
+      ],
+      "campusIds": [
+        "academyinfo:0000007"
+      ],
+      "discoveryHost": "gnu.ac.kr"
+    },
+    {
+      "requestedName": "경희대",
+      "name": "경희대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000066"
+      ],
+      "campusIds": [
+        "academyinfo:0000066"
+      ],
+      "discoveryHost": "khu.ac.kr"
+    },
+    {
+      "requestedName": "계명대",
+      "name": "계명대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000068"
+      ],
+      "campusIds": [
+        "academyinfo:0000068"
+      ],
+      "discoveryHost": "kmu.ac.kr"
+    },
+    {
+      "requestedName": "고려대",
+      "name": "고려대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000069"
+      ],
+      "campusIds": [
+        "academyinfo:0000069",
+        "academyinfo:0000070"
+      ],
+      "discoveryHost": "korea.ac.kr"
+    },
+    {
+      "requestedName": "경인교대",
+      "name": "경인교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000256"
+      ],
+      "campusIds": [
+        "academyinfo:0000256",
+        "academyinfo:0000257"
+      ],
+      "discoveryHost": "ginue.ac.kr"
+    },
+    {
+      "requestedName": "공주교대",
+      "name": "공주교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000251"
+      ],
+      "campusIds": [
+        "academyinfo:0000251"
+      ],
+      "discoveryHost": "gjue.ac.kr"
+    },
+    {
+      "requestedName": "광운대",
+      "name": "광운대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000074"
+      ],
+      "campusIds": [
+        "academyinfo:0000074"
+      ],
+      "discoveryHost": "kw.ac.kr"
+    },
+    {
+      "requestedName": "광주과기원",
+      "name": "광주과학기술원",
+      "institutionIds": [
+        "institution:academyinfo:0000381"
+      ],
+      "campusIds": [
+        "academyinfo:0000381"
+      ],
+      "discoveryHost": "gist.ac.kr"
+    },
+    {
+      "requestedName": "광주교대",
+      "name": "광주교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000252"
+      ],
+      "campusIds": [
+        "academyinfo:0000252"
+      ],
+      "discoveryHost": "gnue.ac.kr"
+    },
+    {
+      "requestedName": "경국대",
+      "name": "국립경국대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000021"
+      ],
+      "campusIds": [
+        "academyinfo:0000021"
+      ],
+      "discoveryHost": "gknu.ac.kr"
+    },
+    {
+      "requestedName": "공주대",
+      "name": "국립공주대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000008"
+      ],
+      "campusIds": [
+        "academyinfo:0000008"
+      ],
+      "discoveryHost": "kongju.ac.kr"
+    },
+    {
+      "requestedName": "군산대",
+      "name": "국립군산대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000009"
+      ],
+      "campusIds": [
+        "academyinfo:0000009"
+      ],
+      "discoveryHost": "kunsan.ac.kr"
+    },
+    {
+      "requestedName": "금오공과대",
+      "name": "국립금오공과대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000010"
+      ],
+      "campusIds": [
+        "academyinfo:0000010"
+      ],
+      "discoveryHost": "kumoh.ac.kr"
+    },
+    {
+      "requestedName": "목포대",
+      "name": "국립목포대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000011"
+      ],
+      "campusIds": [
+        "academyinfo:0000011",
+        "academyinfo:0003312"
+      ],
+      "discoveryHost": "mokpo.ac.kr"
+    },
+    {
+      "requestedName": "목포해양대",
+      "name": "국립목포해양대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000012"
+      ],
+      "campusIds": [
+        "academyinfo:0000012"
+      ],
+      "discoveryHost": "mmu.ac.kr"
+    },
+    {
+      "requestedName": "부경대",
+      "name": "국립부경대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000013"
+      ],
+      "campusIds": [
+        "academyinfo:0000013"
+      ],
+      "discoveryHost": "pknu.ac.kr"
+    },
+    {
+      "requestedName": "순천대",
+      "name": "국립순천대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000020"
+      ],
+      "campusIds": [
+        "academyinfo:0000020"
+      ],
+      "discoveryHost": "scnu.ac.kr"
+    },
+    {
+      "requestedName": "창원대",
+      "name": "국립창원대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000028"
+      ],
+      "campusIds": [
+        "academyinfo:0000028",
+        "academyinfo:0003297",
+        "academyinfo:0003298"
+      ],
+      "discoveryHost": "changwon.ac.kr"
+    },
+    {
+      "requestedName": "교통대",
+      "name": "국립한국교통대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000034"
+      ],
+      "campusIds": [
+        "academyinfo:0000034"
+      ],
+      "discoveryHost": "ut.ac.kr"
+    },
+    {
+      "requestedName": "한국해양대",
+      "name": "국립한국해양대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000033"
+      ],
+      "campusIds": [
+        "academyinfo:0000033"
+      ],
+      "discoveryHost": "kmou.ac.kr"
+    },
+    {
+      "requestedName": "한밭대",
+      "name": "국립한밭대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000039"
+      ],
+      "campusIds": [
+        "academyinfo:0000039"
+      ],
+      "discoveryHost": "hanbat.ac.kr"
+    },
+    {
+      "requestedName": "국민대",
+      "name": "국민대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000078"
+      ],
+      "campusIds": [
+        "academyinfo:0000078"
+      ],
+      "discoveryHost": "kookmin.ac.kr"
+    },
+    {
+      "requestedName": "남서울대",
+      "name": "남서울대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000245"
+      ],
+      "campusIds": [
+        "academyinfo:0000245"
+      ],
+      "discoveryHost": "nsu.ac.kr"
+    },
+    {
+      "requestedName": "단국대",
+      "name": "단국대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000082"
+      ],
+      "campusIds": [
+        "academyinfo:0000082",
+        "academyinfo:0002726"
+      ],
+      "discoveryHost": "dankook.ac.kr"
+    },
+    {
+      "requestedName": "대구과기원",
+      "name": "대구경북과학기술원",
+      "institutionIds": [
+        "institution:academyinfo:0000382"
+      ],
+      "campusIds": [
+        "academyinfo:0000382"
+      ],
+      "discoveryHost": "dgist.ac.kr"
+    },
+    {
+      "requestedName": "대구교대",
+      "name": "대구교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000253"
+      ],
+      "campusIds": [
+        "academyinfo:0000253"
+      ],
+      "discoveryHost": "dnue.ac.kr"
+    },
+    {
+      "requestedName": "대구대",
+      "name": "대구대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000084"
+      ],
+      "campusIds": [
+        "academyinfo:0000084"
+      ],
+      "discoveryHost": "daegu.ac.kr"
+    },
+    {
+      "requestedName": "동국대",
+      "name": "동국대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000100"
+      ],
+      "campusIds": [
+        "academyinfo:0000100",
+        "academyinfo:0000101"
+      ],
+      "discoveryHost": "dongguk.edu"
+    },
+    {
+      "requestedName": "동아대",
+      "name": "동아대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000105"
+      ],
+      "campusIds": [
+        "academyinfo:0000105"
+      ],
+      "discoveryHost": "donga.ac.kr"
+    },
+    {
+      "requestedName": "동의대",
+      "name": "동의대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000107"
+      ],
+      "campusIds": [
+        "academyinfo:0000107"
+      ],
+      "discoveryHost": "deu.ac.kr"
+    },
+    {
+      "requestedName": "명지대",
+      "name": "명지대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000109"
+      ],
+      "campusIds": [
+        "academyinfo:0000109",
+        "academyinfo:0000111"
+      ],
+      "discoveryHost": "mju.ac.kr"
+    },
+    {
+      "requestedName": "백석대",
+      "name": "백석대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000178"
+      ],
+      "campusIds": [
+        "academyinfo:0000178"
+      ],
+      "discoveryHost": "bu.ac.kr"
+    },
+    {
+      "requestedName": "부산교대",
+      "name": "부산교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000254"
+      ],
+      "campusIds": [
+        "academyinfo:0000254"
+      ],
+      "discoveryHost": "bnue.ac.kr"
+    },
+    {
+      "requestedName": "부산대",
+      "name": "부산대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000014"
+      ],
+      "campusIds": [
+        "academyinfo:0000014"
+      ],
+      "discoveryHost": "pusan.ac.kr"
+    },
+    {
+      "requestedName": "서강대",
+      "name": "서강대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000120"
+      ],
+      "campusIds": [
+        "academyinfo:0000120"
+      ],
+      "discoveryHost": "sogang.ac.kr"
+    },
+    {
+      "requestedName": "삼육대",
+      "name": "삼육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000116"
+      ],
+      "campusIds": [
+        "academyinfo:0000116"
+      ],
+      "discoveryHost": "syu.ac.kr"
+    },
+    {
+      "requestedName": "서경대",
+      "name": "서경대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000121"
+      ],
+      "campusIds": [
+        "academyinfo:0000121"
+      ],
+      "discoveryHost": "skuniv.ac.kr"
+    },
+    {
+      "requestedName": "서울과기대",
+      "name": "서울과학기술대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000036"
+      ],
+      "campusIds": [
+        "academyinfo:0000036"
+      ],
+      "discoveryHost": "seoultech.ac.kr"
+    },
+    {
+      "requestedName": "서울교대",
+      "name": "서울교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000255"
+      ],
+      "campusIds": [
+        "academyinfo:0000255"
+      ],
+      "discoveryHost": "snue.ac.kr"
+    },
+    {
+      "requestedName": "서울대",
+      "name": "서울대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000019"
+      ],
+      "campusIds": [
+        "academyinfo:0000019"
+      ],
+      "discoveryHost": "snu.ac.kr"
+    },
+    {
+      "requestedName": "서울시립대",
+      "name": "서울시립대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000040"
+      ],
+      "campusIds": [
+        "academyinfo:0000040"
+      ],
+      "discoveryHost": "uos.ac.kr"
+    },
+    {
+      "requestedName": "서울여대",
+      "name": "서울여자대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000126"
+      ],
+      "campusIds": [
+        "academyinfo:0000126"
+      ],
+      "discoveryHost": "swu.ac.kr"
+    },
+    {
+      "requestedName": "성균관대",
+      "name": "성균관대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000133"
+      ],
+      "campusIds": [
+        "academyinfo:0000133"
+      ],
+      "discoveryHost": "skku.edu"
+    },
+    {
+      "requestedName": "성신여대",
+      "name": "성신여자대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000136"
+      ],
+      "campusIds": [
+        "academyinfo:0000136"
+      ],
+      "discoveryHost": "sungshin.ac.kr"
+    },
+    {
+      "requestedName": "세종대",
+      "name": "세종대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000138"
+      ],
+      "campusIds": [
+        "academyinfo:0000138"
+      ],
+      "discoveryHost": "sejong.ac.kr"
+    },
+    {
+      "requestedName": "수원대",
+      "name": "수원대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000140"
+      ],
+      "campusIds": [
+        "academyinfo:0000140"
+      ],
+      "discoveryHost": "suwon.ac.kr"
+    },
+    {
+      "requestedName": "순천향대",
+      "name": "순천향대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000142"
+      ],
+      "campusIds": [
+        "academyinfo:0000142"
+      ],
+      "discoveryHost": "sch.ac.kr"
+    },
+    {
+      "requestedName": "숙명여대",
+      "name": "숙명여자대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000141"
+      ],
+      "campusIds": [
+        "academyinfo:0000141"
+      ],
+      "discoveryHost": "sookmyung.ac.kr"
+    },
+    {
+      "requestedName": "숭실대",
+      "name": "숭실대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000143"
+      ],
+      "campusIds": [
+        "academyinfo:0000143"
+      ],
+      "discoveryHost": "ssu.ac.kr"
+    },
+    {
+      "requestedName": "아주대",
+      "name": "아주대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000146"
+      ],
+      "campusIds": [
+        "academyinfo:0000146"
+      ],
+      "discoveryHost": "ajou.ac.kr"
+    },
+    {
+      "requestedName": "연세대",
+      "name": "연세대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000149"
+      ],
+      "campusIds": [
+        "academyinfo:0000149",
+        "academyinfo:0000150"
+      ],
+      "discoveryHost": "yonsei.ac.kr"
+    },
+    {
+      "requestedName": "영남대",
+      "name": "영남대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000151"
+      ],
+      "campusIds": [
+        "academyinfo:0000151"
+      ],
+      "discoveryHost": "yu.ac.kr"
+    },
+    {
+      "requestedName": "용인대",
+      "name": "용인대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000156"
+      ],
+      "campusIds": [
+        "academyinfo:0000156"
+      ],
+      "discoveryHost": "yongin.ac.kr"
+    },
+    {
+      "requestedName": "울산과기원",
+      "name": "울산과학기술원",
+      "institutionIds": [
+        "institution:academyinfo:0000250"
+      ],
+      "campusIds": [
+        "academyinfo:0000250"
+      ],
+      "discoveryHost": "unist.ac.kr"
+    },
+    {
+      "requestedName": "울산대",
+      "name": "울산대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000158"
+      ],
+      "campusIds": [
+        "academyinfo:0000158"
+      ],
+      "discoveryHost": "ulsan.ac.kr"
+    },
+    {
+      "requestedName": "인천대",
+      "name": "인천대학교",
+      "institutionIds": [
+        "institution:academyinfo:0002660"
+      ],
+      "campusIds": [
+        "academyinfo:0002660"
+      ],
+      "discoveryHost": "inu.ac.kr"
+    },
+    {
+      "requestedName": "인하대",
+      "name": "인하대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000169"
+      ],
+      "campusIds": [
+        "academyinfo:0000169"
+      ],
+      "discoveryHost": "inha.ac.kr"
+    },
+    {
+      "requestedName": "전남대",
+      "name": "전남대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000023"
+      ],
+      "campusIds": [
+        "academyinfo:0000023",
+        "academyinfo:0000024"
+      ],
+      "discoveryHost": "jnu.ac.kr"
+    },
+    {
+      "requestedName": "전북대",
+      "name": "전북대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000025"
+      ],
+      "campusIds": [
+        "academyinfo:0000025"
+      ],
+      "discoveryHost": "jbnu.ac.kr"
+    },
+    {
+      "requestedName": "전주교대",
+      "name": "전주교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000258"
+      ],
+      "campusIds": [
+        "academyinfo:0000258"
+      ],
+      "discoveryHost": "jnue.kr"
+    },
+    {
+      "requestedName": "조선대",
+      "name": "조선대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000172"
+      ],
+      "campusIds": [
+        "academyinfo:0000172"
+      ],
+      "discoveryHost": "chosun.ac.kr"
+    },
+    {
+      "requestedName": "제주대",
+      "name": "제주대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000027"
+      ],
+      "campusIds": [
+        "academyinfo:0000027"
+      ],
+      "discoveryHost": "jejunu.ac.kr"
+    },
+    {
+      "requestedName": "중앙대",
+      "name": "중앙대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000175"
+      ],
+      "campusIds": [
+        "academyinfo:0000175",
+        "academyinfo:0000174"
+      ],
+      "discoveryHost": "cau.ac.kr"
+    },
+    {
+      "requestedName": "진주교대",
+      "name": "진주교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000260"
+      ],
+      "campusIds": [
+        "academyinfo:0000260"
+      ],
+      "discoveryHost": "cue.ac.kr"
+    },
+    {
+      "requestedName": "청주교대",
+      "name": "청주교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000261"
+      ],
+      "campusIds": [
+        "academyinfo:0000261"
+      ],
+      "discoveryHost": "cje.ac.kr"
+    },
+    {
+      "requestedName": "춘천교대",
+      "name": "춘천교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000262"
+      ],
+      "campusIds": [
+        "academyinfo:0000262"
+      ],
+      "discoveryHost": "cnue.ac.kr"
+    },
+    {
+      "requestedName": "충남대",
+      "name": "충남대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000029"
+      ],
+      "campusIds": [
+        "academyinfo:0000029"
+      ],
+      "discoveryHost": "cnu.ac.kr"
+    },
+    {
+      "requestedName": "충북대",
+      "name": "충북대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000030"
+      ],
+      "campusIds": [
+        "academyinfo:0000030"
+      ],
+      "discoveryHost": "chungbuk.ac.kr"
+    },
+    {
+      "requestedName": "포항공대",
+      "name": "포항공과대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000188"
+      ],
+      "campusIds": [
+        "academyinfo:0000188"
+      ],
+      "discoveryHost": "postech.ac.kr"
+    },
+    {
+      "requestedName": "한경대",
+      "name": "한경국립대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000037"
+      ],
+      "campusIds": [
+        "academyinfo:0000037"
+      ],
+      "discoveryHost": "hknu.ac.kr"
+    },
+    {
+      "requestedName": "공학대",
+      "name": "한국공학대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000247"
+      ],
+      "campusIds": [
+        "academyinfo:0000247"
+      ],
+      "discoveryHost": "tukorea.ac.kr"
+    },
+    {
+      "requestedName": "한국과기원",
+      "name": "한국과학기술원",
+      "institutionIds": [
+        "institution:academyinfo:0000374"
+      ],
+      "campusIds": [
+        "academyinfo:0000374"
+      ],
+      "discoveryHost": "kaist.ac.kr"
+    },
+    {
+      "requestedName": "교원대",
+      "name": "한국교원대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000031"
+      ],
+      "campusIds": [
+        "academyinfo:0000031"
+      ],
+      "discoveryHost": "knue.ac.kr"
+    },
+    {
+      "requestedName": "기술교대",
+      "name": "한국기술교육대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000189"
+      ],
+      "campusIds": [
+        "academyinfo:0000189"
+      ],
+      "discoveryHost": "koreatech.ac.kr"
+    },
+    {
+      "requestedName": "외대",
+      "name": "한국외국어대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000192"
+      ],
+      "campusIds": [
+        "academyinfo:0000192"
+      ],
+      "discoveryHost": "hufs.ac.kr"
+    },
+    {
+      "requestedName": "항공대",
+      "name": "한국항공대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000194"
+      ],
+      "campusIds": [
+        "academyinfo:0000194"
+      ],
+      "discoveryHost": "kau.ac.kr"
+    },
+    {
+      "requestedName": "한성대",
+      "name": "한성대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000200"
+      ],
+      "campusIds": [
+        "academyinfo:0000200"
+      ],
+      "discoveryHost": "hansung.ac.kr"
+    },
+    {
+      "requestedName": "한양대",
+      "name": "한양대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000203"
+      ],
+      "campusIds": [
+        "academyinfo:0000203",
+        "academyinfo:0000204"
+      ],
+      "discoveryHost": "hanyang.ac.kr"
+    },
+    {
+      "requestedName": "호서대",
+      "name": "호서대학교",
+      "institutionIds": [
+        "institution:academyinfo:0000211"
+      ],
+      "campusIds": [
+        "academyinfo:0000211"
+      ],
+      "discoveryHost": "hoseo.ac.kr"
+    }
+  ]
+}

@@ -1,0 +1,775 @@
+{
+  "schemaVersion": 1,
+  "university": "gjue",
+  "mappings": [
+    {
+      "college": null,
+      "department": "영어교육과",
+      "sourceLabel": "1학년 10반 영어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "교육학과",
+      "sourceLabel": "1학년 11반 교육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "1학년 12반 컴퓨터",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "국어교육과",
+      "sourceLabel": "1학년 1반 국어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "윤리교육과",
+      "sourceLabel": "1학년 2반 윤리",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회과교육과",
+      "sourceLabel": "1학년 3반 사회",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "수학교육과",
+      "sourceLabel": "1학년 4반 수학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "1학년 5반 과학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "1학년 6반 실과",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "1학년 7반 체육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "1학년 8반 음악",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "1학년 9반 미술",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "영어교육과",
+      "sourceLabel": "2학년 10반 영어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "교육학과",
+      "sourceLabel": "2학년 11반 교육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "2학년 12반 컴퓨터",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "국어교육과",
+      "sourceLabel": "2학년 1반 국어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "윤리교육과",
+      "sourceLabel": "2학년 2반 윤리",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회과교육과",
+      "sourceLabel": "2학년 3반 사회",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "수학교육과",
+      "sourceLabel": "2학년 4반 수학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "2학년 5반 과학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "2학년 6반 실과",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "2학년 7반 체육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "2학년 8반 음악",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "2학년 9반 미술",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "영어교육과",
+      "sourceLabel": "3학년 10반 영어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "교육학과",
+      "sourceLabel": "3학년 11반 교육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "3학년 12반 컴퓨터",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "국어교육과",
+      "sourceLabel": "3학년 1반 국어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "윤리교육과",
+      "sourceLabel": "3학년 2반 윤리",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회과교육과",
+      "sourceLabel": "3학년 3반 사회",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "수학교육과",
+      "sourceLabel": "3학년 4반 수학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "3학년 5반 과학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "3학년 6반 실과",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "3학년 7반 체육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "3학년 8반 음악",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "3학년 9반 미술",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "영어교육과",
+      "sourceLabel": "4학년 10반 영어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "교육학과",
+      "sourceLabel": "4학년 11반 교육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "4학년 12반 컴퓨터",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "국어교육과",
+      "sourceLabel": "4학년 1반 국어",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "윤리교육과",
+      "sourceLabel": "4학년 2반 윤리",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회과교육과",
+      "sourceLabel": "4학년 3반 사회",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "수학교육과",
+      "sourceLabel": "4학년 4반 수학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "4학년 5반 과학",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "4학년 6반 실과",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "4학년 7반 체육",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "4학년 8반 음악",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "4학년 9반 미술",
+      "sourceUrl": "https://www.gjue.ac.kr/kor/contents/44",
+      "evidence": "공식 심화과정변경 페이지가 학과 변경 제도로 설명하고 학교의 학과 목록을 직접 제공. 기존 학년/반→학과 대응을 유지하며 가짜 단과대 부여 안 함",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/a-sources/gjue-deepen.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    }
+  ],
+  "courseOwners": []
+}

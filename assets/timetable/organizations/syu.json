@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "university": "syu",
+  "mappings": [
+    {
+      "college": "간호대학",
+      "department": "간호학과",
+      "sourceLabel": "간호학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/nursing1/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-4199317.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "경영학과",
+      "sourceLabel": "경영학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": null,
+      "department": "글로벌자유전공학부",
+      "sourceLabel": "글로벌자유전공학부",
+      "sourceUrl": "https://iie.syu.ac.kr/pdf/admission/%28Kor%292026학년도%209월%20외국인%20신%2C편입학%20모집요강260506.pdf",
+      "evidence": "2026 외국인 모집요강 단과대학 열에 글로벌자유전공학부 독립 학부 명시. 단과대를 임의 생성하지 않음.",
+      "sourceFile": "work/all-university-completion-20261012/c-sources/syu-admission.pdf",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": false,
+      "group": "글로벌자유전공학부",
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": "창의융합대학",
+      "department": "글로벌한국학과",
+      "sourceLabel": "글로벌한국학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "동물자원과학과",
+      "sourceLabel": "동물자원과학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "물리치료학과",
+      "sourceLabel": "물리치료학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "바이오융합공학과",
+      "sourceLabel": "바이오융합공학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "보건관리학과",
+      "sourceLabel": "보건관리학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "사회복지학과",
+      "sourceLabel": "사회복지학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "상담심리학과",
+      "sourceLabel": "상담심리학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "식품영양학과",
+      "sourceLabel": "식품영양학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "신학대학",
+      "department": "신학과",
+      "sourceLabel": "신학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/theological-college/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-4204946.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "아트앤디자인학과",
+      "sourceLabel": "아트앤디자인학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "약학대학",
+      "department": "약학과",
+      "sourceLabel": "약학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/a-college-of-pharmacy/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-4205615.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "약학대학",
+      "department": "약학과 (6년제)",
+      "sourceLabel": "약학과 (6년제)",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/a-college-of-pharmacy/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-4205615.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "영어영문학과",
+      "sourceLabel": "영어영문학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "유아교육과",
+      "sourceLabel": "유아교육과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "음악학과",
+      "sourceLabel": "음악학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "인공지능융합학부",
+      "sourceLabel": "인공지능융합학부",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "체육학과",
+      "sourceLabel": "체육학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "컴퓨터공학부",
+      "sourceLabel": "컴퓨터공학부",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "창의융합대학",
+      "department": "항공관광외국어학부",
+      "sourceLabel": "항공관광외국어학부",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/creativity-and-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6309388.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "화학생명과학과",
+      "sourceLabel": "화학생명과학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    },
+    {
+      "college": "미래융합대학",
+      "department": "환경디자인원예학과",
+      "sourceLabel": "환경디자인원예학과",
+      "sourceUrl": "https://www.syu.ac.kr/admissions-education/college/future-convergence/",
+      "evidence": "Official college-page academic unit list; exact label after removing only published phone number/degree-duration suffix. Affiliation only.",
+      "sourceFile": "work/course-owner-filter-20261012/c-sources/syu-6301191.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true
+    }
+  ],
+  "courseOwners": []
+}

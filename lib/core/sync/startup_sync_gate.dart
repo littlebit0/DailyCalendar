@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../localization/app_localizations.dart';
@@ -18,6 +19,8 @@ class StartupSyncGate extends StatefulWidget {
     required this.onContinue,
     required this.child,
     this.timeout = const Duration(seconds: 20),
+    this.showLocalImmediately = false,
+    this.syncStatus,
   });
 
   final bool requiredAtStartup;
@@ -25,6 +28,8 @@ class StartupSyncGate extends StatefulWidget {
   final VoidCallback onContinue;
   final Widget child;
   final Duration timeout;
+  final bool showLocalImmediately;
+  final ValueListenable<GoogleDriveSyncStatus>? syncStatus;
 
   @override
   State<StartupSyncGate> createState() => _StartupSyncGateState();
@@ -36,12 +41,43 @@ class _StartupSyncGateState extends State<StartupSyncGate> {
   bool _slow = false;
   _StartupFailure? _failure;
   int _attempt = 0;
+  DateTime? _lastSyncedAt;
 
   @override
   void initState() {
     super.initState();
+    _lastSyncedAt = widget.syncStatus?.value.lastSyncedAt;
+    widget.syncStatus?.addListener(_syncStatusChanged);
     _ready = !widget.requiredAtStartup;
-    if (!_ready) unawaited(_run());
+    if (!_ready) {
+      if (widget.showLocalImmediately) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted) return;
+          unawaited(_run());
+          _continue();
+        });
+      } else {
+        unawaited(_run());
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.syncStatus?.removeListener(_syncStatusChanged);
+    super.dispose();
+  }
+
+  void _syncStatusChanged() {
+    final status = widget.syncStatus!.value;
+    if (status.lastSyncedAt != _lastSyncedAt &&
+        !status.syncing &&
+        status.error == null) {
+      _lastSyncedAt = status.lastSyncedAt;
+      if (mounted && _failure != null && widget.showLocalImmediately) {
+        setState(() => _failure = null);
+      }
+    }
   }
 
   Future<void> _run() async {
@@ -54,7 +90,11 @@ class _StartupSyncGateState extends State<StartupSyncGate> {
     try {
       await operation.timeout(widget.timeout);
     } on TimeoutException {
-      if (!mounted || _ready || attempt != _attempt) return;
+      if (!mounted ||
+          (_ready && !widget.showLocalImmediately) ||
+          attempt != _attempt) {
+        return;
+      }
       // A transport timeout completes the original operation with an error.
       // Only the UI deadline leaves an operation running in the background.
       if (identical(_operation, operation)) setState(() => _slow = true);
@@ -73,14 +113,23 @@ class _StartupSyncGateState extends State<StartupSyncGate> {
         (_) {
           if (!identical(_operation, operation)) return;
           _operation = null;
-          if (mounted && !_ready) _continue();
+          if (mounted) {
+            if (!_ready) {
+              _continue();
+            } else if (widget.showLocalImmediately) {
+              setState(() {
+                _failure = null;
+                _slow = false;
+              });
+            }
+          }
         },
         onError: (Object error, StackTrace stack) {
           if (!identical(_operation, operation)) return;
           _operation = null;
           final failure = _StartupFailure.fromError(error);
           debugPrint('StartupSyncGate.failure category=${failure.code}');
-          if (!mounted || _ready) return;
+          if (!mounted || (_ready && !widget.showLocalImmediately)) return;
           setState(() {
             _slow = false;
             _failure = failure;
@@ -93,13 +142,64 @@ class _StartupSyncGateState extends State<StartupSyncGate> {
 
   void _continue() {
     if (_ready) return;
-    ++_attempt;
+    if (!widget.showLocalImmediately) ++_attempt;
     setState(() => _ready = true);
     widget.onContinue();
   }
 
   @override
   Widget build(BuildContext context) {
+    if (widget.showLocalImmediately) {
+      final strings = AppLocalizations.of(context);
+      return Column(
+        children: [
+          if (_operation != null || _failure != null)
+            Material(
+              color: Theme.of(context).colorScheme.surfaceContainer,
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 4,
+                  ),
+                  child: Row(
+                    children: [
+                      if (_operation != null)
+                        const SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      else
+                        const Icon(Icons.sync_problem_outlined, size: 18),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Semantics(
+                          liveRegion: true,
+                          child: Text(
+                            strings.text(
+                              _failure?.message ??
+                                  'Google Drive 동기화 중 · 저장된 일정을 사용할 수 있습니다.',
+                            ),
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ),
+                      if (_operation == null)
+                        TextButton(
+                          onPressed: _run,
+                          child: Text(strings.text('다시 시도')),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          Expanded(child: widget.child),
+        ],
+      );
+    }
     if (_ready) return widget.child;
     final strings = AppLocalizations.of(context);
     final failure = _failure;

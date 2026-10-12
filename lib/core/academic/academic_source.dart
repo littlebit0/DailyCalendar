@@ -204,7 +204,9 @@ class DankookAcademicSource implements AcademicSource {
         throw const FormatException('Incomplete Dankook academic record');
       }
       final title = (raw['title'] as String).trim();
-      if (title.isEmpty) throw const FormatException('Empty academic title');
+      if (title.isEmpty) {
+        throw const FormatException('Empty academic title');
+      }
       final start = _koreanTimestampDate(raw['startTime']);
       final last = _koreanTimestampDate(raw['endTime']);
       records.add((title: title, start: start, last: last));
@@ -326,6 +328,148 @@ class ChonnamAcademicSource implements AcademicSource {
   void close() => _client.close();
 }
 
+/// POSTECH's official FullCalendar data feed uses KST midnight timestamps.
+class PostechAcademicSource implements AcademicSource {
+  PostechAcademicSource({http.Client? client})
+    : _client = client ?? http.Client();
+  final http.Client _client;
+  @override
+  String get id => 'postech';
+  @override
+  String get name => '포항공과대학교';
+  @override
+  Uri get website =>
+      Uri.https('www.postech.ac.kr', '/kor/college-life/academic_schedule.do');
+  @override
+  Future<List<AcademicEvent>> fetch(int year) async {
+    final response = await _client
+        .get(
+          website.replace(
+            queryParameters: {
+              'mode': 'getCalendarData',
+              'siteId': 'kor',
+              'start': '$year-01-01',
+              'end': '${year + 1}-01-01',
+            },
+          ),
+        )
+        .timeout(const Duration(seconds: 20));
+    _checkAcademicResponse(response);
+    return parse(utf8.decode(response.bodyBytes), year);
+  }
+
+  static List<AcademicEvent> parse(String body, int year) {
+    final decoded = jsonDecode(body);
+    if (decoded is! Map || decoded['data'] is! List) {
+      throw const FormatException('Invalid POSTECH calendar');
+    }
+    final events = <String, AcademicEvent>{};
+    for (final row in decoded['data'] as List) {
+      if (row is! Map ||
+          row['siteId'] != 'kor' ||
+          row['cSeq'] is! int ||
+          row['content'] is! String ||
+          (row['content'] as String).trim().isEmpty) {
+        throw const FormatException('Invalid POSTECH record');
+      }
+      final start = DankookAcademicSource._koreanTimestampDate(row['beginDt']);
+      final last = DankookAcademicSource._koreanTimestampDate(row['endDt']);
+      if (last.isBefore(start)) {
+        throw const FormatException('Invalid academic period');
+      }
+      final end = DateTime(last.year, last.month, last.day + 1);
+      if (!start.isBefore(DateTime(year + 1)) || !end.isAfter(DateTime(year))) {
+        continue;
+      }
+      final id = row['cSeq'].toString();
+      final event = AcademicEvent(
+        sourceId: id,
+        title: (row['content'] as String).trim(),
+        start: start,
+        end: end,
+        url:
+            'https://www.postech.ac.kr/kor/college-life/academic_schedule.do?mode=list&selectedYear=$year',
+      );
+      if (events.containsKey(id) &&
+          jsonEncode(events[id]!.toJson()) != jsonEncode(event.toJson())) {
+        throw const FormatException('Conflicting POSTECH record');
+      }
+      events[id] = event;
+    }
+    if (events.isEmpty) {
+      throw const FormatException('No published academic calendar');
+    }
+    return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
+  }
+
+  @override
+  void close() => _client.close();
+}
+
+/// Sejong's public calendar separates undergraduate and graduate schedules.
+class SejongAcademicSource implements AcademicSource {
+  SejongAcademicSource({http.Client? client})
+    : _client = client ?? http.Client();
+  final http.Client _client;
+  @override
+  String get id => 'sejong';
+  @override
+  String get name => '세종대학교';
+  @override
+  Uri get website =>
+      Uri.https('www.sejong.ac.kr', '/kor/academics/academic-calendar.do');
+  @override
+  Future<List<AcademicEvent>> fetch(int year) async {
+    final response = await _client
+        .get(
+          website.replace(
+            queryParameters: {
+              'mode': 'getCalendarData',
+              'collDiv': '0001',
+              'start': '$year-01-01',
+              'end': '${year + 1}-01-01',
+            },
+          ),
+        )
+        .timeout(const Duration(seconds: 20));
+    _checkAcademicResponse(response);
+    return parse(utf8.decode(response.bodyBytes), year);
+  }
+
+  static List<AcademicEvent> parse(String body, int year) {
+    final decoded = jsonDecode(body);
+    if (decoded is! Map || decoded['data'] is! List) {
+      throw const FormatException('Invalid Sejong calendar');
+    }
+    final records = <_CalendarRecord>[];
+    for (final row in decoded['data'] as List) {
+      if (row is! Map || row['collDiv'] is! String) {
+        throw const FormatException('Invalid Sejong record');
+      }
+      if (row['collDiv'] != '0001') {
+        continue;
+      }
+      final title = row['scmSubject'];
+      if (title is! String || title.trim().isEmpty) {
+        throw const FormatException('Invalid academic title');
+      }
+      records.add((
+        title: title.trim(),
+        start: SangmyungAcademicSource._date(row['frDt']),
+        last: SangmyungAcademicSource._date(row['toDt']),
+      ));
+    }
+    return _calendarEvents(
+      records,
+      year,
+      'https://www.sejong.ac.kr/kor/academics/academic-calendar.do?mode=list&selectedYear=$year',
+    );
+  }
+
+  @override
+  void close() => _client.close();
+}
+
 typedef _CalendarRecord = ({String title, DateTime start, DateTime last});
 
 void _checkAcademicResponse(http.Response response) {
@@ -409,3 +553,187 @@ String _academicHtmlText(String value) => value
     .replaceAll('&gt;', '>')
     .replaceAll('&amp;', '&')
     .trim();
+
+/// The same public annual request used by Sookmyung's calendar editor/view.
+class SookmyungAcademicSource implements AcademicSource {
+  SookmyungAcademicSource({http.Client? client})
+    : _client = client ?? http.Client();
+  final http.Client _client;
+  @override
+  String get id => 'sookmyung';
+  @override
+  String get name => '숙명여자대학교';
+  @override
+  Uri get website => Uri.https(
+    'www.sookmyung.ac.kr',
+    '/kr/university-life/academic-calendar.do',
+  );
+  @override
+  Future<List<AcademicEvent>> fetch(int year) async {
+    final response = await _client
+        .get(
+          website.replace(
+            queryParameters: {
+              'mode': 'getYearCalendar',
+              'selectedYear': '$year',
+              'siteId': 'kr',
+            },
+          ),
+        )
+        .timeout(const Duration(seconds: 20));
+    _checkAcademicResponse(response);
+    return parse(utf8.decode(response.bodyBytes), year);
+  }
+
+  static List<AcademicEvent> parse(String body, int year) {
+    final decoded = jsonDecode(body);
+    if (decoded is! Map || decoded['data'] is! List) {
+      throw const FormatException('Invalid Sookmyung calendar');
+    }
+    final months = decoded['data'] as List;
+    // Twelve calendar months, next January and a publication flag.
+    if (months.length != 14 ||
+        months.last is! Map ||
+        (months.last as Map)['hasData'] != true ||
+        months.take(13).any((month) => month is! List)) {
+      throw const FormatException('Unpublished Sookmyung annual calendar');
+    }
+    final events = <String, AcademicEvent>{};
+    for (final month in months.take(13).cast<List>()) {
+      for (final raw in month) {
+        if (raw is! Map ||
+            raw['calendarSeq'] is! int ||
+            raw['siteId'] != 'kr' ||
+            raw['content'] is! String ||
+            (raw['content'] as String).trim().isEmpty) {
+          throw const FormatException('Invalid Sookmyung event');
+        }
+        final start = DankookAcademicSource._koreanTimestampDate(
+          raw['beginDatetime'],
+        );
+        final last = DankookAcademicSource._koreanTimestampDate(
+          raw['endDatetime'],
+        );
+        if (last.isBefore(start)) {
+          throw const FormatException('Invalid academic period');
+        }
+        final end = DateTime(last.year, last.month, last.day + 1);
+        if (!start.isBefore(DateTime(year + 1)) ||
+            !end.isAfter(DateTime(year))) {
+          continue;
+        }
+        final id = raw['calendarSeq'].toString();
+        final event = AcademicEvent(
+          sourceId: id,
+          title: (raw['content'] as String).trim(),
+          start: start,
+          end: end,
+          url:
+              'https://www.sookmyung.ac.kr/kr/university-life/academic-calendar.do?mode=list&selectedYear=$year',
+        );
+        final previous = events[id];
+        if (previous != null &&
+            jsonEncode(previous.toJson()) != jsonEncode(event.toJson())) {
+          throw const FormatException('Conflicting Sookmyung event');
+        }
+        events[id] = event;
+      }
+    }
+    if (events.isEmpty) {
+      throw const FormatException('Empty Sookmyung calendar');
+    }
+    return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
+  }
+
+  @override
+  void close() => _client.close();
+}
+
+/// CUK's official public feed covers all three 교정 in one calendar.
+class CatholicAcademicSource implements AcademicSource {
+  CatholicAcademicSource({http.Client? client})
+    : _client = client ?? http.Client();
+  final http.Client _client;
+  @override
+  String get id => 'catholic';
+  @override
+  String get name => '가톨릭대학교';
+  @override
+  Uri get website =>
+      Uri.https('www.catholic.ac.kr', '/ko/support/calendar2024_list.do');
+  @override
+  Future<List<AcademicEvent>> fetch(int year) async {
+    final response = await _client
+        .get(
+          website.replace(
+            queryParameters: {
+              'mode': 'getCalendarData',
+              'siteId': 'ko',
+              'start': '$year-01-01',
+              'end': '${year + 1}-01-01',
+            },
+          ),
+        )
+        .timeout(const Duration(seconds: 20));
+    _checkAcademicResponse(response);
+    return parse(utf8.decode(response.bodyBytes), year);
+  }
+
+  static List<AcademicEvent> parse(String body, int year) {
+    final decoded = jsonDecode(body);
+    if (decoded is! Map || decoded['data'] is! List) {
+      throw const FormatException('Invalid CUK calendar');
+    }
+    final events = <String, AcademicEvent>{};
+    for (final raw in decoded['data'] as List) {
+      if (raw is! Map ||
+          raw['siteId'] != 'ko' ||
+          raw['cSeq'] is! int ||
+          raw['content'] is! String ||
+          (raw['content'] as String).trim().isEmpty ||
+          raw['campus'] is! String) {
+        throw const FormatException('Invalid CUK event');
+      }
+      final campuses = (raw['campus'] as String)
+          .split(',')
+          .map((c) => c.trim())
+          .toList();
+      if (campuses.isEmpty ||
+          campuses.any((c) => !const ['성심', '성의', '성신'].contains(c))) {
+        throw const FormatException('Unknown CUK campus');
+      }
+      final start = DankookAcademicSource._koreanTimestampDate(raw['beginDt']);
+      final last = DankookAcademicSource._koreanTimestampDate(raw['endDt']);
+      if (last.isBefore(start)) {
+        throw const FormatException('Invalid academic period');
+      }
+      final end = DateTime(last.year, last.month, last.day + 1);
+      if (!start.isBefore(DateTime(year + 1)) || !end.isAfter(DateTime(year))) {
+        continue;
+      }
+      final id = raw['cSeq'].toString();
+      final event = AcademicEvent(
+        sourceId: id,
+        title:
+            '${(raw['content'] as String).trim()} (${campuses.map((c) => '$c교정').join('·')})',
+        start: start,
+        end: end,
+        url:
+            'https://www.catholic.ac.kr/ko/support/calendar2024_list.do?mode=list&siteId=ko&selectedYear=$year',
+      );
+      final previous = events[id];
+      if (previous != null &&
+          jsonEncode(previous.toJson()) != jsonEncode(event.toJson())) {
+        throw const FormatException('Conflicting CUK event');
+      }
+      events[id] = event;
+    }
+    if (events.isEmpty) {
+      throw const FormatException('Unpublished CUK calendar');
+    }
+    return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
+  }
+
+  @override
+  void close() => _client.close();
+}

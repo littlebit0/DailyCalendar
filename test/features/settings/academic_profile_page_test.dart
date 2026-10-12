@@ -1,5 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' as ui;
+import 'package:flutter/rendering.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter/services.dart';
+import 'package:daily/core/academic/university_regions.dart';
 
 import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/academic/academic_profile.dart';
@@ -14,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:daily/features/settings/presentation/university_region_map.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _Queue extends Fake implements GoogleDriveSyncService {
@@ -27,7 +33,23 @@ class _Queue extends Fake implements GoogleDriveSyncService {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late UniversityDirectory directory;
-  setUpAll(() {
+  late UniversityRegions regions;
+  setUpAll(() async {
+    // Host fonts are for local visual evidence only; portable tests retain fallback.
+    final hostFont = File('/System/Library/Fonts/AppleSDGothicNeo.ttc');
+    if (hostFont.existsSync()) {
+      final loader = FontLoader('Apple SD Gothic Neo');
+      loader.addFont(
+        Future.value(ByteData.sublistView(hostFont.readAsBytesSync())),
+      );
+      await loader.load();
+    }
+    regions = UniversityRegions.fromJson(
+      jsonDecode(
+            File('assets/academic/university_regions.json').readAsStringSync(),
+          )
+          as Map<String, dynamic>,
+    );
     directory = UniversityDirectory.fromJson(
       jsonDecode(File('assets/academic/universities.json').readAsStringSync())
           as Map<String, dynamic>,
@@ -53,14 +75,16 @@ void main() {
     Widget? child,
     ValueChanged<bool?>? onResult,
     bool onboarding = false,
+    bool dark = false,
   }) => ProviderScope(
     overrides: [
       settingsRepositoryProvider.overrideWithValue(repo),
       googleDriveSyncServiceProvider.overrideWithValue(queue),
       universityDirectoryProvider.overrideWith((ref) async => directory),
+      universityRegionsProvider.overrideWith((ref) async => regions),
     ],
     child: MaterialApp(
-      theme: DailyTheme.light(),
+      theme: dark ? DailyTheme.dark() : DailyTheme.light(),
       locale: const Locale('ko'),
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: const [
@@ -132,6 +156,85 @@ void main() {
   }
 
   testWidgets(
+    'wheel scroll is animated and region transitions retain correct labels',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 900));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final repo = await repository();
+      await tester.pumpWidget(app(repo, _Queue()));
+      await open(tester);
+      final list = find.byKey(const ValueKey('university-list'));
+      ScrollPosition position() => tester
+          .state<ScrollableState>(
+            find.descendant(of: list, matching: find.byType(Scrollable)).first,
+          )
+          .position;
+      final scroll = position();
+      final start = scroll.pixels;
+      await tester.sendEventToBinding(
+        PointerScrollEvent(
+          position: tester.getCenter(list),
+          scrollDelta: const Offset(0, 160),
+        ),
+      );
+      expect(scroll.pixels, start);
+      await tester.pump();
+      await tester.pump(const Duration(microseconds: 8333));
+      expect(scroll.pixels, greaterThan(start));
+      expect(scroll.pixels, lessThan(start + 160));
+      await tester.pumpAndSettle();
+      expect(scroll.pixels, closeTo(start + 160, 1));
+      await tester.tap(find.byKey(const ValueKey('university-region-서울')));
+      await tester.pump();
+      final switcher = tester.widget<AnimatedSwitcher>(
+        find.byKey(const ValueKey('university-region-transition')),
+      );
+      expect(switcher.duration, const Duration(milliseconds: 180));
+      await tester.pump(const Duration(microseconds: 8333));
+      expect(find.byType(FadeTransition), findsWidgets);
+      // Returning before exit finishes must not share scroll positions.
+      await tester.tap(find.byKey(const ValueKey('university-region-천안아산')));
+      await tester.pump();
+      await tester.tap(find.byKey(const ValueKey('university-region-서울')));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await search(tester, '상명');
+      final school = directory.searchInstitutions('상명').single;
+      expect(
+        find.byKey(ValueKey('university-location-${school.id}')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(ValueKey('university-campuses-${school.id}')),
+        findsOneWidget,
+      );
+      expect(find.text('LMS 지원'), findsOneWidget);
+      await search(tester, '공주');
+      // Existing sourced multi-campus captions must survive when disclosure
+      // records contain generic 본교 labels instead of named campus records.
+      await tester.tap(find.byKey(const ValueKey('university-region-천안아산')));
+      await tester.pumpAndSettle();
+      final kongju = directory
+          .searchInstitutions('공주')
+          .where((s) => s.name.contains('공주대'))
+          .first;
+      expect(
+        find.byKey(ValueKey('university-campuses-${kongju.id}')),
+        findsOneWidget,
+      );
+      await tester.tap(find.byKey(const ValueKey('university-region-서울')));
+      await tester.pumpAndSettle();
+      await search(tester, '서강');
+      final single = directory.searchInstitutions('서강').single;
+      expect(
+        find.byKey(ValueKey('university-campuses-${single.id}')),
+        findsNothing,
+      );
+      expect(find.text('LMS 미지원'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
     'integrated university saves once without requiring campus selection',
     (tester) async {
       final repo = await repository();
@@ -174,6 +277,63 @@ void main() {
       expect(queue.calls, 1);
       expect(returned, isTrue);
       expect(find.byType(AcademicProfilePage), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'region selection automatically selects the local branch and saves its identity',
+    (tester) async {
+      tester.view.physicalSize = const Size(1400, 1000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final repo = await repository();
+      await tester.pumpWidget(app(repo, _Queue()));
+      await open(tester);
+      const cases = [
+        ('건국대학교', '서울', 'academyinfo:0000052'),
+        ('건국대학교', '충북', 'academyinfo:0000053'),
+        ('동국대학교', '서울', 'academyinfo:0000100'),
+        ('동국대학교', '경북', 'academyinfo:0000101'),
+        ('연세대학교', '인천', 'academyinfo:0000149'),
+        ('연세대학교', '강원', 'academyinfo:0000150'),
+        ('한양대학교', '서울', 'academyinfo:0000203'),
+        ('한양대학교', '경기남부', 'academyinfo:0000204'),
+        ('고려대학교', '서울', 'academyinfo:0000069'),
+        ('고려대학교', '세종', 'academyinfo:0000070'),
+      ];
+      for (final (name, region, campusId) in cases) {
+        await tester.tap(find.byKey(ValueKey('university-region-$region')));
+        await tester.pumpAndSettle();
+        await search(tester, name);
+        final institution = directory
+            .searchInstitutions(name)
+            .singleWhere((s) => s.name == name);
+        await tester.tap(find.byKey(ValueKey('university-${institution.id}')));
+        await tester.pumpAndSettle();
+        final selector = find.byKey(const ValueKey('academic-profile-campus'));
+        await tester.ensureVisible(selector);
+        await tester.tap(selector);
+        await tester.pumpAndSettle();
+        for (final campus in institution.campuses) {
+          final tile = tester.widget<ListTile>(
+            find.byKey(ValueKey('university-campus-${campus.id}')),
+          );
+          expect(
+            tile.selected,
+            campus.id == campusId,
+            reason: '$name in $region',
+          );
+        }
+        await tester.tap(find.byKey(const ValueKey('university-campus-close')));
+        await tester.pumpAndSettle();
+      }
+      await save(tester);
+      expect(
+        repo.load().academicProfile!.selectedCampusId,
+        'academyinfo:0000070',
+      );
       expect(tester.takeException(), isNull);
     },
   );
@@ -360,16 +520,57 @@ void main() {
   }
 
   testWidgets(
+    'calendar-only school enables calendar without enabling SMU timetable',
+    (tester) async {
+      final repo = await repository();
+      final queue = _Queue();
+      await tester.pumpWidget(app(repo, queue));
+      await open(tester);
+      await search(tester, '서울교육대학교');
+      final institution = directory
+          .searchInstitutions('서울교육대학교')
+          .singleWhere((school) => school.name == '서울교육대학교');
+      await tester.tap(find.byKey(ValueKey('university-${institution.id}')));
+      await tester.pumpAndSettle();
+      await save(tester);
+      expect(repo.load().academicProfile!.academicSourceId, 'snue');
+      expect(repo.load().academicProfile!.timetableSupported, isFalse);
+      await tester.pumpWidget(const SizedBox.shrink());
+      await tester.pumpWidget(
+        app(
+          repo,
+          queue,
+          child: const Column(
+            children: [
+              AcademicFeatureGate(
+                calendar: true,
+                child: Text('calendar-feature'),
+              ),
+              Expanded(
+                child: AcademicFeatureGate(child: Text('timetable-feature')),
+              ),
+            ],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('calendar-feature'), findsOneWidget);
+      expect(find.text('timetable-feature'), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
     'unsupported four-year university remains selectable without enabling SMU',
     (tester) async {
       final repo = await repository();
       final queue = _Queue();
       await tester.pumpWidget(app(repo, queue));
       await open(tester);
-      await search(tester, '서울대학교');
+      await search(tester, '세명대학교');
       final institution = directory
-          .searchInstitutions('서울대학교')
-          .singleWhere((school) => school.name == '서울대학교');
+          .searchInstitutions('세명대학교')
+          .singleWhere((school) => school.name == '세명대학교');
       await tester.tap(find.byKey(ValueKey('university-${institution.id}')));
       await tester.pumpAndSettle();
       expect(
@@ -534,6 +735,163 @@ void main() {
       );
       expect(repo.load().academicProfile!.campusId, isNull);
       expect(queue.calls, 1);
+      expect(tester.takeException(), isNull);
+    },
+  );
+  for (final dark in [false, true]) {
+    testWidgets(
+      'region map filtering preserves selected profile in ${dark ? 'dark' : 'light'} mode',
+      (tester) async {
+        tester.view.physicalSize = const Size(1400, 1000);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        final repo = await repository();
+        final queue = _Queue();
+        final boundary = GlobalKey();
+        await tester.pumpWidget(
+          RepaintBoundary(
+            key: boundary,
+            child: app(repo, queue, dark: dark),
+          ),
+        );
+        await open(tester);
+        expect(find.textContaining('Google Drive'), findsNothing);
+        expect(find.text('울릉도'), findsNothing);
+        expect(find.text('독도'), findsNothing);
+        expect(find.textContaining('섬 확대'), findsNothing);
+        expect(
+          find.descendant(
+            of: find.byType(UniversityRegionMap),
+            matching: find.byType(Scrollable),
+          ),
+          findsNothing,
+        );
+        final mapSize = tester.getSize(find.byType(UniversityRegionMap));
+        expect(mapSize.width, lessThan(mapSize.height * .7));
+        await search(tester, '정석대학');
+        expect(
+          find.byKey(
+            const ValueKey('university-institution:academyinfo:0000288'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.byKey(
+            const ValueKey('university-logo-institution:academyinfo:0000288'),
+          ),
+          findsNothing,
+        );
+        await tester.tap(find.byKey(const ValueKey('university-region-천안아산')));
+        await tester.pumpAndSettle();
+        await search(tester, 'ㅅㅁㄷ');
+        final logoTile = find.byKey(
+          const ValueKey('university-logo-institution:academyinfo:0000117'),
+        );
+        expect(logoTile, findsOneWidget);
+        final logo = tester.widget<Container>(logoTile);
+        expect((logo.decoration as BoxDecoration).color, Colors.white);
+        expect(
+          (logo.decoration as BoxDecoration).borderRadius,
+          BorderRadius.circular(10),
+        );
+        await tester.tap(
+          find.byKey(
+            const ValueKey('university-institution:academyinfo:0000117'),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('서울 / 천안'), findsWidgets);
+        final smuTile = find.byKey(
+          const ValueKey('university-institution:academyinfo:0000117'),
+        );
+        expect(
+          find.descendant(of: smuTile, matching: find.text('학사일정 지원')),
+          findsOneWidget,
+        );
+        expect(
+          find.descendant(of: smuTile, matching: find.text('시간표 연결')),
+          findsOneWidget,
+        );
+        await tester.tap(find.byKey(const ValueKey('university-region-서울')));
+        await tester.pumpAndSettle();
+        expect(
+          find.byKey(
+            const ValueKey('university-institution:academyinfo:0000117'),
+          ),
+          findsOneWidget,
+        );
+        // Render actual Flutter layout for inspection, independently of the AI proposal.
+        await search(tester, '');
+        await tester.tap(find.byKey(const ValueKey('university-region-천안아산')));
+        await tester.pumpAndSettle();
+        await tester.runAsync(() async {
+          await Future.wait([
+            for (final image in tester.widgetList<Image>(find.byType(Image)))
+              precacheImage(image.image, boundary.currentContext!),
+          ]);
+        });
+        await tester.pump();
+        await tester.runAsync(() async {
+          final image =
+              await (boundary.currentContext!.findRenderObject()!
+                      as RenderRepaintBoundary)
+                  .toImage();
+          final png = await image.toByteData(format: ui.ImageByteFormat.png);
+          await File(
+            'work/academic-symbols-20261011/profile-${dark ? 'dark' : 'light'}.png',
+          ).writeAsBytes(png!.buffer.asUint8List());
+          image.dispose();
+        });
+        await save(tester);
+        expect(
+          repo.load().academicProfile!.universityId,
+          'institution:academyinfo:0000117',
+        );
+        expect(queue.calls, 1);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+  testWidgets(
+    'narrow screen region sheet applies filter and search stays fixed during list scroll',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 844);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final repo = await repository();
+      await tester.pumpWidget(app(repo, _Queue()));
+      await open(tester);
+      await tester.tap(find.byKey(const ValueKey('university-region-picker')));
+      await tester.pumpAndSettle();
+      expect(
+        find.descendant(
+          of: find.byType(UniversityRegionMap),
+          matching: find.byType(Scrollable),
+        ),
+        findsNothing,
+      );
+      final button = find.byKey(const ValueKey('university-region-천안아산'));
+      await tester.ensureVisible(button);
+      await tester.tap(button);
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('university-region-filter')),
+        findsOneWidget,
+      );
+      final top = tester.getTopLeft(
+        find.byKey(const ValueKey('university-search')),
+      );
+      await tester.drag(
+        find.byKey(const ValueKey('university-list')),
+        const Offset(0, -300),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.getTopLeft(find.byKey(const ValueKey('university-search'))),
+        top,
+      );
       expect(tester.takeException(), isNull);
     },
   );

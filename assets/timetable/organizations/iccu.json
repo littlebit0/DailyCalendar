@@ -1,0 +1,248 @@
+{
+  "schemaVersion": 1,
+  "university": "iccu",
+  "mappings": [
+    {
+      "college": "ELPIS교양대학",
+      "department": null,
+      "sourceLabel": "ELPIS교양대학",
+      "sourceUrl": "https://www.iccu.ac.kr/",
+      "evidence": "Exact college name retained in official public timetable; direct unit, not a child department.",
+      "sourceFile": "assets/timetable/iccu-songdo-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "songdo",
+      "collegeKnown": true
+    },
+    {
+      "college": "간호대학",
+      "department": "간호학과",
+      "sourceLabel": "간호학과",
+      "sourceUrl": "https://nursing.iccu.ac.kr/intro/introduce.php",
+      "evidence": "Official nursing college introduction explicitly identifies nursing department.",
+      "sourceFile": "assets/timetable/iccu-songdo-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "songdo",
+      "collegeKnown": true
+    },
+    {
+      "campus": "songdo",
+      "department": "문화콘텐츠학과",
+      "sourceLabel": "문화콘텐츠학과",
+      "college": "조형예술대학",
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "2026-2공식안내서 V 조형예술대학 교육과정 안내(인쇄20–38쪽) 아래 학과별 학위교육과정; 시간표 인쇄51–53쪽 exact학과.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified"
+    },
+    {
+      "campus": "songdo",
+      "department": "융합디자인학과",
+      "sourceLabel": "융합디자인학과",
+      "college": "조형예술대학",
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "2026-2공식안내서 V 조형예술대학 교육과정 안내(인쇄20–38쪽) 아래 학과별 학위교육과정; 시간표 인쇄51–53쪽 exact학과.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified"
+    },
+    {
+      "campus": "songdo",
+      "department": "조형예술학과",
+      "sourceLabel": "조형예술학과",
+      "college": "조형예술대학",
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "2026-2공식안내서 V 조형예술대학 교육과정 안내(인쇄20–38쪽) 아래 학과별 학위교육과정; 시간표 인쇄51–53쪽 exact학과.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified"
+    },
+    {
+      "campus": "songdo",
+      "department": null,
+      "sourceLabel": "조형예술대학",
+      "college": "조형예술대학",
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄50쪽4.조형예술대학 시간표 가.공통교과목/나.특성화교과목 exact조회단위. 개설주관owner로확대해석하지않음.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified"
+    },
+    {
+      "campus": "songdo",
+      "department": "문화예술경영마이크로디그리전공",
+      "sourceLabel": "문화예술경영마이크로디그리전공",
+      "college": null,
+      "group": "마이크로디그리전공",
+      "officialGroups": [
+        "마이크로디그리전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄37–38쪽06마이크로디그리전공교육과정안내가5개전공을개별열거,55쪽차~하 exact시간표조회소속. 주관학과컬럼은coursecurriculum담당근거이며제도분류를degreecollege로대체하지않음. 인쇄63쪽06마이크로디그리전공안내/58쪽다중전공규정으로제도확인.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "스마트AI-XR마이크로디그리전공",
+      "sourceLabel": "스마트AI-XR마이크로디그리전공",
+      "college": null,
+      "group": "마이크로디그리전공",
+      "officialGroups": [
+        "마이크로디그리전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄37–38쪽06마이크로디그리전공교육과정안내가5개전공을개별열거,55쪽차~하 exact시간표조회소속. 주관학과컬럼은coursecurriculum담당근거이며제도분류를degreecollege로대체하지않음. 인쇄63쪽06마이크로디그리전공안내/58쪽다중전공규정으로제도확인.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "스마트로컬마이크로디그리전공",
+      "sourceLabel": "스마트로컬마이크로디그리전공",
+      "college": null,
+      "group": "마이크로디그리전공",
+      "officialGroups": [
+        "마이크로디그리전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄37–38쪽06마이크로디그리전공교육과정안내가5개전공을개별열거,55쪽차~하 exact시간표조회소속. 주관학과컬럼은coursecurriculum담당근거이며제도분류를degreecollege로대체하지않음. 인쇄63쪽06마이크로디그리전공안내/58쪽다중전공규정으로제도확인.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "융합미디어아트마이크로디그리전공",
+      "sourceLabel": "융합미디어아트마이크로디그리전공",
+      "college": null,
+      "group": "마이크로디그리전공",
+      "officialGroups": [
+        "마이크로디그리전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄37–38쪽06마이크로디그리전공교육과정안내가5개전공을개별열거,55쪽차~하 exact시간표조회소속. 주관학과컬럼은coursecurriculum담당근거이며제도분류를degreecollege로대체하지않음. 인쇄63쪽06마이크로디그리전공안내/58쪽다중전공규정으로제도확인.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "ContemporaryArt마이크로디그리전공",
+      "sourceLabel": "ContemporaryArt마이크로디그리전공",
+      "college": null,
+      "group": "마이크로디그리전공",
+      "officialGroups": [
+        "마이크로디그리전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄37–38쪽06마이크로디그리전공교육과정안내가5개전공을개별열거,55쪽차~하 exact시간표조회소속. 주관학과컬럼은coursecurriculum담당근거이며제도분류를degreecollege로대체하지않음. 인쇄63쪽06마이크로디그리전공안내/58쪽다중전공규정으로제도확인.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "바이오헬스디자인융합전공",
+      "sourceLabel": "바이오헬스디자인융합전공",
+      "college": null,
+      "group": "융합전공",
+      "officialGroups": [
+        "융합전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄36쪽융합전공교육과정안내와54쪽마/바/사 exact전공시간표;61쪽04융합전공안내,58쪽규정2조5:2개이상학과별도교과과정의다중전공. 참여학과를단일학위단과대로임의선택하지않음.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "스테인드글라스템페라융합전공",
+      "sourceLabel": "스테인드글라스템페라융합전공",
+      "college": null,
+      "group": "융합전공",
+      "officialGroups": [
+        "융합전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄36쪽융합전공교육과정안내와54쪽마/바/사 exact전공시간표;61쪽04융합전공안내,58쪽규정2조5:2개이상학과별도교과과정의다중전공. 참여학과를단일학위단과대로임의선택하지않음.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "지역문화메디에이션융합전공",
+      "sourceLabel": "지역문화메디에이션융합전공",
+      "college": null,
+      "group": "융합전공",
+      "officialGroups": [
+        "융합전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄36쪽융합전공교육과정안내와54쪽마/바/사 exact전공시간표;61쪽04융합전공안내,58쪽규정2조5:2개이상학과별도교과과정의다중전공. 참여학과를단일학위단과대로임의선택하지않음.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "자기설계전공",
+      "sourceLabel": "자기설계전공",
+      "college": null,
+      "group": "자기설계전공",
+      "officialGroups": [
+        "자기설계전공"
+      ],
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "인쇄37쪽05자기설계전공교육과정안내,54쪽아.자기설계전공시간표,62쪽05자기설계전공안내;58쪽규정2조6학생설계교육과정제도.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "campus": "songdo",
+      "department": "자유전공",
+      "sourceLabel": "자유전공",
+      "college": null,
+      "group": "자유전공",
+      "sourceUrl": "https://www.iccu.ac.kr/bbs/download.php?bo_table=notice_b&wr_id=851&no=0",
+      "evidence": "공식안내서표지/목차/인쇄19쪽IV자유전공교육과정은ELPIS교양대학·조형예술대학·간호대학과별도표제.50쪽3.자유전공시간표 exact조회단위; 단과대부모가명시되지않아제목자유전공그대로표시하며대학직속조직이라고별도주장하지않음.",
+      "isOfferingUnit": false,
+      "sourceFile": "work/full-timetable-audit-20261012/limited-c-public-sources/iccu-2026fall-guide.pdf",
+      "collegeKnown": false,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "officialProgramSystem"
+    }
+  ],
+  "courseOwners": []
+}

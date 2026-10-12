@@ -1,3 +1,64 @@
+import '../academic/kangnam_academic_source.dart';
+import '../academic/expansion_a_academic_sources.dart';
+import '../academic/expansion_b_academic_sources.dart';
+import '../academic/expansion17_c_academic_sources.dart';
+import '../academic/namhae_academic_source.dart';
+import '../academic/geochang_academic_source.dart';
+import '../academic/sch_academic_source.dart';
+import '../academic/hoseo_academic_source.dart';
+import '../academic/kmou_academic_source.dart';
+import '../academic/donga_academic_source.dart';
+import '../academic/seoultech_academic_source.dart';
+import '../academic/konkuk_academic_source.dart';
+import '../academic/jnue_academic_source.dart';
+import '../academic/dgist_academic_source.dart';
+import '../academic/chosun_academic_source.dart';
+import '../academic/gnue_academic_source.dart';
+import '../academic/tuk_academic_source.dart';
+import '../academic/hanyang_academic_source.dart';
+import '../academic/korea_academic_source.dart';
+import '../academic/yonsei_academic_source.dart';
+import '../academic/gachon_academic_source.dart';
+import '../academic/sku_academic_source.dart';
+import '../academic/kyonggi_academic_source.dart';
+import '../academic/cue_academic_source.dart';
+import '../academic/kumoh_academic_source.dart';
+import '../academic/khu_academic_source.dart';
+import '../academic/gknu_academic_source.dart';
+import '../academic/snue_academic_source.dart';
+import '../academic/yu_academic_source.dart';
+import '../academic/sungshin_academic_source.dart';
+import '../academic/mmu_academic_source.dart';
+import '../academic/cnu_academic_source.dart';
+import '../academic/dnue_academic_source.dart';
+import '../academic/hufs_academic_source.dart';
+import '../academic/pnu_academic_source.dart';
+import '../academic/pknu_academic_source.dart';
+import '../academic/koreatech_academic_source.dart';
+import '../academic/cbnu_academic_source.dart';
+import '../academic/kau_academic_source.dart';
+import '../academic/swu_academic_source.dart';
+import '../academic/hansung_academic_source.dart';
+import '../academic/suwon_academic_source.dart';
+import '../academic/sogang_academic_source.dart';
+import '../academic/mju_academic_source.dart';
+import '../academic/gjue_academic_source.dart';
+import '../academic/cnue_academic_source.dart';
+import '../academic/ginue_academic_source.dart';
+import '../academic/uos_academic_source.dart';
+import '../academic/bu_academic_source.dart';
+import '../academic/cje_academic_source.dart';
+import '../academic/nsu_academic_source.dart';
+import '../academic/kwangwoon_academic_source.dart';
+import '../academic/inha_academic_source.dart';
+import '../academic/inu_academic_source.dart';
+import '../academic/knue_kunsan_academic_source.dart';
+import '../academic/mokpo_academic_source.dart';
+import '../academic/kongju_academic_source.dart';
+import '../academic/hanbat_academic_source.dart';
+import '../academic/hknu_academic_source.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../features/timetable/data/timetable_store.dart';
 import '../../features/timetable/data/timetable_period_defaults.dart';
@@ -14,6 +75,7 @@ import '../../features/events/data/app_database.dart';
 import '../../features/events/data/drift_event_repository.dart';
 import '../../features/events/data/owner_scoped_event_repository.dart';
 import '../lms/lms_controller.dart';
+import '../lms/lms_sync_service.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
@@ -39,6 +101,30 @@ import '../weather/weather_controller.dart';
 import '../weather/kma_weather_service.dart';
 import '../academic/academic_calendar_service.dart';
 import '../academic/academic_source.dart';
+import '../academic/snu_academic_source.dart';
+import '../academic/ajou_academic_source.dart';
+import '../academic/gist_academic_source.dart';
+import '../academic/skku_academic_source.dart';
+import '../academic/knu_academic_source.dart';
+import '../academic/daegu_academic_source.dart';
+import '../academic/ulsan_academic_source.dart';
+import '../academic/deu_academic_source.dart';
+import '../academic/bnue_academic_source.dart';
+import '../academic/ut_academic_source.dart';
+import '../academic/kookmin_academic_source.dart';
+import '../academic/unist_academic_source.dart';
+import '../academic/kangwon_academic_source.dart';
+import '../academic/kaist_academic_source.dart';
+import '../academic/cau_academic_source.dart';
+import '../academic/yongin_academic_source.dart';
+import '../academic/jeju_academic_source.dart';
+import '../academic/kmu_academic_source.dart';
+import '../academic/ssu_academic_source.dart';
+import '../academic/syu_academic_source.dart';
+import '../academic/gnu_academic_source.dart';
+import '../academic/sv_academic_source.dart';
+import '../academic/jbnu_academic_source.dart';
+import '../academic/dongguk_academic_source.dart';
 
 class CalendarRange {
   const CalendarRange(this.start, this.end);
@@ -95,9 +181,21 @@ final visibleEventRepositoryProvider = Provider<EventRepository>((ref) {
   );
 });
 
-final lmsPresentationStateProvider = Provider<LmsPresentationState>(
-  (ref) => LmsPresentationState(),
-);
+final lmsPresentationStateProvider = Provider<LmsPresentationState>((ref) {
+  final repository = ref.watch(settingsRepositoryProvider);
+  return LmsPresentationState(
+    cachedVisibility: (event) {
+      final profile = repository.load().academicProfile;
+      return LmsSyncService.isCachedEventVisible(
+        event,
+        owner: repository.dailyAccount()?.googleAccount?.email,
+        school: profile?.timetableUniversity,
+        principal: profile?.lmsUserId,
+        hasProfile: profile != null,
+      );
+    },
+  );
+});
 
 final Provider<CalendarWidgetService> calendarWidgetServiceProvider =
     Provider<CalendarWidgetService>((ref) {
@@ -215,9 +313,114 @@ final academicCalendarServiceProvider = Provider<AcademicCalendarService>((
   final settings = ref.watch(settingsRepositoryProvider);
   final service = AcademicCalendarService(
     sources: [
+      EuljiAcademicSource(),
+      IccuAcademicSource(),
+      InjeAcademicSource(),
+      HongikAcademicSource(),
+      WoosongAcademicSource(),
+      EwhaAcademicSource(),
+      KentechAcademicSource(),
+      HanseiAcademicSource(),
+      HyupsungAcademicSource(),
+      SungkyulAcademicSource(),
+      SunmoonAcademicSource(),
+      SangjiAcademicSource(),
+      NambuAcademicSource(),
+      KangnamAcademicSource(),
+      KonyangAcademicSource(),
+      DjuAcademicSource(),
+      PcuAcademicSource(),
       SangmyungAcademicSource(),
       DankookAcademicSource(),
       ChonnamAcademicSource(),
+      SnuAcademicSource(),
+      PostechAcademicSource(),
+      SejongAcademicSource(),
+      AjouAcademicSource(),
+      GistAcademicSource(),
+      SookmyungAcademicSource(),
+      SkkuAcademicSource(),
+      CatholicAcademicSource(),
+      KnuAcademicSource(),
+      DaeguAcademicSource(),
+      UlsanAcademicSource(),
+      DeuAcademicSource(),
+      BnueAcademicSource(),
+      UtAcademicSource(),
+      KookminAcademicSource(),
+      UnistAcademicSource(),
+      KangwonAcademicSource(),
+      KaistAcademicSource(),
+      CauAcademicSource(),
+      YonginAcademicSource(),
+      JejuAcademicSource(),
+      KmuAcademicSource(),
+      SsuAcademicSource(),
+      SyuAcademicSource(),
+      GnuAcademicSource(),
+      InhaAcademicSource(),
+      InuAcademicSource(),
+      KwangwoonAcademicSource(),
+      NsuAcademicSource(),
+      CjeAcademicSource(),
+      BuAcademicSource(),
+      UosAcademicSource(),
+      GinueAcademicSource(),
+      CnueAcademicSource(),
+      GjueAcademicSource(),
+      MjuAcademicSource(),
+      SogangAcademicSource(),
+      SwuAcademicSource(),
+      KoreatechAcademicSource(),
+      PnuAcademicSource(),
+      PknuAcademicSource(),
+      HufsAcademicSource(),
+      CnuAcademicSource(),
+      DnueAcademicSource(),
+      SnueAcademicSource(),
+      GknuAcademicSource(),
+      KhuAcademicSource(),
+      KumohAcademicSource(),
+      CueAcademicSource(),
+      KoreaAcademicSource(),
+      HanyangAcademicSource(),
+      HanyangAcademicSource(erica: true),
+      TukAcademicSource(),
+      GnueAcademicSource(),
+      JnueAcademicSource(),
+      HoseoAcademicSource(),
+      KmouAcademicSource(),
+      DongaAcademicSource(),
+      SeoultechAcademicSource(),
+      KonkukAcademicSource(),
+      KonkukAcademicSource(glocal: true),
+      ChosunAcademicSource(),
+      DgistAcademicSource(),
+      YonseiAcademicSource(),
+      GachonAcademicSource(),
+      SkuAcademicSource(),
+      KyonggiAcademicSource(),
+      MmuAcademicSource(),
+      YuAcademicSource(),
+      SungshinAcademicSource(),
+      CbnuAcademicSource(),
+      KauAcademicSource(),
+      HansungAcademicSource(),
+      SuwonAcademicSource(),
+      KnueKunsanAcademicSource.knue(),
+      KnueKunsanAcademicSource.kunsan(),
+      MokpoAcademicSource(),
+      KongjuAcademicSource(),
+      HanbatAcademicSource(),
+      HknuAcademicSource(),
+      SvAcademicSource.sunchon(),
+      SvAcademicSource.changwon(),
+      SchAcademicSource(),
+      GeochangAcademicSource(),
+      NamhaeAcademicSource(),
+      JbnuAcademicSource(),
+      DonggukAcademicSource(),
+      DonggukAcademicSource(wise: true),
     ],
     store: settings.academicStore,
     settings: settings,
@@ -235,6 +438,17 @@ final lmsControllerProvider = ChangeNotifierProvider<LmsController>((ref) {
     settings: ref.watch(settingsRepositoryProvider),
     repository: ref.watch(eventRepositoryProvider),
     commands: ref.watch(eventCommandServiceProvider),
+    onIntegrationChanged: () {
+      ref.read(appSettingsProvider.notifier).state = ref
+          .read(settingsRepositoryProvider)
+          .load();
+      unawaited(
+        ref
+            .read(googleDriveSyncServiceProvider)
+            .queueSettingsBackup()
+            .catchError((_) {}),
+      );
+    },
   );
   presentation.controller = controller;
   ref.onDispose(() {

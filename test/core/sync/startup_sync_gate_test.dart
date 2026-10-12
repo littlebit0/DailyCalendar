@@ -22,6 +22,119 @@ void main() {
     ),
   );
 
+  Widget localApp(
+    Future<void> Function() sync, {
+    ValueNotifier<GoogleDriveSyncStatus>? status,
+  }) => MaterialApp(
+    home: StartupSyncGate(
+      requiredAtStartup: true,
+      showLocalImmediately: true,
+      syncStatus: status,
+      synchronize: sync,
+      onContinue: () {},
+      timeout: const Duration(seconds: 2),
+      child: const Text('calendar'),
+    ),
+  );
+
+  testWidgets('issue90 calendar renders before slow external synchronization', (
+    tester,
+  ) async {
+    final operation = Completer<void>();
+    var calls = 0;
+    await tester.pumpWidget(
+      localApp(() {
+        calls++;
+        return operation.future;
+      }),
+    );
+    expect(find.text('calendar'), findsOneWidget);
+    await tester.pump(const Duration(seconds: 20));
+    expect(find.text('calendar'), findsOneWidget);
+    expect(calls, 1);
+    operation.complete();
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsNothing);
+  });
+
+  testWidgets(
+    'issue90 failed Drive preserves calendar and manual retry recovers',
+    (tester) async {
+      var calls = 0;
+      await tester.pumpWidget(
+        localApp(() async {
+          if (++calls == 1) {
+            throw const SocketException('private-account-secret');
+          }
+        }),
+      );
+      await tester.pump();
+      expect(find.text('calendar'), findsOneWidget);
+      expect(find.textContaining('private-account-secret'), findsNothing);
+      await tester.tap(find.text('다시 시도'));
+      await tester.pump();
+      expect(calls, 2);
+      expect(find.text('calendar'), findsOneWidget);
+      expect(find.text('다시 시도'), findsNothing);
+    },
+  );
+
+  testWidgets('issue90 automatic Drive recovery clears stale error', (
+    tester,
+  ) async {
+    final status = ValueNotifier(const GoogleDriveSyncStatus());
+    addTearDown(status.dispose);
+    await tester.pumpWidget(
+      localApp(() async {
+        throw TimeoutException('private');
+      }, status: status),
+    );
+    await tester.pump();
+    expect(find.text('다시 시도'), findsOneWidget);
+    status.value = GoogleDriveSyncStatus(lastSyncedAt: DateTime(2026, 10, 12));
+    await tester.pump();
+    expect(find.text('다시 시도'), findsNothing);
+    expect(find.text('calendar'), findsOneWidget);
+  });
+
+  testWidgets(
+    'issue90 controlled before-after: five seconds network excludes first frame',
+    (tester) async {
+      var enteredAt = DateTime(2000);
+      for (final immediate in [false, true]) {
+        final startedAt = tester.binding.clock.now();
+        final external = Completer<void>();
+        await tester.pumpWidget(
+          MaterialApp(
+            home: StartupSyncGate(
+              key: ValueKey(immediate),
+              requiredAtStartup: true,
+              showLocalImmediately: immediate,
+              synchronize: () => external.future,
+              onContinue: () => enteredAt = tester.binding.clock.now(),
+              child: const Text('calendar'),
+            ),
+          ),
+        );
+        expect(
+          find.text('calendar'),
+          immediate ? findsOneWidget : findsNothing,
+        );
+        await tester.pump(const Duration(seconds: 5));
+        external.complete();
+        await tester.pump();
+        expect(find.text('calendar'), findsOneWidget);
+        final blockedMs = enteredAt.difference(startedAt).inMilliseconds;
+        expect(blockedMs, immediate ? 0 : 5000);
+        // Fake-time scenario: legacy blocks all 5000ms; local-first blocks 0ms.
+        debugPrint(
+          'issue90 controlled network_ms=5000 local_first=$immediate '
+          'network_blocked_ui_ms=$blockedMs',
+        );
+      }
+    },
+  );
+
   testWidgets('local account skips synchronization entirely', (tester) async {
     var calls = 0;
     await tester.pumpWidget(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/sync/settings_sync_document.dart';
@@ -42,6 +43,38 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final first = DateTime.utc(2026, 9, 10, 3, 0, 0, 0, 100);
   final second = first.add(const Duration(microseconds: 100));
+
+  test(
+    'equal-time older LMS writer cannot strip manual completion; newer uncheck wins',
+    () {
+      final metadata = LmsEventMetadata(
+        schoolId: 'smu',
+        ownerId: 'student@example.com',
+        lmsUserId: '42',
+        courseId: '123',
+        courseTitle: '수업',
+        activityType: 'quiz',
+        activityId: '456',
+        sourceUrl: 'https://ecampus.smu.ac.kr/mod/quiz/view.php?id=456',
+        sourceCompleted: false,
+        manuallyCompleted: true,
+      );
+      final manual = event(
+        changed: first,
+      ).copyWith(completed: true, lms: metadata);
+      final old = manual.copyWith(
+        lms: metadata.copyWith(manuallyCompleted: false),
+      );
+      expect(compareEventVersions(manual, old), greaterThan(0));
+      expect(compareEventVersions(old, manual), lessThan(0));
+      final unchecked = old.copyWith(completed: false, updatedAt: second);
+      expect(compareEventVersions(unchecked, manual), greaterThan(0));
+      expect(
+        compareEventVersions(manual.copyWith(deletedAt: first), manual),
+        greaterThan(0),
+      );
+    },
+  );
 
   test('UTC equivalent instants do not conflict because of timezone', () {
     final a = event(changed: DateTime.parse('2026-09-10T12:00:00+09:00'));

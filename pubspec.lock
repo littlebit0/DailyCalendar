@@ -21,10 +21,10 @@ packages:
     dependency: transitive
     description:
       name: archive
-      sha256: a96e8b390886ee8abb49b7bd3ac8df6f451c621619f52a26e815fdcf568959ff
+      sha256: "6c5bcd986e06b94e3c40244af471750840a3d2341d1f9763a1100a14add517b4"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.9"
+    version: "4.3.0"
   args:
     dependency: transitive
     description:
@@ -41,6 +41,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.13.1"
+  bidi:
+    dependency: transitive
+    description:
+      name: bidi
+      sha256: "77f475165e94b261745cf1032c751e2032b8ed92ccb2bf5716036db79320637d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.13"
   boolean_selector:
     dependency: transitive
     description:
@@ -662,7 +670,7 @@ packages:
     source: hosted
     version: "3.2.2"
   http_parser:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http_parser
       sha256: "178d74305e7866013777bab2c3d8726205dc5a4dd935297175b19a23a2e66571"
@@ -673,10 +681,10 @@ packages:
     dependency: transitive
     description:
       name: image
-      sha256: f9881ff4998044947ec38d098bc7c8316ae1186fa786eddffdb867b9bc94dfce
+      sha256: a1e7f4951e538a568e14b856702afc9ae1d2f4b202daced8d22c1b9cd211ce89
       url: "https://pub.dev"
     source: hosted
-    version: "4.8.0"
+    version: "4.10.1"
   intl:
     dependency: "direct main"
     description:
@@ -949,6 +957,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.0"
+  pdf_cos:
+    dependency: transitive
+    description:
+      name: pdf_cos
+      sha256: b13c952138028505b0b4137155ad4a63323c40662176339a92909e9df72c89d9
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.1"
+  pdf_document:
+    dependency: "direct main"
+    description:
+      name: pdf_document
+      sha256: "3dd31484697f6028f3470f6ad4081da4c87bc2071b2dd6e8625885c27547d474"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.1"
+  pdf_graphics:
+    dependency: "direct main"
+    description:
+      name: pdf_graphics
+      sha256: d1ea93094bb175de790f53753e7d2db1978ec729265060840ba65b79cb93d306
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.1"
   petitparser:
     dependency: transitive
     description:

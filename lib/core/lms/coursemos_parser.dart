@@ -3,6 +3,9 @@ import 'package:html/parser.dart' as html_parser;
 
 import 'lms_models.dart';
 
+part 'coursemos_learning_parser.dart';
+part 'coursemos_quiz_parser.dart';
+
 /// Safe codes only: neither HTML nor names/grades are included in errors.
 class CoursemosParseException implements Exception {
   const CoursemosParseException(
@@ -33,16 +36,30 @@ class CoursemosActivity {
     required this.course,
     required this.type,
     required this.url,
+    this.openAt,
     this.dueAt,
     this.submissionStatus,
+    this.sourceCompleted,
+    this.requiredLearningSeconds,
+    this.learnedSeconds,
+    this.attendanceStatus,
+    this.progressPercent,
   });
   final String id;
   final String title;
   final CoursemosCourse course;
   final String type;
   final Uri url;
+  final DateTime? openAt;
   final DateTime? dueAt;
   final String? submissionStatus;
+
+  /// Null means the source did not provide a verified completion state.
+  final bool? sourceCompleted;
+  final int? requiredLearningSeconds;
+  final int? learnedSeconds;
+  final String? attendanceStatus;
+  final double? progressPercent;
 }
 
 class CoursemosActivityIndex {
@@ -58,8 +75,8 @@ class CoursemosActivityIndex {
   final int ignoredEmptyCount;
 }
 
-/// Parses only read-only course listings and activity indexes. Activity detail
-/// links are retained for an explicit user action and are never fetched here.
+/// Parses read-only course indexes and verified quiz attempt summaries.
+/// Never follows attempt, answer review, start or submission links.
 class CoursemosParser {
   const CoursemosParser();
 
@@ -245,6 +262,9 @@ class CoursemosParser {
         url: link.url!,
         dueAt: parseKoreanDate(_text(cells[2])),
         submissionStatus: type == 'assignment' ? _text(cells[3]) : null,
+        sourceCompleted: type == 'assignment'
+            ? parseAssignmentCompletion(_text(cells[3]))
+            : null,
       );
     }
     if (spans.isNotEmpty) {
@@ -255,6 +275,20 @@ class CoursemosParser {
       rawRowCount: rows.length,
       ignoredHeadingCount: ignored,
     );
+  }
+
+  /// Exact submission states only: a grade, a generic activity-completion tick,
+  /// or an unfamiliar label is not proof of submission. SMU's published learner
+  /// manual uses '채점 필요' for a submitted assignment; the verified index uses
+  /// '미제출'. The current authenticated app also exposes '제출 완료' from that
+  /// index. Moodle documents the separate submitted and draft states.
+  static bool? parseAssignmentCompletion(String source) {
+    final status = source.replaceAll(RegExp(r'\s+'), ' ').trim().toLowerCase();
+    return switch (status) {
+      '채점 필요' || '제출 완료' || 'submitted for grading' => true,
+      '미제출' || '제출 안 함' || 'draft (not submitted)' => false,
+      _ => null,
+    };
   }
 
   /// The verified SMU indexes use Korean wall time. Never use the device's zone.

@@ -154,6 +154,19 @@ class _AppLocalizationsDelegate
 
 const Map<String, Map<String, String>> _translations = {
   'en': {
+    '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.':
+        'School data synced. Some school information could not be verified.',
+    '퀴즈 {count}개의 응시 상태를 확인하지 못했습니다. 기존 완료 상태는 유지됩니다.':
+        'Attempt status could not be verified for {count} quizzes. Existing completion states are kept.',
+    "학교 데이터를 동기화했습니다. 일부 학습 정보는 확인하지 못했습니다.":
+        "School data synced. Some learning information could not be verified.",
+    "학습 정보가 충분하지 않은 항목 {count}개는 추가하지 않았습니다.":
+        "{count} items were not added because their learning information is incomplete.",
+    "강좌 {count}개의 학습 정보를 확인하지 못했습니다. 기존 학습 일정은 유지됩니다.":
+        "Learning information could not be verified for {count} courses. Existing learning events are kept.",
+    "학습시간: {learned} / 출석 요구시간: {required}":
+        "Learning time: {learned} / Required attendance time: {required}",
+    "{minutes}분 {seconds}초": "{minutes} min {seconds} sec",
     '학사 관리': 'Academic management',
     '학사 정보, LMS, 학사일정 및 시간표 설정':
         'Academic profile, LMS, university calendar and timetable settings',
@@ -175,19 +188,21 @@ const Map<String, Map<String, String>> _translations = {
     "이 인증 경로는 앱에서 아직 지원하지 않습니다.":
         "This verification method is not yet supported in the app.",
     "학교 연결을 확인하고 있습니다.": "Checking your school connection.",
-    "학교에서 최신 과제와 퀴즈를 가져오고 있습니다.":
-        "Fetching the latest assignments and quizzes from your school.",
+    "학교에서 최신 과제·퀴즈·학습 일정을 가져오고 있습니다.":
+        "Fetching the latest assignments, quizzes and learning events from your school.",
     "학교 데이터 동기화 완료": "School data synced",
     "학교에 연결하지 못해 마지막으로 확인한 데이터를 표시합니다.":
         "Unable to connect to your school. Showing the last verified data.",
+    "학교에 다시 로그인해 주세요. 기존 일정은 마지막으로 확인한 상태로 유지됩니다.":
+        "Sign in to your school again. Existing events keep their last verified state.",
     "학교 로그인이 필요합니다.": "Sign in to your school to continue.",
     "이 학교의 LMS 연결은 아직 지원하지 않습니다.":
         "LMS connections for this school are not yet supported.",
     "학교 계정으로 로그인해 연결하세요.": "Sign in with your school account to connect.",
-    "현재 상명대학교 과제·퀴즈를 지원합니다. 다른 학교는 확인 후 지원합니다.":
-        "Assignments and quizzes at Sangmyung University are currently supported. Other schools will be added after verification.",
-    "학교의 공식 로그인 화면에서 인증하면 과제 마감과 퀴즈 일정을 자동으로 가져옵니다.":
-        "Sign in on the official school page to automatically import assignment deadlines and quiz schedules.",
+    "현재 상명대학교 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
+        "LMS events at Sangmyung University are currently supported. Other schools will be added after verification.",
+    "학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.":
+        "Sign in on the official school page to automatically import assignment and quiz deadlines, and learning events with verified attendance requirements.",
     "앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.":
         "Updates are checked when the app starts or resumes, and every 5 minutes while in use. Sign in again when school authentication expires.",
     "최근 확인: {time}": "Last checked: {time}",
@@ -197,8 +212,12 @@ const Map<String, Map<String, String>> _translations = {
         "{count} items without a deadline are not shown on the calendar.",
     "학교 계정으로 로그인": "Sign in with school account",
     "학교 연결 해제": "Disconnect school",
-    "제목·마감·제출 상태는 학교에서 갱신됩니다. Daily의 메모·분류·알림·완료 표시는 별도로 유지됩니다.":
-        "Titles, deadlines and submission status are updated by your school. Your Daily notes, categories, reminders and completion marks are kept separately.",
+    "학교 아이디": "School username",
+    "로그인 정보를 확인하고 있습니다.": "Checking login information.",
+    "저장된 로그인 정보를 확인하지 못했습니다.": "Could not read saved login information.",
+    "저장된 로그인 정보가 없습니다.": "No login information saved.",
+    "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
+        "Titles, deadlines and submission status update from school. Events you complete manually stay complete even if school reports incomplete. Notes, categories and reminders are kept separately.",
     "과제": "Assignment",
     "퀴즈": "Quiz",
     "강의": "Lecture",
@@ -248,6 +267,7 @@ const Map<String, Map<String, String>> _translations = {
     "대학교 검색 · 초성 검색 가능": "Search university or Korean initials",
     "Google 계정 연결": "Connect Google account",
     "학사일정 · 시간표 지원": "Academic calendar and timetable available",
+    "학사일정 지원": "Academic calendar available",
     "저장된 학사 정보": "Saved academic profile",
     "학사 정보 설정": "Set academic profile",
     "학사 정보 변경": "Change academic profile",
@@ -320,6 +340,7 @@ const Map<String, Map<String, String>> _translations = {
     '천안캠퍼스': 'Cheonan campus',
     '상명대학교': 'Sangmyung University',
     '강의 목록을 불러오지 못했습니다.': 'Unable to load the course catalog.',
+    '해당 대학의 학교 시간표는 현재 미지원입니다.': 'This university’s course catalog is currently unavailable.',
     '학교 · 캠퍼스': 'University · Campus',
     '학과 · 전공': 'Department · Major',
     '과목명 · 학수번호 · 교수 검색': 'Search course, code or professor',
@@ -1056,6 +1077,17 @@ const Map<String, Map<String, String>> _translations = {
     '화면과 기능 사용': 'Screens and feature usage',
   },
   'ja': {
+    '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.': '大学のデータを同期しました。一部の情報は確認できませんでした。',
+    '퀴즈 {count}개의 응시 상태를 확인하지 못했습니다. 기존 완료 상태는 유지됩니다.':
+        '小テスト{count}件の受験状況を確認できませんでした。既存の完了状態は保持されます。',
+    "학교 데이터를 동기화했습니다. 일부 학습 정보는 확인하지 못했습니다.":
+        "大学のデータを同期しました。一部の学習情報は確認できませんでした。",
+    "학습 정보가 충분하지 않은 항목 {count}개는 추가하지 않았습니다.": "学習情報が不足している{count}件は追加していません。",
+    "강좌 {count}개의 학습 정보를 확인하지 못했습니다. 기존 학습 일정은 유지됩니다.":
+        "{count}科目の学習情報を確認できませんでした。既存の学習予定は保持されます。",
+    "학습시간: {learned} / 출석 요구시간: {required}":
+        "学習時間：{learned} / 出席に必要な時間：{required}",
+    "{minutes}분 {seconds}초": "{minutes}分{seconds}秒",
     '학사 관리': '学事管理',
     '학사 정보, LMS, 학사일정 및 시간표 설정': '学籍情報、LMS、学年暦、時間割の設定',
     '시간표 설정': '時間割設定',
@@ -1072,16 +1104,18 @@ const Map<String, Map<String, String>> _translations = {
     "학교 로그인창을 불러오지 못했습니다.": "大学のログイン画面を読み込めませんでした。",
     "이 인증 경로는 앱에서 아직 지원하지 않습니다.": "この認証方法にはまだ対応していません。",
     "학교 연결을 확인하고 있습니다.": "大学への接続を確認しています。",
-    "학교에서 최신 과제와 퀴즈를 가져오고 있습니다.": "大学から最新の課題と小テストを取得しています。",
+    "학교에서 최신 과제·퀴즈·학습 일정을 가져오고 있습니다.": "大学から最新の課題・小テスト・学習予定を取得しています。",
     "학교 데이터 동기화 완료": "大学のデータを同期しました",
     "학교에 연결하지 못해 마지막으로 확인한 데이터를 표시합니다.": "大学に接続できないため、前回確認したデータを表示しています。",
+    "학교에 다시 로그인해 주세요. 기존 일정은 마지막으로 확인한 상태로 유지됩니다.":
+        "大学に再度ログインしてください。既存の予定は前回確認した状態で保持されます。",
     "학교 로그인이 필요합니다.": "大学へのログインが必要です。",
     "이 학교의 LMS 연결은 아직 지원하지 않습니다.": "この大学のLMS連携にはまだ対応していません。",
     "학교 계정으로 로그인해 연결하세요.": "大学のアカウントでログインして連携してください。",
-    "현재 상명대학교 과제·퀴즈를 지원합니다. 다른 학교는 확인 후 지원합니다.":
-        "現在、祥明大学校の課題と小テストに対応しています。他の大学は確認後に対応します。",
-    "학교의 공식 로그인 화면에서 인증하면 과제 마감과 퀴즈 일정을 자동으로 가져옵니다.":
-        "大学の公式ログイン画面で認証すると、課題の締切と小テストの日程を自動で取得します。",
+    "현재 상명대학교 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
+        "現在、祥明大学校のLMS予定に対応しています。他の大学は確認後に対応します。",
+    "학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.":
+        "大学の公式ログイン画面で認証すると、課題・小テストの締切と出席条件が確認できた学習予定を自動で取得します。",
     "앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.":
         "アプリの起動・復帰時と、使用中は5分ごとに確認します。大学の認証が切れた場合は再ログインが必要です。",
     "최근 확인: {time}": "最終確認：{time}",
@@ -1089,8 +1123,12 @@ const Map<String, Map<String, String>> _translations = {
     "마감일이 없는 항목 {count}개는 달력에 표시하지 않습니다.": "締切のない{count}件はカレンダーに表示されません。",
     "학교 계정으로 로그인": "大学のアカウントでログイン",
     "학교 연결 해제": "大学との連携を解除",
-    "제목·마감·제출 상태는 학교에서 갱신됩니다. Daily의 메모·분류·알림·완료 표시는 별도로 유지됩니다.":
-        "タイトル・締切・提出状況は大学の情報に合わせて更新されます。Dailyのメモ・分類・通知・完了マークは別に保持されます。",
+    "학교 아이디": "学校のユーザーID",
+    "로그인 정보를 확인하고 있습니다.": "ログイン情報を確認しています。",
+    "저장된 로그인 정보를 확인하지 못했습니다.": "保存されたログイン情報を確認できませんでした。",
+    "저장된 로그인 정보가 없습니다.": "ログイン情報は保存されていません。",
+    "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
+        "タイトル・締切・提出状態は学校から更新されます。手動で完了した予定は学校の未完了状態で変更されません。メモ・分類・通知は別途保持されます。",
     "과제": "課題",
     "퀴즈": "小テスト",
     "강의": "講義",
@@ -1140,6 +1178,7 @@ const Map<String, Map<String, String>> _translations = {
     "대학교 검색 · 초성 검색 가능": "大学名・韓国語頭子音で検索",
     "Google 계정 연결": "Googleアカウントを連携",
     "학사일정 · 시간표 지원": "学事日程・時間割に対応",
+    "학사일정 지원": "学事日程に対応",
     "저장된 학사 정보": "保存した学籍情報",
     "학사 정보 설정": "学籍情報を設定",
     "학사 정보 변경": "学籍情報を変更",
@@ -1206,6 +1245,7 @@ const Map<String, Map<String, String>> _translations = {
     '천안캠퍼스': '天安キャンパス',
     '상명대학교': '祥明大学校',
     '강의 목록을 불러오지 못했습니다.': '授業一覧を読み込めません。',
+    '해당 대학의 학교 시간표는 현재 미지원입니다.': 'この大学の授業時間割には現在対応していません。',
     '학교 · 캠퍼스': '大学・キャンパス',
     '학과 · 전공': '学部・専攻',
     '과목명 · 학수번호 · 교수 검색': '科目名・科目番号・教員を検索',
@@ -1874,6 +1914,16 @@ const Map<String, Map<String, String>> _translations = {
     '화면과 기능 사용': '画面と機能の利用',
   },
   'zh_Hant': {
+    '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.': '學校資料已同步。部分學校資訊無法確認。',
+    '퀴즈 {count}개의 응시 상태를 확인하지 못했습니다. 기존 완료 상태는 유지됩니다.':
+        '無法確認 {count} 個測驗的作答狀態。既有完成狀態會保留。',
+    "학교 데이터를 동기화했습니다. 일부 학습 정보는 확인하지 못했습니다.": "學校資料已同步。部分學習資訊無法確認。",
+    "학습 정보가 충분하지 않은 항목 {count}개는 추가하지 않았습니다.": "有 {count} 個項目因學習資訊不足而未新增。",
+    "강좌 {count}개의 학습 정보를 확인하지 못했습니다. 기존 학습 일정은 유지됩니다.":
+        "無法確認 {count} 門課程的學習資訊。既有學習行程會保留。",
+    "학습시간: {learned} / 출석 요구시간: {required}":
+        "學習時間：{learned} / 出席要求時間：{required}",
+    "{minutes}분 {seconds}초": "{minutes} 分 {seconds} 秒",
     '학사 관리': '學務管理',
     '학사 정보, LMS, 학사일정 및 시간표 설정': '學籍資訊、LMS、大學行事曆與課表設定',
     '시간표 설정': '課表設定',
@@ -1890,16 +1940,17 @@ const Map<String, Map<String, String>> _translations = {
     "학교 로그인창을 불러오지 못했습니다.": "無法載入學校登入頁面。",
     "이 인증 경로는 앱에서 아직 지원하지 않습니다.": "應用程式尚未支援此驗證方式。",
     "학교 연결을 확인하고 있습니다.": "正在確認學校連線。",
-    "학교에서 최신 과제와 퀴즈를 가져오고 있습니다.": "正在從學校取得最新的作業與測驗。",
+    "학교에서 최신 과제·퀴즈·학습 일정을 가져오고 있습니다.": "正在從學校取得最新的作業、測驗與學習行程。",
     "학교 데이터 동기화 완료": "學校資料已同步",
     "학교에 연결하지 못해 마지막으로 확인한 데이터를 표시합니다.": "無法連線至學校，正在顯示上次確認的資料。",
+    "학교에 다시 로그인해 주세요. 기존 일정은 마지막으로 확인한 상태로 유지됩니다.": "請重新登入學校。現有行程會保留上次確認的狀態。",
     "학교 로그인이 필요합니다.": "需要登入學校帳號。",
     "이 학교의 LMS 연결은 아직 지원하지 않습니다.": "尚未支援此學校的 LMS 連線。",
     "학교 계정으로 로그인해 연결하세요.": "請使用學校帳號登入以建立連線。",
-    "현재 상명대학교 과제·퀴즈를 지원합니다. 다른 학교는 확인 후 지원합니다.":
-        "目前支援祥明大學的作業與測驗。其他學校將於確認後提供支援。",
-    "학교의 공식 로그인 화면에서 인증하면 과제 마감과 퀴즈 일정을 자동으로 가져옵니다.":
-        "在學校官方登入頁面完成驗證後，即可自動匯入作業截止時間與測驗日程。",
+    "현재 상명대학교 LMS 일정을 지원합니다. 다른 학교는 확인 후 지원합니다.":
+        "目前支援祥明大學的 LMS 行程。其他學校將於確認後提供支援。",
+    "학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.":
+        "在學校官方登入頁面完成驗證後，即可自動匯入作業、測驗截止時間與已確認出席條件的學習行程。",
     "앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.":
         "應用程式啟動、返回前景及使用期間每 5 分鐘會檢查更新。學校驗證到期後需要重新登入。",
     "최근 확인: {time}": "上次確認：{time}",
@@ -1907,8 +1958,12 @@ const Map<String, Map<String, String>> _translations = {
     "마감일이 없는 항목 {count}개는 달력에 표시하지 않습니다.": "{count} 個沒有截止日期的項目不會顯示在月曆上。",
     "학교 계정으로 로그인": "使用學校帳號登入",
     "학교 연결 해제": "解除學校連線",
-    "제목·마감·제출 상태는 학교에서 갱신됩니다. Daily의 메모·분류·알림·완료 표시는 별도로 유지됩니다.":
-        "標題、截止時間與繳交狀態會依學校資料更新。Daily 的備註、分類、提醒及完成標記會分別保留。",
+    "학교 아이디": "學校帳號",
+    "로그인 정보를 확인하고 있습니다.": "正在確認登入資訊。",
+    "저장된 로그인 정보를 확인하지 못했습니다.": "無法讀取已儲存的登入資訊。",
+    "저장된 로그인 정보가 없습니다.": "尚未儲存登入資訊。",
+    "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
+        "標題、期限和提交狀態會從學校更新。手動完成的行程不會因學校的未完成狀態而變更。備註、分類和提醒會分別保留。",
     "과제": "作業",
     "퀴즈": "測驗",
     "강의": "課程",
@@ -1958,6 +2013,7 @@ const Map<String, Map<String, String>> _translations = {
     "대학교 검색 · 초성 검색 가능": "搜尋大學或韓文聲母",
     "Google 계정 연결": "連結 Google 帳戶",
     "학사일정 · 시간표 지원": "支援校務行事曆與課表",
+    "학사일정 지원": "支援校務行事曆",
     "저장된 학사 정보": "已儲存的學籍資訊",
     "학사 정보 설정": "設定學籍資訊",
     "학사 정보 변경": "變更學籍資訊",
@@ -2022,6 +2078,7 @@ const Map<String, Map<String, String>> _translations = {
     '천안캠퍼스': '天安校區',
     '상명대학교': '祥明大學',
     '강의 목록을 불러오지 못했습니다.': '無法載入課程目錄。',
+    '해당 대학의 학교 시간표는 현재 미지원입니다.': '目前尚未支援此大學的課程表。',
     '학교 · 캠퍼스': '學校 · 校區',
     '학과 · 전공': '學系 · 專業',
     '과목명 · 학수번호 · 교수 검색': '搜尋課程、課號或教師',

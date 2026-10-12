@@ -66,7 +66,14 @@ memory.
 
 ## 7. Verification
 
-- Run the narrowest meaningful tests after focused changes.
+- Complete the entire requested implementation scope before combined verification
+  and review. Do not repeat full checks, builds or installs for each small change
+  or source packet. After correcting failures, rerun the narrowest meaningful
+  checks for changed and directly affected behavior; broaden only for concrete
+  global impact or mandatory requirements. Keep necessary pre-action security,
+  data-loss checks and execution error handling.
+- Distinguish implementation completion from verification and device acceptance.
+  Usage forecasts do not authorize omitted work or unlimited spending.
 - For shared behavior or release work, run `.\tool\flutter.ps1 analyze --no-pub`
   and `.\tool\flutter.ps1 test --no-pub` on Windows when available.
 - For Android/Windows changes, rebuild and smoke-run the relevant app when the
@@ -88,7 +95,31 @@ memory.
 
 ## 8. Handoff
 
-- Keep `AGENT_MEMORY.md` current for cross-agent work.
+- Keep `AGENT_MEMORY.md` as the concise current handoff/index for cross-agent work.
+  Consolidate same-purpose handoffs; preserve superseded evidence in `docs/archive/`
+  and link it rather than accumulating contradictory live instructions.
 - Record changed behavior, platform-specific constraints, verification results,
   release status, and remaining Mac/iPhone work.
 - Do not rely on chat memory for critical project state.
+
+## 9. Repository Codex Skills
+
+Project-scoped skills live in `.agents/skills/`. Select the relevant entrypoint
+instead of loading every skill for each task:
+
+- `dailycalendar-project`: Flutter architecture, repository orientation and tooling.
+- `daily-lms-sync`: Coursemos parsing, import completeness and cache visibility.
+- `daily-auth-regression`: Google/Apple/LMS identity, cancellation and session checks.
+- `daily-calendar-integrity`: dates, recurrence, migrations and Drive merge/deletion rules.
+- `daily-cross-platform-check`: affected-platform builds and verification evidence.
+
+These skills supplement the rules above and do not grant additional permissions.
+Skill/configuration-only edits do not require updating or launching installed apps.
+See `docs/CODEX_SETUP.md` for discovery and external plugin connection boundaries.
+
+# 명시한 요구와 판단 위임의 경계 — 항상 적용
+
+- 사용자가 대상·형태·기준을 지정한 경우, 다른 대상이나 형태로 임의 대체하지 않는다. 확인하지 않은 내용을 추측해 적용하지 않는다.
+- 요구를 충족할 자료를 확인하지 못했거나, 서로 다른 해석이 결과에 실질적인 차이를 만들면 구체적인 선택지와 불확실한 점을 설명하고 사용자에게 먼저 묻는다. 질문에 대한 답이 오기 전에는 그 답에 의존하는 변경을 진행하지 않는다.
+- 사용자가 해당 질문에 대해 명시적으로 “알아서 하라” 등 판단을 위임한 범위는 스스로 판단해 진행한다. 다른 범위에까지 위임을 확대하지 않는다.
+- 자료 수집·현재 코드 확인 등 답에 의존하지 않는 작업은 계속한다. 합의된 범위 내의 통상적인 구현 선택마다 불필요하게 반복 확인하지 않는다.

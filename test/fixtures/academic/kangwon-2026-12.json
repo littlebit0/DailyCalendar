@@ -1,0 +1,70 @@
+{
+  "icon": "success",
+  "title": "",
+  "message": "",
+  "data": [
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 85,
+      "ttl": "학위청구논문 심사결과 보고",
+      "etc1Cn": "2026.12.10",
+      "etc3Cn": "2026.12.10",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 68,
+      "ttl": "2학기 성적 입력",
+      "etc1Cn": "2026.12.14",
+      "etc3Cn": "2026.12.24",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 69,
+      "ttl": "강의보충기간",
+      "etc1Cn": "2026.12.15",
+      "etc3Cn": "2026.12.21",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 70,
+      "ttl": "2학기 기말시험 종료일/종강, 수업점검",
+      "etc1Cn": "2026.12.21",
+      "etc3Cn": "2026.12.21",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 71,
+      "ttl": "계절학기 개강 ",
+      "etc1Cn": "2026.12.24",
+      "etc3Cn": "2026.12.24",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 73,
+      "ttl": "2학기 확정 전 성적 공개",
+      "etc1Cn": "2026.12.28",
+      "etc3Cn": "2027.01.04",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    },
+    {
+      "bbsId": "chuncheon_calender",
+      "pstSn": 72,
+      "ttl": "2학기 기말 수업평가",
+      "etc1Cn": "2026.12.28",
+      "etc3Cn": "2027.01.04",
+      "cd1Vl": 5,
+      "dataSttsCd": "A"
+    }
+  ]
+}

@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_calendar_service.dart';
+import 'package:daily/core/academic/expansion_a_academic_sources.dart';
 import 'package:daily/core/academic/university_directory.dart';
+import 'package:daily/core/academic/university_regions.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/di/app_providers.dart';
 import 'package:daily/core/lms/lms_controller.dart';
@@ -75,6 +78,7 @@ void main() {
     WidgetTester tester, {
     Widget home = const SettingsPage(),
     String? university,
+    bool mismatchedCalendarSource = false,
   }) async {
     final settings = SettingsRepository(
       preferences: await SharedPreferences.getInstance(),
@@ -105,10 +109,33 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
+          if (mismatchedCalendarSource)
+            academicCalendarServiceProvider.overrideWith((ref) {
+              final service = AcademicCalendarService(
+                sources: [EuljiAcademicSource()],
+                store: settings.academicStore,
+                settings: settings,
+                repository: _Events(),
+                commands: _Commands(),
+                sync: drive,
+              );
+              ref.onDispose(service.dispose);
+              return service;
+            }),
           settingsRepositoryProvider.overrideWithValue(settings),
           googleDriveAuthServiceProvider.overrideWithValue(_Auth()),
           googleDriveSyncServiceProvider.overrideWithValue(drive),
           universityDirectoryProvider.overrideWith((ref) async => directory),
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
           timetablePeriodPreparationProvider.overrideWith((ref) async {}),
           lmsControllerProvider.overrideWith((ref) => lms),
         ],
@@ -129,6 +156,20 @@ void main() {
     await tester.pumpAndSettle();
     return settings;
   }
+
+  testWidgets('missing school source never substitutes another university', (
+    tester,
+  ) async {
+    await pump(
+      tester,
+      home: const AcademicCalendarPage(),
+      university: 'smu',
+      mismatchedCalendarSource: true,
+    );
+    expect(find.text('학사일정을 불러오거나 저장하지 못했습니다. 기존 일정은 유지됩니다.'), findsOneWidget);
+    expect(find.text('학사일정 확인'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 
   Future<void> open(WidgetTester tester, String key) async {
     final tile = find.byKey(ValueKey(key));
@@ -222,7 +263,7 @@ void main() {
       await open(tester, 'academic-lms-connection');
       expect(find.byType(LmsSettingsPage), findsOneWidget);
       expect(find.text('Google 계정 로그인이 필요합니다.'), findsOneWidget);
-      expect(find.byKey(const ValueKey('lms-connect')), findsNothing);
+      expect(find.byKey(const ValueKey('lms-local-login-configure')), findsNothing);
       await back(tester);
       await open(tester, 'academic-calendar-settings');
       expect(find.byType(AcademicCalendarPage), findsOneWidget);
@@ -256,14 +297,11 @@ void main() {
         await open(tester, 'academic-lms-connection');
         expect(find.byType(LmsSettingsPage), findsOneWidget);
         expect(
-          find.byKey(const ValueKey('lms-connect')),
+          find.byKey(const ValueKey('lms-local-login-configure')),
           university == 'smu' ? findsOneWidget : findsNothing,
         );
         if (university == 'jnu') {
-          expect(
-            find.text('현재 상명대학교 과제·퀴즈를 지원합니다. 다른 학교는 확인 후 지원합니다.'),
-            findsOneWidget,
-          );
+          expect(find.text('해당 대학의 LMS 연결은 아직 지원하지 않습니다.'), findsOneWidget);
         }
         expect(settings.load().academicProfile, before);
         expect(tester.takeException(), isNull);

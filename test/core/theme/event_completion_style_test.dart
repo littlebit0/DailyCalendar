@@ -117,11 +117,7 @@ void main() {
         ),
       ),
     );
-    final composed = Color.alphaBlend(tint, surface);
-    expect(
-      sourceStyle.decorationColor,
-      calendarEventStrikeColor(category, composed),
-    );
+    expect(sourceStyle.decorationColor, Colors.white);
     await tester.pumpWidget(
       MaterialApp(
         theme: ThemeData.dark(),
@@ -198,7 +194,10 @@ void main() {
           ),
           greaterThanOrEqualTo(4.5),
         );
-        expect(completedStyle.decorationColor, isNotNull);
+        expect(
+          completedStyle.decorationColor,
+          brightness == Brightness.dark ? Colors.white : Colors.black,
+        );
         expect(completedStyle.color!.a, greaterThanOrEqualTo(0.7));
         expect(completedStyle.decorationColor!.a, greaterThanOrEqualTo(0.9));
         expect(completedAccent, categoryColor);

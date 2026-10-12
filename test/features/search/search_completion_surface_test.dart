@@ -48,21 +48,10 @@ void main() {
         calendarEventContrast(title.style!.color!, material.color!),
         greaterThanOrEqualTo(4.5),
       );
-      expect(
-        calendarEventContrast(
-          title.style!.decorationColor!,
-          title.style!.color!,
-        ),
-        greaterThanOrEqualTo(3),
-      );
-      expect(
-        calendarEventContrast(title.style!.decorationColor!, material.color!),
-        greaterThanOrEqualTo(3),
-      );
       expect(event.colorValue, 0xffffff00);
       expect(
         title.style!.decorationColor,
-        calendarEventStrikeColor(const Color(0xffffff00), material.color!),
+        brightness == Brightness.dark ? Colors.white : Colors.black,
       );
       expect(title.style!.decoration, TextDecoration.lineThrough);
       expect(tester.takeException(), isNull);

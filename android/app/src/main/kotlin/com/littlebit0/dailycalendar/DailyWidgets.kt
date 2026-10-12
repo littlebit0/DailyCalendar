@@ -302,6 +302,7 @@ private data class DailyWidgetPalette(
     val backgroundResource: Int,
     val surface: Int,
     val primaryText: Int,
+    val completionStrike: Int,
     val secondaryText: Int,
     val mutedText: Int,
     val accent: Int,
@@ -318,6 +319,7 @@ private data class DailyWidgetPalette(
                 DailyWidgetPalette(
                     backgroundResource = R.drawable.widget_background_dark,
                     surface = Color.BLACK,
+                    completionStrike = Color.WHITE,
                     primaryText = Color.parseColor("#FFF8FAFC"),
                     secondaryText = Color.parseColor("#FFCBD5E1"),
                     mutedText = Color.parseColor("#FF64748B"),
@@ -330,6 +332,7 @@ private data class DailyWidgetPalette(
                 DailyWidgetPalette(
                     backgroundResource = R.drawable.widget_background_light,
                     surface = Color.rgb(253, 253, 254),
+                    completionStrike = Color.BLACK,
                     primaryText = Color.parseColor("#FF111827"),
                     secondaryText = Color.parseColor("#FF64748B"),
                     mutedText = Color.parseColor("#FFCBD5E1"),
@@ -402,7 +405,7 @@ private class DailyMonthWidgetFactory(
             .div(getCount().coerceAtLeast(1)).coerceIn(32, 260)
         views.setImageViewBitmap(R.id.widget_week_image, DailyWidgetCalendarRenderer.render(
             context, week, width, height, palette.primaryText, palette.mutedText,
-            palette.accent, palette.sundayText, palette.saturdayText, palette.surface,
+            palette.accent, palette.sundayText, palette.saturdayText, palette.surface, palette.completionStrike,
         ))
         week.forEachIndexed { index, day ->
             val id = WEEK_DAY_IDS[index]
@@ -481,7 +484,7 @@ private class DailyEventWidgetFactory(
         views.setViewVisibility(R.id.widget_event_strike, if (completed) View.VISIBLE else View.GONE)
         if (completed) {
             views.setImageViewBitmap(R.id.widget_event_strike,
-                completionLine(context, event.optString("title"), colors.strike))
+                completionLine(context, event.optString("title"), palette.completionStrike))
         }
         views.setInt(R.id.widget_event_color, "setColorFilter", eventColor)
         views.setImageViewResource(

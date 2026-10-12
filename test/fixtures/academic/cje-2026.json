@@ -1,0 +1,270 @@
+{
+  "scheduleList": [
+    {
+      "schedule_id": 2787,
+      "schedule": "동계 휴가",
+      "schedule_start_dt": "2025-12-20",
+      "schedule_end_dt": "2026-02-28",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2842,
+      "schedule": "소한",
+      "schedule_start_dt": "2026-01-05",
+      "schedule_end_dt": "2026-01-05",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2841,
+      "schedule": "대한",
+      "schedule_start_dt": "2026-01-20",
+      "schedule_end_dt": "2026-01-20",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2839,
+      "schedule": "2025학년도 전기 학위수여식",
+      "schedule_start_dt": "2026-02-12",
+      "schedule_end_dt": "2026-02-12",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2789,
+      "schedule": "2026학년도 입학식",
+      "schedule_start_dt": "2026-02-25",
+      "schedule_end_dt": "2026-02-25",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2843,
+      "schedule": "2026학년도 제1학기 개강",
+      "schedule_start_dt": "2026-03-01",
+      "schedule_end_dt": "2026-03-01",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2844,
+      "schedule": "삼일절",
+      "schedule_start_dt": "2026-03-01",
+      "schedule_end_dt": "2026-03-01",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2845,
+      "schedule": "삼일절 대체휴일",
+      "schedule_start_dt": "2026-03-02",
+      "schedule_end_dt": "2026-03-02",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2846,
+      "schedule": "개교기념일",
+      "schedule_start_dt": "2026-03-26",
+      "schedule_end_dt": "2026-03-26",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2847,
+      "schedule": "4학년 교육실습Ⅳ",
+      "schedule_start_dt": "2026-03-30",
+      "schedule_end_dt": "2026-04-24",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2848,
+      "schedule": "대동제",
+      "schedule_start_dt": "2026-04-28",
+      "schedule_end_dt": "2026-04-29",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2935,
+      "schedule": "노동절",
+      "schedule_start_dt": "2026-05-01",
+      "schedule_end_dt": "2026-05-01",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2849,
+      "schedule": "어린이날",
+      "schedule_start_dt": "2026-05-05",
+      "schedule_end_dt": "2026-05-05",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2850,
+      "schedule": "3학년 교육실습Ⅲ(1)",
+      "schedule_start_dt": "2026-05-11",
+      "schedule_end_dt": "2026-05-22",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2851,
+      "schedule": "스승의 날 행사",
+      "schedule_start_dt": "2026-05-15",
+      "schedule_end_dt": "2026-05-15",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2852,
+      "schedule": "부처님오신날",
+      "schedule_start_dt": "2026-05-24",
+      "schedule_end_dt": "2026-05-24",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2853,
+      "schedule": "부처님오신날 대체공휴일",
+      "schedule_start_dt": "2026-05-25",
+      "schedule_end_dt": "2026-05-25",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2854,
+      "schedule": "지방선거",
+      "schedule_start_dt": "2026-06-03",
+      "schedule_end_dt": "2026-06-03",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2855,
+      "schedule": "현충일",
+      "schedule_start_dt": "2026-06-06",
+      "schedule_end_dt": "2026-06-06",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2856,
+      "schedule": "실습 보강(3·4학년)",
+      "schedule_start_dt": "2026-06-15",
+      "schedule_end_dt": "2026-06-19",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2857,
+      "schedule": "하계 휴가",
+      "schedule_start_dt": "2026-06-20",
+      "schedule_end_dt": "2026-08-31",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2937,
+      "schedule": "정보보호의 날",
+      "schedule_start_dt": "2026-07-08",
+      "schedule_end_dt": "2026-07-08",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2936,
+      "schedule": "제헌절",
+      "schedule_start_dt": "2026-07-17",
+      "schedule_end_dt": "2026-07-17",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2858,
+      "schedule": "2025학년도 후기 학위수여식",
+      "schedule_start_dt": "2026-08-12",
+      "schedule_end_dt": "2026-08-12",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2859,
+      "schedule": "광복절",
+      "schedule_start_dt": "2026-08-15",
+      "schedule_end_dt": "2026-08-15",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2860,
+      "schedule": "광복절 대체공휴일",
+      "schedule_start_dt": "2026-08-17",
+      "schedule_end_dt": "2026-08-17",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2861,
+      "schedule": "2026학년도 제2학기 개강",
+      "schedule_start_dt": "2026-09-01",
+      "schedule_end_dt": "2026-09-01",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2862,
+      "schedule": "체육대회",
+      "schedule_start_dt": "2026-09-15",
+      "schedule_end_dt": "2026-09-15",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2863,
+      "schedule": "추석연휴",
+      "schedule_start_dt": "2026-09-24",
+      "schedule_end_dt": "2026-09-26",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2864,
+      "schedule": "1학년 교육실습Ⅰ",
+      "schedule_start_dt": "2026-09-28",
+      "schedule_end_dt": "2026-10-02",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2865,
+      "schedule": "개천절",
+      "schedule_start_dt": "2026-10-03",
+      "schedule_end_dt": "2026-10-03",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2866,
+      "schedule": "개천절 대체공휴일",
+      "schedule_start_dt": "2026-10-05",
+      "schedule_end_dt": "2026-10-05",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2867,
+      "schedule": "한글날",
+      "schedule_start_dt": "2026-10-09",
+      "schedule_end_dt": "2026-10-09",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2868,
+      "schedule": "2학년 교육실습Ⅱ",
+      "schedule_start_dt": "2026-10-12",
+      "schedule_end_dt": "2026-10-23",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2869,
+      "schedule": "3학년 교육실습Ⅲ(2)",
+      "schedule_start_dt": "2026-11-02",
+      "schedule_end_dt": "2026-11-13",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2870,
+      "schedule": "2027학년도 수시모집 면접고사 기간",
+      "schedule_start_dt": "2026-11-26",
+      "schedule_end_dt": "2026-11-27",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2871,
+      "schedule": "실습 보강(1·2·3학년)",
+      "schedule_start_dt": "2026-12-15",
+      "schedule_end_dt": "2026-12-21",
+      "code_nm": "학사"
+    },
+    {
+      "schedule_id": 2872,
+      "schedule": "동계 휴가",
+      "schedule_start_dt": "2026-12-22",
+      "schedule_end_dt": "2027-02-28",
+      "code_nm": "학사"
+    }
+  ]
+}

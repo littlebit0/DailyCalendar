@@ -81,18 +81,38 @@ class TimetableSyncDocument {
     : courses = const {},
       termNames = const {},
       termPeriods = const {},
-      activeTerm = null;
+      activeTerm = null,
+      _minimumSchemaVersion = 1;
 
   TimetableSyncDocument.records({
     Map<String, TimetableSyncValue> courses = const {},
     Map<String, TimetableSyncValue> termNames = const {},
     Map<String, TimetableSyncValue> termPeriods = const {},
     this.activeTerm,
-  }) : courses = Map.unmodifiable(courses),
+    int schemaVersion = 1,
+  }) : _minimumSchemaVersion = schemaVersion,
+       courses = Map.unmodifiable(courses),
        termNames = Map.unmodifiable(termNames),
        termPeriods = Map.unmodifiable(termPeriods) {
     _validate();
   }
+
+  final int _minimumSchemaVersion;
+
+  // Older clients reject version 2 rather than silently repeating dated classes
+  // every week or uploading a copy that dropped their date constraints.
+  int get schemaVersion =>
+      _minimumSchemaVersion == 2 ||
+          courses.values.any(
+            (record) =>
+                record.value is Map &&
+                ((record.value as Map)['period'] != null ||
+                    ((record.value as Map)['meetings'] as List).any(
+                      (meeting) => (meeting as Map)['date'] != null,
+                    )),
+          )
+      ? 2
+      : 1;
 
   final Map<String, TimetableSyncValue> courses;
   final Map<String, TimetableSyncValue> termNames;
@@ -108,7 +128,8 @@ class TimetableSyncDocument {
       activeTerm == null;
 
   factory TimetableSyncDocument.fromJson(Map<String, dynamic> json) {
-    if (json['schemaVersion'] != 1) {
+    final version = json['schemaVersion'];
+    if (version != 1 && version != 2) {
       throw const FormatException('Unsupported timetable sync version');
     }
     Map<String, TimetableSyncValue> read(String key) =>
@@ -120,7 +141,8 @@ class TimetableSyncDocument {
             ),
           ),
         );
-    return TimetableSyncDocument.records(
+    final document = TimetableSyncDocument.records(
+      schemaVersion: version as int,
       courses: read('courses'),
       termNames: read('termNames'),
       termPeriods: json.containsKey('termPeriods') ? read('termPeriods') : {},
@@ -130,6 +152,19 @@ class TimetableSyncDocument {
               Map<String, dynamic>.from(json['activeTerm'] as Map),
             ),
     );
+    if (version == 1 &&
+        document.courses.values.any(
+          (record) =>
+              record.value is Map &&
+              ((record.value as Map)['meetings'] as List).any(
+                (meeting) => (meeting as Map)['date'] != null,
+              ),
+        )) {
+      throw const FormatException(
+        'Dated classes require timetable sync version 2',
+      );
+    }
+    return document;
   }
 
   factory TimetableSyncDocument.legacy({
@@ -173,7 +208,7 @@ class TimetableSyncDocument {
   );
 
   Map<String, Object?> toJson() => {
-    'schemaVersion': 1,
+    'schemaVersion': schemaVersion,
     'courses': courses.map((key, value) => MapEntry(key, value.toJson())),
     'termNames': termNames.map((key, value) => MapEntry(key, value.toJson())),
     'termPeriods': termPeriods.map(
@@ -185,13 +220,47 @@ class TimetableSyncDocument {
   bool sameAs(TimetableSyncDocument other) =>
       canonicalSyncJson(toJson()) == canonicalSyncJson(other.toJson());
 
-  TimetableSyncDocument merge(TimetableSyncDocument other) =>
-      TimetableSyncDocument.records(
-        courses: _mergeValues(courses, other.courses),
-        termNames: _mergeValues(termNames, other.termNames),
-        termPeriods: _mergeValues(termPeriods, other.termPeriods),
-        activeTerm: _winner(activeTerm, other.activeTerm),
-      );
+  TimetableSyncDocument merge(TimetableSyncDocument other) {
+    final mergedCourses = _mergeValues(courses, other.courses);
+    for (final key in mergedCourses.keys) {
+      final ours = courses[key], theirs = other.courses[key];
+      final winner = mergedCourses[key]!;
+      if (ours?.value == null ||
+          theirs?.value == null ||
+          winner.value == null) {
+        continue;
+      }
+      bool dated(TimetableSyncValue record) =>
+          ((record.value as Map)['meetings'] as List).any(
+            (meeting) => (meeting as Map)['date'] != null,
+          );
+      // A still-offline old client may edit its weekly copy after another device
+      // upgraded that course. Fail before writing instead of losing its dates.
+      bool losesPublishedSchedule(TimetableSyncValue previous) =>
+          (dated(previous) && !dated(winner)) ||
+          ((previous.value as Map)['period'] != null &&
+              (winner.value as Map)['period'] == null);
+      if ((_minimumSchemaVersion == 1 &&
+              identical(winner, ours) &&
+              losesPublishedSchedule(theirs!)) ||
+          (other._minimumSchemaVersion == 1 &&
+              identical(winner, theirs) &&
+              losesPublishedSchedule(ours!))) {
+        throw const FormatException(
+          'An older timetable edit would remove published teaching dates or period',
+        );
+      }
+    }
+    return TimetableSyncDocument.records(
+      schemaVersion: schemaVersion > other.schemaVersion
+          ? schemaVersion
+          : other.schemaVersion,
+      courses: mergedCourses,
+      termNames: _mergeValues(termNames, other.termNames),
+      termPeriods: _mergeValues(termPeriods, other.termPeriods),
+      activeTerm: _winner(activeTerm, other.activeTerm),
+    );
+  }
 
   DateTime? get latestChangedAt {
     DateTime? latest;
@@ -275,6 +344,7 @@ class TimetableSyncDocument {
       }
     }
     return TimetableSyncDocument.records(
+      schemaVersion: schemaVersion,
       courses: changedCourses,
       termNames: changedNames,
       termPeriods: changedPeriods,
@@ -326,6 +396,9 @@ class TimetableSyncDocument {
       (activeTerm?.value as Map?)?['semester'] as String?;
 
   void _validate() {
+    if (_minimumSchemaVersion != 1 && _minimumSchemaVersion != 2) {
+      throw const FormatException('Unsupported timetable sync version');
+    }
     for (final entry in courses.entries) {
       if (entry.value.value == null) {
         if (entry.key.startsWith('manual/')) {

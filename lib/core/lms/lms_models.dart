@@ -12,8 +12,8 @@ class LmsHtmlPage {
 
 String normalizeLmsOwner(String owner) => owner.trim().toLowerCase();
 
-/// Source data only. Fetch timestamps and credentials belong to the connection,
-/// and a server submission status never changes Daily's personal completion.
+/// School source data and explicit personal completion travel with the event.
+/// Fetch timestamps and credentials belong only to the device connection.
 class LmsEventMetadata {
   LmsEventMetadata({
     this.provider = 'coursemos',
@@ -29,6 +29,11 @@ class LmsEventMetadata {
     DateTime? dueAt,
     this.submissionStatus,
     this.progressPercent,
+    this.sourceCompleted,
+    this.manuallyCompleted = false,
+    this.requiredLearningSeconds,
+    this.learnedSeconds,
+    this.attendanceStatus,
   }) : ownerId = normalizeLmsOwner(ownerId),
        openAt = openAt?.toUtc(),
        dueAt = dueAt?.toUtc() {
@@ -57,6 +62,10 @@ class LmsEventMetadata {
         uri.userInfo.isNotEmpty) {
       throw const FormatException('Invalid LMS source URL');
     }
+    if (requiredLearningSeconds != null && requiredLearningSeconds! <= 0 ||
+        learnedSeconds != null && learnedSeconds! < 0) {
+      throw const FormatException('Invalid LMS learning duration');
+    }
     if (progressPercent != null &&
         (!progressPercent!.isFinite ||
             progressPercent! < 0 ||
@@ -78,6 +87,13 @@ class LmsEventMetadata {
   final DateTime? dueAt;
   final String? submissionStatus;
   final double? progressPercent;
+  final bool? sourceCompleted;
+
+  /// Explicit user completion; independent of the school submission state.
+  final bool manuallyCompleted;
+  final int? requiredLearningSeconds;
+  final int? learnedSeconds;
+  final String? attendanceStatus;
 
   bool belongsToOwner(String? owner) =>
       owner != null && normalizeLmsOwner(owner) == ownerId;
@@ -96,6 +112,12 @@ class LmsEventMetadata {
     'dueAt': dueAt?.toIso8601String(),
     'submissionStatus': submissionStatus,
     'progressPercent': progressPercent,
+    if (sourceCompleted != null) 'sourceCompleted': sourceCompleted,
+    if (manuallyCompleted) 'manuallyCompleted': true,
+    if (requiredLearningSeconds != null)
+      'requiredLearningSeconds': requiredLearningSeconds,
+    if (learnedSeconds != null) 'learnedSeconds': learnedSeconds,
+    if (attendanceStatus != null) 'attendanceStatus': attendanceStatus,
   };
 
   factory LmsEventMetadata.fromJson(Map<String, Object?> json) {
@@ -113,6 +135,24 @@ class LmsEventMetadata {
       return parsed.toUtc();
     }
 
+    int? duration(String key) {
+      final value = json[key];
+      if (value != null && value is! int) {
+        throw FormatException('Invalid LMS $key');
+      }
+      return value as int?;
+    }
+
+    final manual = json['manuallyCompleted'];
+    if (manual != null && manual is! bool) {
+      throw const FormatException('Invalid LMS manual completion');
+    }
+    final completed = json['sourceCompleted'];
+    final attendance = json['attendanceStatus'];
+    if (completed != null && completed is! bool ||
+        attendance != null && attendance is! String) {
+      throw const FormatException('Invalid LMS activity state');
+    }
     final progress = json['progressPercent'];
     final status = json['submissionStatus'];
     if (progress != null && progress is! num ||
@@ -133,6 +173,11 @@ class LmsEventMetadata {
       dueAt: date('dueAt'),
       submissionStatus: status as String?,
       progressPercent: (progress as num?)?.toDouble(),
+      sourceCompleted: completed as bool?,
+      manuallyCompleted: manual as bool? ?? false,
+      requiredLearningSeconds: duration('requiredLearningSeconds'),
+      learnedSeconds: duration('learnedSeconds'),
+      attendanceStatus: attendance as String?,
     );
   }
 
@@ -150,6 +195,14 @@ class LmsEventMetadata {
     DateTime? dueAt,
     String? submissionStatus,
     double? progressPercent,
+    bool? sourceCompleted,
+    bool? manuallyCompleted,
+    int? requiredLearningSeconds,
+    int? learnedSeconds,
+    String? attendanceStatus,
+    bool clearSourceCompleted = false,
+    bool clearLearningDurations = false,
+    bool clearAttendanceStatus = false,
     bool clearOpenAt = false,
     bool clearDueAt = false,
     bool clearSubmissionStatus = false,
@@ -169,6 +222,19 @@ class LmsEventMetadata {
     submissionStatus: clearSubmissionStatus
         ? null
         : submissionStatus ?? this.submissionStatus,
+    sourceCompleted: clearSourceCompleted
+        ? null
+        : sourceCompleted ?? this.sourceCompleted,
+    manuallyCompleted: manuallyCompleted ?? this.manuallyCompleted,
+    requiredLearningSeconds: clearLearningDurations
+        ? null
+        : requiredLearningSeconds ?? this.requiredLearningSeconds,
+    learnedSeconds: clearLearningDurations
+        ? null
+        : learnedSeconds ?? this.learnedSeconds,
+    attendanceStatus: clearAttendanceStatus
+        ? null
+        : attendanceStatus ?? this.attendanceStatus,
     progressPercent: clearProgressPercent
         ? null
         : progressPercent ?? this.progressPercent,

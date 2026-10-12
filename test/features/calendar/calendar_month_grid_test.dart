@@ -89,12 +89,8 @@ void main() {
             if (completed) {
               expect(style.decoration, TextDecoration.lineThrough);
               expect(
-                _contrast(style.decorationColor!, background),
-                greaterThanOrEqualTo(3),
-              );
-              expect(
-                _contrast(style.decorationColor!, style.color!),
-                greaterThanOrEqualTo(3),
+                style.decorationColor,
+                brightness == Brightness.dark ? Colors.white : Colors.black,
               );
             } else {
               expect(style.decoration, isNot(TextDecoration.lineThrough));

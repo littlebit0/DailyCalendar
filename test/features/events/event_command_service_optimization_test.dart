@@ -17,6 +17,170 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  for (final type in ['assignment', 'quiz', 'lecture']) {
+    for (final (sourceCompleted, latestCompleted, preserveSource)
+        in <(bool?, bool, bool)>[
+          (true, false, false),
+          (false, true, false),
+          (null, true, false),
+          (null, false, false),
+          (true, false, true),
+          (false, true, true),
+        ]) {
+      test(
+        'LMS $type completion $sourceCompleted merges latest $latestCompleted '
+        '(category-only $preserveSource)',
+        () async {
+          SharedPreferences.setMockInitialValues({});
+          final settings = SettingsRepository(
+            preferences: await SharedPreferences.getInstance(),
+          );
+          await settings.saveGoogleAccount(
+            const GoogleAccount(email: 'student@example.com'),
+          );
+          final database = AppDatabase.forTesting(NativeDatabase.memory());
+          addTearDown(database.close);
+          final repository = _RacingLmsRepository(database);
+          final metadata = LmsEventMetadata(
+            schoolId: 'smu',
+            ownerId: 'student@example.com',
+            lmsUserId: '42',
+            courseId: '123',
+            courseTitle: '자료구조',
+            activityType: type,
+            activityId: '456',
+            sourceUrl:
+                'https://ecampus.smu.ac.kr/mod/${type == 'assignment'
+                    ? 'assign'
+                    : type == 'lecture'
+                    ? 'vod'
+                    : 'quiz'}/view.php?id=456',
+          );
+          final original = _event(
+            'lms:completion-race',
+            EventCategory.basic,
+          ).copyWith(lms: metadata, completed: !latestCompleted);
+          await repository.save(original);
+          final incoming = original.copyWith(
+            title: '새 학교 제목',
+            lms: metadata.copyWith(sourceCompleted: sourceCompleted),
+          );
+          final current = original.copyWith(
+            completed: latestCompleted,
+            memo: '동시에 저장한 개인 메모',
+            reminderMinutesBeforeList: [15, 60],
+          );
+          repository.beforeMerge = () => repository.save(current);
+          final notifications = _CountingNotificationService();
+          final alarms = _CountingAlarmService();
+          final sync = _CountingSyncService();
+          final commands = EventCommandService(
+            repository: repository,
+            settingsRepository: settings,
+            notificationService: notifications,
+            alarmService: alarms,
+            syncService: sync,
+          );
+
+          expect(
+            await commands.importBatch([
+              incoming,
+            ], preserveLmsSource: preserveSource),
+            {original.id},
+          );
+
+          final saved = (await repository.findById(original.id))!;
+          final expected = preserveSource
+              ? latestCompleted
+              : sourceCompleted ?? latestCompleted;
+          expect(saved.completed, expected);
+          expect(saved.memo, current.memo);
+          expect(saved.reminderMinutesBeforeList, [15, 60]);
+          expect(saved.lms, preserveSource ? current.lms : incoming.lms);
+          expect(saved.title, preserveSource ? current.title : incoming.title);
+          expect(sync.upsertedIds, [original.id]);
+          expect(notifications.cancelCalls, expected ? 1 : 0);
+          expect(alarms.cancelCalls, expected ? 1 : 0);
+          expect(notifications.scheduleCalls, expected ? 0 : 1);
+          expect(alarms.scheduleCalls, expected ? 0 : 1);
+        },
+      );
+    }
+  }
+  for (final type in ['assignment', 'quiz', 'lecture']) {
+    test(
+      'manual $type completion survives concurrent negative LMS import and clears on uncheck',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        await settings.saveGoogleAccount(
+          const GoogleAccount(email: 'student@example.com'),
+        );
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = _RacingLmsRepository(database);
+        final metadata = LmsEventMetadata(
+          schoolId: 'smu',
+          ownerId: 'student@example.com',
+          lmsUserId: '42',
+          courseId: '123',
+          courseTitle: '수업',
+          activityType: type,
+          activityId: '456',
+          sourceUrl: 'https://ecampus.smu.ac.kr/mod/quiz/view.php?id=456',
+          sourceCompleted: true,
+        );
+        final original = _event(
+          'lms:manual',
+          EventCategory.basic,
+        ).copyWith(lms: metadata, completed: true);
+        await repository.save(original);
+        final sync = _CountingSyncService();
+        final commands = EventCommandService(
+          repository: repository,
+          settingsRepository: settings,
+          notificationService: _CountingNotificationService(),
+          alarmService: _CountingAlarmService(),
+          syncService: sync,
+        );
+        // Explicit completion also records intent when already automatically done.
+        await commands.setCompleted(original, true);
+        final manual = (await repository.findById(original.id))!;
+        expect(manual.lms!.manuallyCompleted, isTrue);
+        final incoming = original.copyWith(
+          lms: metadata.copyWith(
+            sourceCompleted: false,
+            submissionStatus: '미제출',
+          ),
+        );
+        // Stale incoming does not know the user's marker; atomic latest must win.
+        repository.beforeMerge = () =>
+            repository.save(manual.copyWith(memo: 'kept'));
+        await commands.importBatch([incoming]);
+        final imported = (await repository.findById(original.id))!;
+        expect(imported.completed, isTrue);
+        expect(imported.lms!.manuallyCompleted, isTrue);
+        expect(imported.lms!.sourceCompleted, isFalse);
+        expect(imported.memo, 'kept');
+        expect(sync.upsertedIds, contains(original.id));
+        repository.beforeMerge = null;
+        // Stale editor cannot strip the manual marker.
+        await commands.save(original.copyWith(memo: 'edited'));
+        expect(
+          (await repository.findById(original.id))!.lms!.manuallyCompleted,
+          isTrue,
+        );
+        await commands.setCompleted(imported, false);
+        final unchecked = (await repository.findById(original.id))!;
+        expect(unchecked.completed, isFalse);
+        expect(unchecked.lms!.manuallyCompleted, isFalse);
+        await commands.importBatch([incoming.copyWith(lms: metadata)]);
+        expect((await repository.findById(original.id))!.completed, isTrue);
+      },
+    );
+  }
   for (final operation in [
     'editor',
     'import',
@@ -76,8 +240,12 @@ void main() {
           lms: metadata.copyWith(submissionStatus: '제출 완료'),
         );
         if (operation == 'editor') {
-          repository.beforeMerge = () =>
-              repository.save(source.copyWith(completed: true));
+          repository.beforeMerge = () => repository.save(
+            source.copyWith(
+              completed: true,
+              lms: source.lms!.copyWith(sourceCompleted: true),
+            ),
+          );
           await commands.save(
             original.copyWith(
               memo: '새 개인 메모',
@@ -91,7 +259,7 @@ void main() {
           expect(result.title, source.title);
           expect(result.startAt, source.startAt);
           expect(result.endAt, source.endAt);
-          expect(result.lms, source.lms);
+          expect(result.lms, source.lms!.copyWith(sourceCompleted: true));
           expect(result.memo, '새 개인 메모');
           expect(result.category.label, personalCategory.label);
           expect(result.reminderMinutesBeforeList, [10]);
@@ -122,7 +290,7 @@ void main() {
           final result = (await repository.findById(original.id))!;
           expect(result.title, source.title);
           expect(result.startAt, source.startAt);
-          expect(result.lms, source.lms);
+          expect(result.lms, source.lms!.copyWith(manuallyCompleted: true));
           expect(result.completed, isTrue);
         } else if (operation == 'recover-source') {
           await repository.save(original.copyWith(clearLms: true));

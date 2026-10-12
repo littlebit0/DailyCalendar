@@ -6,9 +6,11 @@ import 'event_completion_palette.dart';
 
 export 'event_completion_palette.dart';
 
-/// The line belongs to the resolved display palette, not the raw stored RGB.
-Color calendarEventStrikeColor(Color text, Color background) =>
-    calendarEventPalette(text, background).strike;
+/// Every completion line follows the selected appearance, never category RGB.
+Color calendarEventStrikeColor(BuildContext context) =>
+    Theme.of(context).brightness == Brightness.dark
+    ? Colors.white
+    : Colors.black;
 
 Color _eventSurface(BuildContext context, Color? background) {
   final layers = <Color>[?background];
@@ -92,7 +94,7 @@ TextStyle calendarEventCompletionStyle(
   return style.copyWith(
     decoration: TextDecoration.lineThrough,
     decorationStyle: TextDecorationStyle.solid,
-    decorationColor: palette.strike,
+    decorationColor: calendarEventStrikeColor(context),
     // Flutter multiplies the font's strike metric (about fontSize / 20 in
     // Roboto), not logical pixels. Both themes need at least 1.25 logical
     // pixels at small sizes; scaling keeps one line visible without double ink.

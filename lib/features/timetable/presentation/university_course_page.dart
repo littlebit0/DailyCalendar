@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../core/academic/university_support_policy.dart';
+import '../../../core/widgets/smooth_mouse_wheel_scroll_controller.dart';
+import '../domain/course_organization.dart';
 import '../data/timetable_store.dart';
 import '../data/university_catalog.dart';
 import '../domain/timetable.dart';
@@ -70,17 +73,60 @@ class UniversityCoursePanel extends StatefulWidget {
 }
 
 class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
-  List<String> get _campuses => switch (widget.university) {
-    'dku' => const ['jukjeon', 'cheonan'],
-    'jnu' => const ['gwangju', 'yeosu'],
-    _ => const ['seoul', 'cheonan'],
-  };
+  Map<String, String?> _catalogCampuses = {};
+  int _catalogGeneration = 0;
+  List<String> get _campuses => _catalogCampuses.isNotEmpty
+      ? _catalogCampuses.keys.toList()
+      : switch (widget.university) {
+          'dku' => const ['jukjeon', 'cheonan'],
+          'cau' => const ['seoul', 'davinci'],
+          'jnu' => const ['gwangju', 'yeosu'],
+          'smu' => const ['seoul', 'cheonan'],
+          _ => const ['main'],
+        };
 
-  late Future<List<UniversityDataset>> _catalog = widget.loadCatalog();
+  Future<List<UniversityDataset>> _loadCatalog() async {
+    final generation = ++_catalogGeneration;
+    if (!UniversitySupportPolicy.timetableAvailable(widget.university)) {
+      return const [];
+    }
+    final datasets = await (widget.loadCatalog == UniversityCatalog.load
+        ? UniversityCatalog.load(university: widget.university)
+        : widget.loadCatalog());
+    final campuses = <String, String?>{};
+    for (final dataset in datasets.where(
+      (d) => d.university == widget.university,
+    )) {
+      final previous = campuses[dataset.campus];
+      if (previous != null &&
+          dataset.campusName != null &&
+          previous != dataset.campusName) {
+        throw const FormatException('Conflicting catalog campus names');
+      }
+      campuses[dataset.campus] = dataset.campusName ?? previous;
+    }
+    if (mounted && generation == _catalogGeneration) {
+      setState(() {
+        _catalogCampuses = campuses;
+        if (!_campuses.contains(_campus)) {
+          _campus = _campuses.first;
+          _organization = null;
+          _sourceDepartment = null;
+          _category = null;
+          _resetSelection();
+        }
+      });
+    }
+    return datasets;
+  }
+
+  late Future<List<UniversityDataset>> _catalog = _loadCatalog();
   final _search = TextEditingController();
   late String _campus = widget.initialCampus ?? _campuses.first;
-  String? _department;
-  CourseCategory? _category;
+  CourseOrganization? _organization;
+  String? _sourceDepartment;
+  final _scroll = SmoothMouseWheelScrollController();
+  String? _category;
   String _query = '';
   bool _hideConflicts = false;
   bool _filtersVisible = false;
@@ -104,16 +150,20 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
       // A new host owns its preview; do not notify it during this build.
       _year = widget.store.activeYear;
       _semester = widget.store.activeSemester;
-      _department = null;
+      _organization = null;
+      _sourceDepartment = null;
       _resetSelection();
     }
-    if (oldWidget.loadCatalog != widget.loadCatalog) {
-      _catalog = widget.loadCatalog();
+    if (oldWidget.loadCatalog != widget.loadCatalog ||
+        oldWidget.university != widget.university) {
+      _catalogCampuses = {};
+      _catalog = _loadCatalog();
     }
     if (oldWidget.initialCampus != widget.initialCampus ||
         oldWidget.university != widget.university) {
       _campus = widget.initialCampus ?? _campuses.first;
-      _department = null;
+      _organization = null;
+      _sourceDepartment = null;
       _category = null;
       _resetSelection();
     }
@@ -133,7 +183,9 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
       if (termChanged) {
         _year = widget.store.activeYear;
         _semester = widget.store.activeSemester;
-        _department = null;
+        _organization = null;
+        _sourceDepartment = null;
+        _category = null;
       }
       if (termChanged) _resetSelection();
     });
@@ -183,16 +235,22 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
   void dispose() {
     widget.store.removeListener(_storeChanged);
     _search.dispose();
+    _scroll.dispose();
     super.dispose();
   }
 
-  String _campusName(String campus) => context.tr(switch (campus) {
-    'seoul' => '서울캠퍼스',
-    'jukjeon' => '죽전캠퍼스',
-    'gwangju' => '광주캠퍼스',
-    'yeosu' => '여수캠퍼스',
-    _ => '천안캠퍼스',
-  });
+  String _campusName(String campus) =>
+      _catalogCampuses[campus] ??
+      context.tr(switch (campus) {
+        'seoul' => '서울캠퍼스',
+        'jukjeon' => '죽전캠퍼스',
+        'davinci' => '다빈치캠퍼스',
+        'gwangju' => '광주캠퍼스',
+        'yeosu' => '여수캠퍼스',
+        'cheonan' => '천안캠퍼스',
+        'main' => '전체',
+        _ => campus,
+      });
 
   @override
   Widget build(BuildContext context) => PopScope(
@@ -202,13 +260,24 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
       child: FutureBuilder<List<UniversityDataset>>(
         future: _catalog,
         builder: (context, snapshot) {
+          if (!UniversitySupportPolicy.timetableAvailable(widget.university)) {
+            return _CatalogMessage(
+              icon: Icons.school_outlined,
+              message: context.tr('해당 대학의 학교 시간표는 현재 미지원입니다.'),
+            );
+          }
+          // A replacement future can retain the previous school snapshot.
+          // Its campus and category filters are no longer valid while loading.
+          if (snapshot.connectionState != ConnectionState.done) {
+            return const Center(child: CircularProgressIndicator());
+          }
           if (snapshot.hasError) {
             return _CatalogMessage(
               icon: Icons.cloud_off_outlined,
               message: context.tr('강의 목록을 불러오지 못했습니다.'),
               action: TextButton.icon(
                 onPressed: () {
-                  final catalog = widget.loadCatalog();
+                  final catalog = _loadCatalog();
                   setState(() {
                     _catalog = catalog;
                   });
@@ -224,6 +293,51 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
           return _catalogView(snapshot.data!);
         },
       ),
+    ),
+  );
+
+  void _selectOrganization(CourseOrganization? unit) => _changeFilter(() {
+    _organization = unit;
+    _sourceDepartment = null;
+    _category = null;
+  });
+
+  // Department lookup contains major courses for every supported school.
+  bool _matchesUnit(UniversityCourse course) =>
+      (_organization == null ||
+          (course.matchesOrganization(_organization!) &&
+              (_organization!.isCollegeHosted ||
+                  course.isMajorForOrganization(_organization!)))) &&
+      (_sourceDepartment == null ||
+          (course.departments.contains(_sourceDepartment) &&
+              course.isMajorForSourceDepartment(_sourceDepartment!)));
+
+  List<String> _classificationLabels(UniversityCourse course) {
+    if (_sourceDepartment case final String department) {
+      return course.majorClassificationLabelsForSourceDepartment(department);
+    }
+    if (_organization case final CourseOrganization unit
+        when !unit.isCollegeHosted) {
+      return course.majorClassificationLabelsForOrganization(unit);
+    }
+    return course.classificationLabelsForOrganization(_organization);
+  }
+
+  Widget _departmentChoices(List<CourseOrganization> units) => Align(
+    alignment: Alignment.centerLeft,
+    child: Wrap(
+      spacing: 8,
+      runSpacing: 6,
+      children: [
+        for (final unit in units)
+          ChoiceChip(
+            key: ValueKey('course-department-${unit.key}'),
+            label: Text(unit.department!),
+            selected: _organization?.key == unit.key,
+            onSelected: (selected) =>
+                _selectOrganization(selected ? unit : null),
+          ),
+      ],
     ),
   );
 
@@ -243,19 +357,64 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
         .expand((d) => d.courses)
         .where((c) => c.academicYear == _year && c.semester == _semester)
         .toList();
-    final departments = all.expand((c) => c.departments).toSet().toList()
-      ..sort();
+    final organizations = <String, CourseOrganization>{
+      for (final course in all)
+        for (final unit in course.offeringOrganizations)
+          if (unit.isCollegeHosted || course.isMajorForOrganization(unit))
+            '${unit.key}\u0000${unit.displayGroup}': unit,
+    }.values.toList()..sort((a, b) => a.label.compareTo(b.label));
+    final colleges =
+        organizations
+            .where((unit) => unit.isCollegeHosted)
+            .map((unit) => unit.college)
+            .whereType<String>()
+            .toSet()
+            .toList()
+          ..sort();
+    final departmentGroups = <String?, List<CourseOrganization>>{};
+    for (final unit in organizations.where((unit) => unit.department != null)) {
+      (departmentGroups[unit.displayGroup] ??= []).add(unit);
+    }
+    // Preserve source filters where no verified academic organization exists.
+    // Cohort and administration labels remain literal, without guessed parents.
+    final sourceDepartments =
+        all
+            .expand(
+              (course) => course.departments.where(
+                (label) =>
+                    course.isMajorForSourceDepartment(label) &&
+                    !course.offeringOrganizations.any(
+                      (unit) => unit.sourceLabel == label,
+                    ),
+              ),
+            )
+            .where((label) => label.trim().isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
+    final availableLabels = all
+        .where(_matchesUnit)
+        .expand(_classificationLabels)
+        .toSet();
+    final categoryLabels = [
+      for (final category in CourseCategory.values)
+        if (availableLabels.remove(category.label)) category.label,
+      ...(availableLabels.toList()..sort()),
+    ];
+    final activeCategory = categoryLabels.contains(_category)
+        ? _category
+        : null;
     final saved = widget.store.activeClasses;
     final conflicts = {
       for (final course in all)
         course.sourceId: _conflictingClasses(course, saved),
     };
     final courses = all.where((course) {
-      if (_department != null && !course.departments.contains(_department)) {
+      if (!_matchesUnit(course)) {
         return false;
       }
-      if (_category != null &&
-          !course.categoriesFor(_department).contains(_category)) {
+      if (activeCategory != null &&
+          !_classificationLabels(course).contains(activeCategory)) {
         return false;
       }
       if (_hideConflicts && conflicts[course.sourceId]!.isNotEmpty) {
@@ -285,8 +444,9 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
         'course-card-${course.sourceId}': index,
     };
     final hasFilters =
-        _department != null ||
-        _category != null ||
+        _organization != null ||
+        _sourceDepartment != null ||
+        activeCategory != null ||
         _hideConflicts ||
         _campus != (widget.initialCampus ?? _campuses.first);
 
@@ -327,13 +487,20 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                 ),
               ),
               const SizedBox(width: 4),
-              IconButton.filledTonal(
-                key: const ValueKey('course-filters-toggle'),
-                tooltip: context.tr(_filtersVisible ? '필터 닫기' : '강의 필터'),
-                isSelected: _filtersVisible || hasFilters,
-                onPressed: () =>
-                    setState(() => _filtersVisible = !_filtersVisible),
-                icon: const Icon(Icons.tune),
+              SizedBox(
+                width: (MediaQuery.sizeOf(context).width * .22).clamp(120, 240),
+                child: FilledButton.tonal(
+                  key: const ValueKey('course-filters-toggle'),
+                  onPressed: () =>
+                      setState(() => _filtersVisible = !_filtersVisible),
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size(0, 48),
+                    backgroundColor: hasFilters
+                        ? theme.colorScheme.primaryContainer
+                        : null,
+                  ),
+                  child: Text(context.tr('학과 선택')),
+                ),
               ),
             ],
           ),
@@ -341,6 +508,7 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
         Expanded(
           child: CustomScrollView(
             key: const ValueKey('university-course-panel'),
+            controller: _scroll,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverPadding(
@@ -356,9 +524,29 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                         children: [
                           Text(
                             context.tr(switch (widget.university) {
+                              'inje' => '인제대학교',
+                              'hongik' => '홍익대학교',
+                              'wsu' => '우송대학교',
+                              'sunmoon' => '선문대학교',
+                              'dju' => '대전대학교',
+                              'iccu' => '인천가톨릭대학교',
+                              'ewha' => '이화여자대학교',
+                              'eulji' => '을지대학교',
+                              'hansei' => '한세대학교',
+                              'hyupsung' => '협성대학교',
+                              'sungkyul' => '성결대학교',
+                              'sangji' => '상지대학교',
+                              'nambu' => '남부대학교',
+                              'kangnam' => '강남대학교',
+                              'pcu' => '배재대학교',
                               'dku' => '단국대학교',
                               'jnu' => '전남대학교',
-                              _ => '상명대학교',
+                              'smu' => '상명대학교',
+                              'snu' => '서울대학교',
+                              'ajou' => '아주대학교',
+                              'cau' => '중앙대학교',
+                              'sejong' => '세종대학교',
+                              _ => widget.university,
                             }),
                             style: theme.textTheme.labelMedium,
                           ),
@@ -380,49 +568,51 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                               FocusScope.of(context).unfocus();
                               _changeFilter(() {
                                 _campus = value;
-                                _department = null;
+                                _organization = null;
+                                _sourceDepartment = null;
+                                _category = null;
                               });
                             },
                           ),
                         ],
                       ),
-                      const SizedBox(height: 8),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            for (final category in <CourseCategory?>[
-                              null,
-                              ...CourseCategory.values.where(
-                                (c) =>
-                                    c != CourseCategory.unknown ||
-                                    all.any(
-                                      (course) => course
-                                          .categoriesFor(_department)
-                                          .contains(c),
+                      if (categoryLabels.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        SingleChildScrollView(
+                          key: const ValueKey('course-category-row'),
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              for (final label in <String?>[
+                                null,
+                                ...categoryLabels,
+                              ])
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 6),
+                                  child: ChoiceChip(
+                                    key: ValueKey(
+                                      'course-category-${label == null ? 'all' : _categoryForLabel(label)?.name ?? 'native-$label'}',
                                     ),
-                              ),
-                            ])
-                              Padding(
-                                padding: const EdgeInsets.only(right: 6),
-                                child: ChoiceChip(
-                                  key: ValueKey(
-                                    'course-category-${category?.name ?? 'all'}',
+                                    selected: activeCategory == label,
+                                    showCheckmark: false,
+                                    visualDensity: VisualDensity.compact,
+                                    label: label == null
+                                        ? Text(context.tr('전체'))
+                                        : CourseCategoryLabel(
+                                            category:
+                                                _categoryForLabel(label) ??
+                                                CourseCategory.unknown,
+                                            label: label,
+                                          ),
+                                    onSelected: (_) =>
+                                        _changeFilter(() => _category = label),
                                   ),
-                                  selected: _category == category,
-                                  showCheckmark: false,
-                                  visualDensity: VisualDensity.compact,
-                                  label: category == null
-                                      ? Text(context.tr('전체'))
-                                      : CourseCategoryLabel(category: category),
-                                  onSelected: (_) =>
-                                      _changeFilter(() => _category = category),
                                 ),
-                              ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 4),
+                        const SizedBox(height: 4),
+                      ],
                       Wrap(
                         spacing: 8,
                         runSpacing: 4,
@@ -453,14 +643,15 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                                 ),
                               ),
                             ),
-                          if (_department != null ||
-                              _category != null ||
+                          if (_organization != null ||
+                              _sourceDepartment != null ||
+                              activeCategory != null ||
                               _hideConflicts)
                             Text(
                               [
-                                _department,
-                                if (_category != null)
-                                  context.tr(_category!.label),
+                                _organization?.label ?? _sourceDepartment,
+                                if (activeCategory != null)
+                                  context.tr(activeCategory),
                                 if (_hideConflicts) context.tr('겹치는 강의 제외'),
                               ].whereType<String>().join(' · '),
                               style: theme.textTheme.labelSmall?.copyWith(
@@ -469,47 +660,139 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                             ),
                         ],
                       ),
+                      for (final notice
+                          in datasets
+                              .map((d) => d.sourceNotice)
+                              .where((n) => n.isNotEmpty)
+                              .toSet())
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6),
+                          child: Text(
+                            context.tr(notice),
+                            key: const ValueKey('course-source-notice'),
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ),
                       if (_filtersVisible) ...[
                         const SizedBox(height: 12),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 6,
-                              child: DropdownButtonFormField<String>(
-                                key: ValueKey(
-                                  'course-department-$_campus-$_department',
-                                ),
-                                initialValue: _department ?? '',
-                                isExpanded: true,
-                                decoration: InputDecoration(
-                                  labelText: context.tr('학과 · 전공'),
-                                  border: const OutlineInputBorder(),
-                                  contentPadding: const EdgeInsets.all(10),
-                                ),
-                                items: [
-                                  DropdownMenuItem(
-                                    value: '',
-                                    child: Text(context.tr('전체')),
-                                  ),
-                                  for (final department in departments)
-                                    DropdownMenuItem(
-                                      value: department,
-                                      child: Text(
-                                        department,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                ],
-                                onChanged: (value) => _changeFilter(
-                                  () =>
-                                      _department = value == '' ? null : value,
-                                ),
-                              ),
+                        if (_organization != null || _sourceDepartment != null)
+                          ActionChip(
+                            key: const ValueKey('course-organization-reset'),
+                            label: Text(context.tr('전체 주관')),
+                            avatar: const Icon(Icons.close, size: 16),
+                            onPressed: () => _selectOrganization(null),
+                          ),
+                        if (colleges.isNotEmpty) ...[
+                          Text(
+                            context.tr('단과대 주관'),
+                            style: theme.textTheme.labelLarge,
+                          ),
+                          const SizedBox(height: 8),
+                          DropdownButtonFormField<String>(
+                            key: ValueKey(
+                              'course-college-$_campus-${_organization?.isCollegeHosted == true ? _organization?.college : null}',
                             ),
-                          ],
-                        ),
+                            initialValue: _organization?.isCollegeHosted == true
+                                ? _organization?.college
+                                : '',
+                            isExpanded: true,
+                            decoration: InputDecoration(
+                              labelText: context.tr('단과대 직접 주관 과목'),
+                              border: const OutlineInputBorder(),
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                value: '',
+                                child: Text(context.tr('선택 안 함')),
+                              ),
+                              for (final college in colleges)
+                                DropdownMenuItem(
+                                  value: college,
+                                  child: Text(college),
+                                ),
+                            ],
+                            onChanged: (value) => _selectOrganization(
+                              value == null || value.isEmpty
+                                  ? null
+                                  : CourseOrganization(
+                                      college: value,
+                                      department: null,
+                                      sourceLabel: value,
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                        if (departmentGroups.isNotEmpty) ...[
+                          Text(
+                            context.tr('학과·전공 선택'),
+                            style: theme.textTheme.labelLarge,
+                          ),
+                          for (final entry in departmentGroups.entries)
+                            if (entry.key == null)
+                              _departmentChoices(entry.value)
+                            else
+                              ExpansionTile(
+                                key: ValueKey(
+                                  'course-college-departments-${entry.key}',
+                                ),
+                                title: Text(entry.key!),
+                                subtitle:
+                                    entry.value.any(
+                                      (unit) => unit.affiliationUnconfirmed,
+                                    )
+                                    ? Text(context.tr('소속 미확인 · 이름 기준 분류'))
+                                    : null,
+                                expansionAnimationStyle:
+                                    MediaQuery.disableAnimationsOf(context)
+                                    ? AnimationStyle.noAnimation
+                                    : const AnimationStyle(
+                                        duration: Duration(milliseconds: 180),
+                                        curve: Curves.easeOutCubic,
+                                      ),
+                                initiallyExpanded:
+                                    _organization?.department != null &&
+                                    _organization?.displayGroup == entry.key,
+                                tilePadding: EdgeInsets.zero,
+                                childrenPadding: const EdgeInsets.only(
+                                  bottom: 12,
+                                ),
+                                children: [_departmentChoices(entry.value)],
+                              ),
+                        ] else if (sourceDepartments.isEmpty)
+                          Text(context.tr('공개된 학과 주관 정보가 없습니다.')),
+                        if (sourceDepartments.isNotEmpty) ...[
+                          const SizedBox(height: 8),
+                          DropdownButtonFormField<String>(
+                            key: ValueKey(
+                              'course-source-department-$_campus-$_sourceDepartment',
+                            ),
+                            initialValue: _sourceDepartment ?? '',
+                            isExpanded: true,
+                            decoration: InputDecoration(
+                              labelText: context.tr('원자료 분류'),
+                              border: const OutlineInputBorder(),
+                            ),
+                            items: [
+                              DropdownMenuItem(
+                                value: '',
+                                child: Text(context.tr('전체')),
+                              ),
+                              for (final label in sourceDepartments)
+                                DropdownMenuItem(
+                                  value: label,
+                                  child: Text(label),
+                                ),
+                            ],
+                            onChanged: (value) => _changeFilter(() {
+                              _organization = null;
+                              _sourceDepartment = value == null || value.isEmpty
+                                  ? null
+                                  : value;
+                              _category = null;
+                            }),
+                          ),
+                        ],
                         CheckboxListTile(
                           key: const ValueKey('course-hide-conflicts'),
                           value: _hideConflicts,
@@ -544,7 +827,8 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                             onPressed: () => _changeFilter(() {
                               _search.clear();
                               _query = '';
-                              _department = null;
+                              _organization = null;
+                              _sourceDepartment = null;
                               _category = null;
                               _hideConflicts = false;
                             }),
@@ -570,7 +854,7 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                         added: added,
                         selected: selected,
                         conflicting: conflicts[course.sourceId]!.isNotEmpty,
-                        categories: course.categoriesFor(_department),
+                        categories: _classificationLabels(course),
                         onTap: () => _select(course),
                         details: selected
                             ? _CourseDetails(
@@ -664,10 +948,20 @@ class _CourseDetailsState extends State<_CourseDetails>
             course.departments.join(' · '),
             style: theme.textTheme.bodySmall,
           ),
-          if (course.departmentClassifications.isNotEmpty) ...[
+          if (course.departmentClassifications.values.any(
+                (v) => v.trim().isNotEmpty,
+              ) ||
+              course.sourceClassification.trim().isNotEmpty) ...[
             const SizedBox(height: 6),
             Text(context.tr('공식 이수구분'), style: theme.textTheme.labelSmall),
-            for (final entry in course.departmentClassifications.entries)
+            if (course.departmentClassifications.isEmpty)
+              Text(
+                course.sourceClassification,
+                style: theme.textTheme.bodySmall,
+              ),
+            for (final entry in course.departmentClassifications.entries.where(
+              (e) => e.value.trim().isNotEmpty,
+            ))
               Text(
                 '${entry.key}: ${entry.value}',
                 style: theme.textTheme.bodySmall,
@@ -816,7 +1110,7 @@ class _CourseCard extends StatelessWidget {
   final UniversityCourse course;
   final Widget? details;
   final bool added, selected, conflicting;
-  final List<CourseCategory> categories;
+  final List<String> categories;
   final VoidCallback? onTap;
 
   @override
@@ -859,7 +1153,12 @@ class _CourseCard extends StatelessWidget {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           for (final category in categories)
-                            CourseCategoryLabel(category: category),
+                            CourseCategoryLabel(
+                              category:
+                                  _categoryForLabel(category) ??
+                                  CourseCategory.unknown,
+                              label: category,
+                            ),
                           Text(
                             course.codeAndSection,
                             style: theme.textTheme.bodySmall?.copyWith(
@@ -876,7 +1175,9 @@ class _CourseCard extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      for (final meeting in course.meetings)
+                      for (final meeting in timetableDisplayMeetings(
+                        course.meetings,
+                      ))
                         Text(
                           _meetingText(context, meeting),
                           style: theme.textTheme.bodySmall,
@@ -920,8 +1221,14 @@ class _CourseCard extends StatelessWidget {
   }
 }
 
-/// Category hues are fixed across themes; the small text uses the theme's
-/// readable foreground, so color is never the only way to identify a category.
+CourseCategory? _categoryForLabel(String label) {
+  for (final category in CourseCategory.values) {
+    if (category.label == label) return category;
+  }
+  return null;
+}
+
+/// Fixed hues and readable text identify categories in both themes.
 Color courseCategoryColor(CourseCategory category) => switch (category) {
   CourseCategory.major => const Color(0xff657faf),
   CourseCategory.certification => const Color(0xffaa6d74),
@@ -932,14 +1239,17 @@ Color courseCategoryColor(CourseCategory category) => switch (category) {
   CourseCategory.minorMajor => const Color(0xff7582a4),
   CourseCategory.teaching => const Color(0xffbf7153),
   CourseCategory.generalEducation => const Color(0xff488979),
+  CourseCategory.requiredGeneralEducation => const Color(0xff39816e),
+  CourseCategory.electiveGeneralEducation => const Color(0xff668b48),
   CourseCategory.general => const Color(0xff7a8190),
   CourseCategory.microDegree => const Color(0xff9c7c35),
   CourseCategory.unknown => const Color(0xff7d7d7d),
 };
 
 class CourseCategoryLabel extends StatelessWidget {
-  const CourseCategoryLabel({super.key, required this.category});
+  const CourseCategoryLabel({super.key, required this.category, this.label});
   final CourseCategory category;
+  final String? label;
 
   @override
   Widget build(BuildContext context) => Row(
@@ -955,7 +1265,7 @@ class CourseCategoryLabel extends StatelessWidget {
       ),
       const SizedBox(width: 5),
       Text(
-        context.tr(category.label),
+        context.tr(label ?? category.label),
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
           color: Theme.of(context).colorScheme.onSurface,
         ),
@@ -1007,6 +1317,15 @@ List<TimetableClass> _conflictingClasses(
             (meeting) => course.meetings.any(
               (candidate) =>
                   meeting.weekday == candidate.weekday &&
+                  (meeting.date == null ||
+                      candidate.date == null ||
+                      meeting.date == candidate.date) &&
+                  (candidate.date == null ||
+                      existing.period == null ||
+                      existing.period!.contains(candidate.teachingDate!)) &&
+                  (meeting.date == null ||
+                      course.period == null ||
+                      course.period!.contains(meeting.teachingDate!)) &&
                   meeting.startMinute < candidate.endMinute &&
                   candidate.startMinute < meeting.endMinute,
             ),

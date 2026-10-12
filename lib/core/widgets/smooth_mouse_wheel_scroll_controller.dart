@@ -41,7 +41,9 @@ class _SmoothMouseWheelScrollPosition extends ScrollPositionWithSingleContext {
 
   @override
   void pointerScroll(double delta) {
-    if (delta == 0) {
+    if (delta == 0 ||
+        (MediaQuery.maybeOf(context.storageContext)?.disableAnimations ??
+            false)) {
       super.pointerScroll(delta);
       return;
     }

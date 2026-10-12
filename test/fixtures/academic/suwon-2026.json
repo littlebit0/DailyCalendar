@@ -1,0 +1,129 @@
+{
+  "resultList": [
+    {
+      "schdulBgnde": "202512220000",
+      "schdulEndde": "202601090000",
+      "schdulNm": "동계 계절학기(예정)"
+    },
+    {
+      "schdulBgnde": "202602020000",
+      "schdulEndde": "202602050000",
+      "schdulNm": "휴학/복학 신청"
+    },
+    {
+      "schdulBgnde": "202602120000",
+      "schdulEndde": "202602120000",
+      "schdulNm": "2025학년도 학위수여식(Commencement)"
+    },
+    {
+      "schdulBgnde": "202602230000",
+      "schdulEndde": "202602250000",
+      "schdulNm": "재학생 제1학기 등록기간"
+    },
+    {
+      "schdulBgnde": "202602240000",
+      "schdulEndde": "202602270000",
+      "schdulNm": "재학생 제1학기 수강신청 기간"
+    },
+    {
+      "schdulBgnde": "202603030000",
+      "schdulEndde": "202603030000",
+      "schdulNm": "2026학년도 입학식(Freshman Admission Ceremony)"
+    },
+    {
+      "schdulBgnde": "202603040000",
+      "schdulEndde": "202603040000",
+      "schdulNm": "제1학기 개강(Spring Semester begins)"
+    },
+    {
+      "schdulBgnde": "202604220000",
+      "schdulEndde": "202604280000",
+      "schdulNm": "수업일수 1/2"
+    },
+    {
+      "schdulBgnde": "202605220000",
+      "schdulEndde": "202605220000",
+      "schdulNm": "수업일수 3/4"
+    },
+    {
+      "schdulBgnde": "202606100000",
+      "schdulEndde": "202606160000",
+      "schdulNm": "학기말고사 (Final)"
+    },
+    {
+      "schdulBgnde": "202606170000",
+      "schdulEndde": "202606230000",
+      "schdulNm": "보강기간"
+    },
+    {
+      "schdulBgnde": "202606240000",
+      "schdulEndde": "202606240000",
+      "schdulNm": "하계방학(Summer Vacation)(예정)"
+    },
+    {
+      "schdulBgnde": "202606290000",
+      "schdulEndde": "202607170000",
+      "schdulNm": "하계 계절학기(예정)"
+    },
+    {
+      "schdulBgnde": "202608030000",
+      "schdulEndde": "202608060000",
+      "schdulNm": "휴학/복학 신청"
+    },
+    {
+      "schdulBgnde": "202608190000",
+      "schdulEndde": "202608190000",
+      "schdulNm": "2025학년도 후기 학위수여일"
+    },
+    {
+      "schdulBgnde": "202608240000",
+      "schdulEndde": "202608280000",
+      "schdulNm": "재학생 제2학기 등록기간"
+    },
+    {
+      "schdulBgnde": "202608250000",
+      "schdulEndde": "202608280000",
+      "schdulNm": "재학생 제2학기 수강신청기간"
+    },
+    {
+      "schdulBgnde": "202609010000",
+      "schdulEndde": "202609010000",
+      "schdulNm": "제2학기 개강(Fall Semester begins)"
+    },
+    {
+      "schdulBgnde": "202609250000",
+      "schdulEndde": "202609250000",
+      "schdulNm": "개교기념일(University Foundation Day)"
+    },
+    {
+      "schdulBgnde": "202610200000",
+      "schdulEndde": "202610260000",
+      "schdulNm": "수업일수 1/2"
+    },
+    {
+      "schdulBgnde": "202611190000",
+      "schdulEndde": "202611190000",
+      "schdulNm": "수업일수 3/4"
+    },
+    {
+      "schdulBgnde": "202612080000",
+      "schdulEndde": "202612140000",
+      "schdulNm": "학기말고사 (Final)"
+    },
+    {
+      "schdulBgnde": "202612150000",
+      "schdulEndde": "202612220000",
+      "schdulNm": "보강기간"
+    },
+    {
+      "schdulBgnde": "202612230000",
+      "schdulEndde": "202612230000",
+      "schdulNm": "동계방학(Winter Vacation)(예정)"
+    },
+    {
+      "schdulBgnde": "202612280000",
+      "schdulEndde": "202701150000",
+      "schdulNm": "동계 계절학기(예정)"
+    }
+  ]
+}

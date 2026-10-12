@@ -38,6 +38,15 @@ Map<String, dynamic> _course(
       department: varyingCredits ? index + 2 : 3,
   },
   'departments': departments,
+  // Synthetic school ownership, separate from enrollment/curriculum associations.
+  'offeringOrganizations': [
+    for (final department in departments)
+      {
+        'college': '테스트 단과대',
+        'department': department,
+        'sourceLabel': department,
+      },
+  ],
   'departmentRemarks': remarks,
   'departmentClassifications': {
     for (final department in departments) department: classification,
@@ -137,6 +146,420 @@ Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
 }
 
 void main() {
+  testWidgets(
+    'micro majors share a distinct family group without a fake college',
+    (tester) async {
+      final store = await _store();
+      final courses = [
+        for (final (id, name) in [
+          ('micro-a', '시스템반도체설계마이크로전공'),
+          ('micro-b', '신에너지마이크로전공'),
+        ])
+          _course(id, name, departments: [name], classification: '1MD')
+            ..['offeringOrganizations'] = [
+              {
+                'college': null,
+                'department': name,
+                'sourceLabel': name,
+                'group': '마이크로전공',
+              },
+            ],
+      ];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': courses,
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            university: 'smu',
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      expect(find.text('단과대 직접 주관 과목'), findsNothing);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-departments-마이크로전공')),
+      );
+      expect(
+        find.byKey(const ValueKey('course-department-\u0000시스템반도체설계마이크로전공')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('course-department-\u0000신에너지마이크로전공')),
+        findsOneWidget,
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-department-\u0000신에너지마이크로전공')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-card-micro-b')),
+      );
+      expect(find.byKey(const ValueKey('course-card-micro-a')), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final school in ['smu', 'another-school']) {
+    testWidgets(
+      'department lookup excludes general education in $school; whole search retains it',
+      (tester) async {
+        final store = await _store();
+        final dataset = UniversityDataset.fromJson({
+          'schemaVersion': 1,
+          'universityId': school,
+          'campus': 'seoul',
+          'academicYear': 2026,
+          'semester': '2',
+          'publishedDate': '2026-10-12',
+          'sourceUrl': 'https://school.example.edu/courses',
+          'courses': [
+            _course('major', '전공 수업', classification: '전필'),
+            _course('general-required', '학과 주관 교필', classification: '교필'),
+            _course('general-elective', '학과 주관 교선', classification: '교선'),
+          ],
+        });
+        await tester.pumpWidget(
+          _app(
+            UniversityCoursePanel(
+              store: store,
+              university: school,
+              initialCampus: 'seoul',
+              loadCatalog: () async => [dataset],
+              onAdd: (_, _) async => true,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-filters-toggle')),
+        );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+        );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-department-테스트 단과대\u0000컴퓨터과학과')),
+        );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-card-major')),
+        );
+        expect(find.byKey(const ValueKey('course-card-general-required')), findsNothing);
+        expect(find.byKey(const ValueKey('course-card-general-elective')), findsNothing);
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-filters-toggle')),
+        );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-organization-reset')),
+        );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-card-general-required')),
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets(
+    'unmapped source filters preserve classifications and reset on term change',
+    (tester) async {
+      final store = await _store();
+      final raw = _course(
+        'raw-unit',
+        '원자료 과목',
+        departments: ['1학년 1분반'],
+        classification: '전선',
+      )..['offeringOrganizations'] = [];
+      final mapped = _course('mapped-unit', '학과 과목');
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': [raw, mapped],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            university: 'smu',
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-source-department-seoul-null')),
+      );
+      await tester.tap(find.text('1학년 1분반').last);
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-card-raw-unit')),
+      );
+      expect(
+        find.byKey(const ValueKey('course-card-mapped-unit')),
+        findsNothing,
+      );
+      expect(find.text('전선'), findsWidgets);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-organization-reset')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-card-mapped-unit')),
+      );
+      await store.selectTerm(2027, '1');
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('course-organization-reset')),
+        findsNothing,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final university in ['smu', 'other-university']) {
+    testWidgets(
+      'college-only and nested department filters apply in $university',
+      (tester) async {
+        final store = await _store();
+        final direct = _course('college-only', '단과대 직접 주관')
+          ..['offeringOrganizations'] = [
+            {
+              'college': '테스트 단과대',
+              'department': null,
+              'sourceLabel': '테스트 단과대',
+            },
+          ];
+        final dataset = UniversityDataset.fromJson({
+          'schemaVersion': 1,
+          'universityId': university,
+          'campus': 'seoul',
+          'academicYear': 2026,
+          'semester': '2',
+          'publishedDate': '2026-10-12',
+          'sourceUrl': 'https://school.example.edu/courses',
+          'courses': [direct, _course('department-only', '학과 주관')],
+        });
+        await tester.pumpWidget(
+          _app(
+            UniversityCoursePanel(
+              store: store,
+              university: university,
+              initialCampus: 'seoul',
+              loadCatalog: () async => [dataset],
+              onAdd: (_, _) async => true,
+            ),
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('학과 선택'), findsOneWidget);
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-filters-toggle')),
+        );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-college-seoul-null')),
+        );
+        await tester.tap(find.text('테스트 단과대').last);
+        await tester.pumpAndSettle();
+        expect(find.byKey(const ValueKey('college-only')), findsOneWidget);
+        expect(find.byKey(const ValueKey('department-only')), findsNothing);
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+        );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-department-테스트 단과대\u0000컴퓨터과학과')),
+        );
+        expect(find.byKey(const ValueKey('college-only')), findsNothing);
+        expect(find.byKey(const ValueKey('department-only')), findsOneWidget);
+        expect(tester.takeException(), isNull);
+        store.dispose();
+      },
+    );
+  }
+  testWidgets(
+    'standalone departments omit college-only selector and narrow search button stays readable',
+    (tester) async {
+      tester.view.physicalSize = const Size(360, 800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final store = await _store();
+      final raw = _course('standalone', '독립 학과')
+        ..['offeringOrganizations'] = [
+          {'college': null, 'department': '독립 학과', 'sourceLabel': '컴퓨터과학과'},
+        ];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '',
+        'sourceUrl': 'https://school.example.edu',
+        'courses': [raw],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+          scale: 2,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      expect(find.text('학과 선택'), findsOneWidget);
+      expect(find.text('단과대 주관'), findsNothing);
+      expect(
+        find.byKey(const ValueKey('course-department-\u0000독립 학과')),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
+
+  testWidgets(
+    'common courses retain literal category search and expanded source details without a department',
+    (tester) async {
+      final store = await _store();
+      final raw = _course('common-course', '기초글쓰기', departments: [])
+        ..['classification'] = '기초교양';
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'universityId': 'test-university',
+        'campus': 'seoul',
+        'campusName': '본교',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-08',
+        'sourceUrl': 'https://example.test/courses',
+        'courses': [raw],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            university: 'test-university',
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.byKey(const ValueKey('course-search')),
+        '기초교양',
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('기초글쓰기'), findsOneWidget);
+      await _tapVisible(tester, find.byKey(const ValueKey('common-course')));
+      expect(find.text('공식 이수구분'), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.byKey(const ValueKey('course-details-common-course')),
+          matching: find.text('기초교양'),
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
+  testWidgets(
+    'Catalog campuses use the existing selector without a school-specific UI switch',
+    (tester) async {
+      final store = await _store();
+      final datasets = [
+        for (final (campus, label, title) in [
+          ('north', '북쪽캠퍼스', '북쪽 수업'),
+          ('south', '남쪽캠퍼스', '남쪽 수업'),
+        ])
+          UniversityDataset.fromJson({
+            'schemaVersion': 1,
+            'universityId': 'test-university',
+            'campus': campus,
+            'campusName': label,
+            'academicYear': 2026,
+            'semester': '2',
+            'publishedDate': '2026-10-06',
+            'sourceUrl': 'https://example.test/public-courses',
+            'courses': [_course(campus, title, campus: campus)],
+          }),
+      ];
+      await tester.pumpWidget(
+        _app(
+          Scaffold(
+            body: UniversityCoursePanel(
+              store: store,
+              university: 'test-university',
+              initialCampus: 'north',
+              loadCatalog: () async => datasets,
+              onAdd: (_, _) async => true,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('북쪽 수업'), findsOneWidget);
+      expect(find.text('남쪽 수업'), findsNothing);
+      await tester.tap(find.byKey(const ValueKey('course-campus')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('남쪽캠퍼스').last);
+      await tester.pumpAndSettle();
+      expect(find.text('남쪽 수업'), findsOneWidget);
+      expect(find.text('북쪽 수업'), findsNothing);
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
   TestWidgetsFlutterBinding.ensureInitialized();
   testWidgets(
     'university filters isolate equally named campuses and preserve untimed course details',
@@ -230,7 +653,7 @@ void main() {
       expect(find.byKey(const ValueKey('boundary')), findsNothing);
       await _tapVisible(
         tester,
-        find.byKey(const ValueKey('course-category-generalEducation')),
+        find.byKey(const ValueKey('course-category-electiveGeneralEducation')),
       );
       expect(find.text('수업 1개'), findsOneWidget);
       expect(find.byKey(const ValueKey('video')), findsOneWidget);
@@ -287,12 +710,15 @@ void main() {
       );
       await _tapVisible(
         tester,
-        find.byKey(const ValueKey('course-department-seoul-null')),
+        find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
       );
-      await tester.tap(find.text('컴퓨터과학과').last);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-department-테스트 단과대\u0000컴퓨터과학과')),
+      );
       await tester.pumpAndSettle();
       expect(
-        find.byKey(const ValueKey('course-department-seoul-컴퓨터과학과')),
+        find.byKey(const ValueKey('course-organization-reset')),
         findsOneWidget,
       );
       await _tapVisible(tester, campus);
@@ -307,12 +733,8 @@ void main() {
         '담당',
       );
       expect(
-        tester
-            .widget<DropdownButtonFormField<String>>(
-              find.byKey(const ValueKey('course-department-cheonan-null')),
-            )
-            .initialValue,
-        '',
+        find.byKey(const ValueKey('course-organization-reset')),
+        findsNothing,
       );
       expect(find.byKey(const ValueKey('cheonan')), findsOneWidget);
       expect(store.classes.single.toJson(), savedBefore);
@@ -952,6 +1374,164 @@ void main() {
       expect(find.byKey(const ValueKey('alpha')), findsOneWidget);
       expect(attempts, 2);
       expect(tester.takeException(), isNull);
+    },
+  );
+  testWidgets(
+    'only native categories appear and required/elective education filter independently',
+    (tester) async {
+      final store = await _store();
+      final raw = {
+        'schemaVersion': 1,
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '',
+        'sourceUrl': 'https://example.edu',
+        'courses': [
+          _course('required', '필수 수업', classification: '교필'),
+          _course('elective', '선택 수업', classification: '교양선택'),
+          _course('generic', '일반 교양', classification: '교양'),
+        ],
+      };
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            loadCatalog: () async => [UniversityDataset.fromJson(raw)],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      for (final name in [
+        'generalEducation',
+        'requiredGeneralEducation',
+        'electiveGeneralEducation',
+      ]) {
+        expect(find.byKey(ValueKey('course-category-$name')), findsOneWidget);
+      }
+      for (final name in [
+        'advancedMajor',
+        'requiredMajor',
+        'teaching',
+        'unknown',
+      ]) {
+        expect(find.byKey(ValueKey('course-category-$name')), findsNothing);
+      }
+      await tester.tap(
+        find.byKey(const ValueKey('course-category-requiredGeneralEducation')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('required')), findsOneWidget);
+      expect(find.byKey(const ValueKey('elective')), findsNothing);
+      await tester.tap(
+        find.byKey(const ValueKey('course-category-electiveGeneralEducation')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('required')), findsNothing);
+      expect(find.byKey(const ValueKey('elective')), findsOneWidget);
+    },
+  );
+
+  testWidgets(
+    'missing classification removes entire row and university change restores only present filters',
+    (tester) async {
+      final store = await _store();
+      List<UniversityDataset> source(
+        String university,
+        String classification,
+      ) => [
+        UniversityDataset.fromJson({
+          'schemaVersion': 1,
+          'universityId': university,
+          'campus': 'seoul',
+          'academicYear': 2026,
+          'semester': '2',
+          'publishedDate': '',
+          'sourceUrl': 'https://example.edu',
+          'courses': [
+            _course('empty', '분류 없는 수업', classification: classification),
+          ],
+        }),
+      ];
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            loadCatalog: () async => source('smu', ''),
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('course-category-row')), findsNothing);
+      expect(find.byKey(const ValueKey('course-category-all')), findsNothing);
+      expect(find.byKey(const ValueKey('empty')), findsOneWidget);
+      expect(find.text('미분류'), findsNothing);
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            university: 'hongik',
+            initialCampus: 'seoul',
+            loadCatalog: () async => source('hongik', '전필'),
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('course-category-requiredMajor')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('course-category-electiveGeneralEducation')),
+        findsNothing,
+      );
+    },
+  );
+
+  testWidgets(
+    'unmapped published labels stay literal and missing rows do not invent a filter',
+    (tester) async {
+      final store = await _store();
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            loadCatalog: () async => [
+              UniversityDataset.fromJson({
+                'schemaVersion': 1,
+                'campus': 'seoul',
+                'academicYear': 2026,
+                'semester': '2',
+                'publishedDate': '',
+                'sourceUrl': 'https://example.edu',
+                'courses': [
+                  _course('native', '학교 고유 수업', classification: '융합특화'),
+                  _course('unclassified', '미기재 수업', classification: ''),
+                ],
+              }),
+            ],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('course-category-native-융합특화')),
+        findsOneWidget,
+      );
+      expect(
+        find.byKey(const ValueKey('course-category-unknown')),
+        findsNothing,
+      );
+      await tester.tap(
+        find.byKey(const ValueKey('course-category-native-융합특화')),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('native')), findsOneWidget);
+      expect(find.byKey(const ValueKey('unclassified')), findsNothing);
     },
   );
 }

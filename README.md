@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://github.com/littlebit0/DailyCalendar/releases/latest"><img src="https://img.shields.io/github/v/release/littlebit0/DailyCalendar?label=release" alt="Latest release"></a>
-  <img src="https://img.shields.io/badge/version-3.6.0-2f6feb" alt="Version 3.6.0">
+  <img src="https://img.shields.io/badge/version-4.0.0-2f6feb" alt="Version 4.0.0">
   <img src="https://img.shields.io/badge/Flutter-iOS%20%7C%20macOS%20%7C%20Android%20%7C%20Windows%20%7C%20Linux-02569B?logo=flutter" alt="Flutter platforms">
 </p>
 
@@ -19,25 +19,23 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 연결하면 Google Drive AppData를 통해 일정과 설정을 백업하고 동기화할 수
 있습니다.
 
-> 학사 관리에서는 Google 계정에 대학·캠퍼스 학사 정보를 저장하고 Drive로
-> 동기화합니다. 학사정보는 4년제 대학 183개를 이름·초성으로 검색해 등록합니다.
-> 전문대·사이버대·군사·신학 전문대학과 LH토지주택대학교는 선택 목록에서 제외합니다.
-> 학사일정 추가·시간표는 상명대학교(서울·천안), 단국대학교(죽전·천안),
-> 전남대학교(광주·여수)를 지원합니다. 통합 캠퍼스는 한 학교로 등록합니다.
-> 시간표는 연도·학기 목록에서 선택하고, 별도 강의 검색 화면과 검색 항목의 상세 펼침·추가 기능을
-> 사용합니다. 주·일간 스케줄에는 해당 학기 기간에만 수업을 표시합니다.
-> [시간표 구현·저장 구조](docs/TIMETABLE.md) · [대학 목록 범위·출처](docs/UNIVERSITY_DIRECTORY_SOURCES.md)
+학사정보는 지역 지도와 이름·초성 검색으로 대학을 선택합니다. 지역이 다른 분교는 선택 지역에 맞게 등록합니다. 전문대·사이버대·군사·신학 전문대학과 LH토지주택대학교는 선택 목록에서 제외합니다.
 
-## 3.6.0 주요 변경
+학사일정 연동을 확대했으며, 학교 시간표 검색은 상명·단국·아주·중앙·이화여자·홍익·인하·부산·세종·서울대학교에서 지원합니다. 미완료 대학의 검색은 잠정 미지원으로 표시하며 기존 학사일정과 저장 시간표·직접 수업 추가는 유지합니다. 주·일간 캘린더에는 해당 학기 기간에만 수업을 표시합니다.
 
-- 학사 정보·LMS·학사일정·시간표 설정을 학사 관리 메뉴에 통합했습니다.
-- 상명대·단국대·전남대 시간표 검색과 학사일정 추가를 지원합니다.
-- 상명대 LMS 과제·퀴즈를 선택한 개인 분류에 자동 추가·동기화합니다.
-- 시간표 탐색, macOS 상단 메뉴, 시작 동기화 지연을 개선했습니다.
+[시간표 구조](docs/TIMETABLE.md) · [대학 목록 출처](docs/UNIVERSITY_DIRECTORY_SOURCES.md) · [미완료 대학 및 분류 개선 인계 #92](https://github.com/littlebit0/DailyCalendar/issues/92)
 
-> Drive v2와 DB 스키마 9를 사용합니다. 연결 기기를 함께 업데이트해 주세요.
-> App Store 출시는 GitHub 릴리스와 별개입니다.
-> [3.6.0 릴리스 노트](docs/RELEASE_NOTES_3.6.0.md) · [동기화 변경 안내](docs/SYNC_MERGE_RULES.md)
+## 4.0.0 주요 변경
+
+- 지역별 대학 선택·교표, 지역에 맞는 분교 자동 선택을 추가했습니다.
+- 대학 학사일정을 확대하고 시간표의 교필·교선, 학과와 공식 전공제도 분류를 개선했습니다.
+- 기기별 보안 저장소를 사용하는 선택형 LMS 자동 로그인과 퀴즈 완료 상태 처리를 개선했습니다.
+- 반복 LMS 조회, 시작 동기화, 완료 취소선과 빠른 보기·시간표·대학 목록 애니메이션을 개선했습니다.
+
+LMS 로그인 정보는 다른 기기로 동기화하지 않으며 일정만 동기화합니다. 학교 정책에 따라 다른 기기의 LMS 세션이 종료될 수 있습니다.
+
+> Drive v2와 DB 스키마 9를 유지합니다. App Store 출시는 GitHub 릴리스와 별개입니다.
+> [4.0.0 릴리스 노트](docs/RELEASE_NOTES_4.0.0.md) · [스토어 문구](docs/STORE_TEXT_4.0.0_KO.md)
 
 ## 다운로드
 
@@ -47,11 +45,11 @@ DailyCalendar는 월간, 주간, 일간 및 연간 보기로 일정을 관리하
 | 플랫폼 | 배포 상태 | 파일 |
 | --- | --- | --- |
 | iPhone / iPad | App Store 무료 배포 중 | App Store의 `DailyCalendar` |
-| iOS 테스트 | 3.6.0 공개 검증용 미서명 파일 | [daily-ios-3.6.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-ios-3.6.0-unsigned.ipa) |
-| macOS 테스트 | 3.6.0 공개 검증용 미서명 파일 | [daily-macos-3.6.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-macos-3.6.0-unsigned.dmg) |
-| Android | 3.6.0 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-3.6.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-android-3.6.0.apk) |
-| Windows | 3.6.0 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-windows-3.6.0-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-windows-3.6.0.zip) |
-| Linux | 3.6.0-1, 서명된 APT 업데이트 지원 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-linux-3.6.0-1-amd64.deb) · [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-linux-3.6.0-1-arm64.deb) |
+| iOS 테스트 | 4.0.0 공개 검증용 미서명 파일 | [daily-ios-4.0.0-unsigned.ipa](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-ios-4.0.0-unsigned.ipa) |
+| macOS 테스트 | 4.0.0 공개 검증용 미서명 파일 | [daily-macos-4.0.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-macos-4.0.0-unsigned.dmg) |
+| Android | 4.0.0 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-4.0.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-android-4.0.0.apk) |
+| Windows | 4.0.0 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-windows-4.0.0-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-windows-4.0.0.zip) |
+| Linux | 4.0.0-1, 서명된 APT 업데이트 지원 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-linux-4.0.0-1-amd64.deb) · [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-linux-4.0.0-1-arm64.deb) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
 > 서명 없이는 iPhone에 직접 설치할 수 없으며, 재서명 과정에서 Sign in with
@@ -77,7 +75,7 @@ Ubuntu/Debian 데스크톱용 `.deb`를 한 번 설치하면 Daily 전용 타이
 미루며, 일정과 설정은 삭제하지 않습니다. 설치 시 앱을 자동 실행하지 않습니다.
 
 ```sh
-sudo apt install ./daily-linux-3.6.0-1-amd64.deb
+sudo apt install ./daily-linux-4.0.0-1-amd64.deb
 ```
 
 Intel/AMD PC는 amd64, ARM64 PC는 arm64 파일을 사용하세요. amd64는 Ubuntu 22.04+,
@@ -97,7 +95,7 @@ arm64는 Ubuntu 24.04+를 빌드 기준으로 사용합니다. 두 아키텍처�
 - 모든 사용자 일정의 Todo 완료 상태와 빠른 보기·위젯 체크
 - 반복 일정, 연속 일정, D-day, 음력과 대한민국 공휴일
 - 날짜 범위 드래그 입력과 일정 날짜 이동·날짜별 수동 순서
-- 외부 캘린더 및 상명대학교 학부 학사 일정 가져오기
+- 외부 캘린더 및 지원 대학 학사 일정 가져오기
 - 선택형 기상청 날씨 예보와 지역 설정
 - 위치, 지도 바로가기, 링크, 메모와 날씨 정보
 
@@ -150,7 +148,7 @@ arm64는 Ubuntu 24.04+를 빌드 기준으로 사용합니다. 두 아키텍처�
 | 홈 화면 위젯·미니 캘린더 | O | O | O | O |
 | 앱 잠금 | O | O | O | O |
 
-위 표는 플랫폼별 기본 기능 지원 범위입니다. 3.6.0의 공유 기능과 동기화 코드는
+위 표는 플랫폼별 기본 기능 지원 범위입니다. 4.0.0의 공유 기능과 동기화 코드는
 Windows/Linux 배포 빌드에도 포함합니다. 플랫폼별 실제 로그인·알람·위젯 동작은
 빌드 및 자동 테스트와 별도로 확인해야 합니다.
 
@@ -239,13 +237,13 @@ Google OAuth 및 Apple 서명 값은 저장소에 포함하지 않습니다. 로
 ./tool/flutter.sh test --no-pub
 ```
 
-릴리스 검증과 지원 범위는 [릴리스 노트](docs/RELEASE_NOTES_3.6.0.md)와
+릴리스 검증과 지원 범위는 [릴리스 노트](docs/RELEASE_NOTES_4.0.0.md)와
 [에이전트 작업 기록](AGENT_MEMORY.md)에 기록합니다. 자동 테스트와 빌드 성공은
 실제 사용자 기기의 로그인·알람·위젯 동작 검증과 구분합니다.
 
 ## 문서
 
-- [3.6.0 릴리스 노트](docs/RELEASE_NOTES_3.6.0.md)
+- [4.0.0 릴리스 노트](docs/RELEASE_NOTES_4.0.0.md)
 - [기능 로드맵](docs/FEATURE_ROADMAP.md)
 - [프로젝트 분석](PROJECT_ANALYSIS.md)
 - [Google Drive 동기화 설정](docs/GOOGLE_DRIVE_SYNC_SETUP.md)

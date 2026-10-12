@@ -59,6 +59,11 @@ class _TimetablePageState extends ConsumerState<TimetablePage> {
       listenable: store,
       builder: (context, _) {
         final courses = store.activeClasses;
+        final hasDatedMeetings = courses.any(
+          (course) => course.meetings.any((meeting) => meeting.date != null),
+        );
+        // A weekly template cannot represent different dated sessions accurately.
+        final showWeekChanges = _showWeekChanges || hasDatedMeetings;
         final lastDay = courses
             .expand((c) => c.meetings)
             .fold<int>(5, (n, m) => m.weekday > n ? m.weekday : n);
@@ -66,7 +71,7 @@ class _TimetablePageState extends ConsumerState<TimetablePage> {
           lastDay,
           (i) => DateTime(monday.year, monday.month, monday.day + i),
         );
-        final occurrences = _showWeekChanges
+        final occurrences = showWeekChanges
             ? classOccurrences(
                 courses,
                 days,
@@ -88,10 +93,10 @@ class _TimetablePageState extends ConsumerState<TimetablePage> {
           days: days,
           occurrences: occurrences,
           use24HourTime: settings.use24HourTime,
-          showDates: _showWeekChanges,
+          showDates: showWeekChanges,
           compact: compact,
           onOccurrenceTap: (occurrence) {
-            if (_showWeekChanges) {
+            if (showWeekChanges) {
               showClassOccurrence(context, store, occurrence);
             } else {
               showTimetableClassDetails(context, store, occurrence.course);
@@ -226,29 +231,30 @@ class _TimetablePageState extends ConsumerState<TimetablePage> {
                                 style: theme.textTheme.bodySmall,
                               ),
                             ),
-                            TextButton.icon(
-                              key: const ValueKey('timetable-week-toggle'),
-                              onPressed: () => setState(() {
-                                _showWeekChanges = !_showWeekChanges;
-                                if (_showWeekChanges) _alignWeek(store);
-                              }),
-                              icon: Icon(
-                                _showWeekChanges
-                                    ? Icons.calendar_view_week_outlined
-                                    : Icons.event_repeat_outlined,
-                                size: 18,
-                              ),
-                              label: Text(
-                                context.tr(
-                                  _showWeekChanges ? '기본 시간표' : '주간 변경',
+                            if (!hasDatedMeetings)
+                              TextButton.icon(
+                                key: const ValueKey('timetable-week-toggle'),
+                                onPressed: () => setState(() {
+                                  _showWeekChanges = !_showWeekChanges;
+                                  if (_showWeekChanges) _alignWeek(store);
+                                }),
+                                icon: Icon(
+                                  _showWeekChanges
+                                      ? Icons.calendar_view_week_outlined
+                                      : Icons.event_repeat_outlined,
+                                  size: 18,
+                                ),
+                                label: Text(
+                                  context.tr(
+                                    _showWeekChanges ? '기본 시간표' : '주간 변경',
+                                  ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       ),
                     ),
-                    if (_showWeekChanges)
+                    if (showWeekChanges)
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -311,7 +317,7 @@ class _TimetablePageState extends ConsumerState<TimetablePage> {
                           Expanded(
                             child: Text(
                               context.tr(
-                                _showWeekChanges
+                                showWeekChanges
                                     ? '수업을 눌러 해당 날짜의 강의 방식이나 휴강을 변경하세요.'
                                     : store.hasPendingSync
                                     ? '시간표 Google Drive 동기화 대기 중'
@@ -475,7 +481,7 @@ Future<void> showTimetableClassDetails(
                 label: Text(context.tr(lectureModeLabel(course.defaultMode))),
               ),
             ),
-            for (final meeting in course.meetings)
+            for (final meeting in timetableDisplayMeetings(course.meetings))
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
                 child: Row(
@@ -866,7 +872,7 @@ class _ClassEditorState extends State<_ClassEditor> {
                 Card(
                   child: ListTile(
                     title: Text(
-                      '${_weekday(context, _meetings[i].weekday)} ${_time(_meetings[i].startMinute)} – ${_time(_meetings[i].endMinute)}',
+                      '${_meetings[i].date ?? _weekday(context, _meetings[i].weekday)} ${_time(_meetings[i].startMinute)} – ${_time(_meetings[i].endMinute)}',
                     ),
                     subtitle: Text(
                       _meetings[i].classroom.isEmpty
@@ -951,7 +957,7 @@ class _ClassEditorState extends State<_ClassEditor> {
                         child: Text(_weekday(context, d)),
                       ),
                   ],
-                  onChanged: (d) => day = d!,
+                  onChanged: previous?.date == null ? (d) => day = d! : null,
                 ),
                 TextButton(
                   key: const ValueKey('class-meeting-start'),
@@ -1022,6 +1028,7 @@ class _ClassEditorState extends State<_ClassEditor> {
                           ? previous!.originalEndMinute
                           : end,
                       classroom: room.trim(),
+                      date: previous?.date,
                     ),
                   );
                 }
@@ -1060,6 +1067,7 @@ class _ClassEditorState extends State<_ClassEditor> {
       defaultMode: _mode,
       sourceType: previous?.sourceType ?? 'manual',
       sourceId: previous?.sourceId,
+      period: previous?.period,
       overrides: {
         for (final entry
             in (previous?.overrides ?? <String, LectureMode>{}).entries)

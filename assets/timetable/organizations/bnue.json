@@ -1,0 +1,759 @@
+{
+  "schemaVersion": 1,
+  "university": "bnue",
+  "mappings": [
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "1학년 과학",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "교육학과",
+      "sourceLabel": "1학년 교육",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "국어교육과",
+      "sourceLabel": "1학년 국어",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "1학년 미술",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회교육과",
+      "sourceLabel": "1학년 사회",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "수학교육과",
+      "sourceLabel": "1학년 수학",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "1학년 실과",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "영어교육과",
+      "sourceLabel": "1학년 영어",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "윤리교육과",
+      "sourceLabel": "1학년 윤리",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "1학년 음악",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "1학년 체육",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "초등특수·유아교육과",
+      "sourceLabel": "1학년 초등특수\n유아",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "1학년 컴퓨터",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "2학년 과학",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "교육학과",
+      "sourceLabel": "2학년 교육",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "국어교육과",
+      "sourceLabel": "2학년 국어",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "2학년 미술\n8",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회교육과",
+      "sourceLabel": "2학년 사회",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "수학교육과",
+      "sourceLabel": "2학년 수학",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "2학년 실과\n9",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "영어교육과",
+      "sourceLabel": "2학년 영어",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "윤리교육과",
+      "sourceLabel": "2학년 윤리",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "2학년 음악",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "2학년 체육",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "초등특수·유아교육과",
+      "sourceLabel": "2학년 초등특수\n유아",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "2학년 컴퓨터",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "3학년 과학",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "교육학과",
+      "sourceLabel": "3학년 교육",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "국어교육과",
+      "sourceLabel": "3학년 국어",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "3학년 미술",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회교육과",
+      "sourceLabel": "3학년 사회",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "수학교육과",
+      "sourceLabel": "3학년 수학",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "3학년 실과",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "영어교육과",
+      "sourceLabel": "3학년 영어",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "윤리교육과",
+      "sourceLabel": "3학년 윤리",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "3학년 음악",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "3학년 체육",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "초등특수·유아교육과",
+      "sourceLabel": "3학년 초등특수\n유아",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "3학년 컴퓨터",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "과학교육과",
+      "sourceLabel": "4학년 과학",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "미술교육과",
+      "sourceLabel": "4학년 미술",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "사회교육과",
+      "sourceLabel": "4학년 사회",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "실과교육과",
+      "sourceLabel": "4학년 실과",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "음악교육과",
+      "sourceLabel": "4학년 음악",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "체육교육과",
+      "sourceLabel": "4학년 체육",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "초등특수·유아교육과",
+      "sourceLabel": "4학년 초등특수\n유아",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "컴퓨터교육과",
+      "sourceLabel": "4학년 컴퓨터",
+      "sourceUrl": "https://www.bnue.ac.kr/content/life03_02",
+      "evidence": "공식 교육과정: 심화과정은 13개 심화전공별로 구성; 기존 원자료 학과 대응 유지. 단과대 신설하지 않음",
+      "sourceFile": "/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/all-university-completion-20261012/root-sources/bnue-curriculum.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "심화과정",
+      "officialGroups": [
+        "심화과정"
+      ],
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    }
+  ],
+  "courseOwners": []
+}

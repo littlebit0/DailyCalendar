@@ -70,7 +70,7 @@ void main() {
   }
 
   test(
-    'school visibility grant uses verified time and clears during refresh',
+    'school cache grant survives missing fresh auth while retaining explicit visibility',
     () async {
       const channel = MethodChannel(CalendarWidgetChannelContract.appleChannel);
       final snapshots = <Map<Object?, Object?>>[];
@@ -123,12 +123,21 @@ void main() {
       expect(grant['ownerId'], 'student@example.com');
       expect(grant['checkedAt'], verified.millisecondsSinceEpoch);
       expect(grant['eventIds'], ['lms:due']);
-      visible = false;
       verified = null;
+      await service.refresh(now: now);
+      expect(snapshots.last['todayEvents'], hasLength(1));
+      expect((snapshots.last['lmsVisibility'] as Map)['eventIds'], ['lms:due']);
+      expect((snapshots.last['lmsVisibility'] as Map)['checkedAt'], isNull);
+      visible = false;
       await service.refresh(now: now);
       expect(snapshots.last['todayEvents'], isEmpty);
       expect((snapshots.last['lmsVisibility'] as Map)['eventIds'], isEmpty);
-      expect((snapshots.last['lmsVisibility'] as Map)['checkedAt'], isNull);
+      visible = true;
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'other@example.com'),
+      );
+      await service.refresh(now: now);
+      expect((snapshots.last['lmsVisibility'] as Map)['eventIds'], isEmpty);
     },
   );
 

@@ -1,0 +1,7176 @@
+{
+  "schemaVersion": 1,
+  "universityId": "pnu",
+  "campus": "yangsan",
+  "campusName": "양산캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-10-06",
+  "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
+  "courses": [
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3300664/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3300664",
+      "section": "001",
+      "courseName": "대학한문(II)",
+      "professor": "신상원",
+      "credits": 2.0,
+      "sourceSchedule": "금 13:00(100) 양산Y15-206",
+      "sourceClassroom": "양산Y15-206",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "양산Y15-206"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 2.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "대학한문(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3300730/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3300730",
+      "section": "001",
+      "courseName": "의학공부를위한기초화학및실험",
+      "professor": "김인령",
+      "credits": 2.0,
+      "sourceSchedule": "금 09:00-12:00 양산Y15-206",
+      "sourceClassroom": "양산Y15-206",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y15-206"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 2.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "의학공부를위한기초화학및실험 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PD2002764/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PD2002764",
+      "section": "001",
+      "courseName": "의학용어",
+      "professor": "유미현",
+      "credits": 1.0,
+      "sourceSchedule": "목 14:00(75) 양산Y15-207",
+      "sourceClassroom": "양산Y15-207",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 915,
+          "classroom": "양산Y15-207"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 1.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의예과": "의학용어 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PD2002765/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PD2002765",
+      "section": "001",
+      "courseName": "일반생물학및실험(II)",
+      "professor": "유미현 외 2명",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00-13:00 양산Y15-207",
+      "sourceClassroom": "양산Y15-207",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "양산Y15-207"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 3.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의예과": "일반생물학및실험(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PD2002766/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PD2002766",
+      "section": "001",
+      "courseName": "일반화학및실험",
+      "professor": "김인령",
+      "credits": 3.0,
+      "sourceSchedule": "목 09:00-13:00 양산Y15-207",
+      "sourceClassroom": "양산Y15-207",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "양산Y15-207"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 3.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의예과": "일반화학및실험 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PD2002844/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PD2002844",
+      "section": "001",
+      "courseName": "심리학개론",
+      "professor": "김해진",
+      "credits": 2.0,
+      "sourceSchedule": "화 14:00(100) 양산Y15-207",
+      "sourceClassroom": "양산Y15-207",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-207"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의예과": "심리학개론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AC1501341/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AC1501341",
+      "section": "001",
+      "courseName": "생명과학(II)",
+      "professor": "김동환",
+      "credits": 3.0,
+      "sourceSchedule": "월 15:00(75) 양산Y09-104, 수 15:00(75) 양산Y09-104",
+      "sourceClassroom": "양산Y09-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y09-104"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y09-104"
+        }
+      ],
+      "departments": [
+        "응용생명융합학부"
+      ],
+      "departmentCredits": {
+        "응용생명융합학부": 3.0
+      },
+      "departmentClassifications": {
+        "응용생명융합학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "응용생명융합학부": "생명과학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AC1501342/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AC1501342",
+      "section": "001",
+      "courseName": "유기화학",
+      "professor": "성정열",
+      "credits": 3.0,
+      "sourceSchedule": "월 13:30(75) 양산Y09-104, 수 13:30(75) 양산Y09-104",
+      "sourceClassroom": "양산Y09-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y09-104"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y09-104"
+        }
+      ],
+      "departments": [
+        "응용생명융합학부"
+      ],
+      "departmentCredits": {
+        "응용생명융합학부": 3.0
+      },
+      "departmentClassifications": {
+        "응용생명융합학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "응용생명융합학부": "유기화학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AC1501343/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AC1501343",
+      "section": "001",
+      "courseName": "생물통계학",
+      "professor": "강헌일",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y09-104, 수 10:30(75) 양산Y09-104",
+      "sourceClassroom": "양산Y09-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y09-104"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y09-104"
+        }
+      ],
+      "departments": [
+        "응용생명융합학부"
+      ],
+      "departmentCredits": {
+        "응용생명융합학부": 3.0
+      },
+      "departmentClassifications": {
+        "응용생명융합학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "응용생명융합학부": "생물통계학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AC1501344/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AC1501344",
+      "section": "001",
+      "courseName": "효원전공탐색",
+      "professor": "김병우 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "수 16:30(100) 양산Y09-104, 수 16:30(50) 양산Y09-104, 수 17:30(50) 양산Y09-104",
+      "sourceClassroom": "양산Y09-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 990,
+          "endMinute": 1090,
+          "classroom": "양산Y09-104"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 990,
+          "endMinute": 1040,
+          "classroom": "양산Y09-104"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "양산Y09-104"
+        }
+      ],
+      "departments": [
+        "응용생명융합학부"
+      ],
+      "departmentCredits": {
+        "응용생명융합학부": 2.0
+      },
+      "departmentClassifications": {
+        "응용생명융합학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "응용생명융합학부": "효원전공탐색 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR1501141/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR1501141",
+      "section": "001",
+      "courseName": "글로벌건강과이슈",
+      "professor": "윤정미",
+      "credits": 1.0,
+      "sourceSchedule": "금 17:00(50) 양산Y15-415",
+      "sourceClassroom": "양산Y15-415",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "양산Y15-415"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공기초"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "글로벌건강과이슈 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR1600375/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR1600375",
+      "section": "001",
+      "courseName": "인체의구조와기능(I)",
+      "professor": "박종민",
+      "credits": 2.0,
+      "sourceSchedule": "화 14:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공기초"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "인체의구조와기능(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1500215/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1500215",
+      "section": "140",
+      "courseName": "일반물리학(II)",
+      "professor": "백운학",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00(75) 양산Y17-202, 수 09:00(75) 양산Y17-202",
+      "sourceClassroom": "양산Y17-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-202"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-202"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "일반물리학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1500215/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1500215",
+      "section": "141",
+      "courseName": "일반물리학(II)",
+      "professor": "백운학",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y17-202, 수 10:30(75) 양산Y17-202",
+      "sourceClassroom": "양산Y17-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-202"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-202"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "일반물리학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1600702/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1600702",
+      "section": "140",
+      "courseName": "프로그래밍원리와실습",
+      "professor": "손기봉",
+      "credits": 4.0,
+      "sourceSchedule": "금 09:00-13:00 양산Y17-309",
+      "sourceClassroom": "양산Y17-309",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "양산Y17-309"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 4.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "프로그래밍원리와실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1600702/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1600702",
+      "section": "141",
+      "courseName": "프로그래밍원리와실습",
+      "professor": "손기봉",
+      "credits": 4.0,
+      "sourceSchedule": "금 14:00-18:00 양산Y17-309",
+      "sourceClassroom": "양산Y17-309",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1080,
+          "classroom": "양산Y17-309"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 4.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "프로그래밍원리와실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1600706/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1600706",
+      "section": "140",
+      "courseName": "생명과학(II)",
+      "professor": "서지혜",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y17-201, 수 10:30(75) 양산Y17-201",
+      "sourceClassroom": "양산Y17-201",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-201"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-201"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "생명과학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1600706/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1600706",
+      "section": "141",
+      "courseName": "생명과학(II)",
+      "professor": "서지혜",
+      "credits": 3.0,
+      "sourceSchedule": "월 13:30(75) 양산Y17-101, 수 13:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "생명과학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1600706/142",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1600706",
+      "section": "142",
+      "courseName": "생명과학(II)",
+      "professor": "최우일",
+      "credits": 3.0,
+      "sourceSchedule": "월 15:00(75) 양산Y17-202, 수 15:00(75) 양산Y17-202",
+      "sourceClassroom": "양산Y17-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y17-202"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y17-202"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "생명과학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1600707/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1600707",
+      "section": "140",
+      "courseName": "일반화학(II)",
+      "professor": "김은영",
+      "credits": 3.0,
+      "sourceSchedule": "월 13:30(75) 양산Y17-202, 수 13:30(75) 양산Y17-202",
+      "sourceClassroom": "양산Y17-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-202"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-202"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "일반화학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX1600707/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX1600707",
+      "section": "141",
+      "courseName": "일반화학(II)",
+      "professor": "김은영",
+      "credits": 3.0,
+      "sourceSchedule": "월 15:00(75) 양산Y17-203, 수 15:00(75) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "일반화학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600079/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600079",
+      "section": "140",
+      "courseName": "확률및통계",
+      "professor": "성효진",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00(75) 양산Y17-202, 목 09:00(75) 양산Y17-202",
+      "sourceClassroom": "양산Y17-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-202"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-202"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "확률및통계 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600079/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600079",
+      "section": "141",
+      "courseName": "확률및통계",
+      "professor": "성효진",
+      "credits": 3.0,
+      "sourceSchedule": "화 10:30(75) 양산Y17-101, 목 10:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "전공기초"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "확률및통계 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZF1200742/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200742",
+      "section": "001",
+      "courseName": "사상체질로 보는 인간의 감정과 몸",
+      "professor": "신상원",
+      "credits": 3.0,
+      "sourceSchedule": "화 18:00-21:00 양산Y03-608",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "효원창의교양"
+      },
+      "departmentRemarks": {
+        "한의학과": "원격(비실시간) · 사상체질로 보는 인간의 감정과 몸 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZF1200468/300",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200468",
+      "section": "300",
+      "courseName": "현대생활과레크레이션",
+      "professor": "강민서",
+      "credits": 3.0,
+      "sourceSchedule": "목 14:00-17:00 양산Y15-311",
+      "sourceClassroom": "양산Y15-311",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "양산Y15-311"
+        }
+      ],
+      "departments": [
+        "체육교육과"
+      ],
+      "departmentCredits": {
+        "체육교육과": 3.0
+      },
+      "departmentClassifications": {
+        "체육교육과": "효원창의교양"
+      },
+      "departmentRemarks": {
+        "체육교육과": "현대생활과레크레이션 제한사항: 체육교육과전학년수강불가"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZF1200682/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200682",
+      "section": "140",
+      "courseName": "공학자의눈으로세계를보다",
+      "professor": "정준수",
+      "credits": 3.0,
+      "sourceSchedule": "목 15:30-18:30 양산Y17-204",
+      "sourceClassroom": "양산Y17-204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 930,
+          "endMinute": 1110,
+          "classroom": "양산Y17-204"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "효원창의교양"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "공학자의눈으로세계를보다 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZF1200649/300",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZF1200649",
+      "section": "300",
+      "courseName": "PNU시대와지성특강",
+      "professor": "하상복 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "화 15:00-18:00 양산Y15-411",
+      "sourceClassroom": "양산Y15-411",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1080,
+          "classroom": "양산Y15-411"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 3.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원창의교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "PNU시대와지성특강 제한사항: 간호대학전학년수강가능, 응용생명융합학부전학년수강가능, 의과대학전학년수강가능, 의생명융합공학부전학년수강가능, 첨단융합학부전학년수강가능, 치과대학전학년수강가능, 치의학과전학년수강가능, 한의과학과전학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000118/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000118",
+      "section": "140",
+      "courseName": "공학작문및발표",
+      "professor": "이경구",
+      "credits": 3.0,
+      "sourceSchedule": "화 15:00(100) 양산Y17-202, 목 15:00(100) 양산Y17-202",
+      "sourceClassroom": "양산Y17-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y17-202"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y17-202"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "공학작문및발표 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000118/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000118",
+      "section": "141",
+      "courseName": "공학작문및발표",
+      "professor": "최우일",
+      "credits": 3.0,
+      "sourceSchedule": "화 15:00(100) 양산Y17-203, 목 15:00(100) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "의생명융합공학부"
+      ],
+      "departmentCredits": {
+        "의생명융합공학부": 3.0
+      },
+      "departmentClassifications": {
+        "의생명융합공학부": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "의생명융합공학부": "공학작문및발표 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000091/301",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000091",
+      "section": "301",
+      "courseName": "고전읽기와토론",
+      "professor": "원동필",
+      "credits": 2.0,
+      "sourceSchedule": "월 11:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "고전읽기와토론 제한사항: ①내국인 수강가능, ②간호학과 학과사무실 수강지도에 따름"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000091/302",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000091",
+      "section": "302",
+      "courseName": "고전읽기와토론",
+      "professor": "원동필",
+      "credits": 2.0,
+      "sourceSchedule": "월 13:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "고전읽기와토론 제한사항: ①내국인 수강가능, ②간호학과 학과사무실 수강지도에 따름"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000091/303",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000091",
+      "section": "303",
+      "courseName": "고전읽기와토론",
+      "professor": "원동필",
+      "credits": 2.0,
+      "sourceSchedule": "월 15:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "고전읽기와토론 제한사항: ①내국인 수강가능, ②간호학과 학과사무실 수강지도에 따름"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000091/304",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000091",
+      "section": "304",
+      "courseName": "고전읽기와토론",
+      "professor": "최병학",
+      "credits": 2.0,
+      "sourceSchedule": "수 11:00(100) 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "고전읽기와토론 제한사항: ①내국인 수강가능, ②한의학전문대학원 학과사무실 수강지도에 따름"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000101/301",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000101",
+      "section": "301",
+      "courseName": "열린사고와표현",
+      "professor": "허상희",
+      "credits": 2.0,
+      "sourceSchedule": "화 09:00(100) 양산Y15-411",
+      "sourceClassroom": "양산Y15-411",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 640,
+          "classroom": "양산Y15-411"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "열린사고와표현 제한사항: 내국인 수강가능 ②수강신청기간-1차(학부대학 응용생명융합학부만 수강신청 가능, 신입생) ③ 2차 수강신청기간- (전대학, 신입생, 재학생 구분없이 가능)"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000101/302",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000101",
+      "section": "302",
+      "courseName": "열린사고와표현",
+      "professor": "허상희",
+      "credits": 2.0,
+      "sourceSchedule": "화 11:00(100) 양산Y15-411",
+      "sourceClassroom": "양산Y15-411",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-411"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "열린사고와표현 제한사항: 내국인 수강가능 ②수강신청기간-1차(학부대학 응용생명융합학부만 수강신청 가능, 신입생) ③ 2차 수강신청기간- (전대학, 신입생, 재학생 구분없이 가능)"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000101/304",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000101",
+      "section": "304",
+      "courseName": "열린사고와표현",
+      "professor": "허상희",
+      "credits": 2.0,
+      "sourceSchedule": "목 11:00(100) 양산Y15-411",
+      "sourceClassroom": "양산Y15-411",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-411"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "열린사고와표현 제한사항: ①내국인 수강가능 ②수강신청기간-1차(학부대학 응용생명융합학부만 수강신청 가능, 신입생) ③ 2차 수강신청기간- (전대학, 신입생, 재학생 구분없이 가능)"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000113/081",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000113",
+      "section": "081",
+      "courseName": "대학영어",
+      "professor": "프레드릭 소렌드 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "금 13:00(100) 양산Y15-411, 토 사이버수업",
+      "sourceClassroom": "양산Y15-411",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "양산Y15-411"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합) · 대학영어 제한사항: '초급 수준'대상인 '수강가능 학과' 학생만 수강 가능 ('교양교과목 수강지도 지침' 참고) · E · 비동기 사이버수업: 금 13:00(100) 양산Y15-411, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000113/182",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000113",
+      "section": "182",
+      "courseName": "대학영어",
+      "professor": "제시카 노턴 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "화 11:00(100) 양산Y15-311, 토 사이버수업",
+      "sourceClassroom": "양산Y15-311",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-311"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합) · 대학영어 제한사항: '중급 수준'대상인 '수강가능 학과' 학생만 수강 가능 ('교양교과목 수강지도 지침' 참고) · E · 비동기 사이버수업: 화 11:00(100) 양산Y15-311, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000113/184",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000113",
+      "section": "184",
+      "courseName": "대학영어",
+      "professor": "제시카 노턴 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "금 11:00(100) 양산Y15-311, 토 사이버수업",
+      "sourceClassroom": "양산Y15-311",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-311"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합) · 대학영어 제한사항: '중급 수준'대상인 '수강가능 학과' 학생만 수강 가능 ('교양교과목 수강지도 지침' 참고) · E · 비동기 사이버수업: 금 11:00(100) 양산Y15-311, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000113/185",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000113",
+      "section": "185",
+      "courseName": "대학영어",
+      "professor": "제시카 노턴 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "금 13:00(100) 양산Y15-311, 토 사이버수업",
+      "sourceClassroom": "양산Y15-311",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "양산Y15-311"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합) · 대학영어 제한사항: '중급 수준'대상인 '수강가능 학과' 학생만 수강 가능 ('교양교과목 수강지도 지침' 참고) · E · 비동기 사이버수업: 금 13:00(100) 양산Y15-311, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000113/282",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000113",
+      "section": "282",
+      "courseName": "대학영어",
+      "professor": "프레드릭 소렌드 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "금 11:00(100) 양산Y15-411, 토 사이버수업",
+      "sourceClassroom": "양산Y15-411",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-411"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 2.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합) · 대학영어 제한사항: '고급 수준'대상인 '수강가능 학과' 학생만 수강 가능 ('교양교과목 수강지도 지침' 참고) · E · 비동기 사이버수업: 금 11:00(100) 양산Y15-411, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000453/101",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000453",
+      "section": "101",
+      "courseName": "인공지능과디지털사고",
+      "professor": "강문혜 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "월 11:00(100) 양산Y15-414, 토 사이버수업",
+      "sourceClassroom": "양산Y15-414",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-414"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 3.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합),SW기초교과목 · 인공지능과디지털사고 제한사항: ① 2026 교육과정 적용자만 수강 가능(단, 2013∼ 2025교육과정 적용자는 재이수, 미이수자에 한해 수강 가능(컴퓨팅사고와인공지능 대체교과목)), ② 수강대상 및 가능학과 수강지도지침 참고 · 원격(혼합) · 비동기 사이버수업: 월 11:00(100) 양산Y15-414, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000453/102",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000453",
+      "section": "102",
+      "courseName": "인공지능과디지털사고",
+      "professor": "강문혜 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "월 13:00(100) 양산Y15-414, 토 사이버수업",
+      "sourceClassroom": "양산Y15-414",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "양산Y15-414"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 3.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합),SW기초교과목 · 인공지능과디지털사고 제한사항: ① 2026 교육과정 적용자만 수강 가능(단, 2013∼ 2025교육과정 적용자는 재이수, 미이수자에 한해 수강 가능(컴퓨팅사고와인공지능 대체교과목)), ② 수강대상 및 가능학과 수강지도지침 참고 · 원격(혼합) · 비동기 사이버수업: 월 13:00(100) 양산Y15-414, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000453/103",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000453",
+      "section": "103",
+      "courseName": "인공지능과디지털사고",
+      "professor": "강문혜 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "월 15:00(100) 양산Y15-414, 토 사이버수업",
+      "sourceClassroom": "양산Y15-414",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y15-414"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 3.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합),SW기초교과목 · 인공지능과디지털사고 제한사항: ① 2026 교육과정 적용자만 수강 가능(단, 2013∼ 2025교육과정 적용자는 재이수, 미이수자에 한해 수강 가능(컴퓨팅사고와인공지능 대체교과목)), ② 수강대상 및 가능학과 수강지도지침 참고 · 원격(혼합) · 비동기 사이버수업: 월 15:00(100) 양산Y15-414, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/ZE1000453/104",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ZE1000453",
+      "section": "104",
+      "courseName": "인공지능과디지털사고",
+      "professor": "박태진 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "수 14:00(100) 양산Y15-414, 토 사이버수업",
+      "sourceClassroom": "양산Y15-414",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-414"
+        }
+      ],
+      "departments": [
+        "교양교육원 (051-510-3844~6)"
+      ],
+      "departmentCredits": {
+        "교양교육원 (051-510-3844~6)": 3.0
+      },
+      "departmentClassifications": {
+        "교양교육원 (051-510-3844~6)": "효원핵심교양"
+      },
+      "departmentRemarks": {
+        "교양교육원 (051-510-3844~6)": "원격(혼합),SW기초교과목 · 인공지능과디지털사고 제한사항: ① 2026 교육과정 적용자만 수강 가능(단, 2013∼ 2025교육과정 적용자는 재이수, 미이수자에 한해 수강 가능(컴퓨팅사고와인공지능 대체교과목)), ② 수강대상 및 가능학과 수강지도지침 참고 · 원격(혼합) · 비동기 사이버수업: 수 14:00(100) 양산Y15-414, 토 사이버수업"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM2200646/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM2200646",
+      "section": "001",
+      "courseName": "생화학(II)",
+      "professor": "최나리",
+      "credits": 3.0,
+      "sourceSchedule": "목 09:00-12:00 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "생화학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3300661/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3300661",
+      "section": "001",
+      "courseName": "통합의생명과학 및 실험(II)",
+      "professor": "주명수",
+      "credits": 3.0,
+      "sourceSchedule": "금 09:00-13:00 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "통합의생명과학 및 실험(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3300721/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3300721",
+      "section": "001",
+      "courseName": "의료인문학(I)",
+      "professor": "정한솔",
+      "credits": 2.0,
+      "sourceSchedule": "월 14:00(100) 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 2.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "의료인문학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3400742/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3400742",
+      "section": "001",
+      "courseName": "한의문화",
+      "professor": "권영규",
+      "credits": 2.0,
+      "sourceSchedule": "수 11:00(100) 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 2.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "한의문화 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3400743/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3400743",
+      "section": "001",
+      "courseName": "분자세포생물학",
+      "professor": "고창원",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00-12:00 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "분자세포생물학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3400746/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3400746",
+      "section": "001",
+      "courseName": "한의학리더를위한독서토론(II)",
+      "professor": "주명수",
+      "credits": 3.0,
+      "sourceSchedule": "금 14:00-17:00 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한의학과": "한의학리더를위한독서토론(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3400746/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3400746",
+      "section": "002",
+      "courseName": "한의학리더를위한독서토론(II)",
+      "professor": "윤영주",
+      "credits": 3.0,
+      "sourceSchedule": "금 14:00-17:00 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한의학과": "한의학리더를위한독서토론(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3400754/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3400754",
+      "section": "001",
+      "courseName": "면역학",
+      "professor": "주명수",
+      "credits": 3.0,
+      "sourceSchedule": "수 14:00-17:00 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "면역학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3600584/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3600584",
+      "section": "001",
+      "courseName": "실험동물의기술과응용및실습",
+      "professor": "김병주 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00-13:00 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 780,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "실험동물의기술과응용및실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3600585/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3600585",
+      "section": "001",
+      "courseName": "자기계발",
+      "professor": "윤영주",
+      "credits": 1.0,
+      "sourceSchedule": "금 17:00(50) 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 1.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "자기계발 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3600588/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3600588",
+      "section": "001",
+      "courseName": "동아시아고전강독(II)",
+      "professor": "신상원",
+      "credits": 3.0,
+      "sourceSchedule": "목 09:00-12:00 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한의학과": "동아시아고전강독(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3800404/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3800404",
+      "section": "001",
+      "courseName": "세포학",
+      "professor": "이재웅 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "화 14:00-17:00 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한의학과": "세포학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM3900716/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM3900716",
+      "section": "001",
+      "courseName": "발생학",
+      "professor": "이재웅",
+      "credits": 2.0,
+      "sourceSchedule": "목 14:00(100) 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 2.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "발생학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM9600372/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM9600372",
+      "section": "001",
+      "courseName": "보건의료통계학",
+      "professor": "김남권",
+      "credits": 3.0,
+      "sourceSchedule": "화 10:00-13:00 양산Y15-314",
+      "sourceClassroom": "양산Y15-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "양산Y15-314"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 3.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "한의학과": "보건의료통계학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/OM9600416/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OM9600416",
+      "section": "001",
+      "courseName": "의료인문학(II)",
+      "professor": "이혜윤 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "금 10:00-13:00 양산Y15-315",
+      "sourceClassroom": "양산Y15-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "양산Y15-315"
+        }
+      ],
+      "departments": [
+        "한의학과"
+      ],
+      "departmentCredits": {
+        "한의학과": 2.0
+      },
+      "departmentClassifications": {
+        "한의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "한의학과": "의료인문학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD2001097/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD2001097",
+      "section": "001",
+      "courseName": "학생인턴(II)",
+      "professor": "임선주",
+      "credits": 2.0,
+      "sourceSchedule": "목 09:00(100) 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 640,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학생인턴(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3400148/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400148",
+      "section": "001",
+      "courseName": "자기계발(II)",
+      "professor": "이상엽 외 13명",
+      "credits": 2.0,
+      "sourceSchedule": "금 13:30(100) 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 810,
+          "endMinute": 910,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "자기계발(II) 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3400159/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400159",
+      "section": "001",
+      "courseName": "신경및특수감각기학",
+      "professor": "최광동 외 64명",
+      "credits": 6.0,
+      "sourceSchedule": "화 13:00-19:30 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 1170,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 6.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "신경및특수감각기학 제한사항: 의학과2학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3400161/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400161",
+      "section": "001",
+      "courseName": "인간·사회·의료(II)",
+      "professor": "황인경 외 17명",
+      "credits": 4.0,
+      "sourceSchedule": "수 13:30-17:30 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 1050,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "인간·사회·의료(II) 제한사항: 의학과2학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3400564/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3400564",
+      "section": "001",
+      "courseName": "순환기학",
+      "professor": "최정현 외 36명",
+      "credits": 5.0,
+      "sourceSchedule": "월 08:30-13:30 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 510,
+          "endMinute": 810,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 5.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "순환기학 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3600127/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3600127",
+      "section": "001",
+      "courseName": "의학연구(II)",
+      "professor": "유지호 외 19명",
+      "credits": 2.0,
+      "sourceSchedule": "수 13:30(100) 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 910,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "의학연구(II) 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3600131/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3600131",
+      "section": "001",
+      "courseName": "신장비뇨기학",
+      "professor": "이동원 외 26명",
+      "credits": 4.0,
+      "sourceSchedule": "목 08:30-12:30 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 510,
+          "endMinute": 750,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "신장비뇨기학 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3600132/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3600132",
+      "section": "001",
+      "courseName": "내분비학",
+      "professor": "김보현 외 21명",
+      "credits": 3.0,
+      "sourceSchedule": "수 08:30-11:30 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 510,
+          "endMinute": 690,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "내분비학 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3600133/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3600133",
+      "section": "001",
+      "courseName": "호흡기학",
+      "professor": "김기욱 외 37명",
+      "credits": 4.0,
+      "sourceSchedule": "화 08:30-13:00 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 510,
+          "endMinute": 780,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "호흡기학 제한사항: 의학과1학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/MD3600136/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MD3600136",
+      "section": "001",
+      "courseName": "정신의학",
+      "professor": "문은수 외 9명",
+      "credits": 4.0,
+      "sourceSchedule": "월 13:30-17:30 양산Y01-104",
+      "sourceClassroom": "양산Y01-104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 1050,
+          "classroom": "양산Y01-104"
+        }
+      ],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "정신의학 제한사항: 의학과2학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PM2001308/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM2001308",
+      "section": "001",
+      "courseName": "의료와사회",
+      "professor": "김성수 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "수 13:30(100) 양산Y15-312",
+      "sourceClassroom": "양산Y15-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 910,
+          "classroom": "양산Y15-312"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 2.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "의료와사회 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PM3300740/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3300740",
+      "section": "001",
+      "courseName": "사회봉사",
+      "professor": "윤소정",
+      "credits": 1.0,
+      "sourceSchedule": "수 10:30(100) 양산Y15-312",
+      "sourceClassroom": "양산Y15-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 730,
+          "classroom": "양산Y15-312"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 1.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "사회봉사 제한사항: 의예과2학년수강가능"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PM3500158/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500158",
+      "section": "001",
+      "courseName": "세포조절",
+      "professor": "배재호 외 13명",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:00(100) 양산Y15-312, 화 10:00(100) 양산Y15-312",
+      "sourceClassroom": "양산Y15-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y15-312"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y15-312"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "세포조절 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PM3500159/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500159",
+      "section": "001",
+      "courseName": "인체대사",
+      "professor": "이상율 외 8명",
+      "credits": 3.0,
+      "sourceSchedule": "목 10:00(100) 양산Y15-312, 금 10:00(100) 양산Y15-312",
+      "sourceClassroom": "양산Y15-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y15-312"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y15-312"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "인체대사 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PM3500160/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500160",
+      "section": "001",
+      "courseName": "인체구조(I)",
+      "professor": "오세옥 외 7명",
+      "credits": 4.0,
+      "sourceSchedule": "월 13:30-16:30 양산Y15-312, 화 13:30-16:30 양산Y15-312",
+      "sourceClassroom": "양산Y15-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 990,
+          "classroom": "양산Y15-312"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 990,
+          "classroom": "양산Y15-312"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 4.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "인체구조(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/PM3500161/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PM3500161",
+      "section": "001",
+      "courseName": "인체구조(II)",
+      "professor": "오세옥 외 8명",
+      "credits": 5.0,
+      "sourceSchedule": "목 13:00-17:00 양산Y15-312, 금 13:00-17:00 양산Y15-312",
+      "sourceClassroom": "양산Y15-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 1020,
+          "classroom": "양산Y15-312"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 1020,
+          "classroom": "양산Y15-312"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 5.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "인체구조(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DN3400846/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DN3400846",
+      "section": "001",
+      "courseName": "유전학",
+      "professor": "이지혜",
+      "credits": 2.0,
+      "sourceSchedule": "화 13:00(100) 양산Y02-524",
+      "sourceClassroom": "양산Y02-524",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "양산Y02-524"
+        }
+      ],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의학과": "유전학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DN3500091/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DN3500091",
+      "section": "001",
+      "courseName": "자기계발포트폴리오실행",
+      "professor": "김은빈",
+      "credits": 1.0,
+      "sourceSchedule": "수 13:00(50) 양산Y02-524",
+      "sourceClassroom": "양산Y02-524",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 830,
+          "classroom": "양산Y02-524"
+        }
+      ],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "치의학과": "자기계발포트폴리오실행 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DN3600403/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DN3600403",
+      "section": "001",
+      "courseName": "자기계발포트폴리오",
+      "professor": "김은빈",
+      "credits": 2.0,
+      "sourceSchedule": "수 14:00(100) 양산Y02-524",
+      "sourceClassroom": "양산Y02-524",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y02-524"
+        }
+      ],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의학과": "자기계발포트폴리오 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DN3600408/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DN3600408",
+      "section": "001",
+      "courseName": "자율주제연구발표세미나",
+      "professor": "박소영 외 6명",
+      "credits": 2.0,
+      "sourceSchedule": "금 16:00(100) 양산Y02-524",
+      "sourceClassroom": "양산Y02-524",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y02-524"
+        }
+      ],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의학과": "자율주제연구발표세미나 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DN3600409/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DN3600409",
+      "section": "001",
+      "courseName": "과학적사고와연구윤리",
+      "professor": "박소영 외 5명",
+      "credits": 2.0,
+      "sourceSchedule": "수 09:00(100) 양산Y02-524",
+      "sourceClassroom": "양산Y02-524",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 640,
+          "classroom": "양산Y02-524"
+        }
+      ],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "치의학과": "과학적사고와연구윤리 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DN3600416/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DN3600416",
+      "section": "001",
+      "courseName": "치과재료학입문",
+      "professor": "설효정",
+      "credits": 3.0,
+      "sourceSchedule": "금 13:00-16:00 양산Y02-524",
+      "sourceClassroom": "양산Y02-524",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "양산Y02-524"
+        }
+      ],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 3.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "치의학과": "치과재료학입문 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR1500690/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR1500690",
+      "section": "001",
+      "courseName": "약리학",
+      "professor": "김고운",
+      "credits": 2.0,
+      "sourceSchedule": "화 11:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공기초"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "약리학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2001073/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2001073",
+      "section": "001",
+      "courseName": "시뮬레이션통합실습(II)",
+      "professor": "김은미 외 5명",
+      "credits": 1.0,
+      "sourceSchedule": "화 14:00(100) 양산Y15-415, 금 14:00(100) 양산Y04-205, 금 16:00(100) 양산Y04-205, 금 18:00(100) 양산Y04-205, 금 20:00(100) 양산Y04-205",
+      "sourceClassroom": "양산Y15-415 / 양산Y04-205",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-415"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y04-205"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-205"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1080,
+          "endMinute": 1180,
+          "classroom": "양산Y04-205"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-205"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "시뮬레이션통합실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2001073/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2001073",
+      "section": "002",
+      "courseName": "시뮬레이션통합실습(II)",
+      "professor": "김은미 외 5명",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:00(100) 양산Y04-201, 월 14:00(100) 양산Y04-201, 월 20:00(100) 양산Y04-201, 화 14:00(100) 양산Y15-206, 화 18:00(100) 양산Y04-201, 화 20:00(100) 양산Y04-201",
+      "sourceClassroom": "양산Y04-201 / 양산Y15-206",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-201"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y04-201"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-201"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-206"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1080,
+          "endMinute": 1180,
+          "classroom": "양산Y04-201"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-201"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "시뮬레이션통합실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2001073/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2001073",
+      "section": "003",
+      "courseName": "시뮬레이션통합실습(II)",
+      "professor": "김은미 외 5명",
+      "credits": 1.0,
+      "sourceSchedule": "화 20:00(100) 양산Y04-205, 목 08:00(100) 양산Y04-205, 목 10:00(100) 양산Y04-205, 목 14:00(100) 양산Y15-412, 목 20:00(100) 양산Y04-205, 금 12:00(100) 양산Y04-205",
+      "sourceClassroom": "양산Y04-205 / 양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-205"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-205"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-205"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-412"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-205"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 820,
+          "classroom": "양산Y04-205"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "시뮬레이션통합실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2001073/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2001073",
+      "section": "004",
+      "courseName": "시뮬레이션통합실습(II)",
+      "professor": "김은미 외 5명",
+      "credits": 1.0,
+      "sourceSchedule": "월 10:00(100) 양산Y04-307, 화 16:00(100) 양산Y04-307, 목 10:00(100) 양산Y04-307, 목 14:00(100) 양산Y15-415, 금 08:00(100) 양산Y04-307, 금 10:00(100) 양산Y04-307",
+      "sourceClassroom": "양산Y04-307 / 양산Y15-415",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-307"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-307"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-307"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-415"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-307"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-307"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "시뮬레이션통합실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2001073/005",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2001073",
+      "section": "005",
+      "courseName": "시뮬레이션통합실습(II)",
+      "professor": "김은미 외 5명",
+      "credits": 1.0,
+      "sourceSchedule": "월 20:00(100) 양산Y04-308, 화 20:00(100) 양산Y04-308, 수 20:00(100) 양산Y04-308, 금 14:00(100) 양산Y04-212, 금 20:00(100) 양산Y04-308, 금 20:00(100) 양산Y04-309",
+      "sourceClassroom": "양산Y04-308 / 양산Y04-212 / 양산Y04-308 / 양산Y04-309",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-308"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-308"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-308"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y04-212"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1200,
+          "endMinute": 1300,
+          "classroom": "양산Y04-308 / 양산Y04-309"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "시뮬레이션통합실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2001073/006",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2001073",
+      "section": "006",
+      "courseName": "시뮬레이션통합실습(II)",
+      "professor": "김은미 외 5명",
+      "credits": 1.0,
+      "sourceSchedule": "화 11:00(100) 양산Y04-310, 수 08:00(100) 양산Y04-310, 수 11:00(100) 양산Y15-412, 목 08:00(100) 양산Y04-310, 금 11:00(100) 양산Y04-309, 금 11:00(100) 양산Y04-310",
+      "sourceClassroom": "양산Y04-310 / 양산Y15-412 / 양산Y04-309 / 양산Y04-310",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y04-310"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-310"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-412"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-310"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y04-309 / 양산Y04-310"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "시뮬레이션통합실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002055/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002055",
+      "section": "001",
+      "courseName": "성인간호학임상실습(II)",
+      "professor": "윤정미 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "월 09:00(75) 양산Y04-314, 화 09:00-12:00 양산Y04-102, 목 10:30(75) 양산Y04-102",
+      "sourceClassroom": "양산Y04-314 / 양산Y04-102",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-314"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y04-102"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-102"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002055/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002055",
+      "section": "002",
+      "courseName": "성인간호학임상실습(II)",
+      "professor": "강인순 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "화 09:00(75) 양산Y04-507, 수 10:30(75) 양산Y04-507, 금 09:00-12:00 양산Y04-507",
+      "sourceClassroom": "양산Y04-507",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-507"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-507"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y04-507"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002055/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002055",
+      "section": "003",
+      "courseName": "성인간호학임상실습(II)",
+      "professor": "윤정미 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "월 12:00(75) 양산Y04-314, 목 12:00(75) 양산Y04-314, 목 15:00-18:00 양산Y04-314",
+      "sourceClassroom": "양산Y04-314",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-314"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-314"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 1080,
+          "classroom": "양산Y04-314"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002055/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002055",
+      "section": "004",
+      "courseName": "성인간호학임상실습(II)",
+      "professor": "강인순 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "화 10:30(75) 양산Y04-507, 수 18:00-21:00 양산Y04-506, 금 18:00(75) 양산Y04-507",
+      "sourceClassroom": "양산Y04-507 / 양산Y04-506",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-507"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1080,
+          "endMinute": 1260,
+          "classroom": "양산Y04-506"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1080,
+          "endMinute": 1155,
+          "classroom": "양산Y04-507"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002056/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002056",
+      "section": "001",
+      "courseName": "아동간호학임상실습(II)",
+      "professor": "손현미 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "금 09:00(75) 양산Y04-513, 금 10:30(75) 양산Y04-513",
+      "sourceClassroom": "양산Y04-513",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-513"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-513"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "아동간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002056/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002056",
+      "section": "002",
+      "courseName": "아동간호학임상실습(II)",
+      "professor": "한규민 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "수 09:00(75) 양산Y04-116, 금 09:00(75) 양산Y04-504",
+      "sourceClassroom": "양산Y04-116 / 양산Y04-504",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-116"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-504"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "아동간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002056/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002056",
+      "section": "003",
+      "courseName": "아동간호학임상실습(II)",
+      "professor": "손현미 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "금 12:00(75) 양산Y04-513, 금 13:30(75) 양산Y04-513",
+      "sourceClassroom": "양산Y04-513",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-513"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y04-513"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "아동간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002056/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002056",
+      "section": "004",
+      "courseName": "아동간호학임상실습(II)",
+      "professor": "한규민 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "수 10:30(75) 양산Y04-116, 금 12:00(75) 양산Y04-504",
+      "sourceClassroom": "양산Y04-116 / 양산Y04-504",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-116"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-504"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "아동간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002057/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002057",
+      "section": "001",
+      "courseName": "여성건강간호학임상실습(II)",
+      "professor": "김은미 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 09:00(75) 양산Y04-415, 월 10:30(75) 양산Y04-415",
+      "sourceClassroom": "양산Y04-415",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-415"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-415"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "여성건강간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002057/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002057",
+      "section": "002",
+      "courseName": "여성건강간호학임상실습(II)",
+      "professor": "하주영 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 09:00(75) 양산Y04-312, 월 10:30(75) 양산Y04-312",
+      "sourceClassroom": "양산Y04-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-312"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-312"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "여성건강간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002057/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002057",
+      "section": "003",
+      "courseName": "여성건강간호학임상실습(II)",
+      "professor": "김은미 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 12:00(75) 양산Y04-415, 월 13:30(75) 양산Y04-415",
+      "sourceClassroom": "양산Y04-415",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-415"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y04-415"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "여성건강간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002057/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002057",
+      "section": "004",
+      "courseName": "여성건강간호학임상실습(II)",
+      "professor": "하주영 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 12:00(75) 양산Y04-312, 월 13:30(75) 양산Y04-312",
+      "sourceClassroom": "양산Y04-312",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-312"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y04-312"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "여성건강간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002058/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002058",
+      "section": "001",
+      "courseName": "지역사회간호학실습(I)",
+      "professor": "현수경 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "월 09:00(75) 양산Y04-318, 월 10:30(75) 양산Y04-318, 금 09:00-12:00 양산Y15-412",
+      "sourceClassroom": "양산Y04-318 / 양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-318"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-318"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "지역사회간호학실습(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002058/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002058",
+      "section": "002",
+      "courseName": "지역사회간호학실습(I)",
+      "professor": "정인숙 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "수 09:00(75) 양산Y04-412, 수 10:30(75) 양산Y04-412, 금 13:00-16:00 양산Y15-412",
+      "sourceClassroom": "양산Y04-412 / 양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-412"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-412"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "지역사회간호학실습(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002058/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002058",
+      "section": "003",
+      "courseName": "지역사회간호학실습(I)",
+      "professor": "현수경 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "화 09:00(75) 양산Y04-318, 화 10:30(75) 양산Y04-318, 금 16:00-19:00 양산Y15-412",
+      "sourceClassroom": "양산Y04-318 / 양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-318"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-318"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1140,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "지역사회간호학실습(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002058/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002058",
+      "section": "004",
+      "courseName": "지역사회간호학실습(I)",
+      "professor": "정인숙 외 2명",
+      "credits": 2.0,
+      "sourceSchedule": "목 09:00(75) 양산Y04-412, 목 10:30(75) 양산Y04-412, 금 09:00-12:00 양산Y15-415",
+      "sourceClassroom": "양산Y04-412 / 양산Y15-415",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-412"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-412"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "양산Y15-415"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "지역사회간호학실습(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002067/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002067",
+      "section": "001",
+      "courseName": "성인간호학임상실습(IV)",
+      "professor": "이영지 외 3명",
+      "credits": 2.0,
+      "sourceSchedule": "월 15:00(75) 양산Y04-503, 목 09:00(75) 양산Y04-116, 목 09:00(75) 양산Y04-503, 금 10:30(75) 양산Y04-503",
+      "sourceClassroom": "양산Y04-503 / 양산Y04-116 / 양산Y04-503",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y04-503"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-116 / 양산Y04-503"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-503"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(IV) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002067/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002067",
+      "section": "002",
+      "courseName": "성인간호학임상실습(IV)",
+      "professor": "박종민 외 3명",
+      "credits": 2.0,
+      "sourceSchedule": "목 09:00(75) 양산Y04-410, 목 10:30(75) 양산Y04-508, 금 09:00(75) 양산Y04-508, 금 18:00(75) 양산Y04-508",
+      "sourceClassroom": "양산Y04-410 / 양산Y04-508",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-410"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-508"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-508"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1080,
+          "endMinute": 1155,
+          "classroom": "양산Y04-508"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(IV) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002067/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002067",
+      "section": "003",
+      "courseName": "성인간호학임상실습(IV)",
+      "professor": "이영지 외 3명",
+      "credits": 2.0,
+      "sourceSchedule": "목 10:30(75) 양산Y04-116, 목 10:30(75) 양산Y04-503, 목 12:00(75) 양산Y04-503, 목 15:00(75) 양산Y04-503",
+      "sourceClassroom": "양산Y04-116 / 양산Y04-503 / 양산Y04-503",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-116 / 양산Y04-503"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-503"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y04-503"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(IV) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002067/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002067",
+      "section": "004",
+      "courseName": "성인간호학임상실습(IV)",
+      "professor": "박종민 외 3명",
+      "credits": 2.0,
+      "sourceSchedule": "월 10:30(75) 양산Y04-508, 수 15:00(75) 양산Y04-508, 목 10:30(75) 양산Y04-410, 금 10:30(75) 양산Y04-508",
+      "sourceClassroom": "양산Y04-508 / 양산Y04-410",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-508"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y04-508"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-410"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-508"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학임상실습(IV) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002071/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002071",
+      "section": "001",
+      "courseName": "안전과재난간호",
+      "professor": "최신형",
+      "credits": 2.0,
+      "sourceSchedule": "금 09:00(100) 양산Y04-406",
+      "sourceClassroom": "양산Y04-406",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 640,
+          "classroom": "양산Y04-406"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공선택"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "안전과재난간호 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002073/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002073",
+      "section": "001",
+      "courseName": "근거기반실무",
+      "professor": "이윤주",
+      "credits": 2.0,
+      "sourceSchedule": "목 16:00(100) 양산Y04-407",
+      "sourceClassroom": "양산Y04-407",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-407"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공선택"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "근거기반실무 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002140/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002140",
+      "section": "001",
+      "courseName": "문화다양성과간호",
+      "professor": "장민기",
+      "credits": 2.0,
+      "sourceSchedule": "금 13:00(100) 양산Y15-415",
+      "sourceClassroom": "양산Y15-415",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 880,
+          "classroom": "양산Y15-415"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공선택"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "문화다양성과간호 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002157/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002157",
+      "section": "001",
+      "courseName": "보건의료데이터관리",
+      "professor": "한규민",
+      "credits": 2.0,
+      "sourceSchedule": "금 15:00(100) 양산Y15-415",
+      "sourceClassroom": "양산Y15-415",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y15-415"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공선택"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "보건의료데이터관리 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002159/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002159",
+      "section": "001",
+      "courseName": "간호캡스톤디자인",
+      "professor": "현수경",
+      "credits": 2.0,
+      "sourceSchedule": "목 16:00(100) 양산Y04-406",
+      "sourceClassroom": "양산Y04-406",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-406"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공선택"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호캡스톤디자인 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002169/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002169",
+      "section": "001",
+      "courseName": "정신간호학임상실습(II)",
+      "professor": "김고운 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 09:00(75) 양산Y04-509, 월 10:30(75) 양산Y04-509",
+      "sourceClassroom": "양산Y04-509",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-509"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-509"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "정신간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002169/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002169",
+      "section": "002",
+      "courseName": "정신간호학임상실습(II)",
+      "professor": "서지민 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "화 09:00(75) 양산Y04-511, 화 10:30(75) 양산Y04-511",
+      "sourceClassroom": "양산Y04-511",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-511"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-511"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "정신간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002169/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002169",
+      "section": "003",
+      "courseName": "정신간호학임상실습(II)",
+      "professor": "김고운 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 12:00(75) 양산Y04-509, 월 13:30(75) 양산Y04-509",
+      "sourceClassroom": "양산Y04-509",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-509"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y04-509"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "정신간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002169/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002169",
+      "section": "004",
+      "courseName": "정신간호학임상실습(II)",
+      "professor": "서지민 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "화 12:00(75) 양산Y04-511, 화 13:30(75) 양산Y04-511",
+      "sourceClassroom": "양산Y04-511",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-511"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y04-511"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "정신간호학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002170/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002170",
+      "section": "001",
+      "courseName": "간호스타트업",
+      "professor": "김은미",
+      "credits": 2.0,
+      "sourceSchedule": "금 16:00(100) 양산Y04-201",
+      "sourceClassroom": "양산Y04-201",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-201"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공선택"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호스타트업 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002276/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002276",
+      "section": "001",
+      "courseName": "여성건강간호학(III)",
+      "professor": "하주영",
+      "credits": 1.0,
+      "sourceSchedule": "금 17:00(50) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "여성건강간호학(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002278/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002278",
+      "section": "001",
+      "courseName": "여성건강간호학(I)",
+      "professor": "김은미",
+      "credits": 1.0,
+      "sourceSchedule": "화 08:00(50) 양산Y04-212",
+      "sourceClassroom": "양산Y04-212",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 480,
+          "endMinute": 530,
+          "classroom": "양산Y04-212"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "여성건강간호학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002353/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002353",
+      "section": "001",
+      "courseName": "간호관리학임상실습(II)",
+      "professor": "이해정 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 09:00(75) 양산Y04-414, 월 10:30(75) 양산Y04-414",
+      "sourceClassroom": "양산Y04-414",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-414"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y04-414"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호관리학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002353/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002353",
+      "section": "002",
+      "courseName": "간호관리학임상실습(II)",
+      "professor": "이윤주 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 09:00(75) 양산Y04-403, 월 12:00(75) 양산Y04-403",
+      "sourceClassroom": "양산Y04-403",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y04-403"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 795,
+          "classroom": "양산Y04-403"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호관리학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002353/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002353",
+      "section": "003",
+      "courseName": "간호관리학임상실습(II)",
+      "professor": "이해정 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 15:00(75) 양산Y04-414, 월 18:00(75) 양산Y04-414",
+      "sourceClassroom": "양산Y04-414",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y04-414"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 1080,
+          "endMinute": 1155,
+          "classroom": "양산Y04-414"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호관리학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2002353/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2002353",
+      "section": "004",
+      "courseName": "간호관리학임상실습(II)",
+      "professor": "이윤주 외 1명",
+      "credits": 1.0,
+      "sourceSchedule": "월 15:00(75) 양산Y04-403, 월 18:00(75) 양산Y04-403",
+      "sourceClassroom": "양산Y04-403",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "양산Y04-403"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 1080,
+          "endMinute": 1155,
+          "classroom": "양산Y04-403"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호관리학임상실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2003780/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2003780",
+      "section": "001",
+      "courseName": "간호통합세미나",
+      "professor": "이윤주 외 2명",
+      "credits": 1.0,
+      "sourceSchedule": "화 16:00-16:30 양산Y04-301, 화 16:30-17:00 양산Y04-301, 화 17:00-17:30 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 990,
+          "classroom": "양산Y04-301"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1020,
+          "classroom": "양산Y04-301"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1020,
+          "endMinute": 1050,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호통합세미나 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2003780/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2003780",
+      "section": "002",
+      "courseName": "간호통합세미나",
+      "professor": "이윤주 외 2명",
+      "credits": 1.0,
+      "sourceSchedule": "수 16:00-16:30 양산Y04-301, 수 16:30-17:00 양산Y04-301, 수 17:00-17:30 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 990,
+          "classroom": "양산Y04-301"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 990,
+          "endMinute": 1020,
+          "classroom": "양산Y04-301"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1020,
+          "endMinute": 1050,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호통합세미나 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2200567/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2200567",
+      "section": "001",
+      "courseName": "아동간호학(III)",
+      "professor": "손현미 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "목 16:00(50) 양산Y04-212, 목 17:00(50) 양산Y04-212",
+      "sourceClassroom": "양산Y04-212",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1010,
+          "classroom": "양산Y04-212"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "양산Y04-212"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "아동간호학(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR2300928/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR2300928",
+      "section": "001",
+      "courseName": "간호법규",
+      "professor": "김동희",
+      "credits": 1.0,
+      "sourceSchedule": "금 08:00(50) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 480,
+          "endMinute": 530,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호법규 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100283/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100283",
+      "section": "001",
+      "courseName": "건강사정실습",
+      "professor": "하신영",
+      "credits": 1.0,
+      "sourceSchedule": "수 08:00(100) 양산Y04-102",
+      "sourceClassroom": "양산Y04-102",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-102"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "건강사정실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100283/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100283",
+      "section": "002",
+      "courseName": "건강사정실습",
+      "professor": "하신영",
+      "credits": 1.0,
+      "sourceSchedule": "월 11:00(100) 양산Y15-206",
+      "sourceClassroom": "양산Y15-206",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-206"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "건강사정실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100283/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100283",
+      "section": "003",
+      "courseName": "건강사정실습",
+      "professor": "하신영",
+      "credits": 1.0,
+      "sourceSchedule": "목 10:00(100) 양산Y04-404",
+      "sourceClassroom": "양산Y04-404",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-404"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "건강사정실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100283/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100283",
+      "section": "004",
+      "courseName": "건강사정실습",
+      "professor": "윤정미",
+      "credits": 1.0,
+      "sourceSchedule": "금 10:00(100) 양산Y04-404",
+      "sourceClassroom": "양산Y04-404",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-404"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "건강사정실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100283/005",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100283",
+      "section": "005",
+      "courseName": "건강사정실습",
+      "professor": "하신영",
+      "credits": 1.0,
+      "sourceSchedule": "금 12:00(100) 양산Y04-404",
+      "sourceClassroom": "양산Y04-404",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 820,
+          "classroom": "양산Y04-404"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "건강사정실습 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100284/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100284",
+      "section": "001",
+      "courseName": "기본간호학(II)",
+      "professor": "김동희",
+      "credits": 2.0,
+      "sourceSchedule": "목 08:00(100) 양산Y04-315",
+      "sourceClassroom": "양산Y04-315",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-315"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "기본간호학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100285/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100285",
+      "section": "001",
+      "courseName": "기본간호학실습(II)",
+      "professor": "김동희 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "수 14:00(100) 양산Y15-412, 수 16:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y15-412"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "기본간호학실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100285/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100285",
+      "section": "002",
+      "courseName": "기본간호학실습(II)",
+      "professor": "박교연",
+      "credits": 2.0,
+      "sourceSchedule": "수 09:00(100) 양산Y15-412, 수 18:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 640,
+          "classroom": "양산Y15-412"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1080,
+          "endMinute": 1180,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "기본간호학실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100285/003",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100285",
+      "section": "003",
+      "courseName": "기본간호학실습(II)",
+      "professor": "박교연",
+      "credits": 2.0,
+      "sourceSchedule": "목 11:00(100) 양산Y15-412, 목 16:00(100) 양산Y15-412",
+      "sourceClassroom": "양산Y15-412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 760,
+          "classroom": "양산Y15-412"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y15-412"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "기본간호학실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100285/004",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100285",
+      "section": "004",
+      "courseName": "기본간호학실습(II)",
+      "professor": "장민기",
+      "credits": 2.0,
+      "sourceSchedule": "월 16:00(100) 양산Y04-102, 금 16:00(100) 양산Y04-102",
+      "sourceClassroom": "양산Y04-102",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-102"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-102"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "기본간호학실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100285/005",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100285",
+      "section": "005",
+      "courseName": "기본간호학실습(II)",
+      "professor": "김도혜 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "화 15:00(100) 양산Y04-102, 수 15:00(100) 양산Y04-102",
+      "sourceClassroom": "양산Y04-102",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y04-102"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1000,
+          "classroom": "양산Y04-102"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "기본간호학실습(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100287/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100287",
+      "section": "001",
+      "courseName": "지역사회간호학(I)",
+      "professor": "현수경",
+      "credits": 2.0,
+      "sourceSchedule": "수 08:00(100) 양산Y04-318",
+      "sourceClassroom": "양산Y04-318",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-318"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "지역사회간호학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100318/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100318",
+      "section": "001",
+      "courseName": "성인간호학(I)",
+      "professor": "황선경 외 1명",
+      "credits": 4.0,
+      "sourceSchedule": "수 08:00(100) 양산Y04-301, 수 10:00(100) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-301"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 4.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100318/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100318",
+      "section": "002",
+      "courseName": "성인간호학(I)",
+      "professor": "박종민 외 1명",
+      "credits": 4.0,
+      "sourceSchedule": "수 12:00(100) 양산Y04-301, 수 14:00(100) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 820,
+          "classroom": "양산Y04-301"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 940,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 4.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100319/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100319",
+      "section": "001",
+      "courseName": "아동간호학(I)",
+      "professor": "손현미",
+      "credits": 2.0,
+      "sourceSchedule": "월 08:00(100) 양산Y04-212",
+      "sourceClassroom": "양산Y04-212",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-212"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "아동간호학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100319/002",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100319",
+      "section": "002",
+      "courseName": "아동간호학(I)",
+      "professor": "한규민",
+      "credits": 2.0,
+      "sourceSchedule": "월 10:00(100) 양산Y04-212",
+      "sourceClassroom": "양산Y04-212",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-212"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "아동간호학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100324/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100324",
+      "section": "001",
+      "courseName": "지역사회간호학(III)",
+      "professor": "정인숙",
+      "credits": 2.0,
+      "sourceSchedule": "금 10:00(100) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 700,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "지역사회간호학(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3100341/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3100341",
+      "section": "001",
+      "courseName": "건강사정",
+      "professor": "윤정미",
+      "credits": 2.0,
+      "sourceSchedule": "목 16:00(100) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1060,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "건강사정 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3300646/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3300646",
+      "section": "001",
+      "courseName": "성인간호학(III)",
+      "professor": "윤정미 외 1명",
+      "credits": 2.0,
+      "sourceSchedule": "화 09:00(50) 양산Y04-301, 목 09:00(50) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": "양산Y04-301"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "성인간호학(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3300998/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3300998",
+      "section": "001",
+      "courseName": "정신간호학(II)",
+      "professor": "김고운",
+      "credits": 2.0,
+      "sourceSchedule": "금 08:00(100) 양산Y04-202",
+      "sourceClassroom": "양산Y04-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-202"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "정신간호학(II) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3300999/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3300999",
+      "section": "001",
+      "courseName": "정신간호학(III)",
+      "professor": "서지민",
+      "credits": 2.0,
+      "sourceSchedule": "금 08:00(100) 양산Y04-203",
+      "sourceClassroom": "양산Y04-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 480,
+          "endMinute": 580,
+          "classroom": "양산Y04-203"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "정신간호학(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3500472/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3500472",
+      "section": "001",
+      "courseName": "간호관리학(III)",
+      "professor": "이윤주",
+      "credits": 1.0,
+      "sourceSchedule": "월 09:00(50) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 590,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호관리학(III) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/NR3500490/001",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NR3500490",
+      "section": "001",
+      "courseName": "간호관리학(I)",
+      "professor": "이해정",
+      "credits": 1.0,
+      "sourceSchedule": "월 08:00(50) 양산Y04-301",
+      "sourceClassroom": "양산Y04-301",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 480,
+          "endMinute": 530,
+          "classroom": "양산Y04-301"
+        }
+      ],
+      "departments": [
+        "간호학과 (051-510-8305~7)"
+      ],
+      "departmentCredits": {
+        "간호학과 (051-510-8305~7)": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과 (051-510-8305~7)": "전공필수"
+      },
+      "departmentRemarks": {
+        "간호학과 (051-510-8305~7)": "간호관리학(I) 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2001049/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2001049",
+      "section": "140",
+      "courseName": "분자세포생물학",
+      "professor": "이진호",
+      "credits": 3.0,
+      "sourceSchedule": "화 10:30(75) 양산Y17-202, 목 10:30(75) 양산Y17-202",
+      "sourceClassroom": "양산Y17-202",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-202"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-202"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "분자세포생물학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2001053/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2001053",
+      "section": "140",
+      "courseName": "산학캡스톤디자인",
+      "professor": "권선영 외 10명",
+      "credits": 3.0,
+      "sourceSchedule": "금 13:00-19:00 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 1140,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "CAPSTONE DESIGN · 산학캡스톤디자인 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2001133/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2001133",
+      "section": "140",
+      "courseName": "의료영상기기",
+      "professor": "윤석찬",
+      "credits": 3.0,
+      "sourceSchedule": "화 10:30(75) 양산Y17-204, 목 10:30(75) 양산Y17-204",
+      "sourceClassroom": "양산Y17-204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-204"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-204"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "의료영상기기 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2001135/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2001135",
+      "section": "140",
+      "courseName": "글로벌헬스케어산업",
+      "professor": "유지현",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y17-204, 수 10:30(75) 양산Y17-204",
+      "sourceClassroom": "양산Y17-204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-204"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-204"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "글로벌헬스케어산업 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2001139/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2001139",
+      "section": "140",
+      "courseName": "의료용 3D CAD",
+      "professor": "김병수",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(100) 양산Y17-309, 수 10:30(100) 양산Y17-309",
+      "sourceClassroom": "양산Y17-309",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 730,
+          "classroom": "양산Y17-309"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 730,
+          "classroom": "양산Y17-309"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "의료용 3D CAD 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2001885/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2001885",
+      "section": "140",
+      "courseName": "열역학",
+      "professor": "장태식",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00(75) 양산Y17-203, 수 09:00(75) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "열역학 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2500805/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2500805",
+      "section": "140",
+      "courseName": "반도체공학",
+      "professor": "서민호",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00(75) 양산Y17-201, 목 09:00(75) 양산Y17-201",
+      "sourceClassroom": "양산Y17-201",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-201"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-201"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "반도체공학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2700939/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2700939",
+      "section": "140",
+      "courseName": "생체역학",
+      "professor": "김병수",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00(75) 양산Y17-101, 수 09:00(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "생체역학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX2800460/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX2800460",
+      "section": "140",
+      "courseName": "생체재료",
+      "professor": "이진호",
+      "credits": 3.0,
+      "sourceSchedule": "화 13:30(75) 양산Y17-203, 목 13:30(75) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "생체재료 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3500567/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3500567",
+      "section": "140",
+      "courseName": "생체광학",
+      "professor": "윤석찬",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00(75) 양산Y17-101, 목 09:00(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "생체광학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600075/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600075",
+      "section": "140",
+      "courseName": "유기화학",
+      "professor": "정상화",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y17-101, 수 10:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "유기화학 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600080/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600080",
+      "section": "140",
+      "courseName": "회로이론",
+      "professor": "서민호",
+      "credits": 3.0,
+      "sourceSchedule": "화 13:30(100) 양산Y17-201, 목 13:30(100) 양산Y17-201",
+      "sourceClassroom": "양산Y17-201",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 910,
+          "classroom": "양산Y17-201"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 910,
+          "classroom": "양산Y17-201"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "회로이론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600080/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600080",
+      "section": "141",
+      "courseName": "회로이론",
+      "professor": "서민호",
+      "credits": 3.0,
+      "sourceSchedule": "화 15:30(100) 양산Y17-201, 목 15:30(100) 양산Y17-201",
+      "sourceClassroom": "양산Y17-201",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 930,
+          "endMinute": 1030,
+          "classroom": "양산Y17-201"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 930,
+          "endMinute": 1030,
+          "classroom": "양산Y17-201"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "회로이론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600087/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600087",
+      "section": "140",
+      "courseName": "기계학습개론",
+      "professor": "오용경",
+      "credits": 3.0,
+      "sourceSchedule": "화 13:30(75) 양산Y17-101, 목 13:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "기계학습개론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600089/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600089",
+      "section": "140",
+      "courseName": "생체계측",
+      "professor": "정준수 외 1명",
+      "credits": 3.0,
+      "sourceSchedule": "월 13:00-18:00 양산Y17-308",
+      "sourceClassroom": "양산Y17-308",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 1080,
+          "classroom": "양산Y17-308"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "생체계측 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600089/141",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600089",
+      "section": "141",
+      "courseName": "생체계측",
+      "professor": "이경구",
+      "credits": 3.0,
+      "sourceSchedule": "수 13:00-18:00 양산Y17-308",
+      "sourceClassroom": "양산Y17-308",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 1080,
+          "classroom": "양산Y17-308"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "생체계측 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/BX3600099/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BX3600099",
+      "section": "140",
+      "courseName": "나노의학",
+      "professor": "정상화",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00(75) 양산Y17-204, 수 09:00(75) 양산Y17-204",
+      "sourceClassroom": "양산Y17-204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-204"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-204"
+        }
+      ],
+      "departments": [
+        "의생명공학전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "의생명공학전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "의생명공학전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "의생명공학전공 (+82|051-510-8544)": "나노의학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS2001185/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS2001185",
+      "section": "140",
+      "courseName": "의생명과학 프로그래밍",
+      "professor": "박정빈",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y17-203, 수 10:30(75) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "의생명과학 프로그래밍 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS2001633/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS2001633",
+      "section": "140",
+      "courseName": "응용통계학",
+      "professor": "박형기",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00(75) 양산Y17-203, 목 09:00(75) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "응용통계학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS2002438/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS2002438",
+      "section": "140",
+      "courseName": "AI프로그래밍",
+      "professor": "권선영",
+      "credits": 3.0,
+      "sourceSchedule": "월 13:30-16:30 양산Y17-204",
+      "sourceClassroom": "양산Y17-204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 990,
+          "classroom": "양산Y17-204"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "AI프로그래밍 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS2002528/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS2002528",
+      "section": "140",
+      "courseName": "데이터사이언스수학",
+      "professor": "박형기",
+      "credits": 3.0,
+      "sourceSchedule": "화 10:30(75) 양산Y17-203, 목 10:30(75) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "데이터사이언스수학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS3600066/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS3600066",
+      "section": "140",
+      "courseName": "생명정보학",
+      "professor": "박정빈",
+      "credits": 3.0,
+      "sourceSchedule": "수 13:30-16:30 양산Y17-309",
+      "sourceClassroom": "양산Y17-309",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 990,
+          "classroom": "양산Y17-309"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "생명정보학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS3600070/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS3600070",
+      "section": "140",
+      "courseName": "생체신호처리",
+      "professor": "김민우",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00(75) 양산Y17-204, 목 09:00(75) 양산Y17-204",
+      "sourceClassroom": "양산Y17-204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-204"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-204"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "생체신호처리 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS3600075/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS3600075",
+      "section": "140",
+      "courseName": "유기화학",
+      "professor": "정상화",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y17-101, 수 10:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공선택"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "유기화학 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS3600082/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS3600082",
+      "section": "140",
+      "courseName": "자료구조",
+      "professor": "오용경",
+      "credits": 3.0,
+      "sourceSchedule": "수 13:30-16:30 양산Y17-204",
+      "sourceClassroom": "양산Y17-204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 990,
+          "classroom": "양산Y17-204"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "자료구조 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/DS3600087/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DS3600087",
+      "section": "140",
+      "courseName": "기계학습개론",
+      "professor": "오용경",
+      "credits": 3.0,
+      "sourceSchedule": "화 13:30(75) 양산Y17-101, 목 13:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "데이터사이언스전공 (+82|051-510-8544)"
+      ],
+      "departmentCredits": {
+        "데이터사이언스전공 (+82|051-510-8544)": 3.0
+      },
+      "departmentClassifications": {
+        "데이터사이언스전공 (+82|051-510-8544)": "전공필수"
+      },
+      "departmentRemarks": {
+        "데이터사이언스전공 (+82|051-510-8544)": "기계학습개론 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AB2001049/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AB2001049",
+      "section": "140",
+      "courseName": "분자세포생물학",
+      "professor": "유지현",
+      "credits": 3.0,
+      "sourceSchedule": "화 10:30(75) 양산Y17-201, 목 10:30(75) 양산Y17-201",
+      "sourceClassroom": "양산Y17-201",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-201"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-201"
+        }
+      ],
+      "departments": [
+        "첨단바이오공학전공"
+      ],
+      "departmentCredits": {
+        "첨단바이오공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "첨단바이오공학전공": "전공필수"
+      },
+      "departmentRemarks": {
+        "첨단바이오공학전공": "분자세포생물학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AB2001633/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AB2001633",
+      "section": "140",
+      "courseName": "응용통계학",
+      "professor": "박형기",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00(75) 양산Y17-203, 목 09:00(75) 양산Y17-203",
+      "sourceClassroom": "양산Y17-203",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-203"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-203"
+        }
+      ],
+      "departments": [
+        "첨단바이오공학전공"
+      ],
+      "departmentCredits": {
+        "첨단바이오공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "첨단바이오공학전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "첨단바이오공학전공": "응용통계학 제한사항 : 없음"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AB2002371/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AB2002371",
+      "section": "140",
+      "courseName": "유기화학",
+      "professor": "정상화",
+      "credits": 3.0,
+      "sourceSchedule": "월 10:30(75) 양산Y17-101, 수 10:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 705,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "첨단바이오공학전공"
+      ],
+      "departmentCredits": {
+        "첨단바이오공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "첨단바이오공학전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "첨단바이오공학전공": "유기화학 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AB2002386/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AB2002386",
+      "section": "140",
+      "courseName": "생물공정공학",
+      "professor": "유지현",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00(75) 양산Y17-201, 수 09:00(75) 양산Y17-201",
+      "sourceClassroom": "양산Y17-201",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-201"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 615,
+          "classroom": "양산Y17-201"
+        }
+      ],
+      "departments": [
+        "첨단바이오공학전공"
+      ],
+      "departmentCredits": {
+        "첨단바이오공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "첨단바이오공학전공": "전공필수"
+      },
+      "departmentRemarks": {
+        "첨단바이오공학전공": "생물공정공학 제한사항 : 없음 · E"
+      }
+    },
+    {
+      "sourceId": "pnu/yangsan/2026/2/AB3600087/140",
+      "universityId": "pnu",
+      "campus": "yangsan",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AB3600087",
+      "section": "140",
+      "courseName": "기계학습개론",
+      "professor": "오용경",
+      "credits": 3.0,
+      "sourceSchedule": "화 13:30(75) 양산Y17-101, 목 13:30(75) 양산Y17-101",
+      "sourceClassroom": "양산Y17-101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "양산Y17-101"
+        }
+      ],
+      "departments": [
+        "첨단바이오공학전공"
+      ],
+      "departmentCredits": {
+        "첨단바이오공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "첨단바이오공학전공": "전공선택"
+      },
+      "departmentRemarks": {
+        "첨단바이오공학전공": "기계학습개론 제한사항 : 없음"
+      }
+    }
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "completionClaim": false,
+  "wholeOperatingVerified": false
+}

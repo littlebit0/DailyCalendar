@@ -360,6 +360,7 @@ class EventDetailsPanel extends ConsumerWidget {
     List<int> defaultReminderMinutesList,
   ) async {
     final commandService = ref.read(eventCommandServiceProvider);
+    final settingsRepository = ref.read(settingsRepositoryProvider);
     final analytics = ref.read(productAnalyticsProvider);
     final stopwatch = Stopwatch()..start();
     unawaited(
@@ -382,6 +383,7 @@ class EventDetailsPanel extends ConsumerWidget {
         initialDate: event.startAt,
         event: event,
         categories: categories,
+        loadCategories: () => settingsRepository.load().categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
         alarmService: ref.read(alarmServiceProvider),
       ),
@@ -404,7 +406,10 @@ class EventDetailsPanel extends ConsumerWidget {
     }
 
     if (!event.isRecurring) {
-      await commandService.save(_applyDraft(event, draft));
+      await commandService.save(
+        _applyDraft(event, draft),
+        preserveCategory: !draft.categoryChanged,
+      );
       return;
     }
     if (!context.mounted) {
@@ -433,7 +438,10 @@ class EventDetailsPanel extends ConsumerWidget {
         await commandService.save(_endBefore(base, event.startAt));
         await commandService.create(draft);
       case _RecurringChangeScope.all:
-        await commandService.save(_applyDraft(base, draft));
+        await commandService.save(
+          _applyDraft(base, draft),
+          preserveCategory: !draft.categoryChanged,
+        );
     }
   }
 

@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 2,
+  "universityId": "gnu",
+  "campus": "naedong",
+  "campusName": "내동캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-07-24",
+  "sourceUrl": "https://www.gnu.ac.kr/main/na/ntt/selectNttInfo.do?mi=1127&bbsId=1029&nttSn=7823022",
+  "researchOnly": false,
+  "completionClaim": false,
+  "courses": [
+    {
+      "sourceId": "gnu/naedong/2026-2/11022529-001",
+      "campus": "naedong",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11022529",
+      "courseName": "에너지데이터분석",
+      "section": "001",
+      "professor": "안용태",
+      "classification": "전필",
+      "credits": 3.0,
+      "departmentCredits": {
+        "에너지공학과": 3.0
+      },
+      "departments": [
+        "에너지공학과"
+      ],
+      "departmentClassifications": {
+        "에너지공학과": "전필"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. [에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학전공[1,2,3,4,5,6]]",
+      "sourceSchedule": "화1,2,3[303-0312]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "303-0312"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "에너지공학과",
+          "targetYear": "1학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "안용태",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 997,
+          "code": "11022529",
+          "section": "001",
+          "title": "에너지데이터분석",
+          "category": "전필",
+          "schedule": "화1,2,3[303-0312]",
+          "campus": "내동캠퍼스",
+          "remarks": "[에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학과[1,2,3,4,5,6],에너지공학전공[1,2,3,4,5,6]]",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    }
+  ],
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}

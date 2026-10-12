@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "university": "dgist",
+  "mappings": [
+    {
+      "college": "융복합대학",
+      "department": "기초학부",
+      "sourceLabel": "기초학부",
+      "sourceUrl": "https://law.dgist.ac.kr/jsp/lkms3/jsp/_regulation/regulationView2.jsp?Obookid=10000208",
+      "evidence": "Official 사무분장요령 제20조 (2026-08-07) explicitly states 융복합대학의 기초학부, 교양학부, 반도체공학과.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*"
+    },
+    {
+      "college": "융복합대학",
+      "department": "반도체공학과",
+      "sourceLabel": "반도체공학과",
+      "sourceUrl": "https://law.dgist.ac.kr/jsp/lkms3/jsp/_regulation/regulationView2.jsp?Obookid=10000208",
+      "evidence": "Official 사무분장요령 제20조 (2026-08-07) explicitly states 융복합대학의 기초학부, 교양학부, 반도체공학과.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*"
+    }
+  ],
+  "courseOwners": []
+}

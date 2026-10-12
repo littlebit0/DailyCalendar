@@ -17,7 +17,8 @@ private let dailySQLiteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type
 
 // BEGIN LMS VISIBILITY POLICY
 // A stored LMS row alone is never permission to expose school data. The app
-// grants visibility only after checking the active account and source session.
+// grants visibility after checking the active account and source identity.
+// Authentication freshness controls refreshing, not access to last-good rows.
 struct DailySiriLmsVisibility: Equatable {
   let ownerID: String?
   let checkedAt: Double?
@@ -29,17 +30,18 @@ struct DailySiriLmsVisibility: Equatable {
     guard let owner,
           let grant = snapshot?["lmsVisibility"] as? [String: Any],
           Self.normalizedOwner(grant["ownerId"] as? String) == owner,
-          let checked = grant["checkedAt"] as? Double,
-          checked.isFinite,
-          checked > 0,
-          now.timeIntervalSince1970 * 1000 >= checked,
-          now.timeIntervalSince1970 * 1000 - checked <= 300_000,
           let ids = grant["eventIds"] as? [String] else {
       checkedAt = nil
       eventIDs = []
       return
     }
-    checkedAt = checked
+    if let checked = grant["checkedAt"] as? Double,
+       checked.isFinite, checked > 0,
+       now.timeIntervalSince1970 * 1000 >= checked {
+      checkedAt = checked
+    } else {
+      checkedAt = nil
+    }
     eventIDs = Set(ids)
   }
 
@@ -55,7 +57,7 @@ struct DailySiriLmsVisibility: Equatable {
 
   func allows(id: String, metadata: String?) -> Bool {
     guard Self.isLms(id: id, metadata: metadata) else { return true }
-    guard let ownerID, checkedAt != nil, eventIDs.contains(id),
+    guard let ownerID, eventIDs.contains(id),
           let data = metadata?.data(using: .utf8),
           let source = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
           source["provider"] as? String == "coursemos",

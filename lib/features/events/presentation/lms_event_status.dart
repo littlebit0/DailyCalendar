@@ -44,6 +44,22 @@ class LmsEventStatus extends ConsumerWidget {
                 args: {'percent': metadata.progressPercent!},
               ),
             ),
+          if (metadata.learnedSeconds != null &&
+              metadata.requiredLearningSeconds != null)
+            Text(
+              context.tr(
+                '학습시간: {learned} / 출석 요구시간: {required}',
+                args: {
+                  'learned': _learningTime(context, metadata.learnedSeconds!),
+                  'required': _learningTime(
+                    context,
+                    metadata.requiredLearningSeconds!,
+                  ),
+                },
+              ),
+            ),
+          if (sync.state == LmsSyncState.needsLogin)
+            Text(context.tr('학교에 다시 로그인해 주세요. 기존 일정은 마지막으로 확인한 상태로 유지됩니다.')),
           if (sync.state == LmsSyncState.fallback)
             Text(context.tr('학교에 연결하지 못해 마지막으로 확인한 데이터를 표시합니다.')),
           if (last != null)
@@ -62,4 +78,9 @@ class LmsEventStatus extends ConsumerWidget {
       ),
     );
   }
+
+  String _learningTime(BuildContext context, int seconds) => context.tr(
+    '{minutes}분 {seconds}초',
+    args: {'minutes': seconds ~/ 60, 'seconds': seconds % 60},
+  );
 }

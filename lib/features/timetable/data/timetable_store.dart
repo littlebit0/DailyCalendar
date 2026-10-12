@@ -93,7 +93,7 @@ class TimetableStore extends ChangeNotifier {
       if (raw == null) return;
       _persistedRaw = raw;
       final json = jsonDecode(raw) as Map<String, dynamic>;
-      if (json['version'] != 1) {
+      if (json['version'] != 1 && json['version'] != 2) {
         throw const FormatException('Unsupported timetable version');
       }
       final courses = (json['classes'] as List)
@@ -188,13 +188,27 @@ class TimetableStore extends ChangeNotifier {
         );
         pending = !document.isEmpty;
       }
+      final legacyPeriodUpgrade =
+          json['version'] == 1 &&
+          courses.any((course) => course.period != null) &&
+          !courses.any(
+            (course) => course.meetings.any((meeting) => meeting.date != null),
+          ) &&
+          (!json.containsKey('sync') ||
+              ((json['sync'] as Map)['document'] as Map)['schemaVersion'] == 1);
+      if (document.schemaVersion > (json['version'] as int) &&
+          !legacyPeriodUpgrade) {
+        throw const FormatException(
+          'Dated classes require timetable version 2',
+        );
+      }
       _classes = courses;
       _activeYear = year;
       _activeSemester = semester;
       _termNames = names;
       _termPeriods = periods;
       _document = document;
-      _pendingSync = pending;
+      _pendingSync = pending || legacyPeriodUpgrade;
       _deviceId = device;
     } catch (error) {
       loadError = error;
@@ -306,7 +320,7 @@ class TimetableStore extends ChangeNotifier {
     required VoidCallback validate,
   }) async {
     final raw = canonicalSyncJson({
-      'version': 1,
+      'version': document.schemaVersion,
       'activeYear': year,
       'activeSemester': semester,
       'classes': classes.map((c) => c.toJson()).toList(),
@@ -549,6 +563,7 @@ class TimetableStore extends ChangeNotifier {
     }
     if (records.length == document.termPeriods.length) return document;
     return TimetableSyncDocument.records(
+      schemaVersion: document.schemaVersion,
       courses: document.courses,
       termNames: document.termNames,
       termPeriods: records,
@@ -625,7 +640,7 @@ class TimetableStore extends ChangeNotifier {
   ) => _mutate(() {
     final course = _classes.firstWhere((c) => c.id == courseId);
     final meeting = course.meetings.firstWhere((m) => m.id == meetingId);
-    if (date.weekday != meeting.weekday) {
+    if (!meeting.occursOn(date)) {
       throw ArgumentError('Date does not match the meeting');
     }
     return [

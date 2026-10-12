@@ -24,7 +24,11 @@ LmsEventMetadata _metadata() => LmsEventMetadata(
   sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=456',
   openAt: DateTime.parse('2026-09-01T09:00:00+09:00'),
   dueAt: DateTime.utc(2026, 9, 3),
-  submissionStatus: '제출 완료',
+  submissionStatus: '채점 필요',
+  sourceCompleted: true,
+  requiredLearningSeconds: 1200,
+  learnedSeconds: 1250,
+  attendanceStatus: '출석',
   progressPercent: 100,
 );
 
@@ -62,6 +66,28 @@ void main() {
         isNull,
       );
       expect(source.copyWith(clearDueAt: true).dueAt, isNull);
+      expect(
+        source.copyWith(clearSourceCompleted: true).sourceCompleted,
+        isNull,
+      );
+      expect(
+        source.copyWith(clearLearningDurations: true).requiredLearningSeconds,
+        isNull,
+      );
+      expect(
+        source.copyWith(clearLearningDurations: true).learnedSeconds,
+        isNull,
+      );
+      expect(
+        source.copyWith(clearAttendanceStatus: true).attendanceStatus,
+        isNull,
+      );
+      final legacy = source.toJson()
+        ..remove('sourceCompleted')
+        ..remove('requiredLearningSeconds')
+        ..remove('learnedSeconds')
+        ..remove('attendanceStatus');
+      expect(LmsEventMetadata.fromJson(legacy).sourceCompleted, isNull);
       expect(source.belongsToOwner(' STUDENT@example.com '), isTrue);
       expect(source.belongsToOwner(null), isFalse);
     },
@@ -78,6 +104,13 @@ void main() {
       {'progressPercent': -1},
       {'progressPercent': 101},
       {'progressPercent': '100'},
+      {'sourceCompleted': 'true'},
+      {'manuallyCompleted': 'true'},
+      {'requiredLearningSeconds': 0},
+      {'requiredLearningSeconds': 1.5},
+      {'learnedSeconds': -1},
+      {'learnedSeconds': '0'},
+      {'attendanceStatus': true},
     ]) {
       expect(
         () => LmsEventMetadata.fromJson({..._metadata().toJson(), ...patch}),
@@ -129,6 +162,31 @@ void main() {
       repository = DriftEventRepository(database);
     });
     tearDown(() => database.close());
+
+    test(
+      'manual completion survives JSON and SQLite with legacy default false',
+      () async {
+        final legacy = _metadata();
+        expect(
+          LmsEventMetadata.fromJson(legacy.toJson()).manuallyCompleted,
+          isFalse,
+        );
+        final manual = legacy.copyWith(
+          manuallyCompleted: true,
+          sourceCompleted: false,
+        );
+        final restored = LmsEventMetadata.fromJson(
+          jsonDecode(jsonEncode(manual.toJson())) as Map<String, Object?>,
+        );
+        expect(restored, manual);
+        final event = _event().copyWith(completed: true, lms: restored);
+        await repository.save(event);
+        final stored = (await repository.findById(event.id))!;
+        expect(stored.lms!.manuallyCompleted, isTrue);
+        expect(stored.completed, isTrue);
+        expect(eventVersionValues(stored)['lms'], manual.toJson());
+      },
+    );
 
     test('persists source state and exact event timestamp precision', () async {
       final original = _event();

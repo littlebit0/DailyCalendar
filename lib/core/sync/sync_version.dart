@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
 import '../../features/events/domain/calendar_event.dart';
+import '../../features/events/domain/event_category.dart';
 
 String canonicalSyncJson(Object? value) {
   Object? canonical(Object? value) {
@@ -35,6 +36,12 @@ int compareEventVersions(CalendarEvent left, CalendarEvent right) {
     right.lms != null ? 1 : 0,
   );
   if (source != 0) return source;
+  // Older writers can retain LMS metadata but omit the personal extension.
+  // Preserve explicit completion at identical revisions; newer edits still win.
+  final manual = (left.lms?.manuallyCompleted == true ? 1 : 0).compareTo(
+    right.lms?.manuallyCompleted == true ? 1 : 0,
+  );
+  if (manual != 0) return manual;
   return canonicalSyncJson(
     eventVersionValues(left),
   ).compareTo(canonicalSyncJson(eventVersionValues(right)));
@@ -55,7 +62,8 @@ Map<String, Object?> eventVersionValues(CalendarEvent event) => {
       ? _day(event.endAt)
       : event.endAt.toUtc().toIso8601String(),
   'allDay': event.allDay,
-  // Custom categories are stored by label in the existing SQLite schema.
+  // Keep legacy label-based fingerprints compatible with existing precision data.
+  // SQLite now stores stable IDs with categoryIdentity in its local extension.
   'category': event.category.id == 'basic' || event.category.id == 'holiday'
       ? event.category.id
       : event.category.label,
@@ -94,15 +102,30 @@ String _timestampFingerprint(CalendarEvent event) {
 }
 
 String encodeSyncTimestamps(CalendarEvent event) => jsonEncode({
+  'categoryIdentity': event.category.toJson(),
   'fingerprint': _timestampFingerprint(event),
   'createdAt': event.createdAt.toUtc().toIso8601String(),
   'updatedAt': event.updatedAt.toUtc().toIso8601String(),
   'deletedAt': event.deletedAt?.toUtc().toIso8601String(),
 });
 
-CalendarEvent restoreSyncTimestamps(CalendarEvent event, String? details) {
+CalendarEvent restoreSyncTimestamps(
+  CalendarEvent event,
+  String? details, {
+  String? storedCategory,
+}) {
   if (details == null) return event;
   final data = jsonDecode(details) as Map<String, dynamic>;
+  final identity = data['categoryIdentity'];
+  if (identity is Map &&
+      (storedCategory == identity['id'] ||
+          (storedCategory != 'basic' &&
+              storedCategory != 'holiday' &&
+              storedCategory == identity['label']))) {
+    event = event.copyWith(
+      category: EventCategory.fromJson(Map<String, Object?>.from(identity)),
+    );
+  }
   // Native/older writers do not update this column: never reuse stale precision.
   if (data['fingerprint'] != _timestampFingerprint(event)) return event;
   return event.copyWith(

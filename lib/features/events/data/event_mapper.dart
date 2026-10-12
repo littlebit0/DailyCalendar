@@ -58,7 +58,11 @@ extension EventRecordMapper on EventRecord {
       allDayAlarmMinutes: allDayAlarmMinutes,
       holiday: mappedCategory.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
-    return restoreSyncTimestamps(event, syncTimestampDetails);
+    return restoreSyncTimestamps(
+      event,
+      syncTimestampDetails,
+      storedCategory: category,
+    );
   }
 
   List<DateTime> _excludedDatesFromJson(String raw) {

@@ -1,0 +1,5032 @@
+{
+  "schemaVersion": 2,
+  "universityId": "ginue",
+  "campus": "incheon",
+  "campusName": "인천캠퍼스",
+  "institutionId": "institution:academyinfo:0000256",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-08-28",
+  "sourceUrl": "https://www.ginue.ac.kr/kor/CMS/Board/Board.do?mCode=MN125&mode=view&mgr_seq=89&board_seq=46686",
+  "candidateRevision": "merged165-partial-v1",
+  "liveFileFreshnessVerified": false,
+  "completionClaim": false,
+  "courses": [
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N4",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "컴퓨터언어",
+      "section": "",
+      "professor": "허경",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "12\n컴퓨터\nⅡ"
+      ],
+      "departmentRemarks": {
+        "12\n컴퓨터\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 10:00~13:00",
+      "sourceClassroom": "전303",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전303"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N4",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "N4",
+          "mergedRange": "N4:N6",
+          "nativeCellText": "컴퓨터언어\n전303\n허경",
+          "nativeColumnHeader": "12\n컴퓨터\nⅡ",
+          "nativeTitleLineParts": [
+            "컴퓨터언어"
+          ],
+          "courseName": "컴퓨터언어",
+          "professor": "허경",
+          "classroom": "전303",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "월",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "월",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T8",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "영어의구조",
+      "section": "",
+      "professor": "박지현",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "18\n영어"
+      ],
+      "departmentRemarks": {
+        "18\n영어": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 14:00~17:00",
+      "sourceClassroom": "인318",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T8",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "T8",
+          "mergedRange": "T8:T10",
+          "nativeCellText": "영어의구조\n인318\n박지현",
+          "nativeColumnHeader": "18\n영어",
+          "nativeTitleLineParts": [
+            "영어의구조"
+          ],
+          "courseName": "영어의구조",
+          "professor": "박지현",
+          "classroom": "인318",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "월",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "월",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T13",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과 영어학",
+      "section": "",
+      "professor": "박지현",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "18\n영어"
+      ],
+      "departmentRemarks": {
+        "18\n영어": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "화 10:00~13:00",
+      "sourceClassroom": "인318",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-20",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T13",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "T13",
+          "mergedRange": "T13:T15",
+          "nativeCellText": "인공지능과 영어학\n인318\n박지현",
+          "nativeColumnHeader": "18\n영어",
+          "nativeTitleLineParts": [
+            "인공지능과 영어학"
+          ],
+          "courseName": "인공지능과 영어학",
+          "professor": "박지현",
+          "classroom": "인318",
+          "clockRows": [
+            {
+              "weekday": "화",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "화",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "화",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 2,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N16",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "프로그래밍 기초",
+      "section": "",
+      "professor": "이수정",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "12\n컴퓨터\nⅡ"
+      ],
+      "departmentRemarks": {
+        "12\n컴퓨터\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "화 13:00~16:00",
+      "sourceClassroom": "전305",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-10-20",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "전305"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N16",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "N16",
+          "mergedRange": "N16:N18",
+          "nativeCellText": "프로그래밍 기초\n전305\n이수정",
+          "nativeColumnHeader": "12\n컴퓨터\nⅡ",
+          "nativeTitleLineParts": [
+            "프로그래밍 기초"
+          ],
+          "courseName": "프로그래밍 기초",
+          "professor": "이수정",
+          "classroom": "전305",
+          "clockRows": [
+            {
+              "weekday": "화",
+              "period": 5,
+              "start": "13:00",
+              "end": "14:00"
+            },
+            {
+              "weekday": "화",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "화",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            }
+          ],
+          "startMinute": 780,
+          "endMinute": 960,
+          "weekday": 2,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=Q17",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "통합교육현장실습",
+      "section": "",
+      "professor": "이대식",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "15\n특수\nⅡ"
+      ],
+      "departmentRemarks": {
+        "15\n특수\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "화 14:00~17:00",
+      "sourceClassroom": "인206",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-20",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=Q17",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "Q17",
+          "mergedRange": "Q17:Q19",
+          "nativeCellText": "통합교육현장실습\n인206\n이대식",
+          "nativeColumnHeader": "15\n특수\nⅡ",
+          "nativeTitleLineParts": [
+            "통합교육현장실습"
+          ],
+          "courseName": "통합교육현장실습",
+          "professor": "이대식",
+          "classroom": "인206",
+          "clockRows": [
+            {
+              "weekday": "화",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "화",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "화",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 2,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P22",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "통합교육현장실습",
+      "section": "",
+      "professor": "이대식",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "14\n특수\nⅠ"
+      ],
+      "departmentRemarks": {
+        "14\n특수\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "수 10:00~13:00",
+      "sourceClassroom": "인206",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P22",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "P22",
+          "mergedRange": "P22:P24",
+          "nativeCellText": "통합교육현장실습\n인206\n이대식",
+          "nativeColumnHeader": "14\n특수\nⅠ",
+          "nativeTitleLineParts": [
+            "통합교육현장실습"
+          ],
+          "courseName": "통합교육현장실습",
+          "professor": "이대식",
+          "classroom": "인206",
+          "clockRows": [
+            {
+              "weekday": "수",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "수",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "수",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 3,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J40",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "국악가창및장단",
+      "section": "",
+      "professor": "김문희",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "8\n음악\n"
+      ],
+      "departmentRemarks": {
+        "8\n음악\n": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "금 10:00~13:00",
+      "sourceClassroom": "음301",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        },
+        {
+          "date": "2026-12-11",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음301"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J40",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "J40",
+          "mergedRange": "J40:J42",
+          "nativeCellText": "국악가창및장단\n음301\n김문희",
+          "nativeColumnHeader": "8\n음악\n",
+          "nativeTitleLineParts": [
+            "국악가창및장단"
+          ],
+          "courseName": "국악가창및장단",
+          "professor": "김문희",
+          "classroom": "음301",
+          "clockRows": [
+            {
+              "weekday": "금",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "금",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "금",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 5,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=Q40",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "특수아동 가족지원 및 부모상담",
+      "section": "",
+      "professor": "김지수",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "15\n특수\nⅡ"
+      ],
+      "departmentRemarks": {
+        "15\n특수\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "금 10:00~13:00",
+      "sourceClassroom": "인206",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-11",
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인206"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=Q40",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "Q40",
+          "mergedRange": "Q40:Q42",
+          "nativeCellText": "특수아동 가족지원 및 부모상담\n인206\n김지수",
+          "nativeColumnHeader": "15\n특수\nⅡ",
+          "nativeTitleLineParts": [
+            "특수아동 가족지원 및 부모상담"
+          ],
+          "courseName": "특수아동 가족지원 및 부모상담",
+          "professor": "김지수",
+          "classroom": "인206",
+          "clockRows": [
+            {
+              "weekday": "금",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "금",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "금",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 5,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P44",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "특수아동 가족지원 및 부모상담",
+      "section": "",
+      "professor": "김지수",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "14\n특수\nⅠ"
+      ],
+      "departmentRemarks": {
+        "14\n특수\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "금 14:00~17:00",
+      "sourceClassroom": "인206",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        },
+        {
+          "date": "2026-12-11",
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인206"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=1%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P44",
+          "sheet": "1학년(인천)",
+          "grade": 1,
+          "campusNative": "인천",
+          "cell": "P44",
+          "mergedRange": "P44:P46",
+          "nativeCellText": "특수아동 가족지원 및 부모상담\n인206\n김지수",
+          "nativeColumnHeader": "14\n특수\nⅠ",
+          "nativeTitleLineParts": [
+            "특수아동 가족지원 및 부모상담"
+          ],
+          "courseName": "특수아동 가족지원 및 부모상담",
+          "professor": "김지수",
+          "classroom": "인206",
+          "clockRows": [
+            {
+              "weekday": "금",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "금",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "금",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 5,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J4",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "합주지도법",
+      "section": "",
+      "professor": "조윤정",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "8\n음악\nⅠ"
+      ],
+      "departmentRemarks": {
+        "8\n음악\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 10:00~13:00",
+      "sourceClassroom": "음B101(A)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(A)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J4",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "J4",
+          "mergedRange": "J4:J6",
+          "nativeCellText": "합주지도법\n음B101(A)\n조윤정",
+          "nativeColumnHeader": "8\n음악\nⅠ",
+          "nativeTitleLineParts": [
+            "합주지도법"
+          ],
+          "courseName": "합주지도법",
+          "professor": "조윤정",
+          "classroom": "음B101(A)",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "월",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "월",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=L4",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "조소(A)",
+      "section": "",
+      "professor": "서해영",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "10\n미술\nⅠ"
+      ],
+      "departmentRemarks": {
+        "10\n미술\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 10:00~13:00",
+      "sourceClassroom": "예302",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=L4",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "L4",
+          "mergedRange": "L4:L6",
+          "nativeCellText": "조소(A)\n예302\n서해영",
+          "nativeColumnHeader": "10\n미술\nⅠ",
+          "nativeTitleLineParts": [
+            "조소(A)"
+          ],
+          "courseName": "조소(A)",
+          "professor": "서해영",
+          "classroom": "예302",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "월",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "월",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N4",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생활과학교육통계",
+      "section": "",
+      "professor": "류청산",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "12\n생활과학\nⅠ"
+      ],
+      "departmentRemarks": {
+        "12\n생활과학\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 10:00~13:00",
+      "sourceClassroom": "예702",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예702"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N4",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "N4",
+          "mergedRange": "N4:N6",
+          "nativeCellText": "생활과학교육통계\n예702\n류청산",
+          "nativeColumnHeader": "12\n생활과학\nⅠ",
+          "nativeTitleLineParts": [
+            "생활과학교육통계"
+          ],
+          "courseName": "생활과학교육통계",
+          "professor": "류청산",
+          "classroom": "예702",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "월",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "월",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K8",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "합주지도법",
+      "section": "",
+      "professor": "조윤정",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "9\n음악\nⅡ"
+      ],
+      "departmentRemarks": {
+        "9\n음악\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 14:00~17:00",
+      "sourceClassroom": "음B101(C)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(C)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K8",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "K8",
+          "mergedRange": "K8:K10",
+          "nativeCellText": "합주지도법\n음B101(C)\n조윤정",
+          "nativeColumnHeader": "9\n음악\nⅡ",
+          "nativeTitleLineParts": [
+            "합주지도법"
+          ],
+          "courseName": "합주지도법",
+          "professor": "조윤정",
+          "classroom": "음B101(C)",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "월",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "월",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=O8",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생활과학교육통계",
+      "section": "",
+      "professor": "류청산",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "13\n생활과학\nⅡ"
+      ],
+      "departmentRemarks": {
+        "13\n생활과학\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 14:00~17:00",
+      "sourceClassroom": "예702",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예702"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=O8",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "O8",
+          "mergedRange": "O8:O10",
+          "nativeCellText": "생활과학교육통계\n예702\n류청산",
+          "nativeColumnHeader": "13\n생활과학\nⅡ",
+          "nativeTitleLineParts": [
+            "생활과학교육통계"
+          ],
+          "courseName": "생활과학교육통계",
+          "professor": "류청산",
+          "classroom": "예702",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "월",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "월",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P8",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AI디지털교과서 교재분석",
+      "section": "",
+      "professor": "안성훈",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "14\n컴퓨터"
+      ],
+      "departmentRemarks": {
+        "14\n컴퓨터": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "월 14:00~17:00",
+      "sourceClassroom": "전409",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "전409"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P8",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "P8",
+          "mergedRange": "P8:P10",
+          "nativeCellText": "AI디지털교과서 교재분석\n전409\n안성훈",
+          "nativeColumnHeader": "14\n컴퓨터",
+          "nativeTitleLineParts": [
+            "AI디지털교과서 교재분석"
+          ],
+          "courseName": "AI디지털교과서 교재분석",
+          "professor": "안성훈",
+          "classroom": "전409",
+          "clockRows": [
+            {
+              "weekday": "월",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "월",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "월",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 1,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P13",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "창의컴퓨팅교육",
+      "section": "",
+      "professor": "한선관",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "14\n컴퓨터"
+      ],
+      "departmentRemarks": {
+        "14\n컴퓨터": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "화 10:00~13:00",
+      "sourceClassroom": "전409",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-10-20",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "전409"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=P13",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "P13",
+          "mergedRange": "P13:P15",
+          "nativeCellText": "창의컴퓨팅교육\n전409\n한선관",
+          "nativeColumnHeader": "14\n컴퓨터",
+          "nativeTitleLineParts": [
+            "창의컴퓨팅교육"
+          ],
+          "courseName": "창의컴퓨팅교육",
+          "professor": "한선관",
+          "classroom": "전409",
+          "clockRows": [
+            {
+              "weekday": "화",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "화",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "화",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 2,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K14",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양음악이론",
+      "section": "",
+      "professor": "정주연",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "9\n음악\nⅡ"
+      ],
+      "departmentRemarks": {
+        "9\n음악\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "화 11:00~13:00",
+      "sourceClassroom": "음203(C)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-10-20",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(C)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K14",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "K14",
+          "mergedRange": "K14:K15",
+          "nativeCellText": "서양음악이론\n음203(C)\n정주연",
+          "nativeColumnHeader": "9\n음악\nⅡ",
+          "nativeTitleLineParts": [
+            "서양음악이론"
+          ],
+          "courseName": "서양음악이론",
+          "professor": "정주연",
+          "classroom": "음203(C)",
+          "clockRows": [
+            {
+              "weekday": "화",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "화",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 660,
+          "endMinute": 780,
+          "weekday": 2,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J17",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양음악이론",
+      "section": "",
+      "professor": "정주연",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "8\n음악\nⅠ"
+      ],
+      "departmentRemarks": {
+        "8\n음악\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "화 14:00~16:00",
+      "sourceClassroom": "음203(A)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-10-20",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(A)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J17",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "J17",
+          "mergedRange": "J17:J18",
+          "nativeCellText": "서양음악이론\n음203(A)\n정주연",
+          "nativeColumnHeader": "8\n음악\nⅠ",
+          "nativeTitleLineParts": [
+            "서양음악이론"
+          ],
+          "courseName": "서양음악이론",
+          "professor": "정주연",
+          "classroom": "음203(A)",
+          "clockRows": [
+            {
+              "weekday": "화",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "화",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 960,
+          "weekday": 2,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N17",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "설계기술",
+      "section": "",
+      "professor": "송영재",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "12\n생활과학\nⅠ"
+      ],
+      "departmentRemarks": {
+        "12\n생활과학\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "화 14:00~17:00",
+      "sourceClassroom": "예601",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-10-20",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "예601"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=N17",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "N17",
+          "mergedRange": "N17:N19",
+          "nativeCellText": "설계기술\n예601\n송영재",
+          "nativeColumnHeader": "12\n생활과학\nⅠ",
+          "nativeTitleLineParts": [
+            "설계기술"
+          ],
+          "courseName": "설계기술",
+          "professor": "송영재",
+          "classroom": "예601",
+          "clockRows": [
+            {
+              "weekday": "화",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "화",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "화",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 2,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=M22",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "조소(D)",
+      "section": "",
+      "professor": "허태욱",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "11\n미술\nⅡ"
+      ],
+      "departmentRemarks": {
+        "11\n미술\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "수 10:00~13:00",
+      "sourceClassroom": "예305",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예305"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=M22",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "M22",
+          "mergedRange": "M22:M24",
+          "nativeCellText": "조소(D)\n예305\n허태욱",
+          "nativeColumnHeader": "11\n미술\nⅡ",
+          "nativeTitleLineParts": [
+            "조소(D)"
+          ],
+          "courseName": "조소(D)",
+          "professor": "허태욱",
+          "classroom": "예305",
+          "clockRows": [
+            {
+              "weekday": "수",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "수",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "수",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 3,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=L25",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "조소(B)",
+      "section": "",
+      "professor": "권현빈",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "10\n미술\nⅠ"
+      ],
+      "departmentRemarks": {
+        "10\n미술\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "수 13:00~16:00",
+      "sourceClassroom": "예302",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예302"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=L25",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "L25",
+          "mergedRange": "L25:L27",
+          "nativeCellText": "조소(B)\n예302\n권현빈",
+          "nativeColumnHeader": "10\n미술\nⅠ",
+          "nativeTitleLineParts": [
+            "조소(B)"
+          ],
+          "courseName": "조소(B)",
+          "professor": "권현빈",
+          "classroom": "예302",
+          "clockRows": [
+            {
+              "weekday": "수",
+              "period": 5,
+              "start": "13:00",
+              "end": "14:00"
+            },
+            {
+              "weekday": "수",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "수",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            }
+          ],
+          "startMinute": 780,
+          "endMinute": 960,
+          "weekday": 3,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K31",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "합주지도법",
+      "section": "",
+      "professor": "조윤정",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "9\n음악\nⅡ"
+      ],
+      "departmentRemarks": {
+        "9\n음악\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 10:00~13:00",
+      "sourceClassroom": "음B101(D)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "음B101(D)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K31",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "K31",
+          "mergedRange": "K31:K33",
+          "nativeCellText": "합주지도법\n음B101(D)\n조윤정",
+          "nativeColumnHeader": "9\n음악\nⅡ",
+          "nativeTitleLineParts": [
+            "합주지도법"
+          ],
+          "courseName": "합주지도법",
+          "professor": "조윤정",
+          "classroom": "음B101(D)",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "목",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "목",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=M31",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "조소(C)",
+      "section": "",
+      "professor": "허태욱",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "11\n미술\nⅡ"
+      ],
+      "departmentRemarks": {
+        "11\n미술\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 10:00~13:00",
+      "sourceClassroom": "예302",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "예302"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=M31",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "M31",
+          "mergedRange": "M31:M33",
+          "nativeCellText": "조소(C)\n예302\n허태욱",
+          "nativeColumnHeader": "11\n미술\nⅡ",
+          "nativeTitleLineParts": [
+            "조소(C)"
+          ],
+          "courseName": "조소(C)",
+          "professor": "허태욱",
+          "classroom": "예302",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "목",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "목",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T31",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AIDT와 교과통합 영어교육",
+      "section": "",
+      "professor": "이동환",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "18\n영어"
+      ],
+      "departmentRemarks": {
+        "18\n영어": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 10:00~13:00",
+      "sourceClassroom": "인318",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "인318"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T31",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "T31",
+          "mergedRange": "T31:T33",
+          "nativeCellText": "AIDT와 교과통합 영어교육\n인318\n이동환",
+          "nativeColumnHeader": "18\n영어",
+          "nativeTitleLineParts": [
+            "AIDT와 교과통합 영어교육"
+          ],
+          "courseName": "AIDT와 교과통합 영어교육",
+          "professor": "이동환",
+          "classroom": "인318",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 2,
+              "start": "10:00",
+              "end": "11:00"
+            },
+            {
+              "weekday": "목",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "목",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 600,
+          "endMinute": 780,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J32",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양음악이론",
+      "section": "",
+      "professor": "정주연",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "8\n음악\nⅠ"
+      ],
+      "departmentRemarks": {
+        "8\n음악\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 11:00~13:00",
+      "sourceClassroom": "음203(B)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "음203(B)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J32",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "J32",
+          "mergedRange": "J32:J33",
+          "nativeCellText": "서양음악이론\n음203(B)\n정주연",
+          "nativeColumnHeader": "8\n음악\nⅠ",
+          "nativeTitleLineParts": [
+            "서양음악이론"
+          ],
+          "courseName": "서양음악이론",
+          "professor": "정주연",
+          "classroom": "음203(B)",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 3,
+              "start": "11:00",
+              "end": "12:00"
+            },
+            {
+              "weekday": "목",
+              "period": 4,
+              "start": "12:00",
+              "end": "13:00"
+            }
+          ],
+          "startMinute": 660,
+          "endMinute": 780,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=O34",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "설계기술",
+      "section": "",
+      "professor": "이춘식",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "13\n생활과학\nⅡ"
+      ],
+      "departmentRemarks": {
+        "13\n생활과학\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 13:00~16:00",
+      "sourceClassroom": "예601",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "예601"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=O34",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "O34",
+          "mergedRange": "O34:O36",
+          "nativeCellText": "설계기술\n예601\n이춘식",
+          "nativeColumnHeader": "13\n생활과학\nⅡ",
+          "nativeTitleLineParts": [
+            "설계기술"
+          ],
+          "courseName": "설계기술",
+          "professor": "이춘식",
+          "classroom": "예601",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 5,
+              "start": "13:00",
+              "end": "14:00"
+            },
+            {
+              "weekday": "목",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "목",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            }
+          ],
+          "startMinute": 780,
+          "endMinute": 960,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J35",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "합주지도법",
+      "section": "",
+      "professor": "조윤정",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "8\n음악\nⅠ"
+      ],
+      "departmentRemarks": {
+        "8\n음악\nⅠ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 14:00~17:00",
+      "sourceClassroom": "음B101(B)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "음B101(B)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=J35",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "J35",
+          "mergedRange": "J35:J37",
+          "nativeCellText": "합주지도법\n음B101(B)\n조윤정",
+          "nativeColumnHeader": "8\n음악\nⅠ",
+          "nativeTitleLineParts": [
+            "합주지도법"
+          ],
+          "courseName": "합주지도법",
+          "professor": "조윤정",
+          "classroom": "음B101(B)",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "목",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "목",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K35",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양음악이론",
+      "section": "",
+      "professor": "정주연",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "9\n음악\nⅡ"
+      ],
+      "departmentRemarks": {
+        "9\n음악\nⅡ": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 14:00~16:00",
+      "sourceClassroom": "음203(D)",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "음203(D)"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=K35",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "K35",
+          "mergedRange": "K35:K36",
+          "nativeCellText": "서양음악이론\n음203(D)\n정주연",
+          "nativeColumnHeader": "9\n음악\nⅡ",
+          "nativeTitleLineParts": [
+            "서양음악이론"
+          ],
+          "courseName": "서양음악이론",
+          "professor": "정주연",
+          "classroom": "음203(D)",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "목",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 960,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    },
+    {
+      "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T35",
+      "referenceKind": "internalDocumentLocator",
+      "campus": "incheon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "AIDT를 활용한 주제중심 영어교육",
+      "section": "",
+      "professor": "이동환",
+      "classification": "",
+      "departmentClassifications": {},
+      "credits": null,
+      "departmentCredits": {},
+      "departments": [
+        "18\n영어"
+      ],
+      "departmentRemarks": {
+        "18\n영어": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 내부 원문 문서 위치 식별자는 수강신청 코드가 아닙니다. 교과목코드·학점·이수구분은 이 시간표에 미공개로 빈 값/미확인입니다. 반·학과 열은 학생 집단 범위이며 명시된 개별 분반 증거 외에는 숫자 분반을 생성하지 않았습니다. 시간표의 60분 시각 칸 경계를 예약 범위로 보존했으며 휴게시간/실제 강의분수는 별도 미확인입니다. 현재2026-2 6차 시간표 원문을 보존했으나 오늘 공식 재요청은 빈 페이지여서 최신 변경/폐강 대조 미완료입니다. 가정학습10월12~16일과 기말고사12월14~18일은 예약 제외, 자체보강 실제 일정은 미확인입니다. 대동제9월30~10월1일 및 면접11월20일의 강좌별 실제 운영은 미확인입니다."
+      },
+      "sourceSchedule": "목 14:00~17:00",
+      "sourceClassroom": "인318",
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-13"
+      },
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "인318"
+        }
+      ],
+      "sourceEducation": {
+        "referenceKind": "internalDocumentLocator",
+        "nativePublicCells": {
+          "sourceId": "https://www.ginue.ac.kr/kor/ajx_json/UploadMgr/downloadRun.do?qcode=Qm9hcmQsNzgxOTcsWQ==#sheet=2%ED%95%99%EB%85%84%28%EC%9D%B8%EC%B2%9C%29&cell=T35",
+          "sheet": "2학년(인천)",
+          "grade": 2,
+          "campusNative": "인천",
+          "cell": "T35",
+          "mergedRange": "T35:T37",
+          "nativeCellText": "AIDT를 활용한 주제중심 영어교육\n인318\n이동환",
+          "nativeColumnHeader": "18\n영어",
+          "nativeTitleLineParts": [
+            "AIDT를 활용한 주제중심 영어교육"
+          ],
+          "courseName": "AIDT를 활용한 주제중심 영어교육",
+          "professor": "이동환",
+          "classroom": "인318",
+          "clockRows": [
+            {
+              "weekday": "목",
+              "period": 6,
+              "start": "14:00",
+              "end": "15:00"
+            },
+            {
+              "weekday": "목",
+              "period": 7,
+              "start": "15:00",
+              "end": "16:00"
+            },
+            {
+              "weekday": "목",
+              "period": 8,
+              "start": "16:00",
+              "end": "17:00"
+            }
+          ],
+          "startMinute": 840,
+          "endMinute": 1020,
+          "weekday": 4,
+          "section": "",
+          "numericSectionBasis": "Column header 반/학과 is student-group scope, not assumed registration section"
+        },
+        "courseCodeIndividuallyPrinted": false,
+        "campusIndividuallyPrinted": true,
+        "sourceStudentGroupIsNotOpeningDepartment": true,
+        "wholeSchoolCourseCoverageComplete": false,
+        "wholeOperatingVerified": false,
+        "latestClosureCompared": false,
+        "sourceDurationIsHourGridReservationBoundary": true
+      }
+    }
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}

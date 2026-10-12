@@ -998,17 +998,33 @@ private final class DailyLmsCookieStore {
             let host = args["host"] as? String, hosts.contains(host) else {
         result(FlutterError(code: "invalid_school", message: nil, details: nil)); return
       }
+      if call.method == "canStartHeadless" {
+        // Match the attachment parent used by flutter_inappwebview 1.1.2.
+        // Keep the check scene-aware, but require the plugin's actual keyWindow
+        // to exist instead of silently creating an unreachable private store.
+        let windows = UIApplication.shared.connectedScenes
+          .compactMap { $0 as? UIWindowScene }.flatMap(\.windows)
+        result(UIApplication.shared.keyWindow.map { key in
+          windows.contains { $0 === key }
+        } ?? false)
+        return
+      }
       if call.method == "bind" {
         guard let marker = args["marker"] as? String, marker.count >= 32,
               marker.count <= 160 else {
           result(FlutterError(code: "invalid_marker", message: nil, details: nil)); return
         }
         let candidates = schoolViews(host: host)
+        guard !candidates.isEmpty else {
+          result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
+        }
         let group = DispatchGroup()
         var matches: [WKWebsiteDataStore] = []
+        var scriptFailures = 0
         for view in candidates {
           group.enter()
           view.evaluateJavaScript("window.name") { name, error in
+            if error != nil { scriptFailures += 1 }
             if error == nil, name as? String == marker,
                view.url?.host == host, !view.configuration.websiteDataStore.isPersistent {
               matches.append(view.configuration.websiteDataStore)
@@ -1018,7 +1034,9 @@ private final class DailyLmsCookieStore {
         }
         group.notify(queue: .main) {
           guard matches.count == 1, let store = matches.first else {
-            result(FlutterError(code: "school_view_missing", message: nil, details: nil)); return
+            let code = matches.count > 1 ? "school_view_ambiguous"
+              : scriptFailures > 0 ? "school_script_unavailable" : "school_marker_missing"
+            result(FlutterError(code: code, message: nil, details: nil)); return
           }
           stores[host] = store
           result(true)

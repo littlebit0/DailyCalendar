@@ -1,0 +1,192 @@
+[
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "신정",
+    "bgnde": "2026/01/01",
+    "endde": "2026/01/01",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "3.1절",
+    "bgnde": "2026/03/01",
+    "endde": "2026/03/01",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "어린이날",
+    "bgnde": "2026/05/05",
+    "endde": "2026/05/05",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "현충일",
+    "bgnde": "2026/06/06",
+    "endde": "2026/06/06",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "광복절",
+    "bgnde": "2026/08/15",
+    "endde": "2026/08/15",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "개천절",
+    "bgnde": "2026/10/03",
+    "endde": "2026/10/03",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "한글날",
+    "bgnde": "2026/10/09",
+    "endde": "2026/10/09",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "크리스마스",
+    "bgnde": "2026/12/25",
+    "endde": "2026/12/25",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "설날연휴",
+    "bgnde": "2026/02/17",
+    "endde": "2026/02/17",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "설날",
+    "bgnde": "2026/02/17",
+    "endde": "2026/02/17",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "설날연휴",
+    "bgnde": "2026/02/18",
+    "endde": "2026/02/18",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "부처님오신날",
+    "bgnde": "2026/05/24",
+    "endde": "2026/05/24",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "추석연휴",
+    "bgnde": "2026/09/24",
+    "endde": "2026/09/24",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "추석",
+    "bgnde": "2026/09/25",
+    "endde": "2026/09/25",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "추석연휴",
+    "bgnde": "2026/09/26",
+    "endde": "2026/09/26",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "holiday",
+    "sysId": null,
+    "schdulTitle": "대체휴일",
+    "bgnde": "2026/05/05",
+    "endde": "2026/05/05",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "portal",
+    "sysId": null,
+    "schdulTitle": "2027학년도 대학수학능력시험(1AB 임시휴강) 예정",
+    "bgnde": "2026/11/19",
+    "endde": "2026/11/19",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "portal",
+    "sysId": null,
+    "schdulTitle": "2027년도 수시모집 면접고사일(임시휴강 예정)",
+    "bgnde": "2026/11/24",
+    "endde": "2026/11/24",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  },
+  {
+    "schdulSeq": "portal",
+    "sysId": null,
+    "schdulTitle": "수업일수 3/4",
+    "bgnde": "2026/11/24",
+    "endde": "2026/11/24",
+    "alldayAt": "Y",
+    "bgndeTime": null,
+    "enddeTime": null
+  }
+]

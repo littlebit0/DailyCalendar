@@ -12,6 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 import 'lms_models.dart';
+import 'lms_credentials_store.dart';
 
 enum LmsWebSessionError {
   authenticationRequired,
@@ -19,6 +20,11 @@ enum LmsWebSessionError {
   invalidResponse,
   unsupported,
   busy,
+  hostUnavailable,
+  viewUnavailable,
+  viewMismatch,
+  viewAmbiguous,
+  scriptUnavailable,
   disallowedRequest,
 }
 
@@ -28,6 +34,39 @@ class LmsWebSessionException implements Exception {
   final LmsWebSessionError code;
   @override
   String toString() => 'LmsWebSessionException(${code.name})';
+}
+
+/// Bounded, nonsecret evidence for diagnosing the point of authentication loss.
+/// Never add principal IDs, URLs, headers, cookies, or response text here.
+enum LmsAuthenticationReason {
+  readRedirect,
+  readUnauthorized,
+  readOriginChanged,
+  readLoginForm,
+  readPrincipalMismatch,
+  rootLoginForm,
+  rootPrincipalMismatch,
+  rootUnrecognized,
+  rootOriginChanged,
+  rootAccepted,
+  recoveryStarted,
+  finalRootValidationStarted,
+  snapshotRestoreStarted,
+  recoverySucceeded,
+  credentialsDiscarded,
+  refreshConfirmed,
+  closed,
+}
+
+class LmsAuthenticationDiagnostic {
+  const LmsAuthenticationDiagnostic({
+    required this.reason,
+    required this.occurredAt,
+    required this.generation,
+  });
+  final LmsAuthenticationReason reason;
+  final DateTime occurredAt;
+  final int generation;
 }
 
 /// Separate navigation permissions from the much narrower automatic read API.
@@ -51,6 +90,9 @@ class LmsWebRequestPolicy {
         return !uri.hasQuery;
       case '/mod/assign/index.php':
       case '/mod/quiz/index.php':
+      case '/mod/quiz/view.php':
+      case '/course/view.php':
+      case '/report/ubcompletion/user_progress.php':
         return uri.queryParameters.length == 1 &&
             RegExp(r'^[1-9][0-9]*$').hasMatch(uri.queryParameters['id'] ?? '');
       default:
@@ -115,11 +157,23 @@ class LmsWebSession extends ChangeNotifier {
   InAppWebViewKeepAlive? _keepAlive;
   String? _principalId;
   String? _expectedPrincipal;
+  String? _lastPersistedAuthentication;
+  LmsHtmlPage? _verifiedDashboard;
+  DateTime? _verifiedDashboardAt;
+  DateTime? _lastPageLoadedAt;
+  int? _verifiedDashboardGeneration;
   int _generation = 0;
+  int? _authenticationRejectedGeneration;
+  LmsAuthenticationReason? _authenticationRejectedReason;
+  final _authenticationDiagnostics = <LmsAuthenticationDiagnostic>[];
   bool _loginVisible = false;
+  bool _automaticLogin = false;
+  bool _automaticLoginChallenge = false;
   bool _keptAlive = false;
   bool _disposed = false;
   bool _nativeCookieBound = false;
+  bool _authenticationRecoveryPending = false;
+  bool _authenticationRecoveryAttempted = false;
   Completer<void>? _pageLoaded;
   static const _cookieChannel = MethodChannel('daily/lms_cookie_store');
   bool get _usesAppleStore => Platform.isIOS || Platform.isMacOS;
@@ -131,6 +185,8 @@ class LmsWebSession extends ChangeNotifier {
   String? get principalId => _principalId;
   String? get storedPrincipalId => _expectedPrincipal;
   int get generation => _generation;
+  List<LmsAuthenticationDiagnostic> get authenticationDiagnostics =>
+      List.unmodifiable(_authenticationDiagnostics);
   bool get isAuthenticated =>
       !_disposed && _principalId != null && identical(_active, this);
   bool get isLoginVisible => _loginVisible;
@@ -165,7 +221,7 @@ class LmsWebSession extends ChangeNotifier {
     final data = await _readStored();
     _checkLifecycle(startedGeneration);
     _expectedPrincipal = data?['principal'] as String?;
-    return data != null;
+    return data != null && (data['cookies'] as List).isNotEmpty;
   }
 
   Future<Map<String, dynamic>?> _readStored() async {
@@ -177,8 +233,8 @@ class LmsWebSession extends ChangeNotifier {
           data['owner'] == ownerId &&
           data['school'] == schoolId &&
           data['principal'] is String &&
-          data['cookies'] is List &&
-          (data['cookies'] as List).isNotEmpty) {
+          RegExp(r'^[1-9][0-9]*$').hasMatch(data['principal'] as String) &&
+          data['cookies'] is List) {
         return data;
       }
     } on FormatException {
@@ -247,28 +303,168 @@ class LmsWebSession extends ChangeNotifier {
     _checkLifecycle(startedGeneration);
     if (data == null) return;
     _expectedPrincipal = data['principal'] as String;
+    if ((data['cookies'] as List).isEmpty) return;
     try {
       await _activate();
       _checkGeneration(startedGeneration);
+      if (_authenticationRecoveryAttempted &&
+          _controller != null &&
+          _authenticationRejectedReason !=
+              LmsAuthenticationReason.rootLoginForm) {
+        // Later lifecycle retries must not overwrite a live store after an
+        // inconclusive root response either.
+        if (await _validateCurrentStore()) return;
+        if (_authenticationRejectedReason ==
+            LmsAuthenticationReason.rootPrincipalMismatch) {
+          await _discardAuthentication();
+          throw const LmsWebSessionException(
+            LmsWebSessionError.authenticationRequired,
+          );
+        }
+      }
+      final restoreGeneration = _generation;
       await _startHeadless();
-      _checkGeneration(startedGeneration);
+      _checkGeneration(restoreGeneration);
       await _bindCookieStore();
-      _checkGeneration(startedGeneration);
+      _checkGeneration(restoreGeneration);
       await _restoreCookies(data['cookies'] as List);
-      _checkGeneration(startedGeneration);
+      _checkGeneration(restoreGeneration);
       await _reloadRoot();
-      _checkGeneration(startedGeneration);
+      _checkGeneration(restoreGeneration);
       if (await verifyAuthentication() == null) {
-        await _storage.delete(key: _storageKey);
+        // Only a rejected root identity in this still-current lifecycle proves
+        // these restored credentials unusable. View setup and cancellation do
+        // not constitute a school authentication result.
+        if (!_disposed &&
+            identical(_active, this) &&
+            _authenticationRejectedGeneration == _generation) {
+          await _discardAuthentication();
+        }
         throw const LmsWebSessionException(
           LmsWebSessionError.authenticationRequired,
         );
       }
     } on LmsWebSessionException {
+      await _discardUnboundHeadless();
       rethrow;
     } catch (_) {
+      await _discardUnboundHeadless();
       throw const LmsWebSessionException(LmsWebSessionError.network);
     }
+  }
+
+  /// A read rejected by the server gets one restoration of Daily's own saved
+  /// session. This neither opens an SSO route nor submits credentials. A server-
+  /// revoked session still requires an explicit school login.
+  Future<bool> recoverAuthentication() async {
+    _checkNotRetired();
+    if (!_authenticationRecoveryPending || _loginVisible) return false;
+    _authenticationRecoveryPending = false;
+    _authenticationRecoveryAttempted = true;
+    _recordAuthentication(LmsAuthenticationReason.recoveryStarted);
+    // A read can redirect while rotating an otherwise valid cookie. Validate
+    // the live private store before replacing it with an older saved snapshot.
+    if (await _validateCurrentStore()) {
+      _recordAuthentication(LmsAuthenticationReason.recoverySucceeded);
+      return isAuthenticated;
+    }
+    if (_authenticationRejectedReason ==
+        LmsAuthenticationReason.rootPrincipalMismatch) {
+      await _discardAuthentication();
+      return false;
+    }
+    _recordAuthentication(LmsAuthenticationReason.snapshotRestoreStarted);
+    await prepare();
+    if (isAuthenticated) {
+      _recordAuthentication(LmsAuthenticationReason.recoverySucceeded);
+    }
+    return isAuthenticated;
+  }
+
+  Future<bool> _validateCurrentStore() async {
+    final startedGeneration = _generation;
+    await _reloadRoot();
+    _checkGeneration(startedGeneration);
+    if (await verifyAuthentication() != null) return true;
+    // Verification itself advances the generation on an explicit rejection.
+    // A concurrent close/owner change clears this evidence and must stop here.
+    if (_disposed ||
+        !identical(_active, this) ||
+        _authenticationRejectedGeneration != _generation) {
+      throw const LmsWebSessionException(
+        LmsWebSessionError.authenticationRequired,
+      );
+    }
+    if (_authenticationRejectedReason !=
+            LmsAuthenticationReason.rootLoginForm &&
+        _authenticationRejectedReason !=
+            LmsAuthenticationReason.rootPrincipalMismatch) {
+      throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
+    }
+    return false;
+  }
+
+  /// A root check alone does not replenish the retry budget. Only the owning
+  /// controller's successful complete sync pass permits a later recovery.
+  void acknowledgeSuccessfulRefresh() {
+    if (!isAuthenticated || _loginVisible) return;
+    _authenticationRecoveryAttempted = false;
+    _authenticationRecoveryPending = false;
+    _recordAuthentication(LmsAuthenticationReason.refreshConfirmed);
+  }
+
+  void _recordAuthentication(LmsAuthenticationReason reason) {
+    _authenticationDiagnostics.add(
+      LmsAuthenticationDiagnostic(
+        reason: reason,
+        occurredAt: DateTime.now().toUtc(),
+        generation: _generation,
+      ),
+    );
+    if (_authenticationDiagnostics.length > 24) {
+      _authenticationDiagnostics.removeAt(0);
+    }
+  }
+
+  Future<void> _rejectReadAuthentication(LmsAuthenticationReason reason) async {
+    _recordAuthentication(reason);
+    if (_authenticationRecoveryAttempted) {
+      _recordAuthentication(LmsAuthenticationReason.finalRootValidationStarted);
+      if (await _validateCurrentStore()) {
+        // A specific endpoint can reject access while the school root still
+        // verifies this account. Stop this read without another activity retry
+        // or deleting the independently validated session.
+        throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
+      }
+      // The current root has explicitly rejected login or the expected user.
+      // Unknown/network responses throw above and preserve stored material.
+      await _discardAuthentication();
+    } else {
+      _authenticationRecoveryPending = true;
+      _invalidate();
+    }
+  }
+
+  Future<void> _discardAuthentication() async {
+    _recordAuthentication(LmsAuthenticationReason.credentialsDiscarded);
+    _authenticationRecoveryPending = false;
+    final principal = _expectedPrincipal ?? _principalId;
+    _invalidate();
+    if (principal == null) {
+      await _storage.delete(key: _storageKey);
+      return;
+    }
+    // Retaining an identity is not retaining an authenticated session. It lets
+    // the owner recognize their last successful data after expiry/restart.
+    await _storage.write(
+      key: _storageKey,
+      value: jsonEncode({
+        'owner': ownerId,
+        'school': schoolId,
+        'principal': principal,
+        'cookies': const [],
+      }),
+    );
   }
 
   void _checkGeneration(int expected) {
@@ -299,6 +495,22 @@ class LmsWebSession extends ChangeNotifier {
   Future<void> _startHeadless() async {
     if (_controller != null) return;
     final startedGeneration = _generation;
+    if (_usesAppleStore) {
+      try {
+        final available = await _cookieChannel.invokeMethod<bool>(
+          'canStartHeadless',
+          {'host': baseUrl.host},
+        );
+        _checkGeneration(startedGeneration);
+        if (available != true) {
+          throw const LmsWebSessionException(
+            LmsWebSessionError.hostUnavailable,
+          );
+        }
+      } on PlatformException catch (error) {
+        throw _cookieStoreError(error);
+      }
+    }
     final loaded = Completer<void>();
     _pageLoaded = loaded;
     _headless = HeadlessInAppWebView(
@@ -312,33 +524,58 @@ class LmsWebSession extends ChangeNotifier {
           _controller = controller;
         }
       },
-      onLoadStop: (_, _) {
-        final pending = _pageLoaded;
-        if (pending != null && !pending.isCompleted) pending.complete();
-      },
+      onLoadStop: (_, _) => pageLoadFinished(),
       onReceivedError: (_, request, _) {
-        if (request.isForMainFrame == true &&
-            _pageLoaded?.isCompleted == false) {
-          _pageLoaded!.completeError(
-            const LmsWebSessionException(LmsWebSessionError.network),
-          );
-        }
+        if (request.isForMainFrame == true) pageLoadFailed();
       },
       shouldOverrideUrlLoading: (_, action) async {
         final uri = action.request.url?.uriValue;
         return uri != null &&
-                policy.isSchoolOrigin(uri) &&
-                const {'/', '/login.php', '/login/index.php'}.contains(uri.path)
+                ((_automaticLogin &&
+                        (policy.isSchoolOrigin(uri) ||
+                            uri.scheme == 'https' &&
+                                uri.host == 'smsso.smu.ac.kr' &&
+                                uri.port == 443 &&
+                                uri.userInfo.isEmpty)) ||
+                    policy.isSchoolOrigin(uri) &&
+                        const {
+                          '/',
+                          '/login.php',
+                          '/login/index.php',
+                        }.contains(uri.path))
             ? NavigationActionPolicy.ALLOW
             : NavigationActionPolicy.CANCEL;
+      },
+      onJsAlert: (_, request) async {
+        if (!_automaticLogin) return null;
+        _automaticLoginChallenge = true;
+        return JsAlertResponse(handledByClient: true);
+      },
+      onJsConfirm: (_, request) async {
+        if (!_automaticLogin) return null;
+        _automaticLoginChallenge = true;
+        return JsConfirmResponse(
+          handledByClient: true,
+          action: JsConfirmResponseAction.CANCEL,
+        );
+      },
+      onJsPrompt: (_, request) async {
+        if (!_automaticLogin) return null;
+        _automaticLoginChallenge = true;
+        return JsPromptResponse(
+          handledByClient: true,
+          action: JsPromptResponseAction.CANCEL,
+        );
       },
       onCreateWindow: (_, _) async => false,
     );
     try {
       // Attach the error handler before the first native page callback.
       final completion = loaded.future.timeout(const Duration(seconds: 25));
-      await _headless!.run();
-      await completion;
+      await Future.wait<void>([
+        completion,
+        Future<void>.sync(() => _headless!.run()),
+      ], eagerError: true);
     } catch (_) {
       await _headless?.dispose();
       _headless = null;
@@ -347,15 +584,67 @@ class LmsWebSession extends ChangeNotifier {
     }
   }
 
+  Future<void> _discardUnboundHeadless() async {
+    final headless = _headless;
+    if (headless == null || _nativeCookieBound || _keptAlive) return;
+    try {
+      await headless.dispose();
+    } catch (_) {
+      // Retain a failed disposal handle so close/a later retry can finish
+      // cleanup. A detached view never authorizes another cookie store.
+      return;
+    }
+    if (identical(_headless, headless)) {
+      _headless = null;
+      _controller = null;
+      _pageLoaded = null;
+    }
+  }
+
+  static LmsWebSessionException _cookieStoreError(PlatformException error) =>
+      LmsWebSessionException(switch (error.code) {
+        'school_view_missing' => LmsWebSessionError.viewUnavailable,
+        'school_marker_missing' => LmsWebSessionError.viewMismatch,
+        'school_view_ambiguous' => LmsWebSessionError.viewAmbiguous,
+        'school_script_unavailable' => LmsWebSessionError.scriptUnavailable,
+        // Never include native messages/details, cookies, or the marker.
+        _ => LmsWebSessionError.invalidResponse,
+      });
+
+  /// The visible login view can outlive its Flutter route through keepAlive.
+  /// Its callbacks must still settle restoration loads after the route closes.
+  void pageLoadFinished() {
+    _lastPageLoadedAt = DateTime.now();
+    final pending = _pageLoaded;
+    if (pending != null && !pending.isCompleted) {
+      pending.complete();
+    }
+  }
+
+  void pageLoadFailed() {
+    final pending = _pageLoaded;
+    if (pending != null && !pending.isCompleted) {
+      pending.completeError(
+        const LmsWebSessionException(LmsWebSessionError.network),
+      );
+    }
+  }
+
   Future<void> _reloadRoot() async {
     final loaded = Completer<void>();
     _pageLoaded = loaded;
     final waiting = loaded.future.timeout(const Duration(seconds: 25));
-    await _controller!.loadUrl(
-      urlRequest: URLRequest(url: WebUri(baseUrl.toString())),
-    );
     try {
-      await waiting;
+      // Observe both immediately: a native load-failure callback can arrive
+      // before loadUrl's method-channel Future settles.
+      await Future.wait<void>([
+        waiting,
+        Future<void>.sync(
+          () => _controller!.loadUrl(
+            urlRequest: URLRequest(url: WebUri(baseUrl.toString())),
+          ),
+        ),
+      ], eagerError: true);
     } catch (_) {
       throw const LmsWebSessionException(LmsWebSessionError.network);
     }
@@ -368,10 +657,11 @@ class LmsWebSession extends ChangeNotifier {
     final controller = _controller;
     final uri = (await controller?.getUrl())?.uriValue;
     _checkGeneration(startedGeneration);
-    if (controller == null || uri == null || !policy.isSchoolOrigin(uri)) {
-      throw const LmsWebSessionException(
-        LmsWebSessionError.authenticationRequired,
-      );
+    if (controller == null || uri == null) {
+      throw const LmsWebSessionException(LmsWebSessionError.viewUnavailable);
+    }
+    if (!policy.isSchoolOrigin(uri)) {
+      throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
     }
     final marker = 'daily-lms-${const Uuid().v4()}';
     final result = await controller.callAsyncJavaScript(
@@ -380,6 +670,9 @@ class LmsWebSession extends ChangeNotifier {
       arguments: {'marker': marker},
     );
     final originalName = result?.value;
+    if (result?.error != null) {
+      throw const LmsWebSessionException(LmsWebSessionError.scriptUnavailable);
+    }
     if (originalName is! String) {
       throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
     }
@@ -395,8 +688,10 @@ class LmsWebSession extends ChangeNotifier {
       // close awaits this operation, then clears that exact dedicated store.
       _checkGeneration(startedGeneration);
       if (!_nativeCookieBound) {
-        throw const LmsWebSessionException(LmsWebSessionError.unsupported);
+        throw const LmsWebSessionException(LmsWebSessionError.viewUnavailable);
       }
+    } on PlatformException catch (error) {
+      throw _cookieStoreError(error);
     } finally {
       await controller.callAsyncJavaScript(
         functionBody: 'if (window.name === marker) window.name = previous;',
@@ -479,6 +774,8 @@ class LmsWebSession extends ChangeNotifier {
       });
     }
     if (cookies.isEmpty) {
+      _checkGeneration(startedGeneration);
+      await _discardAuthentication();
       throw const LmsWebSessionException(
         LmsWebSessionError.authenticationRequired,
       );
@@ -525,6 +822,108 @@ class LmsWebSession extends ChangeNotifier {
     }
   }
 
+  /// Uses only the school's publicly verified SSO form; submits credentials once.
+  /// No secrets are interpolated into scripts, URLs, diagnostics or exceptions.
+  Future<bool> loginAutomatically(
+    LmsLocalCredentials credentials, {
+    String? expectedPrincipal,
+  }) async {
+    _checkNotRetired();
+    if (schoolId != 'smu' ||
+        credentials.paused ||
+        _loginVisible ||
+        _automaticLogin ||
+        _authenticationRejectedReason ==
+            LmsAuthenticationReason.rootPrincipalMismatch) {
+      return false;
+    }
+    await _activate();
+    _expectedPrincipal = expectedPrincipal ?? _expectedPrincipal;
+    _automaticLogin = true;
+    _automaticLoginChallenge = false;
+    var stage = 'entry';
+    try {
+      await _startHeadless();
+      await _bindCookieStore();
+      final started = _generation;
+      final loaded = Completer<void>();
+      _pageLoaded = loaded;
+      await Future.wait<void>([
+        loaded.future.timeout(const Duration(seconds: 25)),
+        Future<void>.sync(
+          () => _controller!.loadUrl(
+            urlRequest: URLRequest(url: WebUri(loginUrl.toString())),
+          ),
+        ),
+      ], eagerError: true);
+      final deadline = DateTime.now().add(const Duration(seconds: 30));
+      while (DateTime.now().isBefore(deadline)) {
+        if (_automaticLoginChallenge) return false;
+        _checkGeneration(started);
+        final result = await _controller!
+            .callAsyncJavaScript(
+              functionBody: automaticLoginScript,
+              arguments: {
+                'stage': stage,
+                'username': credentials.username,
+                'password': credentials.password,
+              },
+            )
+            .timeout(const Duration(seconds: 5));
+        _checkGeneration(started);
+        final data = result?.value;
+        if (data is! Map || data['state'] == 'blocked') return false;
+        switch (data['state']) {
+          case 'entrySubmitted':
+            stage = 'sso';
+          case 'credentialsSubmitted':
+            stage = 'submitted';
+          case 'authenticated':
+            return await verifyAuthentication() != null;
+        }
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+      }
+      return false;
+    } on LmsWebSessionException {
+      rethrow;
+    } catch (_) {
+      throw const LmsWebSessionException(LmsWebSessionError.network);
+    } finally {
+      _automaticLogin = false;
+      // Never retain password fields in a failed background login page.
+      if (!isAuthenticated) await close();
+    }
+  }
+
+  @visibleForTesting
+  static const automaticLoginScript =
+      r'''    if (location.protocol !== 'https:' || (location.port && location.port !== '443')) return {state:'blocked'};
+    if (document.readyState !== 'complete') return {state:'waiting'};
+    if (location.hostname === 'ecampus.smu.ac.kr') {
+      if (document.querySelector('a[href*="/user/edit.php?id="]') && !document.querySelector('input[type="password"]')) return {state:'authenticated'};
+      if (stage !== 'entry') return {state:'waiting'};
+      const f = document.querySelector('form.form-sso-login');
+      if (!f || f.method.toLowerCase() !== 'post' || new URL(f.action).origin !== location.origin || new URL(f.action).pathname !== '/exsignon/sso/sso_idp_login.php') return {state:'blocked'};
+      setTimeout(() => f.requestSubmit(), 0);
+      return {state:'entrySubmitted'};
+    }
+    if (location.hostname !== 'smsso.smu.ac.kr') return {state:'blocked'};
+    const f = document.querySelector('form#loginFrm');
+    if (!f) return {state:'waiting'};
+    if (stage === 'submitted') return {state: f.dataset.dailyAutoSubmitted === 'true' ? 'waiting' : 'blocked'};
+    if (stage !== 'sso' || f.method.toLowerCase() !== 'post' || new URL(f.action).origin !== location.origin || new URL(f.action).pathname !== '/Login.do') return {state:'blocked'};
+    const user = f.querySelector('#user_id'), pwd = f.querySelector('#user_password');
+    if (!user || !pwd || pwd.type !== 'password' || typeof window.doLogin !== 'function') return {state:'blocked'};
+    if ([...f.querySelectorAll('input')].some(e => e.getClientRects().length && /captcha|otp|motp/i.test(e.id + ' ' + e.name))) return {state:'blocked'};
+    const remember = document.querySelector('#saveIdIpt');
+    if (remember) remember.checked = false;
+    f.dataset.dailyAutoSubmitted = 'true';
+    user.value = username; pwd.value = password;
+    user.dispatchEvent(new Event('input', {bubbles:true})); pwd.dispatchEvent(new Event('input', {bubbles:true}));
+    setTimeout(() => window.doLogin(), 0);
+    return {state:'credentialsSubmitted'};
+  ''';
+
   /// Called only after the user explicitly opens the login page.
   Future<void> beginLogin() async {
     _checkNotRetired();
@@ -542,6 +941,8 @@ class LmsWebSession extends ChangeNotifier {
     await _activate();
     _checkNotRetired();
     _loginVisible = true;
+    _authenticationRecoveryPending = false;
+    _authenticationRecoveryAttempted = false;
     _expectedPrincipal = null;
     _generation++;
     _notify();
@@ -572,42 +973,78 @@ class LmsWebSession extends ChangeNotifier {
   }
 
   Future<String?> _verifyAuthentication() async {
+    _verifiedDashboard = null;
+    _verifiedDashboardAt = null;
+    _verifiedDashboardGeneration = null;
     final startedGeneration = _generation;
     final controller = _controller;
-    if (controller == null || !identical(_active, this)) return null;
+    if (controller == null) {
+      throw const LmsWebSessionException(LmsWebSessionError.viewUnavailable);
+    }
     _checkGeneration(startedGeneration);
     final at = (await controller.getUrl())?.uriValue;
     _checkGeneration(startedGeneration);
-    if (at == null || !policy.isSchoolOrigin(at)) return null;
+    if (at == null) {
+      throw const LmsWebSessionException(LmsWebSessionError.viewUnavailable);
+    }
+    if (!policy.isSchoolOrigin(at)) {
+      _recordAuthentication(LmsAuthenticationReason.rootOriginChanged);
+      throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
+    }
     await _bindCookieStore();
     _checkGeneration(startedGeneration);
     final value = await controller.callAsyncJavaScript(
       functionBody: '''
-      if (location.origin !== origin) return null;
-      if (document.querySelector('input[type="password"]')) return null;
+      if (location.origin !== origin) return {unexpectedOrigin: true};
+      if (document.querySelector('input[type="password"]')) return {authenticationRequired: true};
       const ids = new Set();
       for (const a of document.querySelectorAll('a[href]')) {
         const u = new URL(a.getAttribute('href'), location.href);
         const id = u.searchParams.get('id');
         if (u.origin === origin && u.pathname === '/user/edit.php' && /^[1-9][0-9]*\$/.test(id || '')) ids.add(id);
       }
-      return ids.size === 1 ? Array.from(ids)[0] : {unrecognized: true};
+      return ids.size === 1 ? {
+        principal: Array.from(ids)[0],
+        url: location.href,
+        dashboard: location.pathname === '/' && !location.search
+          ? document.documentElement.outerHTML : null
+      } : {unrecognized: true};
     ''',
       arguments: {'origin': baseUrl.origin},
     );
     _checkGeneration(startedGeneration);
-    if (value?.error != null) {
+    if (value == null || value.error != null) {
+      _recordAuthentication(LmsAuthenticationReason.rootUnrecognized);
       throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
     }
-    final id = value?.value;
-    if (id is Map && id['unrecognized'] == true) {
-      throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
-    }
-    if (id is! String ||
-        (_expectedPrincipal != null && _expectedPrincipal != id)) {
-      _invalidate();
+    final verified = value.value;
+    final id = verified is Map && verified['principal'] is String
+        ? verified['principal']
+        : verified;
+    if ((id is Map && id['authenticationRequired'] == true) ||
+        (id is String &&
+            _expectedPrincipal != null &&
+            _expectedPrincipal != id)) {
+      _principalId = null;
+      _generation++;
+      _authenticationRejectedGeneration = _generation;
+      _authenticationRejectedReason = id is String
+          ? LmsAuthenticationReason.rootPrincipalMismatch
+          : LmsAuthenticationReason.rootLoginForm;
+      _recordAuthentication(_authenticationRejectedReason!);
+      _notify();
       return null;
     }
+    if (id is! String) {
+      _recordAuthentication(
+        id is Map && id['unexpectedOrigin'] == true
+            ? LmsAuthenticationReason.rootOriginChanged
+            : LmsAuthenticationReason.rootUnrecognized,
+      );
+      throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
+    }
+    _authenticationRejectedGeneration = null;
+    _authenticationRejectedReason = null;
     if (_principalId != id) {
       _principalId = id;
       _generation++;
@@ -620,6 +1057,24 @@ class LmsWebSession extends ChangeNotifier {
       if (!_disposed && authenticatedGeneration == _generation) _invalidate();
       rethrow;
     }
+    // Restoration/login has just loaded this authenticated dashboard. Consume
+    // it once, immediately, instead of fetching the same document again. No
+    // quiz/index data is cached and subsequent reads still validate identity.
+    final snapshotUrl = verified is Map && verified['url'] is String
+        ? Uri.tryParse(verified['url'] as String)
+        : null;
+    final snapshot = verified is Map ? verified['dashboard'] : null;
+    if (snapshotUrl == baseUrl.resolve('/') &&
+        snapshot is String &&
+        snapshot.length <= 4000000 &&
+        policy.principalFromHtml(snapshot) == id &&
+        html.parse(snapshot).querySelector('input[type="password"]') == null) {
+      _verifiedDashboard = LmsHtmlPage(url: snapshotUrl!, html: snapshot);
+      // Verification alone does not make an old DOM a fresh server response.
+      _verifiedDashboardAt = _lastPageLoadedAt;
+      _verifiedDashboardGeneration = _generation;
+    }
+    _recordAuthentication(LmsAuthenticationReason.rootAccepted);
     _notify();
     return id;
   }
@@ -661,16 +1116,30 @@ class LmsWebSession extends ChangeNotifier {
         );
       }
       final startedGeneration = _generation;
+      final snapshot = _verifiedDashboard;
+      final snapshotAt = _verifiedDashboardAt;
+      _verifiedDashboard = null;
+      _verifiedDashboardAt = null;
+      if (uri == baseUrl.resolve('/') &&
+          snapshot != null &&
+          snapshotAt != null &&
+          _verifiedDashboardGeneration == startedGeneration &&
+          DateTime.now().difference(snapshotAt) >= Duration.zero &&
+          DateTime.now().difference(snapshotAt) < const Duration(seconds: 2)) {
+        return snapshot;
+      }
       final result = await _controller!
           .callAsyncJavaScript(
             functionBody: '''
-        if (location.origin !== origin) return {status: 'auth'};
+        if (location.origin !== origin) return {status: 'auth', reason: 'origin'};
         const abort = new AbortController();
         const timer = setTimeout(() => abort.abort(), 20000);
         try {
           const response = await fetch(url, {method: 'GET', credentials: 'same-origin',
             mode: 'same-origin', redirect: 'manual', cache: 'no-store', signal: abort.signal});
-          if (response.type === 'opaqueredirect' || response.status === 401 || response.status === 403) return {status: 'auth'};
+          if (response.type === 'opaqueredirect') return {status: 'auth', reason: 'redirect'};
+          if (response.status === 401) return {status: 'auth', reason: 'unauthorized'};
+          if (response.status === 403) return {status: 'invalid'};
           if (!response.ok) return {status: 'network'};
           if (!(response.headers.get('content-type') || '').toLowerCase().includes('text/html')) return {status: 'invalid'};
           const body = await response.text();
@@ -692,8 +1161,18 @@ class LmsWebSession extends ChangeNotifier {
         throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
       }
       if (data['status'] == 'auth') {
-        _invalidate();
-        await _storage.delete(key: _storageKey);
+        final reason = switch (data['reason']) {
+          'origin' => LmsAuthenticationReason.readOriginChanged,
+          'redirect' => LmsAuthenticationReason.readRedirect,
+          'unauthorized' => LmsAuthenticationReason.readUnauthorized,
+          _ => null,
+        };
+        if (reason == null) {
+          throw const LmsWebSessionException(
+            LmsWebSessionError.invalidResponse,
+          );
+        }
+        await _rejectReadAuthentication(reason);
         throw const LmsWebSessionException(
           LmsWebSessionError.authenticationRequired,
         );
@@ -712,6 +1191,17 @@ class LmsWebSession extends ChangeNotifier {
           source is! String) {
         throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
       }
+      // A quiz access-password prompt is not a revoked school login. Leave
+      // such a detail unresolved without discarding the authenticated session.
+      if (finalUrl.path == '/mod/quiz/view.php') {
+        final document = html.parse(source);
+        if (document.body?.id == 'page-mod-quiz-view' &&
+            document.querySelector('input[type="password"]') != null) {
+          throw const LmsWebSessionException(
+            LmsWebSessionError.invalidResponse,
+          );
+        }
+      }
       final pagePrincipal = policy.principalFromHtml(source);
       if (pagePrincipal == null &&
           html.parse(source).querySelector('input[type="password"]') == null) {
@@ -719,8 +1209,16 @@ class LmsWebSession extends ChangeNotifier {
         throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
       }
       if (pagePrincipal != _principalId) {
-        _invalidate();
-        await _storage.delete(key: _storageKey);
+        if (pagePrincipal == null) {
+          await _rejectReadAuthentication(
+            LmsAuthenticationReason.readLoginForm,
+          );
+        } else {
+          // A different verified user is not an expired cookie. Never restore
+          // or retry a read under that newly observed identity automatically.
+          _recordAuthentication(LmsAuthenticationReason.readPrincipalMismatch);
+          await _discardAuthentication();
+        }
         throw const LmsWebSessionException(
           LmsWebSessionError.authenticationRequired,
         );
@@ -754,15 +1252,21 @@ class LmsWebSession extends ChangeNotifier {
     if (authentication.isEmpty) {
       throw const LmsWebSessionException(LmsWebSessionError.invalidResponse);
     }
-    await _storage.write(
-      key: _storageKey,
-      value: jsonEncode({
-        'owner': ownerId,
-        'school': schoolId,
-        'principal': principal,
-        'cookies': authentication,
-      }),
-    );
+    final encoded = jsonEncode({
+      'owner': ownerId,
+      'school': schoolId,
+      'principal': principal,
+      'cookies': authentication,
+    });
+    // Still inspect live cookies on every authenticated response. Only skip
+    // the secure-store write when this instance has successfully saved the
+    // exact same identity and cookie snapshot; rotations are saved immediately.
+    final fingerprint = sha256.convert(utf8.encode(encoded)).toString();
+    if (fingerprint != _lastPersistedAuthentication) {
+      await _storage.write(key: _storageKey, value: encoded);
+      _checkGeneration(startedGeneration);
+      _lastPersistedAuthentication = fingerprint;
+    }
     _checkGeneration(startedGeneration);
     _expectedPrincipal = principal;
   }
@@ -805,7 +1309,14 @@ class LmsWebSession extends ChangeNotifier {
   }
 
   void _invalidate() {
+    _lastPersistedAuthentication = null;
+    _verifiedDashboard = null;
+    _verifiedDashboardAt = null;
+    _verifiedDashboardGeneration = null;
+    _lastPageLoadedAt = null;
     _principalId = null;
+    _authenticationRejectedGeneration = null;
+    _authenticationRejectedReason = null;
     _generation++;
     _notify();
   }
@@ -819,6 +1330,7 @@ class LmsWebSession extends ChangeNotifier {
       await close();
     } finally {
       _expectedPrincipal = null;
+      _authenticationRecoveryPending = false;
       await _storage.delete(key: _storageKey);
     }
   }
@@ -826,10 +1338,12 @@ class LmsWebSession extends ChangeNotifier {
   Future<void> close() {
     if (_closing != null) return _closing!;
     _invalidate();
+    _recordAuthentication(LmsAuthenticationReason.closed);
     return _closing = _close().whenComplete(() => _closing = null);
   }
 
   Future<void> _close() async {
+    _lastPersistedAuthentication = null;
     try {
       await _preparing;
     } catch (_) {

@@ -122,20 +122,28 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
       },
     );
     final profile = settings.academicProfile;
-    if (profile?.supported != true) {
+    if (profile?.academicSourceId == null) {
       return Scaffold(
         appBar: DailyNavigationBar(title: text(AcademicText.title)),
-        body: const AcademicFeatureGate(child: SizedBox.shrink()),
+        body: const AcademicFeatureGate(
+          calendar: true,
+          child: SizedBox.shrink(),
+        ),
       );
     }
     final service = ref.watch(academicCalendarServiceProvider);
     return ListenableBuilder(
       listenable: service,
       builder: (context, _) {
-        final source = service.sources.firstWhere(
-          (s) => s.id == profile!.academicSourceId,
-          orElse: () => service.sources.first,
-        );
+        final source = service.sources
+            .where((s) => s.id == profile!.academicSourceId)
+            .firstOrNull;
+        if (source == null) {
+          return Scaffold(
+            appBar: DailyNavigationBar(title: text(AcademicText.title)),
+            body: Center(child: Text(text(AcademicText.unavailable))),
+          );
+        }
         final preview = _preview;
         final currentPreview =
             preview != null &&

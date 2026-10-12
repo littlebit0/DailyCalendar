@@ -1,0 +1,4724 @@
+{
+  "schemaVersion": 2,
+  "universityId": "wsu",
+  "campus": "unknown",
+  "campusName": "캠퍼스 미표기",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-07-21",
+  "sourceUrl": "https://sires.wsu.ac.kr/board/read.jsp?id=268255&code=sires0401",
+  "sourceAttachmentUrl": "https://sires.wsu.ac.kr/board/download.jsp?file=WzJdRUNJUy5TSVMgRmFsbCBzZW1lc3RlcigyMDI2LjA3LjE2KS54bHN4&ek=7423eb61f47025d87e20126267d9d8f0&id=292541",
+  "courses": [
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row2",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "Sol-Vision1",
+      "professor": "AI빅데이터",
+      "credits": null,
+      "sourceSchedule": " ",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Orientation; 대상: Freshmen Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row3",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "Sol-Vision1",
+      "professor": "AI 경영",
+      "credits": null,
+      "sourceSchedule": " ",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Orientation; 대상: Freshmen Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row4",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "Sol-Vision1",
+      "professor": "글미영",
+      "credits": null,
+      "sourceSchedule": " ",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Orientation; 대상: Freshmen Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row5",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "Sol-Vision1",
+      "professor": "글호",
+      "credits": null,
+      "sourceSchedule": " ",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Orientation; 대상: Freshmen Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row6",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "Sol-Vision1",
+      "professor": "글조",
+      "credits": null,
+      "sourceSchedule": " ",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Orientation; 대상: Freshmen Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row7",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "006",
+      "courseName": "Sol-Vision1",
+      "professor": "글외경",
+      "credits": null,
+      "sourceSchedule": " ",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Orientation; 대상: Freshmen Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row8",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "Sol-Vision2",
+      "professor": "윤형봉(AI 빅데이터)",
+      "credits": null,
+      "sourceSchedule": "수 13:00~14:00",
+      "sourceClassroom": "W110",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "W110"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row9",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "Sol-Vision2",
+      "professor": "윤형봉(AI 빅데이터)",
+      "credits": null,
+      "sourceSchedule": "수 15:00~16:00",
+      "sourceClassroom": "W110",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "W110"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row10",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "Sol-Vision2",
+      "professor": "김형태(AI 경영)",
+      "credits": null,
+      "sourceSchedule": "금 11:00~12:00",
+      "sourceClassroom": "W7 313",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "W7 313"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row11",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "Sol-Vision2",
+      "professor": "이상복 (AI 경영)",
+      "credits": null,
+      "sourceSchedule": "금 11:00~12:00",
+      "sourceClassroom": "W7 311",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "W7 311"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row12",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "Sol-Vision2",
+      "professor": "이정택(글미영)",
+      "credits": null,
+      "sourceSchedule": "수 11:00~12:00",
+      "sourceClassroom": "W16 202",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "W16 202"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row13",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "006",
+      "courseName": "Sol-Vision2",
+      "professor": "이민주(글호)",
+      "credits": null,
+      "sourceSchedule": "월 13:00~14:00",
+      "sourceClassroom": "W16 501-2",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "W16 501-2"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row14",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "007",
+      "courseName": "Sol-Vision2",
+      "professor": "김용우 (글철)",
+      "credits": null,
+      "sourceSchedule": "화 17:00~18:00",
+      "sourceClassroom": "W16 406",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": "W16 406"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row15",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "008",
+      "courseName": "Sol-Vision2",
+      "professor": "장윤정(글조)",
+      "credits": null,
+      "sourceSchedule": "수 14:00-15:00",
+      "sourceClassroom": "W12 503",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "W12 503"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row16",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "009",
+      "courseName": "Sol-Vision2",
+      "professor": "장윤정(글조)",
+      "credits": null,
+      "sourceSchedule": "수 15:00-16:00",
+      "sourceClassroom": " W12 503",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " W12 503"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row17",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "010",
+      "courseName": "Sol-Vision2",
+      "professor": "장윤정(글외경)",
+      "credits": null,
+      "sourceSchedule": "화 14:00-15:00",
+      "sourceClassroom": "W12 503",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "W12 503"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row18",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "011",
+      "courseName": "Sol-Vision2",
+      "professor": "Pinaki Dutta",
+      "credits": null,
+      "sourceSchedule": "9월 04일, \n9월 11일, \n9월 18일, \n10월 02일, \n11월 27일  09:00~12:00",
+      "sourceClassroom": "W12 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 7,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 7,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 7,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 7,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        },
+        {
+          "weekday": 7,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W12 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row19",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "BasicKorean1",
+      "professor": "유기윤",
+      "credits": null,
+      "sourceSchedule": "월,수 13:00~14:30",
+      "sourceClassroom": "W6 408",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W6 408"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W6 408"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row20",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "BasicKorean1",
+      "professor": "김인영",
+      "credits": null,
+      "sourceSchedule": "화,목 13:00~14:30",
+      "sourceClassroom": "W6 410",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W6 410"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W6 410"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row21",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "BasicKorean1",
+      "professor": "Adam Goldsmith",
+      "credits": null,
+      "sourceSchedule": "월,수 13:00~14:30",
+      "sourceClassroom": "W19 106",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 106"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 106"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row22",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "BasicKorean1",
+      "professor": "Sean Denny",
+      "credits": null,
+      "sourceSchedule": "화,목 13:00~14:30",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 105"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row23",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "BasicKorean1",
+      "professor": "Ruth Hong",
+      "credits": null,
+      "sourceSchedule": "월,수 13:00~14:30",
+      "sourceClassroom": "W12 103",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W12 103"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W12 103"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row24",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "006",
+      "courseName": "BasicKorean1",
+      "professor": "Ruth Hong",
+      "credits": null,
+      "sourceSchedule": "화,목 13:00~14:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W16 505"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row25",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "007",
+      "courseName": "BasicKorean1",
+      "professor": "김성아",
+      "credits": null,
+      "sourceSchedule": "월,수 13:00~14:30",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 105"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row26",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "008",
+      "courseName": "BasicKorean1",
+      "professor": "Adam Goldsmith",
+      "credits": null,
+      "sourceSchedule": "화,목 13:00~14:30",
+      "sourceClassroom": "W19 108",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 108"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W19 108"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row27",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "BasicKorean2",
+      "professor": "이유진",
+      "credits": null,
+      "sourceSchedule": "월,수 09:00~10:30",
+      "sourceClassroom": "W6, 407",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W6, 407"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W6, 407"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row28",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "BasicKorean2",
+      "professor": "이지은",
+      "credits": null,
+      "sourceSchedule": "화,목 15:00~16:30",
+      "sourceClassroom": "W6, 408",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": "W6, 408"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": "W6, 408"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row29",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "BasicKorean2",
+      "professor": "김성아",
+      "credits": null,
+      "sourceSchedule": "월,수 15:00~16:30",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": "W19 105"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row30",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "BasicKorean2",
+      "professor": "이지은",
+      "credits": null,
+      "sourceSchedule": "화,목 16:30~18:00",
+      "sourceClassroom": "W6 408",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": "W6 408"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": "W6 408"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row31",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "BasicKorean2",
+      "professor": "김성아",
+      "credits": null,
+      "sourceSchedule": "금 09:00~12:00",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row32",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "006",
+      "courseName": "BasicKorean2",
+      "professor": "이두환",
+      "credits": null,
+      "sourceSchedule": "월,수 16:00~17:30",
+      "sourceClassroom": "W6 404",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1050,
+          "classroom": "W6 404"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1050,
+          "classroom": "W6 404"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row33",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "007",
+      "courseName": "BasicKorean2",
+      "professor": "한국어 교육원",
+      "credits": null,
+      "sourceSchedule": "화,목 16:30~18:00",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": "W19 105"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row34",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "008",
+      "courseName": "BasicKorean2",
+      "professor": "한국어 교육원",
+      "credits": null,
+      "sourceSchedule": "금 09:00~12:00",
+      "sourceClassroom": "W16 202",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W16 202"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row35",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "AdvancedKorean",
+      "professor": "박소연",
+      "credits": null,
+      "sourceSchedule": "화,목 13:00~14:30",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W16 502"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row36",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "AdvancedKorean",
+      "professor": "한국어 교육원",
+      "credits": null,
+      "sourceSchedule": "월,수 13:00~14:30",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W16 502"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 870,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / International Students; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row37",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "LivinginKorea",
+      "professor": "Sean Denny",
+      "credits": null,
+      "sourceSchedule": "금 13:00~15:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "W16 402"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row38",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "LivinginKorea",
+      "professor": "Valentin Tassev",
+      "credits": null,
+      "sourceSchedule": "금 13:00~15:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row39",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "LivinginKorea",
+      "professor": "Paul Lee",
+      "credits": null,
+      "sourceSchedule": "금 13:00~15:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row40",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "LivinginKorea",
+      "professor": "Grace Kim",
+      "credits": null,
+      "sourceSchedule": "금 13:00~15:00",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row41",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "LivinginKorea",
+      "professor": "James Leach",
+      "credits": null,
+      "sourceSchedule": "금 13:00~15:00",
+      "sourceClassroom": "W19 108",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "W19 108"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row42",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoKoreanPopularCulture1",
+      "professor": "Sean Denny",
+      "credits": null,
+      "sourceSchedule": "월  16:30~18:30",
+      "sourceClassroom": "W19 109",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W19 109"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row43",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "IntroductiontoKoreanPopularCulture1",
+      "professor": "Sean Denny",
+      "credits": null,
+      "sourceSchedule": "수 14:30~16:30",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row44",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "IntroductiontoKoreanPopularCulture1",
+      "professor": "Sean Denny",
+      "credits": null,
+      "sourceSchedule": "수 16:30~18:30",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row45",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoKoreanPopularCulture2",
+      "professor": "Sean Denny",
+      "credits": null,
+      "sourceSchedule": "목 16:30~18:30",
+      "sourceClassroom": "W16 406",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 406"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row46",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "IntroductiontoKoreanPopularCulture2",
+      "professor": "Sean Denny",
+      "credits": null,
+      "sourceSchedule": "화 16:30~18:30",
+      "sourceClassroom": "W16 202",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 202"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row47",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "AIEPCommunication2",
+      "professor": "Aisara Nauryzbayeva",
+      "credits": null,
+      "sourceSchedule": "월 14:30~16:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row48",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "AIEPCommunication2",
+      "professor": "Aisara Nauryzbayeva",
+      "credits": null,
+      "sourceSchedule": "화 14:30~16:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row49",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "AIEPCommunication2",
+      "professor": "Elizabeth White",
+      "credits": null,
+      "sourceSchedule": "수 14:30~16:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row50",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "AIEPCommunication2",
+      "professor": "Aisara Nauryzbayeva",
+      "credits": null,
+      "sourceSchedule": "목 14:30~16:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row51",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "AIEPCommunication2",
+      "professor": "James Leach",
+      "credits": null,
+      "sourceSchedule": "금 15:00~17:00",
+      "sourceClassroom": "W16 501-2",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "W16 501-2"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row52",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "006",
+      "courseName": "AIEPCommunication2",
+      "professor": "James Leach",
+      "credits": null,
+      "sourceSchedule": "월 14:30~16:30",
+      "sourceClassroom": "W16 501-2",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 501-2"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row53",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "007",
+      "courseName": "AIEPCommunication2",
+      "professor": "James Leach",
+      "credits": null,
+      "sourceSchedule": "화 14:30~16:30",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row54",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "008",
+      "courseName": "AIEPCommunication2",
+      "professor": "Kyung A Hong",
+      "credits": null,
+      "sourceSchedule": "수 14:30~16:30",
+      "sourceClassroom": "W16 501-2",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 501-2"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row55",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "009",
+      "courseName": "AIEPCommunication2",
+      "professor": "James Leach",
+      "credits": null,
+      "sourceSchedule": "목 14:30~16:30",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 990,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row56",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "010",
+      "courseName": "AIEPCommunication2",
+      "professor": "Kyung A Hong",
+      "credits": null,
+      "sourceSchedule": "금 15:00~17:00",
+      "sourceClassroom": "W16 201",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "W16 201"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: Freshmen Only / International Students; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row57",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "AIEPIntensiveEnglish2",
+      "professor": "Kyung A Hong",
+      "credits": null,
+      "sourceSchedule": "월 13:00~16:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "W16 402"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row58",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "AIEPIntensiveEnglish2",
+      "professor": "Kyung A Hong",
+      "credits": null,
+      "sourceSchedule": "화 13:00~16:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "W16 402"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row59",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "AIEPIntensiveEnglish3",
+      "professor": "Grace Kim",
+      "credits": null,
+      "sourceSchedule": "월 13:00~16:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row60",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "AIEPIntensiveEnglish3",
+      "professor": "Grace Kim",
+      "credits": null,
+      "sourceSchedule": "화 13:00~16:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row61",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "AIEPIntensiveEnglish3",
+      "professor": "Simon Cooke",
+      "credits": null,
+      "sourceSchedule": "수 13:00~16:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row62",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "AIEPIntensiveEnglish3",
+      "professor": "Simon Cooke",
+      "credits": null,
+      "sourceSchedule": "목 13:00~16:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row63",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "AIEPIntensiveEnglish3",
+      "professor": "Grace Kim",
+      "credits": null,
+      "sourceSchedule": "금 09:00~12:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row64",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "AcademicReadingandWriting",
+      "professor": "Erik Goodale",
+      "credits": null,
+      "sourceSchedule": "금 09:00~12:00",
+      "sourceClassroom": "W16 201",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "W16 201"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row65",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "EnglishPronunciation1",
+      "professor": "Erik Goodale",
+      "credits": null,
+      "sourceSchedule": "월 16:30~18:30",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 402"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row66",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "EnglishPronunciation1",
+      "professor": "Erik Goodale",
+      "credits": null,
+      "sourceSchedule": "화 16:30~18:30",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 402"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row67",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "EnglishPronunciation2",
+      "professor": "Jennifer Spiegel",
+      "credits": null,
+      "sourceSchedule": "월 16:30~18:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row68",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "EnglishPronunciation2",
+      "professor": "Simon Cooke",
+      "credits": null,
+      "sourceSchedule": "화 16:30~18:30",
+      "sourceClassroom": "W16 201",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 201"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row69",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "EnglishPronunciation2",
+      "professor": "Jennifer Spiegel",
+      "credits": null,
+      "sourceSchedule": "금 16:00~18:00",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row70",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "EnglishPronunciation2",
+      "professor": "James Leach",
+      "credits": null,
+      "sourceSchedule": "월 16:30~18:30",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row71",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "EnglishPronunciation2",
+      "professor": "James Leach",
+      "credits": null,
+      "sourceSchedule": "화 16:30~18:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1110,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row72",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "PresentationSkills1",
+      "professor": "Valentin Tassev",
+      "credits": null,
+      "sourceSchedule": "수 16:00~18:00",
+      "sourceClassroom": "W16 501-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 501-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row73",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "PresentationSkills1",
+      "professor": "Valentin Tassev",
+      "credits": null,
+      "sourceSchedule": "목 16:00~18:00",
+      "sourceClassroom": "W16 501-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 501-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row74",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "PresentationSkills1",
+      "professor": "Valentin Tassev",
+      "credits": null,
+      "sourceSchedule": "월 16:00~18:00",
+      "sourceClassroom": "W16 202",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 202"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row75",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "PresentationSkills1",
+      "professor": "Valentin Tassev",
+      "credits": null,
+      "sourceSchedule": "금 10:00~12:00",
+      "sourceClassroom": "W19 108",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W19 108"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row76",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "PresentationSkills2",
+      "professor": "Chad Hardy",
+      "credits": null,
+      "sourceSchedule": "금 16:00~18:00",
+      "sourceClassroom": "W16 501-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 501-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row77",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "PresentationSkills2",
+      "professor": "Chad Hardy",
+      "credits": null,
+      "sourceSchedule": "월 16:00~18:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row78",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "003",
+      "courseName": "PresentationSkills2",
+      "professor": "Grace Kim",
+      "credits": null,
+      "sourceSchedule": "수 16:00~18:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 46038; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "Week 셀의 Excel 날짜값 46038를 주차 범위로 추정하지 않음"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row79",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "004",
+      "courseName": "PresentationSkills2",
+      "professor": "Erik Goodale",
+      "credits": null,
+      "sourceSchedule": "목 16:00~18:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 46038; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "Week 셀의 Excel 날짜값 46038를 주차 범위로 추정하지 않음"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row80",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "005",
+      "courseName": "PresentationSkills2",
+      "professor": "Erik Goodale",
+      "credits": null,
+      "sourceSchedule": "금 16:00~18:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 46038; 수업방식: Face-to-Face; 대상: 1st year Only / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "Week 셀의 Excel 날짜값 46038를 주차 범위로 추정하지 않음"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row81",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "ListeningandSpeaking",
+      "professor": "Amanda Beers",
+      "credits": null,
+      "sourceSchedule": "화 15:00~18:00",
+      "sourceClassroom": "W19 102",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1080,
+          "classroom": "W19 102"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row82",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "ListeningandSpeaking",
+      "professor": "Amanda Beers",
+      "credits": null,
+      "sourceSchedule": "수 15:00~18:00",
+      "sourceClassroom": "W19 102",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1080,
+          "classroom": "W19 102"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row83",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "Storytelling1",
+      "professor": "Nataly Karikian",
+      "credits": null,
+      "sourceSchedule": "목 16:00~18:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row84",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "Storytelling1",
+      "professor": "Nataly Karikian",
+      "credits": null,
+      "sourceSchedule": "금 16:00~18:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Korean Only; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row85",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "Storytelling2",
+      "professor": "Kyung A Hong",
+      "credits": null,
+      "sourceSchedule": "월 16:00~18:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row86",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "Storytelling2",
+      "professor": "Kyung A Hong",
+      "credits": null,
+      "sourceSchedule": "화 16:00~18:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row87",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "WorldReligions",
+      "professor": "Simon Meade-Palmer",
+      "credits": null,
+      "sourceSchedule": "수 16:00~18:00",
+      "sourceClassroom": "W19 109",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W19 109"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row88",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "WorldReligions",
+      "professor": "Simon Meade-Palmer",
+      "credits": null,
+      "sourceSchedule": "금 16:00~18:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 1st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row89",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "UserExperienceDesignandDevelopment (ComputerGraphics&UXDesign)",
+      "professor": "이주원",
+      "credits": null,
+      "sourceSchedule": "목 15:00~16:30",
+      "sourceClassroom": "W6 310",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row90",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoLiterature",
+      "professor": "Betina Sue Jones",
+      "credits": null,
+      "sourceSchedule": "화 10:30~12:00",
+      "sourceClassroom": "W6 105",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row91",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "InterpersonalCommunication",
+      "professor": "Claire Louise Hypolite",
+      "credits": null,
+      "sourceSchedule": "수 09:00~10:30",
+      "sourceClassroom": "W6 105",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row92",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "EnvironmentalEthics",
+      "professor": "Kalu Ibe Ekpeghere",
+      "credits": null,
+      "sourceSchedule": "화 13:00~14:00",
+      "sourceClassroom": "W6 301",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row93",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "PositiveBalanceandMentalHealth",
+      "professor": "Hyong Joseph Chon",
+      "credits": null,
+      "sourceSchedule": "월 13:00~14:30",
+      "sourceClassroom": "W6 310",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row94",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "WritingandReasoning",
+      "professor": "Maria Wanjugu Mutitul",
+      "credits": null,
+      "sourceSchedule": "월 10:30~12:00",
+      "sourceClassroom": "W6 405",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row95",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "Diversity&GlobalCitizenship",
+      "professor": "Sean David Denny",
+      "credits": null,
+      "sourceSchedule": "월 13:00~14:30",
+      "sourceClassroom": "W6 407",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row96",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "DesignThinkingProcess",
+      "professor": "Ryan Andrew Kozbia",
+      "credits": null,
+      "sourceSchedule": "수 15:00~16:30",
+      "sourceClassroom": "W6 406",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Hybrid (1 hour Face-to-Face, 1 hour Online); 대상: 1st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "원문은 대면1시간/온라인1시간 병행이며 게시된 시각의 실제 운영 구분을 추가 확인해야 함"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row97",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "AIEPLanguageLab",
+      "professor": "Simon Cooke",
+      "credits": null,
+      "sourceSchedule": "화 08:00~09:00",
+      "sourceClassroom": "W19 502",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 46038; 수업방식: Assignment & Participation; 대상: 1st year / Korean Only; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "Week 셀의 Excel 날짜값 46038를 주차 범위로 추정하지 않음"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row98",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "AIEPLanguageLab",
+      "professor": "Kyung A Hong",
+      "credits": null,
+      "sourceSchedule": "화 08:00~09:00",
+      "sourceClassroom": "W19 505",
+      "scheduleStatus": "unrecognized",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 46038; 수업방식: Assignment & Participation; 대상: 1st year / Korean Only; 원문 hour: 1(학점으로 변환하지 않음).",
+      "unresolvedReasons": [
+        "Week 셀의 Excel 날짜값 46038를 주차 범위로 추정하지 않음"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row99",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "BasicComputerLiteracy",
+      "professor": "Simon Cooke",
+      "credits": null,
+      "sourceSchedule": "월,수 09:00~10:30",
+      "sourceClassroom": "W19 101",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W19 101"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W19 101"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row100",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "BasicComputerLiteracy",
+      "professor": "Simon Cooke",
+      "credits": null,
+      "sourceSchedule": "화,목 09:00~10:30",
+      "sourceClassroom": "W19 101",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W19 101"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W19 101"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row101",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "CreativeIdeasforStartUp",
+      "professor": "Nicholas Bell",
+      "credits": null,
+      "sourceSchedule": "월 10:00~12:00",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row102",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "CreativeIdeasforStartUp",
+      "professor": "Nicholas Bell",
+      "credits": null,
+      "sourceSchedule": "화 10:00~12:00",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row103",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "CreativeProblemSolving",
+      "professor": "Nicholas Bell",
+      "credits": null,
+      "sourceSchedule": "수 10:00~12:00",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row104",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "CreativeProblemSolving",
+      "professor": "Nicholas Bell",
+      "credits": null,
+      "sourceSchedule": "목 10:00~12:00",
+      "sourceClassroom": "W19 105",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W19 105"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row105",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "CriticalThinkinginDiscussion",
+      "professor": "Chad Hardy",
+      "credits": null,
+      "sourceSchedule": "금 10:00~12:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row106",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "CriticalThinkinginDiscussion",
+      "professor": "Chad Hardy",
+      "credits": null,
+      "sourceSchedule": "금 13:00~15:00",
+      "sourceClassroom": "W19 109",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "W19 109"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row107",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "GlobalIssuesandDiscourse",
+      "professor": "Simon Meade-Palmer",
+      "credits": null,
+      "sourceSchedule": "월 10:00~12:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row108",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "GlobalIssuesandDiscourse",
+      "professor": "Erik Goodale",
+      "credits": null,
+      "sourceSchedule": "화 10:00~12:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row109",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "GlobalLeadership",
+      "professor": "Janice Lee",
+      "credits": null,
+      "sourceSchedule": "수 10:00~12:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row110",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "GlobalLeadership",
+      "professor": "Janice Lee",
+      "credits": null,
+      "sourceSchedule": "목 10:00~12:00",
+      "sourceClassroom": "W16 502",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W16 502"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row111",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "GlobalWorkplaceReadiness",
+      "professor": "Aisara Nauryzbayeva",
+      "credits": null,
+      "sourceSchedule": "월 10:00~12:00",
+      "sourceClassroom": "W16 201",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "W16 201"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row112",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "GlobalWorkplaceReadiness",
+      "professor": "Valentin Tassev",
+      "credits": null,
+      "sourceSchedule": "금 15:00~17:00",
+      "sourceClassroom": "W19 109",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "W19 109"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 2(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row113",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoAnthropology",
+      "professor": "Elizabeth White",
+      "credits": null,
+      "sourceSchedule": "화,목 09:00~10:30",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W16 505"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row114",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoFilmsStudies",
+      "professor": "Chad Hardy",
+      "credits": null,
+      "sourceSchedule": "화,목 10:30~12:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 402"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 402"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row115",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "IntroductiontoFilmsStudies",
+      "professor": "Chad Hardy",
+      "credits": null,
+      "sourceSchedule": "월,수 10:30~12:00",
+      "sourceClassroom": "W16 402",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 402"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 402"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row116",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoPhilosophy",
+      "professor": "Colin Thompson",
+      "credits": null,
+      "sourceSchedule": "월,수 10:30~12:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 404-1"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row117",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "IntroductiontoPhilosophy",
+      "professor": "Colin Thompson",
+      "credits": null,
+      "sourceSchedule": "화,목 10:30~12:00",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 404-1"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row118",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoPsychology",
+      "professor": "Amanda Beers",
+      "credits": null,
+      "sourceSchedule": "월,수 10:30~12:00",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 505"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row119",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "IntroductiontoPsychology",
+      "professor": "Amanda Beers",
+      "credits": null,
+      "sourceSchedule": "화,목 10:30~12:00",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 505"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "W16 505"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row120",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "IntroductiontoSociology",
+      "professor": "Kelber Tozini",
+      "credits": null,
+      "sourceSchedule": "월,수 09:00~10:30",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W16 404-1"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row121",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "001",
+      "courseName": "WorldHistory",
+      "professor": "Ahmet Eren",
+      "credits": null,
+      "sourceSchedule": "월금 09:00~10:30/10:30~12:00",
+      "sourceClassroom": "W16 505",
+      "scheduleStatus": "unscheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    },
+    {
+      "sourceId": "wsu-sires-public292541-sheet1-row122",
+      "referenceKind": "공식 공개 문서 행 위치(공식 과목코드 아님)",
+      "canonicalSubjectCodePublished": false,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "section": "002",
+      "courseName": "WorldHistory",
+      "professor": "Ahmet Eren",
+      "credits": null,
+      "sourceSchedule": "화,목 09:00~10:30",
+      "sourceClassroom": "W16 404-1",
+      "scheduleStatus": "scheduled",
+      "departments": [],
+      "departmentClassifications": {},
+      "departmentCredits": {},
+      "departmentRemarks": {},
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W16 404-1"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "W16 404-1"
+        }
+      ],
+      "remarks": "공식 ECIS·SIS 2026-2 교양 목록. Week: 1-16; 수업방식: Face-to-Face; 대상: 2st year / Both; 원문 hour: 3(학점으로 변환하지 않음).",
+      "unresolvedReasons": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "classification": "교양",
+      "universityId": "wsu",
+      "campusName": "캠퍼스 미표기"
+    }
+  ],
+  "completionClaim": false,
+  "sourceSha256": "c2d9758ab46ff69310dfc5ec9f5313008a9d94e90465cd05ae3e4105a1fa04ed",
+  "sourceRowCount": 121,
+  "sourceNotice": "공식 ECIS·SIS 교양 개설 목록입니다. 과목코드·학점 미표기 및 시간 미확인 항목은 원문 상태를 유지합니다.",
+  "periodEvidence": {
+    "start": "2026-09-01",
+    "end": "2026-12-14",
+    "sourceUrl": "https://www.wsu.ac.kr/page/haksa_list.jsp",
+    "sourceSha256": "e21bd61f3e289fd4eba72fd6560a84672f0743d84938d6edba7842beb543668e",
+    "scope": "학부 2학기 개강~정규 종강. 12월15~18일 보강은 주간 반복에 임의 추가하지 않음. 원문 주차값과 수업방식은 remarks에 보존."
+  }
+}

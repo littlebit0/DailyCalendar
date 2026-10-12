@@ -1,0 +1,661 @@
+{
+  "payload": {
+    "records": [
+      {
+        "page": 100,
+        "department": "교양필수",
+        "codeSection": "910021-01",
+        "name": "English2",
+        "creditsCapacity": "2(20)",
+        "classification": "교필",
+        "grade": null,
+        "target": "자격인정반",
+        "professors": [
+          "교무처장"
+        ],
+        "meetings": [],
+        "notes": "* 본 강좌 수강신청자는 개강 첫 주에 공인인증 \n시험기관에서 실시, 발행한 성적표를 학사관리\n과 수업계로 제출\n* 12쪽~13쪽 참조",
+        "sourceRows": [
+          [
+            null,
+            "교필",
+            "자격인정반",
+            "910021-01",
+            "English2",
+            "2(20)",
+            "교무처장",
+            null,
+            null
+          ]
+        ]
+      },
+      {
+        "page": 113,
+        "department": "교양4영역",
+        "codeSection": "950031-01",
+        "name": "쉽게배우는맛보기태권도",
+        "creditsCapacity": "3(100)",
+        "classification": "교선",
+        "grade": "1",
+        "target": "",
+        "professors": [
+          "김중헌"
+        ],
+        "meetings": [],
+        "notes": "* 태권도 전공생 제외(태권도학과, 경호학과 태권도)",
+        "sourceRows": [
+          [
+            "1",
+            "교선",
+            "950031-01",
+            "쉽게배우는맛보기태권도",
+            "3(100)",
+            "김중헌",
+            null
+          ],
+          [
+            null,
+            null,
+            "* 태권도 전공생 제외(태권도학과, 경호학과 태권도)",
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      {
+        "page": 117,
+        "department": "교양6영역",
+        "codeSection": "M00001-01",
+        "name": "사이버보안이해및예방",
+        "creditsCapacity": "3(100)",
+        "classification": "교선",
+        "grade": "1",
+        "target": "",
+        "professors": [
+          "매치업"
+        ],
+        "meetings": [],
+        "notes": "* 수업 관련 문의(031-8020-3378)\n* 모의해킹, 보안과제, 취약점진단, 정보보호컨설팅\n* 수강 완료 학생 이수증 및 디지털 배지 발급\n* Pass/Fail 교과목\n1~8주차는 영상(원격) 강의\n9~15주차는 실습(대면)으로 진행(토요일 또는\n주중 교육생 요구에 따라 추후 결정)\n자세한 사항은 2월 중순 이후\nK-MOOC(https://www.kmooc.kr/) > 보안관제\n기초과정 , 모의해킹 기초과정, 취약점 진단\n기초과정, 정보보호컨설팅 기초과정 중 1 click\n> 공지사항 클릭 후 커리큘럼 등 내용 확인.\n* 수업 관련 문의(031-8020-3378)",
+        "sourceRows": [
+          [
+            "1",
+            "교선",
+            "M00001-01",
+            "사이버보안이해및예방",
+            "3(100)",
+            "매치업",
+            "1~8주차는 영상(원격) 강의\n9~15주차는 실습(대면)으로 진행(토요일 또는\n주중 교육생 요구에 따라 추후 결정)\n자세한 사항은 2월 중순 이후\nK-MOOC(https://www.kmooc.kr/) > 보안관제\n기초과정 , 모의해킹 기초과정, 취약점 진단\n기초과정, 정보보호컨설팅 기초과정 중 1 click\n> 공지사항 클릭 후 커리큘럼 등 내용 확인.\n* 수업 관련 문의(031-8020-3378)"
+          ],
+          [
+            null,
+            null,
+            "* 모의해킹, 보안과제, 취약점진단, 정보보호컨설팅\n* 수강 완료 학생 이수증 및 디지털 배지 발급\n* Pass/Fail 교과목",
+            null,
+            null,
+            null,
+            null
+          ]
+        ]
+      },
+      {
+        "page": 129,
+        "department": "무도학과",
+        "codeSection": "120003-11",
+        "name": "경기예절및경기방법이해(검도)",
+        "creditsCapacity": "3(50)",
+        "classification": "전공",
+        "grade": "1",
+        "target": "",
+        "professors": [
+          "김영학",
+          "김형룡"
+        ],
+        "meetings": [
+          {
+            "rawTime": "월13:05-14:30",
+            "rawRoom": "종-13107(검도실기장)"
+          },
+          {
+            "rawTime": "화13:05-14:30",
+            "rawRoom": "종-13107(검도실기장)"
+          }
+        ],
+        "notes": "",
+        "sourceRows": [
+          [
+            "1",
+            "전공",
+            "120003-11",
+            "경기예절및경기방법이해(검도)",
+            "3(50)",
+            "김영학",
+            "월13:05-14:30",
+            "종-13107(검도실기장)"
+          ],
+          [
+            null,
+            null,
+            null,
+            null,
+            null,
+            "김형룡",
+            "화13:05-14:30",
+            "종-13107(검도실기장)"
+          ]
+        ]
+      },
+      {
+        "page": 139,
+        "department": "스포츠레저학과",
+        "codeSection": "200185-21",
+        "name": "운동심리학",
+        "creditsCapacity": "3(50)",
+        "classification": "전공",
+        "grade": null,
+        "target": "",
+        "professors": [
+          "김의진"
+        ],
+        "meetings": [
+          {
+            "rawTime": "목09:25-12:10",
+            "rawRoom": ""
+          }
+        ],
+        "notes": "",
+        "sourceRows": [
+          [
+            null,
+            "전공",
+            "200185-21",
+            "운동심리학",
+            "3(50)",
+            "김의진",
+            "목09:25-12:10",
+            null
+          ]
+        ]
+      },
+      {
+        "page": 143,
+        "department": "골프학부-골프",
+        "codeSection": "250073-68",
+        "name": "라운드실전실습심화",
+        "creditsCapacity": "3(50)",
+        "classification": "전공",
+        "grade": null,
+        "target": "",
+        "professors": [
+          "권민진"
+        ],
+        "meetings": [
+          {
+            "rawTime": "화16:35-19:15",
+            "rawRoom": "골-14201(골프연습장)"
+          }
+        ],
+        "notes": "* 집중수업",
+        "sourceRows": [
+          [
+            null,
+            "전공",
+            "250073-68 라운드실전실습심화\n* 집중수업",
+            null,
+            "3(50)",
+            "권민진",
+            "화16:35-19:15",
+            "골-14201(골프연습장)"
+          ]
+        ]
+      },
+      {
+        "page": 145,
+        "department": "골프학과",
+        "codeSection": "250051-28",
+        "name": "코스심화공략",
+        "creditsCapacity": "3(50)",
+        "classification": "전공",
+        "grade": null,
+        "target": "",
+        "professors": [
+          "조병철"
+        ],
+        "meetings": [],
+        "notes": "* 집중수업",
+        "sourceRows": [
+          [
+            null,
+            "전공",
+            "250051-28 코스심화공략\n* 집중수업",
+            null,
+            "3(50)",
+            "조병철",
+            "",
+            "골-14201(골프연습장)"
+          ]
+        ]
+      },
+      {
+        "page": 169,
+        "department": "AI융합학부",
+        "codeSection": "550161-72",
+        "name": "컴퓨터구조",
+        "creditsCapacity": "3(40)",
+        "classification": "전공",
+        "grade": "2",
+        "target": "",
+        "professors": [
+          "조문기"
+        ],
+        "meetings": [
+          {
+            "rawTime": "금13:35-16:30",
+            "rawRoom": "용오름-7209(WMS실습실)"
+          }
+        ],
+        "notes": "",
+        "sourceRows": [
+          [
+            "2",
+            "전공",
+            "550161-72",
+            "컴퓨터구조",
+            "3(40)",
+            "조문기",
+            "금13:35-16:30",
+            "용오름-7209(WMS실습실)"
+          ]
+        ]
+      }
+    ],
+    "remote": [
+      {
+        "sequence": 1,
+        "rawCode": "W00461A01",
+        "name": "몸매만들기와보디빌딩",
+        "classification": "교양선택(4영역)",
+        "credits": 3,
+        "professor": "이한경",
+        "notes": "\n용인대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 2,
+        "rawCode": "W00525A01",
+        "name": "100세시대를위한운동과영양",
+        "classification": "교양선택(4영역)",
+        "credits": 3,
+        "professor": "오태웅",
+        "notes": "\n용인대 ● ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 3,
+        "rawCode": "W00669A01",
+        "name": "호신술과자기방어",
+        "classification": "교양선택(4영역)",
+        "credits": 3,
+        "professor": "박준석",
+        "notes": "\n용인대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 4,
+        "rawCode": "W00012A01",
+        "name": "예제로배우는C언어",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "권기태",
+        "notes": "\n강릉원주대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 5,
+        "rawCode": "W00139B01",
+        "name": "생활속의심리학",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "이신동",
+        "notes": "\n순천향대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 6,
+        "rawCode": "W00153B01",
+        "name": "살빼기운동과영양조절",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "이근일",
+        "notes": " 이수구분 변경(2023-1)\n열린대학\n교육협의회\n● ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 7,
+        "rawCode": "W00195A01",
+        "name": "영화속의법률사례",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "최명구",
+        "notes": "\n부경대 ● ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 8,
+        "rawCode": "W00524A01",
+        "name": "나를찾는행복레슨",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "김진호",
+        "notes": "\n순천향대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 9,
+        "rawCode": "W00528A01",
+        "name": "항공우주학개론",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "최연철",
+        "notes": "\n한서대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 10,
+        "rawCode": "W00529A01",
+        "name": "잊을수없는6.25전쟁사",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "정명복",
+        "notes": "\n한국\n열린사이버대\n● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 11,
+        "rawCode": "W00649A01",
+        "name": "영어발음연습",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "박시균",
+        "notes": "\n군산대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 12,
+        "rawCode": "W00809A01",
+        "name": "범죄와범죄심리",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "오윤성",
+        "notes": "\n순천향대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 13,
+        "rawCode": "W00815A01",
+        "name": "결혼과가족",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "김영희",
+        "notes": "\n충북대 ● ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 14,
+        "rawCode": "W00824A01",
+        "name": "경찰과사회",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "정의롬",
+        "notes": "\n부산외국어대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 15,
+        "rawCode": "W00839A01",
+        "name": "영화로배우는자연재해",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "문일주",
+        "notes": "\n제주대 ● ● ●\n\n\n- 87 -\n연번 이수구분 학수번호 교과목명 학점 수강\n인원 담당교수 소속대학 시각 청각 모바일",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 16,
+        "rawCode": "W00868A01",
+        "name": "전통한옥의아름다움",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "서정호",
+        "notes": "\n공주대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 17,
+        "rawCode": "W01000A01",
+        "name": "테마가든과파티장식",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "김수연",
+        "notes": "\n나사렛대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 18,
+        "rawCode": "W01080A01",
+        "name": "마음을읽어주는미술치료",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "김정숙",
+        "notes": "\n군산대 ● ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 19,
+        "rawCode": "W01135A01",
+        "name": "TED로배우는영화속바이오테크놀로지",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "예정용",
+        "notes": "\n인천대 ● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 20,
+        "rawCode": "W01141A01",
+        "name": "창의적문제해결TRIZ기본",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "황의규",
+        "notes": "\n포스코\n인재창조원\n● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "sequence": 21,
+        "rawCode": "W01143A01",
+        "name": "취업준비의정석과차별화",
+        "classification": "일반선택",
+        "credits": 3,
+        "professor": "박창욱",
+        "notes": "\n대우세계\n경영연구회\n● ●",
+        "department": "OCU 컨소시엄"
+      },
+      {
+        "rawCode": "K00002A01",
+        "name": "생활속화학물질과건강",
+        "classification": "교양선택(6영역)",
+        "credits": 3,
+        "professor": "김판기",
+        "notes": "소속대학: 용인대",
+        "department": "KCU 컨소시엄"
+      }
+    ],
+    "academicYear": 2026,
+    "semester": "2"
+  },
+  "closures": [
+    {
+      "round": "1차",
+      "rawCode": "120237D11",
+      "courseCode": "120237",
+      "section": "11",
+      "curriculumSuffix": "D",
+      "name": "경기예절및경기방법이해(택견)",
+      "department": "무도학과"
+    },
+    {
+      "round": "1차",
+      "rawCode": "150079B11",
+      "courseCode": "150079",
+      "section": "11",
+      "curriculumSuffix": "B",
+      "name": "경기예절및경기방법이해심화(택견)",
+      "department": "무도학과"
+    },
+    {
+      "round": "1차",
+      "rawCode": "250051C28",
+      "courseCode": "250051",
+      "section": "28",
+      "curriculumSuffix": "C",
+      "name": "코스심화공략",
+      "department": "골프학과"
+    },
+    {
+      "round": "1차",
+      "rawCode": "210059C22",
+      "courseCode": "210059",
+      "section": "22",
+      "curriculumSuffix": "C",
+      "name": "전공실습초급(수·에·농)",
+      "department": "스포츠레저학과"
+    },
+    {
+      "round": "1차",
+      "rawCode": "350039D39",
+      "courseCode": "350039",
+      "section": "39",
+      "curriculumSuffix": "D",
+      "name": "가창심화",
+      "department": "국악과(주)"
+    },
+    {
+      "round": "1차",
+      "rawCode": "350095E39",
+      "courseCode": "350095",
+      "section": "39",
+      "curriculumSuffix": "E",
+      "name": "시창청음",
+      "department": "국악과(주)"
+    },
+    {
+      "round": "1차",
+      "rawCode": "350097D39",
+      "courseCode": "350097",
+      "section": "39",
+      "curriculumSuffix": "D",
+      "name": "서양음악사",
+      "department": "국악과(주)"
+    },
+    {
+      "round": "1차",
+      "rawCode": "370063D35",
+      "courseCode": "370063",
+      "section": "35",
+      "curriculumSuffix": "D",
+      "name": "프리젠테이션디자인",
+      "department": "미디어디자인학과"
+    },
+    {
+      "round": "1차",
+      "rawCode": "550177C73",
+      "courseCode": "550177",
+      "section": "73",
+      "curriculumSuffix": "C",
+      "name": "시스템프로그래밍",
+      "department": "AI융합학부-AI"
+    },
+    {
+      "round": "1차",
+      "rawCode": "530215B88",
+      "courseCode": "530215",
+      "section": "88",
+      "curriculumSuffix": "B",
+      "name": "파인다이닝 ",
+      "department": "식품조리학부-외식조리"
+    },
+    {
+      "round": "1차",
+      "rawCode": "530213B88",
+      "courseCode": "530213",
+      "section": "88",
+      "curriculumSuffix": "B",
+      "name": "분자미식학 ",
+      "department": "식품조리학부-외식조리"
+    },
+    {
+      "round": "1차",
+      "rawCode": "920175A02",
+      "courseCode": "920175",
+      "section": "02",
+      "curriculumSuffix": "A",
+      "name": "생활물리치료",
+      "department": "교양6영역"
+    },
+    {
+      "round": "1차",
+      "rawCode": "920163B03",
+      "courseCode": "920163",
+      "section": "03",
+      "curriculumSuffix": "B",
+      "name": "사회진출취업전략",
+      "department": "교양7영역"
+    },
+    {
+      "round": "2차",
+      "rawCode": "590037A87",
+      "courseCode": "590037",
+      "section": "87",
+      "curriculumSuffix": "A",
+      "name": "사회문제론",
+      "department": "사회복지학과"
+    },
+    {
+      "round": "2차",
+      "rawCode": "920509B01",
+      "courseCode": "920509",
+      "section": "01",
+      "curriculumSuffix": "B",
+      "name": "초보자를위한데이터시각화",
+      "department": "교양6영역"
+    },
+    {
+      "round": "3차",
+      "rawCode": "200217D21",
+      "courseCode": "200217",
+      "section": "21",
+      "curriculumSuffix": "D",
+      "name": "전공훈련심화(테·탁·댄·승)",
+      "department": "스포츠레저학과"
+    },
+    {
+      "round": "3차",
+      "rawCode": "390019D48",
+      "courseCode": "390019",
+      "section": "48",
+      "curriculumSuffix": "D",
+      "name": "보컬앙상블심화",
+      "department": "실용음악과"
+    },
+    {
+      "round": "3차",
+      "rawCode": "910021B47",
+      "courseCode": "910021",
+      "section": "47",
+      "curriculumSuffix": "B",
+      "name": "English2",
+      "department": "교양필수"
+    }
+  ]
+}

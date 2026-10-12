@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+  <cloud-backup>
+    <exclude domain="sharedpref" path="daily_lms_credentials.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureKeyStorage:daily_lms_credentials.xml" />
+  </cloud-backup>
+  <device-transfer>
+    <exclude domain="sharedpref" path="daily_lms_credentials.xml" />
+    <exclude domain="sharedpref" path="FlutterSecureKeyStorage:daily_lms_credentials.xml" />
+  </device-transfer>
+</data-extraction-rules>

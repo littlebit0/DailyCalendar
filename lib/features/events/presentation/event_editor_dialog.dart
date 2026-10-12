@@ -17,7 +17,7 @@ import 'frequent_places_field.dart';
 
 enum _RecurrenceEndMode { never, until, count }
 
-enum _ValidationTarget { title, date, time, recurrence }
+enum _ValidationTarget { title, date, time, recurrence, category }
 
 class EventEditorDialog extends StatefulWidget {
   const EventEditorDialog({
@@ -27,6 +27,7 @@ class EventEditorDialog extends StatefulWidget {
     this.initialAllDay,
     this.event,
     this.categories = EventCategory.values,
+    this.loadCategories,
     this.defaultReminderMinutes = 60,
     this.defaultReminderMinutesList,
     this.alarmService = const UnsupportedAlarmService(),
@@ -39,6 +40,7 @@ class EventEditorDialog extends StatefulWidget {
   final bool? initialAllDay;
   final CalendarEvent? event;
   final List<EventCategory> categories;
+  final List<EventCategory> Function()? loadCategories;
   final int defaultReminderMinutes;
   final List<int>? defaultReminderMinutesList;
   final AlarmService alarmService;
@@ -62,7 +64,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   late TimeOfDay _startTime;
   late TimeOfDay _endTime;
   late bool _allDay;
-  late EventCategory _category;
+  EventCategory? _category;
+  bool _categoryChanged = false;
   late List<int> _reminders;
   late RecurrenceFrequency _frequency;
   late int _recurrenceInterval;
@@ -119,10 +122,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     _endTime = TimeOfDay.fromDateTime(sourceEnd);
     _allDay = event?.allDay ?? widget.initialAllDay ?? false;
     final usableCategories = _usableCategories;
-    _category = usableCategories.firstWhere(
-      (category) => category.id == event?.category.id,
-      orElse: () => usableCategories.first,
-    );
+    _category = event == null
+        ? usableCategories.first
+        : _resolveCategory(event.category) ?? event.category;
     _reminders =
         event?.reminderMinutesBeforeList ??
         normalizeReminderMinutes(
@@ -339,10 +341,13 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                         ],
                         DropdownButtonFormField<EventCategory>(
                           onTap: _dismissInput,
-                          key: ValueKey(_category.id),
-                          initialValue: _category,
+                          key: ValueKey(_selectedCategory?.id),
+                          initialValue: _selectedCategory,
                           decoration: InputDecoration(
                             labelText: context.tr('분류'),
+                            errorText: _selectedCategory == null
+                                ? context.tr('기존 분류가 없습니다. 분류를 다시 선택해 주세요.')
+                                : null,
                             prefixIcon: const Icon(Icons.category_outlined),
                           ),
                           items: _usableCategories
@@ -374,7 +379,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           onChanged: (value) {
                             if (value != null) {
                               _clearValidation();
-                              setState(() => _category = value);
+                              setState(() {
+                                _category = value;
+                                _categoryChanged = true;
+                              });
                             }
                           },
                         ),
@@ -837,6 +845,14 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
 
   void _submit() {
     _dismissInput();
+    final category = _selectedCategory;
+    if (category == null) {
+      _showValidation(
+        context.tr('기존 분류가 없습니다. 분류를 다시 선택해 주세요.'),
+        target: _ValidationTarget.category,
+      );
+      return;
+    }
     final title = _titleController.text.trim();
     if (title.isEmpty) {
       _showValidation(
@@ -905,8 +921,9 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       startAt: startAt,
       endAt: endAt,
       allDay: _allDay,
-      category: _category,
-      colorValue: _category.colorValue,
+      category: category,
+      categoryChanged: widget.event == null || _categoryChanged,
+      colorValue: category.colorValue,
       reminderMinutesBeforeList: _reminders,
       recurrence: RecurrenceRule(
         frequency: _frequency,
@@ -1047,8 +1064,29 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     );
   }
 
+  EventCategory? _resolveCategory(EventCategory category) {
+    final exact = _usableCategories
+        .where((candidate) => candidate.id == category.id)
+        .firstOrNull;
+    if (exact != null) return exact;
+    // Older SQLite rows store labels and reconstruct their IDs from the label.
+    // Only a unique, exact legacy representation is accepted, never a guess.
+    final legacy = _usableCategories
+        .where(
+          (candidate) =>
+              candidate.label == category.label &&
+              EventCategory.fromStored(candidate.label).id == category.id,
+        )
+        .toList();
+    return legacy.length == 1 ? legacy.single : null;
+  }
+
+  EventCategory? get _selectedCategory =>
+      _category == null ? null : _resolveCategory(_category!);
+
   List<EventCategory> get _usableCategories {
-    final categories = widget.categories.toList();
+    final categories = (widget.loadCategories?.call() ?? widget.categories)
+        .toList();
     return categories.isEmpty ? const [EventCategory.basic] : categories;
   }
 

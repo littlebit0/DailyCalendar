@@ -15,7 +15,7 @@ Map<String, dynamic> source(String campus) =>
 void main() {
   for (final (campus, rows, total, scheduled, unrecognized, unscheduled) in [
     ('gwangju', 16871, 3166, 3072, 93, 1),
-    ('yeosu', 3344, 696, 662, 34, 0),
+    ('yeosu', 3344, 696, 663, 33, 0),
   ]) {
     test('all $campus public courses survive catalog import and round trip', () {
       final raw = source(campus);

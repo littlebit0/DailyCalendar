@@ -1,0 +1,183 @@
+{
+  "schemaVersion": 1,
+  "university": "nsu",
+  "mappings": [
+    {
+      "college": "공과대학",
+      "department": "건축공학과",
+      "sourceLabel": "건축공학과 1학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "건축공학과",
+      "sourceLabel": "건축공학과 2학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "건축공학과",
+      "sourceLabel": "건축공학과 3학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "건축공학과",
+      "sourceLabel": "건축공학과 4학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "스마트팜학과",
+      "sourceLabel": "스마트팜학과 1학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "스마트팜학과",
+      "sourceLabel": "스마트팜학과 2학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "스마트팜학과",
+      "sourceLabel": "스마트팜학과 3학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "스마트팜학과",
+      "sourceLabel": "스마트팜학과 4학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "글로벌상경대학",
+      "department": "영어과",
+      "sourceLabel": "영어과 1학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "글로벌상경대학",
+      "department": "영어과",
+      "sourceLabel": "영어과 2학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "글로벌상경대학",
+      "department": "영어과",
+      "sourceLabel": "영어과 3학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "글로벌상경대학",
+      "department": "영어과",
+      "sourceLabel": "영어과 4학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "보건의료복지대학",
+      "department": "응급구조학과",
+      "sourceLabel": "응급구조학과 1학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "보건의료복지대학",
+      "department": "응급구조학과",
+      "sourceLabel": "응급구조학과 2학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "보건의료복지대학",
+      "department": "응급구조학과",
+      "sourceLabel": "응급구조학과 3학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "보건의료복지대학",
+      "department": "응급구조학과",
+      "sourceLabel": "응급구조학과 4학년",
+      "sourceUrl": "https://www.nsu.ac.kr/?m1=page%25&menu_id=33",
+      "evidence": "Exact official department option is grouped under named college; original grade context retained as sourceLabel.",
+      "sourceFile": "work/course-owner-filter-20261012/nsu-official-overview.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    }
+  ],
+  "courseOwners": []
+}

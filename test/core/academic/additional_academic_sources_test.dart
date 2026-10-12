@@ -1,5 +1,10 @@
+import 'package:daily/core/academic/pnu_academic_source.dart';
+import 'package:daily/core/academic/inha_academic_source.dart';
 import 'dart:convert';
 import 'dart:io';
+import 'package:daily/core/academic/cau_academic_source.dart';
+import 'package:daily/core/academic/ajou_academic_source.dart';
+import 'package:daily/core/academic/snu_academic_source.dart';
 
 import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
@@ -323,7 +328,7 @@ void main() {
   );
 
   test(
-    'eight additional term defaults are bounded by their named official calendar fixtures',
+    'additional term defaults are bounded by their named official calendar fixtures',
     () async {
       final defaults = await TimetablePeriodDefaults.load(
         bundle: _FileBundle(),
@@ -334,10 +339,61 @@ void main() {
               )
               as Map;
       final events = {
+        'sejong': SejongAcademicSource.parse(
+          File('test/fixtures/academic/sejong-2026.json').readAsStringSync(),
+          2026,
+        ),
+        'pnu': PnuAcademicSource.parse(
+          File('test/fixtures/academic/pnu-2026-0020.html').readAsStringSync(),
+          2026,
+          '0020',
+        ),
+        'inha': InhaAcademicSource.parse(
+          File('test/fixtures/academic/inha-2026.html').readAsStringSync(),
+          2026,
+        ),
+        'cau': CauAcademicSource.parse(
+          File('test/fixtures/academic/cau-2026.json').readAsStringSync(),
+          2026,
+        ),
         'dku': DankookAcademicSource.parse(dkuFixture, 2026),
         'jnu': ChonnamAcademicSource.parse(jnuFixture, 2026),
+        'snu': SnuAcademicSource.parse(
+          File('test/fixtures/academic/snu-2026.html').readAsStringSync(),
+          2026,
+        ),
+        'ajou': AjouAcademicSource.parse(
+          File('test/fixtures/academic/ajou-2026.html').readAsStringSync(),
+          2026,
+        ),
       };
       final expected = {
+        'sejong': {'2': ('2026-09-01', '2026-12-21')},
+        'pnu': {'2': ('2026-09-01', '2026-12-21')},
+        'inha': {
+          '1': ('2026-03-02', '2026-06-19'),
+          '여름': ('2026-06-22', '2026-07-15'),
+          '2': ('2026-08-31', '2026-12-18'),
+          '겨울': ('2026-12-21', '2027-01-13'),
+        },
+        'cau': {
+          '1': ('2026-03-03', '2026-06-22'),
+          '여름': ('2026-06-24', '2026-07-15'),
+          '2': ('2026-09-01', '2026-12-21'),
+          '겨울': ('2026-12-23', '2027-01-15'),
+        },
+        'snu': {
+          '1': ('2026-03-03', '2026-06-15'),
+          '여름': ('2026-06-23', '2026-08-03'),
+          '2': ('2026-09-01', '2026-12-14'),
+          '겨울': ('2026-12-22', '2027-01-25'),
+        },
+        'ajou': {
+          '1': ('2026-03-03', '2026-06-22'),
+          '여름': ('2026-07-01', '2026-07-22'),
+          '2': ('2026-09-01', '2026-12-21'),
+          '겨울': ('2027-01-04', '2027-01-25'),
+        },
         'dku': {
           '1': ('2026-03-03', '2026-06-19'),
           '여름': ('2026-06-23', '2026-07-13'),
@@ -351,10 +407,17 @@ void main() {
           '겨울': ('2026-12-28', '2027-01-22'),
         },
       };
-      for (final university
-          in (raw['additionalUniversities'] as List).cast<Map>()) {
+      final registered = (raw['additionalUniversities'] as List).cast<Map>();
+      expect(
+        registered.map((u) => u['university']),
+        containsAll(expected.keys),
+      );
+      // Other universities have their own source-specific fixture tests.
+      for (final university in registered.where(
+        (u) => expected.containsKey(u['university']),
+      )) {
         final id = university['university'] as String;
-        expect(defaults.periodsFor(id), hasLength(4));
+        expect(defaults.periodsFor(id), hasLength(expected[id]!.length));
         for (final term in (university['terms'] as List).cast<Map>()) {
           final semester = term['semester'] as String;
           final period = defaults.periodFor(2026, semester, university: id)!;
