@@ -3,12 +3,13 @@
 2026-10-10 Markdown consolidation. This file is the current entrypoint; detailed history is archived, not deleted.
 
 
-## 4.0.0 release — authorized, VERIFIED APPLE FILES / GITHUB PUBLICATION PENDING 2026-10-12
+## 4.0.0 release — authorized, PUBLISHED / verified exports and Mac test update 2026-10-12
 
 - User authorized issue92 requirement update, README/version4.0.0, commit/push/GitHub release and signed Mac/iOS Transporter exports. University source expansion remains stopped; no app launch or Apple upload/submission authorized.
 - Issue92 now contains the confirmed single college parent with direct-college and department choices inside it, preserving direct-college-only and major-only filtering. This future UI is not implemented by this release task.
 - Product lib/test analysis clean. Combined Dart1982pass/1skip/29fail;11 outdated strike/UI/provider fixture failures corrected with targeted passing checks;18 deferred raw/snapshot discrepancies remain issue92. Native cookie/password/Siri policy checks pass. No all-suite-green or live account/device acceptance claim.
-- Mac/iOS Release archives/app-store-connect exports and production app/widget4.0.0 identity/team/distribution signatures verified. Files under dist/transporter-upload/4.0.0; no Apple upload/submission. Mac test4.0.0 build/install verified in place; same identity/team/secure entitlements, all academic/timetable/logo hashes and strict signatures preserved, generated duplicate removed. No launch. GitHub release publication pending.
+- Mac/iOS Release archives/app-store-connect exports and production app/widget4.0.0 identity/team/distribution signatures verified. Files under dist/transporter-upload/4.0.0; no Apple upload/submission. Mac test4.0.0 build/install verified in place; same identity/team/secure entitlements, all academic/timetable/logo hashes and strict signatures preserved, generated duplicate removed. No launch. GitHub v4.0.0 PUBLISHED with six installers and SHA256SUMS; remote names/bytes/digests verified. Source commit9a2791d. User chose LinuxAMD64/APT3.6.0 retained; ARM64 manual4.0.0 offered. Release pipeline38222353676 and automatic APT38224703714 canceled to preserve this choice.
+- Remote Platform Builds38222806188: Android/Windows Debug pass; whole tests1508pass/247fail/33skip.243 file errors reference ignored work source/snapshot/capture paths;4 remaining are DJU/SKKU/KHU expectations. Did not check fixture portability before commit; issue92 now records that follow-up. No all-CI-green claim; no new source research.
 - Unrelated outputs/daily-study and private archived full agent history are deliberately not included in the release commit. Prior source expansion remains stopped.
 
 ## University expansion — STOPPED by user 2026-10-12; suspension/issue/Mac update COMPLETE

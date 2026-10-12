@@ -49,7 +49,8 @@ LMS 로그인 정보는 다른 기기로 동기화하지 않으며 일정만 동
 | macOS 테스트 | 4.0.0 공개 검증용 미서명 파일 | [daily-macos-4.0.0-unsigned.dmg](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-macos-4.0.0-unsigned.dmg) |
 | Android | 4.0.0 APK, 기존 3.4.0 배포 서명 유지 | [daily-android-4.0.0.apk](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-android-4.0.0.apk) |
 | Windows | 4.0.0 설치 프로그램 및 ZIP | [설치 프로그램](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-windows-4.0.0-setup.exe) · [ZIP](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-windows-4.0.0.zip) |
-| Linux | 4.0.0-1, 서명된 APT 업데이트 지원 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-linux-4.0.0-1-amd64.deb) · [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-linux-4.0.0-1-arm64.deb) |
+| Linux AMD64 | 3.6.0 유지, 4.0.0 검사 보류 | [amd64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v3.6.0/daily-linux-3.6.0-1-amd64.deb) |
+| Linux ARM64 | 4.0.0-1 수동 설치 파일 | [arm64 .deb](https://github.com/littlebit0/DailyCalendar/releases/download/v4.0.0/daily-linux-4.0.0-1-arm64.deb) |
 
 > GitHub의 IPA와 DMG는 App Store 제출 파일이 아닙니다. 미서명 IPA는 별도
 > 서명 없이는 iPhone에 직접 설치할 수 없으며, 재서명 과정에서 Sign in with
@@ -70,12 +71,14 @@ GitHub 릴리스를 확인하며 새 Windows 설치 프로그램이 있으면 �
 
 ### Linux
 
+4.0.0에서는 ARM64 수동 설치 파일을 제공합니다. AMD64는 보류 원자료 검사로 3.6.0을 유지하며, 자동 APT 채널도 기존 3.6.0을 유지합니다.
+
 Ubuntu/Debian 데스크톱용 `.deb`를 한 번 설치하면 Daily 전용 타이머가 약 6시간마다
 서명된 업데이트를 확인합니다. 앱 실행 중이거나 검증에 실패하면 업데이트를
 미루며, 일정과 설정은 삭제하지 않습니다. 설치 시 앱을 자동 실행하지 않습니다.
 
 ```sh
-sudo apt install ./daily-linux-4.0.0-1-amd64.deb
+sudo apt install ./daily-linux-3.6.0-1-amd64.deb
 ```
 
 Intel/AMD PC는 amd64, ARM64 PC는 arm64 파일을 사용하세요. amd64는 Ubuntu 22.04+,
