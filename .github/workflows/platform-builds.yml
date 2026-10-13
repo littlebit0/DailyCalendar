@@ -34,6 +34,45 @@ jobs:
       - name: Test
         run: flutter test
 
+  apple-lms-test:
+    name: Apple LMS session tests
+    runs-on: macos-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: "3.44.0"
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Test Apple LMS session paths without skips
+        run: |
+          flutter test --no-pub --reporter json test/core/lms/lms_web_session_test.dart > apple-lms-results.json
+          python3 - <<'PYTHON'
+          import json
+          from pathlib import Path
+          events = [json.loads(line) for line in Path('apple-lms-results.json').read_text().splitlines() if line.startswith('{')]
+          completed = [event for event in events if event.get('type') == 'testDone' and not event.get('hidden', False)]
+          assert len(completed) == 40, f'Expected all 40 LMS tests, got {len(completed)}'
+          assert all(not event.get('skipped', False) and event.get('result') == 'success' for event in completed), 'Apple LMS tests must all execute and pass'
+          assert any(event.get('type') == 'done' and event.get('success') is True for event in events), 'Missing successful suite completion'
+          print('Apple LMS: all 40 tests executed and passed, including the 32 skipped on Linux')
+          PYTHON
+
+      - name: Upload Apple LMS test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: apple-lms-test-results
+          path: apple-lms-results.json
+          if-no-files-found: error
+
   android-debug:
     name: Android debug build
     runs-on: ubuntu-latest

@@ -2344,98 +2344,67 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))).width,
-      124,
+    final switcher = find.byKey(const ValueKey('bottom-mode-switcher'));
+    final thumb = find.byKey(const ValueKey('bottom-mode-thumb-circle'));
+    final toolbar = find.byKey(const ValueKey('ios-calendar-toolbar'));
+    const compactSize = Size(281.6, 42);
+    const expandedSize = Size(320, 50);
+    void expectCenteredNavigation(Size size) {
+      expect(tester.getSize(switcher), size);
+      expect(
+        tester.getCenter(switcher).dx,
+        closeTo(
+          tester
+              .getCenter(find.byKey(const ValueKey('calendar-bottom-bar')))
+              .dx,
+          0.1,
+        ),
+      );
+      final track = tester.getRect(switcher);
+      final selection = tester.getRect(thumb);
+      expect(selection.left, greaterThanOrEqualTo(track.left));
+      expect(selection.right, lessThanOrEqualTo(track.right));
+      expect(selection.top, greaterThanOrEqualTo(track.top));
+      expect(selection.bottom, lessThanOrEqualTo(track.bottom));
+    }
+
+    void expectSelectedSegment(int index) {
+      final track = tester.getRect(switcher);
+      expect(
+        tester.getCenter(thumb).dx,
+        closeTo(track.left + 5 + (track.width - 10) * (index + 0.5) / 6, 0.5),
+      );
+    }
+
+    expectCenteredNavigation(compactSize);
+    expectSelectedSegment(1);
+    expect(tester.getSize(thumb).height, 28);
+    // The old separate calendar slider is now part of the six-segment bar.
+    expect(find.byKey(const ValueKey('calendar-view-button')), findsNothing);
+    for (final label in ['빠른 보기', '주간', '월간', '일간', 'Siri', '시간표']) {
+      expect(find.byTooltip(label), findsOneWidget);
+    }
+    final track = tester.widget<AnimatedContainer>(
+      find.byKey(const ValueKey('bottom-mode-track')),
     );
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))).height,
-      40,
-    );
-    expect(
-      tester.getCenter(find.byKey(const ValueKey('bottom-mode-switcher'))).dx,
-      closeTo(
-        tester.getCenter(find.byKey(const ValueKey('calendar-bottom-bar'))).dx,
-        0.1,
-      ),
-    );
-    expect(
-      tester.getSize(find.byKey(const ValueKey('calendar-view-button'))).width,
-      lessThan(96),
-    );
-    final compactViewButtonSize = tester.getSize(
-      find.byKey(const ValueKey('calendar-view-button')),
-    );
-    final compactViewThumbSize = tester.getSize(
-      find.byKey(const ValueKey('calendar-view-thumb-circle')),
-    );
-    expect(compactViewButtonSize, const Size(76, 40));
-    expect(compactViewThumbSize, const Size.square(32));
-    expect(
-      tester
-          .widget<AnimatedContainer>(
-            find.byKey(const ValueKey('calendar-view-track')),
-          )
-          .clipBehavior,
-      Clip.none,
-    );
-    expect(
-      tester
-          .widget<Container>(find.byKey(const ValueKey('bottom-mode-track')))
-          .clipBehavior,
-      Clip.none,
-    );
-    final calendarTrackDecoration =
-        tester
-                .widget<AnimatedContainer>(
-                  find.byKey(const ValueKey('calendar-view-track')),
-                )
-                .decoration!
-            as ShapeDecoration;
-    final bottomTrackDecoration =
-        tester
-                .widget<Container>(
-                  find.byKey(const ValueKey('bottom-mode-track')),
-                )
-                .decoration!
-            as ShapeDecoration;
-    expect(
-      (calendarTrackDecoration.shape as StadiumBorder).side,
-      BorderSide.none,
-    );
-    expect(
-      (bottomTrackDecoration.shape as StadiumBorder).side,
-      BorderSide.none,
-    );
-    expect(
-      tester
-          .widget<Stack>(
-            find.byKey(const ValueKey('calendar-view-thumb-layer')),
-          )
-          .clipBehavior,
-      Clip.none,
-    );
-    expect(
-      tester
-          .widget<Stack>(find.byKey(const ValueKey('bottom-mode-thumb-layer')))
-          .clipBehavior,
-      Clip.none,
-    );
-    expect(
-      compactViewThumbSize.width,
-      closeTo(compactViewThumbSize.height, 0.6),
-    );
+    expect(track.duration, greaterThan(Duration.zero));
+    expect(track.decoration, isA<BoxDecoration>());
+    final surface = track.decoration! as BoxDecoration;
+    expect(surface.borderRadius, BorderRadius.circular(25));
+    expect(surface.border, isA<Border>());
+    expect(tester.takeException(), isNull);
     expect(find.byType(PageView), findsOneWidget);
     expect(find.text('일정 없음'), findsWidgets);
-    expect(find.byIcon(Icons.stars_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.graphic_eq_rounded), findsOneWidget);
     expect(find.byTooltip('오늘'), findsOneWidget);
-    final periodButtonRect = tester.getRect(
+
+    final period = tester.getRect(
       find.byKey(const ValueKey('calendar-period-button')),
     );
-    final reservedSpaceRect = tester.getRect(
-      find.byKey(const ValueKey('ios-calendar-header-reserved-space')),
-    );
-    expect(periodButtonRect.width, lessThan(180));
+    final header = tester.getRect(toolbar);
+    expect(period.width, lessThan(180));
+    expect(period.left, lessThan(16));
+    expect(period.right, lessThanOrEqualTo(header.right));
     expect(
       find.descendant(
         of: find.byKey(const ValueKey('calendar-period-button')),
@@ -2443,151 +2412,59 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(periodButtonRect.left, lessThan(16));
-    expect(reservedSpaceRect.left, closeTo(periodButtonRect.right, 0.1));
-    expect(reservedSpaceRect.width, greaterThan(0));
 
-    final compactViewButtonRect = tester.getRect(
-      find.byKey(const ValueKey('calendar-view-button')),
-    );
-    await tester.tapAt(
-      Offset(
-        compactViewButtonRect.left + compactViewButtonRect.width / 6,
-        compactViewButtonRect.center.dy,
-      ),
-    );
+    await tester.tap(find.byTooltip('주간'));
     await tester.pumpAndSettle();
-    final expandedViewButtonSize = tester.getSize(
-      find.byKey(const ValueKey('calendar-view-button')),
-    );
-    expect(expandedViewButtonSize.width, greaterThan(76));
-    expect(expandedViewButtonSize.height, greaterThan(40));
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))),
-      const Size(124, 40),
-    );
-
-    final expandedViewButtonRect = tester.getRect(
-      find.byKey(const ValueKey('calendar-view-button')),
-    );
-    await tester.tapAt(
-      Offset(
-        expandedViewButtonRect.left + expandedViewButtonRect.width / 6,
-        expandedViewButtonRect.center.dy,
-      ),
-    );
+    expectCenteredNavigation(expandedSize);
+    expectSelectedSegment(1);
+    expect(tester.getSize(thumb).height, 36);
+    final selectedThumbSize = tester.getSize(thumb);
+    await tester.tap(find.byTooltip('주간'));
     await tester.pump(const Duration(milliseconds: 90));
-
-    expect(
-      tester.getSize(find.byKey(const ValueKey('calendar-view-button'))),
-      expandedViewButtonSize,
-    );
+    expect(tester.getSize(thumb), selectedThumbSize);
     await tester.pumpAndSettle();
 
-    final iosToolbarBeforeQuickAccess = tester.getRect(
-      find.byKey(const ValueKey('ios-calendar-toolbar')),
+    final headerBeforeQuickView = tester.getRect(toolbar);
+    final gesture = await tester.startGesture(
+      tester.getCenter(find.byTooltip('주간')),
     );
-    await tester.drag(
-      find.byKey(const ValueKey('bottom-mode-switcher')),
-      const Offset(-70, 0),
-    );
+    await gesture.moveBy(Offset(-expandedSize.width / 6, 0));
+    await gesture.up();
     await tester.pump(const Duration(milliseconds: 80));
-    expect(
-      tester.getRect(find.byKey(const ValueKey('ios-calendar-toolbar'))),
-      iosToolbarBeforeQuickAccess,
-    );
+    expect(tester.getRect(toolbar), headerBeforeQuickView);
     await tester.pumpAndSettle();
-
-    expect(find.text('빠른 보기'), findsOneWidget);
-    expect(find.byType(PageView), findsNothing);
+    expect(find.byKey(const ValueKey('quick-view-list')), findsOneWidget);
     expect(find.byType(BottomSheet), findsNothing);
-    expect(find.byKey(const ValueKey('bottom-mode-thumb')), findsOneWidget);
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-thumb-circle'))),
-      const Size.square(40),
-    );
-    expect(find.byKey(const ValueKey('calendar-view-button')), findsNothing);
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))).width,
-      152,
-    );
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))).height,
-      48,
-    );
-    final quickAccessIcon = find.descendant(
-      of: find.byKey(const ValueKey('bottom-mode-switcher')),
-      matching: find.byIcon(Icons.view_agenda_outlined),
-    );
-    expect(
-      tester
-          .getCenter(find.byKey(const ValueKey('bottom-mode-thumb-circle')))
-          .dx,
-      closeTo(tester.getCenter(quickAccessIcon).dx, 0.5),
-    );
-    expect(
-      tester.getCenter(find.byKey(const ValueKey('bottom-mode-switcher'))).dx,
-      closeTo(
-        tester.getCenter(find.byKey(const ValueKey('calendar-bottom-bar'))).dx,
-        0.1,
-      ),
-    );
+    expectCenteredNavigation(expandedSize);
+    expectSelectedSegment(0);
 
-    await tester.tap(quickAccessIcon);
+    await tester.tap(find.byTooltip('빠른 보기'));
     await tester.pump(const Duration(milliseconds: 90));
-
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))),
-      const Size(152, 48),
-    );
+    expectCenteredNavigation(expandedSize);
     await tester.pumpAndSettle();
-
-    await tester.tap(find.byTooltip('달력'));
+    await tester.tap(find.byTooltip('주간'));
     await tester.pumpAndSettle();
-
     expect(find.byType(PageView), findsOneWidget);
-    expect(find.byKey(const ValueKey('calendar-view-button')), findsOneWidget);
-    expect(
-      tester.getRect(find.byKey(const ValueKey('calendar-view-button'))).right,
-      lessThanOrEqualTo(
-        tester.getRect(find.byKey(const ValueKey('bottom-mode-switcher'))).left,
-      ),
-    );
+    expect(find.byKey(const ValueKey('quick-view-list')), findsNothing);
+    expectSelectedSegment(1);
 
     final container = ProviderScope.containerOf(
       tester.element(find.byType(DailyApp)),
     );
     final startDate = container.read(selectedDateProvider);
-
     await tester.drag(find.byType(PageView), const Offset(-500, 0));
     await tester.pumpAndSettle();
-
-    expect(find.byKey(const ValueKey('bottom-mode-thumb')), findsOneWidget);
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-thumb-circle'))),
-      const Size.square(32),
-    );
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))).width,
-      124,
-    );
-    expect(
-      tester.getSize(find.byKey(const ValueKey('bottom-mode-switcher'))).height,
-      40,
-    );
+    expectCenteredNavigation(compactSize);
+    expectSelectedSegment(1);
     expect(
       container.read(selectedDateProvider),
       DateTime(startDate.year, startDate.month, startDate.day + 7),
     );
 
-    final iosToolbarBeforeAi = tester.getRect(
-      find.byKey(const ValueKey('ios-calendar-toolbar')),
-    );
+    final headerBeforeAi = tester.getRect(toolbar);
     final calendarHeightBeforeAi = tester.getSize(find.byType(PageView)).height;
-
     await tester.tap(find.byTooltip('Siri'));
     await tester.pumpAndSettle();
-
     expect(
       find.byKey(const ValueKey('inline-ai-layout-panel')),
       findsOneWidget,
@@ -2604,16 +2481,28 @@ void main() {
       tester.getSize(find.byType(PageView)).height,
       lessThan(calendarHeightBeforeAi),
     );
-    expect(
-      tester.getRect(find.byKey(const ValueKey('ios-calendar-toolbar'))),
-      iosToolbarBeforeAi,
-    );
+    expect(tester.getRect(toolbar), headerBeforeAi);
     expect(find.byType(BottomSheet), findsNothing);
     expect(find.byTooltip('AI 입력 닫기'), findsOneWidget);
+    expectSelectedSegment(4);
+    await tester.tap(find.byTooltip('AI 입력 닫기'));
+    await tester.pumpAndSettle();
+    expect(
+      tester
+          .getSize(find.byKey(const ValueKey('inline-ai-layout-panel')))
+          .height,
+      0,
+    );
+    expect(find.byKey(const ValueKey('inline-ai-input')), findsNothing);
+    expect(
+      tester.getSize(find.byType(PageView)).height,
+      calendarHeightBeforeAi,
+    );
+    expect(tester.getRect(toolbar), headerBeforeAi);
 
     debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
-  }, skip: true);
+  });
 
   testWidgets('iOS uses one liquid-style six-segment calendar navigation', (
     tester,

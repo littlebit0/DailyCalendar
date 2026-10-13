@@ -3,6 +3,12 @@
 2026-10-10 Markdown consolidation. This file is the current entrypoint; detailed history is archived, not deleted.
 
 
+## UI skip removal and Apple CI — 2026-10-13
+
+- User requests preserving existing weekly-shell behavior checks while updating UI expectations and removing its unconditional skip; Apple32 cases must actually execute on Mac CI. University work remains STOPPED.
+- Updated only former weekly test for current integrated six-segment UI, preserving startup/header/selection/animation/quick-view/swipe/AI-space checks; skip removed. Added macos-latest LMS suite40 tests with JSON guard forbidding skips/missing cases/failures and uploaded results. No product/native/assets/install/launch changes.
+- Isolated HEAD checks:updated weekly1pass, existing six-segment1pass, Mac LMS40pass/0skip plus exact CI JSON guard; test analysis clean. Regular push CI final result pending. See docs/CI_TEST_COVERAGE_2026-10-13.md and final run/log/receipt under work/ci-skip-reactivation-20261013. Keep pending and verified outcomes distinct.
+
 ## Confirmed user feedback — 2026-10-13
 
 - Actual errors: announced continued work after ending the turn without an active continuation mechanism; gave an insufficiently grounded 20–40 minute estimate; initial CI fixture repair missed macOS-only output paths and transitive absolute input references, resulting in 11 further remote failures.
