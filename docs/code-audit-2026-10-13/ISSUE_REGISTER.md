@@ -46,7 +46,7 @@
 | [#118](https://github.com/littlebit0/DailyCalendar/issues/118) | 알림 | 대체 알람이 불가능해도 정시 일반 알림을 생략 | 실제 대체 예약 성공을 확인한 경우만 중복 억제 |
 | [#119](https://github.com/littlebit0/DailyCalendar/issues/119) | 알림·동기화 | 원격 알림 설정이 OS 예약에 미반영 | 최종 설정으로 후속 예약 조정; 제거된 사용자 지정 D-day 키도 취소 |
 | [#120](https://github.com/littlebit0/DailyCalendar/issues/120) | Linux | 알림 한 파일의 JSON·전달 예외가 전체 배치를 중단 | 형식 검사와 항목별 실패 격리·재시도 분리 |
-| [#121](https://github.com/littlebit0/DailyCalendar/issues/121) | Drive·성능 | 큰 OR 쿼리리와 일정별 원격 목록 재탐색 | 요청 크기별 배치 및 ID→복수 파일 인덱싱 |
+| [#121](https://github.com/littlebit0/DailyCalendar/issues/121) | Drive·성능 | 큰 OR 쿼리와 일정별 원격 목록 재탐색 | 요청 크기별 배치 및 ID→복수 파일 인덱싱 |
 | [#122](https://github.com/littlebit0/DailyCalendar/issues/122) | Linux·보안 | notify-send 인자에 일정 제목·본문 포함 | 내용을 argv/환경변수로 노출하지 않는 전달 경로 |
 | [#123](https://github.com/littlebit0/DailyCalendar/issues/123) | 반복 일정 | Siri·배경화면이 until 당일·마지막 연속 회차를 누락 | Swift 날짜 포함 규칙과 SQL 선별 범위를 함께 수정 |
 | [#124](https://github.com/littlebit0/DailyCalendar/issues/124) | Siri·검증 | 생성형 응답 검증이 일정명·시간 뒤바뀜 등을 허용 | 사실 필드를 구조화해 결정적으로 렌더링; 검증 실패 시 원문 |
