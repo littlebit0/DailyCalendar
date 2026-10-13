@@ -1,0 +1,16 @@
+# Issues130/143 — implemented and Mac test updated
+
+## Issue130
+Bootstrap no longer marks a partly upgraded legacy DB current after adding only three columns. Drift and snapshot bootstrap use the same generated-column migration implementation. Missing fields receive actual current defaults/constraints; legacy single reminders become lists only when the list column was absent. Stored categories/colors are preserved. Historical sensitive removal remains. Current-version databases are checked against generated current column type/null/default/primary-key metadata and Boolean constraints; incomplete v9 databases are repaired on a snapshot copy. SQLite integrity and retained IDs are validated before atomic replacement. Schema8→9 and current9 repair perform no remote restoration/full upload and retain pending/synced states. Helper connections do not emit fabricated actual-database startup timings.
+
+## Issue143
+App-lock and Settings PIN verification catch secure-store failures and always release checking. Errors remain distinct from wrong PIN; failed reads/writes do not unlock. Legacy verified PIN saves length only, without rewriting its secure hash. App PIN verification owns a generation: background/relock or disable invalidates old results. Disposed or dismissed Settings verification cannot close a newer dialog. Safe translated errors do not include PIN/hash/raw storage data.
+
+## Verification
+Migration/Drift46 passed; stricter SQLite-constraint regression28 passed (overlaps46). PIN widgets11 passed plus existing background-lock1 passed. Existing settings core checks passed in the initial combined run; all27 failures there were a new fixture expectation that confused stored category label with repository resolution without a custom-category list. The assertion now checks preserved SQL value and passes. Whole analysis found only four new test style lints; corrected checks and changed-scope analysis pass. Normal Drift upgrades cover explicit schema1–8; snapshot paths cover1–8 plus incomplete current9, offline/empty remote/winner conditions, post-upgrade repository reads/writes, preserved deletions and failure without original replacement.
+
+These fixtures are reconstructed explicit historical definitions, not past-release exported DBs. Widget tests inject storage errors through a fake, not actual Keychain/Keystore failure. No live accounts/data modified. This is affected-scope verification, not a new whole CI or all-device acceptance claim.
+
+Mac optimized profile/AOT build succeeded. Canonical ~/Applications/Daily Test.app updated in place; test identifier/version4.0.0, signature, secure entitlements, source/built/installed academic/timetable/logo assets verified and preserved. Prior app saved as a compressed backup. Generated app removed to avoid duplicate installations. No launch/restart or real-device migration performed. See install-receipt.json for exact backup and hashes.
+
+Other platform native builds, actual historical release exports, native storage error acceptance, commit/push and full remote CI were subsequently authorized; final remote acceptance is pending. University expansion/source/classification/support work remains STOPPED; issue92 unchanged.

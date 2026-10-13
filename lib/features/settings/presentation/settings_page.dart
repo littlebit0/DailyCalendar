@@ -4792,19 +4792,26 @@ class _PinVerificationDialogState extends State<_PinVerificationDialog> {
     }
     final pin = _pin;
     setState(() => _checking = true);
-    final verified = await widget.verifier(pin);
-    if (!mounted) {
-      return;
+    try {
+      final verified = await widget.verifier(pin);
+      if (!mounted || !ModalRoute.of(context)!.isCurrent) return;
+      if (verified) {
+        Navigator.of(context).pop(true);
+        return;
+      }
+      setState(() {
+        _pin = '';
+        _error = context.tr('PIN이 일치하지 않습니다.');
+      });
+    } on Object {
+      if (!mounted || !ModalRoute.of(context)!.isCurrent) return;
+      setState(() {
+        _pin = '';
+        _error = context.tr('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.');
+      });
+    } finally {
+      if (mounted) setState(() => _checking = false);
     }
-    if (verified) {
-      Navigator.of(context).pop(true);
-      return;
-    }
-    setState(() {
-      _checking = false;
-      _pin = '';
-      _error = context.tr('PIN이 일치하지 않습니다.');
-    });
   }
 
   @override

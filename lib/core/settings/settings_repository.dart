@@ -1067,6 +1067,12 @@ class SettingsRepository {
     await _deleteSecureStorageKey(_appLockPinLengthKey);
   }
 
+  // A verified legacy PIN needs only length metadata; do not rewrite its hash.
+  Future<void> saveAppLockPinLength(int length) async {
+    if (length < 4) throw ArgumentError.value(length, 'length');
+    await _secureStorage.write(key: _appLockPinLengthKey, value: '$length');
+  }
+
   Future<int?> appLockPinLength() async {
     final raw = await _secureStorage.read(key: _appLockPinLengthKey);
     final length = int.tryParse(raw ?? '');

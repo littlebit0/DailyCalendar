@@ -891,6 +891,10 @@ const Map<String, Map<String, String>> _translations = {
     '시스템 잠금으로 해제': 'Unlock with System Authentication',
     'PIN을 계속 입력하거나 지워서 다시 입력하세요.':
         'Continue entering the PIN, or clear it and try again.',
+    '보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.':
+        'The secure storage could not be read. Enter your PIN again.',
+    'PIN 설정을 저장하지 못했습니다. 다시 입력해 주세요.':
+        'PIN settings could not be saved. Enter your PIN again.',
     'PIN이 일치하지 않습니다.': 'The PIN does not match.',
     'Daily 잠금을 해제하려면 인증이 필요합니다.': 'Authentication is required to unlock Daily.',
     '시스템 인증을 완료하지 못했습니다.': 'System authentication was not completed.',
@@ -1717,6 +1721,8 @@ const Map<String, Map<String, String>> _translations = {
     '기기의 Face ID, Touch ID 또는 시스템 비밀번호로 확인합니다.':
         'Face ID、Touch ID、または端末のパスワードで確認します。',
     '시스템 잠금으로 해제': 'システム認証で解除',
+    '보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.': '安全なストレージを確認できませんでした。PINを再入力してください。',
+    'PIN 설정을 저장하지 못했습니다. 다시 입력해 주세요.': 'PIN設定を保存できませんでした。再入力してください。',
     'PIN이 일치하지 않습니다.': 'PINが一致しません。',
     'Daily 잠금을 해제하려면 인증이 필요합니다.': 'Dailyのロック解除には認証が必要です。',
     '시스템 인증을 완료하지 못했습니다.': 'システム認証を完了できませんでした。',
@@ -2539,6 +2545,8 @@ const Map<String, Map<String, String>> _translations = {
     '비밀번호를 통해 잠금해제': '使用 PIN 解鎖',
     '기기의 Face ID, Touch ID 또는 시스템 비밀번호로 확인합니다.': '使用 Face ID、Touch ID 或裝置密碼驗證。',
     '시스템 잠금으로 해제': '使用系統驗證解鎖',
+    '보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.': '無法讀取安全儲存空間。請重新輸入 PIN。',
+    'PIN 설정을 저장하지 못했습니다. 다시 입력해 주세요.': '無法儲存 PIN 設定。請重新輸入。',
     'PIN이 일치하지 않습니다.': 'PIN 不相符。',
     'Daily 잠금을 해제하려면 인증이 필요합니다.': '需要驗證才能解除 Daily 鎖定。',
     '시스템 인증을 완료하지 못했습니다.': '未能完成系統驗證。',

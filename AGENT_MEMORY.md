@@ -3,6 +3,15 @@
 2026-10-10 Markdown consolidation. This file is the current entrypoint; detailed history is archived, not deleted.
 
 
+## Issues130/143 — implemented, verified scope and Mac updated 2026-10-13
+
+- #130: snapshot bootstrap reuses Drift generated-column schema repair instead of adding only three recent columns. Historical defaults/constraints and single→list reminders handled; stored category/color/recurrence/completion/alarms/deletions preserved. Already-mislabeled v9 structures detected and repaired on snapshot copy; final SQLite integrity/structure/IDs checked before replacement. Schema8→9/current9 repair remain local with no remote full migration or pending-state reset. Schema helper connections do not emit actual DB startup timings.
+- #143: both app-lock and Settings PIN verification end checking on storage exceptions, preserve lock, show distinct retry errors and ignore stale/disposed results. App background/relock invalidates verification generation. Verified legacy PIN saves length only; metadata-write failure remains locked/retryable. New messages localized, no PIN/hash/storage payload logging.
+- Verification: migration/Drift46pass; stricter historical-constraint28pass overlaps46; PIN widgets11pass plus existing background-lock1pass; existing settings core checks passed. Initial new historical category assertion confused SQL preservation with category resolution without configured custom categories; corrected raw-value assertion and all historical cases pass. Whole analysis found four new test-style lints only; fixed and affected analysis clean. Explicit reconstructed CREATE TABLE fixtures1–8/incomplete9 cover offline/empty/winner, normal Drift upgrades, repository read/save, defaults/constraints/deletions, repair-failure original preservation. Not actual past-release exports or real Keychain/Keystore fault injection; no production DB migration/account actions.
+- Mac optimized profile/AOT build and canonical ~/Applications/Daily Test.app in-place update succeeded; same4.0.0/com.littlebit0.daily.test/signature/team/secure entitlements and all academic/timetable/logo hashes preserved. Compressed backup, generated duplicate removed; no launch/restart. Other-platform live device acceptance unperformed. Commit/push and full remote CI now authorized; final remote acceptance pending. Preserve unrelated analytics/settings changes. See docs/ISSUES_130_143_VERIFICATION_2026-10-13.md. Evidence work/issues-130-143-20261013/{REPORT.md,verification-receipt.json,install-receipt.json,migration-final-tests.log,constraint-final-tests.log,pin-final-tests.log,background-lock-test.log,correction-analysis.log,mac-build.log}.
+- University expansion remains STOPPED; no source research/processing/support/classification changes. Deferred #92 is not completed by these fixes.
+
+
 ## UI skip removal and Apple CI — 2026-10-13
 
 - User requests preserving existing weekly-shell behavior checks while updating UI expectations and removing its unconditional skip; Apple32 cases must actually execute on Mac CI. University work remains STOPPED.

@@ -61,10 +61,13 @@ class AppDatabase extends _$AppDatabase {
   ''';
 
   final _openClock = Stopwatch()..start();
+  final bool _recordStartupTiming;
 
-  AppDatabase() : super(_openConnection());
+  AppDatabase() : _recordStartupTiming = true, super(_openConnection());
 
-  AppDatabase.forTesting(super.executor);
+  AppDatabase.forTesting(super.executor) : _recordStartupTiming = true;
+
+  AppDatabase.forMigration(super.executor) : _recordStartupTiming = false;
 
   @override
   int get schemaVersion => currentSchemaVersion;
@@ -74,89 +77,62 @@ class AppDatabase extends _$AppDatabase {
     return MigrationStrategy(
       beforeOpen: (_) async {
         _openClock.stop();
-        StartupTiming.mark(
-          StartupStage.database,
-          durationUs: _openClock.elapsedMicroseconds,
-        );
+        if (_recordStartupTiming) {
+          StartupTiming.mark(
+            StartupStage.database,
+            durationUs: _openClock.elapsedMicroseconds,
+          );
+        }
       },
       onCreate: (migrator) async {
         await migrator.createAll();
         await customStatement(createDeletionTable);
       },
       onUpgrade: (migrator, from, to) async {
-        if (from < 2) {
-          await migrator.addColumn(eventRecords, eventRecords.showDday);
-          await customStatement(
-            "UPDATE event_records SET category = 'basic', color_value = 4280640491 WHERE category != 'holiday'",
-          );
-        }
-        if (from < 3) {
-          await migrator.addColumn(eventRecords, eventRecords.url);
-          await migrator.addColumn(eventRecords, eventRecords.weather);
-          await migrator.addColumn(
-            eventRecords,
-            eventRecords.recurrenceExcludedDates,
-          );
-        }
-        if (from < 4) {
-          await migrator.addColumn(
-            eventRecords,
-            eventRecords.reminderMinutesBeforeList,
-          );
-          await customStatement(
-            "UPDATE event_records SET reminder_minutes_before_list = '[' || reminder_minutes_before || ']' WHERE reminder_minutes_before IS NOT NULL",
-          );
-        }
-        if (from < 5) {
-          if (!await _eventRecordsHasColumn('alarm_enabled')) {
-            await migrator.addColumn(eventRecords, eventRecords.alarmEnabled);
-          }
-          if (!await _eventRecordsHasColumn('all_day_alarm_minutes')) {
-            await migrator.addColumn(
-              eventRecords,
-              eventRecords.allDayAlarmMinutes,
-            );
-          }
-        }
-        if (from < 6) {
-          await migrator.alterTable(TableMigration(eventRecords));
-        }
-        if (from < 7 && !await _eventRecordsHasColumn('completed')) {
-          await migrator.addColumn(eventRecords, eventRecords.completed);
-        }
-        if (from < 8) {
-          await customStatement(createDeletionTable);
-          if (!await _eventRecordsHasColumn('sync_timestamp_details')) {
-            await migrator.addColumn(
-              eventRecords,
-              eventRecords.syncTimestampDetails,
-            );
-          }
-        }
-        if (from < 9) {
-          if (!await _eventRecordsHasColumn('lms_metadata')) {
-            await migrator.addColumn(eventRecords, eventRecords.lmsMetadata);
-          }
-          final deletionColumns = await customSelect(
-            'PRAGMA table_info(sync_event_deletions)',
-          ).get();
-          if (!deletionColumns.any(
-            (row) => row.read<String>('name') == 'lms_owner_id',
-          )) {
-            await customStatement(
-              'ALTER TABLE sync_event_deletions ADD COLUMN lms_owner_id TEXT',
-            );
-          }
-        }
+        await repairEventSchema(migrator, rebuild: from < 6);
       },
     );
   }
 
-  Future<bool> _eventRecordsHasColumn(String columnName) async {
+  Future<void> repairCurrentEventSchema({bool rebuild = false}) =>
+      transaction(() => repairEventSchema(Migrator(this), rebuild: rebuild));
+
+  // Shared by Drift upgrades and the bootstrap's snapshot-based repair. Add
+  // only missing columns: stored categories, alarms and recurrence stay intact.
+  Future<void> repairEventSchema(
+    Migrator migrator, {
+    bool rebuild = false,
+  }) async {
     final columns = await customSelect(
       'PRAGMA table_info(event_records)',
     ).get();
-    return columns.any((row) => row.read<String>('name') == columnName);
+    final names = columns.map((row) => row.read<String>('name')).toSet();
+    for (final column in eventRecords.$columns) {
+      if (!names.contains(column.$name)) {
+        await migrator.addColumn(eventRecords, column);
+      }
+    }
+    if (!names.contains('reminder_minutes_before_list')) {
+      await customStatement(
+        "UPDATE event_records SET reminder_minutes_before_list = '[' || reminder_minutes_before || ']' WHERE reminder_minutes_before IS NOT NULL",
+      );
+    }
+    // Schema 6 removed the old sensitive column and establishes the current
+    // defaults/constraints. Repair mislabeled current databases the same way.
+    if (rebuild) {
+      await migrator.alterTable(TableMigration(eventRecords));
+    }
+    await customStatement(createDeletionTable);
+    final deletionColumns = await customSelect(
+      'PRAGMA table_info(sync_event_deletions)',
+    ).get();
+    if (!deletionColumns.any(
+      (row) => row.read<String>('name') == 'lms_owner_id',
+    )) {
+      await customStatement(
+        'ALTER TABLE sync_event_deletions ADD COLUMN lms_owner_id TEXT',
+      );
+    }
   }
 
   Future<File> databaseFile() async {

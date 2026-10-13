@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:drift/native.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqlite3/sqlite3.dart';
 
@@ -93,18 +94,37 @@ class TodoDatabaseMigrationService {
         return const TodoMigrationResult(migrated: false, backupPending: false);
       }
 
+      final schema = AppDatabase.forMigration(NativeDatabase.memory());
+      late final List<Map<String, Object?>> expectedColumns;
+      try {
+        expectedColumns =
+            (await schema
+                    .customSelect('PRAGMA table_info(event_records)')
+                    .get())
+                .map((row) => row.data)
+                .toList();
+      } finally {
+        await schema.close();
+      }
       final original = sqlite3.open(databaseFile.path);
       late final int originalVersion;
       late final Map<String, CalendarEvent> localStates;
       try {
         originalVersion = _userVersion(original);
-        if (originalVersion >= AppDatabase.currentSchemaVersion) {
+        if (originalVersion > AppDatabase.currentSchemaVersion) {
           return const TodoMigrationResult(
             migrated: false,
             backupPending: false,
           );
         }
         if (!_hasEventTable(original)) {
+          return const TodoMigrationResult(
+            migrated: false,
+            backupPending: false,
+          );
+        }
+        if (originalVersion == AppDatabase.currentSchemaVersion &&
+            _hasCurrentSchema(original, expectedColumns)) {
           return const TodoMigrationResult(
             migrated: false,
             backupPending: false,
@@ -119,7 +139,7 @@ class TodoDatabaseMigrationService {
       // deletions. Schema 9 only adds nullable LMS metadata: it must not repeat
       // the old cloud migration or turn every unchanged event into an upload.
       final isAdditiveLmsMigration =
-          originalVersion == 8 && AppDatabase.currentSchemaVersion == 9;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion == 9;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
@@ -169,26 +189,25 @@ class TodoDatabaseMigrationService {
 
       stage = TodoMigrationStage.migrating;
       _report(stage, '일정을 Todo 형식으로 업데이트하고 있습니다.');
+      // Use the same schema implementation as normal Drift upgrades. All work
+      // is confined to the snapshot copy, including already-mislabeled v9 DBs.
+      final driftWorking = AppDatabase.forMigration(
+        NativeDatabase(workingFile),
+      );
+      try {
+        await driftWorking
+            .customSelect('SELECT 1 FROM event_records LIMIT 1')
+            .get();
+        await driftWorking.repairCurrentEventSchema(
+          rebuild: originalVersion == AppDatabase.currentSchemaVersion,
+        );
+      } finally {
+        await driftWorking.close();
+      }
       final working = sqlite3.open(workingFile.path);
       try {
         working.execute('BEGIN IMMEDIATE');
         try {
-          if (!_hasColumn(working, 'event_records', 'completed')) {
-            working.execute(
-              'ALTER TABLE event_records '
-              'ADD COLUMN completed INTEGER NOT NULL DEFAULT 0',
-            );
-          }
-          if (!_hasColumn(working, 'event_records', 'sync_timestamp_details')) {
-            working.execute(
-              'ALTER TABLE event_records ADD COLUMN sync_timestamp_details TEXT',
-            );
-          }
-          if (!_hasColumn(working, 'event_records', 'lms_metadata')) {
-            working.execute(
-              'ALTER TABLE event_records ADD COLUMN lms_metadata TEXT',
-            );
-          }
           for (final event in remoteWinners) {
             _upsertRemoteWinner(working, event);
           }
@@ -247,6 +266,7 @@ class TodoDatabaseMigrationService {
         _report(stage, '업데이트 결과를 확인하고 있습니다.');
         _validateMigratedDatabase(
           working,
+          expectedColumns: expectedColumns,
           localIds: localStates.keys.where((id) => !removedIds.contains(id)),
           remoteIds:
               remoteEvents
@@ -320,6 +340,36 @@ class TodoDatabaseMigrationService {
     return database
         .select('PRAGMA table_info($table)')
         .any((row) => row['name'] == column);
+  }
+
+  bool _hasCurrentSchema(
+    Database database,
+    List<Map<String, Object?>> expected,
+  ) {
+    final actual = {
+      for (final row in database.select('PRAGMA table_info(event_records)'))
+        row['name']: row,
+    };
+    for (final column in expected) {
+      final stored = actual[column['name']];
+      if (stored == null) return false;
+      for (final key in ['type', 'notnull', 'dflt_value', 'pk']) {
+        if (stored[key] != column[key]) return false;
+      }
+    }
+    final tableSql =
+        (database
+                    .select(
+                      "SELECT sql FROM sqlite_master WHERE name='event_records'",
+                    )
+                    .single['sql']
+                as String)
+            .toLowerCase()
+            .replaceAll(RegExp(r'[\s"`]'), '');
+    for (final name in ['all_day', 'show_dday', 'completed', 'alarm_enabled']) {
+      if (!tableSql.contains('check(${name}in(0,1))')) return false;
+    }
+    return _hasColumn(database, 'sync_event_deletions', 'lms_owner_id');
   }
 
   Map<String, CalendarEvent> _readLocalStates(Database database) => {
@@ -487,13 +537,14 @@ class TodoDatabaseMigrationService {
 
   void _validateMigratedDatabase(
     Database database, {
+    required List<Map<String, Object?>> expectedColumns,
     required Iterable<String> localIds,
     required Iterable<String> remoteIds,
   }) {
     if (_userVersion(database) != AppDatabase.currentSchemaVersion ||
-        !_hasColumn(database, 'event_records', 'completed') ||
-        !_hasColumn(database, 'event_records', 'lms_metadata') ||
-        !_hasColumn(database, 'sync_event_deletions', 'lms_owner_id')) {
+        !_hasCurrentSchema(database, expectedColumns) ||
+        database.select('PRAGMA integrity_check').single.values.single !=
+            'ok') {
       throw StateError('Todo schema validation failed.');
     }
     final expectedIds = {...localIds, ...remoteIds};

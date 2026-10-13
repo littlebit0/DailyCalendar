@@ -4634,6 +4634,248 @@ void main() {
     },
   );
 
+  testWidgets('PIN legacy length write failure keeps lock and permits retry', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appLockEnabled': true,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final secureStorage = _FailingPinStorage();
+    final settingsRepository = SettingsRepository(
+      preferences: preferences,
+      secureStorage: secureStorage,
+    );
+    await settingsRepository.saveAppLockPin('13579');
+    secureStorage._values.remove('appLockPinLength');
+    secureStorage.failWrite = true;
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(account: null),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('show-pin-entry-button')));
+    await tester.pump();
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 800));
+    await tester.pumpAndSettle();
+    expect(find.text('PIN 설정을 저장하지 못했습니다. 다시 입력해 주세요.'), findsOneWidget);
+    expect(find.byKey(const ValueKey('app-lock-screen')), findsOneWidget);
+    secureStorage.failWrite = false;
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    await tester.pump(const Duration(milliseconds: 800));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('app-lock-screen')), findsNothing);
+    expect(await settingsRepository.appLockPinLength(), 5);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('PIN late verification does not unlock a new lifecycle lock', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appLockEnabled': true,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final secureStorage = _FailingPinStorage();
+    final settingsRepository = SettingsRepository(
+      preferences: preferences,
+      secureStorage: secureStorage,
+    );
+    await settingsRepository.saveAppLockPin('13579');
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(account: null),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    secureStorage.pendingRead = Completer<String?>();
+    await tester.tap(find.byKey(const ValueKey('show-pin-entry-button')));
+    await tester.pump();
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+    await tester.pump();
+    secureStorage.pendingRead!.complete(
+      secureStorage._values['appLockPinHash'],
+    );
+    await tester.pump();
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('app-lock-screen')), findsOneWidget);
+    await tester.pumpWidget(const SizedBox.shrink());
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('PIN lock ignores a read result after disposal', (tester) async {
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appLockEnabled': true,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final secureStorage = _FailingPinStorage();
+    final settingsRepository = SettingsRepository(
+      preferences: preferences,
+      secureStorage: secureStorage,
+    );
+    await settingsRepository.saveAppLockPin('13579');
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(account: null),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    secureStorage.pendingRead = Completer<String?>();
+    await tester.tap(find.byKey(const ValueKey('show-pin-entry-button')));
+    await tester.pump();
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    await tester.pumpWidget(const SizedBox.shrink());
+    secureStorage.pendingRead!.complete(
+      secureStorage._values['appLockPinHash'],
+    );
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('PIN storage errors retry on the same app lock screen', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appLockEnabled': true,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final secureStorage = _FailingPinStorage();
+    final settingsRepository = SettingsRepository(
+      preferences: preferences,
+      secureStorage: secureStorage,
+    );
+    await settingsRepository.saveAppLockPin('13579');
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(account: null),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    secureStorage.failRead = true;
+    await tester.tap(find.byKey(const ValueKey('show-pin-entry-button')));
+    await tester.pump();
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+    expect(find.text('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.'), findsOneWidget);
+    expect(find.byKey(const ValueKey('app-lock-screen')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    secureStorage.failRead = false;
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('app-lock-screen')), findsNothing);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets('app lock covers Settings immediately after backgrounding', (
     tester,
   ) async {
@@ -6285,6 +6527,166 @@ void main() {
     expect(analytics.deleteCalls, 1);
     expect(find.text('전송 대기 분석 데이터를 삭제했습니다.'), findsOneWidget);
 
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets(
+    'PIN settings ignores success from a dismissed verification dialog',
+    (tester) async {
+      tester.view.physicalSize = const Size(900, 2600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'appLockEnabled': true,
+      });
+      FlutterSecureStorage.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final secureStorage = _FailingPinStorage();
+      final settingsRepository = SettingsRepository(
+        preferences: preferences,
+        secureStorage: secureStorage,
+      );
+      await settingsRepository.saveAppLockPin('13579');
+      final authService = _FakeGoogleDriveAuthService(account: null);
+      final notificationService = _FakeNotification();
+      final eventRepository = _FakeEventRepository();
+      final driveSyncService = _FakeGoogleDriveSyncService(
+        authService: authService,
+        eventRepository: eventRepository,
+        notificationService: notificationService,
+        settingsRepository: settingsRepository,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(notificationService),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+            googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+          ],
+          child: const MaterialApp(home: SettingsPage()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(
+        find.byKey(const ValueKey('privacy-settings-navigation')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(SwitchListTile, '앱 잠금'));
+      await tester.pumpAndSettle();
+      secureStorage.pendingRead = Completer<String?>();
+      for (final digit in ['1', '3', '5', '7', '9']) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+        await tester.pump();
+      }
+      final oldRead = secureStorage.pendingRead!;
+      Navigator.of(tester.element(find.text('PIN 확인'))).pop(false);
+      await tester.pumpAndSettle();
+      secureStorage.pendingRead = null;
+      await tester.tap(find.widgetWithText(SwitchListTile, '앱 잠금'));
+      await tester.pumpAndSettle();
+      oldRead.complete(secureStorage._values['appLockPinHash']);
+      await tester.pumpAndSettle();
+      expect(find.text('PIN 확인'), findsOneWidget);
+      expect(settingsRepository.load().appLockEnabled, true);
+      expect(tester.takeException(), isNull);
+      await tester.tap(find.text('취소').last);
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets('PIN settings verification retries after storage failure', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appLockEnabled': true,
+    });
+    FlutterSecureStorage.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final secureStorage = _FailingPinStorage();
+    final settingsRepository = SettingsRepository(
+      preferences: preferences,
+      secureStorage: secureStorage,
+    );
+    await settingsRepository.saveAppLockPin('13579');
+    final authService = _FakeGoogleDriveAuthService(account: null);
+    final notificationService = _FakeNotification();
+    final eventRepository = _FakeEventRepository();
+    final driveSyncService = _FakeGoogleDriveSyncService(
+      authService: authService,
+      eventRepository: eventRepository,
+      notificationService: notificationService,
+      settingsRepository: settingsRepository,
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(notificationService),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(eventRepository),
+          googleDriveAuthServiceProvider.overrideWithValue(authService),
+          googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+        ],
+        child: const MaterialApp(home: SettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const ValueKey('privacy-settings-navigation')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(SwitchListTile, '앱 잠금'));
+    await tester.pumpAndSettle();
+    expect(find.text('PIN 확인'), findsOneWidget);
+    secureStorage.failRead = true;
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+    expect(find.text('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    secureStorage.failRead = false;
+    for (final digit in ['1', '3', '5', '7', '9']) {
+      await tester.tap(find.widgetWithText(TextButton, digit));
+      await tester.pump();
+    }
+    await tester.pumpAndSettle();
+    expect(find.text('PIN 확인'), findsNothing);
+    expect(settingsRepository.load().appLockEnabled, false);
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
@@ -8910,6 +9312,64 @@ class _MemorySecureStorage extends FlutterSecureStorage {
     AppleOptions? mOptions,
     WindowsOptions? wOptions,
   }) async => _values[key];
+
+  @override
+  Future<void> delete({
+    required String key,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    _values.remove(key);
+  }
+}
+
+class _FailingPinStorage extends _MemorySecureStorage {
+  _FailingPinStorage();
+  bool failRead = false;
+  bool failWrite = false;
+  Completer<String?>? pendingRead;
+
+  @override
+  Future<void> write({
+    required String key,
+    required String? value,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    if (failWrite && key == 'appLockPinLength') {
+      throw StateError('storage write failed');
+    }
+    if (value == null) {
+      _values.remove(key);
+    } else {
+      _values[key] = value;
+    }
+  }
+
+  @override
+  Future<String?> read({
+    required String key,
+    AppleOptions? iOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+    WebOptions? webOptions,
+    AppleOptions? mOptions,
+    WindowsOptions? wOptions,
+  }) async {
+    if (key == 'appLockPinHash') {
+      if (failRead) throw StateError('storage read failed');
+      if (pendingRead != null) return pendingRead!.future;
+    }
+    return _values[key];
+  }
 
   @override
   Future<void> delete({

@@ -158,6 +158,8 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
   final _biometricAuth = BiometricAuthService();
   final _pinKeyboardFocusNode = FocusNode();
   Timer? _legacyPinTimer;
+  int _pinVerificationGeneration = 0;
+  bool _verifyingPin = false;
   String _pin = '';
   int? _pinLength;
   late var _unlocked = !widget.enabled;
@@ -180,6 +182,9 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
   void didUpdateWidget(covariant _AppLockGate oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (!widget.enabled) {
+      _pinVerificationGeneration++;
+      _checking = false;
+      _verifyingPin = false;
       _legacyPinTimer?.cancel();
       _unlocked = true;
       _pin = '';
@@ -206,6 +211,14 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (_verifyingPin &&
+        widget.enabled &&
+        (state == AppLifecycleState.paused ||
+            state == AppLifecycleState.inactive ||
+            state == AppLifecycleState.hidden)) {
+      _lock();
+      return;
+    }
     if (_checking ||
         AppLockPrivacyService.configurationAuthenticationInProgress) {
       return;
@@ -388,16 +401,21 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
   }
 
   Future<void> _loadPinLength() async {
-    final pinLength = await ref
-        .read(settingsRepositoryProvider)
-        .appLockPinLength();
-    if (!mounted) {
-      return;
+    try {
+      final pinLength = await ref
+          .read(settingsRepositoryProvider)
+          .appLockPinLength();
+      if (!mounted) return;
+      setState(() => _pinLength = pinLength);
+    } on Object {
+      if (!mounted) return;
+      setState(() => _error = context.tr('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.'));
     }
-    setState(() => _pinLength = pinLength);
   }
 
   void _lock() {
+    _pinVerificationGeneration++;
+    _verifyingPin = false;
     _legacyPinTimer?.cancel();
     if (mounted) {
       setState(() {
@@ -478,34 +496,52 @@ class _AppLockGateState extends ConsumerState<_AppLockGate>
       return;
     }
     final submittedPin = _pin;
-    setState(() => _checking = true);
+    final request = ++_pinVerificationGeneration;
+    bool isCurrent() =>
+        mounted && request == _pinVerificationGeneration && widget.enabled;
+    setState(() {
+      _checking = true;
+      _verifyingPin = true;
+    });
     final repository = ref.read(settingsRepositoryProvider);
-    final ok = await repository.verifyAppLockPin(submittedPin);
-    if (!mounted) {
-      return;
-    }
-    if (ok) {
-      if (_pinLength == null) {
-        await repository.saveAppLockPin(submittedPin);
-      }
-      if (!mounted) {
-        return;
-      }
-      setState(() {
-        _unlocked = true;
-        _error = '';
-        _checking = false;
-      });
-    } else {
-      setState(() {
-        _checking = false;
-        _error = keepInputOnFailure
-            ? context.tr('PIN을 계속 입력하거나 지워서 다시 입력하세요.')
-            : context.tr('PIN이 일치하지 않습니다.');
-        if (!keepInputOnFailure) {
-          _pin = '';
+    var updatingMetadata = false;
+    try {
+      final ok = await repository.verifyAppLockPin(submittedPin);
+      if (!isCurrent()) return;
+      if (ok) {
+        if (_pinLength == null) {
+          updatingMetadata = true;
+          await repository.saveAppLockPinLength(submittedPin.length);
+          if (!isCurrent()) return;
+          _pinLength = submittedPin.length;
         }
+        setState(() {
+          _unlocked = true;
+          _error = '';
+        });
+      } else {
+        setState(() {
+          _error = keepInputOnFailure
+              ? context.tr('PIN을 계속 입력하거나 지워서 다시 입력하세요.')
+              : context.tr('PIN이 일치하지 않습니다.');
+          if (!keepInputOnFailure) _pin = '';
+        });
+      }
+    } on Object {
+      if (!isCurrent()) return;
+      setState(() {
+        _pin = '';
+        _error = updatingMetadata
+            ? context.tr('PIN 설정을 저장하지 못했습니다. 다시 입력해 주세요.')
+            : context.tr('보안 저장소를 확인하지 못했습니다. 다시 입력해 주세요.');
       });
+    } finally {
+      if (isCurrent()) {
+        setState(() {
+          _checking = false;
+          _verifyingPin = false;
+        });
+      }
     }
   }
 
