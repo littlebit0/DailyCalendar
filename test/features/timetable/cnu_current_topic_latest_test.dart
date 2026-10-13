@@ -206,17 +206,18 @@ void main() {
         expect(decoded.courses[e.key]!.value, e.value.value);
       }
       final path = '/private/tmp/cnu-v8-full-drive-${mode.name}.json';
-      fixtureFile(path).writeAsStringSync(encoded);
+      final output = fixtureOutputFile(path);
+      output.writeAsStringSync(encoded);
       exports.add({
         'mode': mode.name,
         'records': values.length,
-        'path': path,
+        'path': output.path,
         'bytes': utf8.encode(encoded).length,
         'SHA256': sha256.convert(utf8.encode(encoded)).toString(),
         'fullDocumentDeepEqual': true,
       });
     }
-    fixtureFile(
+    fixtureOutputFile(
       '$folder/actual-three-mode-full-drive-validation.json',
     ).writeAsStringSync(
       '${const JsonEncoder.withIndent('  ').convert(exports)}\n',

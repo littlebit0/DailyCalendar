@@ -123,3 +123,10 @@ See `docs/CODEX_SETUP.md` for discovery and external plugin connection boundarie
 - 요구를 충족할 자료를 확인하지 못했거나, 서로 다른 해석이 결과에 실질적인 차이를 만들면 구체적인 선택지와 불확실한 점을 설명하고 사용자에게 먼저 묻는다. 질문에 대한 답이 오기 전에는 그 답에 의존하는 변경을 진행하지 않는다.
 - 사용자가 해당 질문에 대해 명시적으로 “알아서 하라” 등 판단을 위임한 범위는 스스로 판단해 진행한다. 다른 범위에까지 위임을 확대하지 않는다.
 - 자료 수집·현재 코드 확인 등 답에 의존하지 않는 작업은 계속한다. 합의된 범위 내의 통상적인 구현 선택마다 불필요하게 반복 확인하지 않는다.
+
+## Confirmed feedback and recurrence prevention
+
+- Treat user corrections supported by records as actionable feedback. Record the specific mistake and a concrete prevention rule; do not replace correction with appeasement or unsupported admissions.
+- Do not say work will continue after ending a turn unless an actual continuation mechanism is running and verified. A final response alone does not keep this agent working.
+- Give time estimates only with an explained basis and uncertainty. Distinguish active work, remote queue/runtime, and paused work; never present an unmeasured estimate as established.
+- For CI portability, inspect test inputs, generated output locations, absolute paths and host-specific assumptions before claiming clean-checkout reproducibility. After a combined run, rerun only failed/changed checks and directly affected scope unless broader checks are required.

@@ -39,6 +39,19 @@ void main() {
       expect(file.existsSync(), isFalse);
     },
   );
+  test('diagnostics use host temporary storage and preserve frozen inputs', () {
+    final input = fixtureFile(source);
+    final original = input.readAsBytesSync();
+    final output = fixtureOutputFile(source);
+    output.writeAsStringSync('generated diagnostic');
+    expect(output.path, startsWith(Directory.systemTemp.path));
+    expect(output.path, isNot(input.path));
+    expect(input.readAsBytesSync(), original);
+    final macLabel = fixtureOutputFile('/private/tmp/ci-report.json');
+    macLabel.writeAsStringSync('portable');
+    expect(macLabel.parent.path, output.parent.path);
+    expect(macLabel.readAsStringSync(), 'portable');
+  });
   test('ordinary product files still resolve directly', () {
     expect(
       fixtureFile('assets/timetable/catalog.json').path,

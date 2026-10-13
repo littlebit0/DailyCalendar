@@ -260,7 +260,7 @@ void main() {
         for (final c in restored) {
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
         }
-        fixtureFile(
+        fixtureOutputFile(
           '$dir/full-timetable-sync-${mode.name}.json',
         ).writeAsStringSync('${jsonEncode(encoded)}\n');
       }

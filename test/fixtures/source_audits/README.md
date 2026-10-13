@@ -7,7 +7,7 @@ tests resolve them exclusively through `test/support/source_fixture.dart` and
 never fall back to the ignored local research workspace.
 
 `manifest.json` maps logical paths to SHA-256 hashes of the original bytes.
-The four archive parts concatenate into XZ-compressed tar streams, whose combined SHA-256 is
+The five archive parts concatenate into XZ-compressed tar streams, whose combined SHA-256 is
 also in the manifest. Identical bytes are stored once. The archive contains only
 regular files named by their hashes. `tool/prepare_test_fixtures.py` uses Python 3
 standard libraries to verify the archive and each source, reject unsafe paths,
@@ -22,7 +22,7 @@ modified release data. Historical publication projection changes only
 4.0.0 timetable and organization JSON so CI repairs cannot change product data.
 Capture-only UI audits write to OS temporary directories rather than `work/`.
 
-Collected from existing test reads on 2026-10-12: 10,092 logical inputs, 9,475
+Collected from existing test reads on 2026-10-12: 11,401 logical inputs, 10,781
 unique byte sequences. Text inputs were checked for credential/key/token
 patterns with no findings. Original bytes and source hash assertions are
 preserved. An absent fixture fails normally; there is no skip-on-missing rule.

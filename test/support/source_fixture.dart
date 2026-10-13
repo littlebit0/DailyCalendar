@@ -67,3 +67,12 @@ void markHistoricalPublication(Map<String, dynamic> data) {
     }
   }
 }
+
+final _output = Directory.systemTemp.createTempSync(
+  'daily-source-audit-output-',
+);
+// Generated diagnostics must never overwrite immutable source inputs or assume
+// the host has macOS's /private/tmp directory.
+File fixtureOutputFile(String logicalName) => File(
+  '${_output.path}/${sha256.convert(utf8.encode(logicalName))}-${logicalName.split('/').last}',
+);
