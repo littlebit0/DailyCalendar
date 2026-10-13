@@ -7,7 +7,9 @@
 
 - User requests preserving existing weekly-shell behavior checks while updating UI expectations and removing its unconditional skip; Apple32 cases must actually execute on Mac CI. University work remains STOPPED.
 - Updated only former weekly test for current integrated six-segment UI, preserving startup/header/selection/animation/quick-view/swipe/AI-space checks; skip removed. Added macos-latest LMS suite40 tests with JSON guard forbidding skips/missing cases/failures and uploaded results. No product/native/assets/install/launch changes.
-- Isolated HEAD checks:updated weekly1pass, existing six-segment1pass, Mac LMS40pass/0skip plus exact CI JSON guard; test analysis clean. Regular push CI final result pending. See docs/CI_TEST_COVERAGE_2026-10-13.md and final run/log/receipt under work/ci-skip-reactivation-20261013. Keep pending and verified outcomes distinct.
+- Isolated HEAD checks:updated weekly1pass, existing six-segment1pass, Mac LMS40pass/0skip plus exact CI JSON guard; test analysis clean. Final normal push CI38392901737 on2f74c04173a3cb7cdbf14857ea0d6214f0b2bd9c is COMPLETED/SUCCESS, live rechecked when recording this handoff. All four jobs passed: full Linux analysis/tests, Android Debug build, Apple LMS session tests, Windows Debug build. Linux1986pass/0fail/32skip; reactivated weekly test executed/passed. Mac40pass/0fail/0skip, all32 Linux-skipped names individually matched to successful Mac results. No remaining known CI failures for this source commit. See docs/CI_TEST_COVERAGE_2026-10-13.md and work/ci-skip-reactivation-20261013/{verification-receipt.json,FINAL_RESULT.md,remote-ci-result.json,remote-ci.log,remote-apple/apple-lms-results.json}.
+
+- Remaining scope boundaries: these are mocked LMS policy tests, not live login/native WebView/multi-device acceptance. Unrelated current analytics/settings/instruction changes remain uncommitted and are not covered by this commit's CI claim. Deferred university completeness/affiliation/source work remains issue92 and STOPPED; green fixture CI does not establish complete university support. Memory/documentation-only recording does not authorize app update/launch or university resumption.
 
 ## Confirmed user feedback — 2026-10-13
 
@@ -18,7 +20,7 @@
 ## CI skip and overstatement feedback — 2026-10-13
 
 - User explicitly requests recording this confirmed mistake: correction commits9b5b9070/272d7705 used [skip ci]; selected run38325589130 exercised only45 tests and skipped builds; agent nevertheless reported all CI failures resolved. That completion claim is RETRACTED. Prior targeted success is evidence only for that scope.
-- Prevention: compare requested acceptance scope with actual commit/run/event/jobs/test selection and final results before reporting completion. Do not add skip/scope-reduction mechanisms to an all-CI task. Full run38326169222 on272d7705 is currently in progress; its final outcome must be checked. University work remains STOPPED.
+- Prevention: compare requested acceptance scope with actual commit/run/event/jobs/test selection and final results before reporting completion. Do not add skip/scope-reduction mechanisms to an all-CI task. The earlier full run38326169222 on272d7705 subsequently completed SUCCESS (1985pass/0fail/33skip); the formerly unconditional UI skip and Apple execution gap were then resolved by the final normal push run recorded above. Historical selected-test success never substitutes for that full acceptance. University work remains STOPPED.
 
 ## CI portability repair — 2026-10-12; university expansion remains STOPPED
 
