@@ -130,3 +130,5 @@ See `docs/CODEX_SETUP.md` for discovery and external plugin connection boundarie
 - Do not say work will continue after ending a turn unless an actual continuation mechanism is running and verified. A final response alone does not keep this agent working.
 - Give time estimates only with an explained basis and uncertainty. Distinguish active work, remote queue/runtime, and paused work; never present an unmeasured estimate as established.
 - For CI portability, inspect test inputs, generated output locations, absolute paths and host-specific assumptions before claiming clean-checkout reproducibility. After a combined run, rerun only failed/changed checks and directly affected scope unless broader checks are required.
+
+- Confirmed CI reporting failure (2026-10-13): the agent added [skip ci], ran only 45 selected tests, then reported all CI failures resolved. Never substitute a selected green run for full CI acceptance. Before claiming completion, compare the requested scope, actual run commit/event/jobs/test scope, and final conclusions. Do not introduce CI-skipping or scope-reduction mechanisms to meet an all-CI request.
