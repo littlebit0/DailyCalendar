@@ -1,4 +1,13 @@
 # Daily Agent Memory — current handoff
+## Issues 200 / 218 / 217 — 2026-10-16 (commit/push authorized)
+
+- User approved all three fixes, combined checks and canonical Mac test update; commit/push and full CI now authorized; remote result pending. University expansion remains STOPPED; unrelated analytics/test-label/path/policy changes preserved.
+- #200 settings-independent startup error/retry gate; original failed settings retained, no reset/default fallback or lock bypass. No confirmed local settings backup; automatic file reconstruction is not implemented.
+- #218 vendored local_auth_windows2.0.1 with native catches around both availability awaits, fail-closed authentication and exactly-one reply; native sync/async failure+retry tests wired into normal Windows CI. #217 macOS sticky auth disabled only on macOS so system cancellation completes; other platforms/companion channel retained.
+- 52 distinct affected Dart/widget tests passed; lib/test/tool/vendor runtime static analysis clean; YAML and whitespace checks clean. Mac optimized profile build succeeded after pod install --deployment restored missing Manifest.lock; Apple locks unchanged.
+- Canonical `/Users/kimhwi/Applications/Daily Test.app` updated in place; identity, strict signature, secure entitlements, new AOT code and unchanged academic assets verified. Compressed backup kept, generated duplicate removed; not launched. Receipt: `work/issues-200-218-217-20261016/install-receipt.json`.
+- Windows native tests/real Windows Hello and live macOS cancellation are NOT verified. No remote CI, commit/push, login/account mutation or launch. Full evidence and boundaries: docs/reviews/ISSUES_200_218_217_2026-10-16.md; work/issues-200-218-217-20261016/.
+
 
 2026-10-10 Markdown consolidation. This file is the current entrypoint; detailed history is archived, not deleted.
 

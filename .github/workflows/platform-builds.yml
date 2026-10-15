@@ -131,6 +131,15 @@ jobs:
 
       - name: Build Windows app
         run: flutter build windows --debug --no-pub
+      - name: Windows Hello native regression tests
+        shell: pwsh
+        run: |
+          cmake -S windows -B build/windows/x64 -Dinclude_local_auth_windows_tests=ON
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cmake --build build/windows/x64 --config Debug --target local_auth_windows_test
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          ctest --test-dir build/windows/x64/plugins/local_auth_windows -C Debug --output-on-failure --no-tests=error
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload Windows app
         uses: actions/upload-artifact@v4

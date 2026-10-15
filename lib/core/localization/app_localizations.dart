@@ -154,6 +154,8 @@ class _AppLocalizationsDelegate
 
 const Map<String, Map<String, String>> _translations = {
   'en': {
+    '앱을 시작하지 못했습니다': 'Could not start the app',
+    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.': 'Could not load saved settings or prepare the app. Existing settings and events have not been reset. Contact support if the problem persists.',
     "학교 서버에 연결하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.":
         "Could not connect to the school server. Check your network and try again.",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.":
@@ -1118,6 +1120,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면과 기능 사용': 'Screens and feature usage',
   },
   'ja': {
+    '앱을 시작하지 못했습니다': 'アプリを起動できませんでした',
+    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.': '保存した設定の読み込み、またはアプリの準備に失敗しました。既存の設定や予定は初期化していません。問題が続く場合はサポートにお問い合わせください。',
     "학교 서버에 연결하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.":
         "学校サーバーに接続できません。ネットワークを確認して再試行してください。",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.":
@@ -1993,6 +1997,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면과 기능 사용': '画面と機能の利用',
   },
   'zh_Hant': {
+    '앱을 시작하지 못했습니다': '無法啟動應用程式',
+    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.': '無法載入儲存的設定或準備應用程式。既有設定與行程並未重設。若問題持續，請聯絡支援。',
     "학교 서버에 연결하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.": "無法連線學校伺服器。請檢查網路後重試。",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.": "學校登入驗證逾時。請稍後重試。",
     "학교에서 추가 인증 또는 보안문자 입력을 요구합니다. 수동 로그인으로 인증을 완료해 주세요.":

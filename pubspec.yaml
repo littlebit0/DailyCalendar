@@ -141,3 +141,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+# #218: native availability exceptions must not terminate Windows.
+dependency_overrides:
+  local_auth_windows:
+    path: third_party/local_auth_windows

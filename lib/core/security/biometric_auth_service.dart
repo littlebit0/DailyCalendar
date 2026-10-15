@@ -99,7 +99,10 @@ class BiometricAuthService {
       return await _client.authenticate(
         localizedReason: localizedReason,
         biometricOnly: biometricOnly,
-        persistAcrossBackgrounding: true,
+        // Darwin only resumes sticky requests on iOS. On macOS a system
+        // cancellation must complete so the locked UI can offer another try.
+        persistAcrossBackgrounding:
+            defaultTargetPlatform != TargetPlatform.macOS,
       );
     } on LocalAuthException {
       return false;

@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app/daily_bootstrap.dart';
+import 'app/startup_gate.dart';
 import 'core/diagnostics/startup_timing.dart';
 import 'core/analytics/privacy_analytics_service.dart';
 import 'core/di/app_providers.dart';
@@ -15,6 +16,10 @@ import 'core/update/app_update_service.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   StartupTiming.mark(StartupStage.launch);
+  runApp(StartupGate(initialize: _initializeApplication));
+}
+
+Future<Widget> _initializeApplication() async {
   await Future.wait([
     initializeDateFormatting('ko'),
     initializeDateFormatting('en'),
@@ -29,14 +34,13 @@ Future<void> main() async {
   final analytics = PrivacyAnalyticsService(preferences: preferences);
   await analytics.initialize();
 
-  runApp(
-    ProviderScope(
-      overrides: [
-        settingsRepositoryProvider.overrideWithValue(settingsRepository),
-        productAnalyticsProvider.overrideWithValue(analytics),
-      ],
-      child: const DailyBootstrap(),
-    ),
+  final app = ProviderScope(
+    overrides: [
+      settingsRepositoryProvider.overrideWithValue(settingsRepository),
+      productAnalyticsProvider.overrideWithValue(analytics),
+    ],
+    child: const DailyBootstrap(),
   );
   unawaited(AppUpdateService().checkAndInstallIfAvailable());
+  return app;
 }
