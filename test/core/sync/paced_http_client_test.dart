@@ -7,6 +7,34 @@ import 'package:http/http.dart' as http;
 void main() {
   final uri = Uri.https('example.test', '/sync');
 
+  test('default 1ms pacing still waits for the complete response', () async {
+    final body = StreamController<List<int>>();
+    final entered = Completer<void>();
+    var sends = 0;
+    final client = PacedHttpClient(
+      client: _Transport((request) async {
+        sends++;
+        if (sends == 1) {
+          entered.complete();
+          return http.StreamedResponse(body.stream, 200);
+        }
+        return http.StreamedResponse(Stream.value([50]), 200);
+      }),
+    );
+    addTearDown(client.close);
+    expect(client.delay, const Duration(milliseconds: 1));
+    final first = client.get(uri);
+    final second = client.get(uri);
+    await entered.future;
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    expect(sends, 1);
+    body.add([49]);
+    await body.close();
+    expect((await first).body, '1');
+    expect((await second).body, '2');
+    expect(sends, 2);
+  });
+
   test(
     'response bodies finish before the next request and quiet interval',
     () async {

@@ -384,8 +384,21 @@ void main() {
           await tester.ensureVisible(username);
           await tester.pumpAndSettle();
           expect(tester.widget<Text>(username).data, 'fixture-user');
+          final reason = find.byKey(const ValueKey('lms-login-failure-reason'));
+          await tester.ensureVisible(reason);
+          await tester.pumpAndSettle();
+          expect(
+            tester.widget<Text>(reason).data,
+            LmsLoginFailure.authenticationUnconfirmed.message,
+          );
+          expect(find.textContaining(fixturePassword), findsNothing);
+
           final remove = find.byKey(const ValueKey('lms-local-login-remove'));
-          await tester.ensureVisible(remove);
+          await Scrollable.ensureVisible(
+            tester.element(remove),
+            alignment: 0.5,
+          );
+          await tester.pumpAndSettle();
           await tester.tap(remove);
           await tester.pumpAndSettle();
           expect(remove, findsNothing);

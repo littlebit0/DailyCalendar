@@ -10,6 +10,7 @@ import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/sync/google_drive_sync_service.dart';
+import 'package:daily/core/sync/paced_http_client.dart';
 import 'package:daily/core/sync/settings_sync_document.dart';
 import 'package:daily/features/events/data/app_database.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
@@ -214,6 +215,73 @@ void main() {
       expect(settings.driveChangePageToken('tester@example.com'), isNull);
     },
   );
+
+  for (final count in [1, 20, 100]) {
+    test(
+      'default pacing restores $count events without missing or overlapping requests',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final preferences = await SharedPreferences.getInstance();
+        final repository = _MemoryEventRepository();
+        final notifications = _FakeNotificationService();
+        var active = 0;
+        var peak = 0;
+        final downloaded = <String>[];
+        final client = _versionedClient((request) async {
+          active++;
+          if (active > peak) peak = active;
+          try {
+            await Future<void>.delayed(const Duration(milliseconds: 1));
+            expect(request.method, 'GET');
+            if (request.url.path == '/drive/v3/files') {
+              if ((request.url.queryParameters['q'] ?? '').contains(
+                'daily-sync-v2-event-',
+              )) {
+                return _driveFiles(
+                  List.generate(
+                    count,
+                    (i) => {
+                      'id': 'sample-$i',
+                      'name': 'daily-sync-v2-event-sample-$i.json',
+                    },
+                  ),
+                );
+              }
+              return _driveFiles([]);
+            }
+            final id = request.url.pathSegments.last;
+            if (id.startsWith('sample-')) {
+              downloaded.add(id);
+              return _jsonResponse(
+                _eventFileJson(
+                  id: id,
+                  title: 'fixture',
+                  startAt: '2026-06-01T00:00:00.000Z',
+                  endAt: '2026-06-02T00:00:00.000Z',
+                ),
+              );
+            }
+            return http.Response('fixture unexpected request', 500);
+          } finally {
+            active--;
+          }
+        });
+        final service = _service(
+          repository: repository,
+          notificationService: notifications,
+          preferences: preferences,
+          httpClient: client,
+          driveRequestDelay: null,
+        );
+        addTearDown(service.dispose);
+        await service.restoreNow();
+        expect(peak, 1);
+        expect(downloaded, List.generate(count, (i) => 'sample-$i'));
+        expect(repository.events.map((e) => e.id).toSet(), downloaded.toSet());
+        expect(notifications.scheduled.length, count);
+      },
+    );
+  }
 
   test('restore sync downloads v2 event files without uploading', () async {
     SharedPreferences.setMockInitialValues({});
@@ -2588,11 +2656,12 @@ GoogleDriveSyncService _service({
   required http.Client httpClient,
   Duration backupRestoreDelay = Duration.zero,
   Duration changeSyncDelay = Duration.zero,
+  Duration? driveRequestDelay = Duration.zero,
   List<Duration> automaticRetryDelays = const [],
   ProductAnalytics analytics = const NoopProductAnalytics(),
 }) {
   return GoogleDriveSyncService(
-    driveRequestDelay: Duration.zero,
+    driveRequestDelay: driveRequestDelay ?? PacedHttpClient.defaultDelay,
     authService: authService ?? _FakeGoogleDriveAuthService(),
     eventRepository: repository,
     notificationService: notificationService,

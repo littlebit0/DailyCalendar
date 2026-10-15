@@ -7,11 +7,13 @@ import 'package:http/http.dart' as http;
 class PacedHttpClient extends http.BaseClient {
   PacedHttpClient({
     required http.Client client,
-    this.delay = const Duration(milliseconds: 250),
+    this.delay = defaultDelay,
     this.requestTimeout = const Duration(seconds: 10),
     this.validateRequest,
     this.ownsClient = false,
   }) : _client = client;
+
+  static const defaultDelay = Duration(milliseconds: 1);
 
   final http.Client _client;
   final Duration delay;

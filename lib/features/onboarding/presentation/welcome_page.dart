@@ -461,7 +461,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
             ? 'Apple 로그인이 완료되었습니다. 연결된 Google Drive 동기화를 복원했습니다.'
             : 'Apple 로그인이 완료되었습니다.';
       });
-      await _completeOnboarding();
+      await _completeOnboarding(offerProfile: !restoredGoogleSync);
     } on AppleSignInException catch (error) {
       if (mounted) {
         setState(() => _message = error.message);
@@ -486,7 +486,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       final connected = await _connectGoogleDriveAndRestore();
       if (connected) {
         if (!mounted) return;
-        await _completeOnboarding();
+        await _completeOnboarding(offerProfile: false);
       }
     } finally {
       if (mounted) {
@@ -523,13 +523,9 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       if (!_isCurrentGoogleDriveAttempt(attempt)) {
         return false;
       }
-      await syncService.syncPendingChangesNow(
-        promptIfNecessary: false,
-        restoreAfterBackup: true,
-      );
-      if (!_isCurrentGoogleDriveAttempt(attempt)) {
-        return false;
-      }
+      // The calendar starts the same backup-before-restore operation; do not
+      // hold the welcome screen open or enqueue a duplicate initial restore.
+      ref.read(onboardingRestoreOwnerProvider.notifier).state = account.email;
 
       return true;
     } on UnsupportedError catch (error) {
@@ -565,7 +561,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       }
       final syncService = ref.read(googleDriveSyncServiceProvider);
       await syncService.startListeningOnly(flushPendingChanges: false);
-      await syncService.syncPendingChangesNow(restoreAfterBackup: true);
+      ref.read(onboardingRestoreOwnerProvider.notifier).state = restored.email;
       return true;
     } on Object {
       return false;
@@ -576,7 +572,7 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
       left.trim().toLowerCase() == right.trim().toLowerCase();
 
   bool _isCurrentGoogleDriveAttempt(int attempt) {
-    return _googleDriveAttempt == attempt;
+    return mounted && _googleDriveAttempt == attempt;
   }
 
   void _cancelGoogleDriveSignIn() {
@@ -615,12 +611,12 @@ class _WelcomePageState extends ConsumerState<WelcomePage> {
     }
   }
 
-  Future<void> _completeOnboarding() async {
+  Future<void> _completeOnboarding({bool offerProfile = true}) async {
     // Every completion path can have an already linked Google account, including
     // Apple sign-in restoring its connection and returning local users.
     // Offer the profile before marking onboarding complete so rebuilding the
     // app's root cannot skip or dispose the selection step.
-    await offerAcademicProfile(context, ref);
+    if (offerProfile) await offerAcademicProfile(context, ref);
     if (!mounted) return;
     final settingsRepository = ref.read(settingsRepositoryProvider);
     final previous = settingsRepository.load();

@@ -279,6 +279,10 @@ final todoDatabaseMigrationServiceProvider =
       return service;
     });
 
+// A first sign-in hands restoration to the calendar's existing startup gate.
+// Account scoped and memory only; never persisted or synchronized.
+final onboardingRestoreOwnerProvider = StateProvider<String?>((ref) => null);
+
 final syncServiceProvider = Provider<SyncService>((ref) {
   return ref.watch(googleDriveSyncServiceProvider);
 });

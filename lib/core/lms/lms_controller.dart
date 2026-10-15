@@ -52,6 +52,7 @@ class LmsController extends ChangeNotifier {
   final LmsCredentialsStore _credentials;
   final _automaticAttempts = <String>{};
   bool automaticLoginPaused = false;
+  LmsLoginFailure? lastLoginFailure;
   String? _credentialKey;
   String? _localLoginUsername;
   bool _localLoginLoading = false;
@@ -183,6 +184,7 @@ class LmsController extends ChangeNotifier {
       unawaited(loadLocalLoginInfo());
     }
     automaticLoginPaused = false;
+    lastLoginFailure = null;
     _restoredPrincipal = null;
     _stored = false;
     _restoring = false;
@@ -245,11 +247,20 @@ class LmsController extends ChangeNotifier {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
     final school = schoolId;
     if (owner == null || !supported || school == null) return;
-    await _credentials.save(
-      owner,
-      school,
-      LmsLocalCredentials(username, password),
-    );
+    lastLoginFailure = null;
+    try {
+      await _credentials.save(
+        owner,
+        school,
+        LmsLocalCredentials(username, password),
+      );
+    } catch (_) {
+      if (!_disposed && _desiredKey == '${normalizeLmsOwner(owner)}|$school') {
+        lastLoginFailure = LmsLoginFailure.secureStorage;
+        _notify();
+      }
+      rethrow;
+    }
     if (_disposed || _desiredKey != '${normalizeLmsOwner(owner)}|$school') {
       return;
     }
@@ -283,6 +294,7 @@ class LmsController extends ChangeNotifier {
     _localLoginLoading = false;
     _localLoginReadFailed = false;
     automaticLoginPaused = false;
+    lastLoginFailure = null;
     _notify();
   }
 
@@ -301,6 +313,7 @@ class LmsController extends ChangeNotifier {
     try {
       credentials = await _credentials.read(current.ownerId, current.schoolId);
     } catch (_) {
+      if (valid()) lastLoginFailure = LmsLoginFailure.secureStorage;
       return false;
     } // Keychain failure must not destroy normal session/cache.
     if (!valid() || credentials == null) return false;
@@ -310,13 +323,27 @@ class LmsController extends ChangeNotifier {
       key,
     ); // Never automatically repeat a login this process.
     _restoring = true;
+    lastLoginFailure = null;
     _notify();
-    final success = await current.loginAutomatically(
-      credentials,
-      expectedPrincipal: _settings.load().academicProfile?.lmsUserId,
-    );
+    final bool success;
+    try {
+      success = await current.loginAutomatically(
+        credentials,
+        expectedPrincipal: _settings.load().academicProfile?.lmsUserId,
+      );
+    } catch (error) {
+      if (valid()) {
+        lastLoginFailure =
+            current.lastAutomaticLoginFailure ??
+            LmsLoginFailure.fromError(error);
+      }
+      rethrow;
+    }
     if (!valid()) return false;
     if (!success) {
+      lastLoginFailure =
+          current.lastAutomaticLoginFailure ??
+          LmsLoginFailure.authenticationUnconfirmed;
       await _credentials.save(
         current.ownerId,
         current.schoolId,
@@ -331,16 +358,12 @@ class LmsController extends ChangeNotifier {
       sync.markRestoreFailed(authenticationRequired: true);
       return false;
     }
+    lastLoginFailure = null;
     _stored = current.isAuthenticated;
     _restoredPrincipal = current.principalId;
     await _saveConnection(current, enabled: true);
     if (!valid()) return false;
-    _restoring = false;
-    _networkRefreshStarted = true;
-    await sync.refresh(force: true);
-    if (valid() && sync.state == LmsSyncState.ready) {
-      current.acknowledgeSuccessfulRefresh();
-    }
+    await _refreshAuthenticatedSession(current, valid, force: true);
     return true;
   }
 
@@ -429,37 +452,15 @@ class LmsController extends ChangeNotifier {
       _stored = current.isAuthenticated;
       _restoredPrincipal = current.principalId ?? _restoredPrincipal;
       if (current.isAuthenticated) {
+        lastLoginFailure = null;
         await _saveConnection(current, enabled: true);
       }
       if (!valid()) return;
-      _restoring = false;
-      _networkRefreshStarted = true;
-      await sync.refresh(force: force || _forceCurrentRefresh);
-      if (valid() && sync.state == LmsSyncState.ready) {
-        current.acknowledgeSuccessfulRefresh();
-      }
-      if (!valid() || sync.state != LmsSyncState.needsLogin) return;
-      // fetchHtml requests recovery only after a previously authenticated GET
-      // was rejected. The session consumes that request once, using only its
-      // own saved cookies and verified root identity, never SSO credentials.
-      _restoring = true;
-      _notify();
-      final recovered = await current.recoverAuthentication();
-      if (!valid()) return;
-      _stored = current.isAuthenticated;
-      _restoredPrincipal = current.principalId ?? _restoredPrincipal;
-      _restoring = false;
-      if (recovered) {
-        await _saveConnection(current, enabled: true);
-        if (valid()) await sync.refresh(force: true);
-        if (valid() && sync.state == LmsSyncState.ready) {
-          current.acknowledgeSuccessfulRefresh();
-        }
-        if (valid()) _stored = current.isAuthenticated;
-      }
-      if (valid() && sync.state == LmsSyncState.needsLogin) {
-        await _tryAutomaticLogin(current, valid);
-      }
+      await _refreshAuthenticatedSession(
+        current,
+        valid,
+        force: force || _forceCurrentRefresh,
+      );
     } catch (error) {
       if (valid()) {
         final expired =
@@ -483,10 +484,49 @@ class LmsController extends ChangeNotifier {
     }
   }
 
+  // A successful credential submission needs the same bounded cookie recovery
+  // as restored/manual sessions when the first school read redirects.
+  Future<void> _refreshAuthenticatedSession(
+    LmsWebSession current,
+    bool Function() valid, {
+    required bool force,
+  }) async {
+    if (!valid()) return;
+    _restoring = false;
+    _networkRefreshStarted = true;
+    await sync.refresh(force: force);
+    if (valid() && sync.state == LmsSyncState.ready) {
+      current.acknowledgeSuccessfulRefresh();
+    }
+    if (!valid() || sync.state != LmsSyncState.needsLogin) return;
+    // fetchHtml requests recovery only after a previously authenticated GET
+    // was rejected. The session consumes that request once, using only its
+    // own saved cookies and verified root identity, never SSO credentials.
+    _restoring = true;
+    _notify();
+    final recovered = await current.recoverAuthentication();
+    if (!valid()) return;
+    _stored = current.isAuthenticated;
+    _restoredPrincipal = current.principalId ?? _restoredPrincipal;
+    _restoring = false;
+    if (recovered) {
+      await _saveConnection(current, enabled: true);
+      if (valid()) await sync.refresh(force: true);
+      if (valid() && sync.state == LmsSyncState.ready) {
+        current.acknowledgeSuccessfulRefresh();
+      }
+      if (valid()) _stored = current.isAuthenticated;
+    }
+    if (valid() && sync.state == LmsSyncState.needsLogin) {
+      await _tryAutomaticLogin(current, valid);
+    }
+  }
+
   /// Prepares the account-scoped object; the caller alone presents the visible
   /// official school login. Automatic credential submission is suppressed here.
   Future<LmsWebSession?> prepareLogin() async {
     _preparingLogin = true;
+    lastLoginFailure = null;
     try {
       await refresh();
     } finally {
@@ -503,6 +543,7 @@ class LmsController extends ChangeNotifier {
         !loginSession.isAuthenticated) {
       return;
     }
+    lastLoginFailure = null;
     _generation++;
     _restoredPrincipal = loginSession.principalId;
     _stored = true;
@@ -530,6 +571,7 @@ class LmsController extends ChangeNotifier {
 
   Future<void> _disconnect() async {
     _disconnecting = true;
+    lastLoginFailure = null;
     _restoring = false;
     _queuedForce = false;
     _generation++;

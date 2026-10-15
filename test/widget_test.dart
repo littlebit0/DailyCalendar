@@ -1462,7 +1462,7 @@ void main() {
     await tester.pump();
     await tester.pumpAndSettle();
 
-    expect(settingsRepository.load().onboardingCompleted, isFalse);
+    expect(settingsRepository.load().onboardingCompleted, isTrue);
     expect(find.byType(AcademicProfilePage), findsOneWidget);
     await tester.tap(find.text('나중에'));
     await tester.pumpAndSettle();
@@ -1937,6 +1937,88 @@ void main() {
     );
   }
 
+  for (final fails in [false, true]) {
+    testWidgets(
+      'first Google login opens calendar before ${fails ? 'failed' : 'slow'} restore finishes',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({});
+        FlutterSecureStorage.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        final auth = _FakeGoogleDriveAuthService(
+          account: null,
+          signInAccount: const GoogleDriveAccount(email: 'trial@example.com'),
+        );
+        final notifications = _FakeNotification();
+        final events = _FakeEventRepository();
+        final pending = Completer<void>();
+        final sync = _FakeGoogleDriveSyncService(
+          authService: auth,
+          eventRepository: events,
+          notificationService: notifications,
+          settingsRepository: settings,
+          onSyncPending: () => pending.future,
+        );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              universityRegionsProvider.overrideWith(
+                (ref) async => UniversityRegions.fromJson(
+                  jsonDecode(
+                        File(
+                          'assets/academic/university_regions.json',
+                        ).readAsStringSync(),
+                      )
+                      as Map<String, dynamic>,
+                ),
+              ),
+              settingsRepositoryProvider.overrideWithValue(settings),
+              universityDirectoryProvider.overrideWith(
+                (_) async => universityDirectory,
+              ),
+              notificationServiceProvider.overrideWithValue(notifications),
+              eventRepositoryProvider.overrideWithValue(events),
+              googleDriveAuthServiceProvider.overrideWithValue(auth),
+              googleDriveSyncServiceProvider.overrideWithValue(sync),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+            ],
+            child: const DailyApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await _openWelcomeStartPage(tester);
+        await tester.tap(find.text('Google로 계속'));
+        for (var i = 0; i < 12; i++) {
+          await tester.pump(const Duration(milliseconds: 100));
+        }
+        expect(settings.load().onboardingCompleted, isTrue);
+        expect(find.byType(MonthCalendarPage), findsOneWidget);
+        expect(find.byType(AcademicProfilePage), findsNothing);
+        expect(sync.syncPendingChangesNowCalls, 1);
+        expect(sync.restoreAfterBackupRequests, [true]);
+        expect(pending.isCompleted, isFalse);
+        if (fails) {
+          pending.completeError(StateError('private-restore-secret'));
+          await tester.pump();
+          await tester.pump(const Duration(milliseconds: 100));
+          expect(find.byType(MonthCalendarPage), findsOneWidget);
+          expect(find.textContaining('private-restore-secret'), findsNothing);
+          expect(find.byType(AcademicProfilePage), findsNothing);
+        } else {
+          pending.complete();
+          await tester.pumpAndSettle();
+          expect(find.byType(AcademicProfilePage), findsOneWidget);
+          expect(sync.syncPendingChangesNowCalls, 1);
+          await tester.tap(find.text('나중에'));
+          await tester.pumpAndSettle();
+          expect(find.byType(MonthCalendarPage), findsOneWidget);
+        }
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
+
   testWidgets('Google sign-in preserves the linked Apple identity', (
     tester,
   ) async {
@@ -2085,7 +2167,7 @@ void main() {
           expect(find.byType(AcademicProfilePage), findsNothing);
         } else {
           expect(find.byType(AcademicProfilePage), findsOneWidget);
-          expect(settings.load().onboardingCompleted, isFalse);
+          expect(settings.load().onboardingCompleted, isTrue);
           await tester.enterText(
             find.byKey(const ValueKey('university-search')),
             'ㅅㅁㄷ ㅊㅇ',

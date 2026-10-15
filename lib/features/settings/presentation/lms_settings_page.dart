@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/di/app_providers.dart';
 import '../../../core/lms/lms_sync_service.dart';
+import '../../../core/lms/lms_web_session.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/widgets/smooth_mouse_wheel_scroll_controller.dart';
@@ -31,6 +32,7 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
 
   bool _opening = false;
   bool _failed = false;
+  LmsLoginFailure? _failureReason;
   bool _savingCategory = false;
   bool _savingLogin = false;
 
@@ -46,6 +48,7 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
     setState(() {
       _opening = true;
       _failed = false;
+      _failureReason = null;
     });
     final controller = ref.read(lmsControllerProvider);
     try {
@@ -56,8 +59,13 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
         MaterialPageRoute(builder: (_) => LmsLoginPage(session: session)),
       );
       if (connected == true) await controller.loginCompleted(session);
-    } catch (_) {
-      if (mounted) setState(() => _failed = true);
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _failed = true;
+          _failureReason = LmsLoginFailure.fromError(error);
+        });
+      }
     } finally {
       if (mounted) setState(() => _opening = false);
     }
@@ -88,11 +96,17 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
     setState(() {
       _savingLogin = true;
       _failed = false;
+      _failureReason = null;
     });
     try {
       await controller.saveAutomaticLogin(values.$1, values.$2);
-    } catch (_) {
-      if (mounted) setState(() => _failed = true);
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _failed = true;
+          _failureReason = LmsLoginFailure.fromError(error);
+        });
+      }
     } finally {
       if (mounted) setState(() => _savingLogin = false);
     }
@@ -102,11 +116,17 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
     setState(() {
       _savingLogin = true;
       _failed = false;
+      _failureReason = null;
     });
     try {
       await ref.read(lmsControllerProvider).removeAutomaticLogin();
-    } catch (_) {
-      if (mounted) setState(() => _failed = true);
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _failed = true;
+          _failureReason = LmsLoginFailure.fromError(error);
+        });
+      }
     } finally {
       if (mounted) setState(() => _savingLogin = false);
     }
@@ -121,6 +141,7 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
     setState(() {
       _savingCategory = true;
       _failed = false;
+      _failureReason = null;
     });
     try {
       await repository.saveAcademicProfile(
@@ -136,8 +157,13 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
             .catchError((_) {}),
       );
       await ref.read(lmsControllerProvider).sync.applyConfiguredCategory();
-    } catch (_) {
-      if (mounted) setState(() => _failed = true);
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _failed = true;
+          _failureReason = LmsLoginFailure.fromError(error);
+        });
+      }
     } finally {
       if (mounted) setState(() => _savingCategory = false);
     }
@@ -274,6 +300,15 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                                 ),
                               ],
                             ),
+                            if (controller.lastLoginFailure != null) ...[
+                              const SizedBox(height: 12),
+                              Text(
+                                context.tr(
+                                  controller.lastLoginFailure!.message,
+                                ),
+                                key: const ValueKey('lms-login-failure-reason'),
+                              ),
+                            ],
                             if (controller.automaticLoginPaused) ...[
                               const SizedBox(height: 12),
                               Text(
@@ -453,7 +488,12 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                             ],
                             if (_failed)
                               Text(
-                                context.tr('학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.'),
+                                context.tr(
+                                  (controller.lastLoginFailure ??
+                                              _failureReason)
+                                          ?.message ??
+                                      '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.',
+                                ),
                               ),
                             const SizedBox(height: 20),
                             if (!controller.connected || controller.needsLogin)

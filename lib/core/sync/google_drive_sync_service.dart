@@ -36,7 +36,7 @@ class GoogleDriveSyncService implements SyncService {
     http.Client? httpClient,
     Duration backupRestoreDelay = _defaultBackupRestoreDelay,
     Duration changeSyncDelay = _defaultChangeSyncDelay,
-    Duration driveRequestDelay = const Duration(milliseconds: 250),
+    Duration driveRequestDelay = PacedHttpClient.defaultDelay,
     List<Duration> automaticRetryDelays = _automaticRetryDelays,
     ProductAnalytics analytics = const NoopProductAnalytics(),
     Future<void> Function()? onEventsChanged,

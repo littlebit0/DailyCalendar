@@ -32,11 +32,12 @@ correctly until OAuth clients and scopes are configured.
   A missing cursor first captures a baseline token and restores the initial snapshot.
   Repeated unchanged manual sync does not list/download all events again.
   Duplicate taps are disabled while the operation is active.
-- Drive requests run one at a time, with at least 250 ms from each response's
-  completion to the next request. A 10-second transport timeout aborts the
+- Drive requests run one at a time, with a default 1 ms quiet interval from each response's
+  completion to the next request (timer scheduling can take longer). A 10-second transport timeout aborts the
   underlying request; queue/wait time is excluded from that timeout.
-- Startup's 20-second UI deadline now indicates a slow operation rather than
-  failure. The calendar opens automatically when the original sync succeeds.
+- After first-screen sign-in, the calendar opens immediately while restoration
+  continues. A slow or failed restore keeps the calendar available with retry;
+  academic-profile setup is offered after successful restoration.
   Real failures retain retry/local-continue actions and safe diagnostic text.
 - Automatic sync runs on app start, after Google Drive connection, when the app
   returns to the foreground, before the app backgrounds/exits, and after local

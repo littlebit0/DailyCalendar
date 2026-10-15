@@ -334,6 +334,96 @@ void main() {
   );
 
   test(
+    'automatic login first-read rejection uses bounded recovery without resubmitting credentials',
+    () async {
+      configure = (session) {
+        session.stored = false;
+        session.recoverySucceeds = true;
+        session.answer = (_) async {
+          session.answer = null;
+          session.authenticated = false;
+          throw const LmsWebSessionException(
+            LmsWebSessionError.authenticationRequired,
+          );
+        };
+      };
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      expect(sessions.single.automaticLogins, 1);
+      expect(sessions.single.recoveries, 1);
+      expect(sessions.single.confirmedRefreshes, 1);
+      expect(controller.sync.state, LmsSyncState.ready);
+      expect(controller.connected, isTrue);
+      expect(controller.automaticLoginPaused, isFalse);
+    },
+  );
+
+  test(
+    'automatic login failed first-read recovery preserves cache and does not pause valid credentials',
+    () async {
+      final cached = _cached('student@example.com');
+      repository.events[cached.id] = cached;
+      configure = (session) {
+        session.stored = false;
+        session.answer = (_) async {
+          session.authenticated = false;
+          throw const LmsWebSessionException(
+            LmsWebSessionError.authenticationRequired,
+          );
+        };
+      };
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      expect(sessions.single.automaticLogins, 1);
+      expect(sessions.single.recoveries, 1);
+      expect(sessions.single.reads, 1);
+      expect(controller.sync.state, LmsSyncState.needsLogin);
+      expect(controller.automaticLoginPaused, isFalse);
+      expect(repository.events[cached.id], same(cached));
+      expect(
+        (await LmsCredentialsStore().read(
+          'student@example.com',
+          'smu',
+        ))!.paused,
+        isFalse,
+      );
+    },
+  );
+
+  test(
+    'owner switch during automatic first-read recovery prevents the retry import',
+    () async {
+      final wait = Completer<void>();
+      configure = (session) {
+        session.stored = false;
+        session.recoverySucceeds = true;
+        session.recoveryWait = wait;
+        session.answer = (_) async {
+          session.answer = null;
+          session.authenticated = false;
+          throw const LmsWebSessionException(
+            LmsWebSessionError.authenticationRequired,
+          );
+        };
+      };
+      final attempt = controller.saveAutomaticLogin(
+        'test-user',
+        'fixture-password',
+      );
+      while (sessions.isEmpty || sessions.single.recoveries == 0) {
+        await Future<void>.delayed(Duration.zero);
+      }
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'other@example.com'),
+      );
+      controller.settingsChanged();
+      wait.complete();
+      await attempt;
+      expect(sessions.single.automaticLogins, 1);
+      expect(sessions.single.reads, 1);
+      expect(repository.events, isEmpty);
+    },
+  );
+
+  test(
     'rejected automatic credentials pause across process restarts until explicit replacement',
     () async {
       configure = (s) {
@@ -342,6 +432,10 @@ void main() {
       };
       await controller.saveAutomaticLogin('test-user', 'fixture-password');
       expect(controller.automaticLoginPaused, isTrue);
+      expect(
+        controller.lastLoginFailure,
+        LmsLoginFailure.authenticationUnconfirmed,
+      );
       await controller.refresh(force: true);
       expect(sessions.single.automaticLogins, 1);
       expect(
@@ -352,6 +446,7 @@ void main() {
         isTrue,
       );
       await controller.removeAutomaticLogin();
+      expect(controller.lastLoginFailure, isNull);
       expect(
         await LmsCredentialsStore().read('student@example.com', 'smu'),
         isNull,
@@ -414,6 +509,7 @@ void main() {
       await controller.saveAutomaticLogin('test-user', 'fixture-password');
       await controller.refresh(force: true);
       expect(sessions.single.automaticLogins, 1);
+      expect(controller.lastLoginFailure, LmsLoginFailure.network);
       expect(
         (await LmsCredentialsStore().read(
           'student@example.com',

@@ -34,8 +34,10 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
     try {
       await widget.session.beginLogin();
       if (mounted) setState(() => _ready = true);
-    } catch (_) {
-      if (mounted) setState(() => _message = '학교 로그인창을 열지 못했습니다. 다시 시도해 주세요.');
+    } catch (error) {
+      if (mounted) {
+        setState(() => _message = LmsLoginFailure.fromError(error).message);
+      }
     }
   }
 
@@ -50,7 +52,8 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
       if (!mounted) return;
       if (principal == null) {
         if (automatic) return;
-        setState(() => _message = '학교 로그인과 필요한 인증을 완료해 주세요.');
+        final failure = await widget.session.explainLoginFailure();
+        if (mounted) setState(() => _message = failure.message);
         return;
       }
       await widget.session.finishLogin(authenticated: true);
@@ -70,10 +73,9 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
           navigator.removeRoute(loginRoute!, true);
         }
       }
-    } catch (_) {
-      if (mounted && !automatic) {
-        setState(() => _message = '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.');
-      }
+    } catch (error) {
+      final failure = await widget.session.explainLoginFailure(error);
+      if (mounted) setState(() => _message = failure.message);
     } finally {
       if (mounted) setState(() => _checking = false);
     }
@@ -106,6 +108,9 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
         session: widget.session,
         windowId: request.windowId,
         onNavigate: _navigate,
+        onFailure: (failure) {
+          if (mounted) setState(() => _message = failure.message);
+        },
       ),
     );
     _popupRoutes.add(route);
@@ -181,23 +186,40 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
                         widget.session.pageLoadFinished();
                         final uri = url?.uriValue;
                         if (uri != null &&
-                            uri.path == '/' &&
-                            widget.session.policy.isSchoolOrigin(uri)) {
+                            widget.session.policy.isSchoolOrigin(uri) &&
+                            !const {
+                              '/login.php',
+                              '/login/index.php',
+                            }.contains(uri.path)) {
                           unawaited(_complete(automatic: true));
                         }
                       },
                       onProgressChanged: (_, progress) {
                         if (mounted) setState(() => _progress = progress / 100);
                       },
+                      onReceivedHttpError: (_, request, response) {
+                        if (request.isForMainFrame == true &&
+                            mounted &&
+                            (response.statusCode ?? 0) >= 400) {
+                          setState(
+                            () => _message =
+                                LmsLoginFailure.serverRejected.message,
+                          );
+                        }
+                      },
                       shouldOverrideUrlLoading: (_, action) =>
                           _navigate(action),
                       onCreateWindow: (_, request) => _openPopup(request),
-                      onReceivedError: (_, request, _) {
+                      onReceivedError: (_, request, error) {
                         if (request.isForMainFrame == true) {
                           widget.session.pageLoadFailed();
                         }
                         if (request.isForMainFrame == true && mounted) {
-                          setState(() => _message = '학교 로그인창을 불러오지 못했습니다.');
+                          setState(
+                            () => _message = LmsLoginFailure.fromError(
+                              error,
+                            ).message,
+                          );
                         }
                       },
                     ),
@@ -219,15 +241,31 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
   }
 }
 
-class _LmsLoginPopup extends StatelessWidget {
+class _LmsLoginPopup extends StatefulWidget {
   const _LmsLoginPopup({
     required this.session,
     required this.windowId,
     required this.onNavigate,
+    required this.onFailure,
   });
   final LmsWebSession session;
   final int windowId;
   final Future<NavigationActionPolicy> Function(NavigationAction) onNavigate;
+
+  final ValueChanged<LmsLoginFailure> onFailure;
+
+  @override
+  State<_LmsLoginPopup> createState() => _LmsLoginPopupState();
+}
+
+class _LmsLoginPopupState extends State<_LmsLoginPopup> {
+  LmsLoginFailure? _failure;
+
+  void _failed(LmsLoginFailure failure) {
+    if (!mounted) return;
+    setState(() => _failure = failure);
+    widget.onFailure(failure);
+  }
 
   @override
   Widget build(BuildContext context) => Dialog.fullscreen(
@@ -239,17 +277,49 @@ class _LmsLoginPopup extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: InAppWebView(
-        windowId: windowId,
-        webViewEnvironment: session.webViewEnvironment,
-        initialSettings: session.webViewSettings,
-        shouldOverrideUrlLoading: (_, action) => onNavigate(action),
-        onLoadStart: (_, uri) => session.recordLoginNavigation(uri?.uriValue),
-        onCloseWindow: (_) {
-          if (context.mounted && ModalRoute.of(context)?.isCurrent == true) {
-            Navigator.pop(context);
-          }
-        },
+      body: Column(
+        children: [
+          if (_failure != null)
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Text(AppLocalizations.of(context).text(_failure!.message)),
+            ),
+          Expanded(
+            child: InAppWebView(
+              windowId: widget.windowId,
+              webViewEnvironment: widget.session.webViewEnvironment,
+              initialSettings: widget.session.webViewSettings,
+              shouldOverrideUrlLoading: (_, action) async {
+                final policy = await widget.onNavigate(action);
+                if (policy == NavigationActionPolicy.CANCEL) {
+                  _failed(LmsLoginFailure.unsupportedForm);
+                }
+                return policy;
+              },
+              onLoadStart: (_, uri) {
+                if (mounted) setState(() => _failure = null);
+                widget.session.recordLoginNavigation(uri?.uriValue);
+              },
+              onReceivedError: (_, request, error) {
+                if (request.isForMainFrame == true) {
+                  _failed(LmsLoginFailure.fromError(error));
+                }
+              },
+              onReceivedHttpError: (_, request, response) {
+                if (request.isForMainFrame == true &&
+                    (response.statusCode ?? 0) >= 400) {
+                  _failed(LmsLoginFailure.serverRejected);
+                }
+              },
+              onCloseWindow: (_) {
+                if (context.mounted &&
+                    ModalRoute.of(context)?.isCurrent == true) {
+                  Navigator.pop(context);
+                }
+              },
+            ),
+          ),
+        ],
       ),
     ),
   );

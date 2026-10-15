@@ -18,6 +18,7 @@ import '../core/platform/windows_build_identity.dart';
 import '../features/calendar/presentation/month_calendar_page.dart';
 import '../features/onboarding/presentation/analytics_consent_page.dart';
 import '../features/onboarding/presentation/welcome_page.dart';
+import '../features/settings/presentation/academic_profile_page.dart';
 import '../features/onboarding/presentation/update_features_gate.dart';
 import '../core/weather/weather_widgets.dart';
 import '../core/sync/startup_sync_gate.dart';
@@ -708,6 +709,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
   late final LmsController _lmsController;
   var _servicesStarted = false;
+  String? _initialRestoreOwner;
   String? _scheduledLmsOwner;
   late final bool _requiresStartupSync;
   bool _startupGateOpen = false;
@@ -727,6 +729,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   void initState() {
     super.initState();
     _lmsController = ref.read(lmsControllerProvider);
+    _initialRestoreOwner = ref.read(onboardingRestoreOwnerProvider);
     _scheduledLmsOwner = ref
         .read(settingsRepositoryProvider)
         .dailyAccount()
@@ -1198,13 +1201,40 @@ class _AppHomeState extends ConsumerState<_AppHome>
         return false;
       }
       _listenForSyncedSettings();
+      final initialOwner = _initialRestoreOwner;
+      final initialRestore =
+          initialOwner != null &&
+          linkedGoogleEmail.toLowerCase() == initialOwner.toLowerCase();
       await StartupTiming.measure(
         StartupStage.drive,
-        ref.read(syncServiceProvider).start,
+        initialRestore
+            ? () => ref
+                  .read(googleDriveSyncServiceProvider)
+                  .syncPendingChangesNow(restoreAfterBackup: true)
+            : ref.read(syncServiceProvider).start,
       );
       ensureCurrentAccount();
       _servicesStarted = true;
       _syncRestoreRetryable = true;
+      if (initialRestore) {
+        _initialRestoreOwner = null;
+        if (ref.read(onboardingRestoreOwnerProvider) == initialOwner) {
+          ref.read(onboardingRestoreOwnerProvider.notifier).state = null;
+        }
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!mounted ||
+              ref
+                      .read(settingsRepositoryProvider)
+                      .dailyAccount()
+                      ?.googleAccount
+                      ?.email
+                      .toLowerCase() !=
+                  initialOwner.toLowerCase()) {
+            return;
+          }
+          unawaited(offerAcademicProfile(context, ref).catchError((_) {}));
+        });
+      }
       return true;
     } on Object catch (error) {
       _syncRestoreRetryable = error is! GoogleDriveAuthException;

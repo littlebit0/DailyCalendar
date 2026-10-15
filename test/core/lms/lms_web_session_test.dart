@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:daily/core/lms/lms_web_session.dart';
+import 'package:daily/core/lms/lms_credentials_store.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart'
     show
         InAppWebViewController,
@@ -25,6 +26,134 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final base = Uri.parse('https://ecampus.smu.ac.kr/');
   final policy = LmsWebRequestPolicy(base);
+
+  for (final scenario in [
+    'mobile',
+    'desktop',
+    'wrong-principal',
+    'network',
+    'blocked',
+  ]) {
+    test(
+      'real automatic login method handles $scenario entry and confirmation',
+      () async {
+        FlutterSecureStorage.setMockInitialValues({});
+        _mockCookieBridge([]);
+        final oldPlatform = InAppWebViewPlatform.instance;
+        final platform = _HeadlessPlatform();
+        platform.configure = (view) {
+          view.controller.automaticScenario = scenario;
+          view.controller.verification = scenario == 'wrong-principal'
+              ? '456'
+              : scenario == 'network'
+              ? {'network': true}
+              : '123';
+        };
+        InAppWebViewPlatform.instance = platform;
+        final session = LmsWebSession(
+          ownerId: 'student@example.com',
+          schoolId: 'smu',
+        );
+        try {
+          final operation = session.loginAutomatically(
+            const LmsLocalCredentials('fixture-id', 'fixture-password'),
+            expectedPrincipal: '123',
+          );
+          if (scenario == 'network') {
+            await expectLater(
+              operation,
+              throwsA(
+                isA<LmsWebSessionException>().having(
+                  (e) => e.code,
+                  'code',
+                  LmsWebSessionError.network,
+                ),
+              ),
+            );
+          } else {
+            expect(
+              await operation,
+              scenario == 'mobile' || scenario == 'desktop',
+            );
+          }
+          final web = platform.views.single.controller;
+          expect(web.loginLoads, 1);
+          expect(
+            web.automaticStages,
+            scenario == 'desktop'
+                ? ['entry', 'sso', 'submitted']
+                : scenario == 'blocked'
+                ? ['entry']
+                : ['entry', 'submitted'],
+          );
+          expect(
+            session.isAuthenticated,
+            scenario == 'mobile' || scenario == 'desktop',
+          );
+          if (session.isAuthenticated) {
+            expect(await session.hasStoredSession(), isTrue);
+            expect(
+              session.authenticationDiagnostics.map((e) => e.reason),
+              contains(LmsAuthenticationReason.automaticCredentialsSubmitted),
+            );
+          } else {
+            expect(await session.hasStoredSession(), isFalse);
+          }
+        } finally {
+          await session.retire();
+          session.dispose();
+          if (oldPlatform != null) {
+            InAppWebViewPlatform.instance = oldPlatform;
+          }
+          _clearMockCookieBridge();
+        }
+      },
+      skip: !Platform.isMacOS && !Platform.isIOS,
+    );
+  }
+
+  test(
+    'mobile course read confirms current user without a desktop edit link',
+    () async {
+      FlutterSecureStorage.setMockInitialValues({});
+      _mockCookieBridge([]);
+      final session = LmsWebSession(
+        ownerId: 'student@example.com',
+        schoolId: 'smu',
+      );
+      final web = _AuthenticatedWebController()
+        ..fetchHtml =
+            '<html><body id="page-course-view-topics">mobile course</body></html>';
+      try {
+        await session.beginLogin();
+        session.attachLoginController(web);
+        await session.verifyAuthentication();
+        await session.finishLogin(authenticated: true);
+        final result = await session.fetchHtml(
+          base.resolve('/course/view.php?id=10'),
+        );
+        expect(result.html, contains('mobile course'));
+        expect(session.principalId, '123');
+        web.verification = '456';
+        await expectLater(
+          session.fetchHtml(base.resolve('/course/view.php?id=10')),
+          throwsA(
+            isA<LmsWebSessionException>().having(
+              (e) => e.code,
+              'code',
+              LmsWebSessionError.authenticationRequired,
+            ),
+          ),
+        );
+        expect(session.isAuthenticated, isFalse);
+      } finally {
+        await session.retire();
+        session.dispose();
+        _clearMockCookieBridge();
+      }
+    },
+    skip: !Platform.isMacOS && !Platform.isIOS,
+  );
 
   test(
     'fresh verified dashboard is consumed once; quiz reads stay fresh',
@@ -1259,6 +1388,9 @@ class _RecoverySession extends LmsWebSession {
 class _AuthenticatedWebController implements InAppWebViewController {
   int fetches = 0;
   int rootLoads = 0;
+  int loginLoads = 0;
+  String? automaticScenario;
+  final automaticStages = <String>[];
   void Function()? onLoadFinished;
   WebUri? currentUrl = WebUri('https://ecampus.smu.ac.kr/');
   Completer<WebUri?>? urlGate;
@@ -1283,8 +1415,13 @@ class _AuthenticatedWebController implements InAppWebViewController {
     Uri? iosAllowingReadAccessTo,
     WebUri? allowingReadAccessTo,
   }) async {
-    expect(urlRequest.url.toString(), 'https://ecampus.smu.ac.kr/');
-    rootLoads++;
+    if (automaticScenario != null &&
+        urlRequest.url?.uriValue.path == '/login.php') {
+      loginLoads++;
+    } else {
+      expect(urlRequest.url.toString(), 'https://ecampus.smu.ac.kr/');
+      rootLoads++;
+    }
     onLoadFinished?.call();
   }
 
@@ -1294,7 +1431,27 @@ class _AuthenticatedWebController implements InAppWebViewController {
     Map<String, dynamic> arguments = const {},
     ContentWorld? contentWorld,
   }) async {
-    if (functionBody.contains('await fetch')) {
+    if (functionBody == LmsWebSession.automaticLoginScript) {
+      expect(arguments['username'], 'fixture-id');
+      expect(arguments['password'], 'fixture-password');
+      final stage = arguments['stage'] as String;
+      automaticStages.add(stage);
+      return CallAsyncJavaScriptResult(
+        value: {
+          'state': automaticScenario == 'blocked'
+              ? 'blocked'
+              : switch (stage) {
+                  'entry' =>
+                    automaticScenario == 'desktop'
+                        ? 'entrySubmitted'
+                        : 'credentialsSubmitted',
+                  'sso' => 'credentialsSubmitted',
+                  _ => 'authenticated',
+                },
+        },
+      );
+    }
+    if (arguments.containsKey('url')) {
       fetches++;
       if (fetchHtml != null) {
         return CallAsyncJavaScriptResult(
