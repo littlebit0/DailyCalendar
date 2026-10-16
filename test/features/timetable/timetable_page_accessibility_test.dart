@@ -27,6 +27,14 @@ class _FileBundle extends CachingAssetBundle {
 }
 
 void main() {
+  late List<UniversityDataset> catalog;
+  setUpAll(() async {
+    catalog = await UniversityCatalog.load(
+      bundle: _FileBundle(),
+      university: 'smu',
+    );
+  });
+
   for (final height in [350.0, 430.0]) {
     for (final missingPeriod in [false, true]) {
       testWidgets('320x$height with 2x text keeps course search usable '
@@ -72,10 +80,7 @@ void main() {
                 child: child!,
               ),
               home: Scaffold(
-                body: TimetablePage(
-                  loadCatalog: () =>
-                      UniversityCatalog.load(bundle: _FileBundle()),
-                ),
+                body: TimetablePage(loadCatalog: () async => catalog),
               ),
             ),
           ),

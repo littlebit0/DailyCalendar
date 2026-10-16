@@ -4,8 +4,8 @@ import 'package:flutter/services.dart';
 import '../../features/events/domain/calendar_event.dart';
 import 'alarm_service.dart';
 
-class NativeAlarmService implements AlarmService {
-  NativeAlarmService({MethodChannel? channel})
+class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
+  NativeAlarmService({MethodChannel? channel, this.onAlarmScheduled})
     : _channel =
           channel ??
           MethodChannel(
@@ -15,6 +15,7 @@ class NativeAlarmService implements AlarmService {
           );
 
   final MethodChannel _channel;
+  final Future<void> Function(CalendarEvent)? onAlarmScheduled;
 
   bool get _isSupportedPlatform =>
       defaultTargetPlatform == TargetPlatform.iOS ||
@@ -40,7 +41,13 @@ class NativeAlarmService implements AlarmService {
   }
 
   @override
-  Future<void> scheduleEventAlarm(CalendarEvent event) async {
+  Future<void> scheduleEventAlarm(CalendarEvent event) => _schedule(event);
+
+  @override
+  Future<void> reconcileEventAlarm(CalendarEvent event) =>
+      _schedule(event, reconcile: true);
+
+  Future<void> _schedule(CalendarEvent event, {bool reconcile = false}) async {
     if (!_isSupportedPlatform ||
         !event.alarmEnabled ||
         event.completed ||
@@ -62,16 +69,18 @@ class NativeAlarmService implements AlarmService {
             event.allDayAlarmMinutes % 60,
           )
         : event.startAt;
-    if (!fireAt.isAfter(DateTime.now())) {
+    if (!reconcile && !fireAt.isAfter(DateTime.now())) {
       return;
     }
-    await _channel.invokeMethod<void>('schedule', {
-      'eventId': event.id,
-      'title': event.title,
-      'memo': event.memo,
-      'fireAtMilliseconds': fireAt.millisecondsSinceEpoch,
-      'snoozeMinutes': 10,
-    });
+    final scheduled = await _channel
+        .invokeMethod<bool>(reconcile ? 'reconcile' : 'schedule', {
+          'eventId': event.id,
+          'title': event.title,
+          'memo': event.memo,
+          'fireAtMilliseconds': fireAt.millisecondsSinceEpoch,
+          'snoozeMinutes': 10,
+        });
+    if (scheduled == true) await onAlarmScheduled?.call(event);
   }
 
   @override

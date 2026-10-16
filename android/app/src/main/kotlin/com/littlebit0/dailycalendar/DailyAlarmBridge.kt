@@ -28,14 +28,19 @@ internal class DailyAlarmBridge(private val activity: FragmentActivity) {
                         attempted.clear()
                         nextPermission()
                     }
-                    "schedule" -> {
-                        DailyAlarmScheduler.schedule(activity, DailyAlarm(
+                    "schedule", "reconcile" -> {
+                        val alarm = DailyAlarm(
                             requireNotNull(call.argument<String>("eventId")),
                             requireNotNull(call.argument<String>("title")), call.argument<String>("memo").orEmpty(),
                             requireNotNull(call.argument<Number>("fireAtMilliseconds")).toLong(),
                             (call.argument<Number>("snoozeMinutes")?.toInt() ?: 10).coerceIn(1, 60),
-                        ))
-                        result.success(null)
+                        )
+                        if (call.method == "reconcile") {
+                            result.success(DailyAlarmScheduler.reconcile(activity, alarm))
+                        } else {
+                            DailyAlarmScheduler.schedule(activity, alarm)
+                            result.success(true)
+                        }
                     }
                     "cancel" -> {
                         DailyAlarmScheduler.cancel(activity, requireNotNull(call.argument<String>("eventId")))

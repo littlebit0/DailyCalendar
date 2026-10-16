@@ -7,7 +7,7 @@ import 'package:sqlite3/sqlite3.dart';
 import '../../core/migration/historical_event_schema.dart';
 
 void main() {
-  for (final version in [1, 2, 3, 4, 5, 6, 7, 8]) {
+  for (final version in [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
     test(
       'normal Drift upgrades explicit schema $version without losing stored values',
       () async {
@@ -38,7 +38,7 @@ void main() {
           expect(
             (await db.customSelect('PRAGMA user_version').getSingle())
                 .read<int>('user_version'),
-            9,
+            AppDatabase.currentSchemaVersion,
           );
         } finally {
           await db.close();

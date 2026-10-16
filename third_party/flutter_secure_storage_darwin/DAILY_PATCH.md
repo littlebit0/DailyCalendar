@@ -1,0 +1,1 @@
+Based on flutter_secure_storage_darwin 0.3.2 (pub.dev), original license retained. Daily patches preserve stored credentials on failure. Explicit delete operations are unchanged. See docs/reviews/ISSUES_207_208_201_205_140_142_2026-10-16.md.

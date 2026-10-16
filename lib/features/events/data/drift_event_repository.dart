@@ -163,11 +163,27 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     Iterable<CalendarEvent> remoteEvents, {
     required RestoredEventResolver resolve,
   }) {
+    // Materialize once: callers may supply a single-use iterable.
+    final incoming = remoteEvents.toList();
+    if (incoming.isEmpty) return Future.value(const <EventRestoreMutation>[]);
+    final ids = incoming.map((event) => event.id).toSet().toList();
     return _database.transaction(() async {
-      final rows = await _database.select(_database.eventRecords).get();
-      final localById = {for (final row in rows) row.id: row.toDomain()};
+      final localById = <String, CalendarEvent>{};
+      // Stay below SQLite's conservative 999-variable limit.
+      const batchSize = 500;
+      for (var offset = 0; offset < ids.length; offset += batchSize) {
+        final end = offset + batchSize < ids.length
+            ? offset + batchSize
+            : ids.length;
+        final rows = await (_database.select(
+          _database.eventRecords,
+        )..where((table) => table.id.isIn(ids.sublist(offset, end)))).get();
+        for (final row in rows) {
+          localById[row.id] = row.toDomain();
+        }
+      }
       final mutations = <EventRestoreMutation>[];
-      for (final remote in remoteEvents) {
+      for (final remote in incoming) {
         final normalizedRemote = remote.normalizeAllDayBounds();
         final previous = localById[normalizedRemote.id];
         final current = resolve(
@@ -460,6 +476,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       recurrenceInterval: Value(event.recurrence.interval),
       recurrenceUntil: Value(event.recurrence.until),
       recurrenceCount: Value(event.recurrence.count),
+      recurrenceAnchorDay: Value(event.recurrence.anchorDay),
       recurrenceExcludedDates: Value(
         jsonEncode(
           event.recurrence.excludedDates

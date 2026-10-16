@@ -427,11 +427,30 @@ class CalendarWidgetTodoAction {
     required this.token,
     required this.eventId,
     required this.completed,
+    this.occurrenceId,
   });
 
   final String token;
   final String eventId;
   final bool completed;
+  final String? occurrenceId;
+
+  CalendarEvent? targetFor(CalendarEvent source) {
+    final key = occurrenceId;
+    if (!source.recurrence.isRepeating) {
+      return key == null || key.isEmpty || key == source.id ? source : null;
+    }
+    // Legacy actions have no occurrence information. Never guess today's date
+    // or treat a widget tap as an instruction to complete an entire series.
+    if (key == null || !key.startsWith('${source.id}@')) return null;
+    final start = DateTime.tryParse(key.substring(source.id.length + 1));
+    if (start == null) return null;
+    return source.copyWith(
+      occurrenceId: key,
+      startAt: start,
+      endAt: start.add(source.duration),
+    );
+  }
 
   static CalendarWidgetTodoAction? fromMap(Map<Object?, Object?> map) {
     final token = map['token'];
@@ -444,6 +463,9 @@ class CalendarWidgetTodoAction {
       token: token,
       eventId: eventId,
       completed: completed,
+      occurrenceId: map['occurrenceId'] is String
+          ? map['occurrenceId'] as String
+          : null,
     );
   }
 }

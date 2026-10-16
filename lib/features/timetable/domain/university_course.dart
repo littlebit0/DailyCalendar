@@ -412,10 +412,12 @@ class UniversityCourse {
     // A literal curriculum-stage label can have an official course-wide
     // major group. Use it only for that exact label, never to override a
     // different department's published general-education classification.
-    final publishedMajorGroup = sourceClassificationGroup == '전공' &&
+    final publishedMajorGroup =
+        sourceClassificationGroup == '전공' &&
         raw.trim() == sourceClassification.trim() &&
         _categoryFor(raw) == CourseCategory.unknown;
-    return nativeMajor || publishedMajorGroup ||
+    return nativeMajor ||
+        publishedMajorGroup ||
         isMajorClassificationLabel(raw) ||
         const {
           CourseCategory.major,
@@ -456,19 +458,11 @@ class UniversityCourse {
   }
 
   bool matchesQuery(String query) {
-    final text =
-        '$title ${titleAliases.join(' ')} $codeAndSection $professor '
-                '$sourceClassification '
-                '${departmentClassifications.values.join(' ')} '
-                '${categoriesFor().map((c) => c.label).join(' ')} '
-                '$sourceClassroom ${meetings.map((m) => m.classroom).join(' ')}'
-            .toLowerCase();
-    final initials = _hangulInitials(text);
-    return query
-        .trim()
-        .toLowerCase()
-        .split(RegExp(r'\s+'))
-        .every((word) => text.contains(word) || initials.contains(word));
+    final normalized = query.trim().toLowerCase();
+    return normalized.isEmpty ||
+        UniversityCourseSearchText(
+          this,
+        ).matches(normalized.split(RegExp(r'\s+')));
   }
 
   int queryRank(String query) {
@@ -545,5 +539,24 @@ String _hangulInitials(String value) {
       }
       return rune;
     }),
+  );
+}
+
+/// Reused by a catalog page; lifetime is bounded by its selected dataset.
+class UniversityCourseSearchText {
+  UniversityCourseSearchText(UniversityCourse course)
+    : text =
+          ('${course.title} ${course.titleAliases.join(' ')} ${course.codeAndSection} ${course.professor} '
+                  '${course.sourceClassification} '
+                  '${course.departmentClassifications.values.join(' ')} '
+                  '${course.categoriesFor().map((c) => c.label).join(' ')} '
+                  '${course.sourceClassroom} ${course.meetings.map((m) => m.classroom).join(' ')}')
+              .toLowerCase() {
+    initials = _hangulInitials(text);
+  }
+  final String text;
+  late final String initials;
+  bool matches(List<String> normalizedWords) => normalizedWords.every(
+    (word) => text.contains(word) || initials.contains(word),
   );
 }

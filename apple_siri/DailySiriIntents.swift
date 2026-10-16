@@ -161,6 +161,7 @@ final class DailySignalVoiceBridge: NSObject {
   private var silenceTimer: Timer?
   private var maximumTimer: Timer?
   private var pendingResult: FlutterResult?
+  private var activeRequestID: Int?
   private var latestTranscript = ""
   private var inputTapInstalled = false
 
@@ -177,12 +178,17 @@ final class DailySignalVoiceBridge: NSObject {
       }
       switch call.method {
       case "startListening":
-        self.requestPermissionsAndStart(result: result)
+        guard let arguments = call.arguments as? [String: Any],
+              let requestID = arguments["requestId"] as? Int else {
+          result(FlutterError(code: "invalid_request", message: "Missing voice request ID", details: nil))
+          return
+        }
+        self.requestPermissionsAndStart(requestID: requestID, result: result)
       case "finishListening":
-        self.finishListening(cancelled: false)
+        self.finishListening(requestID: (call.arguments as? [String: Any])?["requestId"] as? Int, cancelled: false)
         result(nil)
       case "cancelListening", "stopListening":
-        self.finishListening(cancelled: true)
+        self.finishListening(requestID: (call.arguments as? [String: Any])?["requestId"] as? Int, cancelled: true)
         result(nil)
       case "runSignal":
         guard let arguments = call.arguments as? [String: Any],
@@ -207,26 +213,31 @@ final class DailySignalVoiceBridge: NSObject {
     }
   }
 
-  private func requestPermissionsAndStart(result: @escaping FlutterResult) {
-    guard pendingResult == nil else {
+  private func requestPermissionsAndStart(requestID: Int, result: @escaping FlutterResult) {
+    guard activeRequestID == nil else {
       result(FlutterError(code: "already_listening", message: DailySiriText.alreadyListening, details: nil))
       return
     }
+    // Reserve ownership before either asynchronous permission request.
+    activeRequestID = requestID
+    pendingResult = result
+    latestTranscript = ""
     SFSpeechRecognizer.requestAuthorization { [weak self] speechStatus in
-      guard let self else { return }
-      guard speechStatus == .authorized else {
-        DispatchQueue.main.async {
-          result(FlutterError(code: "speech_denied", message: DailySiriText.speechPermissionRequired, details: nil))
+      DispatchQueue.main.async {
+        guard let self, self.activeRequestID == requestID else { return }
+        guard speechStatus == .authorized else {
+          self.complete(requestID: requestID, value: FlutterError(code: "speech_denied", message: DailySiriText.speechPermissionRequired, details: nil))
+          return
         }
-        return
-      }
-      self.requestMicrophonePermission { granted in
-        DispatchQueue.main.async {
-          guard granted else {
-            result(FlutterError(code: "microphone_denied", message: DailySiriText.microphonePermissionRequired, details: nil))
-            return
+        self.requestMicrophonePermission { [weak self] granted in
+          DispatchQueue.main.async {
+            guard let self, self.activeRequestID == requestID else { return }
+            guard granted else {
+              self.complete(requestID: requestID, value: FlutterError(code: "microphone_denied", message: DailySiriText.microphonePermissionRequired, details: nil))
+              return
+            }
+            self.startListening(requestID: requestID)
           }
-          self.startListening(result: result)
         }
       }
     }
@@ -244,11 +255,12 @@ final class DailySignalVoiceBridge: NSObject {
     #endif
   }
 
-  private func startListening(result: @escaping FlutterResult) {
+  private func startListening(requestID: Int) {
+    guard activeRequestID == requestID else { return }
     stopAudioSession()
     synthesizer.stopSpeaking(at: .immediate)
     guard let recognizer = SFSpeechRecognizer(locale: Locale.current), recognizer.isAvailable else {
-      result(FlutterError(code: "recognizer_unavailable", message: DailySiriText.recognizerUnavailable, details: nil))
+      complete(requestID: requestID, value: FlutterError(code: "recognizer_unavailable", message: DailySiriText.recognizerUnavailable, details: nil))
       return
     }
 
@@ -256,7 +268,6 @@ final class DailySignalVoiceBridge: NSObject {
     request.shouldReportPartialResults = true
     request.taskHint = .dictation
     recognitionRequest = request
-    pendingResult = result
     latestTranscript = ""
 
     #if os(iOS)
@@ -269,7 +280,7 @@ final class DailySignalVoiceBridge: NSObject {
       )
       try session.setActive(true, options: .notifyOthersOnDeactivation)
     } catch {
-      finishListening(error: error)
+      finishListening(requestID: requestID, error: error)
       return
     }
     #endif
@@ -283,16 +294,16 @@ final class DailySignalVoiceBridge: NSObject {
 
     recognitionTask = recognizer.recognitionTask(with: request) { [weak self] recognitionResult, error in
       DispatchQueue.main.async {
-        guard let self else { return }
+        guard let self, self.activeRequestID == requestID else { return }
         if let recognitionResult {
           self.latestTranscript = recognitionResult.bestTranscription.formattedString
-          self.channel.invokeMethod("transcriptChanged", arguments: self.latestTranscript)
-          self.scheduleSilenceFinish()
+          self.channel.invokeMethod("transcriptChanged", arguments: ["requestId": requestID, "transcript": self.latestTranscript])
+          self.scheduleSilenceFinish(requestID: requestID)
           if recognitionResult.isFinal {
-            self.finishListening(cancelled: false)
+            self.finishListening(requestID: requestID, cancelled: false)
           }
         } else if let error {
-          self.finishListening(error: error)
+          self.finishListening(requestID: requestID, error: error)
         }
       }
     }
@@ -300,42 +311,46 @@ final class DailySignalVoiceBridge: NSObject {
     do {
       audioEngine.prepare()
       try audioEngine.start()
-      channel.invokeMethod("listeningStarted", arguments: nil)
+      channel.invokeMethod("listeningStarted", arguments: ["requestId": requestID])
       maximumTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: false) { [weak self] _ in
-        self?.finishListening(cancelled: false)
+        self?.finishListening(requestID: requestID, cancelled: false)
       }
     } catch {
-      finishListening(error: error)
+      finishListening(requestID: requestID, error: error)
     }
   }
 
-  private func scheduleSilenceFinish() {
+  private func scheduleSilenceFinish(requestID: Int) {
     silenceTimer?.invalidate()
     silenceTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [weak self] _ in
-      self?.finishListening(cancelled: false)
+      self?.finishListening(requestID: requestID, cancelled: false)
     }
   }
 
-  private func finishListening(cancelled: Bool) {
-    let result = pendingResult
+  private func finishListening(requestID: Int?, cancelled: Bool) {
+    guard let requestID, activeRequestID == requestID else { return }
     let transcript = latestTranscript.trimmingCharacters(in: .whitespacesAndNewlines)
-    stopAudioSession()
-    guard let result else { return }
-    pendingResult = nil
     if cancelled {
-      result(FlutterError(code: "listening_cancelled", message: DailySiriText.listeningCancelled, details: nil))
+      complete(requestID: requestID, value: FlutterError(code: "listening_cancelled", message: DailySiriText.listeningCancelled, details: nil))
     } else if transcript.isEmpty {
-      result(FlutterError(code: "no_speech", message: DailySiriText.noSpeech, details: nil))
+      complete(requestID: requestID, value: FlutterError(code: "no_speech", message: DailySiriText.noSpeech, details: nil))
     } else {
-      result(transcript)
+      complete(requestID: requestID, value: transcript)
     }
   }
 
-  private func finishListening(error: Error) {
+  private func finishListening(requestID: Int, error: Error) {
+    complete(requestID: requestID, value: FlutterError(code: "recognition_failed", message: error.localizedDescription, details: nil))
+  }
+
+  private func complete(requestID: Int, value: Any) {
+    guard activeRequestID == requestID else { return }
     let result = pendingResult
-    stopAudioSession()
+    // Invalidate before cancellation can deliver an old recognition callback.
+    activeRequestID = nil
     pendingResult = nil
-    result?(FlutterError(code: "recognition_failed", message: error.localizedDescription, details: nil))
+    stopAudioSession()
+    result?(value)
   }
 
   private func stopAudioSession() {
@@ -403,8 +418,8 @@ final class DailySignalVoiceBridge: NSObject {
         let message = self.responseMessage(for: record)
         result(["message": message, "success": record.success])
       } catch {
-        if error is DailySignalConfirmationRequired {
-          result(FlutterError(code: "signal_confirmation_required", message: DailySiriText.commandConfirmation, details: nil))
+        if let confirmation = error as? DailySignalConfirmationRequired {
+          result(FlutterError(code: "signal_confirmation_required", message: confirmation.message, details: nil))
           return
         }
         if let localAuthenticationError = error as? LAError {
@@ -716,6 +731,13 @@ private enum DailySiriText {
     case .japanese: ja
     case .traditionalChinese: zh
     }
+  }
+
+  static func recurrenceScope(title: String, start: Date, entireSeries: Bool) -> String {
+    let scope = entireSeries
+      ? localized("전체 반복", "entire series", "繰り返し全体", "整個重複行程")
+      : localized("이 회차만", "this occurrence only", "この回のみ", "僅這一次")
+    return "\(title) · \(start.formatted(date: .abbreviated, time: .shortened)) · \(scope)"
   }
 
   static var voiceUnavailable: String { localized(
@@ -1414,7 +1436,9 @@ enum DailySiriEventChangeSignal {
   }
 }
 
-private struct DailySignalConfirmationRequired: Error {}
+private struct DailySignalConfirmationRequired: Error {
+  var message: String = DailySiriText.commandConfirmation
+}
 
 @available(iOS 16.0, macOS 13.0, *)
 private struct DailyGenerativeUnderstanding: Sendable {
@@ -1695,6 +1719,22 @@ private enum DailyAppleIntelligenceNarrator {
   }
 }
 
+// BEGIN SIRI OCCURRENCE IDENTITY
+struct DailySiriOccurrenceIdentity {
+  static func make(sourceID: String, start: Date) -> String {
+    "daily-occurrence:" + Data(sourceID.utf8).base64EncodedString() + ":" + String(Int64(start.timeIntervalSince1970))
+  }
+  static func parse(_ id: String) -> (sourceID: String, start: Date)? {
+    let parts = id.split(separator: ":", omittingEmptySubsequences: false)
+    guard parts.count == 3, parts[0] == "daily-occurrence",
+          let data = Data(base64Encoded: String(parts[1])),
+          let source = String(data: data, encoding: .utf8), !source.isEmpty,
+          let seconds = Int64(parts[2]) else { return nil }
+    return (source, Date(timeIntervalSince1970: TimeInterval(seconds)))
+  }
+}
+// END SIRI OCCURRENCE IDENTITY
+
 struct DailySiriEvent: Sendable {
   let id: String
   let title: String
@@ -1717,6 +1757,7 @@ struct DailySiriEvent: Sendable {
   let recurrenceInterval: Int
   let recurrenceUntil: Date?
   let recurrenceCount: Int?
+  let recurrenceAnchorDay: Int?
   let recurrenceExcludedDates: Set<String>
 
   init(
@@ -1741,6 +1782,7 @@ struct DailySiriEvent: Sendable {
     recurrenceInterval: Int = 1,
     recurrenceUntil: Date? = nil,
     recurrenceCount: Int? = nil,
+    recurrenceAnchorDay: Int? = nil,
     recurrenceExcludedDates: Set<String> = []
   ) {
     self.id = id
@@ -1764,6 +1806,7 @@ struct DailySiriEvent: Sendable {
     self.recurrenceInterval = recurrenceInterval
     self.recurrenceUntil = recurrenceUntil
     self.recurrenceCount = recurrenceCount
+    self.recurrenceAnchorDay = recurrenceAnchorDay
     self.recurrenceExcludedDates = recurrenceExcludedDates
   }
 }
@@ -2194,13 +2237,23 @@ private enum DailySiriDatabase {
     )
   }
 
-  static func events(withIDs identifiers: [String]) throws -> [DailySiriEvent] {
+  static func events(withIDs identifiers: [String], database: OpaquePointer? = nil) throws -> [DailySiriEvent] {
     guard !identifiers.isEmpty else { return [] }
-    let placeholders = Array(repeating: "?", count: identifiers.count).joined(separator: ", ")
-    return try query(
+    let sourceIDs = identifiers.map { DailySiriOccurrenceIdentity.parse($0)?.sourceID ?? $0 }
+    let placeholders = Array(repeating: "?", count: sourceIDs.count).joined(separator: ", ")
+    let stored = try query(
       whereClause: "deleted_at IS NULL AND id IN (\(placeholders))",
-      bindings: identifiers.map(Binding.text)
+      bindings: sourceIDs.map(Binding.text), database: database
     )
+    return identifiers.compactMap { id in
+      guard let identity = DailySiriOccurrenceIdentity.parse(id) else {
+        return stored.first { $0.id == id }
+      }
+      guard let source = stored.first(where: { $0.id == identity.sourceID }),
+            source.recurrenceFrequency != "none" else { return nil }
+      return occurrences(of: source, from: identity.start, to: identity.start.addingTimeInterval(1))
+        .first { $0.startAt == identity.start }
+    }
   }
 
   static func suggestedEvents() throws -> [DailySiriEvent] {
@@ -2220,6 +2273,12 @@ private enum DailySiriDatabase {
     guard !id.hasPrefix("lms:") else { throw DailySiriError.lmsOriginalReadOnly }
     guard let event = try events(withIDs: [id]).first else { throw DailySiriError.eventNotFound }
     guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
+  }
+
+  static func mutationScopeLabel(id: String, entireSeries: Bool) throws -> String? {
+    guard let event = try events(withIDs: [id]).first else { throw DailySiriError.eventNotFound }
+    guard event.recurrenceFrequency != "none" else { return nil }
+    return DailySiriText.recurrenceScope(title: event.title, start: event.startAt, entireSeries: entireSeries)
   }
 
   static func ddayEvents() throws -> [DailySiriEvent] {
@@ -2243,7 +2302,8 @@ private enum DailySiriDatabase {
     newWeather: String? = nil,
     reminderMinutesBefore: Int? = nil,
     showDday: Bool? = nil,
-    alarmEnabled: Bool? = nil
+    alarmEnabled: Bool? = nil,
+    entireSeries: Bool = false
   ) throws -> DailySiriEvent {
     let matches = try exactMatches(title)
     guard let event = matches.first else { throw DailySiriError.eventNotFound }
@@ -2261,7 +2321,8 @@ private enum DailySiriDatabase {
       newWeather: newWeather,
       reminderMinutesBefore: reminderMinutesBefore,
       showDday: showDday,
-      alarmEnabled: alarmEnabled
+      alarmEnabled: alarmEnabled,
+      entireSeries: entireSeries
     )
   }
 
@@ -2278,7 +2339,8 @@ private enum DailySiriDatabase {
     newWeather: String? = nil,
     reminderMinutesBefore: Int? = nil,
     showDday: Bool? = nil,
-    alarmEnabled: Bool? = nil
+    alarmEnabled: Bool? = nil,
+    entireSeries: Bool = false
   ) throws -> DailySiriEvent {
     guard let event = try events(withIDs: [id]).first else {
       throw DailySiriError.eventNotFound
@@ -2296,7 +2358,8 @@ private enum DailySiriDatabase {
       newWeather: newWeather,
       reminderMinutesBefore: reminderMinutesBefore,
       showDday: showDday,
-      alarmEnabled: alarmEnabled
+      alarmEnabled: alarmEnabled,
+      entireSeries: entireSeries
     )
   }
 
@@ -2313,27 +2376,44 @@ private enum DailySiriDatabase {
     newWeather: String?,
     reminderMinutesBefore: Int?,
     showDday: Bool?,
-    alarmEnabled: Bool?
+    alarmEnabled: Bool?,
+    entireSeries: Bool = false
   ) throws -> DailySiriEvent {
     guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
-    let updatedTitle = normalized(newTitle) ?? event.title
-    let updatedStart = newStartAt ?? event.startAt
+    let sourceID = DailySiriOccurrenceIdentity.parse(event.id)?.sourceID ?? event.id
+    let base: DailySiriEvent
+    if entireSeries {
+      guard let source = try events(withIDs: [sourceID]).first else { throw DailySiriError.eventNotFound }
+      base = source
+    } else {
+      base = event
+    }
+    let updatedTitle = normalized(newTitle) ?? base.title
+    let updatedStart = newStartAt ?? base.startAt
     let updatedEnd: Date
     if let newEndAt {
       updatedEnd = newEndAt
     } else if newStartAt != nil {
-      updatedEnd = updatedStart.addingTimeInterval(event.endAt.timeIntervalSince(event.startAt))
+      updatedEnd = updatedStart.addingTimeInterval(base.endAt.timeIntervalSince(base.startAt))
     } else {
-      updatedEnd = event.endAt
+      updatedEnd = base.endAt
     }
     guard updatedEnd > updatedStart else { throw DailySiriError.invalidTime }
     let resolvedReminders = reminderMinutesBefore.map { [$0] } ?? event.reminderMinutesBefore
-    try withDatabase { database in
+    let mutationID = try withDatabase { database in
+      try beginMutation(database)
+      var committed = false
+      defer { if !committed { sqlite3_exec(database, "ROLLBACK", nil, nil, nil) } }
+      let target = try prepareMutation(database, event: event, entireSeries: entireSeries, deleting: false)
+      let resetAnchor = entireSeries && !Calendar.current.isDate(updatedStart, inSameDayAs: base.startAt)
+      let hasAnchorColumn = try hasEventColumn(database, name: "recurrence_anchor_day")
+      let anchorUpdate = resetAnchor && hasAnchorColumn
+        ? ", recurrence_anchor_day = NULL" : ""
       let sql = """
         UPDATE event_records SET title = ?, start_at = ?, end_at = ?, all_day = ?,
           category = ?, color_value = ?, location = ?, memo = ?, url = ?, weather = ?,
           reminder_minutes_before = ?, reminder_minutes_before_list = ?,
-          show_dday = ?, alarm_enabled = ?, updated_at = ?, sync_status = 'pending'
+          show_dday = ?, alarm_enabled = ?, updated_at = ?, sync_status = 'pending'\(anchorUpdate)
         WHERE id = ? AND id NOT LIKE 'lms:%' \(try lmsMutationPredicate(database))
         """
       var statement: OpaquePointer?
@@ -2361,20 +2441,27 @@ private enum DailySiriDatabase {
       sqlite3_bind_int(statement, 13, (showDday ?? event.showDday) ? 1 : 0)
       sqlite3_bind_int(statement, 14, (alarmEnabled ?? event.alarmEnabled) ? 1 : 0)
       sqlite3_bind_int64(statement, 15, Int64(Date().timeIntervalSince1970))
-      bind(event.id, to: 16, in: statement)
+      bind(target, to: 16, in: statement)
       guard sqlite3_step(statement) == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
       guard sqlite3_changes(database) == 1 else { throw DailySiriError.eventNotFound }
+      try commitMutation(database)
+      committed = true
+      return target
     }
     if #available(iOS 18.0, macOS 15.0, *) {
       DailySiriSearchIndexer.scheduleRefresh()
     }
     DailySiriEventChangeSignal.post(
-      eventID: event.id,
+      eventID: mutationID,
       action: "update",
       reminderMinutesBefore: Array(Set(event.reminderMinutesBefore + resolvedReminders))
     )
+    let originalID = DailySiriOccurrenceIdentity.parse(event.id)?.sourceID ?? event.id
+    if originalID != mutationID {
+      DailySiriEventChangeSignal.post(eventID: originalID, action: "update", reminderMinutesBefore: event.reminderMinutesBefore)
+    }
     return DailySiriEvent(
-      id: event.id,
+      id: mutationID,
       title: updatedTitle,
       memo: newMemo ?? event.memo,
       location: newLocation ?? event.location,
@@ -2389,31 +2476,43 @@ private enum DailySiriDatabase {
       showDday: showDday ?? event.showDday,
       alarmEnabled: alarmEnabled ?? event.alarmEnabled,
       allDayAlarmMinutes: event.allDayAlarmMinutes,
-      recurrenceFrequency: event.recurrenceFrequency,
+      recurrenceFrequency: entireSeries ? event.recurrenceFrequency : "none",
       recurrenceInterval: event.recurrenceInterval,
-      recurrenceUntil: event.recurrenceUntil,
-      recurrenceCount: event.recurrenceCount,
-      recurrenceExcludedDates: event.recurrenceExcludedDates
+      recurrenceUntil: entireSeries ? event.recurrenceUntil : nil,
+      recurrenceCount: entireSeries ? event.recurrenceCount : nil,
+      recurrenceAnchorDay: entireSeries && Calendar.current.isDate(updatedStart, inSameDayAs: base.startAt) ? base.recurrenceAnchorDay : nil,
+      recurrenceExcludedDates: entireSeries ? event.recurrenceExcludedDates : []
     )
   }
 
-  static func delete(matching title: String) throws -> DailySiriEvent {
+  static func delete(matching title: String, entireSeries: Bool = false) throws -> DailySiriEvent {
     let matches = try exactMatches(title)
     guard let event = matches.first else { throw DailySiriError.eventNotFound }
     guard matches.count == 1 else { throw DailySiriError.ambiguousEvent }
-    return try delete(event: event)
+    return try delete(event: event, entireSeries: entireSeries)
   }
 
-  static func delete(id: String) throws -> DailySiriEvent {
+  static func delete(id: String, entireSeries: Bool = false) throws -> DailySiriEvent {
     guard let event = try events(withIDs: [id]).first else {
       throw DailySiriError.eventNotFound
     }
-    return try delete(event: event)
+    return try delete(event: event, entireSeries: entireSeries)
   }
 
-  private static func delete(event: DailySiriEvent) throws -> DailySiriEvent {
+  private static func delete(event: DailySiriEvent, entireSeries: Bool = false) throws -> DailySiriEvent {
     guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
+    let sourceID = DailySiriOccurrenceIdentity.parse(event.id)?.sourceID ?? event.id
+    let singleOccurrence = event.recurrenceFrequency != "none" && !entireSeries
     try withDatabase { database in
+      try beginMutation(database)
+      var committed = false
+      defer { if !committed { sqlite3_exec(database, "ROLLBACK", nil, nil, nil) } }
+      let target = try prepareMutation(database, event: event, entireSeries: entireSeries, deleting: true)
+      if singleOccurrence {
+        try commitMutation(database)
+        committed = true
+        return
+      }
       let sql = "UPDATE event_records SET deleted_at = ?, updated_at = ?, sync_status = 'pending_delete' WHERE id = ? AND id NOT LIKE 'lms:%' \(try lmsMutationPredicate(database))"
       var statement: OpaquePointer?
       guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else {
@@ -2423,19 +2522,92 @@ private enum DailySiriDatabase {
       let now = Int64(Date().timeIntervalSince1970)
       sqlite3_bind_int64(statement, 1, now)
       sqlite3_bind_int64(statement, 2, now)
-      bind(event.id, to: 3, in: statement)
+      bind(target, to: 3, in: statement)
       guard sqlite3_step(statement) == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
       guard sqlite3_changes(database) == 1 else { throw DailySiriError.eventNotFound }
+      try commitMutation(database)
+      committed = true
     }
     if #available(iOS 18.0, macOS 15.0, *) {
       DailySiriSearchIndexer.scheduleRefresh()
     }
     DailySiriEventChangeSignal.post(
-      eventID: event.id,
-      action: "delete",
+      eventID: sourceID,
+      action: singleOccurrence ? "update" : "delete",
       reminderMinutesBefore: event.reminderMinutesBefore
     )
     return event
+  }
+
+  private static func beginMutation(_ database: OpaquePointer) throws {
+    guard sqlite3_exec(database, "BEGIN IMMEDIATE", nil, nil, nil) == SQLITE_OK else {
+      throw DailySiriError.databaseUnavailable
+    }
+  }
+
+  private static func commitMutation(_ database: OpaquePointer) throws {
+    guard sqlite3_exec(database, "COMMIT", nil, nil, nil) == SQLITE_OK else {
+      throw DailySiriError.databaseUnavailable
+    }
+  }
+
+  private static func prepareMutation(
+    _ database: OpaquePointer, event: DailySiriEvent, entireSeries: Bool, deleting: Bool
+  ) throws -> String {
+    let sourceID = DailySiriOccurrenceIdentity.parse(event.id)?.sourceID ?? event.id
+    guard let source = try events(withIDs: [sourceID], database: database).first,
+          !source.isLms, !source.isHoliday else { throw DailySiriError.eventNotFound }
+    if source.recurrenceFrequency == "none" {
+      guard event.id == sourceID else { throw DailySiriError.eventNotFound }
+      return sourceID
+    }
+    if entireSeries { return sourceID }
+    let occurrenceID = DailySiriOccurrenceIdentity.make(sourceID: sourceID, start: event.startAt)
+    guard let occurrence = try events(withIDs: [occurrenceID], database: database).first else {
+      throw DailySiriError.eventNotFound
+    }
+    var exclusions = source.recurrenceExcludedDates
+    exclusions.insert(dayKey(occurrence.startAt))
+    let encoded = String(data: try JSONEncoder().encode(exclusions.sorted()), encoding: .utf8)!
+    var statement: OpaquePointer?
+    let sql = "UPDATE event_records SET recurrence_excluded_dates = ?, updated_at = ?, sync_status = 'pending' WHERE id = ? AND deleted_at IS NULL"
+    guard sqlite3_prepare_v2(database, sql, -1, &statement, nil) == SQLITE_OK else { throw DailySiriError.databaseUnavailable }
+    bind(encoded, to: 1, in: statement)
+    sqlite3_bind_int64(statement, 2, Int64(Date().timeIntervalSince1970))
+    bind(sourceID, to: 3, in: statement)
+    let status = sqlite3_step(statement)
+    sqlite3_finalize(statement)
+    guard status == SQLITE_DONE, sqlite3_changes(database) == 1 else { throw DailySiriError.databaseUnavailable }
+    if deleting { return sourceID }
+
+    // Copy all native/Flutter fields (including completion and future columns).
+    var columns: [String] = []
+    guard sqlite3_prepare_v2(database, "PRAGMA table_info(event_records)", -1, &statement, nil) == SQLITE_OK else { throw DailySiriError.databaseUnavailable }
+    while sqlite3_step(statement) == SQLITE_ROW { columns.append(string(statement, 1)) }
+    sqlite3_finalize(statement)
+    func quoted(_ column: String) -> String { "\"" + column.replacingOccurrences(of: "\"", with: "\"\"") + "\"" }
+    let newID = UUID().uuidString
+    let copied = columns.map { column -> String in
+      switch column {
+      case "id": return "?"
+      case "start_at": return String(Int64(occurrence.startAt.timeIntervalSince1970))
+      case "end_at": return String(Int64(occurrence.endAt.timeIntervalSince1970))
+      case "recurrence_frequency": return "'none'"
+      case "recurrence_interval": return "1"
+      case "recurrence_until", "recurrence_count": return "NULL"
+      case "recurrence_excluded_dates": return "'[]'"
+      case "sync_status": return "'pending'"
+      default: return quoted(column)
+      }
+    }
+    let clone = "INSERT INTO event_records (" + columns.map(quoted).joined(separator: ",") + ") SELECT " + copied.joined(separator: ",") + " FROM event_records WHERE id = ?"
+    guard sqlite3_prepare_v2(database, clone, -1, &statement, nil) == SQLITE_OK else { throw DailySiriError.databaseUnavailable }
+    bind(newID, to: 1, in: statement)
+    bind(sourceID, to: 2, in: statement)
+    let inserted = sqlite3_step(statement)
+    sqlite3_finalize(statement)
+    guard inserted == SQLITE_DONE, sqlite3_changes(database) == 1 else { throw DailySiriError.databaseUnavailable }
+    return newID
   }
 
   private enum Binding {
@@ -2454,17 +2626,19 @@ private enum DailySiriDatabase {
   private static func query(
     whereClause: String,
     bindings: [Binding],
-    limit: Int? = nil
+    limit: Int? = nil,
+    database: OpaquePointer? = nil
   ) throws -> [DailySiriEvent] {
-    try withDatabase { database in
+    try withDatabase(database) { database in
       let visibility = lmsVisibility()
       let metadataColumn = try hasLmsMetadataColumn(database) ? "lms_metadata" : "NULL"
+      let anchorColumn = try hasEventColumn(database, name: "recurrence_anchor_day") ? "recurrence_anchor_day" : "NULL"
       let sql = """
         SELECT id, title, memo, location, url, weather, start_at, end_at,
           all_day, category, color_value, reminder_minutes_before_list,
           show_dday, alarm_enabled, all_day_alarm_minutes,
           recurrence_frequency, recurrence_interval, recurrence_until,
-          recurrence_count, recurrence_excluded_dates, \(metadataColumn)
+          recurrence_count, recurrence_excluded_dates, \(metadataColumn), \(anchorColumn)
         FROM event_records WHERE \(whereClause) ORDER BY start_at ASC
         """
       var statement: OpaquePointer?
@@ -2505,6 +2679,7 @@ private enum DailySiriDatabase {
             recurrenceInterval: max(Int(sqlite3_column_int(statement, 16)), 1),
             recurrenceUntil: optionalDate(statement, 17),
             recurrenceCount: optionalInt(statement, 18),
+            recurrenceAnchorDay: optionalInt(statement, 21),
             recurrenceExcludedDates: excludedDates(optionalString(statement, 19))
           )
         )
@@ -2518,13 +2693,17 @@ private enum DailySiriDatabase {
   }
 
   private static func hasLmsMetadataColumn(_ database: OpaquePointer) throws -> Bool {
+    try hasEventColumn(database, name: "lms_metadata")
+  }
+
+  private static func hasEventColumn(_ database: OpaquePointer, name: String) throws -> Bool {
     var statement: OpaquePointer?
     guard sqlite3_prepare_v2(database, "PRAGMA table_info(event_records)", -1, &statement, nil) == SQLITE_OK else {
       throw DailySiriError.databaseUnavailable
     }
     defer { sqlite3_finalize(statement) }
     while sqlite3_step(statement) == SQLITE_ROW {
-      if string(statement, 1) == "lms_metadata" { return true }
+      if string(statement, 1) == name { return true }
     }
     return false
   }
@@ -2551,7 +2730,8 @@ private enum DailySiriDatabase {
     return DailySiriLmsVisibility(ownerID: owner, snapshot: snapshot)
   }
 
-  private static func withDatabase<T>(_ operation: (OpaquePointer) throws -> T) throws -> T {
+  private static func withDatabase<T>(_ existing: OpaquePointer? = nil, _ operation: (OpaquePointer) throws -> T) throws -> T {
+    if let existing { return try operation(existing) }
     guard let url = databaseURL(), FileManager.default.fileExists(atPath: url.path) else {
       throw DailySiriError.databaseUnavailable
     }
@@ -2643,13 +2823,13 @@ private enum DailySiriDatabase {
     var result: [DailySiriEvent] = []
     while start < rangeEnd && occurrenceIndex < 100_000 {
       if let count = event.recurrenceCount, occurrenceIndex >= count { break }
-      if let until = event.recurrenceUntil, start > until { break }
+      if let until = event.recurrenceUntil, calendar.startOfDay(for: start) > calendar.startOfDay(for: until) { break }
       let occurrenceEnd = start.addingTimeInterval(duration)
       if occurrenceEnd > rangeStart &&
           !event.recurrenceExcludedDates.contains(dayKey(start)) {
         result.append(
           DailySiriEvent(
-            id: event.id,
+            id: DailySiriOccurrenceIdentity.make(sourceID: event.id, start: start),
             title: event.title,
             memo: event.memo,
             location: event.location,
@@ -2670,12 +2850,13 @@ private enum DailySiriDatabase {
             recurrenceInterval: event.recurrenceInterval,
             recurrenceUntil: event.recurrenceUntil,
             recurrenceCount: event.recurrenceCount,
+            recurrenceAnchorDay: event.recurrenceAnchorDay,
             recurrenceExcludedDates: event.recurrenceExcludedDates
           )
         )
       }
       occurrenceIndex += 1
-      guard let next = nextOccurrence(after: start, event: event, calendar: calendar),
+      guard let next = nextOccurrence(index: occurrenceIndex, event: event, calendar: calendar),
             next > start else { break }
       start = next
     }
@@ -2683,16 +2864,24 @@ private enum DailySiriDatabase {
   }
 
   private static func nextOccurrence(
-    after date: Date,
+    index: Int,
     event: DailySiriEvent,
     calendar: Calendar
   ) -> Date? {
-    let interval = max(event.recurrenceInterval, 1)
+    let product = max(event.recurrenceInterval, 1).multipliedReportingOverflow(by: index)
+    guard !product.overflow else { return nil }
+    let interval = product.partialValue
+    let date = event.startAt
     switch event.recurrenceFrequency {
     case "daily": return calendar.date(byAdding: .day, value: interval, to: date)
     case "weekly": return calendar.date(byAdding: .weekOfYear, value: interval, to: date)
-    case "monthly": return calendar.date(byAdding: .month, value: interval, to: date)
-    case "yearly": return calendar.date(byAdding: .year, value: interval, to: date)
+    case "monthly", "yearly":
+      let component: Calendar.Component = event.recurrenceFrequency == "monthly" ? .month : .year
+      guard let target = calendar.date(byAdding: component, value: interval, to: date),
+            let days = calendar.range(of: .day, in: .month, for: target) else { return nil }
+      var parts = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .nanosecond], from: target)
+      parts.day = min(max(event.recurrenceAnchorDay ?? calendar.component(.day, from: date), 1), days.count)
+      return calendar.date(from: parts)
     default: return nil
     }
   }
@@ -2959,10 +3148,22 @@ struct SearchDailyEventsIntent: AppIntent {
 }
 
 @available(iOS 16.0, macOS 13.0, *)
+enum DailyRecurringMutationScope: String, AppEnum {
+  case occurrence
+  case entireSeries
+  static var typeDisplayRepresentation = TypeDisplayRepresentation(name: "Repeat scope")
+  static var caseDisplayRepresentations: [DailyRecurringMutationScope: DisplayRepresentation] = [
+    .occurrence: DisplayRepresentation(title: "이 회차만"),
+    .entireSeries: DisplayRepresentation(title: "전체 반복"),
+  ]
+}
+
+@available(iOS 16.0, macOS 13.0, *)
 struct UpdateDailyEventIntent: AppIntent {
   static var title: LocalizedStringResource = "Update Daily Event"
   static var authenticationPolicy: IntentAuthenticationPolicy = .requiresLocalDeviceAuthentication
   @Parameter(title: "Event") var event: DailyEventEntity
+  @Parameter(title: "Repeat scope", default: .occurrence) var repeatScope: DailyRecurringMutationScope
   @Parameter(title: "New title") var newTitle: String?
   @Parameter(title: "New start") var newStartAt: Date?
   @Parameter(title: "New end") var newEndAt: Date?
@@ -2995,6 +3196,9 @@ struct UpdateDailyEventIntent: AppIntent {
       throw $newCategory.requestValue(IntentDialog(stringLiteral: DailySiriText.categoryRequest))
     }
     let resolvedEnd = newEndAt ?? Calendar.current.date(byAdding: .day, value: 1, to: Calendar.current.startOfDay(for: newStartAt))!
+    if let scope = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries) {
+      try await requestConfirmation(result: .result(dialog: IntentDialog(stringLiteral: scope + " · " + DailySiriText.commandConfirmation)))
+    }
     let updatedEvent = try loggedSiriOperation(action: "update", summary: event.title) {
       try DailySiriDatabase.update(
         id: event.id,
@@ -3009,7 +3213,8 @@ struct UpdateDailyEventIntent: AppIntent {
         newWeather: newWeather,
         reminderMinutesBefore: reminderMinutesBefore,
         showDday: showDday,
-        alarmEnabled: alarmEnabled
+        alarmEnabled: alarmEnabled,
+        entireSeries: repeatScope == .entireSeries
       )
     }
     DailySiriLogStore.append(
@@ -3028,12 +3233,14 @@ struct DeleteDailyEventIntent: AppIntent {
   static var title: LocalizedStringResource = "Delete Daily Event"
   static var authenticationPolicy: IntentAuthenticationPolicy = .requiresLocalDeviceAuthentication
   @Parameter(title: "Event") var event: DailyEventEntity
+  @Parameter(title: "Repeat scope", default: .occurrence) var repeatScope: DailyRecurringMutationScope
 
   func perform() async throws -> some IntentResult & ProvidesDialog {
     try DailySiriDatabase.requireEditable(id: event.id)
+    let scope = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries)
     do {
       try await requestConfirmation(result: .result(
-        dialog: IntentDialog(stringLiteral: DailySiriText.deleteConfirmation(event.title))
+        dialog: IntentDialog(stringLiteral: DailySiriText.deleteConfirmation(scope ?? event.title))
       ))
     } catch {
       DailySiriLogStore.append(
@@ -3045,7 +3252,7 @@ struct DeleteDailyEventIntent: AppIntent {
       throw error
     }
     let deletedEvent = try loggedSiriOperation(action: "delete", summary: event.title) {
-      try DailySiriDatabase.delete(id: event.id)
+      try DailySiriDatabase.delete(id: event.id, entireSeries: repeatScope == .entireSeries)
     }
     DailySiriLogStore.append(
       action: "delete",
@@ -3101,6 +3308,7 @@ struct DailySignalCommandIntent: AppIntent {
   @Parameter(title: "Date") var date: Date?
   @Parameter(title: "Search text") var query: String?
   @Parameter(title: "Event") var event: DailyEventEntity?
+  @Parameter(title: "Repeat scope", default: .occurrence) var repeatScope: DailyRecurringMutationScope
   @Parameter(title: "Title") var eventTitle: String?
   @Parameter(title: "Start") var startAt: Date?
   @Parameter(title: "End") var endAt: Date?
@@ -3311,6 +3519,7 @@ struct DailySignalCommandIntent: AppIntent {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.updateTargetRequest))
       }
       try DailySiriDatabase.requireEditable(id: event.id)
+      let scopeLabel = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries)
       guard let resolvedNewTitle = normalized(newTitle) ?? generatedUnderstanding?.newTitle else {
         throw $newTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
       }
@@ -3340,7 +3549,10 @@ struct DailySignalCommandIntent: AppIntent {
         to: Calendar.current.startOfDay(for: resolvedNewStartAt)
       )!
       if isBridgeExecution && !confirmedInApp {
-        throw DailySignalConfirmationRequired()
+        throw DailySignalConfirmationRequired(message: scopeLabel.map { $0 + " · " + DailySiriText.commandConfirmation } ?? DailySiriText.commandConfirmation)
+      }
+      if !isBridgeExecution, let scopeLabel {
+        try await requestConfirmation(result: .result(dialog: IntentDialog(stringLiteral: scopeLabel + " · " + DailySiriText.commandConfirmation)))
       }
       try await authenticateMutation(DailySiriText.updateAuthentication)
       let updatedEvent = try loggedSiriOperation(action: "signal-update", summary: event.title) {
@@ -3357,7 +3569,8 @@ struct DailySignalCommandIntent: AppIntent {
           newWeather: normalized(weather) ?? generatedUnderstanding?.weather,
           reminderMinutesBefore: reminderMinutesBefore ?? generatedUnderstanding?.reminderMinutesBefore,
           showDday: showDday ?? generatedUnderstanding?.showDday,
-          alarmEnabled: alarmEnabled ?? generatedUnderstanding?.alarmEnabled
+          alarmEnabled: alarmEnabled ?? generatedUnderstanding?.alarmEnabled,
+          entireSeries: repeatScope == .entireSeries
         )
       }
       DailySiriLogStore.append(
@@ -3377,11 +3590,15 @@ struct DailySignalCommandIntent: AppIntent {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.deleteTargetRequest))
       }
       try DailySiriDatabase.requireEditable(id: event.id)
+      let scopeLabel = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries)
       try await authenticateMutation(DailySiriText.deleteAuthentication)
+      if isBridgeExecution && !confirmedInApp {
+        throw DailySignalConfirmationRequired(message: DailySiriText.deleteConfirmation(scopeLabel ?? event.title))
+      }
       if !confirmedInApp {
         do {
           try await requestConfirmation(result: .result(
-            dialog: IntentDialog(stringLiteral: DailySiriText.deleteConfirmation(event.title))
+            dialog: IntentDialog(stringLiteral: DailySiriText.deleteConfirmation(scopeLabel ?? event.title))
           ))
         } catch {
           DailySiriLogStore.append(action: "signal-delete", summary: event.title, result: "cancelled", success: false)
@@ -3389,7 +3606,7 @@ struct DailySignalCommandIntent: AppIntent {
         }
       }
       let deletedEvent = try loggedSiriOperation(action: "signal-delete", summary: event.title) {
-        try DailySiriDatabase.delete(id: event.id)
+        try DailySiriDatabase.delete(id: event.id, entireSeries: repeatScope == .entireSeries)
       }
       DailySiriLogStore.append(
         action: "signal-delete",

@@ -1,0 +1,131 @@
+[
+  {
+    "name": "jan28",
+    "start": "2025-01-28",
+    "frequency": "monthly",
+    "interval": 1,
+    "count": 3,
+    "expected": [
+      "2025-01-28",
+      "2025-02-28",
+      "2025-03-28"
+    ]
+  },
+  {
+    "name": "jan29",
+    "start": "2025-01-29",
+    "frequency": "monthly",
+    "interval": 1,
+    "count": 3,
+    "expected": [
+      "2025-01-29",
+      "2025-02-28",
+      "2025-03-29"
+    ]
+  },
+  {
+    "name": "jan30",
+    "start": "2025-01-30",
+    "frequency": "monthly",
+    "interval": 1,
+    "count": 3,
+    "expected": [
+      "2025-01-30",
+      "2025-02-28",
+      "2025-03-30"
+    ]
+  },
+  {
+    "name": "jan31",
+    "start": "2025-01-31",
+    "frequency": "monthly",
+    "interval": 1,
+    "count": 3,
+    "expected": [
+      "2025-01-31",
+      "2025-02-28",
+      "2025-03-31"
+    ]
+  },
+  {
+    "name": "two-month",
+    "start": "2025-12-31",
+    "frequency": "monthly",
+    "interval": 2,
+    "count": 4,
+    "expected": [
+      "2025-12-31",
+      "2026-02-28",
+      "2026-04-30",
+      "2026-06-30"
+    ]
+  },
+  {
+    "name": "yearly-leap",
+    "start": "2024-02-29",
+    "frequency": "yearly",
+    "interval": 1,
+    "count": 5,
+    "expected": [
+      "2024-02-29",
+      "2025-02-28",
+      "2026-02-28",
+      "2027-02-28",
+      "2028-02-29"
+    ]
+  },
+  {
+    "name": "twelve-month",
+    "start": "2024-02-29",
+    "frequency": "monthly",
+    "interval": 12,
+    "count": 5,
+    "expected": [
+      "2024-02-29",
+      "2025-02-28",
+      "2026-02-28",
+      "2027-02-28",
+      "2028-02-29"
+    ]
+  },
+  {
+    "name": "split",
+    "start": "2025-02-28",
+    "frequency": "monthly",
+    "interval": 1,
+    "count": 3,
+    "expected": [
+      "2025-02-28",
+      "2025-03-31",
+      "2025-04-30"
+    ],
+    "anchorDay": 31
+  },
+  {
+    "name": "until-excluded",
+    "start": "2025-01-31",
+    "frequency": "monthly",
+    "interval": 1,
+    "count": 6,
+    "expected": [
+      "2025-01-31",
+      "2025-03-31"
+    ],
+    "until": "2025-03-31",
+    "excluded": [
+      "2025-02-28"
+    ]
+  },
+  {
+    "name": "narrow",
+    "start": "2025-01-31",
+    "frequency": "monthly",
+    "interval": 1,
+    "count": 8,
+    "expected": [
+      "2025-03-31"
+    ],
+    "rangeStart": "2025-03-01",
+    "rangeEnd": "2025-04-01"
+  }
+]

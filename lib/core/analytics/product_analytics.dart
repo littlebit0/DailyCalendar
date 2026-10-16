@@ -15,6 +15,8 @@ enum AnalyticsCalendarView { quickView, week, month, day }
 
 enum AnalyticsEditorMode { create, edit }
 
+enum AnalyticsSavePhase { database, followUp }
+
 enum AnalyticsOperation { create, update, delete, complete, uncomplete }
 
 enum AnalyticsFeature { search, filter, widget, calendarImport, siri, map }
@@ -116,6 +118,7 @@ class AnalyticsRecord {
     required bool succeeded,
     required int durationMs,
     AnalyticsErrorCode? errorCode,
+    AnalyticsSavePhase phase = AnalyticsSavePhase.database,
   }) {
     return AnalyticsRecord._(
       succeeded
@@ -123,6 +126,7 @@ class AnalyticsRecord {
           : AnalyticsEventName.eventSaveFailed,
       {
         'operation': operation.name,
+        'phase': phase.name,
         'durationMs': _boundedDuration(durationMs),
         if (!succeeded)
           'errorCode': (errorCode ?? AnalyticsErrorCode.unknown).name,

@@ -29,6 +29,17 @@ struct DailyWallpaperSettingsView: View {
 
   private func t(_ key: String) -> String { DailyWallpaperText.value(key) }
 
+  private var dailyAppLockEnabled: Bool {
+    let defaults = UserDefaults.standard
+    guard let encoded = defaults.string(forKey: "flutter.appLockConfiguration.v1") else {
+      return defaults.bool(forKey: "flutter.appLockEnabled")
+    }
+    guard let data = encoded.data(using: .utf8),
+          let value = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any],
+          let enabled = value["enabled"] as? Bool else { return true }
+    return enabled
+  }
+
   var body: some View {
     NavigationStack {
       ScrollView {
@@ -70,7 +81,7 @@ struct DailyWallpaperSettingsView: View {
         appIsActive = false
       }
       .onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)) { _ in
-        if UserDefaults.standard.bool(forKey: "flutter.appLockEnabled") { dismiss() }
+        if dailyAppLockEnabled { dismiss() }
       }
       .onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)) { _ in
         appIsActive = true

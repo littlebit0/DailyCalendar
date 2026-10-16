@@ -2916,6 +2916,88 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  for (final cancelPath in ['text', 'background', 'dispose']) {
+    testWidgets('Signal permission pending cancellation via $cancelPath', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(393, 852);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      const signalChannel = MethodChannel('daily/signal_voice');
+      final reply = Completer<String>();
+      final calls = <MethodCall>[];
+      final messenger =
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(signalChannel, (call) async {
+        calls.add(call);
+        if (call.method == 'startListening') return reply.future;
+        return null;
+      });
+      addTearDown(
+        () => messenger.setMockMethodCallHandler(signalChannel, null),
+      );
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'appleUserIdentifier': 'apple-user',
+        'appleEmail': 'hwi@example.com',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Siri'));
+      await tester.pumpAndSettle();
+      // The OS permission prompt temporarily makes the app inactive.
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      await tester.pump();
+      expect(calls.where((c) => c.method == 'cancelListening'), isEmpty);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      if (cancelPath == 'text') {
+        await tester.tap(find.byTooltip('텍스트로 입력'));
+      } else if (cancelPath == 'background') {
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+      } else {
+        await tester.pumpWidget(const SizedBox.shrink());
+      }
+      await tester.pumpAndSettle();
+      expect(calls.where((c) => c.method == 'cancelListening'), isNotEmpty);
+      reply.complete('이전 요청의 늦은 응답');
+      await tester.pumpAndSettle();
+      expect(calls.where((c) => c.method == 'runSignal'), isEmpty);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    });
+  }
+
   for (final platform in [
     TargetPlatform.macOS,
     TargetPlatform.iOS,
@@ -5506,84 +5588,105 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('settings displays matching app version and build label', (
-    tester,
-  ) async {
-    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
-    FlutterSecureStorage.setMockInitialValues({});
-    PackageInfo.setMockInitialValues(
-      appName: 'Daily',
-      packageName: 'com.littlebit0.daily',
-      version: '2.7.1',
-      buildNumber: '1',
-      buildSignature: '',
-    );
-    final preferences = await SharedPreferences.getInstance();
-    final settingsRepository = SettingsRepository(preferences: preferences);
-    final authService = _FakeGoogleDriveAuthService(account: null);
-    final notificationService = _FakeNotification();
-    final eventRepository = _FakeEventRepository();
-    final driveSyncService = _FakeGoogleDriveSyncService(
-      authService: authService,
-      eventRepository: eventRepository,
-      notificationService: notificationService,
-      settingsRepository: settingsRepository,
-    );
+  for (final packageName in [
+    'com.littlebit0.daily',
+    'com.littlebit0.daily.test',
+  ]) {
+    testWidgets(
+      'settings displays matching app version and build label: $packageName',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+        FlutterSecureStorage.setMockInitialValues({});
+        PackageInfo.setMockInitialValues(
+          appName: 'Daily',
+          packageName: packageName,
+          version: '2.7.1',
+          buildNumber: '1',
+          buildSignature: '',
+        );
+        final preferences = await SharedPreferences.getInstance();
+        final settingsRepository = SettingsRepository(preferences: preferences);
+        final authService = _FakeGoogleDriveAuthService(account: null);
+        final notificationService = _FakeNotification();
+        final eventRepository = _FakeEventRepository();
+        final driveSyncService = _FakeGoogleDriveSyncService(
+          authService: authService,
+          eventRepository: eventRepository,
+          notificationService: notificationService,
+          settingsRepository: settingsRepository,
+        );
 
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File(
-                      'assets/academic/university_regions.json',
-                    ).readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              universityRegionsProvider.overrideWith(
+                (ref) async => UniversityRegions.fromJson(
+                  jsonDecode(
+                        File(
+                          'assets/academic/university_regions.json',
+                        ).readAsStringSync(),
+                      )
+                      as Map<String, dynamic>,
+                ),
+              ),
+              settingsRepositoryProvider.overrideWithValue(settingsRepository),
+              notificationServiceProvider.overrideWithValue(
+                notificationService,
+              ),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+              eventRepositoryProvider.overrideWithValue(eventRepository),
+              googleDriveAuthServiceProvider.overrideWithValue(authService),
+              googleDriveSyncServiceProvider.overrideWithValue(
+                driveSyncService,
+              ),
+            ],
+            child: const MaterialApp(home: SettingsPage()),
           ),
-          settingsRepositoryProvider.overrideWithValue(settingsRepository),
-          notificationServiceProvider.overrideWithValue(notificationService),
-          syncServiceProvider.overrideWithValue(_FakeSync()),
-          eventRepositoryProvider.overrideWithValue(eventRepository),
-          googleDriveAuthServiceProvider.overrideWithValue(authService),
-          googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
-        ],
-        child: const MaterialApp(home: SettingsPage()),
-      ),
-    );
-    await tester.pumpAndSettle();
-    final aboutNavigation = find.byKey(
-      const ValueKey('about-settings-navigation'),
-    );
-    await tester.dragUntilVisible(
-      aboutNavigation,
-      find.byType(ListView),
-      const Offset(0, -520),
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(aboutNavigation);
-    await tester.pumpAndSettle();
-    await tester.drag(find.byType(ListView), const Offset(0, -2200));
-    await tester.pumpAndSettle();
+        );
+        await tester.pumpAndSettle();
+        final aboutNavigation = find.byKey(
+          const ValueKey('about-settings-navigation'),
+        );
+        await tester.dragUntilVisible(
+          aboutNavigation,
+          find.byType(ListView),
+          const Offset(0, -520),
+        );
+        await tester.pumpAndSettle();
+        await tester.tap(aboutNavigation);
+        await tester.pumpAndSettle();
+        await tester.drag(find.byType(ListView), const Offset(0, -2200));
+        await tester.pumpAndSettle();
 
-    expect(
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is Text &&
-            (widget.data == '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기' ||
-                widget.semanticsLabel ==
-                    '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기'),
-      ),
-      findsOneWidget,
-    );
-    final versionTile = find.byKey(const ValueKey('daily-version-github-link'));
-    expect(versionTile, findsOneWidget);
-    expect(tester.widget<GestureDetector>(versionTile).onDoubleTap, isNotNull);
+        expect(
+          find.byWidgetPredicate(
+            (widget) =>
+                widget is Text &&
+                (widget.data == '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기' ||
+                    widget.semanticsLabel ==
+                        '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기'),
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text(
+            packageName.endsWith('.test') ? 'Daily 테스트 버전' : 'Daily 버전',
+          ),
+          findsOneWidget,
+        );
+        final versionTile = find.byKey(
+          const ValueKey('daily-version-github-link'),
+        );
+        expect(versionTile, findsOneWidget);
+        expect(
+          tester.widget<GestureDetector>(versionTile).onDoubleTap,
+          isNotNull,
+        );
 
-    await tester.pumpWidget(const SizedBox.shrink());
-  });
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
 
   testWidgets(
     'Windows settings controls animate while persistence is still pending',
@@ -6771,6 +6874,179 @@ void main() {
     expect(settingsRepository.load().appLockEnabled, false);
     await tester.pumpWidget(const SizedBox.shrink());
   });
+
+  testWidgets(
+    'PIN disable preserves PIN and reports settings persistence failure',
+    (tester) async {
+      tester.view.physicalSize = const Size(900, 2600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'appLockEnabled': true,
+      });
+      FlutterSecureStorage.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final secureStorage = _FailingPinStorage();
+      final settingsRepository = _FailingLockSettingsRepository(
+        preferences: preferences,
+        secureStorage: secureStorage,
+      );
+      await settingsRepository.saveAppLockPin('13579');
+      final authService = _FakeGoogleDriveAuthService(account: null);
+      final notificationService = _FakeNotification();
+      final eventRepository = _FakeEventRepository();
+      final driveSyncService = _FakeGoogleDriveSyncService(
+        authService: authService,
+        eventRepository: eventRepository,
+        notificationService: notificationService,
+        settingsRepository: settingsRepository,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(notificationService),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+            googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+          ],
+          child: const MaterialApp(home: SettingsPage()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(
+        find.byKey(const ValueKey('privacy-settings-navigation')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(SwitchListTile, '앱 잠금'));
+      await tester.pumpAndSettle();
+      expect(find.text('PIN 확인'), findsOneWidget);
+      settingsRepository.failSave = true;
+      for (final digit in ['1', '3', '5', '7', '9']) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+      expect(settingsRepository.load().appLockEnabled, isTrue);
+      expect(await settingsRepository.verifyAppLockPin('13579'), isTrue);
+      expect(tester.takeException(), isNull);
+      settingsRepository.failSave = false;
+      await tester.tap(find.widgetWithText(SwitchListTile, '앱 잠금'));
+      await tester.pumpAndSettle();
+      for (final digit in ['1', '3', '5', '7', '9']) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+      expect(find.text('PIN 확인'), findsNothing);
+      expect(settingsRepository.load().appLockEnabled, false);
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
+  testWidgets(
+    'Windows PIN disable preserves PIN and reports settings persistence failure',
+    (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      tester.view.physicalSize = const Size(900, 2600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'appLockEnabled': true,
+      });
+      FlutterSecureStorage.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final secureStorage = _FailingPinStorage();
+      final settingsRepository = _FailingLockSettingsRepository(
+        preferences: preferences,
+        secureStorage: secureStorage,
+      );
+      await settingsRepository.saveAppLockPin('13579');
+      final authService = _FakeGoogleDriveAuthService(account: null);
+      final notificationService = _FakeNotification();
+      final eventRepository = _FakeEventRepository();
+      final driveSyncService = _FakeGoogleDriveSyncService(
+        authService: authService,
+        eventRepository: eventRepository,
+        notificationService: notificationService,
+        settingsRepository: settingsRepository,
+      );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(notificationService),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(eventRepository),
+            googleDriveAuthServiceProvider.overrideWithValue(authService),
+            googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+          ],
+          child: const MaterialApp(home: SettingsPage()),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      await tester.tap(
+        find.byKey(const ValueKey('privacy-settings-navigation')),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(SwitchListTile, '앱 잠금'));
+      await tester.pumpAndSettle();
+      expect(find.text('PIN 확인'), findsOneWidget);
+      settingsRepository.failSave = true;
+      for (final digit in ['1', '3', '5', '7', '9']) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+      expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+      expect(settingsRepository.load().appLockEnabled, isTrue);
+      expect(await settingsRepository.verifyAppLockPin('13579'), isTrue);
+      expect(tester.takeException(), isNull);
+      settingsRepository.failSave = false;
+      await tester.tap(find.widgetWithText(SwitchListTile, '앱 잠금'));
+      await tester.pumpAndSettle();
+      for (final digit in ['1', '3', '5', '7', '9']) {
+        await tester.tap(find.widgetWithText(TextButton, digit));
+        await tester.pump();
+      }
+      await tester.pumpAndSettle();
+      expect(find.text('PIN 확인'), findsNothing);
+      expect(settingsRepository.load().appLockEnabled, false);
+      await tester.pumpWidget(const SizedBox.shrink());
+      debugDefaultTargetPlatformOverride = null;
+    },
+  );
 
   testWidgets('PIN setup reveals dots only as digits are entered', (
     tester,
@@ -8280,6 +8556,16 @@ void main() {
     expect(eventRepository.clearAllCalls, 1);
     expect(settingsRepository.load().onboardingCompleted, isFalse);
 
+    await preferences.reload();
+    final cleanup =
+        jsonDecode(settingsRepository.notificationCleanupJournal!) as Map;
+    expect((cleanup['events'] as Map).containsKey('reset-event'), isTrue);
+    expect(cleanup['briefing'], isTrue);
+    expect(
+      settingsRepository.notificationCleanupJournal,
+      isNot(contains('초기화 테스트')),
+    );
+
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
@@ -9258,6 +9544,32 @@ class _CompletionEventRepository extends _StreamingEventRepository {
   }
 
   @override
+  Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
+    Iterable<CalendarEvent> incoming, {
+    required RestoredEventResolver resolve,
+  }) async {
+    final next = {for (final event in _events) event.id: event};
+    final mutations = <EventRestoreMutation>[];
+    for (final event in incoming) {
+      final previous = next[event.id];
+      final current = resolve(previous, event);
+      next[current.id] = current;
+      mutations.add(
+        EventRestoreMutation(previous: previous, current: current),
+      );
+    }
+    if (failNextSave) {
+      failNextSave = false;
+      throw StateError('save failed');
+    }
+    _events
+      ..clear()
+      ..addAll(next.values);
+    _changes.add(null);
+    return mutations;
+  }
+
+  @override
   Future<List<CalendarEvent>> search(String query) async =>
       _events.where((e) => e.title.contains(query)).toList();
 
@@ -9464,5 +9776,26 @@ class _FailingPinStorage extends _MemorySecureStorage {
     WindowsOptions? wOptions,
   }) async {
     _values.remove(key);
+  }
+}
+
+class _FailingLockSettingsRepository extends SettingsRepository {
+  _FailingLockSettingsRepository({
+    required super.preferences,
+    required super.secureStorage,
+  });
+  bool failSave = false;
+  @override
+  Future<void> save(
+    AppSettings settings, {
+    bool markSyncPending = true,
+    AppSettings? changedFrom,
+  }) async {
+    if (failSave) throw StateError('settings storage unavailable');
+    await super.save(
+      settings,
+      markSyncPending: markSyncPending,
+      changedFrom: changedFrom,
+    );
   }
 }

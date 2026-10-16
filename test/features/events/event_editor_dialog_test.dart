@@ -1,14 +1,113 @@
+import 'dart:async';
 import 'package:daily/core/alarms/alarm_service.dart';
 import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_draft.dart';
+import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:daily/features/events/presentation/event_editor_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  for (final state in [
+    AlarmAuthorizationState.unsupported,
+    AlarmAuthorizationState.denied,
+  ]) {
+    for (final respondBeforeSave in [false, true]) {
+      testWidgets(
+        'alarm preference survives $state beforeSave=$respondBeforeSave',
+        (tester) async {
+          final permission = Completer<AlarmAuthorizationState>();
+          final event = _eventWithEndBeforeStart().copyWith(
+            endAt: _eventWithEndBeforeStart().startAt.add(
+              const Duration(hours: 1),
+            ),
+            alarmEnabled: true,
+            allDayAlarmMinutes: 615,
+          );
+          EventDraft? saved;
+          await tester.pumpWidget(
+            _DialogHost(
+              builder: (_) => EventEditorDialog(
+                initialDate: event.startAt,
+                event: event,
+                alarmService: _DelayedAlarmService(permission.future),
+              ),
+              onSaved: (draft) => saved = draft,
+            ),
+          );
+          await tester.tap(find.text('열기'));
+          await tester.pumpAndSettle();
+          if (respondBeforeSave) {
+            permission.complete(state);
+            await tester.pumpAndSettle();
+          }
+          await tester.enterText(find.byType(TextField).first, 'renamed');
+          await tester.tap(find.text('저장'));
+          await tester.pumpAndSettle();
+          expect(saved!.alarmEnabled, isTrue);
+          expect(saved!.allDayAlarmMinutes, 615);
+          if (!respondBeforeSave) {
+            permission.complete(state);
+            await tester.pump();
+          }
+        },
+      );
+    }
+  }
+
+  testWidgets(
+    'title-only editor retains recurrence exclusions without resetting count',
+    (tester) async {
+      final start = DateTime(2026, 10, 1, 9);
+      final event = CalendarEvent(
+        id: 'repeat',
+        title: 'original',
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: start,
+        updatedAt: start,
+        recurrence: RecurrenceRule(
+          frequency: RecurrenceFrequency.daily,
+          count: 5,
+          excludedDates: [DateTime(2026, 10, 2)],
+        ),
+      );
+      EventDraft? saved;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                onPressed: () async {
+                  saved = await showDialog<EventDraft>(
+                    context: context,
+                    builder: (_) =>
+                        EventEditorDialog(initialDate: start, event: event),
+                  );
+                },
+                child: const Text('open'),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('open'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).first, 'renamed');
+      await tester.tap(find.text('저장').last);
+      await tester.pumpAndSettle();
+      expect(saved!.recurrence.excludedDates, [DateTime(2026, 10, 2)]);
+      expect(saved!.recurrenceCountChanged, isFalse);
+      expect(saved!.recurrence.count, 5);
+    },
+  );
+
   const school = EventCategory(
     id: 'custom_original_id',
     label: 'LMS renamed',
@@ -556,4 +655,11 @@ CalendarEvent _eventWithEndBeforeStart() {
     createdAt: start,
     updatedAt: start,
   );
+}
+
+class _DelayedAlarmService extends _AuthorizedAlarmService {
+  const _DelayedAlarmService(this.permission);
+  final Future<AlarmAuthorizationState> permission;
+  @override
+  Future<AlarmAuthorizationState> authorizationState() => permission;
 }

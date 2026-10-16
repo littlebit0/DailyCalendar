@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
 import '../domain/university_course.dart';
 import 'course_organization_directory.dart';
 
@@ -54,43 +55,58 @@ class UniversityCatalog {
     final files =
         jsonDecode(await assets.loadString('assets/timetable/catalog.json'))
             as List;
-    final datasets = <UniversityDataset>[];
-    final organizations = <String, CourseOrganizationDirectory>{};
+    final texts = <String>[];
     for (final path in files.cast<String>()) {
-      // Catalog filenames are university-campus-year-semester. Do not load
-      // every school's courses when the user opens one school's search.
       if (university != null &&
           !path.split('/').last.startsWith('$university-')) {
         continue;
       }
-      final json =
-          jsonDecode(await assets.loadString(path)) as Map<String, dynamic>;
-      final school = json['universityId'] as String? ?? 'smu';
-      if (!organizations.containsKey(school)) {
-        final directory = CourseOrganizationDirectory.fromJson(
-          jsonDecode(
-                await assets.loadString(
-                  'assets/timetable/organizations/$school.json',
-                ),
-              )
-              as Map<String, dynamic>,
-        );
-        if (directory.university != school) {
-          throw const FormatException('Organization university mismatch');
-        }
-        organizations[school] = directory;
-      }
-      final dataset = UniversityDataset.fromJson(
-        json,
-        organizationDirectory: organizations[school],
-      );
-      if (university != null && dataset.university != university) {
-        throw const FormatException(
-          'Catalog university does not match its file',
-        );
-      }
-      datasets.add(dataset);
+      texts.add(await assets.loadString(path));
     }
-    return datasets;
+    if (texts.isEmpty) return [];
+    final decoded = await compute(_decodeDatasets, texts);
+    final organizationTexts = <String, String>{};
+    for (final json in decoded) {
+      final school = json['universityId'] as String? ?? 'smu';
+      if (!organizationTexts.containsKey(school)) {
+        organizationTexts[school] = await assets.loadString(
+          'assets/timetable/organizations/$school.json',
+        );
+      }
+    }
+    return compute(_buildDatasets, (decoded, organizationTexts, university));
   }
+}
+
+List<Map<String, dynamic>> _decodeDatasets(List<String> texts) => [
+  for (final text in texts) jsonDecode(text) as Map<String, dynamic>,
+];
+
+List<UniversityDataset> _buildDatasets(
+  (List<Map<String, dynamic>>, Map<String, String>, String?) input,
+) {
+  final (decoded, texts, university) = input;
+  final organizations = <String, CourseOrganizationDirectory>{};
+  for (final entry in texts.entries) {
+    final directory = CourseOrganizationDirectory.fromJson(
+      jsonDecode(entry.value) as Map<String, dynamic>,
+    );
+    if (directory.university != entry.key) {
+      throw const FormatException('Organization university mismatch');
+    }
+    organizations[entry.key] = directory;
+  }
+  final datasets = <UniversityDataset>[];
+  for (final json in decoded) {
+    final school = json['universityId'] as String? ?? 'smu';
+    final dataset = UniversityDataset.fromJson(
+      json,
+      organizationDirectory: organizations[school],
+    );
+    if (university != null && dataset.university != university) {
+      throw const FormatException('Catalog university does not match its file');
+    }
+    datasets.add(dataset);
+  }
+  return datasets;
 }

@@ -16,16 +16,16 @@ import org.json.JSONObject
 
 internal data class DailyAlarm(
     val eventId: String, val title: String, val memo: String,
-    val fireAt: Long, val snoozeMinutes: Int,
+    val fireAt: Long, val snoozeMinutes: Int, val sourceFireAt: Long = fireAt,
 ) {
     fun json() = JSONObject().put("eventId", eventId).put("title", title)
-        .put("memo", memo).put("fireAt", fireAt).put("snoozeMinutes", snoozeMinutes).toString()
+        .put("memo", memo).put("fireAt", fireAt).put("sourceFireAt", sourceFireAt).put("snoozeMinutes", snoozeMinutes).toString()
 
     companion object {
         fun parse(raw: String): DailyAlarm {
             val json = JSONObject(raw)
             return DailyAlarm(json.getString("eventId"), json.getString("title"),
-                json.optString("memo"), json.getLong("fireAt"), json.optInt("snoozeMinutes", 10))
+                json.optString("memo"), json.getLong("fireAt"), json.optInt("snoozeMinutes", 10), json.optLong("sourceFireAt", 0))
         }
     }
 }
@@ -80,6 +80,26 @@ internal object DailyAlarmScheduler {
             store(context).edit().putString(alarm.eventId, previous).commit()
             throw error
         }
+    }
+
+    @Synchronized
+    fun reconcile(context: Context, source: DailyAlarm): Boolean {
+        val existing = read(context, source.eventId)
+        val now = System.currentTimeMillis()
+        val sameSource = existing != null && existing.title == source.title &&
+            existing.memo == source.memo && existing.snoozeMinutes == source.snoozeMinutes &&
+            (existing.sourceFireAt == source.fireAt ||
+                (existing.sourceFireAt == 0L && (existing.fireAt == source.fireAt || source.fireAt <= now)))
+        if (sameSource) {
+            // Rearm a future native request (including snooze) after OS restart,
+            // but never stop a currently ringing service just to open the app.
+            if (existing!!.fireAt > now) schedule(context, existing)
+            return true
+        }
+        if (existing != null) cancel(context, source.eventId)
+        if (source.fireAt <= now) return false
+        schedule(context, source)
+        return true
     }
 
     @Synchronized

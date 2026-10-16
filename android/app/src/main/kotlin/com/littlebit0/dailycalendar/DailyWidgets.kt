@@ -498,7 +498,7 @@ private class DailyEventWidgetFactory(
         )
         views.setOnClickFillInIntent(
             R.id.widget_todo_button,
-            DailyWidgetActionReceiver.toggleFillInIntent(eventId, !completed),
+            DailyWidgetActionReceiver.toggleFillInIntent(eventId, !completed, event.optString("id")),
         )
         views.setOnClickFillInIntent(
             R.id.widget_item_root,
@@ -543,7 +543,7 @@ class DailyWidgetActionReceiver : BroadcastReceiver() {
                 if (eventId.isBlank() || !intent.hasExtra(EXTRA_COMPLETED)) return
                 val completed = intent.getBooleanExtra(EXTRA_COMPLETED, false)
                 runCatching {
-                    DailyAndroidWidgetStore.enqueueTodoAction(context, eventId, completed)
+                    DailyAndroidWidgetStore.enqueueTodoAction(context, eventId, completed, intent.getStringExtra("occurrenceId"))
                 }.onSuccess {
                     DailyWidgetUpdater.refreshAll(context)
                     DailyAndroidWidgetBridge.notifyTodoActionsChanged()
@@ -604,10 +604,11 @@ class DailyWidgetActionReceiver : BroadcastReceiver() {
             )
         }
 
-        internal fun toggleFillInIntent(eventId: String, completed: Boolean) = Intent().apply {
+        internal fun toggleFillInIntent(eventId: String, completed: Boolean, occurrenceId: String? = null) = Intent().apply {
             putExtra(EXTRA_COMMAND, COMMAND_TOGGLE)
             putExtra(EXTRA_EVENT_ID, eventId)
             putExtra(EXTRA_COMPLETED, completed)
+            putExtra("occurrenceId", occurrenceId)
         }
 
         internal fun openFillInIntent(date: String? = null, eventId: String? = null) =

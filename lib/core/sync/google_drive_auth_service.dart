@@ -23,12 +23,16 @@ class GoogleDriveAuthService {
     http.Client? httpClient,
     String? Function()? linkedGoogleEmail,
     @visibleForTesting bool? useDesktopOAuth,
+    @visibleForTesting
+    Future<({String code, String redirectUri, String codeVerifier})> Function()?
+    desktopAuthorizationCode,
     @visibleForTesting bool? useAndroidAuthorizationRecovery,
     @visibleForTesting Duration? mobileUserApprovalTimeout,
   }) : _secureStorage = secureStorage ?? const FlutterSecureStorage(),
        _httpClient = httpClient ?? http.Client(),
        _linkedGoogleEmail = linkedGoogleEmail,
        _desktopOAuthOverride = useDesktopOAuth,
+       _desktopAuthorizationCode = desktopAuthorizationCode,
        _androidAuthorizationRecoveryOverride = useAndroidAuthorizationRecovery,
        _mobileUserApprovalTimeoutOverride = mobileUserApprovalTimeout;
 
@@ -76,6 +80,7 @@ class GoogleDriveAuthService {
     'GOOGLE_DESKTOP_CLIENT_SECRET',
   );
   static const _storagePrefix = 'daily.google_drive.';
+  static const _sessionKey = '${_storagePrefix}session.v1';
   static const _accessTokenKey = '${_storagePrefix}access_token';
   static const _refreshTokenKey = '${_storagePrefix}refresh_token';
   static const _expiresAtKey = '${_storagePrefix}expires_at';
@@ -108,6 +113,15 @@ class GoogleDriveAuthService {
   var _androidCredentialClearEventsPending = 0;
   final _pendingAndroidNativeOperations = <Future<void>>{};
   var _androidRestorationBlocked = false;
+  final Future<({String code, String redirectUri, String codeVerifier})>
+  Function()?
+  _desktopAuthorizationCode;
+  var _desktopGeneration = 0;
+  int? _desktopSignInGeneration;
+  var _desktopRestoreBlocked = false;
+  Future<void> _desktopStorageTail = Future<void>.value();
+  Future<void>? _desktopRefresh;
+  int? _desktopRefreshGeneration;
   GoogleDriveAccount? _desktopAccount;
   _DesktopTokens? _desktopTokens;
   Completer<void>? _desktopSignInCancelCompleter;
@@ -392,25 +406,21 @@ class GoogleDriveAuthService {
   Future<GoogleDriveAccount?> signIn({
     bool forceAccountSelection = false,
   }) async {
-    await initialize();
+    final initialization = initialize();
     if (_usesDesktopOAuth) {
       try {
-        if (forceAccountSelection) {
-          await _clearDesktopSession();
-        }
         return await _signInWithDesktopOAuth(
           forceAccountSelection: forceAccountSelection,
         );
       } on PlatformException catch (error) {
-        _setDesktopAccount(null);
         throw GoogleDriveAuthException(_platformAuthMessage(error));
       } on TimeoutException {
-        _setDesktopAccount(null);
         throw const GoogleDriveAuthException(
           'Google Drive 연결 응답 시간이 초과되었습니다. 브라우저 창을 닫고 다시 시도해 주세요.',
         );
       }
     }
+    await initialization;
     if (!_isAvailable) {
       throw UnsupportedError('현재 플랫폼에서는 Google Drive 연결을 지원하지 않습니다.');
     }
@@ -657,18 +667,23 @@ class GoogleDriveAuthService {
   }
 
   void cancelPendingSignIn() {
+    if (_desktopSignInGeneration != null) _invalidateDesktopSession();
+  }
+
+  void _invalidateDesktopSession() {
+    _desktopGeneration++;
+    _desktopSignInGeneration = null;
     final completer = _desktopSignInCancelCompleter;
-    if (completer != null && !completer.isCompleted) {
-      completer.complete();
-    }
+    if (completer != null && !completer.isCompleted) completer.complete();
   }
 
   Future<void> signOut() async {
-    await initialize();
+    final initialization = initialize();
     if (_usesDesktopOAuth) {
       await _clearDesktopSession();
       return;
     }
+    await initialization;
     _mobileSessionGeneration++;
     _mobileSignOutGeneration++;
     final generation = _mobileSessionGeneration;
@@ -717,12 +732,15 @@ class GoogleDriveAuthService {
       try {
         if (promptIfNecessary &&
             normalizedScopes.any((scope) => !scopes.contains(scope))) {
-          await _signInWithDesktopOAuth(
+          final consent = _signInWithDesktopOAuth(
             requestedScopes: {
               ..._desktopScopes,
               ...normalizedScopes,
             }.toList(growable: false),
           );
+          final consentGeneration = _desktopGeneration;
+          await consent;
+          if (consentGeneration != _desktopGeneration) return null;
         }
         return await _desktopAuthorizationHeaders(
           promptIfNecessary: promptIfNecessary,
@@ -1133,52 +1151,93 @@ class GoogleDriveAuthService {
       );
     }
 
-    final codeResponse = await _requestDesktopAuthorizationCode(
-      requestedScopes,
-      forceAccountSelection: forceAccountSelection,
-    );
-    final tokens = await _exchangeAuthorizationCode(codeResponse);
-    final account = await _fetchDesktopAccount(tokens.accessToken);
-    await _saveDesktopSession(tokens, account);
-    _setDesktopAccount(account);
-    return account;
+    _invalidateDesktopSession();
+    final generation = _desktopGeneration;
+    _desktopSignInGeneration = generation;
+    _desktopRestoreBlocked = true;
+    try {
+      await initialize();
+      _checkDesktopGeneration(generation);
+      if (forceAccountSelection) {
+        await _clearDesktopSession(invalidate: false);
+        _checkDesktopGeneration(generation);
+      }
+      final codeResponse = await _requestDesktopAuthorizationCode(
+        requestedScopes,
+        forceAccountSelection: forceAccountSelection,
+      );
+      _checkDesktopGeneration(generation);
+      final tokens = await _exchangeAuthorizationCode(codeResponse);
+      _checkDesktopGeneration(generation);
+      final account = await _fetchDesktopAccount(tokens.accessToken);
+      _checkDesktopGeneration(generation);
+      await _saveDesktopSession(tokens, account, generation);
+      return account;
+    } finally {
+      if (_desktopSignInGeneration == generation) {
+        _desktopSignInGeneration = null;
+      }
+    }
+  }
+
+  void _checkDesktopGeneration(int generation) {
+    if (generation != _desktopGeneration) {
+      throw const GoogleDriveAuthException(
+        'Google 계정 연결 작업이 취소되었거나 계정이 변경되었습니다.',
+      );
+    }
   }
 
   Future<Map<String, String>?> _desktopAuthorizationHeaders({
     required bool promptIfNecessary,
   }) async {
-    if (_configuredOAuthClientId.isEmpty) {
+    if (_configuredOAuthClientId.isEmpty || _desktopSignInGeneration != null) {
       return null;
     }
+    final generation = _desktopGeneration;
     await _restoreDesktopSession();
-
+    if (generation != _desktopGeneration) return null;
     if (_desktopTokens == null) {
-      if (!promptIfNecessary) {
-        return null;
-      }
-      await _signInWithDesktopOAuth();
+      if (!promptIfNecessary) return null;
+      return _interactiveDesktopHeaders();
     } else if (_desktopTokens!.needsRefresh) {
       try {
         await _refreshDesktopAccessToken();
       } on Object {
-        if (!promptIfNecessary) {
-          return null;
-        }
-        await _signInWithDesktopOAuth();
+        if (generation != _desktopGeneration || !promptIfNecessary) return null;
+        return _interactiveDesktopHeaders();
       }
+      // A successful refresh never changes the session generation.
+      if (generation != _desktopGeneration) return null;
     }
-
     final accessToken = _desktopTokens?.accessToken;
-    if (accessToken == null) {
-      return null;
-    }
-    return {'Authorization': 'Bearer $accessToken'};
+    return accessToken == null
+        ? null
+        : {'Authorization': 'Bearer $accessToken'};
+  }
+
+  Future<Map<String, String>?> _interactiveDesktopHeaders() async {
+    final login = _signInWithDesktopOAuth();
+    final generation = _desktopGeneration;
+    await login;
+    if (generation != _desktopGeneration) return null;
+    final token = _desktopTokens?.accessToken;
+    return token == null ? null : {'Authorization': 'Bearer $token'};
   }
 
   Future<_DesktopCodeResponse> _requestDesktopAuthorizationCode(
     List<String> requestedScopes, {
     bool forceAccountSelection = false,
   }) async {
+    final override = _desktopAuthorizationCode;
+    if (override != null) {
+      final value = await override();
+      return _DesktopCodeResponse(
+        code: value.code,
+        redirectUri: value.redirectUri,
+        codeVerifier: value.codeVerifier,
+      );
+    }
     if (Platform.isIOS) {
       return _requestIosAuthorizationCode(requestedScopes);
     }
@@ -1345,7 +1404,21 @@ class GoogleDriveAuthService {
     return _tokensFromJson(decoded, refreshToken: refreshToken);
   }
 
-  Future<void> _refreshDesktopAccessToken() async {
+  Future<void> _refreshDesktopAccessToken() {
+    final generation = _desktopGeneration;
+    if (_desktopRefreshGeneration == generation && _desktopRefresh != null) {
+      return _desktopRefresh!;
+    }
+    final operation = _refreshDesktopSession(generation);
+    _desktopRefreshGeneration = generation;
+    _desktopRefresh = operation;
+    return operation.whenComplete(() {
+      if (identical(_desktopRefresh, operation)) _desktopRefresh = null;
+    });
+  }
+
+  Future<void> _refreshDesktopSession(int generation) async {
+    final accountAtStart = _desktopAccount;
     final refreshToken = _desktopTokens?.refreshToken;
     if (refreshToken == null || refreshToken.isEmpty) {
       throw const GoogleDriveAuthException('저장된 Google Drive 갱신 토큰이 없습니다.');
@@ -1361,12 +1434,13 @@ class GoogleDriveAuthService {
           }),
         )
         .timeout(_desktopNetworkTimeout);
+    _checkDesktopGeneration(generation);
     final decoded = _decodeTokenResponse(response);
     final tokens = _tokensFromJson(decoded, refreshToken: refreshToken);
     final account =
-        _desktopAccount ?? await _fetchDesktopAccount(tokens.accessToken);
-    await _saveDesktopSession(tokens, account);
-    _setDesktopAccount(account);
+        accountAtStart ?? await _fetchDesktopAccount(tokens.accessToken);
+    _checkDesktopGeneration(generation);
+    await _saveDesktopSession(tokens, account, generation);
   }
 
   Map<String, String> _withDesktopClientSecret(Map<String, String> body) {
@@ -1514,59 +1588,96 @@ class GoogleDriveAuthService {
     return 'Google 계정 정보를 확인하지 못했습니다. 다시 연결해 주세요.';
   }
 
-  Future<void> _restoreDesktopSession() async {
-    if (_desktopTokens != null || _desktopAccount != null) {
-      return;
-    }
-    final refreshToken = await _readDesktopStorage(_refreshTokenKey);
-    if (refreshToken == null || refreshToken.isEmpty) {
-      _setDesktopAccount(null);
-      return;
-    }
-    final accessToken = await _readDesktopStorage(_accessTokenKey);
-    final expiresAtValue = await _readDesktopStorage(_expiresAtKey);
-    final email = await _readDesktopStorage(_emailKey);
-    final displayName = await _readDesktopStorage(_displayNameKey);
-    final expiresAt = expiresAtValue == null
-        ? DateTime.fromMillisecondsSinceEpoch(0, isUtc: true)
-        : DateTime.tryParse(expiresAtValue)?.toUtc() ??
-              DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
+  Future<T> _withDesktopStorage<T>(Future<T> Function() operation) {
+    final result = _desktopStorageTail.then((_) => operation());
+    _desktopStorageTail = result.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return result;
+  }
 
-    _desktopTokens = _DesktopTokens(
-      accessToken: accessToken ?? '',
-      refreshToken: refreshToken,
-      expiresAt: expiresAt,
-    );
-    _setDesktopAccount(
-      email == null || email.isEmpty
-          ? null
-          : GoogleDriveAccount(email: email, displayName: displayName),
-    );
+  Future<void> _restoreDesktopSession() {
+    final generation = _desktopGeneration;
+    return _withDesktopStorage(() async {
+      if (_desktopRestoreBlocked ||
+          _desktopTokens != null ||
+          generation != _desktopGeneration) {
+        return;
+      }
+      final envelope = await _readDesktopStorage(_sessionKey);
+      String? refreshToken, accessToken, expiresAtValue, email, displayName;
+      if (envelope != null) {
+        final data = jsonDecode(envelope) as Map<String, dynamic>;
+        if (data['signedOut'] == true) return;
+        refreshToken = data['refreshToken'] as String?;
+        accessToken = data['accessToken'] as String?;
+        expiresAtValue = data['expiresAt'] as String?;
+        email = data['email'] as String?;
+        displayName = data['displayName'] as String?;
+      } else {
+        refreshToken = await _readDesktopStorage(_refreshTokenKey);
+        accessToken = await _readDesktopStorage(_accessTokenKey);
+        expiresAtValue = await _readDesktopStorage(_expiresAtKey);
+        email = await _readDesktopStorage(_emailKey);
+        displayName = await _readDesktopStorage(_displayNameKey);
+      }
+      if (generation != _desktopGeneration ||
+          _desktopRestoreBlocked ||
+          refreshToken == null ||
+          refreshToken.isEmpty) {
+        return;
+      }
+      _desktopTokens = _DesktopTokens(
+        accessToken: accessToken ?? '',
+        refreshToken: refreshToken,
+        expiresAt:
+            DateTime.tryParse(expiresAtValue ?? '')?.toUtc() ??
+            DateTime.fromMillisecondsSinceEpoch(0, isUtc: true),
+      );
+      _setDesktopAccount(
+        email == null || email.isEmpty
+            ? null
+            : GoogleDriveAccount(email: email, displayName: displayName),
+      );
+    });
   }
 
   Future<void> _saveDesktopSession(
     _DesktopTokens tokens,
     GoogleDriveAccount account,
-  ) async {
-    await _writeDesktopStorage(_refreshTokenKey, tokens.refreshToken);
-    await _writeDesktopStorage(_accessTokenKey, tokens.accessToken);
-    await _writeDesktopStorage(
-      _expiresAtKey,
-      tokens.expiresAt.toIso8601String(),
-    );
-    await _writeDesktopStorage(_emailKey, account.email);
-    await _writeDesktopStorage(_displayNameKey, account.displayName);
-
-    final storedRefreshToken = await _readDesktopStorage(_refreshTokenKey);
-    final storedEmail = await _readDesktopStorage(_emailKey);
-    if (storedRefreshToken != tokens.refreshToken ||
-        storedEmail?.toLowerCase() != account.email.toLowerCase()) {
-      throw const GoogleDriveAuthException(
-        'Google 로그인 정보를 안전하게 저장하지 못했습니다. 기기의 보안 저장소 설정을 확인한 뒤 다시 시도해 주세요.',
-      );
+    int generation,
+  ) => _withDesktopStorage(() async {
+    _checkDesktopGeneration(generation);
+    // One secure-store entry prevents tokens and account metadata from tearing.
+    final encoded = jsonEncode({
+      'refreshToken': tokens.refreshToken,
+      'accessToken': tokens.accessToken,
+      'expiresAt': tokens.expiresAt.toIso8601String(),
+      'email': account.email,
+      'displayName': account.displayName,
+    });
+    final previous = await _readDesktopStorage(_sessionKey);
+    _checkDesktopGeneration(generation);
+    try {
+      await _writeDesktopStorage(_sessionKey, encoded);
+      final stored = await _readDesktopStorage(_sessionKey);
+      _checkDesktopGeneration(generation);
+      if (stored != encoded) {
+        throw const GoogleDriveAuthException(
+          'Google 로그인 정보를 안전하게 저장하지 못했습니다. 기기의 보안 저장소 설정을 확인한 뒤 다시 시도해 주세요.',
+        );
+      }
+    } on Object {
+      // Roll back a canceled or unverified commit before the next queued
+      // login/logout. Tokens and identity always move as one envelope.
+      await _writeDesktopStorage(_sessionKey, previous);
+      rethrow;
     }
     _desktopTokens = tokens;
-  }
+    _desktopRestoreBlocked = false;
+    _setDesktopAccount(account);
+  });
 
   Future<String?> _readDesktopStorage(String key) async {
     try {
@@ -1610,16 +1721,30 @@ class GoogleDriveAuthService {
     }
   }
 
-  Future<void> _clearDesktopSession() async {
+  Future<void> _clearDesktopSession({bool invalidate = true}) {
+    if (invalidate) _invalidateDesktopSession();
+    _desktopRestoreBlocked = true;
     _desktopTokens = null;
-    await Future.wait([
-      _deleteDesktopStorage(_accessTokenKey),
-      _deleteDesktopStorage(_refreshTokenKey),
-      _deleteDesktopStorage(_expiresAtKey),
-      _deleteDesktopStorage(_emailKey),
-      _deleteDesktopStorage(_displayNameKey),
-    ]);
     _setDesktopAccount(null);
+    return _withDesktopStorage(() async {
+      // Retain a tombstone so a legacy key left by a failed delete cannot restore.
+      const cleared = '{"signedOut":true}';
+      await _writeDesktopStorage(_sessionKey, cleared);
+      if (await _readDesktopStorage(_sessionKey) != cleared) {
+        throw const GoogleDriveAuthException(
+          'Google 로그아웃 정보를 저장하지 못했습니다. 다시 시도해 주세요.',
+        );
+      }
+      for (final key in [
+        _accessTokenKey,
+        _refreshTokenKey,
+        _expiresAtKey,
+        _emailKey,
+        _displayNameKey,
+      ]) {
+        await _deleteDesktopStorage(key);
+      }
+    });
   }
 
   Future<void> _openSystemBrowser(Uri uri) async {

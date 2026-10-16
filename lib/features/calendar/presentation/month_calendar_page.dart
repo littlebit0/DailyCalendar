@@ -29,7 +29,6 @@ import '../../events/domain/calendar_event.dart';
 import '../../events/presentation/event_completion_action.dart';
 import '../../events/domain/event_category.dart';
 import '../../events/domain/event_draft.dart';
-import '../../events/domain/recurrence_rule.dart';
 import '../../events/presentation/event_details_panel.dart';
 import '../../events/presentation/day_sheet_scroll_physics.dart';
 import '../../events/presentation/event_editor_dialog.dart';
@@ -1745,6 +1744,8 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
   String _pendingCommand = '';
   bool _closing = false;
   bool _nativeListening = false;
+  bool _listeningPending = false;
+  int _listenGeneration = 0;
   bool _showTextInput = false;
 
   @override
@@ -1765,6 +1766,7 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
   @override
   void dispose() {
     _closing = true;
+    _listenGeneration++;
     WidgetsBinding.instance.removeObserver(this);
     _voice.setHandlers();
     _voice.cancelListening().catchError((_) {});
@@ -1775,12 +1777,14 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!_nativeListening || _closing) return;
-    if (state == AppLifecycleState.inactive ||
+    if (!_listeningPending || _closing) return;
+    if ((state == AppLifecycleState.inactive && _nativeListening) ||
         state == AppLifecycleState.paused ||
         state == AppLifecycleState.hidden ||
         state == AppLifecycleState.detached) {
       _nativeListening = false;
+      _listeningPending = false;
+      _listenGeneration++;
       unawaited(_voice.cancelListening().catchError((_) {}));
       if (mounted) {
         setState(() {
@@ -1792,7 +1796,9 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
   }
 
   Future<void> _listen() async {
-    if (!mounted) return;
+    if (!mounted || _listeningPending) return;
+    final generation = ++_listenGeneration;
+    _listeningPending = true;
     setState(() {
       _state = _SignalVoiceState.listening;
       _transcript = '';
@@ -1802,20 +1808,24 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
     });
     try {
       final spoken = await _voice.startListening();
-      if (!mounted || _closing) return;
+      if (!mounted || _closing || generation != _listenGeneration) return;
       _nativeListening = false;
       await _acceptCommand(spoken);
     } on PlatformException catch (error) {
+      if (generation != _listenGeneration) return;
       _nativeListening = false;
       if (!mounted || _closing || error.code == 'listening_cancelled') return;
       _showPlatformError(error);
     } catch (_) {
+      if (generation != _listenGeneration) return;
       _nativeListening = false;
-      if (!mounted || _closing) return;
+      if (!mounted || _closing || generation != _listenGeneration) return;
       setState(() {
         _response = context.tr('음성 명령을 처리하지 못했습니다.');
         _state = _SignalVoiceState.failed;
       });
+    } finally {
+      if (generation == _listenGeneration) _listeningPending = false;
     }
   }
 
@@ -1870,7 +1880,7 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
   void _showPlatformError(PlatformException error, {String? command}) {
     if (error.code == 'signal_confirmation_required') {
       final pending = command ?? _transcript;
-      final message = context.tr('이 명령을 실행할까요?');
+      final message = error.message ?? context.tr('이 명령을 실행할까요?');
       setState(() {
         _pendingCommand = pending;
         _response = message;
@@ -1921,8 +1931,10 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
   }
 
   Future<void> _toggleTextInput() async {
-    if (_nativeListening) {
+    if (_listeningPending) {
       _nativeListening = false;
+      _listeningPending = false;
+      _listenGeneration++;
       await _voice.cancelListening().catchError((_) {});
     }
     if (!mounted) return;
@@ -4430,58 +4442,7 @@ class _CalendarMonthPage extends ConsumerWidget {
     CalendarEvent occurrence,
     DateTime targetDate,
     _RecurringDragScope scope,
-  ) async {
-    final repository = ref.read(visibleEventRepositoryProvider);
-    final commandService = ref.read(eventCommandServiceProvider);
-    final base = await repository.findById(occurrence.id);
-    if (base == null) {
-      return null;
-    }
-    final shiftedOccurrence = shiftCalendarEventToDate(occurrence, targetDate);
-
-    switch (scope) {
-      case _RecurringDragScope.onlyThis:
-        await commandService.save(_excludeOccurrence(base, occurrence.startAt));
-        return commandService.create(
-          _eventDraftFrom(
-            shiftedOccurrence,
-            recurrence: const RecurrenceRule(),
-          ),
-        );
-      case _RecurringDragScope.future:
-        await commandService.save(_endBefore(base, occurrence.startAt));
-        final futureRule = recurrenceRuleForMovedFuture(
-          base: base,
-          occurrence: occurrence,
-          targetDate: targetDate,
-        );
-        final created = await commandService.create(
-          _eventDraftFrom(shiftedOccurrence, recurrence: futureRule),
-        );
-        return created.copyWith(
-          occurrenceId: '${created.id}@${created.startAt.toIso8601String()}',
-        );
-      case _RecurringDragScope.all:
-        final dayDelta = calendarDayDifference(targetDate, occurrence.startAt);
-        final shiftedBaseEvent = shiftCalendarEventToDate(
-          base,
-          shiftCalendarDateByDays(base.startAt, dayDelta),
-        );
-        final shiftedBase = shiftedBaseEvent.copyWith(
-          recurrence: shiftRecurrenceRuleByDays(base.recurrence, dayDelta),
-        );
-        await commandService.save(shiftedBase);
-        final shiftedStart = shiftCalendarDateByDays(
-          occurrence.startAt,
-          dayDelta,
-        );
-        return occurrence.copyWith(
-          occurrenceId: '${base.id}@${shiftedStart.toIso8601String()}',
-          startAt: shiftedStart,
-          endAt: shiftedStart.add(occurrence.duration),
-        );
-    }
-  }
+  ) => _moveRecurringCalendarEvent(ref, occurrence, targetDate, scope);
 
   Future<void> _saveManualOrderAfterDrop(
     WidgetRef ref, {
@@ -4552,49 +4513,6 @@ class _CalendarMonthPage extends ConsumerWidget {
       ref,
       previous: settings,
       updated: updatedSettings,
-    );
-  }
-
-  EventDraft _eventDraftFrom(
-    CalendarEvent event, {
-    required RecurrenceRule recurrence,
-  }) {
-    return EventDraft(
-      title: event.title,
-      memo: event.memo,
-      location: event.location,
-      url: event.url,
-      weather: event.weather,
-      startAt: event.startAt,
-      endAt: event.endAt,
-      allDay: event.allDay,
-      category: event.category,
-      colorValue: event.colorValue,
-      reminderMinutesBeforeList: event.reminderMinutesBeforeList,
-      recurrence: recurrence,
-      showDday: event.showDday,
-      alarmEnabled: event.alarmEnabled,
-      allDayAlarmMinutes: event.allDayAlarmMinutes,
-    );
-  }
-
-  CalendarEvent _excludeOccurrence(CalendarEvent base, DateTime occurrence) {
-    final excludedDate = _dateOnly(occurrence);
-    final excluded = {
-      ...base.recurrence.excludedDates.map(_dateOnly),
-      excludedDate,
-    }.toList()..sort();
-    return base.copyWith(
-      recurrence: base.recurrence.copyWith(excludedDates: excluded),
-    );
-  }
-
-  CalendarEvent _endBefore(CalendarEvent base, DateTime occurrence) {
-    return base.copyWith(
-      recurrence: base.recurrence.copyWith(
-        until: _dateOnly(occurrence).subtract(const Duration(days: 1)),
-        clearCount: true,
-      ),
     );
   }
 
@@ -4793,63 +4711,12 @@ Future<CalendarEvent?> _moveRecurringCalendarEvent(
   CalendarEvent occurrence,
   DateTime targetDate,
   _RecurringDragScope scope,
-) async {
-  final repository = ref.read(visibleEventRepositoryProvider);
-  final commandService = ref.read(eventCommandServiceProvider);
-  final base = await repository.findById(occurrence.id);
-  if (base == null) {
-    return null;
-  }
-  final shiftedOccurrence = shiftCalendarEventToDate(occurrence, targetDate);
-
-  switch (scope) {
-    case _RecurringDragScope.onlyThis:
-      await commandService.save(
-        _excludeCalendarOccurrence(base, occurrence.startAt),
-      );
-      return _createMovedCalendarOccurrence(
-        commandService,
-        shiftedOccurrence,
-        const RecurrenceRule(),
-      );
-    case _RecurringDragScope.future:
-      await commandService.save(
-        _endCalendarRecurrenceBefore(base, occurrence.startAt),
-      );
-      final futureRule = recurrenceRuleForMovedFuture(
-        base: base,
-        occurrence: occurrence,
-        targetDate: targetDate,
-      );
-      final created = await _createMovedCalendarOccurrence(
-        commandService,
-        shiftedOccurrence,
-        futureRule,
-      );
-      return created.copyWith(
-        occurrenceId: '${created.id}@${created.startAt.toIso8601String()}',
-      );
-    case _RecurringDragScope.all:
-      final dayDelta = calendarDayDifference(targetDate, occurrence.startAt);
-      final shiftedBaseEvent = shiftCalendarEventToDate(
-        base,
-        shiftCalendarDateByDays(base.startAt, dayDelta),
-      );
-      final shiftedBase = shiftedBaseEvent.copyWith(
-        recurrence: shiftRecurrenceRuleByDays(base.recurrence, dayDelta),
-      );
-      await commandService.save(shiftedBase);
-      final shiftedStart = shiftCalendarDateByDays(
-        occurrence.startAt,
-        dayDelta,
-      );
-      return occurrence.copyWith(
-        occurrenceId: '${base.id}@${shiftedStart.toIso8601String()}',
-        startAt: shiftedStart,
-        endAt: shiftedStart.add(occurrence.duration),
-      );
-  }
-}
+) => _moveRecurringCalendarEventToStart(
+  ref,
+  occurrence,
+  shiftCalendarEventToDate(occurrence, targetDate).startAt,
+  scope,
+);
 
 Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
   WidgetRef ref,
@@ -4863,35 +4730,40 @@ Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
   if (base == null) {
     return null;
   }
-  final shiftedOccurrence = shiftCalendarEventToStart(occurrence, targetStart);
-
   switch (scope) {
     case _RecurringDragScope.onlyThis:
-      await commandService.save(
-        _excludeCalendarOccurrence(base, occurrence.startAt),
-      );
-      return _createMovedCalendarOccurrence(
-        commandService,
-        shiftedOccurrence,
-        const RecurrenceRule(),
-      );
     case _RecurringDragScope.future:
-      await commandService.save(
-        _endCalendarRecurrenceBefore(base, occurrence.startAt),
-      );
-      final futureRule = recurrenceRuleForMovedFuture(
-        base: base,
-        occurrence: occurrence,
-        targetDate: targetStart,
-      );
-      final created = await _createMovedCalendarOccurrence(
-        commandService,
-        shiftedOccurrence,
-        futureRule,
-      );
-      return created.copyWith(
-        occurrenceId: '${created.id}@${created.startAt.toIso8601String()}',
-      );
+      Future<RecurringMoveResult> move() =>
+          commandService.moveRecurringOccurrence(
+            occurrence: occurrence,
+            targetStart: targetStart,
+            scope: scope == _RecurringDragScope.onlyThis
+                ? RecurringMoveScope.onlyThis
+                : RecurringMoveScope.future,
+          );
+      final result = await move();
+      if (result.followUpFailed && ref.context.mounted) {
+        ScaffoldMessenger.of(ref.context).showSnackBar(
+          SnackBar(
+            content: Text(
+              ref.context.tr('일정은 이동했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.'),
+            ),
+            action: SnackBarAction(
+              label: ref.context.tr('다시 시도'),
+              onPressed: () async {
+                await move();
+              },
+            ),
+          ),
+        );
+      }
+      final created = result.event;
+      return created.recurrence.isRepeating
+          ? created.copyWith(
+              occurrenceId:
+                  '${created.id}@${created.startAt.toIso8601String()}',
+            )
+          : created;
     case _RecurringDragScope.all:
       final dayDelta = calendarDayDifference(targetStart, occurrence.startAt);
       final shiftedBaseDate = shiftCalendarDateByDays(base.startAt, dayDelta);
@@ -4917,22 +4789,6 @@ Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
         endAt: targetStart.add(occurrence.duration),
       );
   }
-}
-
-Future<CalendarEvent> _createMovedCalendarOccurrence(
-  EventCommandService commandService,
-  CalendarEvent event,
-  RecurrenceRule recurrence,
-) async {
-  final created = await commandService.create(
-    _calendarEventDraftFrom(event, recurrence: recurrence),
-  );
-  if (!event.completed) {
-    return created;
-  }
-  final completed = created.copyWith(completed: true);
-  await commandService.save(completed);
-  return completed;
 }
 
 Future<void> _saveCalendarManualOrderAfterDrop(
@@ -5028,55 +4884,6 @@ Future<void> _persistCalendarManualOrder(
     }
     rethrow;
   }
-}
-
-EventDraft _calendarEventDraftFrom(
-  CalendarEvent event, {
-  required RecurrenceRule recurrence,
-}) {
-  return EventDraft(
-    title: event.title,
-    memo: event.memo,
-    location: event.location,
-    url: event.url,
-    weather: event.weather,
-    startAt: event.startAt,
-    endAt: event.endAt,
-    allDay: event.allDay,
-    category: event.category,
-    colorValue: event.colorValue,
-    reminderMinutesBeforeList: event.reminderMinutesBeforeList,
-    recurrence: recurrence,
-    showDday: event.showDday,
-    alarmEnabled: event.alarmEnabled,
-    allDayAlarmMinutes: event.allDayAlarmMinutes,
-  );
-}
-
-CalendarEvent _excludeCalendarOccurrence(
-  CalendarEvent base,
-  DateTime occurrence,
-) {
-  final excludedDate = _dateOnly(occurrence);
-  final excluded = {
-    ...base.recurrence.excludedDates.map(_dateOnly),
-    excludedDate,
-  }.toList()..sort();
-  return base.copyWith(
-    recurrence: base.recurrence.copyWith(excludedDates: excluded),
-  );
-}
-
-CalendarEvent _endCalendarRecurrenceBefore(
-  CalendarEvent base,
-  DateTime occurrence,
-) {
-  return base.copyWith(
-    recurrence: base.recurrence.copyWith(
-      until: _dateOnly(occurrence).subtract(const Duration(days: 1)),
-      clearCount: true,
-    ),
-  );
 }
 
 Future<_RecurringDragScope?> _showCalendarRecurringDragScopeDialog(

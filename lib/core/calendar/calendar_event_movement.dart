@@ -100,6 +100,7 @@ RecurrenceRule shiftRecurrenceRuleByDays(RecurrenceRule rule, int days) {
         ? null
         : shiftCalendarDateByDays(rule.until!, days),
     count: rule.count,
+    anchorDay: days == 0 ? rule.anchorDay : null,
     excludedDates: rule.excludedDates
         .map((date) => shiftCalendarDateByDays(date, days))
         .toList(growable: false),
@@ -125,6 +126,7 @@ RecurrenceRule recurrenceRuleForMovedFuture({
         ? null
         : shiftCalendarDateByDays(rule.until!, dayOffset),
     count: _remainingRecurrenceCount(base, occurrence),
+    anchorDay: dayOffset == 0 ? rule.anchorDay ?? base.startAt.day : null,
     excludedDates: rule.excludedDates
         .where((date) => !_calendarDate(date).isBefore(occurrenceDate))
         .map((date) => shiftCalendarDateByDays(date, dayOffset))

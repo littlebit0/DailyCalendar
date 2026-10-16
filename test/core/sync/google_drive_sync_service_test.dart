@@ -1,3 +1,4 @@
+import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
@@ -311,14 +312,15 @@ void main() {
       }
       if (request.method == 'GET' &&
           request.url.path == '/drive/v3/files/remote-event-1') {
-        return _jsonResponse(
-          _eventFileJson(
-            id: 'iphone-all-day',
-            title: '6.1 평일외출',
-            startAt: '2026-06-01T00:00:00.000Z',
-            endAt: '2026-06-02T00:00:00.000Z',
-          ),
+        final payload = _eventFileJson(
+          id: 'iphone-all-day',
+          title: '6.1 평일외출',
+          startAt: '2026-06-01T00:00:00.000Z',
+          endAt: '2026-06-02T00:00:00.000Z',
         );
+        (payload['event'] as Map)['recurrenceFrequency'] = 'monthly';
+        (payload['event'] as Map)['recurrenceAnchorDay'] = 31;
+        return _jsonResponse(payload);
       }
       if (request.method == 'GET' &&
           request.url.path == '/drive/v3/files/remote-event-2') {
@@ -349,6 +351,7 @@ void main() {
 
     final saved = {for (final event in repository.events) event.id: event};
     expect(saved['iphone-all-day']!.allDay, isTrue);
+    expect(saved['iphone-all-day']!.recurrence.anchorDay, 31);
     expect(saved['iphone-all-day']!.startAt, DateTime(2026, 6, 1));
     expect(saved['iphone-all-day']!.endAt, DateTime(2026, 6, 2));
     expect(saved['iphone-all-day-offset']!.allDay, isTrue);
@@ -615,14 +618,21 @@ void main() {
       final preferences = await SharedPreferences.getInstance();
       final repository = _MemoryEventRepository();
       final notificationService = _FakeNotificationService();
-      final changed = _event(
-        id: 'queued-event',
-        title: '6.20~21 캠핑 약속',
-        startAt: DateTime(2026, 6, 20),
-        endAt: DateTime(2026, 6, 22),
-        updatedAt: DateTime(2026, 5, 30, 18),
-        syncStatus: 'pending',
-      ).copyWith(completed: true);
+      final changed =
+          _event(
+            id: 'queued-event',
+            title: '6.20~21 캠핑 약속',
+            startAt: DateTime(2026, 6, 20),
+            endAt: DateTime(2026, 6, 22),
+            updatedAt: DateTime(2026, 5, 30, 18),
+            syncStatus: 'pending',
+          ).copyWith(
+            completed: true,
+            recurrence: const RecurrenceRule(
+              frequency: RecurrenceFrequency.monthly,
+              anchorDay: 31,
+            ),
+          );
       await repository.save(changed);
 
       final uploadedEventBodies = <Map<String, Object?>>[];
@@ -689,6 +699,7 @@ void main() {
       expect(event['endDate'], '2026-06-22');
       expect(event['title'], '6.20~21 캠핑 약속');
       expect(event['completed'], isTrue);
+      expect(event['recurrenceAnchorDay'], 31);
       expect((await repository.findById('queued-event'))!.syncStatus, 'synced');
       expect(
         requests.any(

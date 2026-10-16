@@ -1,3 +1,4 @@
+import '../../../core/notifications/recoverable_notification_service.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -12,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/auth/apple_account.dart';
 import '../../../core/analytics/product_analytics.dart';
+import '../../../core/platform/app_build_identity.dart';
 import '../../../core/auth/apple_sign_in_service.dart';
 import '../../../core/auth/daily_account.dart';
 import '../../../core/auth/google_account.dart';
@@ -928,7 +930,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                   '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.',
                                 ),
                               ),
-                              onChanged: (value) => analytics.setEnabled(value),
+                              onChanged: _setAnalyticsEnabled,
                             ),
                       ),
                       const Divider(height: 1),
@@ -957,9 +959,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                               ? '앱 실행 시 ${settings.appLockMethod.label}으로 확인합니다.'
                               : context.tr('앱을 다시 열 때 사용자를 확인합니다.'),
                         ),
-                        onChanged: (value) => value
-                            ? _enableAppLock(settings)
-                            : _disableAppLock(settings),
+                        onChanged: (value) => _runLockChange(
+                          () => value
+                              ? _enableAppLock(settings)
+                              : _disableAppLock(settings),
+                        ),
                       ),
                       if (settings.appLockEnabled) ...[
                         const Divider(height: 1),
@@ -967,8 +971,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           method: settings.appLockMethod,
                           systemAuthenticationAvailable:
                               _deviceAuthenticationAvailable,
-                          onChanged: (method) =>
-                              _changeAppLockMethod(settings, method),
+                          onChanged: (method) => _runLockChange(
+                            () => _changeAppLockMethod(settings, method),
+                          ),
                         ),
                         if (settings.appLockMethod == AppLockMethod.appPin) ...[
                           const Divider(height: 1),
@@ -988,8 +993,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                                   : '이 기기에서 사용할 수 있는 생체인식이 없습니다.',
                             ),
                             onChanged: _biometricAuthenticationAvailable
-                                ? (value) =>
-                                      _changePinBiometricUnlock(settings, value)
+                                ? (value) => _runLockChange(
+                                    () => _changePinBiometricUnlock(
+                                      settings,
+                                      value,
+                                    ),
+                                  )
                                 : null,
                           ),
                         ],
@@ -1265,6 +1274,30 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     }
   }
 
+  Future<void> _setAnalyticsEnabled(bool value) async {
+    try {
+      await ref.read(productAnalyticsProvider).setEnabled(value);
+    } on Object {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 15),
+          content: Text(
+            context.tr(
+              value
+                  ? '분석 동의 설정을 저장하지 못했습니다. 다시 시도해 주세요.'
+                  : '현재 분석 수집은 중단했습니다. 저장에 실패했으니 앱 종료 전에 다시 시도해 주세요.',
+            ),
+          ),
+          action: SnackBarAction(
+            label: context.tr('다시 시도'),
+            onPressed: () => _setAnalyticsEnabled(value),
+          ),
+        ),
+      );
+    }
+  }
+
   Future<void> _deleteAnalyticsData() async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -1288,7 +1321,18 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       ),
     );
     if (confirmed != true) return;
-    await ref.read(productAnalyticsProvider).deletePendingData();
+    try {
+      await ref.read(productAnalyticsProvider).deletePendingData();
+    } on Object {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(context.tr('전송 대기 분석 데이터를 삭제하지 못했습니다. 다시 시도해 주세요.')),
+          ),
+        );
+      }
+      return;
+    }
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(context.tr('전송 대기 분석 데이터를 삭제했습니다.'))),
@@ -1514,7 +1558,14 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       // synchronously for every changed key. Keep that work outside the
       // control-motion window, and publish only the newest persisted value.
       final revision = ++_windowsSettingsSaveRevision;
-      setState(() => _pendingWindowsSettings = settings);
+      final changesLock =
+          settings.appLockEnabled != changedFrom.appLockEnabled ||
+          settings.appLockMethod != changedFrom.appLockMethod ||
+          settings.appLockBiometricsEnabled !=
+              changedFrom.appLockBiometricsEnabled;
+      // Security state is shown only after persistence, even on the deferred
+      // Windows path. Other controls retain their existing motion behavior.
+      if (!changesLock) setState(() => _pendingWindowsSettings = settings);
       final repository = ref.read(settingsRepositoryProvider);
       final mutationGeneration = repository.settingsMutationGeneration;
       final backupService = ref.read(googleDriveSyncServiceProvider);
@@ -1548,7 +1599,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             setState(() => _pendingWindowsSettings = null);
           }
         }
-        return;
+        throw StateError('Settings change was canceled');
       }
       if (backup) {
         unawaited(backupService.queueSettingsBackup().catchError((_) {}));
@@ -1573,6 +1624,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             .read(googleDriveSyncServiceProvider)
             .queueSettingsBackup()
             .catchError((_) {}),
+      );
+    }
+  }
+
+  Future<void> _runLockChange(Future<void> Function() change) async {
+    try {
+      await change();
+    } on Object {
+      if (!mounted) return;
+      ref.read(appSettingsProvider.notifier).state = ref
+          .read(settingsRepositoryProvider)
+          .load();
+      setState(() => _pendingWindowsSettings = null);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
       );
     }
   }
@@ -2442,21 +2508,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   Future<void> _tryCancelNotificationsBeforeReset(
     List<CalendarEvent> events,
   ) async {
-    try {
-      await Future<void>(() async {
-        final notificationService = ref.read(notificationServiceProvider);
-        for (final event in events) {
-          await notificationService.cancelEventReminder(
-            event.id,
-            reminderMinutesBeforeList: event.reminderMinutesBeforeList,
+    final service = ref.read(notificationServiceProvider);
+    final recovery = service is RecoverableNotificationService
+        ? service
+        : RecoverableNotificationService(
+            service,
+            ref.read(settingsRepositoryProvider),
           );
-        }
-        await notificationService.cancelMorningBriefing();
-      }).timeout(_resetNotificationCleanupTimeout);
-    } on Object {
-      // Local data reset must not be blocked by OS notification permission,
-      // signing, or notification-center state. Stale reminders are resynced or
-      // cleared on the next successful notification initialization.
+    final completed = await recovery.prepareForReset(
+      events,
+      timeout: _resetNotificationCleanupTimeout,
+    );
+    if (!completed && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.tr(
+              '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.',
+            ),
+          ),
+        ),
+      );
     }
   }
 
@@ -3655,7 +3727,13 @@ class _AppVersionTile extends StatelessWidget {
           child: ListTile(
             contentPadding: EdgeInsets.zero,
             leading: const _SettingsLeadingIcon(Icons.info_outline),
-            title: Text(context.tr('Daily 버전')),
+            title: Text(
+              context.tr(
+                isTestAppPackage(info?.packageName ?? '')
+                    ? 'Daily 테스트 버전'
+                    : 'Daily 버전',
+              ),
+            ),
             subtitle: _SettingsDescription(
               context.tr(
                 '버전 {version} · 더블 클릭하여 Github 확인하기',

@@ -40,10 +40,14 @@ void _prepare() {
 // Logical work/ paths are provenance labels only. Never fall back to local work.
 File fixtureFile(String path) {
   path = (_manifest['pathAliases'] as Map?)?[path] as String? ?? path;
-  const recordedRoot =
-      '/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/';
-  if (path.startsWith('${recordedRoot}work/')) {
-    path = path.substring(recordedRoot.length);
+  for (final recordedRoot in [
+    '/Users/kimhwi/Documents/Codex/DailyCalendar/',
+    '/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/',
+  ]) {
+    if (path.startsWith('${recordedRoot}work/')) {
+      path = path.substring(recordedRoot.length);
+      break;
+    }
   }
   if (!path.startsWith('work/')) return File(path);
   _prepare();

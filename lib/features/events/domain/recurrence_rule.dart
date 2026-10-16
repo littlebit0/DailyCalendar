@@ -26,6 +26,7 @@ class RecurrenceRule {
     this.interval = 1,
     this.until,
     this.count,
+    this.anchorDay,
     this.excludedDates = const <DateTime>[],
   });
 
@@ -33,6 +34,7 @@ class RecurrenceRule {
   final int interval;
   final DateTime? until;
   final int? count;
+  final int? anchorDay;
   final List<DateTime> excludedDates;
 
   bool get isRepeating => frequency != RecurrenceFrequency.none;
@@ -42,6 +44,8 @@ class RecurrenceRule {
     int? interval,
     DateTime? until,
     int? count,
+    int? anchorDay,
+    bool clearAnchorDay = false,
     List<DateTime>? excludedDates,
     bool clearUntil = false,
     bool clearCount = false,
@@ -51,6 +55,7 @@ class RecurrenceRule {
       interval: interval ?? this.interval,
       until: clearUntil ? null : until ?? this.until,
       count: clearCount ? null : count ?? this.count,
+      anchorDay: clearAnchorDay ? null : anchorDay ?? this.anchorDay,
       excludedDates: excludedDates ?? this.excludedDates,
     );
   }

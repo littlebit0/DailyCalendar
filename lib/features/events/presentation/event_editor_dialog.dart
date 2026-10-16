@@ -72,6 +72,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   late _RecurrenceEndMode _recurrenceEndMode;
   late DateTime? _recurrenceUntil;
   late int? _recurrenceCount;
+  bool _recurrenceCountChanged = false;
   late bool _showDday;
   late bool _alarmEnabled;
   late TimeOfDay _allDayAlarmTime;
@@ -437,12 +438,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                         SwitchListTile(
                           value:
                               _frequency == RecurrenceFrequency.none &&
-                                  _alarmCanBeEnabled
-                              ? _alarmEnabled
-                              : false,
+                              _alarmEnabled,
                           onChanged:
                               _frequency != RecurrenceFrequency.none ||
-                                  !_alarmCanBeEnabled
+                                  (!_alarmEnabled && !_alarmCanBeEnabled)
                               ? null
                               : _toggleAlarm,
                           title: Text(context.tr('일정 알람')),
@@ -779,6 +778,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       _clearValidation();
       setState(() {
         _recurrenceCount = picked;
+        _recurrenceCountChanged = true;
         _recurrenceEndMode = _RecurrenceEndMode.count;
       });
     }
@@ -925,7 +925,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       categoryChanged: widget.event == null || _categoryChanged,
       colorValue: category.colorValue,
       reminderMinutesBeforeList: _reminders,
+      recurrenceCountChanged: _recurrenceCountChanged,
       recurrence: RecurrenceRule(
+        anchorDay: widget.event?.recurrence.anchorDay,
+        excludedDates: widget.event?.recurrence.excludedDates ?? const [],
         frequency: _frequency,
         interval: _frequency == RecurrenceFrequency.none
             ? 1
@@ -1022,10 +1025,6 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     setState(() {
       _alarmState = state;
       _alarmStateLoading = false;
-      if (state == AlarmAuthorizationState.unsupported ||
-          state == AlarmAuthorizationState.denied) {
-        _alarmEnabled = false;
-      }
     });
   }
 

@@ -1,3 +1,4 @@
+import '../notifications/recoverable_notification_service.dart';
 import '../academic/kangnam_academic_source.dart';
 import '../academic/expansion_a_academic_sources.dart';
 import '../academic/expansion_b_academic_sources.dart';
@@ -215,14 +216,25 @@ final Provider<CalendarWidgetService> calendarWidgetServiceProvider =
 final appleWidgetServiceProvider = calendarWidgetServiceProvider;
 
 final notificationServiceProvider = Provider<NotificationService>((ref) {
-  return LocalNotificationService(
-    settingsRepository: ref.watch(settingsRepositoryProvider),
-    eventRepository: ref.watch(visibleEventRepositoryProvider),
+  final settings = ref.watch(settingsRepositoryProvider);
+  return RecoverableNotificationService(
+    LocalNotificationService(
+      settingsRepository: settings,
+      eventRepository: ref.watch(visibleEventRepositoryProvider),
+    ),
+    settings,
   );
 });
 
 final alarmServiceProvider = Provider<AlarmService>((ref) {
-  return NativeAlarmService();
+  return NativeAlarmService(
+    onAlarmScheduled: (event) async {
+      final service = ref.read(notificationServiceProvider);
+      if (service is RecoverableNotificationService) {
+        await service.confirmAlarmScheduled(event);
+      }
+    },
+  );
 });
 
 final koreanHolidayServiceProvider = Provider<KoreanHolidayService>((ref) {
@@ -287,6 +299,8 @@ final syncServiceProvider = Provider<SyncService>((ref) {
   return ref.watch(googleDriveSyncServiceProvider);
 });
 
+final eventFollowUpFailureProvider = StateProvider<int>((ref) => 0);
+
 final eventCommandServiceProvider = Provider<EventCommandService>((ref) {
   return EventCommandService(
     repository: ref.watch(eventRepositoryProvider),
@@ -295,6 +309,8 @@ final eventCommandServiceProvider = Provider<EventCommandService>((ref) {
     alarmService: ref.watch(alarmServiceProvider),
     syncService: ref.watch(syncServiceProvider),
     analytics: ref.watch(productAnalyticsProvider),
+    onFollowUpFailure: () =>
+        ref.read(eventFollowUpFailureProvider.notifier).state++,
     onEventsChanged: ref.watch(calendarWidgetServiceProvider).refresh,
   );
 });

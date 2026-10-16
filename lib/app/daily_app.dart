@@ -7,6 +7,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../core/di/app_providers.dart';
+import '../core/alarms/alarm_service.dart';
 import '../core/lms/lms_controller.dart';
 import '../core/analytics/product_analytics.dart';
 import '../core/auth/google_account.dart';
@@ -823,20 +824,36 @@ class _AppHomeState extends ConsumerState<_AppHome>
     final repository = ref.read(visibleEventRepositoryProvider);
     final commandService = ref.read(eventCommandServiceProvider);
     final acknowledged = <String>[];
+    var staleOccurrence = false;
     for (final action in actions) {
       final event = await repository.findById(action.eventId);
       if (event == null || event.isDeleted) {
         acknowledged.add(action.token);
         continue;
       }
+      final target = action.targetFor(event);
+      if (target == null) {
+        staleOccurrence = true;
+        acknowledged.add(action.token);
+        continue;
+      }
       try {
-        await commandService.setCompleted(event, action.completed);
+        await commandService.setCompleted(target, action.completed);
         acknowledged.add(action.token);
       } on Object {
         break;
       }
     }
     await widgetService.acknowledgeTodoActions(acknowledged);
+    if (staleOccurrence && mounted) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: Text(
+            context.tr('이전 위젯 작업의 반복 회차를 확인할 수 없습니다. 새로고침된 위젯에서 다시 선택해 주세요.'),
+          ),
+        ),
+      );
+    }
     if (acknowledged.isNotEmpty) {
       await widgetService.refresh();
       unawaited(
@@ -929,7 +946,6 @@ class _AppHomeState extends ConsumerState<_AppHome>
         event.id,
         reminderMinutesBeforeList: event.reminderMinutesBeforeList,
       );
-      await alarmService.cancelEventAlarm(event.id);
       if (event.isDeleted ||
           !event.isVisibleToOwner(
             ref
@@ -938,13 +954,14 @@ class _AppHomeState extends ConsumerState<_AppHome>
                 ?.googleAccount
                 ?.email,
           )) {
+        await alarmService.cancelEventAlarm(event.id);
         continue;
       }
       await notificationService.scheduleEventReminder(
         event,
         allowImmediate: false,
       );
-      await alarmService.scheduleEventAlarm(event);
+      await reconcileEventAlarm(alarmService, event);
     }
   }
 
@@ -981,6 +998,21 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(eventFollowUpFailureProvider, (_, _) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(
+          content: const Text('일정은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.'),
+          action: SnackBarAction(
+            label: '다시 시도',
+            onPressed: () {
+              unawaited(
+                ref.read(eventCommandServiceProvider).retryPendingFollowUps(),
+              );
+            },
+          ),
+        ),
+      );
+    });
     ref.listen<AppSettings>(appSettingsProvider, (previous, next) {
       if (previous != next) {
         ref.read(lmsControllerProvider).settingsChanged();
@@ -1326,6 +1358,10 @@ class _AppHomeState extends ConsumerState<_AppHome>
       await _reconcileAllEventSchedules();
     } catch (error, stackTrace) {
       debugPrint('Local notification startup failed: $error\n$stackTrace');
+    } finally {
+      if (mounted) {
+        await ref.read(eventCommandServiceProvider).retryPendingFollowUps();
+      }
     }
   }
 }

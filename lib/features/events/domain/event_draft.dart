@@ -15,6 +15,7 @@ class EventDraft {
     this.category = EventCategory.other,
     this.colorValue,
     this.categoryChanged = true,
+    this.recurrenceCountChanged = false,
     int? reminderMinutesBefore = 60,
     List<int>? reminderMinutesBeforeList,
     this.recurrence = const RecurrenceRule(),
@@ -42,6 +43,7 @@ class EventDraft {
 
   /// False when an editor saves without explicitly selecting a category.
   final bool categoryChanged;
+  final bool recurrenceCountChanged;
   final List<int> reminderMinutesBeforeList;
   final RecurrenceRule recurrence;
   final bool showDday;
@@ -81,6 +83,32 @@ class EventDraft {
       allDayAlarmMinutes: allDayAlarmMinutes,
       holiday: category.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
+  }
+
+  CalendarEvent applyTo(CalendarEvent event) {
+    return event.copyWith(
+      title: title,
+      memo: memo,
+      location: location,
+      url: url,
+      weather: weather,
+      startAt: startAt,
+      endAt: endAt,
+      allDay: allDay,
+      category: category,
+      colorValue: colorValue ?? category.colorValue,
+      reminderMinutesBeforeList: reminderMinutesBeforeList,
+      recurrence: recurrence,
+      showDday: showDday,
+      alarmEnabled: alarmEnabled,
+      allDayAlarmMinutes: allDayAlarmMinutes,
+      holiday: category.id == EventCategory.holiday.id,
+      clearMemo: memo == null,
+      clearLocation: location == null,
+      clearUrl: url == null,
+      clearWeather: weather == null,
+      clearReminder: reminderMinutesBeforeList.isEmpty,
+    );
   }
 
   EventDraft copyWith({
@@ -124,6 +152,7 @@ class EventDraft {
       category: category ?? this.category,
       colorValue: colorValue ?? this.colorValue,
       categoryChanged: categoryChanged,
+      recurrenceCountChanged: recurrenceCountChanged,
       reminderMinutesBeforeList: nextReminderMinutes,
       recurrence: recurrence ?? this.recurrence,
       showDday: showDday ?? this.showDday,

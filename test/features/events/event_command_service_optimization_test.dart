@@ -1,4 +1,15 @@
+import 'package:daily/core/localization/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:daily/features/events/presentation/event_details_panel.dart';
+import 'package:daily/features/chat/presentation/chat_input_bar.dart';
+import 'package:daily/features/chat/application/rule_based_schedule_parser.dart';
+import 'package:daily/core/di/app_providers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:daily/core/alarms/alarm_service.dart';
+import 'package:daily/core/calendar/recurring_event_edit.dart';
+import 'package:daily/features/events/domain/event_draft.dart';
+import 'package:daily/features/events/data/recurrence_expander.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/lms/lms_models.dart';
@@ -17,6 +28,622 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
+  testWidgets(
+    'same recurrence detail sheet toggles one persisted row despite follow-up failure',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final source = _event('detail-series', EventCategory.basic).copyWith(
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.daily,
+          count: 3,
+        ),
+      );
+      await repository.save(source);
+      final occurrence = RecurrenceExpander()
+          .expand(
+            source,
+            source.startAt,
+            source.startAt.add(const Duration(days: 4)),
+          )
+          .elementAt(1);
+      final commands = EventCommandService(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: _FailingMoveNotifications(),
+        syncService: _CountingSyncService(),
+      );
+      Widget panel(CalendarEvent event) => ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          eventRepositoryProvider.overrideWithValue(repository),
+          eventCommandServiceProvider.overrideWithValue(commands),
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            body: EventDetailsPanel(
+              date: event.startAt,
+              events: [event],
+              initialEvent: event,
+            ),
+          ),
+        ),
+      );
+      await tester.pumpWidget(panel(occurrence));
+      await tester.pumpAndSettle();
+      String? detachedID;
+      for (final completed in [true, false, true]) {
+        await tester.tap(find.byType(Checkbox));
+        await tester.pumpAndSettle();
+        expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, completed);
+        final rows = await repository.allEventsForSync();
+        expect(rows.length, 2);
+        final detached = rows.singleWhere((event) => event.id != source.id);
+        detachedID ??= detached.id;
+        expect(detached.id, detachedID);
+        expect(detached.completed, completed);
+        final remaining = RecurrenceExpander()
+            .expand(
+              rows.singleWhere((event) => event.id == source.id),
+              source.startAt,
+              source.startAt.add(const Duration(days: 4)),
+            )
+            .toList();
+        expect(remaining.length, 2);
+      }
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpWidget(panel((await repository.findById(detachedID!))!));
+      await tester.pumpAndSettle();
+      expect(tester.widget<Checkbox>(find.byType(Checkbox)).value, isTrue);
+    },
+  );
+
+  for (final stage in ['notification', 'alarm', 'sync', 'widgets']) {
+    test(
+      'post-save $stage failure leaves one saved row and retries only pending stage',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = DriftEventRepository(database);
+        final notifications = _FailingMoveNotifications()
+          ..fail = stage == 'notification';
+        final alarms = _FailingSaveAlarms()..fail = stage == 'alarm';
+        final sync = _FailingSaveSync()..fail = stage == 'sync';
+        var failWidgets = stage == 'widgets';
+        final commands = EventCommandService(
+          repository: repository,
+          settingsRepository: settings,
+          notificationService: notifications,
+          alarmService: alarms,
+          syncService: sync,
+          onEventsChanged: () async {
+            if (failWidgets) throw StateError('injected widget failure');
+          },
+        );
+        final event = await commands.create(
+          EventDraft(
+            title: 'saved',
+            startAt: DateTime(2027, 1, 1, 9),
+            endAt: DateTime(2027, 1, 1, 10),
+          ),
+        );
+        expect((await repository.allEventsForSync()).length, 1);
+        expect(settings.pendingEventFollowUps()[event.id]['stages'], [stage]);
+        notifications.fail = false;
+        alarms.fail = false;
+        sync.fail = false;
+        failWidgets = false;
+        expect(await commands.retryPendingFollowUps(), isTrue);
+        expect(settings.pendingEventFollowUps(), isEmpty);
+        expect((await repository.allEventsForSync()).length, 1);
+      },
+    );
+  }
+
+  for (final failDatabase in [false, true]) {
+    testWidgets(
+      'chat preserves only unsaved drafts databaseFailure=$failDatabase',
+      (tester) async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = DriftEventRepository(database);
+        await repository.allEventsForSync();
+        if (failDatabase) {
+          await database.customStatement(
+            "CREATE TRIGGER reject_create BEFORE INSERT ON event_records BEGIN SELECT RAISE(ABORT, 'injected write failure'); END",
+          );
+        }
+        final notifications = _FailingMoveNotifications();
+        final commands = EventCommandService(
+          repository: repository,
+          settingsRepository: settings,
+          notificationService: notifications,
+          syncService: _CountingSyncService(),
+        );
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              settingsRepositoryProvider.overrideWithValue(settings),
+              eventCommandServiceProvider.overrideWithValue(commands),
+              scheduleParserProvider.overrideWithValue(
+                RuleBasedScheduleParser(),
+              ),
+            ],
+            child: const MaterialApp(
+              locale: Locale('ko'),
+              supportedLocales: AppLocalizations.supportedLocales,
+              localizationsDelegates: [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              home: Scaffold(body: ChatInputBar()),
+            ),
+          ),
+        );
+        const input = '내일 오후 3시 회의';
+        await tester.enterText(find.byType(TextField), input);
+        await tester.pump();
+        await tester.tap(find.byIcon(Icons.arrow_upward));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+        await tester.runAsync(() async {
+          await tester.tap(find.byType(FilledButton));
+          for (var attempt = 0; attempt < 200; attempt++) {
+            await Future<void>.delayed(const Duration(milliseconds: 10));
+            await tester.pump();
+            if (find.byType(CircularProgressIndicator).evaluate().isEmpty) {
+              break;
+            }
+          }
+        });
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget<TextField>(find.byType(TextField)).controller!.text,
+          failDatabase ? input : '',
+        );
+        expect(
+          (await repository.allEventsForSync()).length,
+          failDatabase ? 0 : 1,
+        );
+        if (!failDatabase) {
+          notifications.fail = false;
+          expect(await commands.retryPendingFollowUps(), isTrue);
+          expect((await repository.allEventsForSync()).length, 1);
+        }
+      },
+    );
+  }
+
+  test(
+    'saved create survives notification failure and restart recovery uses same ID',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final settings = SettingsRepository(preferences: preferences);
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final notifications = _FailingMoveNotifications();
+      final sync = _CountingSyncService();
+      var notices = 0;
+      final commands = EventCommandService(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: notifications,
+        syncService: sync,
+        onFollowUpFailure: () => notices++,
+      );
+      final saved = await commands.create(
+        EventDraft(
+          title: 'persisted',
+          startAt: DateTime(2027, 1, 1, 9),
+          endAt: DateTime(2027, 1, 1, 10),
+        ),
+      );
+      expect((await repository.findById(saved.id))?.title, 'persisted');
+      expect(notices, 1);
+      expect(sync.upsertedIds, contains(saved.id));
+      expect(settings.pendingEventFollowUps().keys, contains(saved.id));
+      notifications.fail = false;
+      final restarted = EventCommandService(
+        repository: repository,
+        settingsRepository: SettingsRepository(preferences: preferences),
+        notificationService: notifications,
+        syncService: sync,
+      );
+      expect(await restarted.retryPendingFollowUps(), isTrue);
+      expect(settings.pendingEventFollowUps(), isEmpty);
+      expect(sync.upsertedIds.where((id) => id == saved.id).length, 1);
+      expect((await repository.allEventsForSync()).length, 1);
+    },
+  );
+
+  test(
+    'old follow-up acknowledgement cannot remove newer save intent',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settings.stageEventFollowUp('event', 'old', [10]);
+      await settings.stageEventFollowUp('event', 'new', [30]);
+      await settings.acknowledgeEventFollowUp('event', 'old');
+      expect(settings.pendingEventFollowUps()['event']['token'], 'new');
+      expect(
+        settings.pendingEventFollowUps()['event']['reminders'],
+        containsAll([10, 30]),
+      );
+      await settings.acknowledgeEventFollowUp('event', 'new');
+      expect(settings.pendingEventFollowUps(), isEmpty);
+    },
+  );
+
+  for (final reverse in [false, true]) {
+    test(
+      'parallel occurrence completion preserves both exclusions reverse=$reverse',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = DriftEventRepository(database);
+        final source = _event('concurrent-series', EventCategory.basic)
+            .copyWith(
+              recurrence: const RecurrenceRule(
+                frequency: RecurrenceFrequency.daily,
+                count: 5,
+              ),
+            );
+        await repository.save(source);
+        final occurrences = [1, 2]
+            .map(
+              (day) => source.copyWith(
+                startAt: source.startAt.add(Duration(days: day)),
+                endAt: source.endAt.add(Duration(days: day)),
+                occurrenceId: 'series@$day',
+              ),
+            )
+            .toList();
+        EventCommandService commands() => EventCommandService(
+          repository: repository,
+          settingsRepository: settings,
+          notificationService: _CountingNotificationService(),
+          syncService: _CountingSyncService(),
+        );
+        final ordered = reverse ? occurrences.reversed : occurrences;
+        await Future.wait(ordered.map((e) => commands().setCompleted(e, true)));
+        final saved = (await repository.findById(source.id))!;
+        for (final occurrence in occurrences) {
+          expect(saved.recurrence.excludes(occurrence.startAt), isTrue);
+        }
+        var all = await repository.allEventsForSync();
+        expect(all.length, 3);
+        expect(
+          all.where((e) => e.id != source.id).every((e) => e.completed),
+          isTrue,
+        );
+        await commands().setCompleted(occurrences.first, true);
+        await commands().setCompleted(occurrences.first, false);
+        all = await repository.allEventsForSync();
+        expect(all.length, 3);
+        expect(
+          all
+              .singleWhere(
+                (e) =>
+                    e.id != source.id && e.startAt == occurrences.first.startAt,
+              )
+              .completed,
+          isFalse,
+        );
+        final displayed = all.expand(
+          (e) => RecurrenceExpander().expand(
+            e,
+            source.startAt,
+            source.startAt.add(const Duration(days: 7)),
+          ),
+        );
+        expect(displayed.length, 5);
+      },
+    );
+  }
+  for (final mutation in ['deleted', 'no-repeat']) {
+    test(
+      'completion cannot revive a $mutation source during the transaction boundary',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = _RacingLmsRepository(database);
+        final source = _event('racing-series', EventCategory.basic).copyWith(
+          recurrence: const RecurrenceRule(
+            frequency: RecurrenceFrequency.daily,
+            count: 3,
+          ),
+        );
+        await repository.save(source);
+        final changed = mutation == 'deleted'
+            ? source.copyWith(deletedAt: DateTime(2026, 10, 16))
+            : source.copyWith(recurrence: const RecurrenceRule());
+        repository.beforeMerge = () => repository.save(changed);
+        final commands = EventCommandService(
+          repository: repository,
+          settingsRepository: SettingsRepository(
+            preferences: await SharedPreferences.getInstance(),
+          ),
+          notificationService: _CountingNotificationService(),
+          syncService: _CountingSyncService(),
+        );
+        await expectLater(
+          commands.setCompleted(
+            source.copyWith(occurrenceId: 'original'),
+            true,
+          ),
+          throwsStateError,
+        );
+        expect((await repository.allEventsForSync()).length, 1);
+        final current = (await repository.findById(source.id))!;
+        expect(current.isDeleted, changed.isDeleted);
+        expect(current.recurrence.isRepeating, changed.recurrence.isRepeating);
+      },
+    );
+  }
+
+  for (final scope in [RecurringEditScope.all, RecurringEditScope.future]) {
+    for (final index in [0, 2, 4]) {
+      test(
+        'recurring title edit $scope occurrence $index keeps dates and live exclusions',
+        () async {
+          SharedPreferences.setMockInitialValues({});
+          final settings = SettingsRepository(
+            preferences: await SharedPreferences.getInstance(),
+          );
+          final database = AppDatabase.forTesting(NativeDatabase.memory());
+          addTearDown(database.close);
+          final repository = DriftEventRepository(database);
+          final original = _event('edit-source', EventCategory.basic).copyWith(
+            recurrence: const RecurrenceRule(
+              frequency: RecurrenceFrequency.daily,
+              count: 5,
+            ),
+          );
+          final selectedStart = original.startAt.add(Duration(days: index));
+          final occurrence = original.copyWith(
+            startAt: selectedStart,
+            endAt: selectedStart.add(original.duration),
+            occurrenceId: 'selected',
+          );
+          // The snapshot held by the editor predates another occurrence's deletion.
+          final latest = original.copyWith(
+            recurrence: original.recurrence.copyWith(
+              excludedDates: [original.startAt.add(const Duration(days: 1))],
+            ),
+          );
+          await repository.save(latest);
+          final commands = EventCommandService(
+            repository: repository,
+            settingsRepository: settings,
+            notificationService: _CountingNotificationService(),
+            syncService: _CountingSyncService(),
+          );
+          final result = await commands.editRecurringOccurrence(
+            occurrence: occurrence,
+            draft: EventDraft(
+              title: 'edited',
+              startAt: occurrence.startAt,
+              endAt: occurrence.endAt,
+              categoryChanged: false,
+              recurrence: original.recurrence,
+            ),
+            scope: scope,
+          );
+          expect(result.followUpFailed, isFalse);
+          final expander = RecurrenceExpander();
+          final begin = original.startAt.subtract(const Duration(days: 1));
+          final end = original.startAt.add(const Duration(days: 15));
+          final expected = expander
+              .expand(latest, begin, end)
+              .map((e) => e.startAt)
+              .toList();
+          final actual =
+              (await repository.allEventsForSync())
+                  .expand((e) => expander.expand(e, begin, end))
+                  .map((e) => e.startAt)
+                  .toList()
+                ..sort();
+          expect(actual, expected);
+          expect(
+            result.event.recurrence.count,
+            scope == RecurringEditScope.all ? 5 : 5 - index,
+          );
+          expect(result.event.category, latest.category);
+        },
+      );
+    }
+  }
+  test(
+    'explicit future count and all-series date changes remain intentional',
+    () async {
+      final base = _event('edit', EventCategory.basic).copyWith(
+        recurrence: RecurrenceRule(
+          frequency: RecurrenceFrequency.daily,
+          count: 5,
+          excludedDates: [DateTime(2026, 7, 30)],
+        ),
+      );
+      final occurrence = base.copyWith(
+        startAt: DateTime(2026, 7, 31, 9),
+        endAt: DateTime(2026, 7, 31, 10),
+      );
+      final explicit = EventDraft(
+        title: 'edited',
+        startAt: DateTime(2026, 8, 1, 14),
+        endAt: DateTime(2026, 8, 1, 15),
+        recurrence: base.recurrence,
+        recurrenceCountChanged: true,
+      );
+      final future = applyRecurringEventDraft(
+        latest: base,
+        occurrence: occurrence,
+        draft: explicit,
+        scope: RecurringEditScope.future,
+      );
+      expect(future.recurrence.count, 5);
+      final all = applyRecurringEventDraft(
+        latest: base,
+        occurrence: occurrence,
+        draft: explicit,
+        scope: RecurringEditScope.all,
+      );
+      expect(all.startAt, DateTime(2026, 7, 30, 14));
+      expect(all.recurrence.excludes(DateTime(2026, 7, 31)), isTrue);
+      final noRepeat = applyRecurringEventDraft(
+        latest: base,
+        occurrence: occurrence,
+        draft: explicit.copyWith(recurrence: const RecurrenceRule()),
+        scope: RecurringEditScope.future,
+      );
+      expect(noRepeat.recurrence.isRepeating, isFalse);
+      expect(noRepeat.recurrence.excludedDates, isEmpty);
+    },
+  );
+
+  for (final scope in RecurringMoveScope.values) {
+    for (final timeShift in [false, true]) {
+      test(
+        'atomic recurring move $scope timeShift=$timeShift survives retry',
+        () async {
+          SharedPreferences.setMockInitialValues({});
+          final settings = SettingsRepository(
+            preferences: await SharedPreferences.getInstance(),
+          );
+          final database = AppDatabase.forTesting(NativeDatabase.memory());
+          addTearDown(database.close);
+          final repository = DriftEventRepository(database);
+          final original = _event('move-source', EventCategory.basic).copyWith(
+            recurrence: RecurrenceRule(
+              frequency: RecurrenceFrequency.daily,
+              count: 10,
+              excludedDates: [DateTime(2026, 8, 2)],
+            ),
+            completed: true,
+          );
+          await repository.save(original);
+          final occurrence = original.copyWith(
+            startAt: DateTime(2026, 7, 31, 9),
+            endAt: DateTime(2026, 7, 31, 10),
+            occurrenceId: 'move-source@2026-07-31',
+          );
+          final target = DateTime(2026, 8, 1, timeShift ? 14 : 9);
+          final notifications = _FailingMoveNotifications();
+          final sync = _CountingSyncService();
+          EventCommandService commands() => EventCommandService(
+            repository: repository,
+            settingsRepository: settings,
+            notificationService: notifications,
+            syncService: sync,
+          );
+          final result = await commands().moveRecurringOccurrence(
+            occurrence: occurrence,
+            targetStart: target,
+            scope: scope,
+          );
+          expect(result.followUpFailed, isTrue);
+          expect(result.event.startAt, target);
+          expect(result.event.completed, isTrue);
+          expect((await repository.allEventsForSync()).length, 2);
+          expect(sync.upsertedIds.toSet(), {original.id, result.event.id});
+          final savedSource = (await repository.findById(original.id))!;
+          if (scope == RecurringMoveScope.onlyThis) {
+            expect(savedSource.recurrence.excludes(occurrence.startAt), isTrue);
+            expect(result.event.recurrence.isRepeating, isFalse);
+          } else {
+            expect(savedSource.recurrence.until, DateTime(2026, 7, 30));
+            expect(result.event.recurrence.count, 8);
+            expect(
+              result.event.recurrence.excludes(DateTime(2026, 8, 3)),
+              isTrue,
+            );
+          }
+          notifications.fail = false;
+          // A new command instance represents retry after restart, not an in-memory cache.
+          final retry = await commands().moveRecurringOccurrence(
+            occurrence: occurrence,
+            targetStart: target,
+            scope: scope,
+          );
+          expect(retry.followUpFailed, isFalse);
+          expect(retry.event.id, result.event.id);
+          expect((await repository.allEventsForSync()).length, 2);
+        },
+      );
+    }
+    for (final failSource in [true, false]) {
+      test(
+        'recurring move $scope rolls back on ${failSource ? "source" : "detached"} write failure',
+        () async {
+          SharedPreferences.setMockInitialValues({});
+          final settings = SettingsRepository(
+            preferences: await SharedPreferences.getInstance(),
+          );
+          final database = AppDatabase.forTesting(NativeDatabase.memory());
+          addTearDown(database.close);
+          final repository = DriftEventRepository(database);
+          final original = _event('move-source', EventCategory.basic).copyWith(
+            recurrence: const RecurrenceRule(
+              frequency: RecurrenceFrequency.daily,
+              count: 10,
+            ),
+          );
+          await repository.save(original);
+          await database.customStatement(
+            "CREATE TRIGGER fail_move BEFORE INSERT ON event_records "
+            "WHEN NEW.id ${failSource ? '=' : '!='} 'move-source' "
+            "BEGIN SELECT RAISE(ABORT, 'injected write failure'); END",
+          );
+          final notifications = _CountingNotificationService();
+          final commands = EventCommandService(
+            repository: repository,
+            settingsRepository: settings,
+            notificationService: notifications,
+            syncService: _CountingSyncService(),
+          );
+          await expectLater(
+            commands.moveRecurringOccurrence(
+              occurrence: original,
+              targetStart: DateTime(2026, 8, 1, 9),
+              scope: scope,
+            ),
+            throwsA(anything),
+          );
+          final all = await repository.allEventsForSync();
+          expect(all.length, 1);
+          expect(all.single.recurrence.count, 10);
+          expect(all.single.recurrence.until, isNull);
+          expect(all.single.recurrence.excludedDates, isEmpty);
+          expect(notifications.cancelCalls, 0);
+          expect(notifications.scheduleCalls, 0);
+        },
+      );
+    }
+  }
+
   for (final type in ['assignment', 'quiz', 'lecture']) {
     for (final (sourceCompleted, latestCompleted, preserveSource)
         in <(bool?, bool, bool)>[
@@ -859,7 +1486,20 @@ class _MultiCompletionRepository implements EventRepository {
   Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
     Iterable<CalendarEvent> remoteEvents, {
     required RestoredEventResolver resolve,
-  }) async => const [];
+  }) async {
+    final staged = Map<String, CalendarEvent>.from(events);
+    final changes = <EventRestoreMutation>[];
+    for (final incoming in remoteEvents) {
+      final previous = staged[incoming.id];
+      final current = resolve(previous, incoming);
+      staged[current.id] = current;
+      changes.add(EventRestoreMutation(previous: previous, current: current));
+    }
+    events
+      ..clear()
+      ..addAll(staged);
+    return changes;
+  }
 
   @override
   Future<List<CalendarEvent>> pendingSyncEvents() async =>
@@ -916,5 +1556,35 @@ class _ThrowingAnalytics extends NoopProductAnalytics {
   @override
   Future<void> record(AnalyticsRecord record) async {
     throw StateError('analytics unavailable');
+  }
+}
+
+class _FailingMoveNotifications extends _CountingNotificationService {
+  bool fail = true;
+  @override
+  Future<void> scheduleEventReminder(
+    CalendarEvent event, {
+    bool allowImmediate = false,
+  }) async {
+    if (fail) throw StateError('injected platform scheduling failure');
+    await super.scheduleEventReminder(event, allowImmediate: allowImmediate);
+  }
+}
+
+class _FailingSaveAlarms extends _CountingAlarmService {
+  bool fail = false;
+  @override
+  Future<void> scheduleEventAlarm(CalendarEvent event) async {
+    if (fail) throw StateError('injected alarm failure');
+    await super.scheduleEventAlarm(event);
+  }
+}
+
+class _FailingSaveSync extends _CountingSyncService {
+  bool fail = false;
+  @override
+  Future<void> queueEventUpsert(CalendarEvent event) async {
+    if (fail) throw StateError('injected sync failure');
+    await super.queueEventUpsert(event);
   }
 }

@@ -65,6 +65,9 @@ dependencies:
   pdf_graphics: 5.1.1
 
 dev_dependencies:
+  shared_preferences_platform_interface: ^2.4.2
+  flutter_secure_storage_windows: 4.2.2
+  flutter_inappwebview_windows: 0.6.0
   flutter_test:
     sdk: flutter
 
@@ -79,6 +82,11 @@ dev_dependencies:
   drift_dev: ^2.33.0
   msix: ^3.16.13
 
+  file: any
+  path_provider_linux: any
+  path_provider_windows: any
+  shared_preferences_linux: any
+  shared_preferences_windows: any
 msix_config:
   display_name: DailyCalendar
   publisher_display_name: littlebit0
@@ -144,5 +152,14 @@ flutter:
 
 # #218: native availability exceptions must not terminate Windows.
 dependency_overrides:
+  flutter_secure_storage:
+    path: third_party/flutter_secure_storage
+  flutter_secure_storage_darwin:
+    path: third_party/flutter_secure_storage_darwin
   local_auth_windows:
     path: third_party/local_auth_windows
+  # #202/#236: bounded file retries and correctly scoped environment disposal.
+  flutter_secure_storage_windows:
+    path: third_party/flutter_secure_storage_windows
+  flutter_inappwebview_windows:
+    path: third_party/flutter_inappwebview_windows

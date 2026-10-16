@@ -27,10 +27,7 @@ namespace {
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
 #endif
 
-constexpr char kActionsFileMagic[] = {'D', 'A', 'I', 'L', 'Y', 'A', 'C', '1'};
 constexpr wchar_t kPopupClassName[] = L"DAILY_WINDOWS_WIDGET_SURFACE";
-constexpr std::size_t kMaxStoredActions = 4096;
-constexpr std::uint32_t kMaxStoredStringBytes = 64 * 1024;
 
 const flutter::EncodableValue* MapValue(const flutter::EncodableMap& map,
                                         const char* key) {
@@ -250,27 +247,6 @@ std::array<std::wstring, 7> WeekdayLabels(
           monday_labels[5]};
 }
 
-bool WriteString(std::ofstream& output, const std::string& value) {
-  if (value.size() > kMaxStoredStringBytes) {
-    return false;
-  }
-  const auto size = static_cast<std::uint32_t>(value.size());
-  output.write(reinterpret_cast<const char*>(&size), sizeof(size));
-  output.write(value.data(), static_cast<std::streamsize>(value.size()));
-  return output.good();
-}
-
-bool ReadString(std::ifstream& input, std::string* value) {
-  std::uint32_t size = 0;
-  input.read(reinterpret_cast<char*>(&size), sizeof(size));
-  if (!input.good() || size > kMaxStoredStringBytes) {
-    return false;
-  }
-  value->resize(size);
-  input.read(value->data(), static_cast<std::streamsize>(size));
-  return input.good();
-}
-
 }  // namespace
 
 WindowsWidgetBridge::WindowsWidgetBridge(flutter::BinaryMessenger* messenger,
@@ -395,6 +371,7 @@ bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
       if (event.event_id.empty()) {
         event.event_id = StringValue(*event_map, "id");
       }
+      event.occurrence_id = StringValue(*event_map, "id");
       event.title = Utf16FromUtf8(StringValue(*event_map, "title"));
       event.time_label = Utf16FromUtf8(StringValue(*event_map, "timeLabel"));
       event.color = static_cast<std::uint32_t>(
@@ -446,6 +423,7 @@ flutter::EncodableList WindowsWidgetBridge::PendingActionsForFlutter() const {
         flutter::EncodableValue(action.event_id);
     map[flutter::EncodableValue("completed")] =
         flutter::EncodableValue(action.completed);
+    map[flutter::EncodableValue("occurrenceId")] = flutter::EncodableValue(action.occurrence_id);
     encoded.emplace_back(map);
   }
   return encoded;
@@ -487,9 +465,10 @@ void WindowsWidgetBridge::ToggleEvent(std::size_t index) {
     return;
   }
   const bool completed = !snapshot_.today_events[index].completed;
-  UpdateEventCompletion(event_id, completed);
+  const std::string occurrence_id = snapshot_.today_events[index].occurrence_id;
+  UpdateEventCompletion(occurrence_id.empty() ? event_id : occurrence_id, completed);
   pending_actions_.push_back(
-      PendingAction{NewActionToken(), event_id, completed});
+      PendingAction{NewActionToken(), event_id, completed, occurrence_id});
   SavePendingActions();
   InvalidateRect(popup_, nullptr, FALSE);
   channel_->InvokeMethod("todoActionsChanged", nullptr);
@@ -498,7 +477,7 @@ void WindowsWidgetBridge::ToggleEvent(std::size_t index) {
 void WindowsWidgetBridge::UpdateEventCompletion(const std::string& event_id,
                                                 bool completed) {
   for (auto& event : snapshot_.today_events) {
-    if (event.event_id == event_id) {
+    if ((event.occurrence_id.empty() ? event.event_id : event.occurrence_id) == event_id) {
       event.completed = completed;
     }
   }
@@ -896,34 +875,7 @@ void WindowsWidgetBridge::LoadPendingActions() {
   if (!input) {
     return;
   }
-  std::array<char, sizeof(kActionsFileMagic)> magic{};
-  input.read(magic.data(), static_cast<std::streamsize>(magic.size()));
-  if (!input.good() || !std::equal(magic.begin(), magic.end(),
-                                   std::begin(kActionsFileMagic))) {
-    return;
-  }
-  std::uint32_t count = 0;
-  input.read(reinterpret_cast<char*>(&count), sizeof(count));
-  if (!input.good() || count > kMaxStoredActions) {
-    return;
-  }
-  std::vector<PendingAction> loaded;
-  loaded.reserve(count);
-  for (std::uint32_t index = 0; index < count; ++index) {
-    PendingAction action;
-    std::uint8_t completed = 0;
-    if (!ReadString(input, &action.token) ||
-        !ReadString(input, &action.event_id)) {
-      return;
-    }
-    input.read(reinterpret_cast<char*>(&completed), sizeof(completed));
-    if (!input.good()) {
-      return;
-    }
-    action.completed = completed != 0;
-    loaded.push_back(std::move(action));
-  }
-  pending_actions_ = std::move(loaded);
+  daily_widgets::ReadActions(input, &pending_actions_);
 }
 
 bool WindowsWidgetBridge::SavePendingActions() const {
@@ -933,21 +885,10 @@ bool WindowsWidgetBridge::SavePendingActions() const {
   if (!output) {
     return false;
   }
-  output.write(kActionsFileMagic, sizeof(kActionsFileMagic));
-  const auto count = static_cast<std::uint32_t>(
-      std::min<std::size_t>(pending_actions_.size(), kMaxStoredActions));
-  output.write(reinterpret_cast<const char*>(&count), sizeof(count));
-  const std::size_t first = pending_actions_.size() - count;
-  for (std::size_t index = first; index < pending_actions_.size(); ++index) {
-    const auto& action = pending_actions_[index];
-    if (!WriteString(output, action.token) ||
-        !WriteString(output, action.event_id)) {
-      output.close();
-      DeleteFileW(temporary.c_str());
-      return false;
-    }
-    const std::uint8_t completed = action.completed ? 1 : 0;
-    output.write(reinterpret_cast<const char*>(&completed), sizeof(completed));
+  if (!daily_widgets::WriteActions(output, pending_actions_)) {
+    output.close();
+    DeleteFileW(temporary.c_str());
+    return false;
   }
   output.flush();
   const bool succeeded = output.good();

@@ -34,6 +34,11 @@ class _FileBundle extends CachingAssetBundle {
 }
 
 void main() {
+  late List<UniversityDataset> catalog;
+  setUpAll(() async {
+    catalog = await UniversityCatalog.load(bundle: _FileBundle());
+  });
+
   TestWidgetsFlutterBinding.ensureInitialized();
   Future<SettingsRepository> settings() async {
     SharedPreferences.setMockInitialValues({});
@@ -581,7 +586,7 @@ void main() {
           repo,
           UniversityCoursePage(
             store: repo.timetableStore,
-            loadCatalog: () => UniversityCatalog.load(bundle: _FileBundle()),
+            loadCatalog: () async => catalog,
           ),
         ),
       );
@@ -638,7 +643,7 @@ void main() {
   test(
     'bundled datasets validate every section and preserve cross-listed credits',
     () async {
-      final datasets = await UniversityCatalog.load(bundle: _FileBundle());
+      final datasets = catalog;
       expect(
         {
           for (final dataset in datasets)
@@ -1042,10 +1047,7 @@ void main() {
             key: boundary,
             child: app(
               repo,
-              TimetablePage(
-                loadCatalog: () =>
-                    UniversityCatalog.load(bundle: _FileBundle()),
-              ),
+              TimetablePage(loadCatalog: () async => catalog),
               dark: dark,
               showNavigation: true,
             ),

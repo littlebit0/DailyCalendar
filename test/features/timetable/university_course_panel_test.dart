@@ -147,6 +147,42 @@ Future<void> _tapVisible(WidgetTester tester, Finder finder) async {
 
 void main() {
   testWidgets(
+    'search ranks are reused for card rebuild and invalidated for query',
+    (tester) async {
+      final store = await _store();
+      final counted = _CountingCourse(_course('counted', '알고리즘'));
+      final dataset = _CountingDataset(counted);
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).first, '알고');
+      await tester.pumpAndSettle();
+      expect(counted.ranks, 1);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-card-counted')),
+      );
+      expect(counted.ranks, 1);
+      await tester.enterText(find.byType(TextField).first, 'ㅇㄱ');
+      await tester.pumpAndSettle();
+      expect(counted.ranks, 2);
+      expect(find.byKey(const ValueKey('course-card-counted')), findsOneWidget);
+      await store.save(
+        counted.toTimetable(id: 'saved', mode: LectureMode.inPerson),
+      );
+      await tester.pumpAndSettle();
+      expect(counted.ranks, 3);
+    },
+  );
+
+  testWidgets(
     'micro majors share a distinct family group without a fake college',
     (tester) async {
       final store = await _store();
@@ -263,8 +299,14 @@ void main() {
           tester,
           find.byKey(const ValueKey('course-card-major')),
         );
-        expect(find.byKey(const ValueKey('course-card-general-required')), findsNothing);
-        expect(find.byKey(const ValueKey('course-card-general-elective')), findsNothing);
+        expect(
+          find.byKey(const ValueKey('course-card-general-required')),
+          findsNothing,
+        );
+        expect(
+          find.byKey(const ValueKey('course-card-general-elective')),
+          findsNothing,
+        );
         await _tapVisible(
           tester,
           find.byKey(const ValueKey('course-filters-toggle')),
@@ -1534,4 +1576,35 @@ void main() {
       expect(find.byKey(const ValueKey('unclassified')), findsNothing);
     },
   );
+}
+
+class _CountingCourse extends UniversityCourse {
+  _CountingCourse(super.json) : super.fromJson();
+  int ranks = 0;
+  @override
+  int queryRank(String query) {
+    ranks++;
+    return super.queryRank(query);
+  }
+}
+
+class _CountingDataset implements UniversityDataset {
+  _CountingDataset(this.course);
+  final UniversityCourse course;
+  @override
+  List<UniversityCourse> get courses => [course];
+  @override
+  String get universityId => 'smu';
+  @override
+  String get university => 'smu';
+  @override
+  String get campus => 'seoul';
+  @override
+  String? get campusName => null;
+  @override
+  String get publishedDate => '2026-10-16';
+  @override
+  String get sourceNotice => '';
+  @override
+  String get sourceUrl => 'https://example.edu';
 }

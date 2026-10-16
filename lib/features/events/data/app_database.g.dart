@@ -202,6 +202,16 @@ class $EventRecordsTable extends EventRecords
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _recurrenceAnchorDayMeta =
+      const VerificationMeta('recurrenceAnchorDay');
+  @override
+  late final GeneratedColumn<int> recurrenceAnchorDay = GeneratedColumn<int>(
+    'recurrence_anchor_day',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _recurrenceExcludedDatesMeta =
       const VerificationMeta('recurrenceExcludedDates');
   @override
@@ -358,6 +368,7 @@ class $EventRecordsTable extends EventRecords
     recurrenceInterval,
     recurrenceUntil,
     recurrenceCount,
+    recurrenceAnchorDay,
     recurrenceExcludedDates,
     createdAt,
     updatedAt,
@@ -515,6 +526,15 @@ class $EventRecordsTable extends EventRecords
         recurrenceCount.isAcceptableOrUnknown(
           data['recurrence_count']!,
           _recurrenceCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('recurrence_anchor_day')) {
+      context.handle(
+        _recurrenceAnchorDayMeta,
+        recurrenceAnchorDay.isAcceptableOrUnknown(
+          data['recurrence_anchor_day']!,
+          _recurrenceAnchorDayMeta,
         ),
       );
     }
@@ -681,6 +701,10 @@ class $EventRecordsTable extends EventRecords
         DriftSqlType.int,
         data['${effectivePrefix}recurrence_count'],
       ),
+      recurrenceAnchorDay: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}recurrence_anchor_day'],
+      ),
       recurrenceExcludedDates: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}recurrence_excluded_dates'],
@@ -753,6 +777,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
   final int recurrenceInterval;
   final DateTime? recurrenceUntil;
   final int? recurrenceCount;
+  final int? recurrenceAnchorDay;
   final String recurrenceExcludedDates;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -783,6 +808,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     required this.recurrenceInterval,
     this.recurrenceUntil,
     this.recurrenceCount,
+    this.recurrenceAnchorDay,
     required this.recurrenceExcludedDates,
     required this.createdAt,
     required this.updatedAt,
@@ -833,6 +859,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     }
     if (!nullToAbsent || recurrenceCount != null) {
       map['recurrence_count'] = Variable<int>(recurrenceCount);
+    }
+    if (!nullToAbsent || recurrenceAnchorDay != null) {
+      map['recurrence_anchor_day'] = Variable<int>(recurrenceAnchorDay);
     }
     map['recurrence_excluded_dates'] = Variable<String>(
       recurrenceExcludedDates,
@@ -886,6 +915,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       recurrenceCount: recurrenceCount == null && nullToAbsent
           ? const Value.absent()
           : Value(recurrenceCount),
+      recurrenceAnchorDay: recurrenceAnchorDay == null && nullToAbsent
+          ? const Value.absent()
+          : Value(recurrenceAnchorDay),
       recurrenceExcludedDates: Value(recurrenceExcludedDates),
       createdAt: Value(createdAt),
       updatedAt: Value(updatedAt),
@@ -934,6 +966,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       recurrenceInterval: serializer.fromJson<int>(json['recurrenceInterval']),
       recurrenceUntil: serializer.fromJson<DateTime?>(json['recurrenceUntil']),
       recurrenceCount: serializer.fromJson<int?>(json['recurrenceCount']),
+      recurrenceAnchorDay: serializer.fromJson<int?>(
+        json['recurrenceAnchorDay'],
+      ),
       recurrenceExcludedDates: serializer.fromJson<String>(
         json['recurrenceExcludedDates'],
       ),
@@ -975,6 +1010,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       'recurrenceInterval': serializer.toJson<int>(recurrenceInterval),
       'recurrenceUntil': serializer.toJson<DateTime?>(recurrenceUntil),
       'recurrenceCount': serializer.toJson<int?>(recurrenceCount),
+      'recurrenceAnchorDay': serializer.toJson<int?>(recurrenceAnchorDay),
       'recurrenceExcludedDates': serializer.toJson<String>(
         recurrenceExcludedDates,
       ),
@@ -1010,6 +1046,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     int? recurrenceInterval,
     Value<DateTime?> recurrenceUntil = const Value.absent(),
     Value<int?> recurrenceCount = const Value.absent(),
+    Value<int?> recurrenceAnchorDay = const Value.absent(),
     String? recurrenceExcludedDates,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -1047,6 +1084,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     recurrenceCount: recurrenceCount.present
         ? recurrenceCount.value
         : this.recurrenceCount,
+    recurrenceAnchorDay: recurrenceAnchorDay.present
+        ? recurrenceAnchorDay.value
+        : this.recurrenceAnchorDay,
     recurrenceExcludedDates:
         recurrenceExcludedDates ?? this.recurrenceExcludedDates,
     createdAt: createdAt ?? this.createdAt,
@@ -1098,6 +1138,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       recurrenceCount: data.recurrenceCount.present
           ? data.recurrenceCount.value
           : this.recurrenceCount,
+      recurrenceAnchorDay: data.recurrenceAnchorDay.present
+          ? data.recurrenceAnchorDay.value
+          : this.recurrenceAnchorDay,
       recurrenceExcludedDates: data.recurrenceExcludedDates.present
           ? data.recurrenceExcludedDates.value
           : this.recurrenceExcludedDates,
@@ -1143,6 +1186,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           ..write('recurrenceInterval: $recurrenceInterval, ')
           ..write('recurrenceUntil: $recurrenceUntil, ')
           ..write('recurrenceCount: $recurrenceCount, ')
+          ..write('recurrenceAnchorDay: $recurrenceAnchorDay, ')
           ..write('recurrenceExcludedDates: $recurrenceExcludedDates, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -1178,6 +1222,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     recurrenceInterval,
     recurrenceUntil,
     recurrenceCount,
+    recurrenceAnchorDay,
     recurrenceExcludedDates,
     createdAt,
     updatedAt,
@@ -1212,6 +1257,7 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           other.recurrenceInterval == this.recurrenceInterval &&
           other.recurrenceUntil == this.recurrenceUntil &&
           other.recurrenceCount == this.recurrenceCount &&
+          other.recurrenceAnchorDay == this.recurrenceAnchorDay &&
           other.recurrenceExcludedDates == this.recurrenceExcludedDates &&
           other.createdAt == this.createdAt &&
           other.updatedAt == this.updatedAt &&
@@ -1244,6 +1290,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
   final Value<int> recurrenceInterval;
   final Value<DateTime?> recurrenceUntil;
   final Value<int?> recurrenceCount;
+  final Value<int?> recurrenceAnchorDay;
   final Value<String> recurrenceExcludedDates;
   final Value<DateTime> createdAt;
   final Value<DateTime> updatedAt;
@@ -1275,6 +1322,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.recurrenceInterval = const Value.absent(),
     this.recurrenceUntil = const Value.absent(),
     this.recurrenceCount = const Value.absent(),
+    this.recurrenceAnchorDay = const Value.absent(),
     this.recurrenceExcludedDates = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.updatedAt = const Value.absent(),
@@ -1307,6 +1355,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.recurrenceInterval = const Value.absent(),
     this.recurrenceUntil = const Value.absent(),
     this.recurrenceCount = const Value.absent(),
+    this.recurrenceAnchorDay = const Value.absent(),
     this.recurrenceExcludedDates = const Value.absent(),
     required DateTime createdAt,
     required DateTime updatedAt,
@@ -1345,6 +1394,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Expression<int>? recurrenceInterval,
     Expression<DateTime>? recurrenceUntil,
     Expression<int>? recurrenceCount,
+    Expression<int>? recurrenceAnchorDay,
     Expression<String>? recurrenceExcludedDates,
     Expression<DateTime>? createdAt,
     Expression<DateTime>? updatedAt,
@@ -1380,6 +1430,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       if (recurrenceInterval != null) 'recurrence_interval': recurrenceInterval,
       if (recurrenceUntil != null) 'recurrence_until': recurrenceUntil,
       if (recurrenceCount != null) 'recurrence_count': recurrenceCount,
+      if (recurrenceAnchorDay != null)
+        'recurrence_anchor_day': recurrenceAnchorDay,
       if (recurrenceExcludedDates != null)
         'recurrence_excluded_dates': recurrenceExcludedDates,
       if (createdAt != null) 'created_at': createdAt,
@@ -1417,6 +1469,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Value<int>? recurrenceInterval,
     Value<DateTime?>? recurrenceUntil,
     Value<int?>? recurrenceCount,
+    Value<int?>? recurrenceAnchorDay,
     Value<String>? recurrenceExcludedDates,
     Value<DateTime>? createdAt,
     Value<DateTime>? updatedAt,
@@ -1451,6 +1504,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       recurrenceInterval: recurrenceInterval ?? this.recurrenceInterval,
       recurrenceUntil: recurrenceUntil ?? this.recurrenceUntil,
       recurrenceCount: recurrenceCount ?? this.recurrenceCount,
+      recurrenceAnchorDay: recurrenceAnchorDay ?? this.recurrenceAnchorDay,
       recurrenceExcludedDates:
           recurrenceExcludedDates ?? this.recurrenceExcludedDates,
       createdAt: createdAt ?? this.createdAt,
@@ -1528,6 +1582,9 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     if (recurrenceCount.present) {
       map['recurrence_count'] = Variable<int>(recurrenceCount.value);
     }
+    if (recurrenceAnchorDay.present) {
+      map['recurrence_anchor_day'] = Variable<int>(recurrenceAnchorDay.value);
+    }
     if (recurrenceExcludedDates.present) {
       map['recurrence_excluded_dates'] = Variable<String>(
         recurrenceExcludedDates.value,
@@ -1592,6 +1649,7 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
           ..write('recurrenceInterval: $recurrenceInterval, ')
           ..write('recurrenceUntil: $recurrenceUntil, ')
           ..write('recurrenceCount: $recurrenceCount, ')
+          ..write('recurrenceAnchorDay: $recurrenceAnchorDay, ')
           ..write('recurrenceExcludedDates: $recurrenceExcludedDates, ')
           ..write('createdAt: $createdAt, ')
           ..write('updatedAt: $updatedAt, ')
@@ -1640,6 +1698,7 @@ typedef $$EventRecordsTableCreateCompanionBuilder =
       Value<int> recurrenceInterval,
       Value<DateTime?> recurrenceUntil,
       Value<int?> recurrenceCount,
+      Value<int?> recurrenceAnchorDay,
       Value<String> recurrenceExcludedDates,
       required DateTime createdAt,
       required DateTime updatedAt,
@@ -1673,6 +1732,7 @@ typedef $$EventRecordsTableUpdateCompanionBuilder =
       Value<int> recurrenceInterval,
       Value<DateTime?> recurrenceUntil,
       Value<int?> recurrenceCount,
+      Value<int?> recurrenceAnchorDay,
       Value<String> recurrenceExcludedDates,
       Value<DateTime> createdAt,
       Value<DateTime> updatedAt,
@@ -1783,6 +1843,11 @@ class $$EventRecordsTableFilterComposer
 
   ColumnFilters<int> get recurrenceCount => $composableBuilder(
     column: $table.recurrenceCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get recurrenceAnchorDay => $composableBuilder(
+    column: $table.recurrenceAnchorDay,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -1941,6 +2006,11 @@ class $$EventRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<int> get recurrenceAnchorDay => $composableBuilder(
+    column: $table.recurrenceAnchorDay,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get recurrenceExcludedDates => $composableBuilder(
     column: $table.recurrenceExcludedDates,
     builder: (column) => ColumnOrderings(column),
@@ -2076,6 +2146,11 @@ class $$EventRecordsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<int> get recurrenceAnchorDay => $composableBuilder(
+    column: $table.recurrenceAnchorDay,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get recurrenceExcludedDates => $composableBuilder(
     column: $table.recurrenceExcludedDates,
     builder: (column) => column,
@@ -2169,6 +2244,7 @@ class $$EventRecordsTableTableManager
                 Value<int> recurrenceInterval = const Value.absent(),
                 Value<DateTime?> recurrenceUntil = const Value.absent(),
                 Value<int?> recurrenceCount = const Value.absent(),
+                Value<int?> recurrenceAnchorDay = const Value.absent(),
                 Value<String> recurrenceExcludedDates = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<DateTime> updatedAt = const Value.absent(),
@@ -2200,6 +2276,7 @@ class $$EventRecordsTableTableManager
                 recurrenceInterval: recurrenceInterval,
                 recurrenceUntil: recurrenceUntil,
                 recurrenceCount: recurrenceCount,
+                recurrenceAnchorDay: recurrenceAnchorDay,
                 recurrenceExcludedDates: recurrenceExcludedDates,
                 createdAt: createdAt,
                 updatedAt: updatedAt,
@@ -2233,6 +2310,7 @@ class $$EventRecordsTableTableManager
                 Value<int> recurrenceInterval = const Value.absent(),
                 Value<DateTime?> recurrenceUntil = const Value.absent(),
                 Value<int?> recurrenceCount = const Value.absent(),
+                Value<int?> recurrenceAnchorDay = const Value.absent(),
                 Value<String> recurrenceExcludedDates = const Value.absent(),
                 required DateTime createdAt,
                 required DateTime updatedAt,
@@ -2264,6 +2342,7 @@ class $$EventRecordsTableTableManager
                 recurrenceInterval: recurrenceInterval,
                 recurrenceUntil: recurrenceUntil,
                 recurrenceCount: recurrenceCount,
+                recurrenceAnchorDay: recurrenceAnchorDay,
                 recurrenceExcludedDates: recurrenceExcludedDates,
                 createdAt: createdAt,
                 updatedAt: updatedAt,

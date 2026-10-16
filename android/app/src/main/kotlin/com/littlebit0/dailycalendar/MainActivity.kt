@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.app.AlertDialog
 import android.os.Build
+import android.os.CancellationSignal
 import android.os.Bundle
 import android.provider.CalendarContract
 import android.view.WindowManager
@@ -18,6 +19,7 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterFragmentActivity() {
     private var pendingCalendarOperation: (() -> Unit)? = null
     private var pendingCalendarResult: MethodChannel.Result? = null
+    private val calendarImportWorker = CalendarImportWorker()
     private val alarmBridge = DailyAlarmBridge(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,12 +64,12 @@ class MainActivity : FlutterFragmentActivity() {
             .setMethodCallHandler { call, result ->
                 when (call.method) {
                     "listCalendars" -> withCalendarPermission(result) {
-                        result.success(listSamsungCalendars())
+                        calendarImportWorker.submit(result) { signal -> listSamsungCalendars(signal) }
                     }
                     "loadEvents" -> {
                         val calendarIds = call.argument<List<String>>("calendarIds").orEmpty()
                         withCalendarPermission(result) {
-                            result.success(loadSamsungEvents(calendarIds.toSet()))
+                            calendarImportWorker.submit(result) { signal -> loadSamsungEvents(calendarIds.toSet(), signal) }
                         }
                     }
                     else -> result.notImplemented()
@@ -87,6 +89,10 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     override fun onDestroy() {
+        pendingCalendarOperation = null
+        pendingCalendarResult?.error("calendar_import_cancelled", "캘린더 가져오기가 취소됐습니다.", null)
+        pendingCalendarResult = null
+        calendarImportWorker.close()
         alarmBridge.dispose()
         DailyAndroidWidgetBridge.unregister()
         super.onDestroy()
@@ -146,7 +152,7 @@ class MainActivity : FlutterFragmentActivity() {
         }
     }
 
-    private fun listSamsungCalendars(): List<Map<String, Any?>> {
+    private fun listSamsungCalendars(signal: CancellationSignal): List<Map<String, Any?>> {
         val projection = arrayOf(
             CalendarContract.Calendars._ID,
             CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
@@ -162,6 +168,7 @@ class MainActivity : FlutterFragmentActivity() {
             null,
             null,
             CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " COLLATE NOCASE ASC",
+            signal,
         )?.use { cursor ->
             val idIndex = cursor.getColumnIndexOrThrow(CalendarContract.Calendars._ID)
             val titleIndex = cursor.getColumnIndexOrThrow(CalendarContract.Calendars.CALENDAR_DISPLAY_NAME)
@@ -170,6 +177,7 @@ class MainActivity : FlutterFragmentActivity() {
             val colorIndex = cursor.getColumnIndexOrThrow(CalendarContract.Calendars.CALENDAR_COLOR)
             val visibleIndex = cursor.getColumnIndexOrThrow(CalendarContract.Calendars.VISIBLE)
             while (cursor.moveToNext()) {
+                signal.throwIfCanceled()
                 val accountType = cursor.getString(typeIndex).orEmpty()
                 if (!isSamsungCalendar(accountType) || cursor.getInt(visibleIndex) == 0) continue
                 values += mapOf(
@@ -183,7 +191,7 @@ class MainActivity : FlutterFragmentActivity() {
         return values
     }
 
-    private fun loadSamsungEvents(calendarIds: Set<String>): List<Map<String, Any?>> {
+    private fun loadSamsungEvents(calendarIds: Set<String>, signal: CancellationSignal): List<Map<String, Any?>> {
         if (calendarIds.isEmpty()) return emptyList()
         val projection = arrayOf(
             CalendarContract.Events._ID,
@@ -208,6 +216,7 @@ class MainActivity : FlutterFragmentActivity() {
             "${CalendarContract.Events.CALENDAR_ID} IN ($placeholders) AND ${CalendarContract.Events.DELETED}=0",
             calendarIds.toTypedArray(),
             CalendarContract.Events.DTSTART + " ASC",
+            signal,
         )?.use { cursor ->
             val idIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events._ID)
             val calendarIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.CALENDAR_ID)
@@ -221,6 +230,7 @@ class MainActivity : FlutterFragmentActivity() {
             val ruleIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.RRULE)
             val urlIndex = cursor.getColumnIndexOrThrow(CalendarContract.Events.CUSTOM_APP_URI)
             while (cursor.moveToNext()) {
+                signal.throwIfCanceled()
                 val allDay = cursor.getInt(allDayIndex) == 1
                 var start = cursor.getLong(startIndex)
                 if (allDay) start = utcMidnightToLocalMidnight(start)
@@ -247,11 +257,11 @@ class MainActivity : FlutterFragmentActivity() {
                 mutableEvents[sourceId] = event
             }
         }
-        attachReminderMinutes(mutableEvents)
+        attachReminderMinutes(mutableEvents, signal)
         return values
     }
 
-    private fun attachReminderMinutes(events: Map<String, MutableMap<String, Any?>>) {
+    private fun attachReminderMinutes(events: Map<String, MutableMap<String, Any?>>, signal: CancellationSignal) {
         if (events.isEmpty()) return
         val reminders = mutableMapOf<String, MutableSet<Int>>()
         events.keys.chunked(800).forEach { eventIds ->
@@ -266,11 +276,13 @@ class MainActivity : FlutterFragmentActivity() {
                 "${CalendarContract.Reminders.EVENT_ID} IN ($placeholders)",
                 eventIds.toTypedArray(),
                 null,
+                signal,
             )?.use { cursor ->
                 val eventIndex = cursor.getColumnIndexOrThrow(CalendarContract.Reminders.EVENT_ID)
                 val minutesIndex = cursor.getColumnIndexOrThrow(CalendarContract.Reminders.MINUTES)
                 val methodIndex = cursor.getColumnIndexOrThrow(CalendarContract.Reminders.METHOD)
                 while (cursor.moveToNext()) {
+                    signal.throwIfCanceled()
                     val method = cursor.getInt(methodIndex)
                     if (method != CalendarContract.Reminders.METHOD_DEFAULT &&
                         method != CalendarContract.Reminders.METHOD_ALERT &&

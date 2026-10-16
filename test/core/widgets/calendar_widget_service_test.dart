@@ -5,6 +5,7 @@ import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/core/widgets/calendar_widget_service.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
+import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -13,6 +14,52 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test(
+    'widget action retains the tapped date and rejects legacy whole-series ambiguity',
+    () {
+      final source =
+          _event(
+            id: 'series',
+            title: 'repeat',
+            startAt: DateTime(2026, 10, 1, 9),
+          ).copyWith(
+            recurrence: const RecurrenceRule(
+              frequency: RecurrenceFrequency.daily,
+            ),
+          );
+      const key = 'series@2026-10-15T09:00:00.000';
+      final action = CalendarWidgetTodoAction.fromMap({
+        'token': 'old-tap',
+        'eventId': 'series',
+        'completed': true,
+        'occurrenceId': key,
+      })!;
+      final target = action.targetFor(source)!;
+      expect(target.occurrenceId, key);
+      expect(target.startAt, DateTime(2026, 10, 15, 9));
+      expect(target.endAt, target.startAt.add(source.duration));
+      final legacy = CalendarWidgetTodoAction.fromMap({
+        'token': 'legacy',
+        'eventId': 'series',
+        'completed': true,
+      })!;
+      expect(legacy.targetFor(source), isNull);
+      expect(
+        legacy.targetFor(source.copyWith(recurrence: const RecurrenceRule())),
+        isNotNull,
+      );
+      expect(
+        const CalendarWidgetTodoAction(
+          token: 'bad',
+          eventId: 'series',
+          completed: true,
+          occurrenceId: 'other@2026-10-15',
+        ).targetFor(source),
+        isNull,
+      );
+    },
+  );
 
   setUpAll(() => initializeDateFormatting('en'));
 

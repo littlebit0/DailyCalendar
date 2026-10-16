@@ -32,6 +32,160 @@ class SettingsRepository {
        _secureStorage = secureStorage ?? const FlutterSecureStorage(),
        _now = now ?? DateTime.now;
 
+  static const _notificationCleanupKey = 'notificationCleanup.v1';
+  String? get notificationCleanupJournal =>
+      _preferences.getString(_notificationCleanupKey);
+
+  Future<void> saveNotificationCleanupJournal(String? value) async {
+    final success = value == null
+        ? await _preferences.remove(_notificationCleanupKey)
+        : await _preferences.setString(_notificationCleanupKey, value);
+    await _preferences.reload();
+    if (!success || _preferences.getString(_notificationCleanupKey) != value) {
+      throw StateError('알림 정리 기록을 저장하지 못했습니다. 다시 시도해 주세요.');
+    }
+  }
+
+  static const _notificationIdsKey = 'notificationIds.v2';
+  static final _notificationIdTails = Expando<Future<void>>();
+
+  Set<int> retiredLegacyNotificationIds({required bool delivered}) =>
+      (_preferences.getStringList('notificationLegacyRetired.v2.$delivered') ??
+              const [])
+          .map(int.parse)
+          .toSet();
+
+  Future<void> retireLegacyNotificationIds(
+    Set<int> ids, {
+    required bool delivered,
+  }) {
+    final prior = _notificationIdTails[_preferences] ?? Future<void>.value();
+    final operation = prior.then((_) async {
+      final all = {
+        ...retiredLegacyNotificationIds(delivered: delivered),
+        ...ids,
+      };
+      final key = 'notificationLegacyRetired.v2.$delivered';
+      final encoded = all.map((id) => '$id').toList()..sort();
+      final success = await _preferences.setStringList(key, encoded);
+      await _preferences.reload();
+      if (!success ||
+          jsonEncode(_preferences.getStringList(key)) != jsonEncode(encoded)) {
+        throw StateError('기존 알림 전환 기록을 저장하지 못했습니다.');
+      }
+    });
+    _notificationIdTails[_preferences] = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return operation;
+  }
+
+  Map<String, int> _notificationIds() {
+    final raw = _preferences.getString(_notificationIdsKey);
+    final values = raw == null
+        ? <String, int>{}
+        : Map<String, int>.from(jsonDecode(raw) as Map);
+    if (values.values.any((id) => id >= 0 || id < -2147483647) ||
+        values.values.toSet().length != values.length) {
+      throw StateError('알림 식별 기록을 확인할 수 없습니다.');
+    }
+    return values;
+  }
+
+  int? existingNotificationId(String key) => _notificationIds()[key];
+
+  Future<int> notificationId(String key) {
+    final prior = _notificationIdTails[_preferences] ?? Future<void>.value();
+    final operation = prior.then((_) async {
+      final ids = _notificationIds();
+      if (ids.containsKey(key)) return ids[key]!;
+      // Old hashes are nonnegative. The negative range isolates migration and
+      // all new logical keys share this one durable allocation table.
+      final next = ids.values.fold<int>(0, (a, b) => a < b ? a : b) - 1;
+      if (next < -2147483647) throw StateError('알림 식별 공간이 부족합니다.');
+      ids[key] = next;
+      final encoded = jsonEncode(ids);
+      final success = await _preferences.setString(
+        _notificationIdsKey,
+        encoded,
+      );
+      await _preferences.reload();
+      if (!success || _preferences.getString(_notificationIdsKey) != encoded) {
+        throw StateError('알림 식별 기록을 저장하지 못했습니다.');
+      }
+      return next;
+    });
+    _notificationIdTails[_preferences] = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return operation;
+  }
+
+  static const _eventFollowUpKey = 'eventFollowUps.v1';
+  Future<void> _eventFollowUpTail = Future<void>.value();
+
+  Map<String, dynamic> pendingEventFollowUps() {
+    final raw = _preferences.getString(_eventFollowUpKey);
+    return raw == null ? {} : Map<String, dynamic>.from(jsonDecode(raw) as Map);
+  }
+
+  Future<void> _changeEventFollowUps(
+    void Function(Map<String, dynamic>) change,
+  ) {
+    final operation = _eventFollowUpTail.then((_) async {
+      final entries = pendingEventFollowUps();
+      change(entries);
+      final encoded = jsonEncode(entries);
+      final success = await _preferences.setString(_eventFollowUpKey, encoded);
+      await _preferences.reload();
+      if (!success || _preferences.getString(_eventFollowUpKey) != encoded) {
+        throw StateError('일정 후속 처리 기록을 저장하지 못했습니다.');
+      }
+    });
+    _eventFollowUpTail = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return operation;
+  }
+
+  Future<void> stageEventFollowUp(
+    String id,
+    String token,
+    List<int> reminders,
+  ) => _changeEventFollowUps((entries) {
+    final old = entries[id];
+    final previous = old is Map
+        ? (old['reminders'] as List? ?? const [])
+        : const [];
+    entries[id] = {
+      'token': token,
+      'stages': ['notification', 'alarm', 'sync', 'briefing', 'widgets'],
+      'reminders': <int>{...previous.whereType<int>(), ...reminders}.toList(),
+    };
+  });
+
+  Future<void> completeEventFollowUpStage(
+    String id,
+    String token,
+    String stage,
+  ) => _changeEventFollowUps((entries) {
+    if (entries[id] is Map && entries[id]['token'] == token) {
+      final stages = List<String>.from(entries[id]['stages'] as List);
+      stages.remove(stage);
+      entries[id]['stages'] = stages;
+    }
+  });
+
+  Future<void> acknowledgeEventFollowUp(String id, String token) =>
+      _changeEventFollowUps((entries) {
+        if (entries[id] is Map && entries[id]['token'] == token) {
+          entries.remove(id);
+        }
+      });
+
   final SharedPreferences _preferences;
   late final announcements = FeatureAnnouncementStore(_preferences);
   late final frequentPlaces = FrequentPlaces(_preferences);
@@ -148,6 +302,7 @@ class SettingsRepository {
   static const _calendarHolidayBackgroundEnabledKey =
       'calendarHolidayBackgroundEnabled';
   static const _calendarDdayOnlyKey = 'calendarDdayOnly';
+  static const _appLockConfigurationKey = 'appLockConfiguration.v1';
   static const _appLockEnabledKey = 'appLockEnabled';
   static const _appLockBiometricsEnabledKey = 'appLockBiometricsEnabled';
   static const _appLockMethodKey = 'appLockMethod';
@@ -175,6 +330,7 @@ class SettingsRepository {
 
   AppSettings load() {
     final rawProfile = _preferences.getString(_academicProfileKey);
+    final lock = _loadLockConfiguration();
     return AppSettings(
       academicProfile: rawProfile != null
           ? AcademicProfile.fromJson(
@@ -224,20 +380,44 @@ class SettingsRepository {
       calendarHolidayBackgroundEnabled:
           _preferences.getBool(_calendarHolidayBackgroundEnabledKey) ?? true,
       calendarDdayOnly: _preferences.getBool(_calendarDdayOnlyKey) ?? false,
-      appLockEnabled: _preferences.getBool(_appLockEnabledKey) ?? false,
-      appLockBiometricsEnabled:
-          _preferences.getBool(_appLockBiometricsEnabledKey) ?? false,
-      appLockMethod: AppLockMethod.fromName(
-        _preferences.getString(_appLockMethodKey),
-        legacyBiometricsEnabled:
-            _preferences.getBool(_appLockBiometricsEnabledKey) ?? false,
-      ),
+      appLockEnabled: lock.enabled,
+      appLockBiometricsEnabled: lock.biometrics,
+      appLockMethod: lock.method,
       use24HourTime: _preferences.getBool(_use24HourTimeKey) ?? true,
       themeMode: AppThemeMode.fromName(_preferences.getString(_themeModeKey)),
       monthNavigationMode: MonthNavigationMode.fromName(
         _preferences.getString(_monthNavigationModeKey),
       ),
       language: AppLanguage.fromName(_preferences.getString(_languageKey)),
+    );
+  }
+
+  ({bool enabled, bool biometrics, AppLockMethod method})
+  _loadLockConfiguration() {
+    final encoded = _preferences.getString(_appLockConfigurationKey);
+    if (encoded != null) {
+      try {
+        final value = jsonDecode(encoded) as Map<String, dynamic>;
+        final method = AppLockMethod.values.byName(value['method'] as String);
+        return (
+          enabled: value['enabled'] as bool,
+          biometrics: value['biometrics'] as bool,
+          method: method,
+        );
+      } on Object {
+        // Corrupt local lock configuration must not silently disable protection.
+        return (enabled: true, biometrics: false, method: AppLockMethod.appPin);
+      }
+    }
+    final biometrics =
+        _preferences.getBool(_appLockBiometricsEnabledKey) ?? false;
+    return (
+      enabled: _preferences.getBool(_appLockEnabledKey) ?? false,
+      biometrics: biometrics,
+      method: AppLockMethod.fromName(
+        _preferences.getString(_appLockMethodKey),
+        legacyBiometricsEnabled: biometrics,
+      ),
     );
   }
 
@@ -620,25 +800,40 @@ class SettingsRepository {
         await _preferences.remove(legacyKey);
       }
     }
-    if (baseline.appLockEnabled != settings.appLockEnabled &&
-        previous.appLockEnabled != settings.appLockEnabled) {
-      await _preferences.setBool(_appLockEnabledKey, settings.appLockEnabled);
-    }
-    if (baseline.appLockBiometricsEnabled !=
-            settings.appLockBiometricsEnabled &&
-        previous.appLockBiometricsEnabled !=
-            settings.appLockBiometricsEnabled) {
-      await _preferences.setBool(
-        _appLockBiometricsEnabledKey,
-        settings.appLockBiometricsEnabled,
-      );
-    }
-    if (baseline.appLockMethod != settings.appLockMethod &&
-        previous.appLockMethod != settings.appLockMethod) {
-      await _preferences.setString(
-        _appLockMethodKey,
-        settings.appLockMethod.name,
-      );
+    if (baseline.appLockEnabled != settings.appLockEnabled ||
+        baseline.appLockBiometricsEnabled !=
+            settings.appLockBiometricsEnabled ||
+        baseline.appLockMethod != settings.appLockMethod) {
+      final encoded = jsonEncode({
+        'enabled': baseline.appLockEnabled != settings.appLockEnabled
+            ? settings.appLockEnabled
+            : previous.appLockEnabled,
+        'biometrics':
+            baseline.appLockBiometricsEnabled !=
+                settings.appLockBiometricsEnabled
+            ? settings.appLockBiometricsEnabled
+            : previous.appLockBiometricsEnabled,
+        'method':
+            (baseline.appLockMethod != settings.appLockMethod
+                    ? settings.appLockMethod
+                    : previous.appLockMethod)
+                .name,
+      });
+      try {
+        final saved = await _preferences.setString(
+          _appLockConfigurationKey,
+          encoded,
+        );
+        // The plugin updates its cache even when its platform write fails.
+        await _preferences.reload();
+        if (!saved ||
+            _preferences.getString(_appLockConfigurationKey) != encoded) {
+          throw StateError('App lock configuration was not persisted');
+        }
+      } on Object {
+        await _preferences.reload();
+        rethrow;
+      }
     }
     if (baseline.use24HourTime != settings.use24HourTime &&
         previous.use24HourTime != settings.use24HourTime) {
@@ -1132,6 +1327,7 @@ class SettingsRepository {
     await _preferences.remove(_appLockEnabledKey);
     await _preferences.remove(_appLockBiometricsEnabledKey);
     await _preferences.remove(_appLockMethodKey);
+    await _preferences.remove(_appLockConfigurationKey);
     await _preferences.remove(_use24HourTimeKey);
     await _preferences.remove(_themeModeKey);
     await _preferences.remove(_monthNavigationModeKey);

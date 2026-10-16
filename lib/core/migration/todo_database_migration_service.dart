@@ -67,6 +67,7 @@ class TodoDatabaseMigrationService {
     required Future<List<CalendarEvent>?> Function() loadRemoteEvents,
     required Future<void> Function() backupMigratedEvents,
     List<EventDeletion> Function()? remoteDeletionRecords,
+    @visibleForTesting this.beforeCommit,
   }) : _databaseFile = databaseFile,
        _hasLinkedGoogleAccount = hasLinkedGoogleAccount,
        _loadRemoteEvents = loadRemoteEvents,
@@ -86,10 +87,12 @@ class TodoDatabaseMigrationService {
   Future<TodoMigrationResult> migrateIfNeeded() async {
     File? workingFile;
     String? snapshotPath;
+    Database? lockedOriginal;
     var stage = TodoMigrationStage.checking;
     try {
       _report(stage, '업데이트 확인 중');
       final databaseFile = await _databaseFile();
+      await _recoverInterruptedReplacement(databaseFile);
       if (!await databaseFile.exists()) {
         return const TodoMigrationResult(migrated: false, backupPending: false);
       }
@@ -108,7 +111,7 @@ class TodoDatabaseMigrationService {
       }
       final original = sqlite3.open(databaseFile.path);
       late final int originalVersion;
-      late final Map<String, CalendarEvent> localStates;
+      late Map<String, CalendarEvent> localStates;
       try {
         originalVersion = _userVersion(original);
         if (originalVersion > AppDatabase.currentSchemaVersion) {
@@ -139,7 +142,7 @@ class TodoDatabaseMigrationService {
       // deletions. Schema 9 only adds nullable LMS metadata: it must not repeat
       // the old cloud migration or turn every unchanged event into an upload.
       final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion == 9;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 10;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
@@ -155,16 +158,24 @@ class TodoDatabaseMigrationService {
           );
         }
       }
-      final remoteWinners = _remoteWinners(
-        localStates,
-        remoteEvents ?? const <CalendarEvent>[],
-      );
+
       final deletions =
           requiresLegacyCloudMigration && _hasLinkedGoogleAccount()
           ? _remoteDeletionRecords()
           : const <EventDeletion>[];
       final removedIds = <String>{};
 
+      // Reserve the original SQLite writer slot only after network work.
+      // Keep its inode and WAL in place so independent writers cannot commit
+      // to an unlinked old file. Readers can continue; writers retry or fail busy.
+      lockedOriginal = sqlite3.open(databaseFile.path);
+      lockedOriginal.execute('PRAGMA busy_timeout = 1000');
+      lockedOriginal.execute('BEGIN IMMEDIATE');
+      localStates = _readLocalStates(lockedOriginal);
+      final remoteWinners = _remoteWinners(
+        localStates,
+        remoteEvents ?? const <CalendarEvent>[],
+      );
       stage = TodoMigrationStage.snapshotting;
       _report(stage, '안전 스냅샷을 만들고 있습니다.');
       final migrationDirectory = Directory(
@@ -199,7 +210,7 @@ class TodoDatabaseMigrationService {
             .customSelect('SELECT 1 FROM event_records LIMIT 1')
             .get();
         await driftWorking.repairCurrentEventSchema(
-          rebuild: originalVersion == AppDatabase.currentSchemaVersion,
+          rebuild: originalVersion >= 9,
         );
       } finally {
         await driftWorking.close();
@@ -278,8 +289,11 @@ class TodoDatabaseMigrationService {
         working.close();
       }
 
-      await _replaceDatabaseAtomically(databaseFile, workingFile);
-      workingFile = null;
+      _publishMigratedDatabase(lockedOriginal, workingFile);
+      beforeCommit?.call();
+      lockedOriginal.execute('COMMIT');
+      lockedOriginal.close();
+      lockedOriginal = null;
 
       var backupPending = false;
       if (requiresLegacyCloudMigration && _hasLinkedGoogleAccount()) {
@@ -311,6 +325,13 @@ class TodoDatabaseMigrationService {
         snapshotPath: snapshotPath,
       );
     } finally {
+      if (lockedOriginal != null) {
+        try {
+          if (!lockedOriginal.autocommit) lockedOriginal.execute('ROLLBACK');
+        } finally {
+          lockedOriginal.close();
+        }
+      }
       if (workingFile != null && await workingFile.exists()) {
         await workingFile.delete();
       }
@@ -402,6 +423,7 @@ class TodoDatabaseMigrationService {
     recurrenceInterval: row['recurrence_interval'] as int? ?? 1,
     recurrenceUntil: _dateFromSql(row['recurrence_until']),
     recurrenceCount: row['recurrence_count'] as int?,
+    recurrenceAnchorDay: row['recurrence_anchor_day'] as int?,
     recurrenceExcludedDates:
         row['recurrence_excluded_dates'] as String? ?? '[]',
     createdAt: _dateFromSql(row['created_at'])!,
@@ -563,34 +585,73 @@ class TodoDatabaseMigrationService {
     }
   }
 
-  Future<void> _replaceDatabaseAtomically(
-    File databaseFile,
-    File workingFile,
-  ) async {
-    final replacedFile = File('${databaseFile.path}.before-todo-replace');
-    if (await replacedFile.exists()) {
-      await replacedFile.delete();
-    }
-    await _removeSidecar(databaseFile.path, '-wal');
-    await _removeSidecar(databaseFile.path, '-shm');
-    await databaseFile.rename(replacedFile.path);
-    try {
-      await workingFile.rename(databaseFile.path);
-      await replacedFile.delete();
-    } on Object {
-      if (await databaseFile.exists()) {
-        await databaseFile.delete();
+  final void Function()? beforeCommit;
+
+  Future<void> _recoverInterruptedReplacement(File databaseFile) async {
+    final previous = File('${databaseFile.path}.before-todo-replace');
+    if (!await previous.exists()) {
+      if (!await databaseFile.exists() &&
+          await File('${databaseFile.path}.todo-migration').exists()) {
+        throw const TodoMigrationException(
+          stage: TodoMigrationStage.checking,
+          message: '중단된 데이터 업데이트의 복구 확인이 필요합니다. 기존 파일은 보존했습니다.',
+        );
       }
-      await replacedFile.rename(databaseFile.path);
-      rethrow;
+      return;
     }
+    // Legacy replacements had no durable commit marker. If both candidates
+    // exist, never guess which user's changes are newer or delete either one.
+    if (await databaseFile.exists() ||
+        await File('${databaseFile.path}-wal').exists() ||
+        await File('${databaseFile.path}-shm').exists() ||
+        await File('${databaseFile.path}-journal').exists() ||
+        await File('${previous.path}-wal').exists() ||
+        await File('${previous.path}-journal').exists()) {
+      throw const TodoMigrationException(
+        stage: TodoMigrationStage.checking,
+        message: '중단된 데이터 업데이트의 복구 확인이 필요합니다. 기존 파일은 보존했습니다.',
+      );
+    }
+    final candidate = sqlite3.open(previous.path, mode: OpenMode.readOnly);
+    try {
+      if (!_hasEventTable(candidate) ||
+          _userVersion(candidate) > AppDatabase.currentSchemaVersion ||
+          candidate.select('PRAGMA integrity_check').single.values.single !=
+              'ok') {
+        throw StateError('Interrupted database is not a valid recovery source');
+      }
+      _readLocalStates(candidate); // Validate readable original event records.
+    } finally {
+      candidate.close();
+    }
+    await previous.rename(databaseFile.path);
   }
 
-  Future<void> _removeSidecar(String databasePath, String suffix) async {
-    final sidecar = File('$databasePath$suffix');
-    if (await sidecar.exists()) {
-      await sidecar.delete();
+  void _publishMigratedDatabase(Database original, File workingFile) {
+    // All DDL, rows, indexes and user_version commit together on the ORIGINAL
+    // connection. SQLite rollback/WAL recovery handles interruption at any step.
+    original.execute('ATTACH DATABASE ? AS migrated', [workingFile.path]);
+    for (final table in ['event_records', 'sync_event_deletions']) {
+      final definitions = original.select(
+        "SELECT type, sql FROM migrated.sqlite_master WHERE tbl_name = ? "
+        "AND sql IS NOT NULL ORDER BY CASE type WHEN 'table' THEN 0 ELSE 1 END",
+        [table],
+      );
+      final tableSql =
+          definitions.singleWhere((row) => row['type'] == 'table')['sql']
+              as String;
+      original.execute('DROP TABLE IF EXISTS main.$table');
+      original.execute(tableSql);
+      original.execute('INSERT INTO main.$table SELECT * FROM migrated.$table');
+      for (final definition in definitions.where(
+        (row) => row['type'] != 'table',
+      )) {
+        original.execute(definition['sql'] as String);
+      }
     }
+    original.execute(
+      'PRAGMA main.user_version = ${AppDatabase.currentSchemaVersion}',
+    );
   }
 
   int _dateToSql(DateTime value) => value.millisecondsSinceEpoch ~/ 1000;

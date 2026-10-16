@@ -34,3 +34,27 @@ class UnsupportedAlarmService implements AlarmService {
   @override
   Future<void> cancelAllEventAlarms() async {}
 }
+
+/// Startup reconciliation preserves a native snooze/ringing state when the
+/// saved source has not changed. Explicit user mutations still cancel normally.
+abstract interface class ReconciliableAlarmService {
+  Future<void> reconcileEventAlarm(CalendarEvent event);
+}
+
+Future<void> reconcileEventAlarm(
+  AlarmService service,
+  CalendarEvent event,
+) async {
+  if (!event.alarmEnabled ||
+      event.completed ||
+      event.isDeleted ||
+      event.isRecurring ||
+      event.readOnly ||
+      event.systemEvent) {
+    await service.cancelEventAlarm(event.id);
+  } else if (service is ReconciliableAlarmService) {
+    await (service as ReconciliableAlarmService).reconcileEventAlarm(event);
+  } else {
+    await service.scheduleEventAlarm(event);
+  }
+}

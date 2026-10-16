@@ -3,18 +3,59 @@ import 'dart:convert';
 import 'package:daily/core/analytics/privacy_analytics_service.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setUp(() => FlutterSecureStorage.setMockInitialValues({}));
 
   const environment = AnalyticsEnvironment(
     appVersion: '3.1.0',
     platform: 'ios',
     osMajor: 26,
   );
+
+  for (final packageName in [
+    'com.littlebit0.daily',
+    'com.littlebit0.daily.test',
+  ]) {
+    test('analytics labels the actual version for $packageName', () async {
+      PackageInfo.setMockInitialValues(
+        appName: 'Daily',
+        packageName: packageName,
+        version: '4.1.2',
+        buildNumber: '42',
+        buildSignature: '',
+      );
+      SharedPreferences.setMockInitialValues({
+        'anonymousAnalyticsEnabled': true,
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final batches = <Map<String, dynamic>>[];
+      final service = PrivacyAnalyticsService(
+        preferences: preferences,
+        endpoint: Uri.parse('https://analytics.example.com/v1/events'),
+        httpClient: MockClient((request) async {
+          batches.add(jsonDecode(request.body) as Map<String, dynamic>);
+          return http.Response('{}', 202);
+        }),
+      );
+      addTearDown(service.dispose);
+      await service.initialize();
+      await service.record(AnalyticsRecord.appLoad(durationMs: 25));
+      await service.flush();
+      expect(batches, hasLength(1));
+      expect(
+        (batches.single['environment'] as Map)['appVersion'],
+        packageName.endsWith('.test') ? '4.1.2-test' : '4.1.2',
+      );
+      expect(isSafeAnalyticsBatch(batches.single), isTrue);
+    });
+  }
 
   test('analytics is opt-in and records nothing before consent', () async {
     SharedPreferences.setMockInitialValues({});

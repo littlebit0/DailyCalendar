@@ -30,6 +30,18 @@ class _Bundle extends CachingAssetBundle {
 }
 
 void main() {
+  test('worker propagates malformed JSON and organization mismatch', () async {
+    for (final malformed in [true, false]) {
+      await expectLater(
+        UniversityCatalog.load(
+          bundle: _InvalidBundle(malformed),
+          university: 'smu',
+        ),
+        throwsFormatException,
+      );
+    }
+  });
+
   test(
     'one school loads independently from unrelated missing or corrupt data',
     () async {
@@ -54,4 +66,20 @@ void main() {
       expect(bundle.loaded, ['assets/timetable/catalog.json']);
     },
   );
+}
+
+class _InvalidBundle extends CachingAssetBundle {
+  _InvalidBundle(this.malformed);
+  final bool malformed;
+  @override
+  Future<ByteData> load(String key) async {
+    final text = key.endsWith('catalog.json')
+        ? '["assets/timetable/smu-seoul-2026-2.json"]'
+        : key.contains('/organizations/')
+        ? '{"schemaVersion":1,"university":"other","mappings":[],"courseOwners":[]}'
+        : malformed
+        ? '{invalid'
+        : '{"universityId":"smu"}';
+    return ByteData.sublistView(Uint8List.fromList(utf8.encode(text)));
+  }
 }

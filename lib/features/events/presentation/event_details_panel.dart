@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/analytics/product_analytics.dart';
 import '../../../core/calendar/calendar_event_movement.dart';
+import '../../../core/calendar/recurring_event_edit.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/maps/map_launcher.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -21,7 +22,6 @@ import '../../calendar/widgets/calendar_event_drag_layer.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
-import '../domain/recurrence_rule.dart';
 import 'event_editor_dialog.dart';
 import 'lms_event_status.dart';
 import 'event_completion_action.dart';
@@ -425,23 +425,21 @@ class EventDetailsPanel extends ConsumerWidget {
       return;
     }
 
-    final base =
-        await ref.read(visibleEventRepositoryProvider).findById(event.id) ??
-        event;
-    switch (scope) {
-      case _RecurringChangeScope.onlyThis:
-        await commandService.save(_excludeOccurrence(base, event.startAt));
-        await commandService.create(
-          draft.copyWith(recurrence: const RecurrenceRule()),
-        );
-      case _RecurringChangeScope.future:
-        await commandService.save(_endBefore(base, event.startAt));
-        await commandService.create(draft);
-      case _RecurringChangeScope.all:
-        await commandService.save(
-          _applyDraft(base, draft),
-          preserveCategory: !draft.categoryChanged,
-        );
+    final result = await commandService.editRecurringOccurrence(
+      occurrence: event,
+      draft: draft,
+      scope: switch (scope) {
+        _RecurringChangeScope.onlyThis => RecurringEditScope.onlyThis,
+        _RecurringChangeScope.future => RecurringEditScope.future,
+        _RecurringChangeScope.all => RecurringEditScope.all,
+      },
+    );
+    if (result.followUpFailed && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(context.tr('일정은 저장했습니다. 알림 또는 동기화 처리를 다시 시도해 주세요.')),
+        ),
+      );
     }
   }
 
@@ -505,31 +503,8 @@ class EventDetailsPanel extends ConsumerWidget {
     }
   }
 
-  CalendarEvent _applyDraft(CalendarEvent event, EventDraft draft) {
-    return event.copyWith(
-      title: draft.title,
-      memo: draft.memo,
-      location: draft.location,
-      url: draft.url,
-      weather: draft.weather,
-      startAt: draft.startAt,
-      endAt: draft.endAt,
-      allDay: draft.allDay,
-      category: draft.category,
-      colorValue: draft.colorValue ?? draft.category.colorValue,
-      reminderMinutesBeforeList: draft.reminderMinutesBeforeList,
-      recurrence: draft.recurrence,
-      showDday: draft.showDday,
-      alarmEnabled: draft.alarmEnabled,
-      allDayAlarmMinutes: draft.allDayAlarmMinutes,
-      holiday: draft.category.id == EventCategory.holiday.id,
-      clearMemo: draft.memo == null,
-      clearLocation: draft.location == null,
-      clearUrl: draft.url == null,
-      clearWeather: draft.weather == null,
-      clearReminder: draft.reminderMinutesBeforeList.isEmpty,
-    );
-  }
+  CalendarEvent _applyDraft(CalendarEvent event, EventDraft draft) =>
+      draft.applyTo(event);
 
   CalendarEvent _excludeOccurrence(CalendarEvent base, DateTime occurrence) {
     final occurrenceDay = DateTime(

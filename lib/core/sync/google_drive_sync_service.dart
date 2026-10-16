@@ -2015,6 +2015,7 @@ class GoogleDriveSyncService implements SyncService {
           .map(_dateOnlyToJson)
           .toList(),
       'recurrenceCount': normalized.recurrence.count,
+      'recurrenceAnchorDay': normalized.recurrence.anchorDay,
       'recurrenceExcludedDates': normalized.recurrence.excludedDates
           .map((date) => DateTime(date.year, date.month, date.day))
           .map((date) => date.toUtc().toIso8601String())
@@ -2078,6 +2079,7 @@ class GoogleDriveSyncService implements SyncService {
             ? _readAllDayDate(json['recurrenceUntilDate'])
             : _readDate(json['recurrenceUntil']),
         count: json['recurrenceCount'] as int?,
+        anchorDay: json['recurrenceAnchorDay'] as int?,
         excludedDates: json['recurrenceExcludedDatesOnly'] is List
             ? (json['recurrenceExcludedDatesOnly'] as List)
                   .map(_readAllDayDate)

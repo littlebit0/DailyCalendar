@@ -45,6 +45,7 @@ extension EventRecordMapper on EventRecord {
         interval: recurrenceInterval,
         until: recurrenceUntil,
         count: recurrenceCount,
+        anchorDay: recurrenceAnchorDay,
         excludedDates: _excludedDatesFromJson(recurrenceExcludedDates),
       ),
       createdAt: createdAt,

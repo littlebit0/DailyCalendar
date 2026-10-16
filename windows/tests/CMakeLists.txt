@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.14)
+project(daily_widget_tests LANGUAGES CXX)
+enable_testing()
+add_executable(widget_action_codec_test widget_action_codec_test.cpp)
+target_compile_features(widget_action_codec_test PRIVATE cxx_std_17)
+add_test(NAME widget_action_codec COMMAND widget_action_codec_test)

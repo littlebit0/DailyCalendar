@@ -147,6 +147,12 @@ class LocalNotificationService implements NotificationService {
   Future<void> scheduleEventReminder(
     CalendarEvent event, {
     bool allowImmediate = false,
+  }) => _scheduleEventReminder(event, allowImmediate: allowImmediate);
+
+  Future<void> _scheduleEventReminder(
+    CalendarEvent event, {
+    bool allowImmediate = false,
+    bool retireLegacy = true,
   }) async {
     await initialize();
     if (event.deletedAt != null ||
@@ -163,9 +169,6 @@ class LocalNotificationService implements NotificationService {
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
     for (final reminderMinutes in reminderMinutesList) {
-      if (event.alarmEnabled && reminderMinutes == 0) {
-        continue;
-      }
       final reminderAt = base.subtract(Duration(minutes: reminderMinutes));
       final plan = resolveReminderDeliveryPlan(
         reminderAt: reminderAt,
@@ -182,7 +185,9 @@ class LocalNotificationService implements NotificationService {
         deliveredImmediateReminder = true;
       }
       await _deliverPlan(
-        id: _eventNotificationId(event.id, reminderMinutes),
+        id: await _settingsRepository.notificationId(
+          '${event.id}:reminder:$reminderMinutes',
+        ),
         title: title,
         body: reminderMinutes == 0 || plan.deliverAt == base
             ? l10n.text('일정이 시작됩니다.')
@@ -195,10 +200,8 @@ class LocalNotificationService implements NotificationService {
       );
     }
 
-    if (!event.showDday) {
-      return;
-    }
-    for (final offset in settings.dDayReminderOffsets.toSet()) {
+    for (final offset
+        in event.showDday ? settings.dDayReminderOffsets.toSet() : <int>{}) {
       final scheduled = DateTime(
         event.startAt.year,
         event.startAt.month,
@@ -207,7 +210,9 @@ class LocalNotificationService implements NotificationService {
         settings.allDayReminderMinute,
       ).add(Duration(days: offset));
       await _deliverPlan(
-        id: _eventDdayNotificationId(event.id, offset),
+        id: await _settingsRepository.notificationId(
+          '${event.id}:dday:$offset',
+        ),
         title: '${_ddayLabel(offset)} $title',
         body: l10n.text('D-day 일정 알림입니다.'),
         plan: scheduled.isAfter(DateTime.now())
@@ -216,42 +221,165 @@ class LocalNotificationService implements NotificationService {
         payload: '${event.id}:dday:$offset',
       );
     }
+    if (retireLegacy) {
+      await _retireLegacy(
+        _legacyIds(event.id, reminderMinutesList),
+        exceptEventId: event.id,
+      );
+    }
+  }
+
+  Future<void> confirmAlarmScheduled(CalendarEvent event) async {
+    if (!event.reminderMinutesBeforeList.contains(0)) return;
+    final alarmAt = event.allDay
+        ? DateTime(
+            event.startAt.year,
+            event.startAt.month,
+            event.startAt.day,
+            event.allDayAlarmMinutes ~/ 60,
+            event.allDayAlarmMinutes % 60,
+          )
+        : event.startAt;
+    // An all-day alarm at a different clock time does not replace the user's
+    // normal all-day reminder. Suppress only the exact confirmed replacement.
+    if (alarmAt != _baseReminderTime(event, _settingsRepository.load())) return;
+    final id = _settingsRepository.existingNotificationId(
+      '${event.id}:reminder:0',
+    );
+    if (id != null) await _cancelPendingNotification(id);
+  }
+
+  Set<int> _legacyIds(
+    String eventId,
+    List<int> reminders, {
+    List<int> dday = const [],
+  }) => {
+    _legacyEventNotificationId(eventId),
+    for (final minutes in {
+      ..._commonReminderMinutes,
+      ..._settingsRepository.load().defaultReminderMinutesList,
+      ...reminders,
+    })
+      _eventNotificationId(eventId, minutes),
+    for (final offset in {
+      ..._commonDdayOffsets,
+      ..._settingsRepository.load().dDayReminderOffsets,
+      ...dday,
+    })
+      _eventDdayNotificationId(eventId, offset),
+  };
+
+  Future<void> _retireLegacy(
+    Set<int> ids, {
+    String? exceptEventId,
+    bool includeDelivered = false,
+  }) async {
+    ids = ids.difference(
+      _settingsRepository.retiredLegacyNotificationIds(
+        delivered: includeDelivered,
+      ),
+    );
+    if (ids.isEmpty) return;
+    // An old integer may belong to a different event. Reestablish every known
+    // colliding owner's requests under unique IDs before removing that integer.
+    for (final other
+        in includeDelivered
+            ? <CalendarEvent>[]
+            : await _eventRepository.allEventsForSync()) {
+      if (other.id == exceptEventId || other.isDeleted || other.completed) {
+        continue;
+      }
+      if (_legacyIds(
+        other.id,
+        other.reminderMinutesBeforeList,
+      ).intersection(ids).isNotEmpty) {
+        await _scheduleEventReminder(other, retireLegacy: false);
+      }
+    }
+    final settings = _settingsRepository.load();
+    final briefingIds = {
+      _briefingId,
+      for (var i = 0; i < _briefingScheduleDays; i++)
+        _morningBriefingNotificationId(i),
+    };
+    if (!includeDelivered &&
+        exceptEventId != null &&
+        settings.morningBriefingEnabled &&
+        ids.intersection(briefingIds).isNotEmpty) {
+      await _scheduleMorningBriefing(
+        hour: settings.morningBriefingHour,
+        minute: settings.morningBriefingMinute,
+        retireLegacy: false,
+      );
+    }
+    for (final id in ids) {
+      if (includeDelivered) {
+        await _cancelNotification(id);
+      } else {
+        await _cancelPendingNotification(id);
+      }
+    }
+    await _settingsRepository.retireLegacyNotificationIds(
+      ids,
+      delivered: includeDelivered,
+    );
   }
 
   @override
   Future<void> cancelEventReminder(
     String eventId, {
     List<int> reminderMinutesBeforeList = const [],
+    List<int> dDayOffsets = const [],
+    bool includeDelivered = false,
   }) async {
     await initialize();
-    await _cancelPendingNotification(_legacyEventNotificationId(eventId));
-    final reminderMinutes = {
+    final cancel = includeDelivered
+        ? _cancelNotification
+        : _cancelPendingNotification;
+    for (final minutes in {
       ..._commonReminderMinutes,
       ..._settingsRepository.load().defaultReminderMinutesList,
       ...reminderMinutesBeforeList,
-    };
-    for (final minutes in reminderMinutes) {
-      await _cancelPendingNotification(_eventNotificationId(eventId, minutes));
+    }) {
+      final id = _settingsRepository.existingNotificationId(
+        '$eventId:reminder:$minutes',
+      );
+      if (id != null) await cancel(id);
     }
-    final offsets = {
+    for (final offset in {
       ..._commonDdayOffsets,
       ..._settingsRepository.load().dDayReminderOffsets,
-    };
-    for (final offset in offsets) {
-      await _cancelPendingNotification(
-        _eventDdayNotificationId(eventId, offset),
+      ...dDayOffsets,
+    }) {
+      final id = _settingsRepository.existingNotificationId(
+        '$eventId:dday:$offset',
       );
+      if (id != null) await cancel(id);
     }
+    await _retireLegacy(
+      _legacyIds(eventId, reminderMinutesBeforeList, dday: dDayOffsets),
+      exceptEventId: eventId,
+      includeDelivered: includeDelivered,
+    );
   }
 
   @override
   Future<void> scheduleMorningBriefing({
     required int hour,
     required int minute,
+  }) => _scheduleMorningBriefing(hour: hour, minute: minute);
+
+  Future<void> _scheduleMorningBriefing({
+    required int hour,
+    required int minute,
+    bool retireLegacy = true,
   }) async {
     await initialize();
     final l10n = _localizations(_settingsRepository.load());
-    await cancelMorningBriefing();
+    for (var index = 0; index < _briefingScheduleDays; index++) {
+      final id = _settingsRepository.existingNotificationId('briefing:$index');
+      if (id != null) await _cancelPendingNotification(id);
+    }
     final now = DateTime.now();
     var scheduled = DateTime(now.year, now.month, now.day, hour, minute);
     if (!scheduled.isAfter(now)) {
@@ -261,24 +389,39 @@ class LocalNotificationService implements NotificationService {
     for (var dayOffset = 0; dayOffset < _briefingScheduleDays; dayOffset++) {
       final briefingAt = scheduled.add(Duration(days: dayOffset));
       await _scheduleNotification(
-        id: _morningBriefingNotificationId(dayOffset),
+        id: await _settingsRepository.notificationId('briefing:$dayOffset'),
         title: l10n.text('오늘의 일정'),
         body: await _morningBriefingBody(briefingAt),
         scheduled: briefingAt,
         payload: 'morning_briefing',
       );
     }
+    if (retireLegacy) {
+      await _retireLegacy({
+        _briefingId,
+        for (var index = 0; index < _briefingScheduleDays; index++)
+          _morningBriefingNotificationId(index),
+      });
+    }
   }
 
   @override
-  Future<void> cancelMorningBriefing() async {
+  Future<void> cancelMorningBriefing({bool includeDelivered = false}) async {
     await initialize();
-    await _cancelPendingNotification(_briefingId);
+    final cancel = includeDelivered
+        ? _cancelNotification
+        : _cancelPendingNotification;
     for (var dayOffset = 0; dayOffset < _briefingScheduleDays; dayOffset++) {
-      await _cancelPendingNotification(
-        _morningBriefingNotificationId(dayOffset),
+      final id = _settingsRepository.existingNotificationId(
+        'briefing:$dayOffset',
       );
+      if (id != null) await cancel(id);
     }
+    await _retireLegacy({
+      _briefingId,
+      for (var index = 0; index < _briefingScheduleDays; index++)
+        _morningBriefingNotificationId(index),
+    }, includeDelivered: includeDelivered);
   }
 
   Future<String> _morningBriefingBody(DateTime briefingDate) async {

@@ -155,7 +155,8 @@ class _AppLocalizationsDelegate
 const Map<String, Map<String, String>> _translations = {
   'en': {
     '앱을 시작하지 못했습니다': 'Could not start the app',
-    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.': 'Could not load saved settings or prepare the app. Existing settings and events have not been reset. Contact support if the problem persists.',
+    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.':
+        'Could not load saved settings or prepare the app. Existing settings and events have not been reset. Contact support if the problem persists.',
     "학교 서버에 연결하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.":
         "Could not connect to the school server. Check your network and try again.",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.":
@@ -624,6 +625,14 @@ const Map<String, Map<String, String>> _translations = {
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         'Collect screen and feature usage, error categories, and performance only, without event content, searches, or account information.',
     '분석 데이터 삭제': 'Delete analytics data',
+    '분석 동의 설정을 저장하지 못했습니다. 다시 시도해 주세요.':
+        'Could not save analytics consent. Please try again.',
+    '현재 분석 수집은 중단했습니다. 저장에 실패했으니 앱 종료 전에 다시 시도해 주세요.':
+        'Analytics collection is stopped for now. Saving failed; retry before closing the app.',
+    '전송 대기 분석 데이터를 삭제하지 못했습니다. 다시 시도해 주세요.':
+        'Could not delete queued analytics data. Please try again.',
+    '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
+        'Some old notifications could not be cleared. Cleanup will retry on the next launch. New reminders are paused until cleanup finishes.',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.':
         'Delete anonymous analytics waiting to be sent from this device.',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
@@ -734,6 +743,7 @@ const Map<String, Map<String, String>> _translations = {
     'D-day 알림': 'D-day reminders',
     'Daily 계정': 'Daily Account',
     'Daily 버전': 'Daily Version',
+    'Daily 테스트 버전': 'Daily Test Version',
     'Google Drive 동기화': 'Google Drive Sync',
     'Google Drive에서 복원': 'Restore from Google Drive',
     'Google 계정': 'Google Account',
@@ -1121,7 +1131,8 @@ const Map<String, Map<String, String>> _translations = {
   },
   'ja': {
     '앱을 시작하지 못했습니다': 'アプリを起動できませんでした',
-    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.': '保存した設定の読み込み、またはアプリの準備に失敗しました。既存の設定や予定は初期化していません。問題が続く場合はサポートにお問い合わせください。',
+    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.':
+        '保存した設定の読み込み、またはアプリの準備に失敗しました。既存の設定や予定は初期化していません。問題が続く場合はサポートにお問い合わせください。',
     "학교 서버에 연결하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.":
         "学校サーバーに接続できません。ネットワークを確認して再試行してください。",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.":
@@ -1543,6 +1554,13 @@ const Map<String, Map<String, String>> _translations = {
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         '予定内容、検索語、アカウント情報を含めず、画面・機能の利用、エラー分類、性能情報のみを収集します。',
     '분석 데이터 삭제': '分析データを削除',
+    '분석 동의 설정을 저장하지 못했습니다. 다시 시도해 주세요.': '分析への同意を保存できませんでした。もう一度お試しください。',
+    '현재 분석 수집은 중단했습니다. 저장에 실패했으니 앱 종료 전에 다시 시도해 주세요.':
+        '現在の分析収集は停止しました。保存に失敗したため、アプリを終了する前に再試行してください。',
+    '전송 대기 분석 데이터를 삭제하지 못했습니다. 다시 시도해 주세요.':
+        '送信待ちの分析データを削除できませんでした。もう一度お試しください。',
+    '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
+        '一部の以前の通知を削除できませんでした。次回起動時に再試行します。削除完了まで新しい通知の予約は保留されます。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.': 'このデバイスで送信待ちの匿名分析データを削除します。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
         'このデバイスで送信待ちの匿名分析データを削除しますか？送信済みデータはアカウントやデバイスに結び付けず集計されるため、特定ユーザーの識別や復元はできません。',
@@ -1634,6 +1652,7 @@ const Map<String, Map<String, String>> _translations = {
     'D-day 알림': 'D-day通知',
     'Daily 계정': 'Dailyアカウント',
     'Daily 버전': 'Dailyバージョン',
+    'Daily 테스트 버전': 'Dailyテストバージョン',
     'Google Drive 동기화': 'Google Drive同期',
     'Google Drive에서 복원': 'Google Driveから復元',
     'Google 계정': 'Googleアカウント',
@@ -1998,7 +2017,8 @@ const Map<String, Map<String, String>> _translations = {
   },
   'zh_Hant': {
     '앱을 시작하지 못했습니다': '無法啟動應用程式',
-    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.': '無法載入儲存的設定或準備應用程式。既有設定與行程並未重設。若問題持續，請聯絡支援。',
+    '저장된 설정을 불러오거나 앱을 준비하지 못했습니다. 기존 설정과 일정은 초기화하지 않았습니다. 문제가 계속되면 지원을 요청해 주세요.':
+        '無法載入儲存的設定或準備應用程式。既有設定與行程並未重設。若問題持續，請聯絡支援。',
     "학교 서버에 연결하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.": "無法連線學校伺服器。請檢查網路後重試。",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.": "學校登入驗證逾時。請稍後重試。",
     "학교에서 추가 인증 또는 보안문자 입력을 요구합니다. 수동 로그인으로 인증을 완료해 주세요.":
@@ -2403,6 +2423,12 @@ const Map<String, Map<String, String>> _translations = {
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         '僅收集畫面與功能使用、錯誤分類及效能資訊，不包含行程內容、搜尋詞或帳號資訊。',
     '분석 데이터 삭제': '刪除分析資料',
+    '분석 동의 설정을 저장하지 못했습니다. 다시 시도해 주세요.': '無法儲存分析同意設定。請再試一次。',
+    '현재 분석 수집은 중단했습니다. 저장에 실패했으니 앱 종료 전에 다시 시도해 주세요.':
+        '目前已停止分析收集。儲存失敗，請在關閉應用程式前重試。',
+    '전송 대기 분석 데이터를 삭제하지 못했습니다. 다시 시도해 주세요.': '無法刪除待傳送的分析資料。請再試一次。',
+    '일부 이전 알림을 정리하지 못했습니다. 다음 실행에서 다시 시도합니다. 정리 전까지 새 알림 예약이 보류됩니다.':
+        '部分舊通知無法清除，將於下次啟動時重試。清除完成前暫停排程新提醒。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제합니다.': '刪除此裝置上等待傳送的匿名分析資料。',
     '이 기기에 전송 대기 중인 익명 분석 데이터를 삭제할까요? 이미 전송되어 집계된 데이터는 계정이나 기기와 연결되지 않아 특정 사용자를 식별하거나 되돌릴 수 없습니다.':
         '要刪除此裝置上等待傳送的匿名分析資料嗎？已傳送的資料不會連結帳號或裝置，且只會彙總，因此無法識別或還原特定使用者的資料。',
@@ -2494,6 +2520,7 @@ const Map<String, Map<String, String>> _translations = {
     'D-day 알림': 'D-day 提醒',
     'Daily 계정': 'Daily 帳號',
     'Daily 버전': 'Daily 版本',
+    'Daily 테스트 버전': 'Daily 測試版本',
     'Google Drive 동기화': 'Google Drive 同步',
     'Google Drive에서 복원': '從 Google Drive 還原',
     'Google 계정': 'Google 帳號',

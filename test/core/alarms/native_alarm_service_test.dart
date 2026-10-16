@@ -1,3 +1,4 @@
+import 'package:daily/core/alarms/alarm_service.dart';
 import 'package:daily/core/alarms/native_alarm_service.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
@@ -16,6 +17,81 @@ void main() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, null);
   });
+
+  test(
+    'startup reconciliation reaches native state for past source without cancel',
+    () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      final methods = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            methods.add(call.method);
+            if (call.method == 'authorizationState') return 'authorized';
+            if (call.method == 'reconcile') return true;
+            return null;
+          });
+      final service = NativeAlarmService(channel: channel);
+      final source = _event(
+        startAt: DateTime.now().subtract(const Duration(minutes: 5)),
+        alarmEnabled: true,
+      );
+      await reconcileEventAlarm(service, source);
+      expect(methods, ['authorizationState', 'reconcile']);
+      methods.clear();
+      await reconcileEventAlarm(service, source.copyWith(completed: true));
+      expect(methods, ['cancel']);
+      methods.clear();
+      await reconcileEventAlarm(service, source.copyWith(alarmEnabled: false));
+      expect(methods, ['cancel']);
+    },
+  );
+
+  for (final state in [
+    'unsupported',
+    'denied',
+    'notDetermined',
+    'authorized',
+  ]) {
+    for (final outcome in ['success', 'no-op', 'failure']) {
+      test(
+        'only confirmed alarm suppresses fallback $state $outcome',
+        () async {
+          debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+          var replaced = 0;
+          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+              .setMockMethodCallHandler(channel, (call) async {
+                if (call.method == 'authorizationState') return state;
+                if (call.method == 'schedule') {
+                  if (outcome == 'failure') {
+                    throw PlatformException(code: 'schedule_failed');
+                  }
+                  return outcome == 'success';
+                }
+                return null;
+              });
+          final service = NativeAlarmService(
+            channel: channel,
+            onAlarmScheduled: (_) async => replaced++,
+          );
+          final action = service.scheduleEventAlarm(
+            _event(
+              startAt: DateTime.now().add(const Duration(hours: 2)),
+              alarmEnabled: true,
+            ),
+          );
+          if (state == 'authorized' && outcome == 'failure') {
+            await expectLater(action, throwsA(isA<PlatformException>()));
+          } else {
+            await action;
+          }
+          expect(
+            replaced,
+            state == 'authorized' && outcome == 'success' ? 1 : 0,
+          );
+        },
+      );
+    }
+  }
 
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
     group('$platform', () {

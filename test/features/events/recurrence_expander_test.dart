@@ -1,10 +1,102 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:daily/core/calendar/calendar_event_movement.dart';
+import 'package:daily/features/events/data/app_database.dart';
+import 'package:daily/features/events/data/drift_event_repository.dart';
+import 'package:drift/native.dart';
 import 'package:daily/features/events/data/recurrence_expander.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+DateTime fixtureDate(String value) => DateTime.parse('${value}T09:00:00');
+
 void main() {
+  final cases =
+      jsonDecode(
+            File(
+              'test/fixtures/recurrence_anchor_cases.json',
+            ).readAsStringSync(),
+          )
+          as List;
+  for (final item in cases) {
+    test('shared anchor fixture ${item['name']}', () async {
+      final start = fixtureDate(item['start']);
+      final event = CalendarEvent(
+        id: item['name'],
+        title: 'anchor',
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: 1,
+        createdAt: start,
+        updatedAt: start,
+        recurrence: RecurrenceRule(
+          frequency: RecurrenceFrequency.values.byName(item['frequency']),
+          interval: item['interval'],
+          count: item['count'],
+          anchorDay: item['anchorDay'],
+          until: item['until'] == null ? null : fixtureDate(item['until']),
+          excludedDates: [
+            for (final d in item['excluded'] ?? []) fixtureDate(d),
+          ],
+        ),
+      );
+      final db = AppDatabase.forTesting(NativeDatabase.memory());
+      final repository = DriftEventRepository(db);
+      try {
+        await repository.save(event);
+        final restored = (await repository.findById(event.id))!;
+        expect(restored.recurrence.anchorDay, event.recurrence.anchorDay);
+        final actual = RecurrenceExpander().expand(
+          restored,
+          fixtureDate(
+            item['rangeStart'] ?? item['start'],
+          ).subtract(const Duration(hours: 9)),
+          fixtureDate(item['rangeEnd'] ?? '2030-01-01'),
+        );
+        expect(
+          actual.map((e) => e.startAt.toIso8601String().substring(0, 10)),
+          item['expected'],
+        );
+        if (item['rangeStart'] == null) {
+          expect(
+            RecurrenceExpander().lastPlannedEnd(restored),
+            actual.last.endAt,
+          );
+          if (item['until'] == null) {
+            expect(
+              RecurrenceExpander().lastCountedEnd(restored),
+              actual.last.endAt,
+            );
+          }
+        }
+        if (item['name'] == 'jan31') {
+          final split = recurrenceRuleForMovedFuture(
+            base: restored,
+            occurrence: actual[1],
+            targetDate: actual[1].startAt,
+          );
+          expect(split.anchorDay, 31);
+          expect(
+            RecurrenceExpander()
+                .expand(
+                  actual[1].copyWith(recurrence: split),
+                  fixtureDate('2025-02-01'),
+                  fixtureDate('2025-05-01'),
+                )
+                .map((e) => e.startAt.day),
+            [28, 31],
+          );
+        }
+      } finally {
+        await db.close();
+      }
+    });
+  }
+
   test('expands weekly events inside the visible range', () {
     final event = CalendarEvent(
       id: 'event-1',

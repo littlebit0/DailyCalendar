@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -10,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
 import 'product_analytics.dart';
+import '../platform/app_build_identity.dart';
 
 class AnalyticsEnvironment {
   const AnalyticsEnvironment({
@@ -34,12 +36,14 @@ class PrivacyAnalyticsService implements ProductAnalytics {
       'https://littlebit.tail6514a4.ts.net/v1/events';
   PrivacyAnalyticsService({
     required SharedPreferences preferences,
+    FlutterSecureStorage? secureStorage,
     http.Client? httpClient,
     Uri? endpoint,
     Future<AnalyticsEnvironment> Function()? environmentLoader,
     DateTime Function()? now,
     String Function()? idGenerator,
   }) : _preferences = preferences,
+       _secureStorage = secureStorage ?? const FlutterSecureStorage(),
        _httpClient = httpClient ?? http.Client(),
        _ownsHttpClient = httpClient == null,
        _endpoint = endpoint ?? _configuredEndpoint,
@@ -54,6 +58,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
              preferences.containsKey(_enabledKey),
        );
 
+  static const _consentJournalKey = 'daily.analytics.consent.v1';
   static const _enabledKey = 'anonymousAnalyticsEnabled';
   static const _consentPromptCompletedKey =
       'anonymousAnalyticsConsentPromptCompletedV1';
@@ -73,6 +78,12 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   static final Uri? _configuredEndpoint = _parseConfiguredEndpoint();
 
   final SharedPreferences _preferences;
+  final FlutterSecureStorage _secureStorage;
+  Future<void> _consentTail = Future<void>.value();
+  Future<void> _queueTail = Future<void>.value();
+  Future<void>? _initialization;
+  int _generation = 0;
+
   final http.Client _httpClient;
   final bool _ownsHttpClient;
   final Uri? _endpoint;
@@ -108,13 +119,31 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   @override
   Future<void> completeConsentPrompt({required bool enabled}) async {
     await setEnabled(enabled);
-    await _preferences.setBool(_consentPromptCompletedKey, true);
+    if (!await _preferences.setBool(_consentPromptCompletedKey, true)) {
+      throw StateError('분석 동의 안내 완료 상태를 저장하지 못했습니다. 다시 시도해 주세요.');
+    }
+    await _preferences.reload();
+    if (_preferences.getBool(_consentPromptCompletedKey) != true) {
+      throw StateError('분석 동의 안내 완료 상태를 확인하지 못했습니다.');
+    }
     _consentPromptCompleted.value = true;
   }
 
   @override
-  Future<void> initialize() async {
-    if (_initialized) return;
+  Future<void> initialize() => _initialization ??= _initialize();
+
+  Future<void> _initialize() async {
+    final generation = _generation;
+    try {
+      final saved = await _secureStorage.read(key: _consentJournalKey);
+      if (generation == _generation &&
+          (saved == 'off' || (saved != null && saved != 'on'))) {
+        _enabled.value = false;
+      }
+    } on Object {
+      // An unreadable consent record never grants collection permission.
+      if (generation == _generation) _enabled.value = false;
+    }
     try {
       _environment = await _environmentLoader();
     } on Object {
@@ -125,7 +154,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
       );
     }
     try {
-      _queue = _loadQueue();
+      _queue = enabled && generation == _generation ? _loadQueue() : [];
       _pruneQueue();
       await _persistQueue();
     } on Object {
@@ -138,35 +167,92 @@ class PrivacyAnalyticsService implements ProductAnalytics {
       _performanceMonitoring = false;
     }
     if (enabled) {
-      unawaited(flush());
+      unawaited(flush().catchError((Object _) {}));
     }
   }
 
   @override
-  Future<void> setEnabled(bool value) async {
-    if (_enabled.value == value) return;
-    await _preferences.setBool(_enabledKey, value);
-    _enabled.value = value;
+  Future<void> setEnabled(bool value) {
+    final generation = ++_generation;
+    // Withdrawal blocks new events and sends immediately, before storage awaits.
+    _enabled.value = false;
     _updatePerformanceMonitoring();
     if (!value) {
-      await deletePendingData();
-      return;
+      _retryTimer?.cancel();
+      _queue.clear();
     }
-    unawaited(flush());
+    final operation = _consentTail.then((_) async {
+      if (value) {
+        // A durable deny record protects a partially completed grant.
+        await _writeConsentJournal('off');
+        await _writeEnabledPreference(true);
+        if (generation != _generation) return;
+        await _writeConsentJournal('on');
+        if (generation != _generation) return;
+        _enabled.value = true;
+        _updatePerformanceMonitoring();
+        unawaited(flush().catchError((Object _) {}));
+      } else {
+        var failed = false;
+        // Independent stores: attempt both even if either write fails.
+        try {
+          await _writeConsentJournal('off');
+        } on Object {
+          failed = true;
+        }
+        try {
+          await _writeEnabledPreference(false);
+        } on Object {
+          failed = true;
+        }
+        try {
+          await _persistQueue();
+        } on Object {
+          failed = true;
+        }
+        if (failed) {
+          throw StateError(
+            '현재 분석 수집은 중단했습니다. 설정 또는 대기 데이터 저장에 실패했습니다. 앱을 종료하기 전에 다시 끄기를 시도해 주세요.',
+          );
+        }
+      }
+    });
+    _consentTail = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return operation;
+  }
+
+  Future<void> _writeConsentJournal(String value) async {
+    await _secureStorage.write(key: _consentJournalKey, value: value);
+    if (await _secureStorage.read(key: _consentJournalKey) != value) {
+      throw StateError('분석 동의 복구 기록 저장 실패');
+    }
+  }
+
+  Future<void> _writeEnabledPreference(bool value) async {
+    final saved = await _preferences.setBool(_enabledKey, value);
+    await _preferences.reload();
+    if (!saved || _preferences.getBool(_enabledKey) != value) {
+      throw StateError('분석 동의 설정 저장 실패');
+    }
   }
 
   @override
   Future<void> deletePendingData() async {
+    ++_generation;
     _retryTimer?.cancel();
     _retryTimer = null;
     _queue.clear();
-    await _preferences.remove(_queueKey);
+    await _persistQueue();
   }
 
   @override
   Future<void> record(AnalyticsRecord record) async {
     if (!enabled) return;
     if (!_initialized) await initialize();
+    if (!enabled) return;
     final event = _QueuedAnalyticsEvent(
       id: _idGenerator(),
       name: record.name.wireName,
@@ -179,8 +265,12 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     if (_isRecentDuplicate(event)) return;
     _queue.add(event);
     _pruneQueue();
-    await _persistQueue();
-    unawaited(flush());
+    try {
+      await _persistQueue();
+    } on Object {
+      return;
+    }
+    unawaited(flush().catchError((Object _) {}));
   }
 
   @override
@@ -214,7 +304,9 @@ class PrivacyAnalyticsService implements ProductAnalytics {
       return;
     }
 
+    final generation = _generation;
     final environment = _environment ?? await _environmentLoader();
+    if (!enabled || generation != _generation) return;
     _environment = environment;
     try {
       final response = await _httpClient
@@ -232,6 +324,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
             }),
           )
           .timeout(_requestTimeout);
+      if (!enabled || generation != _generation) return;
       if (response.statusCode >= 200 && response.statusCode < 300) {
         final sentIds = ready.map((event) => event.id).toSet();
         _queue.removeWhere((event) => sentIds.contains(event.id));
@@ -245,6 +338,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
         _markFailed(ready);
       }
     } on Object {
+      if (!enabled || generation != _generation) return;
       _markFailed(ready);
     }
     await _persistQueue();
@@ -271,7 +365,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
         .reduce((left, right) => left.isBefore(right) ? left : right);
     final delay = next.difference(now);
     _retryTimer = Timer(delay.isNegative ? Duration.zero : delay, () {
-      unawaited(flush());
+      unawaited(flush().catchError((Object _) {}));
     });
   }
 
@@ -314,11 +408,25 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   }
 
   Future<void> _persistQueue() {
-    if (_queue.isEmpty) return _preferences.remove(_queueKey);
-    return _preferences.setString(
-      _queueKey,
-      jsonEncode(_queue.map((event) => event.toQueueJson()).toList()),
+    final generation = _generation;
+    final raw = _queue.isEmpty
+        ? null
+        : jsonEncode(_queue.map((event) => event.toQueueJson()).toList());
+    final operation = _queueTail.then((_) async {
+      if (generation != _generation) return;
+      final saved = raw == null
+          ? await _preferences.remove(_queueKey)
+          : await _preferences.setString(_queueKey, raw);
+      await _preferences.reload();
+      if (!saved || _preferences.getString(_queueKey) != raw) {
+        throw StateError('전송 대기 분석 데이터를 저장하거나 삭제하지 못했습니다. 다시 시도해 주세요.');
+      }
+    });
+    _queueTail = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
     );
+    return operation;
   }
 
   void _updatePerformanceMonitoring() {
@@ -379,7 +487,9 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   static Future<AnalyticsEnvironment> _loadEnvironment() async {
     final packageInfo = await PackageInfo.fromPlatform();
     return AnalyticsEnvironment(
-      appVersion: packageInfo.version,
+      appVersion: isTestAppPackage(packageInfo.packageName)
+          ? '${packageInfo.version}-test'
+          : packageInfo.version,
       platform: Platform.operatingSystem,
       osMajor: _osMajor(Platform.operatingSystemVersion),
     );
@@ -455,7 +565,7 @@ bool isSafeAnalyticsBatch(Object? value) {
   if (!platforms.contains(env['platform']) ||
       env['appVersion'] is! String ||
       !RegExp(
-        r'^\d+\.\d+\.\d+(?:\.\d+)?$',
+        r'^\d+\.\d+\.\d+(?:\.\d+)?(?:-test)?$',
       ).hasMatch(env['appVersion'] as String) ||
       env['osMajor'] is! int) {
     return false;
@@ -518,10 +628,12 @@ final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
     'durationMs': _duration,
   },
   AnalyticsEventName.eventSaveSucceeded.wireName: {
+    'phase': (value) => _enumValue(value, AnalyticsSavePhase.values),
     'operation': (value) => _enumValue(value, AnalyticsOperation.values),
     'durationMs': _duration,
   },
   AnalyticsEventName.eventSaveFailed.wireName: {
+    'phase': (value) => _enumValue(value, AnalyticsSavePhase.values),
     'operation': (value) => _enumValue(value, AnalyticsOperation.values),
     'durationMs': _duration,
     'errorCode': (value) => _enumValue(value, AnalyticsErrorCode.values),

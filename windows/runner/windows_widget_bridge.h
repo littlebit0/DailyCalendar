@@ -10,6 +10,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "widget_action_codec.h"
 
 // Hosts the Windows equivalent of the Apple calendar widgets. Flutter sends
 // the same snapshot shape used by WidgetKit, while the tray mini calendar
@@ -37,6 +38,7 @@ class WindowsWidgetBridge final {
 
   struct TodayEvent {
     std::string event_id;
+    std::string occurrence_id;
     std::wstring title;
     std::wstring time_label;
     std::uint32_t color = 0xFF2563EB;
@@ -63,11 +65,7 @@ class WindowsWidgetBridge final {
     std::vector<DdayEvent> ddays;
   };
 
-  struct PendingAction {
-    std::string token;
-    std::string event_id;
-    bool completed = false;
-  };
+  using PendingAction = daily_widgets::TodoAction;
 
   struct EventHitTarget {
     RECT bounds{};

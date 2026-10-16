@@ -225,7 +225,7 @@ private final class DailyMacAlarms {
         authorizationState(result)
       case "requestAuthorization":
         requestAuthorization(result)
-      case "schedule":
+      case "schedule", "reconcile":
         schedule(call, result)
       case "cancel":
         cancel(call, result)
@@ -329,10 +329,6 @@ private final class DailyMacAlarms {
     }
 
     let fireAt = Date(timeIntervalSince1970: TimeInterval(fireAtMilliseconds) / 1000.0)
-    guard fireAt > Date() else {
-      result(nil)
-      return
-    }
 
     let snoozeMinutes = max(intValue(arguments["snoozeMinutes"]) ?? 10, 1)
     let memo = (arguments["memo"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -343,9 +339,12 @@ private final class DailyMacAlarms {
     content.sound = .default
     content.categoryIdentifier = categoryIdentifier
     content.threadIdentifier = "daily-event-alarms"
+    let sourceData = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
+    let sourceFingerprint = sourceData.base64EncodedString()
     content.userInfo = [
       eventIdKey: eventId,
       snoozeMinutesKey: snoozeMinutes,
+      "dailyAlarmSource": sourceFingerprint,
     ]
     if #available(macOS 12.0, *) {
       content.interruptionLevel = .timeSensitive
@@ -361,10 +360,26 @@ private final class DailyMacAlarms {
       )
     )
     let center = UNUserNotificationCenter.current()
-    center.removePendingNotificationRequests(withIdentifiers: [identifier])
-    center.removeDeliveredNotifications(withIdentifiers: [identifier])
-    center.add(request) { error in
-      finish(result, error: error)
+    let apply = {
+      center.removePendingNotificationRequests(withIdentifiers: [identifier])
+      center.removeDeliveredNotifications(withIdentifiers: [identifier])
+      guard fireAt > Date() else { finish(result, value: false); return }
+      center.add(request) { error in
+        finish(result, error: error, value: true)
+      }
+    }
+    guard call.method == "reconcile" else { apply(); return }
+    let matches: (UNNotificationRequest) -> Bool = { existing in
+      guard existing.identifier == identifier else { return false }
+      let previous = existing.content.userInfo["dailyAlarmSource"] as? String
+      return previous == sourceFingerprint || (previous == nil && fireAt <= Date())
+    }
+    center.getPendingNotificationRequests { pending in
+      if pending.contains(where: matches) { finish(result, value: true); return }
+      center.getDeliveredNotifications { delivered in
+        if delivered.contains(where: { matches($0.request) }) { finish(result, value: true); return }
+        apply()
+      }
     }
   }
 

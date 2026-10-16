@@ -51,7 +51,7 @@ struct DailyWidgetMonthEvent: Codable, Identifiable {
 }
 
 private enum DailyWidgetTodoActionStore {
-  static func append(eventId: String, completed: Bool) throws {
+  static func append(eventId: String, completed: Bool, occurrenceId: String? = nil) throws {
     guard let containerURL = FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
     ) else {
@@ -71,31 +71,33 @@ private enum DailyWidgetTodoActionStore {
       "token": UUID().uuidString,
       "eventId": eventId,
       "completed": completed,
+      "occurrenceId": occurrenceId ?? "",
     ])
     let data = try JSONSerialization.data(withJSONObject: actions)
     try data.write(to: actionsURL, options: .atomic)
     try updateSnapshot(
       at: containerURL.appendingPathComponent(snapshotFileName),
       eventId: eventId,
-      completed: completed
+      completed: completed,
+      occurrenceId: occurrenceId
     )
     notifyApp()
   }
 
-  private static func updateSnapshot(at url: URL, eventId: String, completed: Bool) throws {
+  private static func updateSnapshot(at url: URL, eventId: String, completed: Bool, occurrenceId: String?) throws {
     guard let data = try? Data(contentsOf: url),
           var snapshot = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
       return
     }
     for key in ["todayEvents", "scheduleEvents", "ddays"] {
       guard var events = snapshot[key] as? [[String: Any]] else { continue }
-      update(&events, eventId: eventId, completed: completed)
+      update(&events, eventId: eventId, completed: completed, occurrenceId: occurrenceId)
       snapshot[key] = events
     }
     if var days = snapshot["monthDays"] as? [[String: Any]] {
       for index in days.indices {
         guard var events = days[index]["events"] as? [[String: Any]] else { continue }
-        update(&events, eventId: eventId, completed: completed)
+        update(&events, eventId: eventId, completed: completed, occurrenceId: occurrenceId)
         days[index]["events"] = events
       }
       snapshot["monthDays"] = days
@@ -108,10 +110,12 @@ private enum DailyWidgetTodoActionStore {
   private static func update(
     _ events: inout [[String: Any]],
     eventId: String,
-    completed: Bool
+    completed: Bool,
+    occurrenceId: String?
   ) {
+    let target = occurrenceId.flatMap { $0.isEmpty ? nil : $0 } ?? eventId
     for index in events.indices where
-      (events[index]["eventId"] as? String ?? events[index]["id"] as? String) == eventId {
+      (events[index]["id"] as? String ?? events[index]["eventId"] as? String) == target {
       events[index]["completed"] = completed
     }
   }
@@ -143,18 +147,21 @@ struct DailyToggleTodoIntent: AppIntent {
 
   @Parameter(title: "일정 ID") var eventId: String
   @Parameter(title: "완료") var targetCompleted: Bool
+  @Parameter(title: "반복 회차 ID") var occurrenceId: String?
 
   init() {}
 
-  init(eventId: String, targetCompleted: Bool) {
+  init(eventId: String, targetCompleted: Bool, occurrenceId: String? = nil) {
     self.eventId = eventId
     self.targetCompleted = targetCompleted
+    self.occurrenceId = occurrenceId
   }
 
   func perform() async throws -> some IntentResult {
     try DailyWidgetTodoActionStore.append(
       eventId: eventId,
-      completed: targetCompleted
+      completed: targetCompleted,
+      occurrenceId: occurrenceId
     )
     reloadDailyWidgetTimelines()
     return .result()
@@ -305,7 +312,8 @@ private struct DailyTodoToggle: View {
       Button(
         intent: DailyToggleTodoIntent(
           eventId: event.eventId ?? event.id,
-          targetCompleted: event.completed != true
+          targetCompleted: event.completed != true,
+          occurrenceId: event.id
         )
       ) {
         Image(systemName: event.completed == true ? "checkmark.circle.fill" : "circle")

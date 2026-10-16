@@ -54,6 +54,12 @@ jobs:
       - name: Test LMS authentication scripts
         run: python3 -m unittest discover -s tool/tests -p test_lms_login_scripts.py -v
 
+      - name: Test Siri request ownership and recurrence mutations
+        run: |
+          python3 -m unittest discover -s tool/tests -p test_signal_voice_lifecycle.py -v
+          python3 -m unittest discover -s tool/tests -p test_siri_occurrence_mutation.py -v
+          python3 -m unittest discover -s tool/tests -p test_widget_occurrence_action.py -v
+
       - name: Test Apple LMS session paths without skips
         run: |
           flutter test --no-pub --reporter json test/core/lms/lms_web_session_test.dart > apple-lms-results.json
@@ -102,6 +108,10 @@ jobs:
       - name: Build APK
         run: flutter build apk --debug --no-pub
 
+      - name: Android native regression tests
+        working-directory: android
+        run: ./gradlew :app:testDebugUnitTest
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -139,6 +149,16 @@ jobs:
           cmake --build build/windows/x64 --config Debug --target local_auth_windows_test
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           ctest --test-dir build/windows/x64/plugins/local_auth_windows -C Debug --output-on-failure --no-tests=error
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+      - name: Windows widget action native regression tests
+        shell: pwsh
+        run: |
+          cmake -S windows/tests -B build/windows-widget-tests
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          cmake --build build/windows-widget-tests --config Debug
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          ctest --test-dir build/windows-widget-tests -C Debug --output-on-failure --no-tests=error
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Upload Windows app

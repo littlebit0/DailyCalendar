@@ -22,7 +22,7 @@ object DailyAndroidWidgetStore {
         val pending = loadTodoActions(context)
         for (index in 0 until pending.length()) {
             val action = pending.optJSONObject(index) ?: continue
-            updateCompletion(snapshot, action.optString("eventId"), action.optBoolean("completed"))
+            updateCompletion(snapshot, action.optString("eventId"), action.optBoolean("completed"), action.optString("occurrenceId").takeIf { it.isNotBlank() })
         }
         return preferences(context)
             .edit()
@@ -40,6 +40,7 @@ object DailyAndroidWidgetStore {
         context: Context,
         eventId: String,
         completed: Boolean,
+        occurrenceId: String? = null,
     ): String {
         require(eventId.isNotBlank()) { "eventId must not be blank" }
         val token = UUID.randomUUID().toString()
@@ -48,12 +49,13 @@ object DailyAndroidWidgetStore {
             JSONObject()
                 .put("token", token)
                 .put("eventId", eventId)
-                .put("completed", completed),
+                .put("completed", completed)
+                .put("occurrenceId", occurrenceId),
         )
 
         val snapshot = snapshot(context)
         if (snapshot != null) {
-            updateCompletion(snapshot, eventId, completed)
+            updateCompletion(snapshot, eventId, completed, occurrenceId)
         }
 
         val editor = preferences(context)
@@ -79,6 +81,7 @@ object DailyAndroidWidgetStore {
                 "token" to token,
                 "eventId" to eventId,
                 "completed" to action.optBoolean("completed"),
+                "occurrenceId" to action.optString("occurrenceId"),
             )
         }
         return result
@@ -143,10 +146,10 @@ object DailyAndroidWidgetStore {
         )
     }
 
-    private fun updateCompletion(snapshot: JSONObject, eventId: String, completed: Boolean) {
-        updateCompletionInEvents(snapshot.optJSONArray("todayEvents"), eventId, completed)
-        updateCompletionInEvents(snapshot.optJSONArray("scheduleEvents"), eventId, completed)
-        updateCompletionInEvents(snapshot.optJSONArray("ddays"), eventId, completed)
+    private fun updateCompletion(snapshot: JSONObject, eventId: String, completed: Boolean, occurrenceId: String?) {
+        updateCompletionInEvents(snapshot.optJSONArray("todayEvents"), eventId, completed, occurrenceId)
+        updateCompletionInEvents(snapshot.optJSONArray("scheduleEvents"), eventId, completed, occurrenceId)
+        updateCompletionInEvents(snapshot.optJSONArray("ddays"), eventId, completed, occurrenceId)
 
         val monthDays = snapshot.optJSONArray("monthDays") ?: return
         for (dayIndex in 0 until monthDays.length()) {
@@ -154,6 +157,7 @@ object DailyAndroidWidgetStore {
                 monthDays.optJSONObject(dayIndex)?.optJSONArray("events"),
                 eventId,
                 completed,
+                occurrenceId,
             )
         }
     }
@@ -162,11 +166,13 @@ object DailyAndroidWidgetStore {
         events: JSONArray?,
         eventId: String,
         completed: Boolean,
+        occurrenceId: String?,
     ) {
         if (events == null) return
         for (index in 0 until events.length()) {
             val event = events.optJSONObject(index) ?: continue
-            if (event.optString("eventId", event.optString("id")) == eventId) {
+            val target = occurrenceId?.takeIf { it.isNotBlank() } ?: eventId
+            if (event.optString("id", event.optString("eventId")) == target) {
                 event.put("completed", completed)
             }
         }

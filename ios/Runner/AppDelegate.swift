@@ -597,7 +597,7 @@ private final class DailyAlarmKit {
         result(authorizationStateName())
       case "requestAuthorization":
         requestAuthorization(result)
-      case "schedule":
+      case "schedule", "reconcile":
         schedule(call, result)
       case "cancel":
         cancel(call, result)
@@ -657,13 +657,25 @@ private final class DailyAlarmKit {
     let visibleMemo = memo.flatMap { $0.isEmpty ? nil : String($0.prefix(80)) }
     let displayTitle = visibleMemo.map { "\(title)\n\($0)" } ?? title
     let fireDate = Date(timeIntervalSince1970: Double(fireAtMilliseconds) / 1000)
-    guard fireDate > Date() else {
-      result(nil)
-      return
-    }
-
+    let fingerprintData = (try? JSONSerialization.data(withJSONObject: [fireAtMilliseconds, title, memo ?? "", snoozeMinutes])) ?? Data()
+    let fingerprint = SHA256.hash(data: fingerprintData).map { String(format: "%02x", $0) }.joined()
+    let fingerprintKey = "daily.alarm.source.\(id.uuidString)"
     Task { @MainActor in
       do {
+        if call.method == "reconcile", try AlarmManager.shared.alarms.contains(where: { $0.id == id }) {
+          let previous = UserDefaults.standard.string(forKey: fingerprintKey)
+          if previous == fingerprint || (previous == nil && fireDate <= Date()) {
+            // Legacy countdowns have no source fingerprint. Preserve them on
+            // first reconciliation; explicit mutation still uses cancel.
+            result(true)
+            return
+          }
+        }
+        guard fireDate > Date() else {
+          if call.method == "reconcile" { try? AlarmManager.shared.cancel(id: id) }
+          result(false)
+          return
+        }
         try? AlarmManager.shared.cancel(id: id)
         let secondaryButton = AlarmButton(
           text: "\(snoozeMinutes)분 후 다시 알림",
@@ -710,7 +722,8 @@ private final class DailyAlarmKit {
           sound: .default
         )
         _ = try await AlarmManager.shared.schedule(id: id, configuration: configuration)
-        result(nil)
+        UserDefaults.standard.set(fingerprint, forKey: fingerprintKey)
+        result(true)
       } catch {
         result(FlutterError(code: "alarm_schedule_failed", message: error.localizedDescription, details: nil))
       }

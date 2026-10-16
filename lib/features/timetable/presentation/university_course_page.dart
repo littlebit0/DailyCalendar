@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -73,6 +74,13 @@ class UniversityCoursePanel extends StatefulWidget {
 }
 
 class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
+  Object? _preparedKey, _filterKey, _unitKey;
+  List<UniversityCourse> _unitCourses = [];
+  List<String> _unitCategories = [];
+  _PreparedCourses? _prepared;
+  List<TimetableClass>? _conflictInputs;
+  Map<String, List<TimetableClass>> _conflicts = {};
+  (List<String>, String?, List<UniversityCourse>)? _filterResult;
   Map<String, String?> _catalogCampuses = {};
   int _catalogGeneration = 0;
   List<String> get _campuses => _catalogCampuses.isNotEmpty
@@ -343,98 +351,94 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
 
   Widget _catalogView(List<UniversityDataset> catalog) {
     final theme = Theme.of(context);
-    final datasets = catalog
-        .where(
-          (d) =>
-              d.universityId == widget.university &&
-              d.campus == _campus &&
-              d.courses.any(
-                (c) => c.academicYear == _year && c.semester == _semester,
-              ),
-        )
-        .toList();
-    final all = datasets
-        .expand((d) => d.courses)
-        .where((c) => c.academicYear == _year && c.semester == _semester)
-        .toList();
-    final organizations = <String, CourseOrganization>{
-      for (final course in all)
-        for (final unit in course.offeringOrganizations)
-          if (unit.isCollegeHosted || course.isMajorForOrganization(unit))
-            '${unit.key}\u0000${unit.displayGroup}': unit,
-    }.values.toList()..sort((a, b) => a.label.compareTo(b.label));
-    final colleges =
-        organizations
-            .where((unit) => unit.isCollegeHosted)
-            .map((unit) => unit.college)
-            .whereType<String>()
-            .toSet()
-            .toList()
-          ..sort();
-    final departmentGroups = <String?, List<CourseOrganization>>{};
-    for (final unit in organizations.where((unit) => unit.department != null)) {
-      (departmentGroups[unit.displayGroup] ??= []).add(unit);
+    final key = (catalog, widget.university, _campus, _year, _semester);
+    if (_preparedKey != key) {
+      _preparedKey = key;
+      _prepared = _PreparedCourses(
+        catalog,
+        widget.university,
+        _campus,
+        _year,
+        _semester,
+      );
+      _conflictInputs = null;
     }
-    // Preserve source filters where no verified academic organization exists.
-    // Cohort and administration labels remain literal, without guessed parents.
-    final sourceDepartments =
-        all
-            .expand(
-              (course) => course.departments.where(
-                (label) =>
-                    course.isMajorForSourceDepartment(label) &&
-                    !course.offeringOrganizations.any(
-                      (unit) => unit.sourceLabel == label,
-                    ),
-              ),
-            )
-            .where((label) => label.trim().isNotEmpty)
-            .toSet()
-            .toList()
-          ..sort();
-    final availableLabels = all
-        .where(_matchesUnit)
-        .expand(_classificationLabels)
-        .toSet();
-    final categoryLabels = [
-      for (final category in CourseCategory.values)
-        if (availableLabels.remove(category.label)) category.label,
-      ...(availableLabels.toList()..sort()),
-    ];
-    final activeCategory = categoryLabels.contains(_category)
-        ? _category
-        : null;
+    final prepared = _prepared!;
+    final datasets = prepared.datasets;
+    final all = prepared.all;
+    final colleges = prepared.colleges;
+    final departmentGroups = prepared.departmentGroups;
+    final sourceDepartments = prepared.sourceDepartments;
     final saved = widget.store.activeClasses;
-    final conflicts = {
-      for (final course in all)
-        course.sourceId: _conflictingClasses(course, saved),
-    };
-    final courses = all.where((course) {
-      if (!_matchesUnit(course)) {
-        return false;
-      }
-      if (activeCategory != null &&
-          !_classificationLabels(course).contains(activeCategory)) {
-        return false;
-      }
-      if (_hideConflicts && conflicts[course.sourceId]!.isNotEmpty) {
-        return false;
-      }
-      return course.matchesQuery(_query);
-    }).toList();
-    if (_query.trim().isNotEmpty) {
-      courses.sort((a, b) {
-        final ranked = a.queryRank(_query).compareTo(b.queryRank(_query));
-        if (ranked != 0) return ranked;
-        final title = a.title.compareTo(b.title);
-        if (title != 0) return title;
-        final code = a.code.compareTo(b.code);
-        if (code != 0) return code;
-        return (int.tryParse(a.section) ?? 0).compareTo(
-          int.tryParse(b.section) ?? 0,
-        );
-      });
+    if (!listEquals(_conflictInputs, saved)) {
+      _conflictInputs = List.of(saved);
+      _conflicts = {
+        for (final course in all)
+          course.sourceId: _conflictingClasses(course, saved),
+      };
     }
+    final conflicts = _conflicts;
+    final unitKey = (prepared, _organization, _sourceDepartment);
+    if (_unitKey != unitKey) {
+      _unitKey = unitKey;
+      _unitCourses = all.where(_matchesUnit).toList();
+      final availableLabels = _unitCourses
+          .expand(_classificationLabels)
+          .toSet();
+      _unitCategories = <String>[
+        for (final category in CourseCategory.values)
+          if (availableLabels.remove(category.label)) category.label,
+        ...(availableLabels.toList()..sort()),
+      ];
+    }
+    final filterKey = (
+      prepared,
+      _organization,
+      _sourceDepartment,
+      _category,
+      _hideConflicts,
+      _query,
+      conflicts,
+    );
+    if (_filterKey != filterKey) {
+      _filterKey = filterKey;
+      final categoryLabels = _unitCategories;
+      final activeCategory = categoryLabels.contains(_category)
+          ? _category
+          : null;
+      final query = _query.trim().toLowerCase();
+      final words = query.isEmpty
+          ? const <String>[]
+          : query.split(RegExp(r'\s+'));
+      final courses = _unitCourses.where((course) {
+        if (activeCategory != null &&
+            !_classificationLabels(course).contains(activeCategory)) {
+          return false;
+        }
+        if (_hideConflicts && conflicts[course.sourceId]!.isNotEmpty) {
+          return false;
+        }
+        return words.isEmpty || prepared.search[course]!.matches(words);
+      }).toList();
+      if (query.isNotEmpty) {
+        final ranks = {
+          for (final course in courses) course: course.queryRank(query),
+        };
+        courses.sort((a, b) {
+          final ranked = ranks[a]!.compareTo(ranks[b]!);
+          if (ranked != 0) return ranked;
+          final title = a.title.compareTo(b.title);
+          if (title != 0) return title;
+          final code = a.code.compareTo(b.code);
+          if (code != 0) return code;
+          return (int.tryParse(a.section) ?? 0).compareTo(
+            int.tryParse(b.section) ?? 0,
+          );
+        });
+      }
+      _filterResult = (categoryLabels, activeCategory, courses);
+    }
+    final (categoryLabels, activeCategory, courses) = _filterResult!;
     final addedIds = saved
         .map((course) => course.sourceId)
         .whereType<String>()
@@ -1345,3 +1349,71 @@ String _time(int minute) =>
 String _creditText(num value) => value == value.roundToDouble()
     ? value.toInt().toString()
     : value.toString();
+
+class _PreparedCourses {
+  _PreparedCourses(
+    List<UniversityDataset> catalog,
+    String university,
+    String campus,
+    int year,
+    String semester,
+  ) {
+    datasets = catalog
+        .where(
+          (d) =>
+              d.universityId == university &&
+              d.campus == campus &&
+              d.courses.any(
+                (c) => c.academicYear == year && c.semester == semester,
+              ),
+        )
+        .toList();
+    all = datasets
+        .expand((d) => d.courses)
+        .where((c) => c.academicYear == year && c.semester == semester)
+        .toList();
+    final organizations = <String, CourseOrganization>{
+      for (final course in all)
+        for (final unit in course.offeringOrganizations)
+          if (unit.isCollegeHosted || course.isMajorForOrganization(unit))
+            '${unit.key}\u0000${unit.displayGroup}': unit,
+    }.values.toList()..sort((a, b) => a.label.compareTo(b.label));
+    colleges =
+        organizations
+            .where((unit) => unit.isCollegeHosted)
+            .map((unit) => unit.college)
+            .whereType<String>()
+            .toSet()
+            .toList()
+          ..sort();
+    departmentGroups = <String?, List<CourseOrganization>>{};
+    for (final unit in organizations.where((unit) => unit.department != null)) {
+      (departmentGroups[unit.displayGroup] ??= []).add(unit);
+    }
+    // Preserve source filters where no verified academic organization exists.
+    // Cohort and administration labels remain literal, without guessed parents.
+    sourceDepartments =
+        all
+            .expand(
+              (course) => course.departments.where(
+                (label) =>
+                    course.isMajorForSourceDepartment(label) &&
+                    !course.offeringOrganizations.any(
+                      (unit) => unit.sourceLabel == label,
+                    ),
+              ),
+            )
+            .where((label) => label.trim().isNotEmpty)
+            .toSet()
+            .toList()
+          ..sort();
+    search = {
+      for (final course in all) course: UniversityCourseSearchText(course),
+    };
+  }
+  late final List<UniversityDataset> datasets;
+  late final List<UniversityCourse> all;
+  late final List<String> colleges, sourceDepartments;
+  late final Map<String?, List<CourseOrganization>> departmentGroups;
+  late final Map<UniversityCourse, UniversityCourseSearchText> search;
+}
