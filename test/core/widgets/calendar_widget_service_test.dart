@@ -113,6 +113,23 @@ void main() {
       expect(snapshot['todayEvents'], hasLength(1));
       expect(snapshot['scheduleEvents'], hasLength(1));
       expect(snapshot['monthDays'], hasLength(42));
+      final dates = [
+        for (final day in snapshot['monthDays'] as List)
+          DateTime.parse((day as Map)['date'] as String),
+      ];
+      for (var i = 1; i < dates.length; i++) {
+        final previous = DateTime.utc(
+          dates[i - 1].year,
+          dates[i - 1].month,
+          dates[i - 1].day,
+        );
+        final current = DateTime.utc(
+          dates[i].year,
+          dates[i].month,
+          dates[i].day,
+        );
+        expect(current.difference(previous).inDays, 1, reason: 'cell $i');
+      }
     });
   }
 

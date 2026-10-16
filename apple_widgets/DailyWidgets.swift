@@ -62,19 +62,30 @@ private enum DailyWidgetTodoActionStore {
       )
     }
     let actionsURL = containerURL.appendingPathComponent(todoActionsFileName)
-    var actions: [[String: Any]] = []
-    if let data = try? Data(contentsOf: actionsURL),
-       let decoded = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] {
-      actions = decoded
+    try withTodoActionsLock(in: containerURL) {
+      var actions: [[String: Any]] = []
+      if FileManager.default.fileExists(atPath: actionsURL.path) {
+        let existing = try Data(contentsOf: actionsURL)
+        if let decoded = try? JSONSerialization.jsonObject(with: existing) as? [[String: Any]] {
+          actions = decoded
+        } else {
+          // Never replace an unreadable queue with an empty one: keep it aside.
+          let aside = containerURL.appendingPathComponent(
+            "daily-widget-todo-actions.corrupt-\(Int(Date().timeIntervalSince1970)).json"
+          )
+          try? FileManager.default.removeItem(at: aside)
+          try FileManager.default.moveItem(at: actionsURL, to: aside)
+        }
+      }
+      actions.append([
+        "token": UUID().uuidString,
+        "eventId": eventId,
+        "completed": completed,
+        "occurrenceId": occurrenceId ?? "",
+      ])
+      let data = try JSONSerialization.data(withJSONObject: actions)
+      try data.write(to: actionsURL, options: .atomic)
     }
-    actions.append([
-      "token": UUID().uuidString,
-      "eventId": eventId,
-      "completed": completed,
-      "occurrenceId": occurrenceId ?? "",
-    ])
-    let data = try JSONSerialization.data(withJSONObject: actions)
-    try data.write(to: actionsURL, options: .atomic)
     try updateSnapshot(
       at: containerURL.appendingPathComponent(snapshotFileName),
       eventId: eventId,
@@ -82,6 +93,38 @@ private enum DailyWidgetTodoActionStore {
       occurrenceId: occurrenceId
     )
     notifyApp()
+  }
+
+  /// Serializes read-modify-write of the shared action queue across the app and
+  /// widget processes. An in-process queue cannot protect another process.
+  private static func withTodoActionsLock<T>(
+    in containerURL: URL,
+    _ body: () throws -> T
+  ) throws -> T {
+    let lockPath = containerURL.appendingPathComponent("daily-widget-todo-actions.lock").path
+    let descriptor = open(lockPath, O_CREAT | O_RDWR, 0o600)
+    guard descriptor >= 0 else {
+      throw NSError(
+        domain: "DailyWidgets",
+        code: 2,
+        userInfo: [NSLocalizedDescriptionKey: "위젯 작업 잠금을 열 수 없습니다."]
+      )
+    }
+    defer { close(descriptor) }
+    var attempts = 0
+    while flock(descriptor, LOCK_EX | LOCK_NB) != 0 {
+      attempts += 1
+      guard errno == EWOULDBLOCK, attempts <= 300 else {
+        throw NSError(
+          domain: "DailyWidgets",
+          code: 3,
+          userInfo: [NSLocalizedDescriptionKey: "위젯 작업 잠금을 얻지 못했습니다."]
+        )
+      }
+      usleep(10_000)
+    }
+    defer { flock(descriptor, LOCK_UN) }
+    return try body()
   }
 
   private static func updateSnapshot(at url: URL, eventId: String, completed: Bool, occurrenceId: String?) throws {
