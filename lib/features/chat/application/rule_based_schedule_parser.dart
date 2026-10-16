@@ -18,7 +18,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
     r'(\d{1,2})\s*박\s*(\d{1,2})\s*일',
   );
   static final _timePattern = RegExp(
-    r'(오전|오후|아침|점심|저녁|밤)?\s*(\d{1,2})(?:\s*시|:)(?:\s*(\d{1,2})\s*분?)?',
+    r'(오전|오후|아침|점심|저녁|밤)?\s*(\d{1,2})(?:\s*시(?!간)|:)(?:\s*(\d{1,2})\s*분?)?',
   );
   static final _hourReminderPattern = RegExp(r'(\d{1,2})\s*시간\s*전');
   static final _minuteReminderPattern = RegExp(r'(\d{1,3})\s*분\s*전');
@@ -36,13 +36,35 @@ class RuleBasedScheduleParser implements ScheduleParser {
       return const EventParseResult(question: '등록할 일정 내용을 입력해 주세요.');
     }
 
-    final dateRange = _parseDateRange(normalized, baseDate, selectedDate);
+    try {
+      return _parse(
+        normalized,
+        baseDate: baseDate,
+        selectedDate: selectedDate,
+        defaultReminderMinutes: defaultReminderMinutes,
+        defaultReminderMinutesList: defaultReminderMinutesList,
+      );
+    } on _InvalidScheduleInput catch (error) {
+      return EventParseResult(question: error.message);
+    }
+  }
+
+  EventParseResult _parse(
+    String normalized, {
+    required DateTime baseDate,
+    DateTime? selectedDate,
+    required int defaultReminderMinutes,
+    List<int>? defaultReminderMinutesList,
+  }) {
+    // A reminder such as "2시간 전" must not also be read as a start/end time.
+    final reminder = _parseReminder(normalized);
+    final schedule = _withoutReminders(normalized);
+    final dateRange = _parseDateRange(schedule, baseDate, selectedDate);
     final date =
-        dateRange?.startDate ?? _parseDate(normalized, baseDate, selectedDate);
-    final parsedTimes = _parseTimes(normalized);
+        dateRange?.startDate ?? _parseDate(schedule, baseDate, selectedDate);
+    final parsedTimes = _parseTimes(schedule);
     final parsedTime = parsedTimes.isEmpty ? null : parsedTimes[0];
     final parsedEndTime = parsedTimes.length > 1 ? parsedTimes[1] : null;
-    final reminder = _parseReminder(normalized);
     final reminders = reminder == null
         ? normalizeReminderMinutes(
             defaultReminderMinutesList ?? [defaultReminderMinutes],
@@ -97,11 +119,10 @@ class RuleBasedScheduleParser implements ScheduleParser {
       final endMonth = int.tryParse(monthDayRange.group(3) ?? '') ?? startMonth;
       final endDay = int.parse(monthDayRange.group(4)!);
       final startDate = _resolveMonthDay(startMonth, startDay, today);
-      var endDate = DateTime(startDate.year, endMonth, endDay);
-      if (endDate.isBefore(startDate)) {
-        endDate = DateTime(startDate.year + 1, endMonth, endDay);
-      }
-      return _ParsedDateRange(startDate, endDate);
+      return _ParsedDateRange(
+        startDate,
+        _resolveRangeEnd(startDate, endMonth, endDay),
+      );
     }
 
     final monthDays = _monthDayPattern.allMatches(input).toList();
@@ -113,15 +134,14 @@ class RuleBasedScheduleParser implements ScheduleParser {
         int.parse(startMatch.group(2)!),
         today,
       );
-      var endDate = DateTime(
-        startDate.year,
-        int.parse(endMatch.group(1)!),
-        int.parse(endMatch.group(2)!),
+      return _ParsedDateRange(
+        startDate,
+        _resolveRangeEnd(
+          startDate,
+          int.parse(endMatch.group(1)!),
+          int.parse(endMatch.group(2)!),
+        ),
       );
-      if (endDate.isBefore(startDate)) {
-        endDate = DateTime(endDate.year + 1, endDate.month, endDate.day);
-      }
-      return _ParsedDateRange(startDate, endDate);
     }
 
     final relativeRange = _relativeDateRangePattern.firstMatch(input);
@@ -202,14 +222,36 @@ class RuleBasedScheduleParser implements ScheduleParser {
     return today;
   }
 
+  /// The date only when [month]/[day] really exist in [year] (no overflow into
+  /// another month, as the DateTime constructor would do).
+  DateTime? _exactDate(int year, int month, int day) {
+    final date = DateTime(year, month, day);
+    return date.year == year && date.month == month && date.day == day
+        ? date
+        : null;
+  }
+
   DateTime _resolveMonthDay(int month, int day, DateTime today) {
-    var year = today.year;
-    var date = DateTime(year, month, day);
-    if (date.isBefore(today.subtract(const Duration(days: 1)))) {
-      year += 1;
-      date = DateTime(year, month, day);
+    final earliest = today.subtract(const Duration(days: 1));
+    // Eight years is enough to reach the next 29 February.
+    for (var year = today.year; year <= today.year + 8; year++) {
+      final date = _exactDate(year, month, day);
+      if (date != null && !date.isBefore(earliest)) return date;
     }
-    return date;
+    throw _InvalidScheduleInput('$month월 $day일은 올바른 날짜가 아닙니다. 날짜를 확인해 주세요.');
+  }
+
+  DateTime _resolveRangeEnd(DateTime start, int month, int day) {
+    final end =
+        _exactDate(start.year, month, day) ??
+        (throw _InvalidScheduleInput(
+          '$month월 $day일은 올바른 날짜가 아닙니다. 날짜를 확인해 주세요.',
+        ));
+    if (!end.isBefore(start)) return end;
+    return _exactDate(start.year + 1, month, day) ??
+        (throw _InvalidScheduleInput(
+          '$month월 $day일은 올바른 날짜가 아닙니다. 날짜를 확인해 주세요.',
+        ));
   }
 
   DateTime _resolveRelativeDate(String value, DateTime today) {
@@ -224,16 +266,13 @@ class RuleBasedScheduleParser implements ScheduleParser {
     final times = <_ParsedTime>[];
     String? previousMarker;
     for (final match in _timePattern.allMatches(input)) {
-      final parsed = _parseTimeMatch(match, previousMarker);
-      if (parsed != null) {
-        times.add(parsed);
-        previousMarker = match.group(1) ?? previousMarker;
-      }
+      times.add(_parseTimeMatch(match, previousMarker));
+      previousMarker = match.group(1) ?? previousMarker;
     }
     return times;
   }
 
-  _ParsedTime? _parseTimeMatch(RegExpMatch match, String? fallbackMarker) {
+  _ParsedTime _parseTimeMatch(RegExpMatch match, String? fallbackMarker) {
     final marker = match.group(1) ?? fallbackMarker;
     var hour = int.parse(match.group(2)!);
     final minute = int.tryParse(match.group(3) ?? '') ?? 0;
@@ -249,7 +288,9 @@ class RuleBasedScheduleParser implements ScheduleParser {
       hour = 0;
     }
     if (hour > 23 || minute > 59) {
-      return null;
+      throw _InvalidScheduleInput(
+        '${match.group(0)!.trim()}은 올바른 시각이 아닙니다. 시각을 확인해 주세요.',
+      );
     }
     return _ParsedTime(hour, minute);
   }
@@ -305,6 +346,10 @@ class RuleBasedScheduleParser implements ScheduleParser {
         : startAt.add(const Duration(hours: 1));
   }
 
+  String _withoutReminders(String input) => input
+      .replaceAll(_hourReminderPattern, ' ')
+      .replaceAll(_minuteReminderPattern, ' ');
+
   int? _parseReminder(String input) {
     final hour = _hourReminderPattern.firstMatch(input);
     if (hour != null) {
@@ -354,9 +399,10 @@ class RuleBasedScheduleParser implements ScheduleParser {
       _durationNightsPattern,
       _durationDaysPattern,
       _monthDayPattern,
-      _timePattern,
+      // Reminders first: otherwise the time pattern eats the "20분" of "20분 전".
       _hourReminderPattern,
       _minuteReminderPattern,
+      _timePattern,
       RegExp(r'오늘|내일|모레|이번 주|이번주|다음 주|다음주'),
       RegExp(r'월요일|화요일|수요일|목요일|금요일|토요일|일요일'),
       RegExp(r'매일|매주|매월|매년'),
@@ -369,6 +415,12 @@ class RuleBasedScheduleParser implements ScheduleParser {
     }
     return value.replaceAll(RegExp(r'\s+'), ' ').trim();
   }
+}
+
+class _InvalidScheduleInput implements Exception {
+  const _InvalidScheduleInput(this.message);
+
+  final String message;
 }
 
 class _ParsedTime {

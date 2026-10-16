@@ -1988,17 +1988,30 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         .map((id) => id == category.id ? updatedCategory.id : id)
         .toSet()
         .toList();
-    await _save(
-      settings.copyWith(
-        categories: _normalizeCategories(categories),
-        hiddenCategoryIds: hiddenCategoryIds,
-      ),
-      changedFrom: settings,
-      backup: false,
+    final updatedSettings = settings.copyWith(
+      categories: _normalizeCategories(categories),
+      hiddenCategoryIds: hiddenCategoryIds,
     );
-    await ref
-        .read(eventCommandServiceProvider)
-        .updateCategoryUsage(previous: category, updated: updatedCategory);
+    await _save(updatedSettings, changedFrom: settings, backup: false);
+    try {
+      await ref
+          .read(eventCommandServiceProvider)
+          .updateCategoryUsage(previous: category, updated: updatedCategory);
+    } on Object {
+      // The event rows are updated in one transaction, so a failure leaves them
+      // on the old category. Put the settings back so both stay consistent.
+      try {
+        await _save(settings, changedFrom: updatedSettings, backup: false);
+      } on Object {
+        /* the snackbar below still asks the user to retry */
+      }
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
+        );
+      }
+      return;
+    }
     _queueCategoryBackup();
   }
 

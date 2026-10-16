@@ -849,8 +849,14 @@ class EventCommandService {
       return;
     }
 
+    // The rows are already saved as pending; a failed upload is retried by the
+    // next sync and must not look like a failed category update.
     for (final event in affected) {
-      await _syncService.queueEventUpsert(event);
+      try {
+        await _syncService.queueEventUpsert(event);
+      } on Object {
+        /* pending status keeps the upload retryable */
+      }
     }
     await _refreshWidgets();
   }

@@ -7374,6 +7374,70 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets('failed event update puts the edited category settings back', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    FlutterSecureStorage.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    final authService = _FakeGoogleDriveAuthService(account: null);
+    final notificationService = _FakeNotification();
+    final eventRepository = _FakeEventRepository()..failCategoryUpdate = true;
+    final driveSyncService = _FakeGoogleDriveSyncService(
+      authService: authService,
+      eventRepository: eventRepository,
+      notificationService: notificationService,
+      settingsRepository: settingsRepository,
+    );
+    final before = settingsRepository.load().categories;
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(notificationService),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(eventRepository),
+          googleDriveAuthServiceProvider.overrideWithValue(authService),
+          googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+        ],
+        child: const MaterialApp(home: SettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('category-settings-navigation')),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('분류 수정').first);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, '바뀐 이름');
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('선택을 저장하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+    expect(
+      settingsRepository.load().categories.map((c) => (c.id, c.label)),
+      before.map((c) => (c.id, c.label)),
+    );
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets('linked Google metadata requires a valid auth session to sync', (
     tester,
   ) async {
@@ -9398,6 +9462,7 @@ class _FakeEventRepository implements EventRepository {
 
   final List<CalendarEvent> _events;
   var clearAllCalls = 0;
+  var failCategoryUpdate = false;
 
   @override
   Future<void> delete(String eventId) async {}
@@ -9426,6 +9491,7 @@ class _FakeEventRepository implements EventRepository {
     required EventCategory updated,
     required DateTime updatedAt,
   }) async {
+    if (failCategoryUpdate) throw StateError('event rows were not updated');
     final affected = <CalendarEvent>[];
     for (var index = 0; index < _events.length; index++) {
       final event = _events[index];
@@ -9554,9 +9620,7 @@ class _CompletionEventRepository extends _StreamingEventRepository {
       final previous = next[event.id];
       final current = resolve(previous, event);
       next[current.id] = current;
-      mutations.add(
-        EventRestoreMutation(previous: previous, current: current),
-      );
+      mutations.add(EventRestoreMutation(previous: previous, current: current));
     }
     if (failNextSave) {
       failNextSave = false;

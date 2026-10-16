@@ -221,7 +221,13 @@ private final class DailyCalendarImport {
           result(FlutterError(code: "bad_arguments", message: "가져올 캘린더를 선택해 주세요.", details: nil))
           return
         }
-        withAccess(result) { result(events(calendarIds: Set(calendarIds))) }
+        withAccess(result) {
+          // Many EventKit windows are read; keep them off the main thread.
+          DispatchQueue.global(qos: .userInitiated).async {
+            let values = events(calendarIds: Set(calendarIds))
+            DispatchQueue.main.async { result(values) }
+          }
+        }
       default:
         result(FlutterMethodNotImplemented)
       }
@@ -305,12 +311,9 @@ private final class DailyCalendarImport {
       calendarIds.contains($0.calendarIdentifier) && !isGoogleSource($0.source)
     }
     guard !selected.isEmpty else { return [] }
-    let start = Calendar(identifier: .gregorian).date(from: DateComponents(year: 1970, month: 1, day: 1))!
-    let end = Calendar(identifier: .gregorian).date(from: DateComponents(year: 2101, month: 1, day: 1))!
-    let predicate = store.predicateForEvents(withStart: start, end: end, calendars: selected)
     var seen = Set<String>()
     var values: [[String: Any]] = []
-    for event in store.events(matching: predicate).sorted(by: { $0.startDate < $1.startDate }) {
+    for event in eventsInChunks(calendars: selected) {
       let sourceId = event.calendarItemIdentifier
       guard !sourceId.isEmpty, seen.insert(sourceId).inserted else { continue }
       var value: [String: Any] = [
@@ -343,6 +346,22 @@ private final class DailyCalendarImport {
       values.append(value)
     }
     return values
+  }
+
+  /// EventKit truncates a predicate longer than four years to its first four, so
+  /// the full 1970-2100 range is read in three-year windows, oldest first.
+  private static func eventsInChunks(calendars: [EKCalendar]) -> [EKEvent] {
+    let gregorian = Calendar(identifier: .gregorian)
+    let rangeEnd = gregorian.date(from: DateComponents(year: 2101, month: 1, day: 1))!
+    var windowStart = gregorian.date(from: DateComponents(year: 1970, month: 1, day: 1))!
+    var collected: [EKEvent] = []
+    while windowStart < rangeEnd {
+      let windowEnd = min(gregorian.date(byAdding: .year, value: 3, to: windowStart)!, rangeEnd)
+      let predicate = store.predicateForEvents(withStart: windowStart, end: windowEnd, calendars: calendars)
+      collected += store.events(matching: predicate).sorted { $0.startDate < $1.startDate }
+      windowStart = windowEnd
+    }
+    return collected
   }
 
   private static func recurrenceValue(_ rule: EKRecurrenceRule) -> String? {
@@ -487,12 +506,12 @@ private final class DailyGoogleOAuthSession: NSObject, ASWebAuthenticationPresen
       if authSession.start() {
         return
       }
-      flutterResult = nil
-      session = nil
-      fallbackPresentationWindow?.isHidden = true
-      fallbackPresentationWindow = nil
+      // Take the callback before clearing it, so the failure reaches Dart now.
       let pendingResult = self.flutterResult
       self.flutterResult = nil
+      self.session = nil
+      self.fallbackPresentationWindow?.isHidden = true
+      self.fallbackPresentationWindow = nil
       pendingResult?(
         FlutterError(code: "failed", message: "Google 인증 창을 열 수 없습니다.", details: nil)
       )
