@@ -4,6 +4,7 @@ import LocalAuthentication
 import UserNotifications
 import WidgetKit
 import WebKit
+import StoreKit
 
 private final class DailyAppleWidgets {
   static let channelName = "daily/apple_widgets"
@@ -981,6 +982,7 @@ class MainFlutterWindow: NSWindow {
     DailyNativeNotifications.register(with: flutterViewController)
     DailyMacAlarms.register(with: flutterViewController)
     DailyMapLauncher.register(with: flutterViewController)
+    DailyDotIntegration.register(with: flutterViewController)
     DailyAppleWidgets.register(with: flutterViewController)
     DailyLmsCookieStore.register(with: flutterViewController.engine.binaryMessenger)
     DailySiriLogsBridge.register(with: flutterViewController)
@@ -1205,5 +1207,396 @@ private final class DailyLmsCookieStore {
       return result
     }
     return NSApplication.shared.windows.compactMap(\.contentView).flatMap(walk)
+  }
+}
+
+@MainActor
+private enum DailyDotIntegration {
+
+  static func register(with controller: FlutterViewController) {
+    let channel = FlutterMethodChannel(
+      name: "daily/dot_integration",
+      binaryMessenger: controller.engine.binaryMessenger
+    )
+    // Keep every app entry point closed while direct Dot tool access is unresolved.
+    // Do not initialize purchases, export folders, or status watchers.
+    channel.setMethodCallHandler { _, result in
+      result(FlutterError(code: "integration_disabled", message: "Dot integration is suspended.", details: nil))
+    }
+  }
+}
+
+@available(macOS 12.0, *)
+@MainActor
+private final class DailyDotPurchases {
+  // Non-consumable. Registration and KRW 1,000 pricing belong in App Store Connect.
+  private let productID = "com.littlebit0.daily.dot.unlock"
+  private let channel: FlutterMethodChannel
+  private var updates: Task<Void, Never>?
+  private var purchasing = false
+  private var exportDirectory: URL?
+  private var scopedDirectory: URL?
+  private var statusWatcher: DispatchSourceFileSystemObject?
+
+  private func watchStatus(in root: URL) {
+    guard statusWatcher == nil else { return }
+    let directory = root.appendingPathComponent("status", isDirectory: true)
+    let descriptor = open(directory.path, O_EVTONLY)
+    guard descriptor >= 0 else { return }
+    let watcher = DispatchSource.makeFileSystemObjectSource(
+      fileDescriptor: descriptor, eventMask: [.write, .delete, .rename], queue: .main)
+    watcher.setEventHandler { [weak self, weak watcher] in
+      Task { @MainActor in
+        guard let self, let watcher else { return }
+        if watcher.data.contains(.delete) || watcher.data.contains(.rename) {
+          self.statusWatcher?.cancel()
+          self.statusWatcher = nil
+        }
+        self.channel.invokeMethod("setupChanged", arguments: nil)
+      }
+    }
+    watcher.setCancelHandler { close(descriptor) }
+    statusWatcher = watcher
+    watcher.resume()
+  }
+
+  init(channel: FlutterMethodChannel) {
+    self.channel = channel
+    updates = Task { [weak self] in
+      for await verification in StoreKit.Transaction.updates {
+        guard let self else { return }
+        switch verification {
+        case .verified(let transaction):
+          guard transaction.productID == self.productID else { continue }
+          await transaction.finish()
+          self.channel.invokeMethod("purchaseChanged", arguments: nil)
+        case .unverified(let transaction, _):
+          if transaction.productID == self.productID {
+            self.channel.invokeMethod("purchaseChanged", arguments: nil)
+          }
+        }
+      }
+    }
+  }
+
+  deinit {
+    updates?.cancel()
+    statusWatcher?.cancel()
+    scopedDirectory?.stopAccessingSecurityScopedResource()
+  }
+
+  private func exportRoot(in directory: URL) throws -> URL {
+    let path = directory.resolvingSymlinksInPath().path
+    guard !path.contains("/Library/Containers/"), !path.contains("/Library/Group Containers/"),
+          !path.hasSuffix("/Library/Containers"), !path.hasSuffix("/Library/Group Containers") else {
+      throw PurchaseError.protectedFolder
+    }
+    let root = directory.appendingPathComponent("DailyCalendar Dot-\(getuid())", isDirectory: true)
+    let manager = FileManager.default
+    if !manager.fileExists(atPath: root.path) {
+      try manager.createDirectory(at: root, withIntermediateDirectories: false,
+        attributes: [.posixPermissions: 0o700])
+    }
+    let attributes = try manager.attributesOfItem(atPath: root.path)
+    guard attributes[.type] as? FileAttributeType == .typeDirectory,
+          (attributes[.ownerAccountID] as? NSNumber)?.uint32Value == getuid(),
+          root.resolvingSymlinksInPath().standardizedFileURL.path == root.standardizedFileURL.path else {
+      throw PurchaseError.protectedFolder
+    }
+    try manager.setAttributes([.posixPermissions: 0o700], ofItemAtPath: root.path)
+    return root
+  }
+
+  // A deep link does not grant ChatGPT access to this app's protected container.
+  // Use a user-selected folder, and keep all request/receipt paths there too.
+  private func integrationRoot(allowSelection: Bool = false) async throws -> URL {
+    if let directory = exportDirectory { return directory }
+    let key = "daily.dot.exportBookmark"
+    if let bookmark = UserDefaults.standard.data(forKey: key) {
+      var stale = false
+      if let directory = try? URL(resolvingBookmarkData: bookmark,
+          options: [.withSecurityScope], relativeTo: nil, bookmarkDataIsStale: &stale),
+         directory.startAccessingSecurityScopedResource() {
+        if FileManager.default.fileExists(atPath: directory.path) {
+          let root: URL
+          do { root = try exportRoot(in: directory) }
+          catch { directory.stopAccessingSecurityScopedResource(); throw error }
+          scopedDirectory = directory
+          exportDirectory = root
+          if stale, let refreshed = try? directory.bookmarkData(options: [.withSecurityScope],
+              includingResourceValuesForKeys: nil, relativeTo: nil) {
+            UserDefaults.standard.set(refreshed, forKey: key)
+          }
+          return root
+        }
+        directory.stopAccessingSecurityScopedResource()
+      }
+    }
+    guard allowSelection else { throw PurchaseError.folderRequired }
+    let panel = NSOpenPanel()
+    panel.canChooseDirectories = true
+    panel.canChooseFiles = false
+    panel.allowsMultipleSelection = false
+    panel.canCreateDirectories = true
+    panel.directoryURL = URL(fileURLWithPath: "/Users/Shared", isDirectory: true)
+    panel.message = NSLocalizedString("DailyCalendar와 ChatGPT가 함께 사용할 연결 폴더를 선택하세요. 앱 보호 폴더는 사용할 수 없습니다.", comment: "Dot export folder")
+    panel.prompt = NSLocalizedString("연결 폴더 선택", comment: "Dot export folder")
+    let response = await withCheckedContinuation { (continuation: CheckedContinuation<NSApplication.ModalResponse, Never>) in
+      panel.begin { continuation.resume(returning: $0) }
+    }
+    guard response == .OK, let directory = panel.url else { throw PurchaseError.folderCancelled }
+    guard directory.startAccessingSecurityScopedResource() else { throw PurchaseError.folderRequired }
+    do {
+      let bookmark = try directory.bookmarkData(options: [.withSecurityScope],
+        includingResourceValuesForKeys: nil, relativeTo: nil)
+      let root = try exportRoot(in: directory)
+      UserDefaults.standard.set(bookmark, forKey: key)
+      scopedDirectory = directory
+      exportDirectory = root
+      return root
+    } catch {
+      directory.stopAccessingSecurityScopedResource()
+      throw error
+    }
+  }
+
+  private var testAccess: Bool {
+    Bundle.main.bundleIdentifier == "com.littlebit0.daily.test"
+  }
+
+  private func canUseDot() async throws -> Bool {
+    if testAccess { return true }
+    return try await unlocked()
+  }
+
+  private func unlocked() async throws -> Bool {
+    for await verification in StoreKit.Transaction.currentEntitlements {
+      switch verification {
+      case .verified(let transaction):
+        if transaction.productID == productID,
+           transaction.productType == .nonConsumable,
+           transaction.revocationDate == nil,
+           !transaction.isUpgraded { return true }
+      case .unverified(let transaction, _):
+        if transaction.productID == productID {
+          throw PurchaseError.unverified
+        }
+      }
+    }
+    return false
+  }
+
+  private func product() async throws -> Product? {
+    try await Product.products(for: [productID]).first {
+      $0.id == productID && $0.type == .nonConsumable &&
+      $0.priceFormatStyle.currencyCode == "KRW" && $0.price == Decimal(1000)
+    }
+  }
+
+  private func status() async throws -> [String: Any] {
+    if testAccess {
+      return ["unlocked": false, "testAccess": true, "available": false,
+              "price": "", "productID": productID]
+    }
+    let owned = try await unlocked()
+    // A store outage must not discard an independently verified entitlement.
+    let item = try? await product()
+    return ["unlocked": owned, "available": item != nil,
+            "price": item?.displayPrice ?? "", "productID": productID]
+  }
+
+  func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) async {
+    do {
+      switch call.method {
+      case "requestSetup":
+        guard try await canUseDot() else { throw PurchaseError.locked }
+        guard let action = call.arguments as? String,
+              ["connect", "check", "read"].contains(action),
+              let nonce = UserDefaults.standard.string(forKey: "daily.dot.statusNonce") else {
+          throw PurchaseError.unavailable
+        }
+        let directory = try await integrationRoot().appendingPathComponent("status", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true,
+          attributes: [.posixPermissions: 0o700])
+        if let root = exportDirectory { watchStatus(in: root) }
+        let identifier = UUID().uuidString
+        let request: [String: Any] = ["nonce": nonce, "id": identifier,
+          "action": action, "createdAt": Date().timeIntervalSince1970]
+        let file = directory.appendingPathComponent("request.json")
+        try JSONSerialization.data(withJSONObject: request).write(to: file, options: .atomic)
+        try FileManager.default.setAttributes([.posixPermissions: 0o600], ofItemAtPath: file.path)
+        result(identifier)
+      case "openGoogle":
+        let directory = try await integrationRoot().appendingPathComponent("status", isDirectory: true)
+        let data = try Data(contentsOf: directory.appendingPathComponent("connection.json"))
+        guard let state = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+              state["nonce"] as? String == UserDefaults.standard.string(forKey: "daily.dot.statusNonce"),
+              let address = state["authURL"] as? String, let url = URL(string: address),
+              url.scheme == "http", url.host == "127.0.0.1", url.port != nil,
+              url.path.hasPrefix("/connect/"), NSWorkspace.shared.open(url) else {
+          throw PurchaseError.unavailable
+        }
+        result(nil)
+      case "setupStatus":
+        guard let root = try? await integrationRoot() else { result([:]); return }
+        watchStatus(in: root)
+        let prepared = filesPrepared(in: root)
+        let file = root.appendingPathComponent("status/connection.json")
+        if let data = try? Data(contentsOf: file),
+           let state = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let nonce = UserDefaults.standard.string(forKey: "daily.dot.statusNonce"),
+           state["nonce"] as? String == nonce,
+           state["pluginVersion"] as? String == "0.1.3",
+           let checked = state["checkedAt"] as? Double,
+           Date().timeIntervalSince1970 - checked >= 0 {
+          let now = Date().timeIntervalSince1970
+          let googleChecked = state["googleCheckedAt"] as? Double ?? 0
+          let queried = state["lastQuery"] as? Double ?? 0
+          result(["filesPrepared": prepared, "pluginReady": state["pluginReady"] as? Bool ?? false,
+                  "googleConnected": (state["googleConnected"] as? Bool == true) &&
+                    now - googleChecked >= 0,
+                  "lastQuery": now - queried >= 0 && now - queried < 300 ? queried as Any : NSNull(),
+                  "requestAction": state["requestAction"] ?? NSNull(),
+                  "queryPhase": state["queryPhase"] ?? NSNull(),
+                  "filesRead": state["filesRead"] ?? 0,
+                  "filesTotal": state["filesTotal"] ?? 0,
+                  "requestCreatedAt": state["requestCreatedAt"] ?? NSNull(),
+                  "errorCode": state["errorCode"] ?? NSNull(),
+                  "requestID": state["requestID"] ?? NSNull(),
+                  "requestState": state["requestState"] ?? NSNull(),
+                  "hasAuthURL": state["authURL"] is String])
+        } else {
+          result(["filesPrepared": prepared])
+        }
+      case "preparePlugin":
+        guard try await canUseDot() else { throw PurchaseError.locked }
+        guard let payload = call.arguments as? FlutterStandardTypedData,
+              payload.data.count >= 4, payload.data.count <= 4 * 1024 * 1024,
+              payload.data.prefix(4) == Data([0x50, 0x4b, 0x03, 0x04]) else {
+          throw PurchaseError.unavailable
+        }
+        try await preparePlugin(payload.data)
+        result(nil)
+      case "openPlugin":
+        guard try await canUseDot() else { throw PurchaseError.locked }
+        try await openPlugin()
+        result(nil)
+      case "openDot":
+        guard let url = URL(string: "codex://dots"), NSWorkspace.shared.open(url) else {
+          throw PurchaseError.chatgptUnavailable
+        }
+        result(nil)
+      case "purchaseStatus":
+        result(try await status())
+      case "restorePurchases":
+        guard !purchasing else { throw PurchaseError.busy }
+        purchasing = true
+        defer { purchasing = false }
+        try await AppStore.sync()
+        result(try await status())
+      case "purchase":
+        guard !purchasing else { throw PurchaseError.busy }
+        purchasing = true
+        defer { purchasing = false }
+        if try await unlocked() { result("purchased"); return }
+        guard let item = try await product() else { throw PurchaseError.unavailable }
+        switch try await item.purchase() {
+        case .success(let verification):
+          guard case .verified(let transaction) = verification,
+                transaction.productID == productID,
+                transaction.productType == .nonConsumable,
+                transaction.revocationDate == nil else { throw PurchaseError.unverified }
+          await transaction.finish()
+          result("purchased")
+        case .pending: result("pending")
+        case .userCancelled: result("cancelled")
+        @unknown default: throw PurchaseError.unavailable
+        }
+      default: result(FlutterMethodNotImplemented)
+      }
+    } catch let error as PurchaseError {
+      result(FlutterError(code: error.rawValue, message: nil, details: nil))
+    } catch {
+      result(FlutterError(code: "store_unavailable", message: nil, details: nil))
+    }
+  }
+
+  private func filesPrepared(in root: URL) -> Bool {
+    let required = [".agents/plugins/marketplace.json", "dailycalendar-awareness/plugin.json",
+                    "dailycalendar-awareness/mcp.json", "dailycalendar-awareness/mcp_server.py",
+                    "dailycalendar-awareness/drive_reader.py", "dailycalendar-awareness/keychain_store.py",
+                    "dailycalendar-awareness/SKILL.md", "dailycalendar-awareness/drive-data.md"]
+    return required.allSatisfy { FileManager.default.isReadableFile(atPath: root.appendingPathComponent($0).path) }
+  }
+
+  private func preparePlugin(_ data: Data) async throws {
+    let root = try await integrationRoot(allowSelection: true)
+    try FileManager.default.createDirectory(at: root, withIntermediateDirectories: true,
+      attributes: [.posixPermissions: 0o700])
+    let archive = root.appendingPathComponent("dailycalendar.zip")
+    try data.write(to: archive, options: .atomic)
+    // Only the app-bundled archive is supplied by the Flutter settings page.
+    let process = Process()
+    process.executableURL = URL(fileURLWithPath: "/usr/bin/ditto")
+    process.arguments = ["-x", "-k", archive.path, root.path]
+    process.standardOutput = FileHandle.nullDevice
+    process.standardError = FileHandle.nullDevice
+    try process.run()
+    await withCheckedContinuation { (continuation: CheckedContinuation<Void, Never>) in
+      DispatchQueue.global().async { process.waitUntilExit(); continuation.resume() }
+    }
+    guard process.terminationStatus == 0 else { throw PurchaseError.unavailable }
+    // Remove obsolete app-generated helpers; credentials live in Keychain, not these files.
+    for name in ["keychain", "keychain.swift"] {
+      let old = root.appendingPathComponent("dailycalendar-awareness/" + name)
+      if FileManager.default.fileExists(atPath: old.path) {
+        try FileManager.default.removeItem(at: old)
+      }
+    }
+    let nonce = UUID().uuidString
+    UserDefaults.standard.set(nonce, forKey: "daily.dot.statusNonce")
+    let mcpURL = root.appendingPathComponent("dailycalendar-awareness/mcp.json")
+    var mcp = try JSONSerialization.jsonObject(with: Data(contentsOf: mcpURL)) as? [String: Any] ?? [:]
+    var servers = mcp["mcpServers"] as? [String: [String: Any]] ?? [:]
+    guard var server = servers["dailycalendar"] else { throw PurchaseError.unavailable }
+    server["env"] = ["DAILY_DOT_STATUS_FILE": root.appendingPathComponent("status/connection.json").path,
+                     "DAILY_DOT_STATUS_NONCE": nonce]
+    servers["dailycalendar"] = server
+    mcp["mcpServers"] = servers
+    try JSONSerialization.data(withJSONObject: mcp).write(to: mcpURL, options: .atomic)
+    let directory = root.appendingPathComponent(".agents/plugins", isDirectory: true)
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    let catalog = directory.appendingPathComponent("marketplace.json")
+    let metadata: [String: Any] = ["name": "dailycalendar-local",
+      "interface": ["displayName": "DailyCalendar"],
+      "plugins": [["name": "dailycalendar",
+        "source": ["source": "local", "path": "./dailycalendar-awareness"],
+        "policy": ["installation": "AVAILABLE", "authentication": "ON_INSTALL"],
+        "category": "Productivity"]]]
+    try JSONSerialization.data(withJSONObject: metadata).write(to: catalog, options: .atomic)
+    guard filesPrepared(in: root) else { throw PurchaseError.filesRequired }
+  }
+
+  private func openPlugin() async throws {
+    guard NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.openai.codex") != nil else {
+      throw PurchaseError.chatgptUnavailable
+    }
+    let root = try await integrationRoot()
+    guard filesPrepared(in: root) else { throw PurchaseError.filesRequired }
+    let catalog = root.appendingPathComponent(".agents/plugins/marketplace.json")
+    var link = URLComponents()
+    link.scheme = "codex"
+    link.host = "plugins"
+    link.path = "/dailycalendar"
+    link.queryItems = [URLQueryItem(name: "marketplacePath", value: catalog.path)]
+    guard let url = link.url, NSWorkspace.shared.open(url) else {
+      throw PurchaseError.chatgptUnavailable
+    }
+    // Opening the installation screen is not an installation or Dot-access receipt.
+  }
+
+  private enum PurchaseError: String, Error {
+    case busy, unavailable, unverified, locked, chatgptUnavailable
+    case folderRequired, folderCancelled, protectedFolder, filesRequired
   }
 }

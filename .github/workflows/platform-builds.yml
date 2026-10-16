@@ -54,6 +54,9 @@ jobs:
       - name: Test LMS authentication scripts
         run: python3 -m unittest discover -s tool/tests -p test_lms_login_scripts.py -v
 
+      - name: Test Dot integration suspension and export boundaries
+        run: python3 -m unittest discover -s tool/tests -p test_dot_export_folder.py -v
+
       - name: Test Siri request ownership and recurrence mutations
         run: |
           python3 -m unittest discover -s tool/tests -p test_signal_voice_lifecycle.py -v

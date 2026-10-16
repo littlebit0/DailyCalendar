@@ -35,6 +35,7 @@ import 'academic_profile_page.dart';
 import 'category_color_picker.dart';
 import 'siri_activity_log_page.dart';
 import 'weather_settings_page.dart';
+import 'dot_connect_tile.dart';
 import '../../../core/weather/weather_strings.dart';
 import '../../../core/widgets/lock_screen_wallpaper_service.dart';
 
@@ -280,6 +281,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         onTap: () =>
                             _openDestination(_SettingsDestination.account),
                       ),
+                      if (!kIsWeb &&
+                          defaultTargetPlatform == TargetPlatform.macOS) ...[
+                        const Divider(height: 1),
+                        const DotConnectTile(),
+                      ],
                       const Divider(height: 1),
                       ListTile(
                         key: const ValueKey('academic-management-navigation'),

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "dailycalendar",
+  "version": "0.1.3",
+  "description": "Read DailyCalendar schedules from Google Drive through your connected Mac.",
+  "author": {
+    "name": "littlebit0"
+  },
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "DailyCalendar",
+        "shortDescription": "연결된 Mac에서 일정 전체 내용을 읽습니다.",
+        "developerName": "littlebit0",
+        "category": "Productivity",
+        "capabilities": [
+          "Read"
+        ]
+      }
+    }
+  }
+}

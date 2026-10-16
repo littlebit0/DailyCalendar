@@ -111,6 +111,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/dot/dailycalendar-awareness.skill
     - assets/timetable/
     - assets/timetable/organizations/
     - assets/academic/

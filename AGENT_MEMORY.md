@@ -10,6 +10,15 @@
 - Include intertwined earlier issue implementations/dependencies in commit; preserve concurrent Dot awareness and unrelated deployment/policy/receiver files. Upstream vendored whitespace/CRLF is retained, not treated as changed product failure. Review: docs/reviews/PRIORITY11_CHECKPOINT_2026-10-16.md. Logs: work/priority11-onward-20261016/. No new university source work.
 
 
+## Dot integration suspended — 2026-10-17
+
+- User requested blocking Dot in DailyCalendar, committing/pushing and verifying CI, plus filing the plugin issue. Tracking: https://github.com/littlebit0/DailyCalendar/issues/264 (`bug`, `priority: high`). Purchase account mapping remains separate #263.
+- Mac settings retain a disabled Dot row labelled unavailable; no setup dialog opens. Native daily/dot_integration rejects every method with integration_disabled and does not initialize purchase/export/watch services. Existing Google credentials, installed external plugin, snapshots and app data are preserved; no plugin uninstall or account reset.
+- Direct Dot MCP integration remains unresolved. Local MCP acquisition succeeded, and user reports a separate Dot Mac task completed CLI acquisition after one-command execution approval. Neither proves direct tool exposure or an automatic supported connection. Do not resume workaround tasks or declare integration complete.
+- Existing unfinished flat plugin and setup implementation are retained for follow-up, but app entry points remain disabled. Prior notes: docs/archive/DOT_PRE_SUSPENSION_2026-10-17.md.
+- Verification: Flutter Dot UI17 passed; native extracted production registration rejects all10 tested methods and export boundaries pass. Python package32 passed and changed-scope analyzer clean. Full local analyzer also scanned untracked development SDK/cache and reported74755 findings; do not call it clean. Mac profile/AOT build and in-place Daily Test installation passed signature/identity/assets checks after user closure; no launch. Final normal-push CI pending. No test app launch authorized. University expansion remains paused.
+
+
 ## Workspace paths - 2026-10-15
 
 - Canonical repo: `/Users/kimhwi/Documents/Codex/DailyCalendar`. Previous long repo path no longer exists.
