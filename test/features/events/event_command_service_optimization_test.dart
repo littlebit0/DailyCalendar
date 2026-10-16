@@ -1038,6 +1038,30 @@ void main() {
     },
   );
 
+  test('a failed upload queue does not fail the category update', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final previous = EventCategory.basic;
+    const updated = EventCategory(
+      id: 'basic',
+      label: '기본 일정',
+      colorValue: 0xff123456,
+    );
+    final repository = _CategoryUpdateRepository([_event('one', previous)]);
+    var widgetRefreshes = 0;
+    final service = EventCommandService(
+      repository: repository,
+      settingsRepository: SettingsRepository(preferences: preferences),
+      notificationService: _CountingNotificationService(),
+      syncService: _ThrowingUpsertSyncService(),
+      onEventsChanged: () async => widgetRefreshes += 1,
+    );
+
+    await service.updateCategoryUsage(previous: previous, updated: updated);
+
+    expect(widgetRefreshes, 1);
+  });
+
   test(
     'Todo completion persists, syncs, and updates scheduled delivery',
     () async {
@@ -1541,6 +1565,13 @@ class _CountingSyncService implements SyncService {
 
   @override
   Future<void> start() async {}
+}
+
+class _ThrowingUpsertSyncService extends _CountingSyncService {
+  @override
+  Future<void> queueEventUpsert(CalendarEvent event) async {
+    throw StateError('upload queue unavailable');
+  }
 }
 
 class _RecordingAnalytics extends NoopProductAnalytics {

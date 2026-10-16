@@ -108,5 +108,78 @@ void main() {
       expect(draft.endAt, DateTime(2026, 5, 15));
       expect(draft.allDay, isTrue);
     });
+
+    Future<dynamic> parse(String text, {DateTime? at}) => parser.parse(
+      text,
+      baseDate: at ?? baseDate,
+      defaultReminderMinutes: 60,
+    );
+
+    test('a reminder never becomes a start or end time', () async {
+      for (final entry in {
+        '내일 오전 9시 회의 2시간 전 알림': (DateTime(2026, 5, 12, 9), 120),
+        '내일 오전 9시 회의 30분 전 알림': (DateTime(2026, 5, 12, 9), 30),
+        '내일 오후 3시 회의 1시간 전 알림': (DateTime(2026, 5, 12, 15), 60),
+        '내일 오후 3시 20분 전 회의': (DateTime(2026, 5, 12, 15), 20),
+        '1시간 전 알림 내일 오후 3시 회의': (DateTime(2026, 5, 12, 15), 60),
+      }.entries) {
+        final draft = (await parse(entry.key)).draft!;
+        expect(draft.startAt, entry.value.$1, reason: entry.key);
+        expect(
+          draft.endAt,
+          entry.value.$1.add(const Duration(hours: 1)),
+          reason: entry.key,
+        );
+        expect(draft.allDay, isFalse, reason: entry.key);
+        expect(draft.reminderMinutesBeforeList, [entry.value.$2]);
+        expect(draft.title, '회의', reason: entry.key);
+      }
+    });
+
+    test('real start and end times and minutes are kept', () async {
+      var draft = (await parse('내일 오후 3시 20분 회의')).draft!;
+      expect(draft.startAt, DateTime(2026, 5, 12, 15, 20));
+      draft = (await parse('내일 오전 9시부터 오전 10시까지 회의 1시간 전 알림')).draft!;
+      expect(draft.startAt, DateTime(2026, 5, 12, 9));
+      expect(draft.endAt, DateTime(2026, 5, 12, 10));
+      expect(draft.reminderMinutesBeforeList, [60]);
+    });
+
+    test(
+      'dates that do not exist ask instead of moving to another day',
+      () async {
+        for (final text in ['2월 30일 회의', '4월 31일 회의', '13월 1일 회의']) {
+          final result = await parse(text, at: DateTime(2026, 1, 1));
+          expect(result.draft, isNull, reason: text);
+          expect(result.question, contains('올바른 날짜가 아닙니다'), reason: text);
+        }
+        final range = await parse(
+          '2월 27일부터 2월 30일까지 출장',
+          at: DateTime(2026, 1, 1),
+        );
+        expect(range.draft, isNull);
+        expect(range.question, contains('2월 30일'));
+      },
+    );
+
+    test('real month ends and leap days still parse', () async {
+      var draft = (await parse('2월 28일 회의', at: DateTime(2026, 1, 1))).draft!;
+      expect(draft.startAt, DateTime(2026, 2, 28));
+      draft = (await parse('2월 29일 회의', at: DateTime(2026, 1, 1))).draft!;
+      expect(draft.startAt, DateTime(2028, 2, 29));
+    });
+
+    test(
+      'invalid clock times ask instead of becoming an all-day event',
+      () async {
+        for (final text in ['내일 25시 회의', '내일 9시 75분 회의']) {
+          final result = await parse(text);
+          expect(result.draft, isNull, reason: text);
+          expect(result.question, contains('올바른 시각이 아닙니다'), reason: text);
+        }
+        final draft = (await parse('내일 회의')).draft!;
+        expect(draft.allDay, isTrue);
+      },
+    );
   });
 }
