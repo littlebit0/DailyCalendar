@@ -122,5 +122,7 @@ add_custom_command(TARGET ${TEST_RUNNER} POST_BUILD
 )
 
 include(GoogleTest)
-gtest_discover_tests(${TEST_RUNNER})
+# Discovery runs the test exe after the build; the 5 s default timed out on a
+# cold CI runner and failed the build, so allow a minute.
+gtest_discover_tests(${TEST_RUNNER} DISCOVERY_TIMEOUT 60)
 endif()
