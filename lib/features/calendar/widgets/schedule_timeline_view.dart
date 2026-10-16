@@ -1134,7 +1134,9 @@ class _ScheduleTimeDropTarget extends StatelessWidget {
       day.year,
       day.month,
       day.day,
-    ).add(Duration(minutes: minuteOfDay));
+      minuteOfDay ~/ 60,
+      minuteOfDay % 60,
+    );
   }
 }
 
@@ -1166,13 +1168,31 @@ class _TimelineSegmentLayout {
   final int laneCount;
 }
 
+/// Wall-clock minute ranges of [events] on [date], for regression tests.
+@visibleForTesting
+List<({CalendarEvent event, int startMinute, int endMinute})>
+timelineSegmentMinutesForDate(List<CalendarEvent> events, DateTime date) {
+  return [
+    for (final segment in _segmentsForDate(
+      events,
+      date,
+      (a, b) => a.id.compareTo(b.id),
+    ))
+      (
+        event: segment.event,
+        startMinute: segment.startMinute,
+        endMinute: segment.endMinute,
+      ),
+  ];
+}
+
 List<_TimelineSegment> _segmentsForDate(
   List<CalendarEvent> events,
   DateTime date,
   Comparator<CalendarEvent> eventComparator,
 ) {
   final dayStart = DateTime(date.year, date.month, date.day);
-  final dayEnd = dayStart.add(const Duration(days: 1));
+  final dayEnd = shiftCalendarDateByDays(dayStart, 1);
   final segments = <_TimelineSegment>[];
   for (final event in events) {
     if (event.allDay || !event.overlaps(dayStart, dayEnd)) {
@@ -1180,8 +1200,12 @@ List<_TimelineSegment> _segmentsForDate(
     }
     final start = event.startAt.isAfter(dayStart) ? event.startAt : dayStart;
     final end = event.endAt.isBefore(dayEnd) ? event.endAt : dayEnd;
-    final startMinute = start.difference(dayStart).inMinutes.clamp(0, 1439);
-    final endMinute = end.difference(dayStart).inMinutes.clamp(1, 1440);
+    // Minutes are wall-clock positions on the timeline grid; elapsed time since
+    // midnight differs from them on 23/25-hour daylight-saving days.
+    final startMinute = start.hour * 60 + start.minute;
+    final endMinute = end.isBefore(dayEnd)
+        ? (end.hour * 60 + end.minute).clamp(1, 1440)
+        : 1440;
     segments.add(
       _TimelineSegment(
         event: event,
@@ -1254,7 +1278,7 @@ bool _isSameDay(DateTime first, DateTime second) =>
 
 bool _eventOccursOnDate(CalendarEvent event, DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
-  final end = start.add(const Duration(days: 1));
+  final end = shiftCalendarDateByDays(start, 1);
   return event.overlaps(start, end);
 }
 

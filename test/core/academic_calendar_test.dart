@@ -114,6 +114,27 @@ class Repository implements EventRepository {
     events[event.id] = event;
   }
 
+  /// Runs just before a merge reads its rows, like an editor save that
+  /// finished while the import was still preparing.
+  void Function()? beforeMerge;
+  @override
+  Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
+    Iterable<CalendarEvent> remoteEvents, {
+    required RestoredEventResolver resolve,
+  }) async {
+    beforeMerge?.call();
+    final mutations = <EventRestoreMutation>[];
+    for (final remote in remoteEvents.toList()) {
+      final previous = events[remote.id];
+      final current = resolve(previous, remote.normalizeAllDayBounds());
+      if (identical(previous, current)) continue;
+      if (fail.contains(current.id)) throw StateError('disk failure');
+      events[current.id] = current;
+      mutations.add(EventRestoreMutation(previous: previous, current: current));
+    }
+    return mutations;
+  }
+
   @override
   Future<void> delete(String id) async {
     events[id] = events[id]!.copyWith(deletedAt: DateTime(2026, 9, 16));
@@ -290,6 +311,79 @@ void main() {
       await service.setCategoryColor('smu', 0xff123456);
       expect(service.unavailable, isFalse);
       expect(repository.events.values.single.colorValue, 0xff123456);
+    },
+  );
+
+  test(
+    'refresh keeps an edit or deletion saved while the import ran',
+    () async {
+      await importAll();
+      final id = repository.events.keys.single;
+      source.events = [remote(day: 3, end: 10)];
+
+      repository.beforeMerge = () {
+        repository.events[id] = repository.events[id]!.copyWith(
+          memo: 'saved during refresh',
+          completed: true,
+        );
+        repository.beforeMerge = null;
+      };
+      await service.refresh('smu');
+      var event = repository.events[id]!;
+      expect(event.memo, 'saved during refresh');
+      expect(event.completed, isTrue);
+      expect(event.startAt, DateTime(2026, 9, 3), reason: 'source fix applies');
+
+      source.events = [remote(day: 5, end: 12)];
+      repository.beforeMerge = () {
+        repository.events[id] = repository.events[id]!.copyWith(
+          title: 'my title',
+        );
+        repository.beforeMerge = null;
+      };
+      await service.refresh('smu');
+      event = repository.events[id]!;
+      expect(event.title, 'my title');
+      expect(event.startAt, DateTime(2026, 9, 3), reason: 'user edit wins');
+
+      repository.beforeMerge = () {
+        repository.events[id] = repository.events[id]!.copyWith(
+          deletedAt: DateTime(2026, 9, 17),
+        );
+        repository.beforeMerge = null;
+      };
+      source.events = [remote(day: 7, end: 14)];
+      await service.refresh('smu');
+      expect(repository.events[id]!.isDeleted, isTrue);
+    },
+  );
+
+  test(
+    'a shifted same-title feed never moves personal state to another date',
+    () async {
+      AcademicEvent term(String id, int month) => AcademicEvent(
+        sourceId: id,
+        title: '수강신청',
+        start: DateTime(2026, month, 1),
+        end: DateTime(2026, month, 8),
+        url: 'https://example.test/$id',
+      );
+      source.events = [term('t:0', 3), term('t:1', 9)];
+      await importAll();
+      final september = repository.events.values.singleWhere(
+        (event) => event.startAt.month == 9,
+      );
+      repository.events[september.id] = september.copyWith(
+        memo: 'september memo',
+        completed: true,
+      );
+      // June is inserted before September, shifting September to t:2.
+      source.events = [term('t:0', 3), term('t:1', 6), term('t:2', 9)];
+      await service.refresh('smu');
+      final kept = repository.events[september.id]!;
+      expect(kept.startAt.month, 9);
+      expect(kept.memo, 'september memo');
+      expect(kept.completed, isTrue);
     },
   );
 

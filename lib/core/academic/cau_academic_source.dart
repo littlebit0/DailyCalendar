@@ -33,7 +33,6 @@ class CauAcademicSource implements AcademicSource {
     if (decoded is! Map || decoded['data'] is! List) {
       throw const FormatException('Invalid CAU calendar');
     }
-    final occurrences = <String, int>{};
     final events = <AcademicEvent>[];
     for (final row in decoded['data'] as List) {
       if (row is! Map ||
@@ -71,15 +70,9 @@ class CauAcademicSource implements AcademicSource {
         throw const FormatException('Unexpected CAU calendar period');
       }
       final title = (row['SUBJECT'] as String).trim();
-      final key = '$year:$title';
-      final occurrence = occurrences.update(
-        key,
-        (n) => n + 1,
-        ifAbsent: () => 0,
-      );
       events.add(
         AcademicEvent(
-          sourceId: '$key:$occurrence',
+          sourceId: '$year:$title',
           title: title,
           start: start,
           end: end,
@@ -91,7 +84,24 @@ class CauAcademicSource implements AcademicSource {
     if (events.isEmpty) {
       throw const FormatException('No published CAU calendar');
     }
-    return events..sort((a, b) => a.start.compareTo(b.start));
+    // Same-title rows are numbered by date, not by their position in the
+    // response, so reordering an identical row set keeps each row's identity.
+    events.sort((a, b) {
+      final byStart = a.start.compareTo(b.start);
+      return byStart != 0 ? byStart : a.end.compareTo(b.end);
+    });
+    final occurrences = <String, int>{};
+    return [
+      for (final event in events)
+        AcademicEvent(
+          sourceId:
+              '${event.sourceId}:${occurrences.update(event.sourceId, (n) => n + 1, ifAbsent: () => 0)}',
+          title: event.title,
+          start: event.start,
+          end: event.end,
+          url: event.url,
+        ),
+    ];
   }
 
   @override
