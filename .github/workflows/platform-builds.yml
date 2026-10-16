@@ -110,7 +110,8 @@ jobs:
 
       - name: Android native regression tests
         working-directory: android
-        run: ./gradlew :app:testDebugUnitTest
+        # --stacktrace: the task failure reported no cause, so show it in the log.
+        run: ./gradlew :app:testDebugUnitTest --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
