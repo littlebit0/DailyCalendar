@@ -297,9 +297,7 @@ class AcademicCalendarService extends ChangeNotifier {
     final saved = await _commands.importBatch(
       candidates,
       isCurrent: () => !_disposed && generation == _store.generation,
-      prepare: (incoming) async {
-        _check(generation);
-        final local = await _repository.findById(incoming.id);
+      resolveLatest: (local, incoming) {
         _check(generation);
         if (local == null) {
           newIds.add(incoming.id);
@@ -315,6 +313,19 @@ class AcademicCalendarService extends ChangeNotifier {
           return null;
         }
         if (_matches(local, remote)) {
+          unchanged.add(incoming.id);
+          return null;
+        }
+        // The previous row for this id still exists in the feed under another
+        // id: the feed was reordered or shifted, not edited. Moving this row's
+        // personal state onto a different date would swap user data.
+        if (baseline != null &&
+            external.entries.any(
+              (entry) =>
+                  entry.key != incoming.id &&
+                  _sameSource(entry.value, baseline),
+            )) {
+          preserved++;
           unchanged.add(incoming.id);
           return null;
         }
@@ -341,6 +352,9 @@ class AcademicCalendarService extends ChangeNotifier {
       failed: failed,
     );
   }
+
+  static bool _sameSource(AcademicEvent a, AcademicEvent b) =>
+      a.title == b.title && a.start == b.start && a.end == b.end;
 
   static bool _matches(CalendarEvent local, AcademicEvent baseline) =>
       local.title == baseline.title &&

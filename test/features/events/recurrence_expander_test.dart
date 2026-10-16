@@ -296,6 +296,68 @@ void main() {
       }
     },
   );
+
+  group('daily and weekly repeats keep the local start time', () {
+    // Run under a DST zone (e.g. TZ=America/New_York) to cover clock changes;
+    // in zones without DST these still guard the plain wall-clock contract.
+    for (final frequency in [
+      RecurrenceFrequency.daily,
+      RecurrenceFrequency.weekly,
+    ]) {
+      test('${frequency.name} occurrences, fast-forward and count agree', () {
+        final start = DateTime(2026, 10, 25, 9, 30);
+        final event = _recurringEvent(
+          startAt: start,
+          endAt: start.add(const Duration(hours: 1)),
+          recurrence: RecurrenceRule(frequency: frequency, count: 40),
+        );
+        final expander = RecurrenceExpander();
+        final all = expander.expand(
+          event,
+          DateTime(2026, 10, 1),
+          DateTime(2028, 1, 1),
+        );
+        expect(all, hasLength(40));
+        final step = frequency == RecurrenceFrequency.daily ? 1 : 7;
+        for (var i = 0; i < all.length; i++) {
+          expect(
+            all[i].startAt,
+            DateTime(2026, 10, 25 + step * i, 9, 30),
+            reason: 'occurrence $i',
+          );
+        }
+        // A far-away range uses the fast-forward path and must match the
+        // occurrences generated from the first one.
+        final open = event.copyWith(
+          recurrence: RecurrenceRule(frequency: frequency),
+        );
+        final everything = expander.expand(
+          open,
+          DateTime(2026, 10, 1),
+          DateTime(2027, 4, 1),
+        );
+        final late = expander.expand(
+          open,
+          DateTime(2027, 3, 1),
+          DateTime(2027, 3, 20),
+        );
+        expect(late, isNotEmpty);
+        for (final occurrence in late) {
+          expect(occurrence.startAt.hour, 9);
+          expect(occurrence.startAt.minute, 30);
+          expect(
+            everything.map((e) => e.startAt),
+            contains(occurrence.startAt),
+          );
+        }
+        expect(
+          expander.lastCountedEnd(event).hour,
+          10,
+          reason: 'count-based last end keeps the local hour',
+        );
+      });
+    }
+  });
 }
 
 CalendarEvent _recurringEvent({
