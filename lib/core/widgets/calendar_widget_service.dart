@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-import '../calendar/calendar_event_movement.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../settings/app_settings.dart';
@@ -174,8 +173,8 @@ class CalendarWidgetService {
     final leadingDays = settings.weekStartsOnMonday
         ? monthStart.weekday - DateTime.monday
         : monthStart.weekday % DateTime.daysPerWeek;
-    final gridStart = shiftCalendarDateByDays(monthStart, -leadingDays);
-    final gridEnd = shiftCalendarDateByDays(gridStart, 42);
+    final gridStart = monthStart.subtract(Duration(days: leadingDays));
+    final gridEnd = gridStart.add(const Duration(days: 42));
 
     final results = await Future.wait([
       _eventRepository.eventsInRange(gridStart, gridEnd),
@@ -242,15 +241,15 @@ class CalendarWidgetSnapshotBuilder {
     final weekOffset = settings.weekStartsOnMonday
         ? today.weekday - DateTime.monday
         : today.weekday % DateTime.daysPerWeek;
-    final weekStart = shiftCalendarDateByDays(today, -weekOffset);
-    final weekEnd = shiftCalendarDateByDays(weekStart, 6);
+    final weekStart = today.subtract(Duration(days: weekOffset));
+    final weekEnd = weekStart.add(const Duration(days: 6));
     final visibleMonthEvents = monthEvents
         .where((event) => _isVisible(event, settings))
         .toList(growable: false);
     final monthEventsByDay = _eventsByDay(
       visibleMonthEvents,
       gridStart,
-      shiftCalendarDateByDays(gridStart, 42),
+      gridStart.add(const Duration(days: 42)),
     );
     final todayEvents =
         List<CalendarEvent>.from(monthEventsByDay[_dateKey(today)] ?? const [])
@@ -288,7 +287,7 @@ class CalendarWidgetSnapshotBuilder {
           '${DateFormat.MMMd(localeName).format(weekEnd)}',
       'weekStartsOnMonday': settings.weekStartsOnMonday,
       'monthDays': List.generate(42, (index) {
-        final date = shiftCalendarDateByDays(gridStart, index);
+        final date = gridStart.add(Duration(days: index));
         final dayStart = _dateOnly(date);
         final events = monthEventsByDay[_dateKey(dayStart)] ?? const [];
         return {
@@ -373,13 +372,13 @@ class CalendarWidgetSnapshotBuilder {
             ? event.endAt
             : event.endAt.subtract(const Duration(microseconds: 1)),
       );
-      final lastRangeDay = shiftCalendarDateByDays(rangeEnd, -1);
+      final lastRangeDay = rangeEnd.subtract(const Duration(days: 1));
       if (eventEnd.isAfter(lastRangeDay)) {
         eventEnd = lastRangeDay;
       }
       while (!cursor.isAfter(eventEnd)) {
         result.putIfAbsent(_dateKey(cursor), () => []).add(event);
-        cursor = shiftCalendarDateByDays(cursor, 1);
+        cursor = cursor.add(const Duration(days: 1));
       }
     }
     for (final dayEvents in result.values) {

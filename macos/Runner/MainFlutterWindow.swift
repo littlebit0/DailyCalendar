@@ -53,15 +53,11 @@ private final class DailyAppleWidgets {
         let arguments = call.arguments as? [String: Any]
         let tokens = Set(arguments?["tokens"] as? [String] ?? [])
         do {
-          // Remove only the acknowledged tokens, re-reading under the lock so a
-          // request the widget appended meanwhile stays queued.
-          try withTodoActionsLock(in: try containerURL()) {
-            let remaining = try loadTodoActions().filter {
-              guard let token = $0["token"] as? String else { return false }
-              return !tokens.contains(token)
-            }
-            try writeTodoActions(remaining)
+          let remaining = try loadTodoActions().filter {
+            guard let token = $0["token"] as? String else { return false }
+            return !tokens.contains(token)
           }
+          try writeTodoActions(remaining)
           result(nil)
         } catch {
           result(FlutterError(code: "widget_todo_ack_failed", message: error.localizedDescription, details: nil))
@@ -105,38 +101,6 @@ private final class DailyAppleWidgets {
       to: try containerURL().appendingPathComponent(snapshotFileName),
       options: .atomic
     )
-  }
-
-  /// Serializes read-modify-write of the shared action queue across the app and
-  /// widget processes. An in-process queue cannot protect another process.
-  private static func withTodoActionsLock<T>(
-    in containerURL: URL,
-    _ body: () throws -> T
-  ) throws -> T {
-    let lockPath = containerURL.appendingPathComponent("daily-widget-todo-actions.lock").path
-    let descriptor = open(lockPath, O_CREAT | O_RDWR, 0o600)
-    guard descriptor >= 0 else {
-      throw NSError(
-        domain: "DailyWidgets",
-        code: 2,
-        userInfo: [NSLocalizedDescriptionKey: "위젯 작업 잠금을 열 수 없습니다."]
-      )
-    }
-    defer { close(descriptor) }
-    var attempts = 0
-    while flock(descriptor, LOCK_EX | LOCK_NB) != 0 {
-      attempts += 1
-      guard errno == EWOULDBLOCK, attempts <= 300 else {
-        throw NSError(
-          domain: "DailyWidgets",
-          code: 3,
-          userInfo: [NSLocalizedDescriptionKey: "위젯 작업 잠금을 얻지 못했습니다."]
-        )
-      }
-      usleep(10_000)
-    }
-    defer { flock(descriptor, LOCK_UN) }
-    return try body()
   }
 
   private static func loadTodoActions() throws -> [[String: Any]] {

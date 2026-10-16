@@ -1,4 +1,3 @@
-import '../../../core/calendar/calendar_event_movement.dart';
 import '../domain/calendar_event.dart';
 import '../domain/recurrence_rule.dart';
 
@@ -99,13 +98,16 @@ class RecurrenceExpander {
     required DateTime rangeStart,
     required RecurrenceRule rule,
   }) {
-    final interval = rule.interval < 1 ? 1 : rule.interval;
-    final stepDays = switch (rule.frequency) {
-      RecurrenceFrequency.daily => interval,
-      RecurrenceFrequency.weekly => 7 * interval,
+    final step = switch (rule.frequency) {
+      RecurrenceFrequency.daily => Duration(
+        days: rule.interval < 1 ? 1 : rule.interval,
+      ),
+      RecurrenceFrequency.weekly => Duration(
+        days: 7 * (rule.interval < 1 ? 1 : rule.interval),
+      ),
       _ => null,
     };
-    if (stepDays == null) {
+    if (step == null) {
       return _FastForwardResult(current, 0);
     }
 
@@ -114,19 +116,14 @@ class RecurrenceExpander {
       return _FastForwardResult(current, 0);
     }
 
-    // Step by calendar days so the local start time survives daylight-saving
-    // changes; elapsed 24-hour periods would shift it by an hour.
-    var skipped =
-        calendarDayDifference(earliestRelevantStart, current) ~/ stepDays;
-    var candidate = shiftCalendarDateByDays(current, stepDays * skipped);
-    while (skipped > 0 && candidate.isAfter(earliestRelevantStart)) {
-      skipped -= 1;
-      candidate = shiftCalendarDateByDays(current, stepDays * skipped);
-    }
+    final elapsedMicroseconds = earliestRelevantStart
+        .difference(current)
+        .inMicroseconds;
+    final skipped = elapsedMicroseconds ~/ step.inMicroseconds;
     if (skipped <= 0) {
       return _FastForwardResult(current, 0);
     }
-    return _FastForwardResult(candidate, skipped);
+    return _FastForwardResult(current.add(step * skipped), skipped);
   }
 
   DateTime _at(DateTime current, RecurrenceRule rule, int index) {
@@ -134,11 +131,8 @@ class RecurrenceExpander {
     final interval = (rule.interval < 1 ? 1 : rule.interval) * index;
     return switch (rule.frequency) {
       RecurrenceFrequency.none => current,
-      RecurrenceFrequency.daily => shiftCalendarDateByDays(current, interval),
-      RecurrenceFrequency.weekly => shiftCalendarDateByDays(
-        current,
-        7 * interval,
-      ),
+      RecurrenceFrequency.daily => current.add(Duration(days: interval)),
+      RecurrenceFrequency.weekly => current.add(Duration(days: 7 * interval)),
       RecurrenceFrequency.monthly => _addMonths(
         current,
         interval,

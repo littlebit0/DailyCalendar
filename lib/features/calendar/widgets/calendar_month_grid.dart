@@ -557,7 +557,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
     final leadingDays = weekStartsOnMonday
         ? first.weekday - 1
         : first.weekday % 7;
-    final start = shiftCalendarDateByDays(first, -leadingDays);
+    final start = first.subtract(Duration(days: leadingDays));
     final daysInMonth = DateUtils.getDaysInMonth(month.year, month.month);
     final requiredWeeks = ((leadingDays + daysInMonth) / 7).ceil();
     final weekCount = widget.continuous
@@ -565,7 +565,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
         : math.max(5, requiredWeeks);
     return List.generate(
       weekCount * 7,
-      (index) => shiftCalendarDateByDays(start, index),
+      (index) => start.add(Duration(days: index)),
     );
   }
 
@@ -584,7 +584,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
       );
       while (cursor.isBefore(end)) {
         days.add(cursor);
-        cursor = shiftCalendarDateByDays(cursor, 1);
+        cursor = cursor.add(const Duration(days: 1));
       }
     }
     return days;
@@ -782,7 +782,7 @@ class _WeekRowState extends State<_WeekRow> {
     final weekStart = widget.weekDays.first;
     _segments = _layoutSegments(
       weekStart,
-      shiftCalendarDateByDays(weekStart, 7),
+      weekStart.add(const Duration(days: 7)),
     );
   }
 
@@ -1001,13 +1001,11 @@ class _WeekRowState extends State<_WeekRow> {
                       height: metrics.height,
                       child: _EventSpanFlag(
                         event: segment.event,
-                        segmentStart: shiftCalendarDateByDays(
-                          weekStart,
-                          segment.startCol,
+                        segmentStart: weekStart.add(
+                          Duration(days: segment.startCol),
                         ),
-                        segmentEnd: shiftCalendarDateByDays(
-                          weekStart,
-                          segment.endCol,
+                        segmentEnd: weekStart.add(
+                          Duration(days: segment.endCol),
                         ),
                         showTime: widget.showEventTimes,
                         compact: widget.compact,
@@ -1052,13 +1050,11 @@ class _WeekRowState extends State<_WeekRow> {
                       height: metrics.height,
                       child: _EventSpanFlag(
                         event: segment.event,
-                        segmentStart: shiftCalendarDateByDays(
-                          weekStart,
-                          segment.startCol,
+                        segmentStart: weekStart.add(
+                          Duration(days: segment.startCol),
                         ),
-                        segmentEnd: shiftCalendarDateByDays(
-                          weekStart,
-                          segment.endCol,
+                        segmentEnd: weekStart.add(
+                          Duration(days: segment.endCol),
                         ),
                         showTime: widget.showEventTimes,
                         compact: widget.compact,
@@ -1174,7 +1170,7 @@ class _WeekRowState extends State<_WeekRow> {
     final weekStart = widget.weekDays.first;
     return _layoutSegments(
       weekStart,
-      shiftCalendarDateByDays(weekStart, 7),
+      weekStart.add(const Duration(days: 7)),
       events: projectedEvents,
       previewEvent: previewEvent,
       previewDate: hoverDate,
@@ -1191,7 +1187,7 @@ class _WeekRowState extends State<_WeekRow> {
 
     final normalizedStart = _dayStart(start.isAfter(end) ? end : start);
     final normalizedEnd = _dayStart(start.isAfter(end) ? start : end);
-    final weekLast = shiftCalendarDateByDays(weekStart, 6);
+    final weekLast = weekStart.add(const Duration(days: 6));
     if (normalizedEnd.isBefore(weekStart) ||
         normalizedStart.isAfter(weekLast)) {
       return null;
@@ -1217,8 +1213,8 @@ class _WeekRowState extends State<_WeekRow> {
       }
     }
     return _RangeHighlightSegment(
-      startCol: calendarDayDifference(segmentStart, weekStart),
-      endCol: calendarDayDifference(segmentEnd, weekStart),
+      startCol: segmentStart.difference(weekStart).inDays,
+      endCol: segmentEnd.difference(weekStart).inDays,
     );
   }
 
@@ -1234,7 +1230,7 @@ class _WeekRowState extends State<_WeekRow> {
     List<String>? previewManualOrder;
     if (previewEvent != null && previewDate != null) {
       final dayStart = _dayStart(previewDate);
-      final dayEnd = shiftCalendarDateByDays(dayStart, 1);
+      final dayEnd = dayStart.add(const Duration(days: 1));
       final targetEvents = sortedCalendarEvents(
         sourceEvents.where(
           (event) =>
@@ -1264,9 +1260,8 @@ class _WeekRowState extends State<_WeekRow> {
             .cast<_EventSegment>()
             .toList()
           ..sort((a, b) {
-            final comparisonDate = shiftCalendarDateByDays(
-              weekStart,
-              math.max(a.startCol, b.startCol),
+            final comparisonDate = weekStart.add(
+              Duration(days: math.max(a.startCol, b.startCol)),
             );
             final eventCompare = compareCalendarEvents(
               a.event,
@@ -1302,7 +1297,7 @@ class _WeekRowState extends State<_WeekRow> {
 
   List<CalendarEvent> _eventsForDay(DateTime day) {
     final dayStart = _dayStart(day);
-    final dayEnd = shiftCalendarDateByDays(dayStart, 1);
+    final dayEnd = dayStart.add(const Duration(days: 1));
     return sortedCalendarEvents(
       widget.events.where((event) => event.overlaps(dayStart, dayEnd)),
       priority: widget.eventSortPriority,
@@ -1812,13 +1807,13 @@ class _EventSpanFlag extends StatelessWidget {
   }
 
   DateTime _dateAtLocalPosition(Offset position, double width) {
-    final dayCount = calendarDayDifference(segmentEnd, segmentStart) + 1;
+    final dayCount = segmentEnd.difference(segmentStart).inDays + 1;
     if (dayCount <= 1 || width <= 0) {
       return segmentStart;
     }
     final dayWidth = width / dayCount;
     final dayIndex = (position.dx / dayWidth).floor().clamp(0, dayCount - 1);
-    return shiftCalendarDateByDays(segmentStart, dayIndex);
+    return segmentStart.add(Duration(days: dayIndex));
   }
 
   String _formatDday(CalendarEvent event) {
@@ -1829,7 +1824,7 @@ class _EventSpanFlag extends StatelessWidget {
       event.startAt.month,
       event.startAt.day,
     );
-    final diff = calendarDayDifference(target, today);
+    final diff = target.difference(today).inDays;
     if (diff == 0) {
       return 'D-day';
     }

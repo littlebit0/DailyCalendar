@@ -55,8 +55,6 @@ class _Commands implements EventCommandService {
   Future<Set<String>> importBatch(
     Iterable<CalendarEvent> events, {
     Future<CalendarEvent?> Function(CalendarEvent event)? prepare,
-    CalendarEvent? Function(CalendarEvent? latest, CalendarEvent incoming)?
-    resolveLatest,
     bool Function()? isCurrent,
     EventCategory? Function()? lmsCategory,
     bool preserveLmsSource = false,

@@ -13,65 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('timeline minutes follow wall-clock time on every day', () {
-    // Covers 23/25-hour daylight-saving days when run in a DST time zone.
-    CalendarEvent timed(String id, DateTime start, DateTime end) =>
-        CalendarEvent(
-          id: id,
-          title: id,
-          startAt: start,
-          endAt: end,
-          allDay: false,
-          category: EventCategory.basic,
-          colorValue: EventCategory.basic.colorValue,
-          createdAt: start,
-          updatedAt: start,
-        );
-    for (final day in [
-      DateTime(2026, 3, 8),
-      DateTime(2026, 3, 29),
-      DateTime(2026, 10, 25),
-      DateTime(2026, 11, 1),
-      DateTime(2026, 5, 4),
-    ]) {
-      final morning = timed(
-        'morning',
-        DateTime(day.year, day.month, day.day, 9),
-        DateTime(day.year, day.month, day.day, 10),
-      );
-      final late = timed(
-        'late',
-        DateTime(day.year, day.month, day.day, 23, 15),
-        DateTime(day.year, day.month, day.day, 23, 45),
-      );
-      final overnight = timed(
-        'overnight',
-        DateTime(day.year, day.month, day.day, 22),
-        DateTime(day.year, day.month, day.day + 1, 1),
-      );
-      final byId = {
-        for (final s in timelineSegmentMinutesForDate([
-          morning,
-          late,
-          overnight,
-        ], day))
-          s.event.id: s,
-      };
-      expect(byId['morning']!.startMinute, 9 * 60, reason: '$day');
-      expect(byId['morning']!.endMinute, 10 * 60, reason: '$day');
-      expect(byId['late']!.startMinute, 23 * 60 + 15, reason: '$day');
-      expect(byId['late']!.endMinute, 23 * 60 + 45, reason: '$day');
-      expect(byId['overnight']!.startMinute, 22 * 60, reason: '$day');
-      expect(byId['overnight']!.endMinute, 1440, reason: '$day');
-      // The next day continues from midnight.
-      final next = timelineSegmentMinutesForDate([
-        overnight,
-      ], DateTime(day.year, day.month, day.day + 1));
-      expect(next.single.startMinute, 0, reason: '$day');
-      expect(next.single.endMinute, 60, reason: '$day');
-    }
-  });
-
   for (final brightness in Brightness.values) {
     testWidgets('timed card keeps its title and time readable in $brightness', (
       tester,

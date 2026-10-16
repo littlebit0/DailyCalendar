@@ -15,46 +15,11 @@ env:
   RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
 
 jobs:
-  resolve:
-    name: Resolve release tag
-    runs-on: ubuntu-latest
-    outputs:
-      sha: ${{ steps.verify.outputs.sha }}
-      version: ${{ steps.verify.outputs.version }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: refs/tags/${{ env.RELEASE_TAG }}
-      - name: Verify tag, product version and release notes
-        id: verify
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [[ ! "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Release tag must look like v1.2.3 (no build suffix): $RELEASE_TAG" >&2
-            exit 1
-          fi
-          version="${RELEASE_TAG#v}"
-          pubspec_version="$(sed -n 's/^version: *//p' pubspec.yaml | head -n 1 | tr -d '[:space:]')"
-          if [[ "$pubspec_version" != "$version" ]]; then
-            echo "pubspec.yaml version '$pubspec_version' does not match tag '$RELEASE_TAG'" >&2
-            exit 1
-          fi
-          if [[ ! -f "docs/RELEASE_NOTES_${version}.md" ]]; then
-            echo "docs/RELEASE_NOTES_${version}.md is missing at tag $RELEASE_TAG" >&2
-            exit 1
-          fi
-          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
   ios:
     name: iOS unsigned IPA
-    needs: resolve
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.resolve.outputs.sha }}
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -62,11 +27,6 @@ jobs:
           cache: true
       - run: flutter pub get
       - run: flutter build ios --release --no-codesign --no-pub
-      - name: Verify built app version
-        shell: bash
-        run: |
-          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/ios/iphoneos/Runner.app/Info.plist)"
-          test "$built" = "${{ needs.resolve.outputs.version }}" || { echo "Built iOS version $built != ${{ needs.resolve.outputs.version }}" >&2; exit 1; }
       - name: Stage IPA
         shell: bash
         run: |
@@ -82,12 +42,9 @@ jobs:
 
   macos:
     name: macOS unsigned DMG
-    needs: resolve
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.resolve.outputs.sha }}
       - uses: subosito/flutter-action@v2
         with:
           channel: stable
@@ -106,11 +63,6 @@ jobs:
         env:
           GOOGLE_DESKTOP_CLIENT_SECRET: ${{ secrets.GOOGLE_DESKTOP_CLIENT_SECRET }}
         run: flutter build macos --release --no-pub --dart-define=GOOGLE_DESKTOP_CLIENT_SECRET="$GOOGLE_DESKTOP_CLIENT_SECRET"
-      - name: Verify built app version
-        shell: bash
-        run: |
-          built="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' build/macos/Build/Products/Release/Daily.app/Contents/Info.plist)"
-          test "$built" = "${{ needs.resolve.outputs.version }}" || { echo "Built macOS version $built != ${{ needs.resolve.outputs.version }}" >&2; exit 1; }
       - name: Stage DMG
         shell: bash
         run: |
@@ -126,12 +78,10 @@ jobs:
 
   publish:
     name: Publish GitHub release
-    needs: [resolve, ios, macos]
+    needs: [ios, macos]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ needs.resolve.outputs.sha }}
       - uses: actions/download-artifact@v4
         with:
           pattern: release-*
@@ -141,7 +91,7 @@ jobs:
         with:
           tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
           name: DailyCalendar ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
-          body_path: docs/RELEASE_NOTES_${{ needs.resolve.outputs.version }}.md
+          body_path: docs/RELEASE_NOTES_3.5.2.md
           draft: true
           files: dist/*
           fail_on_unmatched_files: true

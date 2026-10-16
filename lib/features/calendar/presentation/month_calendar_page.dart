@@ -1342,14 +1342,14 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           selectedDate,
         );
       case CalendarViewMode.week:
-        final next = shiftCalendarDateByDays(selectedDate, delta * 7);
+        final next = selectedDate.add(Duration(days: delta * 7));
         ref.read(selectedDateProvider.notifier).state = next;
         ref.read(visibleMonthProvider.notifier).state = DateTime(
           next.year,
           next.month,
         );
       case CalendarViewMode.day:
-        final next = shiftCalendarDateByDays(selectedDate, delta);
+        final next = selectedDate.add(Duration(days: delta));
         ref.read(selectedDateProvider.notifier).state = next;
         ref.read(visibleMonthProvider.notifier).state = DateTime(
           next.year,
@@ -2575,9 +2575,8 @@ class _WeekPageViewState extends State<_WeekPageView> {
             }
           },
           itemBuilder: (context, index) {
-            final pageDate = shiftCalendarDateByDays(
-              _anchorDate,
-              (index - _initialPage) * 7,
+            final pageDate = _anchorDate.add(
+              Duration(days: (index - _initialPage) * 7),
             );
             return _desktopMouseWheelSignalRegion(
               context,
@@ -2717,7 +2716,7 @@ class _WeekPageViewState extends State<_WeekPageView> {
       widget.settings.weekStartsOnMonday,
     ).start;
     final toStart = _weekRangeFor(to, widget.settings.weekStartsOnMonday).start;
-    return calendarDayDifference(toStart, fromStart) ~/ 7;
+    return toStart.difference(fromStart).inDays ~/ 7;
   }
 }
 
@@ -2760,7 +2759,7 @@ class _CalendarWeekPage extends ConsumerWidget {
         if (settings.weekDayLayoutMode == WeekDayLayoutMode.schedule) {
           final days = List.generate(
             7,
-            (index) => shiftCalendarDateByDays(range.start, index),
+            (index) => range.start.add(Duration(days: index)),
           );
           return TimetableSchedule(
             days: days,
@@ -2949,9 +2948,8 @@ class _DayPageViewState extends State<_DayPageView> {
             }
           },
           itemBuilder: (context, index) {
-            final pageDate = shiftCalendarDateByDays(
-              _anchorDate,
-              index - _initialPage,
+            final pageDate = _anchorDate.add(
+              Duration(days: index - _initialPage),
             );
             return _desktopMouseWheelSignalRegion(
               context,
@@ -3086,7 +3084,7 @@ class _DayPageViewState extends State<_DayPageView> {
   }
 
   int _dayDelta(DateTime from, DateTime to) {
-    return calendarDayDifference(to, from);
+    return _dateOnly(to).difference(_dateOnly(from)).inDays;
   }
 }
 
@@ -3770,10 +3768,9 @@ class _MonthPageViewState extends ConsumerState<_MonthPageView> {
       final weekCount = ((leadingDays + daysInMonth) / 7).ceil();
       final column = (local.dx / (renderObject.size.width / 7)).floor();
       final row = (local.dy / (renderObject.size.height / weekCount)).floor();
-      final date = shiftCalendarDateByDays(
-        first,
-        row * 7 + column - leadingDays,
-      );
+      final date = first
+          .subtract(Duration(days: leadingDays))
+          .add(Duration(days: row * 7 + column));
       if (date.year != month.year || date.month != month.month) {
         return null;
       }
@@ -5381,14 +5378,14 @@ class _CalendarHeader extends ConsumerWidget {
           selectedDate,
         );
       case CalendarViewMode.week:
-        final next = shiftCalendarDateByDays(selectedDate, delta * 7);
+        final next = selectedDate.add(Duration(days: delta * 7));
         ref.read(selectedDateProvider.notifier).state = next;
         ref.read(visibleMonthProvider.notifier).state = DateTime(
           next.year,
           next.month,
         );
       case CalendarViewMode.day:
-        final next = shiftCalendarDateByDays(selectedDate, delta);
+        final next = selectedDate.add(Duration(days: delta));
         ref.read(selectedDateProvider.notifier).state = next;
         ref.read(visibleMonthProvider.notifier).state = DateTime(
           next.year,
@@ -7152,7 +7149,7 @@ class _CalendarWeekViewState extends State<_CalendarWeekView> {
     final range = _weekRangeFor(widget.selectedDate, widget.weekStartsOnMonday);
     final days = List.generate(
       7,
-      (index) => shiftCalendarDateByDays(range.start, index),
+      (index) => range.start.add(Duration(days: index)),
     );
     final compact = MediaQuery.sizeOf(context).width < 720;
 

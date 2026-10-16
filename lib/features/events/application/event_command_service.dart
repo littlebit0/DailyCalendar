@@ -671,8 +671,6 @@ class EventCommandService {
   Future<Set<String>> importBatch(
     Iterable<CalendarEvent> events, {
     Future<CalendarEvent?> Function(CalendarEvent event)? prepare,
-    CalendarEvent? Function(CalendarEvent? latest, CalendarEvent incoming)?
-    resolveLatest,
     EventCategory? Function()? lmsCategory,
     bool preserveLmsSource = false,
     bool Function()? isCurrent,
@@ -682,97 +680,68 @@ class EventCommandService {
       if (isCurrent != null && !isCurrent()) break;
       CalendarEvent imported;
       try {
-        if (resolveLatest != null) {
-          // The decision reads the current row inside the write transaction,
-          // so an edit or deletion saved while the import ran cannot be
-          // overwritten by an older snapshot. Returning null keeps the row.
-          CalendarEvent? decided;
-          final mutations = await _repository.mergeRestoredEventsAtomically(
-            [event],
-            resolve: (latest, incoming) {
-              if (isCurrent != null && !isCurrent()) {
-                throw StateError('가져오기 대상이 변경되었습니다.');
+        final prepared = prepare == null ? event : await prepare(event);
+        if (isCurrent != null && !isCurrent()) break;
+        if (prepared == null) continue;
+        imported = prepared
+            .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
+            .normalizeAllDayBounds();
+        if (imported.lms == null) {
+          await _repository.save(imported);
+        } else {
+          if (!_isCurrentOwner(imported)) break;
+          await _repository.mergeRestoredEventsAtomically(
+            [imported],
+            resolve: (latest, source) {
+              if (isCurrent != null && !isCurrent() ||
+                  !_isCurrentOwner(source)) {
+                throw StateError('LMS 계정이 변경되었습니다.');
               }
-              final result = resolveLatest(latest, incoming);
-              if (result == null) {
-                if (latest == null) throw StateError('저장할 일정이 없습니다.');
+              final destination = lmsCategory?.call();
+              if (latest == null) {
+                imported = source.copyWith(
+                  category: destination,
+                  colorValue: destination?.colorValue,
+                  completed: preserveLmsSource
+                      ? source.completed
+                      : source.lms?.sourceCompleted ?? source.completed,
+                );
+                return imported;
+              }
+              final recoverStrippedSource =
+                  latest.lms == null && latest.id.startsWith('lms:');
+              if (!_isCurrentOwner(latest) && !recoverStrippedSource) {
+                imported = latest;
                 return latest;
               }
-              decided = result
-                  .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
-                  .normalizeAllDayBounds();
-              return decided!;
+              // Re-read personal fields in the same write transaction, after
+              // any editor save which completed while prepare was awaiting.
+              imported =
+                  (preserveLmsSource ? latest : _withLmsSource(latest, source))
+                      .copyWith(
+                        category: destination,
+                        colorValue: destination?.colorValue,
+                        // User completion wins over a negative school state.
+                        // Read its provenance in this transaction, not from
+                        // the possibly stale snapshot prepared by the fetch.
+                        lms: preserveLmsSource
+                            ? latest.lms
+                            : source.lms?.copyWith(
+                                manuallyCompleted:
+                                    latest.lms?.manuallyCompleted ?? false,
+                              ),
+                        completed: preserveLmsSource
+                            ? latest.completed
+                            : latest.lms?.manuallyCompleted == true
+                            ? true
+                            : source.lms?.sourceCompleted ?? latest.completed,
+                        createdAt: latest.createdAt,
+                        updatedAt: _nextLmsChange(latest),
+                        syncStatus: 'pending',
+                      );
+              return imported;
             },
           );
-          if (isCurrent != null && !isCurrent()) break;
-          if (mutations.isEmpty || decided == null) continue;
-          imported = decided!;
-        } else {
-          final prepared = prepare == null ? event : await prepare(event);
-          if (isCurrent != null && !isCurrent()) break;
-          if (prepared == null) continue;
-          imported = prepared
-              .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
-              .normalizeAllDayBounds();
-          if (imported.lms == null) {
-            await _repository.save(imported);
-          } else {
-            if (!_isCurrentOwner(imported)) break;
-            await _repository.mergeRestoredEventsAtomically(
-              [imported],
-              resolve: (latest, source) {
-                if (isCurrent != null && !isCurrent() ||
-                    !_isCurrentOwner(source)) {
-                  throw StateError('LMS 계정이 변경되었습니다.');
-                }
-                final destination = lmsCategory?.call();
-                if (latest == null) {
-                  imported = source.copyWith(
-                    category: destination,
-                    colorValue: destination?.colorValue,
-                    completed: preserveLmsSource
-                        ? source.completed
-                        : source.lms?.sourceCompleted ?? source.completed,
-                  );
-                  return imported;
-                }
-                final recoverStrippedSource =
-                    latest.lms == null && latest.id.startsWith('lms:');
-                if (!_isCurrentOwner(latest) && !recoverStrippedSource) {
-                  imported = latest;
-                  return latest;
-                }
-                // Re-read personal fields in the same write transaction, after
-                // any editor save which completed while prepare was awaiting.
-                imported =
-                    (preserveLmsSource
-                            ? latest
-                            : _withLmsSource(latest, source))
-                        .copyWith(
-                          category: destination,
-                          colorValue: destination?.colorValue,
-                          // User completion wins over a negative school state.
-                          // Read its provenance in this transaction, not from
-                          // the possibly stale snapshot prepared by the fetch.
-                          lms: preserveLmsSource
-                              ? latest.lms
-                              : source.lms?.copyWith(
-                                  manuallyCompleted:
-                                      latest.lms?.manuallyCompleted ?? false,
-                                ),
-                          completed: preserveLmsSource
-                              ? latest.completed
-                              : latest.lms?.manuallyCompleted == true
-                              ? true
-                              : source.lms?.sourceCompleted ?? latest.completed,
-                          createdAt: latest.createdAt,
-                          updatedAt: _nextLmsChange(latest),
-                          syncStatus: 'pending',
-                        );
-                return imported;
-              },
-            );
-          }
         }
       } on Object {
         continue;

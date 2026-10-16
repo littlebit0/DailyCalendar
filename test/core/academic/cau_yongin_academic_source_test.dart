@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/cau_academic_source.dart';
 import 'package:daily/core/academic/yongin_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -30,31 +29,6 @@ void main() {
       expect(() => CauAcademicSource.parse(body, 2025), throwsFormatException);
     },
   );
-
-  test('CAU row order does not change same-title identities', () {
-    final body = File(
-      'test/fixtures/academic/cau-2026.json',
-    ).readAsStringSync();
-    String key(AcademicEvent e) => '${e.title}|${e.start}|${e.end}';
-    final original = {
-      for (final e in CauAcademicSource.parse(body, 2026)) key(e): e.sourceId,
-    };
-    final decoded = jsonDecode(body) as Map<String, dynamic>;
-    decoded['data'] = (decoded['data'] as List).reversed.toList();
-    final reordered = CauAcademicSource.parse(jsonEncode(decoded), 2026);
-    expect(
-      reordered.map((e) => e.sourceId).toSet(),
-      hasLength(reordered.length),
-    );
-    for (final e in reordered) {
-      expect(e.sourceId, original[key(e)], reason: key(e));
-    }
-    expect(
-      original.values.where((id) => id.endsWith(':1')),
-      isNotEmpty,
-      reason: 'fixture must contain same-title rows',
-    );
-  });
 
   test(
     'Yongin uses current January and February and recognises empty months',

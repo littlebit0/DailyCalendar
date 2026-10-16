@@ -401,10 +401,10 @@ class CalendarEventMonthDropOverlay extends StatelessWidget {
     final firstWeekdayOffset = weekStartsOnMonday
         ? month.weekday - DateTime.monday
         : month.weekday % DateTime.daysPerWeek;
-    final firstDate = shiftCalendarDateByDays(month, -firstWeekdayOffset);
+    final firstDate = month.subtract(Duration(days: firstWeekdayOffset));
     final days = List.generate(
       42,
-      (index) => shiftCalendarDateByDays(firstDate, index),
+      (index) => firstDate.add(Duration(days: index)),
     );
     final firstWeekday = weekStartsOnMonday ? DateTime.monday : DateTime.sunday;
     final locale = Localizations.localeOf(context).toLanguageTag();
