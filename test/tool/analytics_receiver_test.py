@@ -108,6 +108,35 @@ class DurationTruncationTests(unittest.TestCase):
             'operation': 'create', 'phase': 'followUp', 'durationMs': 5, 'errorCode': 'unknown'})))
 
 
+class FrameSummaryTests(unittest.TestCase):
+    BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z',
+            'name': 'frame_summary'}
+    GOOD = {'frameCount': 600, 'slowFrameCount': 3, 'durationMs': 80, 'refreshRateHz': 120,
+            'buildMode': 'release'}
+
+    def valid(self, **changes):
+        from tool.analytics_receiver import valid_event
+        return valid_event({**self.BASE, 'attributes': {**self.GOOD, **changes}})
+
+    def test_accepts_a_window_and_rejects_out_of_range_or_inconsistent_values(self):
+        self.assertTrue(self.valid())
+        self.assertTrue(self.valid(slowFrameCount=0))
+        self.assertTrue(self.valid(slowFrameCount=600))
+        self.assertFalse(self.valid(slowFrameCount=601))
+        self.assertFalse(self.valid(frameCount=0))
+        self.assertFalse(self.valid(frameCount=100001, slowFrameCount=0))
+        self.assertFalse(self.valid(refreshRateHz=23))
+        self.assertFalse(self.valid(refreshRateHz=241))
+        self.assertFalse(self.valid(buildMode='beta'))
+        self.assertFalse(self.valid(refreshRateHz=120.0))
+
+    def test_missing_or_extra_attributes_are_rejected(self):
+        from tool.analytics_receiver import valid_event
+        partial = {k: v for k, v in self.GOOD.items() if k != 'buildMode'}
+        self.assertFalse(valid_event({**self.BASE, 'attributes': partial}))
+        self.assertFalse(self.valid(screen='calendar'))
+
+
 class BuildNumberTests(unittest.TestCase):
     def test_real_build_numbers_and_unknown_are_accepted(self):
         for value in ("400", "4.0.0", "4.0.0.12", "unknown"):

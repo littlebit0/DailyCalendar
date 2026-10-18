@@ -66,6 +66,7 @@ ENUMS = {
         "backupThenDetectRemoteChanges",
     },
     "phase": {"database", "followUp"},
+    "buildMode": {"debug", "profile", "release"},
     "feature": {"search", "filter", "widget", "calendarImport", "siri", "map"},
     "trigger": {"automatic", "manual", "startup", "resume", "localChange"},
     "outcome": {"succeeded", "failed", "canceled"},
@@ -85,7 +86,7 @@ OPTIONAL_SCHEMAS = {
     for name in (
         "app_load_completed", "event_editor_completed", "event_save_succeeded",
         "event_save_failed", "sync_succeeded", "sync_failed",
-        "slow_interaction_detected",
+        "slow_interaction_detected", "frame_summary",
     )
 }
 for _name in ("event_save_succeeded", "event_save_failed"):
@@ -114,6 +115,11 @@ SCHEMAS = {
         "operation": "syncOperation", "trigger": "trigger", "outcome": "failedOutcome",
         "durationMs": "duration", "errorCode": "errorCode",
     },
+    "frame_summary": {
+        "frameCount": "framesInWindow", "slowFrameCount": "slowFramesInWindow",
+        "durationMs": "duration", "refreshRateHz": "refreshRate",
+        "buildMode": "buildMode",
+    },
     "slow_interaction_detected": {
         "interaction": "interaction", "durationMs": "duration",
         "slowFrameCount": "frameCount",
@@ -124,6 +130,12 @@ SCHEMAS = {
 def _valid_value(kind, value):
     if kind == "duration":
         return type(value) is int and 0 <= value <= 120000
+    if kind == "framesInWindow":
+        return type(value) is int and 1 <= value <= 100000
+    if kind == "slowFramesInWindow":
+        return type(value) is int and 0 <= value <= 100000
+    if kind == "refreshRate":
+        return type(value) is int and 24 <= value <= 240
     if kind == "truncatedFlag":
         return value is True
     if kind == "frameCount":
@@ -170,6 +182,8 @@ def valid_event(event):
         return False
     # The flag means the real duration was longer than the cap and was cut to it.
     if "durationTruncated" in attributes and attributes["durationMs"] != 120000:
+        return False
+    if event["name"] == "frame_summary" and attributes["slowFrameCount"] > attributes["frameCount"]:
         return False
     return True
 
