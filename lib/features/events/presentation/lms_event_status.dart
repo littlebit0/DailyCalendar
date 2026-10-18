@@ -62,6 +62,16 @@ class LmsEventStatus extends ConsumerWidget {
             Text(context.tr('학교에 다시 로그인해 주세요. 기존 일정은 마지막으로 확인한 상태로 유지됩니다.')),
           if (sync.state == LmsSyncState.fallback)
             Text(context.tr('학교에 연결하지 못해 마지막으로 확인한 데이터를 표시합니다.')),
+          if (type == '강의' &&
+              (metadata.learnedSeconds != null ||
+                  metadata.progressPercent != null) &&
+              sync.lastResult?.learningCoverageIncomplete == true)
+            // The last sync kept the earlier learning values for what it could
+            // not read, so the time below belongs to the whole sync, not to this item.
+            Text(
+              context.tr('일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.'),
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
           if (last != null)
             Text(
               context.tr(

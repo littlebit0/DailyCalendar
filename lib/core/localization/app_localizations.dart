@@ -1128,6 +1128,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': 'Display & Calendar',
     '화면 및 일정': 'Display & Schedule',
     '화면과 기능 사용': 'Screens and feature usage',
+    '일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.':
+        'Some learning information could not be read this time, so the values above may be from an earlier check.',
   },
   'ja': {
     '앱을 시작하지 못했습니다': 'アプリを起動できませんでした',
@@ -2014,6 +2016,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '表示とカレンダー',
     '화면 및 일정': '表示と予定',
     '화면과 기능 사용': '画面と機能の利用',
+    '일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.':
+        '一部の学習情報を今回確認できなかったため、上の学習情報は以前に確認した値の可能性があります。',
   },
   'zh_Hant': {
     '앱을 시작하지 못했습니다': '無法啟動應用程式',
@@ -2873,5 +2877,7 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '顯示與行事曆',
     '화면 및 일정': '顯示與行程',
     '화면과 기능 사용': '畫面與功能使用',
+    '일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.':
+        '這次無法讀取部分學習資訊，因此上方學習資訊可能是先前確認的數值。',
   },
 };
