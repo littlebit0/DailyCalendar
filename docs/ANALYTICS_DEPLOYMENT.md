@@ -192,3 +192,21 @@ it may be still running, cut off by the app being closed, or lost with the pendi
 queue (200 events / 7 days) or an unreachable receiver. Compute
 `unknown = started - (succeeded + failed + abandoned)` over a window that excludes
 the most recent minutes, and never treat it as a failure. Deploy the receiver first.
+
+## Feature usage (#153)
+
+`feature_used` records only the features below, so **a missing record is never
+evidence of zero use**. The event's `outcome` means:
+
+| feature | measured | `succeeded` | `canceled` | `failed` |
+|---|---|---|---|---|
+| `search` | search panel opened | panel opened (not a search result) | - | - |
+| `filter` | filter sheet closed | at least one filter changed (query, hidden categories, holidays, D-day only) | closed with no net change | - |
+| `widget` | queued widget Todo actions handled by the app | the app acknowledged at least one queued action: it was applied, **or dropped** because its event or recurring occurrence no longer exists (so this overstates completion changes) | - | - |
+| `calendarImport` | an import run from the import page | the run finished without error | - | the run threw |
+| `map` | **not measured**: the native chooser reports "handled" for both opening a map and dismissing the dialog | - | - | - |
+| `siri` | **not measured**: Siri intents run in the OS/extension without the Dart app | - | - | - |
+
+Search text, imported event content, locations and Siri phrases are never recorded.
+Records written before this change used `succeeded` for every filter-sheet close;
+that older meaning is not reinterpreted. Receivers need no change (existing enums).

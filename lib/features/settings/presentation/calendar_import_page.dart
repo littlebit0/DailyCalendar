@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/analytics/product_analytics.dart';
 import '../../../core/calendar_import/calendar_import_models.dart';
 import '../../../core/calendar_import/google_calendar_source.dart';
 import '../../../core/di/app_providers.dart';
@@ -215,16 +216,20 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
       _importBusy = true;
       _message = null;
     });
+    // Taken before the await: the page can be left while an import runs.
+    final analytics = ref.read(productAnalyticsProvider);
+    final importService = ref.read(calendarImportServiceProvider);
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    final driveSync = ref.read(googleDriveSyncServiceProvider);
+    var importFinished = false;
     try {
-      final result = await ref
-          .read(calendarImportServiceProvider)
-          .importCalendars(calendars);
-      ref.read(appSettingsProvider.notifier).state = ref
-          .read(settingsRepositoryProvider)
-          .load();
-      unawaited(
-        ref.read(googleDriveSyncServiceProvider).backupNow().catchError((_) {}),
-      );
+      final result = await importService.importCalendars(calendars);
+      importFinished = true;
+      _recordImportUsage(analytics, AnalyticsOutcome.succeeded);
+      // The imported events are saved whether or not the page is still open.
+      settingsNotifier.state = settingsRepository.load();
+      unawaited(driveSync.backupNow().catchError((_) {}));
       if (!mounted) {
         return;
       }
@@ -242,14 +247,32 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
             : '$summary\n${context.tr('{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.', args: {'count': result.unsupportedRecurrence})}';
       });
     } on CalendarImportException catch (error) {
+      if (!importFinished) _recordImportUsage(analytics, AnalyticsOutcome.failed);
       _showError(error);
     } on Object catch (error) {
+      // An error after the import itself finished is not an import failure.
+      if (!importFinished) _recordImportUsage(analytics, AnalyticsOutcome.failed);
       _showError(error);
     } finally {
       if (mounted) {
         setState(() => _importBusy = false);
       }
     }
+  }
+
+  /// One record per import action. Not measured: reading the calendar list or
+  /// opening this page, so a missing record is not a zero-use signal.
+  void _recordImportUsage(ProductAnalytics analytics, AnalyticsOutcome outcome) {
+    unawaited(
+      analytics
+          .record(
+            AnalyticsRecord.featureUsed(
+              AnalyticsFeature.calendarImport,
+              outcome: outcome,
+            ),
+          )
+          .catchError((_) {}),
+    );
   }
 
   void _showError(Object error) {

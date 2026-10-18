@@ -5591,6 +5591,9 @@ class _CalendarHeader extends ConsumerWidget {
     var hidden = settings.hiddenCategoryIds.toSet();
     var showHolidays = settings.calendarShowHolidays;
     var ddayOnly = settings.calendarDdayOnly;
+    final initialQuery = ref.read(calendarSearchQueryProvider);
+    // Taken now: the sheet can outlive this widget's ref.
+    final analytics = ref.read(productAnalyticsProvider);
 
     return showModalBottomSheet<void>(
       context: context,
@@ -5846,13 +5849,29 @@ class _CalendarHeader extends ConsumerWidget {
         },
       ),
     ).whenComplete(() {
+      // Closing the sheet without changing anything is not a use of the
+      // filter, so it is recorded as canceled rather than succeeded (#153).
+      // Compared with the sheet's own values, which change the moment a switch
+      // is toggled: the settings providers only catch up after the (possibly
+      // still queued) save, and a quick dismissal would read the old ones.
+      final applied = filterSheetChangedSettings(
+        initialQuery: initialQuery,
+        finalQuery: queryController.text,
+        initialHiddenCategoryIds: settings.hiddenCategoryIds,
+        finalHiddenCategoryIds: hidden,
+        initialShowHolidays: settings.calendarShowHolidays,
+        finalShowHolidays: showHolidays,
+        initialDdayOnly: settings.calendarDdayOnly,
+        finalDdayOnly: ddayOnly,
+      );
       unawaited(
-        ref
-            .read(productAnalyticsProvider)
+        analytics
             .record(
               AnalyticsRecord.featureUsed(
                 AnalyticsFeature.filter,
-                outcome: AnalyticsOutcome.succeeded,
+                outcome: applied
+                    ? AnalyticsOutcome.succeeded
+                    : AnalyticsOutcome.canceled,
               ),
             )
             .catchError((_) {}),
@@ -5862,6 +5881,27 @@ class _CalendarHeader extends ConsumerWidget {
       );
     });
   }
+}
+
+/// Whether the filter sheet left any filter different from how it opened.
+@visibleForTesting
+bool filterSheetChangedSettings({
+  required String initialQuery,
+  required String finalQuery,
+  required Iterable<String> initialHiddenCategoryIds,
+  required Iterable<String> finalHiddenCategoryIds,
+  required bool initialShowHolidays,
+  required bool finalShowHolidays,
+  required bool initialDdayOnly,
+  required bool finalDdayOnly,
+}) {
+  return initialQuery.trim() != finalQuery.trim() ||
+      initialShowHolidays != finalShowHolidays ||
+      initialDdayOnly != finalDdayOnly ||
+      !setEquals(
+        initialHiddenCategoryIds.toSet(),
+        finalHiddenCategoryIds.toSet(),
+      );
 }
 
 class _CalendarBottomBar extends StatefulWidget {

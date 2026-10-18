@@ -170,7 +170,7 @@ class SyncAttemptTests(unittest.TestCase):
     def test_abandoned_event_contract(self):
         good = {'operation': 'backup', 'trigger': 'manual', 'reason': 'sessionChanged', 'durationMs': 5}
         self.assertTrue(self.valid('sync_abandoned', good))
-        self.assertTrue(self.valid('sync_abandoned', {**good, 'attempt': 3, 'durationTruncated': True}))
+        self.assertTrue(self.valid('sync_abandoned', {**good, 'attempt': 3, 'durationMs': 120000, 'durationTruncated': True}))
         self.assertFalse(self.valid('sync_abandoned', {**good, 'reason': 'crash'}))
         self.assertFalse(self.valid('sync_abandoned', {**good, 'errorCode': 'unknown'}))
 
