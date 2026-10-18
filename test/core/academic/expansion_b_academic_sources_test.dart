@@ -157,6 +157,23 @@ void main() {
     );
 
     test(
+      'fails when only the previous response reaches the requested year',
+      () async {
+        // January 2026 sits in the 2025 academic-year response, but the 2026
+        // response itself is stale and does not overlap 2026.
+        final stale = source(
+          month(1, '2026-01-05', '2026-01-10'),
+          month(2, '2025-11-01', '2025-11-30'),
+        );
+        addTearDown(stale.close);
+        await expectLater(stale.fetch(2026), throwsFormatException);
+        final empty = source(month(1, '2026-01-05', '2026-01-10'), '[]');
+        addTearDown(empty.close);
+        await expectLater(empty.fetch(2026), throwsFormatException);
+      },
+    );
+
+    test(
       'still fails when neither response reaches the requested year',
       () async {
         final empty = source(
