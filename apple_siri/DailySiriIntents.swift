@@ -3069,8 +3069,15 @@ enum DailySiriCommandClassifier {
   /// schedule", so only an imperative start or a verb + object counts as adding.
   private static func schedulesSomething(_ command: String) -> Bool {
     if command.hasPrefix("schedule ") { return true }
-    return command.range(
+    if command.range(
       of: "\\bschedule\\s+(a|an|the|my|me|this|that|it|another|new)\\b",
+      options: .regularExpression
+    ) != nil { return true }
+    // A polite or desiring lead-in makes "schedule" a verb even before a bare
+    // object ("Please schedule lunch at noon"), unless it is followed by a
+    // word that makes it a noun ("what to schedule for today" stays a query).
+    return command.range(
+      of: "\\b(please|could you|can you|would you|will you|let's|lets|i want to|i need to|i'd like to|i would like to|need to|want to|help me)\\s+(please\\s+)?schedule\\s+(?!(for|on|of|today|tomorrow|yesterday|is|was|and|that|here)\\b)\\w",
       options: .regularExpression
     ) != nil
   }
