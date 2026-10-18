@@ -58,6 +58,7 @@ jobs:
         run: |
           python3 -m unittest discover -s tool/tests -p test_signal_voice_lifecycle.py -v
           python3 -m unittest discover -s tool/tests -p test_siri_occurrence_mutation.py -v
+          python3 -m unittest discover -s tool/tests -p test_siri_command_classifier.py -v
           python3 -m unittest discover -s tool/tests -p test_widget_occurrence_action.py -v
 
       - name: Test Apple LMS session paths without skips
