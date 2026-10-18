@@ -287,10 +287,16 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   }
 
   Future<void> _flushImpl() async {
-    if (!enabled || !_initialized || _queue.isEmpty || _endpoint == null) {
-      return;
-    }
-    if (!_isAllowedEndpoint(_endpoint)) return;
+    if (!enabled || !_initialized) return;
+    // Local retention applies even when nothing can be sent (no endpoint).
+    await _enforceRetention();
+    final endpoint = _endpoint;
+    if (_queue.isEmpty || endpoint == null) return;
+    if (!_isAllowedEndpoint(endpoint)) return;
+    // The storage write above can be slow, or the app suspended meanwhile:
+    // prune again with no await between this and picking what to send.
+    _pruneQueue();
+    if (_queue.isEmpty) return;
     final now = _now().toUtc();
     final ready = _queue
         .where(
@@ -311,7 +317,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     try {
       final response = await _httpClient
           .post(
-            _endpoint,
+            endpoint,
             headers: const {
               HttpHeaders.contentTypeHeader: 'application/json',
               'X-Daily-Analytics-Schema': '1',
@@ -400,12 +406,40 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   }
 
   void _pruneQueue() {
+    final before = _queue.length;
     final cutoff = _now().toUtc().subtract(_maxEventAge);
     _queue.removeWhere((event) => event.occurredAt.isBefore(cutoff));
     if (_queue.length > _maxQueueLength) {
       _queue = _queue.sublist(_queue.length - _maxQueueLength);
     }
+    // Whatever was dropped must also leave storage, even if that write fails.
+    if (_queue.length != before) _storageDirty = true;
   }
+
+  bool _storageDirty = false;
+  Timer? _storageRetryTimer;
+
+  /// Drops expired events and removes them from storage. A failed write keeps
+  /// the cleanup pending and is retried, so expired data never lingers on disk
+  /// until some later event or restart happens to rewrite the queue.
+  Future<void> _enforceRetention() async {
+    _pruneQueue();
+    if (!_storageDirty) return;
+    try {
+      await _persistQueue();
+      _storageDirty = false;
+      _storageRetryTimer?.cancel();
+      _storageRetryTimer = null;
+    } on Object {
+      _storageRetryTimer ??= Timer(_storageRetryDelay, () {
+        _storageRetryTimer = null;
+        unawaited(flush().catchError((Object _) {}));
+      });
+    }
+    if (_queue.isEmpty) _retryTimer?.cancel();
+  }
+
+  static const _storageRetryDelay = Duration(seconds: 30);
 
   Future<void> _persistQueue() {
     final generation = _generation;
@@ -461,6 +495,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   @override
   void dispose() {
     _retryTimer?.cancel();
+    _storageRetryTimer?.cancel();
     if (_performanceMonitoring) {
       SchedulerBinding.instance.removeTimingsCallback(_onFrameTimings);
     }

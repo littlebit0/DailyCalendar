@@ -34,7 +34,9 @@ namespace flutter_inappwebview_plugin
   {
     decodeResult = [](const flutter::EncodableValue* value)
       {
-        return value;
+        // Daily #240: a Dart null success arrives as nullptr; report it as "no value"
+        // so the default behaviour never dereferences it.
+        return value == nullptr ? std::optional<const flutter::EncodableValue*>{} : std::optional<const flutter::EncodableValue*>(value);
       };
   }
 
@@ -54,7 +56,9 @@ namespace flutter_inappwebview_plugin
   {
     decodeResult = [](const flutter::EncodableValue* value)
       {
-        return std::make_shared<PermissionResponse>(std::get<flutter::EncodableMap>(*value));
+        // Daily #240: no onPermissionRequest handler returns null; that must reach the
+        // default behaviour (deny, complete the deferral once) instead of being decoded.
+        return value == nullptr || value->IsNull() ? std::optional<std::shared_ptr<PermissionResponse>>{} : std::make_shared<PermissionResponse>(std::get<flutter::EncodableMap>(*value));
       };
   }
 

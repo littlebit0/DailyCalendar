@@ -33,6 +33,30 @@ class SettingsRepository {
        _now = now ?? DateTime.now;
 
   static const _notificationCleanupKey = 'notificationCleanup.v1';
+  static const _appliedWidgetActionsKey = 'widgetAppliedActionTokens.v1';
+  static const _appliedWidgetActionsLimit = 200;
+
+  /// Widget action tokens already applied to the database. A token that is
+  /// delivered again (its acknowledgement could not be saved) must not
+  /// overwrite a newer choice the user made in the app.
+  Set<String> appliedWidgetActionTokens() =>
+      (_preferences.getStringList(_appliedWidgetActionsKey) ?? const <String>[])
+          .toSet();
+
+  Future<void> rememberAppliedWidgetActionTokens(
+    Iterable<String> tokens,
+  ) async {
+    final merged = <String>[
+      ...(_preferences.getStringList(_appliedWidgetActionsKey) ??
+          const <String>[]),
+      ...tokens,
+    ];
+    final trimmed = merged.length > _appliedWidgetActionsLimit
+        ? merged.sublist(merged.length - _appliedWidgetActionsLimit)
+        : merged;
+    await _preferences.setStringList(_appliedWidgetActionsKey, trimmed);
+  }
+
   String? get notificationCleanupJournal =>
       _preferences.getString(_notificationCleanupKey);
 
@@ -94,6 +118,12 @@ class SettingsRepository {
   }
 
   int? existingNotificationId(String key) => _notificationIds()[key];
+
+  /// Allocated notification ids whose logical key starts with [prefix].
+  Map<String, int> notificationIdsWithPrefix(String prefix) => {
+    for (final entry in _notificationIds().entries)
+      if (entry.key.startsWith(prefix)) entry.key: entry.value,
+  };
 
   Future<int> notificationId(String key) {
     final prior = _notificationIdTails[_preferences] ?? Future<void>.value();
@@ -270,6 +300,68 @@ class SettingsRepository {
         rethrow;
       }
     });
+  }
+
+  String _lmsLearningCheckedKey(
+    String ownerId,
+    String schoolId,
+    String lmsUserId,
+  ) {
+    final identity = jsonEncode([
+      ownerId.trim().toLowerCase(),
+      schoolId,
+      lmsUserId,
+    ]);
+    return 'daily.lms.learningChecked.v1.${sha256.convert(utf8.encode(identity))}';
+  }
+
+  /// When each lecture's learning values were last confirmed by the school
+  /// (event id -> UTC time), kept on this device only. A lecture the school did
+  /// not report on a later sync keeps its older time, so the app can say which
+  /// values may be stale instead of stamping them with the whole sync's time.
+  Map<String, DateTime> lmsLearningCheckedAt({
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) {
+    final raw = _preferences.get(
+      _lmsLearningCheckedKey(ownerId, schoolId, lmsUserId),
+    );
+    if (raw is! String) return const {};
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map) return const {};
+      return {
+        for (final entry in decoded.entries)
+          if (entry.key is String && entry.value is int)
+            entry.key as String: DateTime.fromMillisecondsSinceEpoch(
+              entry.value as int,
+              isUtc: true,
+            ),
+      };
+    } on FormatException {
+      return const {};
+    }
+  }
+
+  Future<void> saveLmsLearningCheckedAt(
+    Map<String, DateTime> checkedAt, {
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) async {
+    final key = _lmsLearningCheckedKey(ownerId, schoolId, lmsUserId);
+    if (checkedAt.isEmpty) {
+      await _preferences.remove(key);
+      return;
+    }
+    await _preferences.setString(
+      key,
+      jsonEncode({
+        for (final entry in checkedAt.entries)
+          entry.key: entry.value.toUtc().millisecondsSinceEpoch,
+      }),
+    );
   }
 
   static const _defaultReminderKey = 'defaultReminderMinutes';

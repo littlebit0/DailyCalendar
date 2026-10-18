@@ -9,6 +9,7 @@ import '../domain/course_organization.dart';
 import '../data/timetable_store.dart';
 import '../data/university_catalog.dart';
 import '../domain/timetable.dart';
+import '../domain/timetable_term.dart';
 import '../domain/timetable_colors.dart';
 import '../domain/university_course.dart';
 
@@ -1309,6 +1310,30 @@ class _CatalogMessage extends StatelessWidget {
   );
 }
 
+/// Saved classes whose lessons collide with [course] on a real date.
+@visibleForTesting
+List<TimetableClass> conflictingClasses(
+  UniversityCourse course,
+  List<TimetableClass> saved,
+) => _conflictingClasses(course, saved);
+
+/// Two weekly lessons can only collide on a date inside both teaching periods.
+/// A missing period means the whole term, so it never rules a collision out.
+bool _periodsShareWeekday(
+  TimetablePeriod? first,
+  TimetablePeriod? second,
+  int weekday,
+) {
+  if (first == null || second == null) return true;
+  final start = first.start.isAfter(second.start) ? first.start : second.start;
+  final end = first.end.isBefore(second.end) ? first.end : second.end;
+  for (var day = start, i = 0; !day.isAfter(end) && i < 7; i++) {
+    if (day.weekday == weekday) return true;
+    day = DateTime(day.year, day.month, day.day + 1);
+  }
+  return false;
+}
+
 List<TimetableClass> _conflictingClasses(
   UniversityCourse course,
   List<TimetableClass> saved,
@@ -1321,6 +1346,13 @@ List<TimetableClass> _conflictingClasses(
             (meeting) => course.meetings.any(
               (candidate) =>
                   meeting.weekday == candidate.weekday &&
+                  (meeting.date != null ||
+                      candidate.date != null ||
+                      _periodsShareWeekday(
+                        existing.period,
+                        course.period,
+                        meeting.weekday,
+                      )) &&
                   (meeting.date == null ||
                       candidate.date == null ||
                       meeting.date == candidate.date) &&

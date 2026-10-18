@@ -1758,6 +1758,7 @@ struct DailySiriEvent: Sendable {
   let recurrenceUntil: Date?
   let recurrenceCount: Int?
   let recurrenceAnchorDay: Int?
+  let recurrenceDetails: String?
   let recurrenceExcludedDates: Set<String>
 
   init(
@@ -1783,6 +1784,7 @@ struct DailySiriEvent: Sendable {
     recurrenceUntil: Date? = nil,
     recurrenceCount: Int? = nil,
     recurrenceAnchorDay: Int? = nil,
+    recurrenceDetails: String? = nil,
     recurrenceExcludedDates: Set<String> = []
   ) {
     self.id = id
@@ -1807,6 +1809,7 @@ struct DailySiriEvent: Sendable {
     self.recurrenceUntil = recurrenceUntil
     self.recurrenceCount = recurrenceCount
     self.recurrenceAnchorDay = recurrenceAnchorDay
+    self.recurrenceDetails = recurrenceDetails
     self.recurrenceExcludedDates = recurrenceExcludedDates
   }
 }
@@ -2413,11 +2416,16 @@ private enum DailySiriDatabase {
       let hasAnchorColumn = try hasEventColumn(database, name: "recurrence_anchor_day")
       let anchorUpdate = resetAnchor && hasAnchorColumn
         ? ", recurrence_anchor_day = NULL" : ""
+      // Weekday/position conditions are relative to the old date: a series moved
+      // to another day repeats on its new date instead.
+      let hasDetailsColumn = try hasEventColumn(database, name: "recurrence_details")
+      let detailsUpdate = resetAnchor && hasDetailsColumn
+        ? ", recurrence_details = NULL" : ""
       let sql = """
         UPDATE event_records SET title = ?, start_at = ?, end_at = ?, all_day = ?,
           category = ?, color_value = ?, location = ?, memo = ?, url = ?, weather = ?,
           reminder_minutes_before = ?, reminder_minutes_before_list = ?,
-          show_dday = ?, alarm_enabled = ?, updated_at = ?, sync_status = 'pending'\(anchorUpdate)
+          show_dday = ?, alarm_enabled = ?, updated_at = ?, sync_status = 'pending'\(anchorUpdate)\(detailsUpdate)
         WHERE id = ? AND id NOT LIKE 'lms:%' \(try lmsMutationPredicate(database))
         """
       var statement: OpaquePointer?
@@ -2485,6 +2493,7 @@ private enum DailySiriDatabase {
       recurrenceUntil: entireSeries ? event.recurrenceUntil : nil,
       recurrenceCount: entireSeries ? event.recurrenceCount : nil,
       recurrenceAnchorDay: entireSeries && Calendar.current.isDate(updatedStart, inSameDayAs: base.startAt) ? base.recurrenceAnchorDay : nil,
+      recurrenceDetails: entireSeries && Calendar.current.isDate(updatedStart, inSameDayAs: base.startAt) ? base.recurrenceDetails : nil,
       recurrenceExcludedDates: entireSeries ? event.recurrenceExcludedDates : []
     )
   }
@@ -2587,8 +2596,13 @@ private enum DailySiriDatabase {
     // Copy all native/Flutter fields (including completion and future columns).
     var columns: [String] = []
     guard sqlite3_prepare_v2(database, "PRAGMA table_info(event_records)", -1, &statement, nil) == SQLITE_OK else { throw DailySiriError.databaseUnavailable }
-    while sqlite3_step(statement) == SQLITE_ROW { columns.append(string(statement, 1)) }
+    var schemaStatus = sqlite3_step(statement)
+    while schemaStatus == SQLITE_ROW {
+      columns.append(string(statement, 1))
+      schemaStatus = sqlite3_step(statement)
+    }
     sqlite3_finalize(statement)
+    guard schemaStatus == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
     func quoted(_ column: String) -> String { "\"" + column.replacingOccurrences(of: "\"", with: "\"\"") + "\"" }
     let newID = UUID().uuidString
     let copied = columns.map { column -> String in
@@ -2637,12 +2651,13 @@ private enum DailySiriDatabase {
       let visibility = lmsVisibility()
       let metadataColumn = try hasLmsMetadataColumn(database) ? "lms_metadata" : "NULL"
       let anchorColumn = try hasEventColumn(database, name: "recurrence_anchor_day") ? "recurrence_anchor_day" : "NULL"
+      let detailsColumn = try hasEventColumn(database, name: "recurrence_details") ? "recurrence_details" : "NULL"
       let sql = """
         SELECT id, title, memo, location, url, weather, start_at, end_at,
           all_day, category, color_value, reminder_minutes_before_list,
           show_dday, alarm_enabled, all_day_alarm_minutes,
           recurrence_frequency, recurrence_interval, recurrence_until,
-          recurrence_count, recurrence_excluded_dates, \(metadataColumn), \(anchorColumn)
+          recurrence_count, recurrence_excluded_dates, \(metadataColumn), \(anchorColumn), \(detailsColumn)
         FROM event_records WHERE \(whereClause) ORDER BY start_at ASC
         """
       var statement: OpaquePointer?
@@ -2657,7 +2672,11 @@ private enum DailySiriDatabase {
         }
       }
       var events: [DailySiriEvent] = []
-      while sqlite3_step(statement) == SQLITE_ROW {
+      var stepStatus = SQLITE_DONE
+      var reachedLimit = false
+      while true {
+        stepStatus = sqlite3_step(statement)
+        if stepStatus != SQLITE_ROW { break }
         let id = string(statement, 0)
         let metadata = optionalString(statement, 20)
         guard visibility.allows(id: id, metadata: metadata) else { continue }
@@ -2684,13 +2703,17 @@ private enum DailySiriDatabase {
             recurrenceUntil: optionalDate(statement, 17),
             recurrenceCount: optionalInt(statement, 18),
             recurrenceAnchorDay: optionalInt(statement, 21),
+            recurrenceDetails: optionalString(statement, 22),
             recurrenceExcludedDates: excludedDates(optionalString(statement, 19))
           )
         )
         // Apply limits after authorization, so hidden LMS rows cannot consume
         // the ordinary event search result limit.
-        if let limit, events.count >= limit { break }
+        if let limit, events.count >= limit { reachedLimit = true; break }
       }
+      // A failed step (BUSY, IOERR, ...) is not "no more rows": never hand back
+      // an empty or partial list as if the whole table had been read.
+      guard reachedLimit || stepStatus == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
       if visibility != lmsVisibility() { events.removeAll { $0.isLms } }
       return events
     }
@@ -2706,9 +2729,13 @@ private enum DailySiriDatabase {
       throw DailySiriError.databaseUnavailable
     }
     defer { sqlite3_finalize(statement) }
-    while sqlite3_step(statement) == SQLITE_ROW {
+    var status = sqlite3_step(statement)
+    while status == SQLITE_ROW {
       if string(statement, 1) == name { return true }
+      status = sqlite3_step(statement)
     }
+    // A failed schema read must not be reported as "column does not exist".
+    guard status == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
     return false
   }
 
@@ -2825,6 +2852,10 @@ private enum DailySiriDatabase {
     var start = event.startAt
     var occurrenceIndex = 0
     var result: [DailySiriEvent] = []
+    // Rules with BYDAY/BYMONTHDAY/BYMONTH/BYSETPOS list their dates period by period.
+    let detailedStarts = recurrenceDetails(event.recurrenceDetails).map {
+      detailedOccurrenceStarts(of: event, details: $0, before: rangeEnd, calendar: calendar)
+    }
     while start < rangeEnd && occurrenceIndex < 100_000 {
       if let count = event.recurrenceCount, occurrenceIndex >= count { break }
       if let until = event.recurrenceUntil, calendar.startOfDay(for: start) > calendar.startOfDay(for: until) { break }
@@ -2855,14 +2886,187 @@ private enum DailySiriDatabase {
             recurrenceUntil: event.recurrenceUntil,
             recurrenceCount: event.recurrenceCount,
             recurrenceAnchorDay: event.recurrenceAnchorDay,
+            recurrenceDetails: event.recurrenceDetails,
             recurrenceExcludedDates: event.recurrenceExcludedDates
           )
         )
       }
       occurrenceIndex += 1
-      guard let next = nextOccurrence(index: occurrenceIndex, event: event, calendar: calendar),
-            next > start else { break }
+      let nextStart: Date? = detailedStarts == nil
+        ? nextOccurrence(index: occurrenceIndex, event: event, calendar: calendar)
+        : (occurrenceIndex < detailedStarts!.count ? detailedStarts![occurrenceIndex] : nil)
+      guard let next = nextStart, next > start else { break }
       start = next
+    }
+    return result
+  }
+
+  // MARK: Rules with BYDAY / BYMONTHDAY / BYMONTH / BYSETPOS
+  // Must produce the same dates as Dart's RecurrenceExpander (shared fixture
+  // test/fixtures/recurrence_detail_cases.json).
+
+  private struct RecurrenceDetails {
+    var byDay: [(ordinal: Int?, weekday: Int)]
+    var byMonthDay: [Int]
+    var byMonth: [Int]
+    var bySetPos: [Int]
+  }
+
+  private static func recurrenceDetails(_ json: String?) -> RecurrenceDetails? {
+    guard let json = json, let data = json.data(using: .utf8),
+          let object = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+      return nil
+    }
+    // Calendar weekday numbers: 1 = Sunday ... 7 = Saturday.
+    let codes: [String: Int] = ["SU": 1, "MO": 2, "TU": 3, "WE": 4, "TH": 5, "FR": 6, "SA": 7]
+    var days: [(ordinal: Int?, weekday: Int)] = []
+    for token in (object["byDay"] as? [String] ?? []) {
+      let upper = token.uppercased()
+      guard upper.count >= 2, let weekday = codes[String(upper.suffix(2))] else { continue }
+      let prefix = String(upper.dropLast(2))
+      days.append((prefix.isEmpty ? nil : Int(prefix), weekday))
+    }
+    func ints(_ key: String) -> [Int] {
+      (object[key] as? [Any] ?? []).compactMap { ($0 as? NSNumber)?.intValue }
+    }
+    let details = RecurrenceDetails(
+      byDay: days, byMonthDay: ints("byMonthDay"), byMonth: ints("byMonth"), bySetPos: ints("bySetPos")
+    )
+    return days.isEmpty && details.byMonthDay.isEmpty && details.byMonth.isEmpty && details.bySetPos.isEmpty
+      ? nil : details
+  }
+
+  /// Occurrence starts, oldest first; the event start is always the first one.
+  private static func detailedOccurrenceStarts(
+    of event: DailySiriEvent,
+    details: RecurrenceDetails,
+    before rangeEnd: Date,
+    calendar: Calendar
+  ) -> [Date] {
+    let interval = max(event.recurrenceInterval, 1)
+    let start = event.startAt
+    let startParts = calendar.dateComponents([.year, .month, .day, .hour, .minute, .second, .nanosecond], from: start)
+    let startDay = calendar.startOfDay(for: start)
+    func firstOfMonth(_ year: Int, _ month: Int) -> Date {
+      calendar.date(from: DateComponents(year: year, month: month, day: 1))!
+    }
+    func daysIn(_ year: Int, _ month: Int) -> Int {
+      calendar.range(of: .day, in: .month, for: firstOfMonth(year, month))!.count
+    }
+    func weekday(_ year: Int, _ month: Int, _ day: Int) -> Int {
+      calendar.component(.weekday, from: calendar.date(from: DateComponents(year: year, month: month, day: day))!)
+    }
+    func at(_ year: Int, _ month: Int, _ day: Int) -> Date? {
+      var parts = startParts
+      parts.year = year; parts.month = month; parts.day = day
+      return calendar.date(from: parts)
+    }
+    func monthDays(_ year: Int, _ month: Int, applySetPos: Bool = true) -> [Int] {
+      let length = daysIn(year, month)
+      var fromMonthDay: Set<Int>?
+      if !details.byMonthDay.isEmpty {
+        fromMonthDay = Set(details.byMonthDay.compactMap { day -> Int? in
+          if day > 0 && day <= length { return day }
+          if day < 0 && length + day + 1 >= 1 { return length + day + 1 }
+          return nil
+        })
+      }
+      var fromWeekday: Set<Int>?
+      if !details.byDay.isEmpty {
+        var days = Set<Int>()
+        for token in details.byDay {
+          let matching = (1...length).filter { weekday(year, month, $0) == token.weekday }
+          if let ordinal = token.ordinal {
+            if ordinal > 0 && ordinal <= matching.count { days.insert(matching[ordinal - 1]) }
+            else if ordinal < 0 && -ordinal <= matching.count { days.insert(matching[matching.count + ordinal]) }
+          } else {
+            days.formUnion(matching)
+          }
+        }
+        fromWeekday = days
+      }
+      var days: Set<Int>
+      if let a = fromMonthDay, let b = fromWeekday { days = a.intersection(b) }
+      else if let a = fromMonthDay ?? fromWeekday { days = a }
+      else {
+        let day = event.recurrenceAnchorDay ?? startParts.day!
+        days = day <= length ? [day] : []
+      }
+      let sorted = days.sorted()
+      if !applySetPos || details.bySetPos.isEmpty { return sorted }
+      var picked = Set<Int>()
+      for position in details.bySetPos {
+        if position > 0 && position <= sorted.count { picked.insert(sorted[position - 1]) }
+        else if position < 0 && -position <= sorted.count { picked.insert(sorted[sorted.count + position]) }
+      }
+      return picked.sorted()
+    }
+    // BYSETPOS selects within a whole week or year, not within each month.
+    func selectPositions(_ dates: [(Int, Int, Int)]) -> [(Int, Int, Int)] {
+      if details.bySetPos.isEmpty { return dates }
+      var picked = Set<Int>()
+      for position in details.bySetPos {
+        if position > 0 && position <= dates.count { picked.insert(position - 1) }
+        else if position < 0 && -position <= dates.count { picked.insert(dates.count + position) }
+      }
+      return picked.sorted().map { dates[$0] }
+    }
+    let wantedWeekdays = Set(details.byDay.map { $0.weekday })
+    var result = [start]
+    for period in 0..<20_000 {
+      var candidates: [(Int, Int, Int)] = []
+      var periodStart: Date
+      switch event.recurrenceFrequency {
+      case "daily":
+        guard let day = calendar.date(byAdding: .day, value: period * interval, to: startDay) else { return result }
+        periodStart = day
+        let parts = calendar.dateComponents([.year, .month, .day, .weekday], from: day)
+        let monthMatches = details.byMonth.isEmpty || details.byMonth.contains(parts.month!)
+        let weekdayMatches = wantedWeekdays.isEmpty || wantedWeekdays.contains(parts.weekday!)
+        var dayMatches = true
+        if !details.byMonthDay.isEmpty {
+          let length = daysIn(parts.year!, parts.month!)
+          dayMatches = details.byMonthDay.contains { ($0 > 0 ? $0 : length + $0 + 1) == parts.day! }
+        }
+        if monthMatches && weekdayMatches && dayMatches { candidates.append((parts.year!, parts.month!, parts.day!)) }
+      case "weekly":
+        let mondayOffset = (calendar.component(.weekday, from: start) + 5) % 7
+        guard let weekStart = calendar.date(byAdding: .day, value: -mondayOffset + 7 * interval * period, to: startDay) else { return result }
+        periodStart = weekStart
+        let wanted = wantedWeekdays.isEmpty ? [calendar.component(.weekday, from: start)] : wantedWeekdays
+        for offset in 0..<7 {
+          guard let day = calendar.date(byAdding: .day, value: offset, to: weekStart) else { continue }
+          let parts = calendar.dateComponents([.year, .month, .day, .weekday], from: day)
+          if wanted.contains(parts.weekday!) && (details.byMonth.isEmpty || details.byMonth.contains(parts.month!)) {
+            candidates.append((parts.year!, parts.month!, parts.day!))
+          }
+        }
+        candidates = selectPositions(candidates)
+      case "monthly":
+        guard let month = calendar.date(byAdding: .month, value: period * interval, to: firstOfMonth(startParts.year!, startParts.month!)) else { return result }
+        periodStart = month
+        let parts = calendar.dateComponents([.year, .month], from: month)
+        if details.byMonth.isEmpty || details.byMonth.contains(parts.month!) {
+          for day in monthDays(parts.year!, parts.month!) { candidates.append((parts.year!, parts.month!, day)) }
+        }
+      case "yearly":
+        let year = startParts.year! + period * interval
+        periodStart = firstOfMonth(year, 1)
+        // BYMONTHDAY alone (RFC 5545) applies to every month of the year.
+        let months = !details.byMonth.isEmpty ? details.byMonth.sorted()
+          : !details.byMonthDay.isEmpty ? Array(1...12) : [startParts.month!]
+        for month in months where month >= 1 && month <= 12 {
+          for day in monthDays(year, month, applySetPos: false) { candidates.append((year, month, day)) }
+        }
+        candidates = selectPositions(candidates)
+      default:
+        return result
+      }
+      if periodStart >= rangeEnd { break }
+      for (year, month, day) in candidates {
+        guard let date = at(year, month, day), calendar.startOfDay(for: date) > startDay else { continue }
+        result.append(date)
+      }
     }
     return result
   }

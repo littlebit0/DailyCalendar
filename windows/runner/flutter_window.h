@@ -29,6 +29,12 @@ class FlutterWindow : public Win32Window {
 
  private:
   void AddTrayIcon();
+  // True when the tray icon exists now: confirms an icon believed present,
+  // otherwise adds it (or adopts one that is already there).
+  bool EnsureTrayIcon();
+  void FillTrayIconData();
+  // The icon could not be restored: keep a taskbar button and retry a few times.
+  void BeginTrayRecovery();
   void RemoveTrayIcon();
   void RestoreFromTray();
   void ShowTrayMenu();
@@ -50,6 +56,9 @@ class FlutterWindow : public Win32Window {
 
   NOTIFYICONDATA notify_icon_data_ = {};
   bool tray_icon_added_ = false;
+  // Broadcast by Explorer when the taskbar is (re)created; it drops our icon.
+  UINT taskbar_created_message_ = 0;
+  int tray_retry_attempts_ = 0;
   bool exit_requested_ = false;
 };
 
