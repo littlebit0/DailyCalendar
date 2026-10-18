@@ -163,3 +163,6 @@ dependency_overrides:
     path: third_party/flutter_secure_storage_windows
   flutter_inappwebview_windows:
     path: third_party/flutter_inappwebview_windows
+  # #233: keep-alive WebViews must not leave null entries for engine detach.
+  flutter_inappwebview_android:
+    path: third_party/flutter_inappwebview_android
