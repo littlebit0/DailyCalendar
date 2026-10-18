@@ -271,12 +271,12 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                     enabled: androidMedium && !desktop,
                                     child: Column(
                                       children: [
-                                        if (_quickAccessSelected && _searchOpen)
-                                          // The search button also works in quick view.
-                                          _buildInlineSearchPanel(),
                                         if (_quickAccessSelected)
                                           Expanded(
-                                            child: _QuickMonthPageView(
+                                            child: Stack(
+                                              children: [
+                                                Positioned.fill(
+                                                  child: _QuickMonthPageView(
                                               month: month,
                                               onMonthChanged: (target) =>
                                                   _setVisibleMonth(
@@ -301,6 +301,31 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                                               pageMonth,
                                                             ),
                                                   ),
+                                            ),
+                                                ),
+                                                if (_searchOpen)
+                                                  // The search button also works
+                                                  // in quick view. The panel floats
+                                                  // over the page and sizes its
+                                                  // results to the space left, so a
+                                                  // short window cannot overflow.
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topCenter,
+                                                    child: LayoutBuilder(
+                                                      builder: (context, box) =>
+                                                          _buildInlineSearchPanel(
+                                                            maxResultsHeight:
+                                                                (box.maxHeight -
+                                                                        _inlineSearchChromeHeight)
+                                                                    .clamp(
+                                                                      0.0,
+                                                                      260.0,
+                                                                    ),
+                                                          ),
+                                                    ),
+                                                  ),
+                                              ],
                                             ),
                                           )
                                         else
@@ -464,7 +489,13 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     );
   }
 
-  _InlineSearchPanel _buildInlineSearchPanel() => _InlineSearchPanel(
+  /// Height the search field, its padding and a loading/empty row need.
+  static const _inlineSearchChromeHeight = 110.0;
+
+  _InlineSearchPanel _buildInlineSearchPanel({
+    double maxResultsHeight = 260,
+  }) => _InlineSearchPanel(
+    maxResultsHeight: maxResultsHeight,
     controller: _searchController,
     focusNode: _searchFocusNode,
     results: _searchResults,
@@ -2149,6 +2180,7 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
 
 class _InlineSearchPanel extends ConsumerWidget {
   const _InlineSearchPanel({
+    this.maxResultsHeight = 260,
     required this.controller,
     required this.focusNode,
     required this.results,
@@ -2158,6 +2190,7 @@ class _InlineSearchPanel extends ConsumerWidget {
     required this.onEventSelected,
   });
 
+  final double maxResultsHeight;
   final TextEditingController controller;
   final FocusNode focusNode;
   final Future<List<CalendarEvent>>? results;
@@ -2251,8 +2284,9 @@ class _InlineSearchPanel extends ConsumerWidget {
                   ),
                 );
               }
+              if (maxResultsHeight <= 0) return const SizedBox.shrink();
               return ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 260),
+                constraints: BoxConstraints(maxHeight: maxResultsHeight),
                 child: ListView.separated(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(top: 10),
