@@ -929,6 +929,17 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       recurrence: RecurrenceRule(
         anchorDay: widget.event?.recurrence.anchorDay,
         excludedDates: widget.event?.recurrence.excludedDates ?? const [],
+        // Imported weekday/position conditions stay while the repeat kind is
+        // unchanged; switching to another kind starts from a plain rule.
+        byDay: _keepsDetails ? widget.event!.recurrence.byDay : const [],
+        byMonthDay: _keepsDetails
+            ? widget.event!.recurrence.byMonthDay
+            : const [],
+        byMonth: _keepsDetails ? widget.event!.recurrence.byMonth : const [],
+        bySetPos: _keepsDetails ? widget.event!.recurrence.bySetPos : const [],
+        rawRule: _frequency == RecurrenceFrequency.none
+            ? widget.event?.recurrence.rawRule
+            : null,
         frequency: _frequency,
         interval: _frequency == RecurrenceFrequency.none
             ? 1
@@ -950,6 +961,11 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     );
     Navigator.of(context).pop(draft);
   }
+
+  bool get _keepsDetails =>
+      widget.event != null &&
+      _frequency != RecurrenceFrequency.none &&
+      _frequency == widget.event!.recurrence.frequency;
 
   void _showValidation(String message, {required _ValidationTarget target}) {
     setState(() {

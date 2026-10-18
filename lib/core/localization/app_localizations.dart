@@ -921,6 +921,8 @@ const Map<String, Map<String, String>> _translations = {
     '가져올 수 있는 {provider}가 없습니다.': 'No {provider} calendars are available.',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         'Import complete: {imported} added, {skipped} duplicates skipped, {failed} failed',
+    '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+        '{count} events have a repeat rule that is not supported, so they were imported once and the original rule was kept.',
     '캘린더 권한 또는 연결 상태를 확인해 주세요.':
         'Check calendar permission or connection status.',
     '가져올 캘린더를 선택해 주세요.': 'Select a calendar to import.',
@@ -1803,6 +1805,8 @@ const Map<String, Map<String, String>> _translations = {
     '가져올 수 있는 {provider}가 없습니다.': '読み込める{provider}カレンダーがありません。',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         '読み込み完了：{imported}件追加、{skipped}件の重複を除外、{failed}件失敗',
+    '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+        '{count}件の予定は未対応の繰り返し条件があるため1回だけ読み込み、元のルールは保存しました。',
     '캘린더 권한 또는 연결 상태를 확인해 주세요.': 'カレンダーの権限または接続状態を確認してください。',
     '가져올 캘린더를 선택해 주세요.': '読み込むカレンダーを選択してください。',
     '설정에서 Daily의 캘린더 전체 접근을 허용해 주세요.': '設定でDailyにカレンダーへのフルアクセスを許可してください。',
@@ -2668,6 +2672,8 @@ const Map<String, Map<String, String>> _translations = {
     '가져올 수 있는 {provider}가 없습니다.': '沒有可匯入的 {provider} 行事曆。',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         '匯入完成：新增 {imported} 個、略過 {skipped} 個重複項目、{failed} 個失敗',
+    '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+        '{count} 個行程的重複條件尚不支援，因此只匯入一次，並保留原始規則。',
     '캘린더 권한 또는 연결 상태를 확인해 주세요.': '請檢查行事曆權限或連線狀態。',
     '가져올 캘린더를 선택해 주세요.': '請選擇要匯入的行事曆。',
     '설정에서 Daily의 캘린더 전체 접근을 허용해 주세요.': '請在「設定」中允許 Daily 完整存取行事曆。',

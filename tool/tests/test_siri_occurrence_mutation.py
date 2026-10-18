@@ -29,6 +29,7 @@ class SiriOccurrenceMutationTest(unittest.TestCase):
             executable = Path(d) / 'test'
             compiled = subprocess.run(['swiftc', str(main), '-o', str(executable)], capture_output=True, text=True)
             self.assertEqual(compiled.returncode, 0, compiled.stderr)
-            result = subprocess.run([str(executable), str(Path(d) / 'events.sqlite'), str(ROOT / 'test/fixtures/recurrence_anchor_cases.json')], capture_output=True, text=True)
+            result = subprocess.run([str(executable), str(Path(d) / 'events.sqlite'), str(ROOT / 'test/fixtures/recurrence_anchor_cases.json'), str(ROOT / 'test/fixtures/recurrence_detail_cases.json')], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn('Siri occurrence mutation checks passed', result.stdout)
+            self.assertIn('Siri recurrence detail fixtures passed', result.stdout)

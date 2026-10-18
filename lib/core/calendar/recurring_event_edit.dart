@@ -59,6 +59,18 @@ CalendarEvent applyRecurringEventDraft({
           anchorDay: frequency == latest.recurrence.frequency
               ? inherited.anchorDay
               : null,
+          byDay: frequency == latest.recurrence.frequency
+              ? inherited.byDay
+              : const [],
+          byMonthDay: frequency == latest.recurrence.frequency
+              ? inherited.byMonthDay
+              : const [],
+          byMonth: frequency == latest.recurrence.frequency
+              ? inherited.byMonth
+              : const [],
+          bySetPos: frequency == latest.recurrence.frequency
+              ? inherited.bySetPos
+              : const [],
         );
   return draft
       .applyTo(latest)
