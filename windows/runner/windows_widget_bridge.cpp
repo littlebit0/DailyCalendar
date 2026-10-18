@@ -20,6 +20,7 @@
 #include <variant>
 
 #include "app_identity.h"
+#include "widget_date_rollover.h"
 #include "resource.h"
 
 namespace {
@@ -301,75 +302,44 @@ void WindowsWidgetBridge::HandleMethodCall(
   result->NotImplemented();
 }
 
-namespace {
-
-std::string LocalDateKey() {
-  const std::time_t now = std::time(nullptr);
-  std::tm local{};
-  localtime_s(&local, &now);
-  char buffer[16];
-  std::snprintf(buffer, sizeof(buffer), "%04d-%02d-%02d", local.tm_year + 1900,
-                local.tm_mon + 1, local.tm_mday);
-  return buffer;
-}
-
-// Days since 1970-01-01 for yyyy-MM-dd, independent of time zone and DST.
-bool EpochDay(const std::string& date, long long* out) {
-  int year = 0, month = 0, day = 0;
-  if (std::sscanf(date.c_str(), "%d-%d-%d", &year, &month, &day) != 3 ||
-      month < 1 || month > 12 || day < 1 || day > 31) {
-    return false;
-  }
-  year -= month <= 2 ? 1 : 0;
-  const long long era = (year >= 0 ? year : year - 399) / 400;
-  const long long yoe = year - era * 400;
-  const long long doy = (153LL * (month + (month > 2 ? -3 : 9)) + 2) / 5 + day - 1;
-  *out = era * 146097 + yoe * 365 + yoe / 4 - yoe / 100 + doy - 719468;
-  return true;
-}
-
-}  // namespace
-
 void WindowsWidgetBridge::RollSnapshotToToday() {
-  if (snapshot_.snapshot_date.empty()) {
-    return;  // Built-in fallback or an older app version: nothing to compare.
+  const std::time_t now = std::time(nullptr);
+  const std::string today = daily_widgets::LocalDateKey(now);
+  std::vector<std::string> view_dates;
+  view_dates.reserve(snapshot_.daily_views.size());
+  for (const auto& view : snapshot_.daily_views) {
+    view_dates.push_back(view.date);
   }
-  const std::string today = LocalDateKey();
-  if (snapshot_.snapshot_date == today) {
+  const auto decision = daily_widgets::DecideRollover(
+      snapshot_.snapshot_date, today, snapshot_.has_utc_offset,
+      snapshot_.utc_offset_minutes,
+      daily_widgets::LocalUtcOffsetMinutes(static_cast<std::time_t>(
+          snapshot_.utc_offset_at_ms / 1000)),
+      view_dates);
+  if (decision.action == daily_widgets::RolloverAction::kKeep) {
     return;
-  }
-  const DailyView* view = nullptr;
-  for (const auto& candidate : snapshot_.daily_views) {
-    if (candidate.date == today) {
-      view = &candidate;
-      break;
-    }
   }
   for (auto& day : snapshot_.month_days) {
     day.is_today = !day.date.empty() && day.date == today;
   }
-  if (view == nullptr) {
-    // The cached grid cannot represent today: do not present old values as
-    // current; ask the user to open the app, which sends a fresh snapshot.
+  if (decision.action == daily_widgets::RolloverAction::kNeedsRefresh) {
+    // The cache cannot represent today (outside the grid, or the time zone
+    // changed): do not present old values as current. Ask the user to open the
+    // app, which sends a fresh snapshot.
     snapshot_.today_events.clear();
     snapshot_.today_remaining_count = 0;
     snapshot_.today_title = OpenLabel(snapshot_.locale_tag);
     snapshot_.ddays.clear();
-    snapshot_.snapshot_date = today;
+    for (auto& day : snapshot_.month_days) {
+      day.is_today = false;
+    }
     return;
   }
-  snapshot_.today_title = view->today_title;
-  snapshot_.today_events = view->today_events;
-  snapshot_.today_remaining_count = view->today_remaining_count;
-  long long today_day = 0;
-  const bool today_ok = EpochDay(today, &today_day);
-  for (auto& dday : snapshot_.ddays) {
-    long long target_day = 0;
-    if (today_ok && !dday.target_date.empty() &&
-        EpochDay(dday.target_date, &target_day)) {
-      dday.days_remaining = static_cast<int>(target_day - today_day);
-    }
-  }
+  const DailyView& view = snapshot_.daily_views[decision.view_index];
+  snapshot_.today_title = view.today_title;
+  snapshot_.today_events = view.today_events;
+  snapshot_.today_remaining_count = view.today_remaining_count;
+  snapshot_.ddays = view.ddays;
   snapshot_.snapshot_date = today;
 }
 
@@ -431,6 +401,30 @@ bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
     }
   }
 
+  const auto parse_ddays = [](const flutter::EncodableList* ddays) {
+    std::vector<DdayEvent> parsed_ddays;
+    if (ddays == nullptr) {
+      return parsed_ddays;
+    }
+    parsed_ddays.reserve(ddays->size());
+    for (const auto& encoded_dday : *ddays) {
+      const auto* dday_map = std::get_if<flutter::EncodableMap>(&encoded_dday);
+      if (dday_map == nullptr) {
+        continue;
+      }
+      DdayEvent dday;
+      dday.title = Utf16FromUtf8(StringValue(*dday_map, "title"));
+      dday.date_label = Utf16FromUtf8(StringValue(*dday_map, "dateLabel"));
+      dday.days_remaining = static_cast<int>(std::clamp<std::int64_t>(
+          IntegerValue(*dday_map, "daysRemaining"),
+          std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
+      dday.color = static_cast<std::uint32_t>(
+          IntegerValue(*dday_map, "color", 0xFF2563EB));
+      dday.completed = BoolValue(*dday_map, "completed");
+      parsed_ddays.push_back(std::move(dday));
+    }
+    return parsed_ddays;
+  };
   const auto parse_today_events = [](const flutter::EncodableList* events) {
     std::vector<TodayEvent> parsed_events;
     if (events == nullptr) {
@@ -461,6 +455,13 @@ bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
   parsed.today_events = parse_today_events(AsList(MapValue(map, "todayEvents")));
 
   parsed.snapshot_date = StringValue(map, "snapshotDate");
+  if (MapValue(map, "utcOffsetMinutes") != nullptr &&
+      MapValue(map, "utcOffsetAtMs") != nullptr) {
+    parsed.has_utc_offset = true;
+    parsed.utc_offset_minutes = static_cast<int>(
+        std::clamp<std::int64_t>(IntegerValue(map, "utcOffsetMinutes"), -1440, 1440));
+    parsed.utc_offset_at_ms = IntegerValue(map, "utcOffsetAtMs");
+  }
   parsed.daily_views.clear();
   if (const auto* views = AsList(MapValue(map, "dailyViews"))) {
     parsed.daily_views.reserve(views->size());
@@ -476,33 +477,12 @@ bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
           IntegerValue(*view_map, "todayRemainingCount"), 0, 100000));
       view.today_events =
           parse_today_events(AsList(MapValue(*view_map, "todayEvents")));
+      view.ddays = parse_ddays(AsList(MapValue(*view_map, "ddays")));
       parsed.daily_views.push_back(std::move(view));
     }
   }
 
-  parsed.ddays.clear();
-  if (const auto* ddays = AsList(MapValue(map, "ddays"))) {
-    parsed.ddays.reserve(ddays->size());
-    for (const auto& encoded_dday : *ddays) {
-      const auto* dday_map =
-          std::get_if<flutter::EncodableMap>(&encoded_dday);
-      if (dday_map == nullptr) {
-        continue;
-      }
-      DdayEvent dday;
-      dday.title = Utf16FromUtf8(StringValue(*dday_map, "title"));
-      dday.date_label =
-          Utf16FromUtf8(StringValue(*dday_map, "dateLabel"));
-      dday.target_date = StringValue(*dday_map, "targetDate");
-      dday.days_remaining = static_cast<int>(std::clamp<std::int64_t>(
-          IntegerValue(*dday_map, "daysRemaining"),
-          std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
-      dday.color = static_cast<std::uint32_t>(
-          IntegerValue(*dday_map, "color", 0xFF2563EB));
-      dday.completed = BoolValue(*dday_map, "completed");
-      parsed.ddays.push_back(std::move(dday));
-    }
-  }
+  parsed.ddays = parse_ddays(AsList(MapValue(map, "ddays")));
 
   snapshot_ = std::move(parsed);
   RollSnapshotToToday();

@@ -147,9 +147,11 @@ private enum DailyWidgetTodoActionStore {
     }
     if var views = snapshot["dailyViews"] as? [[String: Any]] {
       for index in views.indices {
-        guard var events = views[index]["todayEvents"] as? [[String: Any]] else { continue }
-        update(&events, eventId: eventId, completed: completed, occurrenceId: occurrenceId)
-        views[index]["todayEvents"] = events
+        for key in ["todayEvents", "ddays"] {
+          guard var events = views[index][key] as? [[String: Any]] else { continue }
+          update(&events, eventId: eventId, completed: completed, occurrenceId: occurrenceId)
+          views[index][key] = events
+        }
       }
       snapshot["dailyViews"] = views
     }
@@ -398,19 +400,40 @@ struct DailyWidgetDday: Codable, Identifiable {
 // BEGIN WIDGET ROLLOVER
 /// Re-derives the "today" values of a stored snapshot for the device date.
 ///
-/// Flutter computes todayTitle/todayEvents/weekTitle/isToday/daysRemaining for
-/// `snapshotDate` only. When the date has moved on this switches to the matching
-/// precomputed `dailyViews` entry. It returns nil when the cached grid cannot
-/// represent the new date, so a widget never shows stale values as current (#103).
+/// Flutter computes todayTitle/todayEvents/weekTitle/isToday and the D-days for
+/// `snapshotDate` and, for every day of the cached month grid, a `dailyViews`
+/// entry with the same values for that day. When the date has moved on this
+/// switches to the matching entry, so no date arithmetic or ranking happens here.
+/// It returns nil when the snapshot cannot represent the situation (the date is
+/// outside the cached grid, or the time zone changed since the day buckets were
+/// built), so a widget never shows stale values as current (#103).
 enum DailyWidgetDateRollover {
-  static func dateKey(_ date: Date, calendar: Calendar = .current) -> String {
+  /// yyyy-MM-dd in the Gregorian calendar and `timeZone`, whatever calendar the
+  /// user's region prefers (Buddhist, Islamic, ...).
+  static func dateKey(_ date: Date, timeZone: TimeZone = .current) -> String {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = timeZone
     let parts = calendar.dateComponents([.year, .month, .day], from: date)
     return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
   }
 
-  static func rollForward(_ stored: [String: Any], today: String) -> [String: Any]? {
-    guard let snapshotDate = stored["snapshotDate"] as? String, !snapshotDate.isEmpty,
-          snapshotDate != today else { return stored }
+  static func rollForward(
+    _ stored: [String: Any],
+    today: String,
+    timeZone: TimeZone = .current
+  ) -> [String: Any]? {
+    guard let snapshotDate = stored["snapshotDate"] as? String, !snapshotDate.isEmpty else {
+      return stored  // Written before this contract: no base date to compare.
+    }
+    // The day buckets were built with one UTC offset. A different offset at that
+    // same instant means the time zone changed, so a timed event may belong to
+    // another day than the one it was filed under.
+    if let built = (stored["utcOffsetMinutes"] as? NSNumber)?.intValue,
+       let builtAt = (stored["utcOffsetAtMs"] as? NSNumber)?.int64Value {
+      let now = timeZone.secondsFromGMT(for: Date(timeIntervalSince1970: Double(builtAt) / 1000)) / 60
+      if built != now { return nil }
+    }
+    if snapshotDate == today { return stored }
     guard let views = stored["dailyViews"] as? [[String: Any]],
           let view = views.first(where: { ($0["date"] as? String) == today }) else { return nil }
     var rolled = stored
@@ -418,6 +441,7 @@ enum DailyWidgetDateRollover {
     rolled["weekTitle"] = view["weekTitle"]
     rolled["todayEvents"] = view["todayEvents"] ?? []
     rolled["todayRemainingCount"] = view["todayRemainingCount"] ?? 0
+    rolled["ddays"] = view["ddays"] ?? []
     rolled["snapshotDate"] = today
     if var days = stored["monthDays"] as? [[String: Any]] {
       for index in days.indices {
@@ -425,31 +449,7 @@ enum DailyWidgetDateRollover {
       }
       rolled["monthDays"] = days
     }
-    if var ddays = stored["ddays"] as? [[String: Any]] {
-      for index in ddays.indices {
-        if let target = ddays[index]["targetDate"] as? String, !target.isEmpty,
-           let remaining = daysBetween(today, target) {
-          ddays[index]["daysRemaining"] = remaining
-        }
-      }
-      rolled["ddays"] = ddays
-    }
     return rolled
-  }
-
-  /// Whole calendar days from `from` to `to` (yyyy-MM-dd), unaffected by DST.
-  static func daysBetween(_ from: String, _ to: String) -> Int? {
-    func epochDay(_ value: String) -> Int? {
-      let parts = value.split(separator: "-").compactMap { Int($0) }
-      guard parts.count == 3 else { return nil }
-      let year = parts[1] <= 2 ? parts[0] - 1 : parts[0]
-      let era = (year >= 0 ? year : year - 399) / 400
-      let yoe = year - era * 400
-      let doy = (153 * (parts[1] + (parts[1] > 2 ? -3 : 9)) + 2) / 5 + parts[2] - 1
-      return era * 146097 + yoe * 365 + yoe / 4 - yoe / 100 + doy - 719468
-    }
-    guard let start = epochDay(from), let end = epochDay(to) else { return nil }
-    return end - start
   }
 }
 // END WIDGET ROLLOVER
@@ -468,6 +468,8 @@ struct DailyWidgetSnapshot: Codable {
   let ddays: [DailyWidgetDday]
   // Present on snapshots written by newer app versions; only used for rollover.
   var snapshotDate: String? = nil
+  /// Set on the placeholder shown when the cached data cannot cover today.
+  var needsRefresh: Bool? = nil
 
   func events(on date: Date) -> [DailyWidgetEvent] {
     guard let scheduleEvents else { return todayEvents }
@@ -493,12 +495,14 @@ struct DailyWidgetSnapshot: Codable {
     guard let rolled = DailyWidgetDateRollover.rollForward(raw, today: DailyWidgetDateRollover.dateKey(date)),
           let data = try? JSONSerialization.data(withJSONObject: rolled),
           let snapshot = try? JSONDecoder().decode(DailyWidgetSnapshot.self, from: data) else {
-      return stored.needsRefresh
+      return stored.refreshPlaceholder
     }
     return snapshot
   }
 
-  private var needsRefresh: DailyWidgetSnapshot {
+  static let refreshMessage = "앱을 열어 일정을 갱신하세요"
+
+  private var refreshPlaceholder: DailyWidgetSnapshot {
     DailyWidgetSnapshot(
       generatedAt: 0,
       themeMode: themeMode,
@@ -506,11 +510,12 @@ struct DailyWidgetSnapshot: Codable {
       weekTitle: nil,
       weekStartsOnMonday: weekStartsOnMonday,
       monthDays: [],
-      todayTitle: "앱을 열어 일정을 갱신하세요",
+      todayTitle: DailyWidgetSnapshot.refreshMessage,
       todayEvents: [],
       todayRemainingCount: 0,
       scheduleEvents: [],
-      ddays: []
+      ddays: [],
+      needsRefresh: true
     )
   }
 
@@ -791,6 +796,14 @@ struct DailyMonthWidgetView: View {
       .frame(height: 20)
       .layoutPriority(1)
 
+      if entry.snapshot.needsRefresh == true {
+        Spacer()
+        Text(DailyWidgetSnapshot.refreshMessage)
+          .font(.subheadline)
+          .foregroundStyle(Color.dailySecondary)
+          .multilineTextAlignment(.center)
+        Spacer()
+      } else {
       HStack(spacing: 2) {
         ForEach(Array(weekdayLabels.enumerated()), id: \.offset) { index, label in
           Text(label)
@@ -810,6 +823,7 @@ struct DailyMonthWidgetView: View {
         if weekIndex < 5 {
           Spacer(minLength: 0)
         }
+      }
       }
     }
     .dailyWidgetBackground(themeMode: entry.snapshot.themeMode)
@@ -846,7 +860,13 @@ struct DailyWeekWidgetView: View {
         systemImage: "calendar.badge.clock"
       )
 
-      if weekDays.isEmpty {
+      if entry.snapshot.needsRefresh == true {
+        Spacer()
+        Text(DailyWidgetSnapshot.refreshMessage)
+          .font(.subheadline)
+          .foregroundStyle(Color.dailySecondary)
+        Spacer()
+      } else if weekDays.isEmpty {
         Spacer()
         Text("이번 주 일정이 없습니다")
           .font(.subheadline)
@@ -941,7 +961,13 @@ struct DailyDdayWidgetView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       DailyWidgetHeader(title: "D-day", systemImage: "flag")
-      if entry.snapshot.ddays.isEmpty {
+      if entry.snapshot.needsRefresh == true {
+        Spacer()
+        Text(DailyWidgetSnapshot.refreshMessage)
+          .font(.subheadline)
+          .foregroundStyle(Color.dailySecondary)
+        Spacer()
+      } else if entry.snapshot.ddays.isEmpty {
         Spacer()
         Text("표시할 D-day가 없습니다")
           .font(.subheadline)

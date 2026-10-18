@@ -157,12 +157,9 @@ object DailyAndroidWidgetStore {
 
         snapshot.optJSONArray("dailyViews")?.let { views ->
             for (viewIndex in 0 until views.length()) {
-                updateCompletionInEvents(
-                    views.optJSONObject(viewIndex)?.optJSONArray("todayEvents"),
-                    eventId,
-                    completed,
-                    occurrenceId,
-                )
+                val view = views.optJSONObject(viewIndex)
+                updateCompletionInEvents(view?.optJSONArray("todayEvents"), eventId, completed, occurrenceId)
+                updateCompletionInEvents(view?.optJSONArray("ddays"), eventId, completed, occurrenceId)
             }
         }
 

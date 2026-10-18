@@ -266,25 +266,53 @@ class CalendarWidgetSnapshotBuilder {
           });
     final todayEvents = eventsOn(today);
 
-    final ddayEvents =
-        allEvents
-            .where((event) => event.showDday && _isVisible(event, settings))
-            .toList()
-          ..sort((left, right) {
-            final leftDistance = _dateOnly(
-              left.startAt,
-            ).difference(today).inDays.abs();
-            final rightDistance = _dateOnly(
-              right.startAt,
-            ).difference(today).inDays.abs();
-            final distanceOrder = leftDistance.compareTo(rightDistance);
-            return distanceOrder != 0
-                ? distanceOrder
-                : left.startAt.compareTo(right.startAt);
-          });
+    final ddayCandidates = allEvents
+        .where((event) => event.showDday && _isVisible(event, settings))
+        .toList(growable: false);
+    // The six D-days shown on [day], nearest first, with the counter measured
+    // from that day. Each cached day carries its own list, so a widget opened
+    // days later neither keeps expired entries ahead of nearer targets nor
+    // misses a target that only became one of the six since.
+    List<Map<String, Object?>> ddaysFor(DateTime day) {
+      final sorted = ddayCandidates.toList()
+        ..sort((left, right) {
+          final leftDistance = calendarDayDifference(
+            day,
+            _dateOnly(left.startAt),
+          ).abs();
+          final rightDistance = calendarDayDifference(
+            day,
+            _dateOnly(right.startAt),
+          ).abs();
+          final distanceOrder = leftDistance.compareTo(rightDistance);
+          return distanceOrder != 0
+              ? distanceOrder
+              : left.startAt.compareTo(right.startAt);
+        });
+      return sorted
+          .take(6)
+          .map((event) {
+            final target = _dateOnly(event.startAt);
+            return {
+              'id': event.id,
+              'title': l10n.eventTitle(event.title, holiday: event.holiday),
+              'dateLabel':
+                  '${target.year}.${_two(target.month)}.${_two(target.day)}',
+              'daysRemaining': calendarDayDifference(target, day),
+              'color': event.colorValue,
+              'completed': event.completed,
+            };
+          })
+          .toList(growable: false);
+    }
 
     return {
       'generatedAt': now.millisecondsSinceEpoch,
+      // The UTC offset the day buckets were built with. A widget that finds the
+      // device now uses a different offset at that same instant (the time zone
+      // changed) must not trust them and asks the app to refresh.
+      'utcOffsetMinutes': now.timeZoneOffset.inMinutes,
+      'utcOffsetAtMs': now.millisecondsSinceEpoch,
       'localeTag': localeName,
       'themeMode': settings.themeMode.name,
       'monthTitle': DateFormat.yMMMM(localeName).format(now),
@@ -307,6 +335,7 @@ class CalendarWidgetSnapshotBuilder {
           'todayRemainingCount': dayEvents.length > 8
               ? dayEvents.length - 8
               : 0,
+          'ddays': ddaysFor(day),
         };
       }),
       'weekStartsOnMonday': settings.weekStartsOnMonday,
@@ -350,23 +379,7 @@ class CalendarWidgetSnapshotBuilder {
               }))
               .map((event) => _eventJson(event, l10n))
               .toList(growable: false),
-      'ddays': ddayEvents
-          .take(6)
-          .map((event) {
-            final target = _dateOnly(event.startAt);
-            final remaining = target.difference(today).inDays;
-            return {
-              'id': event.id,
-              'title': l10n.eventTitle(event.title, holiday: event.holiday),
-              'dateLabel':
-                  '${target.year}.${_two(target.month)}.${_two(target.day)}',
-              'targetDate': _dateKey(target),
-              'daysRemaining': remaining,
-              'color': event.colorValue,
-              'completed': event.completed,
-            };
-          })
-          .toList(growable: false),
+      'ddays': ddaysFor(today),
     };
   }
 

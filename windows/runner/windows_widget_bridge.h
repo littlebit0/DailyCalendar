@@ -49,7 +49,6 @@ class WindowsWidgetBridge final {
   struct DdayEvent {
     std::wstring title;
     std::wstring date_label;
-    std::string target_date;  // yyyy-MM-dd; empty on snapshots from older apps
     int days_remaining = 0;
     std::uint32_t color = 0xFF2563EB;
     bool completed = false;
@@ -61,11 +60,16 @@ class WindowsWidgetBridge final {
     std::wstring today_title;
     int today_remaining_count = 0;
     std::vector<TodayEvent> today_events;
+    std::vector<DdayEvent> ddays;  // ranked for this day
   };
 
   struct Snapshot {
     // The day the "today" values were computed for; empty on older snapshots.
     std::string snapshot_date;
+    // UTC offset the day buckets were built with, and the instant it is for.
+    bool has_utc_offset = false;
+    int utc_offset_minutes = 0;
+    std::int64_t utc_offset_at_ms = 0;
     std::vector<DailyView> daily_views;
     std::wstring month_title;
     std::wstring today_title;

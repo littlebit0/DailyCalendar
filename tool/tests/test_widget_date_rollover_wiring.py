@@ -22,19 +22,25 @@ class WidgetDateRolloverWiringTest(unittest.TestCase):
 
     def test_android_rollover_returns_null_outside_the_cached_grid(self):
         source = (KOTLIN / "DailyWidgetDateRollover.kt").read_text()
-        for needle in ('"snapshotDate"', '"dailyViews"', '"targetDate"', "?: return null", "Math.floorDiv"):
+        for needle in ('"snapshotDate"', '"dailyViews"', '"ddays"', "?: return null", "GregorianCalendar(zone)"):
             self.assertIn(needle, source)
+        # Behaviour is covered by DailyWidgetDateRolloverTest (run by Gradle in CI).
+        self.assertTrue((ROOT / "android/app/src/test/kotlin/com/littlebit0/dailycalendar/DailyWidgetDateRolloverTest.kt").exists())
 
     def test_windows_rolls_before_showing_and_on_new_snapshots(self):
         show = CPP[CPP.index("void WindowsWidgetBridge::ShowMiniCalendar") :][:200]
         self.assertIn("RollSnapshotToToday();", show)
         self.assertIn("snapshot_ = std::move(parsed);\n  RollSnapshotToToday();", CPP)
         self.assertIn("apply(view.today_events)", CPP)
+        self.assertIn("daily_widgets::DecideRollover", CPP)
+        self.assertIn("view.ddays", CPP)  # D-days come from the day's own ranked list
 
     def test_apple_provider_and_midnight_refresh(self):
         self.assertIn("DailyWidgetSnapshot.load(for: now)", SWIFT)
         self.assertIn("calendar.date(byAdding: .day, value: 1", SWIFT)
         self.assertNotIn("startOfDay(for: now).addingTimeInterval", SWIFT)
+        # Every widget family shows the refresh state, not only the today view.
+        self.assertGreaterEqual(SWIFT.count("snapshot.needsRefresh == true"), 3)
 
     @unittest.skipUnless(subprocess.run(["which", "swiftc"], capture_output=True).returncode == 0, "swiftc missing")
     def test_apple_rollover_logic(self):
