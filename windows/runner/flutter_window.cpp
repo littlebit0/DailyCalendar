@@ -59,6 +59,7 @@ bool FlutterWindow::OnCreate() {
   // window is shown. It is a no-op if the first frame hasn't completed yet.
   flutter_controller_->ForceRedraw();
 
+  taskbar_created_message_ = RegisterWindowMessageW(L"TaskbarCreated");
   AddTrayIcon();
 
   return true;
@@ -167,10 +168,25 @@ LRESULT
 FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
+  if (taskbar_created_message_ != 0 && message == taskbar_created_message_) {
+    // Explorer restarted: the shell forgot the icon, so add it again.
+    tray_icon_added_ = false;
+    AddTrayIcon();
+    return 0;
+  }
   switch (message) {
     case WM_CLOSE:
       if (!exit_requested_) {
-        ShowWindow(hwnd, SW_HIDE);
+        if (!tray_icon_added_) {
+          AddTrayIcon();
+        }
+        if (tray_icon_added_) {
+          ShowWindow(hwnd, SW_HIDE);
+        } else {
+          // Nothing in the tray to restore from: keep a taskbar button instead
+          // of hiding the only way back to the window.
+          ShowWindow(hwnd, SW_MINIMIZE);
+        }
         return 0;
       }
       break;
