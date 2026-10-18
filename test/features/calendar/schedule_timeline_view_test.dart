@@ -967,6 +967,58 @@ void main() {
     expect(droppedStart, DateTime(2026, 8, 28, 9, 20));
   });
 
+  testWidgets('overlapping occurrences of one series get distinct block keys', (
+    tester,
+  ) async {
+    // A 25-hour daily repeat: the occurrence that started on May 4 and the one
+    // that starts on May 5 both appear on May 5 and share the series id.
+    CalendarEvent occurrence(DateTime start) => CalendarEvent(
+      id: 'series',
+      occurrenceId: 'series@${start.toIso8601String()}',
+      title: '긴 반복',
+      startAt: start,
+      endAt: start.add(const Duration(hours: 25)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 5, 1),
+      updatedAt: DateTime(2026, 5, 1),
+    );
+    final day = DateTime(2026, 5, 5);
+    final first = occurrence(DateTime(2026, 5, 4, 9));
+    final second = occurrence(DateTime(2026, 5, 5, 9));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ScheduleTimelineView(
+            days: [day],
+            events: [first, second],
+            selectedDate: day,
+            use24HourTime: true,
+            showAllDayEvents: true,
+            holidayBackgroundEnabled: true,
+            holidayColorValue: EventCategory.holiday.colorValue,
+            onShowAllDayEventsChanged: (_) {},
+            onDateSelected: (_) {},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(tester.takeException(), isNull);
+    for (final event in [first, second]) {
+      expect(
+        find.byKey(
+          ValueKey(
+            'schedule-event-${event.occurrenceId}-${day.toIso8601String()}',
+          ),
+        ),
+        findsOneWidget,
+      );
+    }
+  });
+
   testWidgets('overlapping schedule lanes follow category order', (
     tester,
   ) async {

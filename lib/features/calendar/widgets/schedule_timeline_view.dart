@@ -986,7 +986,7 @@ class _ScheduleTimeGrid extends StatelessWidget {
     );
     return AnimatedPositioned(
       key: ValueKey(
-        'schedule-event-${layout.event.id}-${day.toIso8601String()}${preview ? '-preview' : ''}',
+        'schedule-event-${calendarEventOrderKey(layout.event)}-${day.toIso8601String()}${preview ? '-preview' : ''}',
       ),
       duration: const Duration(milliseconds: 180),
       curve: Curves.easeOutCubic,
