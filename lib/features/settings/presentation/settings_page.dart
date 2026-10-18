@@ -3916,6 +3916,12 @@ class _TimeFormatTile extends StatelessWidget {
   }
 }
 
+/// Chips for the D-day reminder offsets: the usual presets plus every stored
+/// value, so a custom offset can always be seen and switched off.
+@visibleForTesting
+List<int> ddayOffsetOptions(Iterable<int> stored) =>
+    ({-30, -14, -7, -3, -1, 0, ...stored}.toList()..sort());
+
 class _DdayOffsetsTile extends StatelessWidget {
   const _DdayOffsetsTile({
     required this.offsets,
@@ -3930,7 +3936,7 @@ class _DdayOffsetsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = offsets.toSet();
-    const presets = [-30, -14, -7, -3, -1, 0];
+    final options = ddayOffsetOptions(offsets);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -3958,7 +3964,7 @@ class _DdayOffsetsTile extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 6,
                   children: [
-                    for (final offset in presets)
+                    for (final offset in options)
                       FilterChip(
                         label: Text(_ddayLabel(offset)),
                         selected: selected.contains(offset),
