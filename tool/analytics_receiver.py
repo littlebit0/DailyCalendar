@@ -18,7 +18,9 @@ from urllib.request import Request, urlopen
 MAX_REQUEST_BYTES = 64 * 1024
 MAX_EVENTS = 25
 MAX_REQUESTS_PER_MINUTE = 120
-MAX_BUG_REPORT_BYTES = 16 * 1024
+# Field limits allow 12,120 characters; four-byte UTF-8 (emoji) is the worst case
+# at about 48.5 KB, so 64 KiB covers every form-valid report plus the environment.
+MAX_BUG_REPORT_BYTES = 64 * 1024
 MAX_BUG_REPORTS_PER_HOUR = 5
 BUG_REPORT_RETENTION_DAYS = 365
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
@@ -109,7 +111,7 @@ def _valid_value(kind, value):
     if kind == "succeeded":
         return value == "succeeded"
     if kind == "failedOutcome":
-        return value in {"failed", "canceled"}
+        return isinstance(value, str) and value in {"failed", "canceled"}
     return isinstance(value, str) and value in ENUMS[kind]
 
 
@@ -132,6 +134,9 @@ def valid_event(event):
         return False
     if not _valid_timestamp(event["occurredAt"]):
         return False
+    # A list or object is valid JSON but unhashable: reject it, never raise.
+    if not isinstance(event["name"], str):
+        return False
     schema = SCHEMAS.get(event["name"])
     attributes = event["attributes"]
     if schema is None or not isinstance(attributes, dict) or set(attributes) != set(schema):
@@ -153,7 +158,13 @@ def valid_batch(batch):
         return False
     if not isinstance(environment["appVersion"], str) or not ANALYTICS_VERSION_PATTERN.fullmatch(environment["appVersion"]):
         return False
-    if environment["platform"] not in {"ios", "macos", "android", "windows", "linux"}:
+    if not isinstance(environment["platform"], str) or environment["platform"] not in {
+        "ios",
+        "macos",
+        "android",
+        "windows",
+        "linux",
+    }:
         return False
     if type(environment["osMajor"]) is not int:
         return False
@@ -295,6 +306,11 @@ class Aggregator:
                 path.unlink(missing_ok=True)
 
 
+REQUEST_ID_PATTERN = re.compile(
+    r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+)
+
+
 class BugReportBackend:
     def __init__(
         self,
@@ -304,9 +320,11 @@ class BugReportBackend:
         github_repository=None,
         google_identity_fetcher=None,
         github_issue_creator=None,
+        github_issue_finder=None,
         now=None,
     ):
         self.contact_directory = Path(directory) / "bug-report-contacts"
+        self.request_directory = Path(directory) / "bug-report-requests"
         self.github_token = github_token if github_token is not None else os.environ.get("DAILY_GITHUB_TOKEN", "")
         self.github_repository = (
             github_repository
@@ -317,11 +335,14 @@ class BugReportBackend:
             raise ValueError("invalid GitHub repository")
         self._google_identity_fetcher = google_identity_fetcher or self._fetch_google_identity
         self._github_issue_creator = github_issue_creator or self._create_github_issue
+        self._github_issue_finder = github_issue_finder or self._find_github_issue
+        self._request_lock = threading.Lock()
+        self._inflight_requests = set()
         self._now = now or (lambda: datetime.now(timezone.utc))
         self._rate_lock = threading.Lock()
         self._rate_windows = defaultdict(list)
 
-    def submit(self, payload, authorization):
+    def submit(self, payload, authorization, request_id=None):
         identity = self._google_identity_fetcher(authorization)
         subject = identity.get("sub") if isinstance(identity, dict) else None
         email = identity.get("email") if isinstance(identity, dict) else None
@@ -338,8 +359,47 @@ class BugReportBackend:
             raise InvalidGoogleToken()
 
         subject_hash = hashlib.sha256(subject.encode()).hexdigest()
-        self._check_report_rate(subject_hash)
-        report_id = str(uuid.uuid4())
+        if not isinstance(request_id, str) or not REQUEST_ID_PATTERN.fullmatch(request_id):
+            # Without a client request ID a retry cannot be told from a new report.
+            self._check_report_rate(subject_hash)
+            return self._create_report(payload, email, subject_hash, str(uuid.uuid4()), None)
+
+        # The request ID is bound to the verified account, so another user cannot
+        # read or reuse this report's result.
+        key = hashlib.sha256(f"{subject_hash}:{request_id.lower()}".encode()).hexdigest()
+        with self._request_lock:
+            if key in self._inflight_requests:
+                raise UpstreamUnavailable()
+            self._inflight_requests.add(key)
+        try:
+            record = self._read_request(key)
+            if record is not None and record.get("state") == "created":
+                return {"issueNumber": record["issueNumber"], "issueUrl": record["issueUrl"]}
+            if record is None:
+                self._check_report_rate(subject_hash)
+                report_id = str(uuid.uuid4())
+                record = {
+                    "schemaVersion": 1,
+                    "reportId": report_id,
+                    "state": "pending",
+                    "createdAt": self._now().isoformat().replace("+00:00", "Z"),
+                }
+                self._write_request(key, record)
+            else:
+                # An earlier attempt ended without a known result. Never create a
+                # second issue before checking whether the first one exists.
+                report_id = record["reportId"]
+                existing = self._github_issue_finder(report_id)
+                if existing is not None:
+                    return self._finish_report(
+                        email, subject_hash, report_id, existing, key, record
+                    )
+            return self._create_report(payload, email, subject_hash, report_id, (key, record))
+        finally:
+            with self._request_lock:
+                self._inflight_requests.discard(key)
+
+    def _create_report(self, payload, email, subject_hash, report_id, request):
         created_at = self._now().isoformat().replace("+00:00", "Z")
         contact = {
             "schemaVersion": 1,
@@ -351,34 +411,136 @@ class BugReportBackend:
         }
         contact_path = self._write_contact(contact)
         title, body = self._github_content(payload, report_id)
+
+        def fail():
+            if request is None:
+                contact_path.unlink(missing_ok=True)
+            else:
+                # The issue may exist even though no answer arrived: keep the
+                # private contact and let the same request resolve it.
+                key, record = request
+                self._write_request(key, {**record, "state": "unknown"})
+            raise UpstreamUnavailable()
+
         try:
             issue = self._github_issue_creator(title, body)
-        except UpstreamUnavailable:
-            contact_path.unlink(missing_ok=True)
-            raise
         except Exception:
-            contact_path.unlink(missing_ok=True)
-            raise UpstreamUnavailable() from None
-
+            fail()
         issue_number = issue.get("number") if isinstance(issue, dict) else None
         issue_url = issue.get("html_url") if isinstance(issue, dict) else None
         if type(issue_number) is not int or not self._valid_issue_url(issue_url, issue_number):
-            contact_path.unlink(missing_ok=True)
-            raise UpstreamUnavailable()
-        contact.update(
-            {
-                "status": "created",
-                "issueNumber": issue_number,
-                "issueUrl": issue_url,
-            }
+            fail()
+        return self._finish_report(
+            email, subject_hash, report_id, issue, *(request or (None, None)), contact=contact, contact_path=contact_path
         )
+
+    def _finish_report(
+        self, email, subject_hash, report_id, issue, key=None, record=None, *, contact=None, contact_path=None
+    ):
+        issue_number = issue.get("number")
+        issue_url = issue.get("html_url")
+        if contact is None:
+            contact_path = self.contact_directory / f"{report_id}.json"
+            try:
+                contact = json.loads(contact_path.read_text())
+            except (OSError, ValueError):
+                contact = {
+                    "schemaVersion": 1,
+                    "reportId": report_id,
+                    "createdAt": self._now().isoformat().replace("+00:00", "Z"),
+                    "email": email,
+                    "googleSubjectHash": subject_hash,
+                }
+        contact.update({"status": "created", "issueNumber": issue_number, "issueUrl": issue_url})
         try:
             self._write_contact(contact, path=contact_path)
         except OSError:
             # The pending file still retains the private contact and report ID.
             # Returning the created issue avoids duplicate reports on retry.
             pass
+        if key is not None:
+            try:
+                self._write_request(
+                    key,
+                    {**record, "state": "created", "issueNumber": issue_number, "issueUrl": issue_url},
+                )
+            except OSError:
+                pass
         return {"issueNumber": issue_number, "issueUrl": issue_url}
+
+    def _read_request(self, key):
+        try:
+            record = json.loads((self.request_directory / f"{key}.json").read_text())
+        except (OSError, ValueError):
+            return None
+        if (
+            not isinstance(record, dict)
+            or not isinstance(record.get("reportId"), str)
+            or not REQUEST_ID_PATTERN.fullmatch(record["reportId"])
+        ):
+            return None
+        if record.get("state") == "created" and (
+            type(record.get("issueNumber")) is not int
+            or not self._valid_issue_url(record.get("issueUrl"), record.get("issueNumber"))
+        ):
+            return None
+        return record
+
+    def _write_request(self, key, record):
+        self.request_directory.mkdir(parents=True, exist_ok=True)
+        os.chmod(self.request_directory, 0o700)
+        target = self.request_directory / f"{key}.json"
+        fd, temporary = tempfile.mkstemp(prefix=f".{target.name}.", dir=self.request_directory)
+        try:
+            os.fchmod(fd, 0o600)
+            with os.fdopen(fd, "w") as output:
+                json.dump(record, output, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+                output.flush()
+                os.fsync(output.fileno())
+            os.replace(temporary, target)
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
+
+    def _find_github_issue(self, report_id):
+        """Finds an already created issue by its report ID marker, or None."""
+        if not self.github_token:
+            raise UpstreamUnavailable()
+        request = Request(
+            f"https://api.github.com/repos/{self.github_repository}/issues"
+            "?state=all&sort=created&direction=desc&per_page=100",
+            headers={
+                "Accept": "application/vnd.github+json",
+                "Authorization": f"Bearer {self.github_token}",
+                "X-GitHub-Api-Version": GITHUB_API_VERSION,
+                "User-Agent": "DailyCalendar-Bug-Reporter",
+            },
+            method="GET",
+        )
+        try:
+            with urlopen(request, timeout=15) as response:
+                response_body = response.read(2 * 1024 * 1024 + 1)
+        except (HTTPError, OSError, URLError, TimeoutError):
+            raise UpstreamUnavailable() from None
+        if len(response_body) > 2 * 1024 * 1024:
+            raise UpstreamUnavailable()
+        try:
+            decoded = json.loads(response_body)
+        except (TypeError, ValueError, UnicodeDecodeError):
+            raise UpstreamUnavailable() from None
+        if not isinstance(decoded, list):
+            raise UpstreamUnavailable()
+        for issue in decoded:
+            if (
+                isinstance(issue, dict)
+                and "pull_request" not in issue
+                and isinstance(issue.get("body"), str)
+                and f"`{report_id}`" in issue["body"]
+                and type(issue.get("number")) is int
+                and self._valid_issue_url(issue.get("html_url"), issue["number"])
+            ):
+                return {"number": issue["number"], "html_url": issue["html_url"]}
+        return None
 
     def _fetch_google_identity(self, authorization):
         if (
@@ -512,6 +674,13 @@ class BugReportBackend:
                 continue
             if modified < cutoff:
                 path.unlink(missing_ok=True)
+        for path in self.request_directory.glob("*.json"):
+            try:
+                modified = datetime.fromtimestamp(path.stat().st_mtime, timezone.utc)
+            except OSError:
+                continue
+            if modified < cutoff:
+                path.unlink(missing_ok=True)
 
     def _valid_issue_url(self, value, issue_number):
         return (
@@ -575,6 +744,7 @@ class ReceiverHandler(BaseHTTPRequestHandler):
             submission = self.bug_reports.submit(
                 normalized,
                 self.headers.get("Authorization"),
+                self.headers.get("Idempotency-Key"),
             )
         except InvalidGoogleToken:
             self._respond(401, {"error": "invalid_google_token"})

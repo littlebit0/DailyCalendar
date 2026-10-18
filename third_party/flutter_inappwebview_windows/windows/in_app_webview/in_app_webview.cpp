@@ -618,13 +618,14 @@ namespace flutter_inappwebview_plugin
 
         wil::unique_cotaskmem_string json;
         if (succeededOrLog(args->get_WebMessageAsJson(&json))) {
-          auto message = nlohmann::json::parse(wide_to_utf8(json.get()));
+          // Daily #241: page-controlled input must never throw out of this callback.
+          auto message = nlohmann::json::parse(wide_to_utf8(json.get()), nullptr, false);
 
-          if (message.is_object() && message.contains("name") && message.at("name").is_string() && message.contains("body") && message.at("body").is_object()) {
+          if (!message.is_discarded() && message.is_object() && message.contains("name") && message.at("name").is_string() && message.contains("body") && message.at("body").is_object()) {
             auto name = message.at("name").get<std::string>();
             auto body = message.at("body").get<nlohmann::json>();
 
-            if (name.compare("callHandler") == 0 && body.contains("handlerName") && body.at("handlerName").is_string()) {
+            if (name.compare("callHandler") == 0 && body.contains("handlerName") && body.at("handlerName").is_string() && body.contains("_callHandlerID") && body.contains("args")) {
               auto handlerName = body.at("handlerName").get<std::string>();
               auto callHandlerID = body.at("_callHandlerID").is_number_integer() ? body.at("_callHandlerID").get<int64_t>() : 0;
               std::string handlerArgs = body.at("args").is_string() ? body.at("args").get<std::string>() : "";
@@ -633,7 +634,7 @@ namespace flutter_inappwebview_plugin
               callback->defaultBehaviour = [this, callHandlerID](const std::optional<const flutter::EncodableValue*> response)
                 {
                   std::string json = "null";
-                  if (response.has_value() && !response.value()->IsNull()) {
+                  if (response.has_value() && response.value() != nullptr && !response.value()->IsNull()) {
                     json = std::get<std::string>(*(response.value()));
                   }
 

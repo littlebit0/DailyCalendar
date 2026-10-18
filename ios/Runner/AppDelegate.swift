@@ -410,6 +410,34 @@ private final class DailyCalendarImport {
     @unknown default: return nil
     }
     var fields = ["FREQ=\(frequency)", "INTERVAL=\(max(rule.interval, 1))"]
+    // Keep the conditions that decide which dates repeat (BYDAY etc.); dropping
+    // them would turn "Mon and Wed" or "2nd Tuesday" into a plain repeat.
+    let weekdayCodes: [EKWeekday: String] = [
+      .sunday: "SU", .monday: "MO", .tuesday: "TU", .wednesday: "WE",
+      .thursday: "TH", .friday: "FR", .saturday: "SA",
+    ]
+    if let days = rule.daysOfTheWeek, !days.isEmpty {
+      let tokens = days.compactMap { day -> String? in
+        guard let code = weekdayCodes[day.dayOfTheWeek] else { return nil }
+        return day.weekNumber == 0 ? code : "\(day.weekNumber)\(code)"
+      }
+      if !tokens.isEmpty { fields.append("BYDAY=" + tokens.joined(separator: ",")) }
+    }
+    func list(_ name: String, _ values: [NSNumber]?) {
+      guard let values = values, !values.isEmpty else { return }
+      fields.append(name + "=" + values.map { String($0.intValue) }.joined(separator: ","))
+    }
+    list("BYMONTHDAY", rule.daysOfTheMonth)
+    list("BYMONTH", rule.monthsOfTheYear)
+    list("BYSETPOS", rule.setPositions)
+    // Not representable in the app: flagged so the importer can say so.
+    list("BYWEEKNO", rule.weeksOfTheYear)
+    list("BYYEARDAY", rule.daysOfTheYear)
+    if rule.firstDayOfTheWeek != 0 && rule.firstDayOfTheWeek != 2 {
+      if let code = weekdayCodes[EKWeekday(rawValue: rule.firstDayOfTheWeek) ?? .monday] {
+        fields.append("WKST=\(code)")
+      }
+    }
     if let count = rule.recurrenceEnd?.occurrenceCount, count > 0 {
       fields.append("COUNT=\(count)")
     } else if let date = rule.recurrenceEnd?.endDate {
