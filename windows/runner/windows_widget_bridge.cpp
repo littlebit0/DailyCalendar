@@ -292,8 +292,13 @@ void WindowsWidgetBridge::HandleMethodCall(
     return;
   }
   if (call.method_name() == "acknowledgeTodoActions") {
-    AcknowledgeActions(
-        std::get_if<flutter::EncodableMap>(call.arguments()));
+    if (!AcknowledgeActions(
+            std::get_if<flutter::EncodableMap>(call.arguments()))) {
+      // The tokens stay queued (memory and disk agree), so the caller retries.
+      result->Error("pending_actions_save_failed",
+                    "The widget action queue could not be saved.");
+      return;
+    }
     result->Success();
     return;
   }
@@ -429,14 +434,14 @@ flutter::EncodableList WindowsWidgetBridge::PendingActionsForFlutter() const {
   return encoded;
 }
 
-void WindowsWidgetBridge::AcknowledgeActions(
+bool WindowsWidgetBridge::AcknowledgeActions(
     const flutter::EncodableMap* arguments) {
   if (arguments == nullptr) {
-    return;
+    return true;
   }
   const auto* tokens = AsList(MapValue(*arguments, "tokens"));
   if (tokens == nullptr || tokens->empty()) {
-    return;
+    return true;
   }
   std::set<std::string> acknowledged;
   for (const auto& encoded_token : *tokens) {
@@ -444,6 +449,7 @@ void WindowsWidgetBridge::AcknowledgeActions(
       acknowledged.insert(*token);
     }
   }
+  const auto previous_actions = pending_actions_;
   const auto old_size = pending_actions_.size();
   pending_actions_.erase(
       std::remove_if(pending_actions_.begin(), pending_actions_.end(),
@@ -451,9 +457,12 @@ void WindowsWidgetBridge::AcknowledgeActions(
                        return acknowledged.count(action.token) != 0;
                      }),
       pending_actions_.end());
-  if (pending_actions_.size() != old_size) {
-    SavePendingActions();
+  if (pending_actions_.size() != old_size && !SavePendingActions()) {
+    // Do not report the tokens as handled when the file still lists them.
+    pending_actions_ = previous_actions;
+    return false;
   }
+  return true;
 }
 
 void WindowsWidgetBridge::ToggleEvent(std::size_t index) {
@@ -466,10 +475,15 @@ void WindowsWidgetBridge::ToggleEvent(std::size_t index) {
   }
   const bool completed = !snapshot_.today_events[index].completed;
   const std::string occurrence_id = snapshot_.today_events[index].occurrence_id;
-  UpdateEventCompletion(occurrence_id.empty() ? event_id : occurrence_id, completed);
   pending_actions_.push_back(
       PendingAction{NewActionToken(), event_id, completed, occurrence_id});
-  SavePendingActions();
+  if (!SavePendingActions()) {
+    // Without a durable request a restart would lose the click, so neither the
+    // queue nor the displayed state may claim it happened.
+    pending_actions_.pop_back();
+    return;
+  }
+  UpdateEventCompletion(occurrence_id.empty() ? event_id : occurrence_id, completed);
   InvalidateRect(popup_, nullptr, FALSE);
   channel_->InvokeMethod("todoActionsChanged", nullptr);
 }

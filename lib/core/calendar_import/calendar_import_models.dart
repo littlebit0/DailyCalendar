@@ -65,9 +65,13 @@ class CalendarImportResult {
     required this.imported,
     required this.skipped,
     required this.failed,
+    this.unsupportedRecurrence = 0,
   });
 
   final int imported;
   final int skipped;
   final int failed;
+
+  /// Imported once, because their repeat rule cannot be represented.
+  final int unsupportedRecurrence;
 }

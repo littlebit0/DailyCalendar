@@ -113,6 +113,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   var _appleMessage = '';
   var _appleBusy = false;
   var _bugReportBusy = false;
+  // Kept when a submission fails, so the text is not lost.
+  BugReportDraft? _unsentBugReportDraft;
+  String? _unsentBugReportEmail;
   var _deviceAuthenticationAvailable = false;
   var _biometricAuthenticationAvailable = false;
   AppSettings? _pendingWindowsSettings;
@@ -1246,19 +1249,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Future<_AppVersionInfo> _loadAppVersionInfo() async {
-    try {
-      final info = await PackageInfo.fromPlatform();
-      return _AppVersionInfo(
-        version: info.version.isEmpty ? _fallbackAppVersion : info.version,
-        buildNumber: info.version.isEmpty ? _fallbackAppVersion : info.version,
-        packageName: info.packageName,
-      );
-    } on Object {
-      return const _AppVersionInfo(
-        version: _fallbackAppVersion,
-        buildNumber: _fallbackAppVersion,
-      );
-    }
+    final resolved = await resolveAppVersionInfo(PackageInfo.fromPlatform);
+    return _AppVersionInfo(
+      version: resolved.version,
+      buildNumber: resolved.buildNumber,
+      packageName: resolved.packageName,
+    );
   }
 
   Future<void> _openGithubRepository() async {
@@ -1365,11 +1361,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       return;
     }
 
+    // A retained draft belongs to the account it was written under.
+    if (_unsentBugReportEmail != activeGoogle.email) {
+      _unsentBugReportDraft = null;
+    }
     final draft = await showDialog<BugReportDraft>(
       context: context,
-      builder: (context) => _BugReportDialog(email: activeGoogle.email),
+      builder: (context) => _BugReportDialog(
+        email: activeGoogle.email,
+        initialDraft: _unsentBugReportDraft,
+      ),
     );
     if (draft == null || !mounted) return;
+    _unsentBugReportDraft = draft;
+    _unsentBugReportEmail = activeGoogle.email;
 
     setState(() => _bugReportBusy = true);
     final info = await _appVersionInfo;
@@ -1396,6 +1401,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             environment: environment,
             googleAuthorizationHeaders: authorizationHeaders,
           );
+      _unsentBugReportDraft = null;
+      _unsentBugReportEmail = null;
       if (!mounted) return;
       await showDialog<void>(
         context: context,
@@ -1950,22 +1957,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     ref.read(appSettingsProvider.notifier).state = updated;
 
     final revision = ++_categoryReorderRevision;
+    // Queued saves outlive this screen, so take everything they need now:
+    // a disposed WidgetRef cannot be read once the screen has been closed.
+    final repository = ref.read(settingsRepositoryProvider);
+    final settingsState = ref.read(appSettingsProvider.notifier);
+    final syncService = ref.read(googleDriveSyncServiceProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final failureMessage = context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.');
     _categoryReorderSaveQueue = _categoryReorderSaveQueue.then((_) async {
       try {
-        await ref
-            .read(settingsRepositoryProvider)
-            .save(updated, changedFrom: settings);
+        await repository.save(updated, changedFrom: settings);
         if (revision == _categoryReorderRevision) {
-          _queueCategoryBackup();
+          unawaited(syncService.syncPendingChangesNow().catchError((_) {}));
         }
       } on Object {
-        if (!mounted || revision != _categoryReorderRevision) {
+        if (revision != _categoryReorderRevision) {
           return;
         }
-        ref.read(appSettingsProvider.notifier).state = settings;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
-        );
+        settingsState.state = settings;
+        if (mounted) {
+          messenger.showSnackBar(SnackBar(content: Text(failureMessage)));
+        }
       }
     });
   }
@@ -2312,6 +2324,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         // cannot clear its cached Google session.
       }
       await ref.read(settingsRepositoryProvider).deleteGoogleAccount();
+      // A report draft written under the unlinked account must not follow the
+      // next account that is linked on this screen.
+      _unsentBugReportDraft = null;
+      _unsentBugReportEmail = null;
       if (mounted) {
         ref.read(appSettingsProvider.notifier).state = ref
             .read(settingsRepositoryProvider)
@@ -3482,10 +3498,24 @@ class _SettingsDescription extends StatelessWidget {
   }
 }
 
+/// Rejects an edit that would make the whole report too large to send.
+class _BugReportBudgetFormatter extends TextInputFormatter {
+  const _BugReportBudgetFormatter(this.fits);
+
+  final bool Function(String text) fits;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) => fits(newValue.text) ? newValue : oldValue;
+}
+
 class _BugReportDialog extends StatefulWidget {
-  const _BugReportDialog({required this.email});
+  const _BugReportDialog({required this.email, this.initialDraft});
 
   final String email;
+  final BugReportDraft? initialDraft;
 
   @override
   State<_BugReportDialog> createState() => _BugReportDialogState();
@@ -3498,6 +3528,19 @@ class _BugReportDialogState extends State<_BugReportDialog> {
   final _reproductionController = TextEditingController();
   final _expectedController = TextEditingController();
   final _actualController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final draft = widget.initialDraft;
+    if (draft != null) {
+      _titleController.text = draft.title;
+      _descriptionController.text = draft.description;
+      _reproductionController.text = draft.reproductionSteps;
+      _expectedController.text = draft.expectedBehavior;
+      _actualController.text = draft.actualBehavior;
+    }
+  }
 
   @override
   void dispose() {
@@ -3647,6 +3690,21 @@ class _BugReportDialogState extends State<_BugReportDialog> {
     );
   }
 
+  BugReportDraft _draftWith(TextEditingController changed, String text) {
+    String value(TextEditingController controller) =>
+        identical(controller, changed) ? text : controller.text;
+    return BugReportDraft(
+      title: value(_titleController),
+      description: value(_descriptionController),
+      reproductionSteps: value(_reproductionController),
+      expectedBehavior: value(_expectedController),
+      actualBehavior: value(_actualController),
+    );
+  }
+
+  bool Function(String) _fitsWith(TextEditingController controller) =>
+      (text) => bugReportDraftFits(_draftWith(controller, text));
+
   Widget _field({
     required Key key,
     required TextEditingController controller,
@@ -3664,6 +3722,9 @@ class _BugReportDialogState extends State<_BugReportDialog> {
       minLines: minLines,
       maxLines: maxLines,
       maxLength: maxLength,
+      // The character limit alone cannot bound the request: a single emoji
+      // sequence is one character but dozens of bytes.
+      inputFormatters: [_BugReportBudgetFormatter(_fitsWith(controller))],
       textInputAction: maxLines == 1
           ? TextInputAction.next
           : TextInputAction.newline,
@@ -3701,6 +3762,38 @@ class _BugReportDialogState extends State<_BugReportDialog> {
         actualBehavior: _actualController.text,
       ),
     );
+  }
+}
+
+/// The package's own version and build number. A missing build number is shown
+/// as `unknown` instead of repeating the version as if it were one.
+@visibleForTesting
+({String version, String buildNumber, String packageName})
+appVersionInfoFromPackage(
+  String version,
+  String buildNumber,
+  String packageName,
+) => (
+  version: version.isEmpty ? _fallbackAppVersion : version,
+  buildNumber: buildNumber.isEmpty ? 'unknown' : buildNumber,
+  packageName: packageName,
+);
+
+/// Looks the package metadata up. When the lookup itself fails, the version
+/// falls back to a known value but the build number is `unknown`: reusing the
+/// version there would invent a build number a report never had.
+@visibleForTesting
+Future<({String version, String buildNumber, String packageName})>
+resolveAppVersionInfo(Future<PackageInfo> Function() lookup) async {
+  try {
+    final info = await lookup();
+    return appVersionInfoFromPackage(
+      info.version,
+      info.buildNumber,
+      info.packageName,
+    );
+  } on Object {
+    return appVersionInfoFromPackage(_fallbackAppVersion, '', '');
   }
 }
 
@@ -3916,6 +4009,12 @@ class _TimeFormatTile extends StatelessWidget {
   }
 }
 
+/// Chips for the D-day reminder offsets: the usual presets plus every stored
+/// value, so a custom offset can always be seen and switched off.
+@visibleForTesting
+List<int> ddayOffsetOptions(Iterable<int> stored) =>
+    ({-30, -14, -7, -3, -1, 0, ...stored}.toList()..sort());
+
 class _DdayOffsetsTile extends StatelessWidget {
   const _DdayOffsetsTile({
     required this.offsets,
@@ -3930,7 +4029,7 @@ class _DdayOffsetsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = offsets.toSet();
-    const presets = [-30, -14, -7, -3, -1, 0];
+    final options = ddayOffsetOptions(offsets);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -3958,7 +4057,7 @@ class _DdayOffsetsTile extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 6,
                   children: [
-                    for (final offset in presets)
+                    for (final offset in options)
                       FilterChip(
                         label: Text(_ddayLabel(offset)),
                         selected: selected.contains(offset),

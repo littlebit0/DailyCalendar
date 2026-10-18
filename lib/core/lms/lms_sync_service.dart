@@ -375,6 +375,8 @@ class LmsSyncService extends ChangeNotifier {
       );
       final courses = _parser.courses(dashboard);
       final fetched = <CoursemosActivity>[];
+      // Activities whose learning values the school confirmed in this sync.
+      final confirmedLearning = Set<CoursemosActivity>.identity();
       var unresolvedLearningActivities = 0;
       var excludedLearningActivities = 0;
       var failedLearningCourses = 0;
@@ -449,7 +451,11 @@ class LmsSyncService extends ChangeNotifier {
               // Keep the verified report subset and explicit unresolved count.
             }
           }
-          fetched.addAll(learning.activities);
+          // `activities` builds new objects on every read: take it once so the
+          // instances kept as "confirmed" are the ones that get applied.
+          final reported = learning.activities;
+          fetched.addAll(reported);
+          confirmedLearning.addAll(reported);
           unresolvedLearningActivities += learning.unresolvedRowCount;
           excludedLearningActivities += learning.excludedNonAttendanceCount;
           // An empty table has no independently verified empty marker. Report
@@ -472,6 +478,7 @@ class LmsSyncService extends ChangeNotifier {
         epoch,
         courses,
         fetched,
+        confirmedLearning: confirmedLearning,
         unresolvedLearningActivities: unresolvedLearningActivities,
         excludedLearningActivities: excludedLearningActivities,
         failedLearningCourses: failedLearningCourses,
@@ -622,6 +629,7 @@ class LmsSyncService extends ChangeNotifier {
     int epoch,
     List<CoursemosCourse> courses,
     List<CoursemosActivity> activities, {
+    required Set<CoursemosActivity> confirmedLearning,
     required int unresolvedLearningActivities,
     required int excludedLearningActivities,
     required int failedLearningCourses,
@@ -633,6 +641,7 @@ class LmsSyncService extends ChangeNotifier {
     _check(session, epoch);
     final category = _configuredCategory() ?? EventCategory.basic;
     final candidates = <CalendarEvent>[];
+    final confirmedEventIds = <String>{};
     final now = _now();
     for (final activity in activities) {
       final due = activity.dueAt;
@@ -676,6 +685,9 @@ class LmsSyncService extends ChangeNotifier {
         attendanceStatus: activity.attendanceStatus,
         progressPercent: activity.progressPercent,
       );
+      if (confirmedLearning.contains(activity)) {
+        confirmedEventIds.add(eventId(metadata));
+      }
       candidates.add(
         CalendarEvent(
           id: eventId(metadata),
@@ -763,6 +775,7 @@ class LmsSyncService extends ChangeNotifier {
     };
     final readCourseIds = courses.map((course) => course.id).toSet();
     var deleted = 0;
+    final deletedIds = <String>{};
     for (final event in previous) {
       if (!event.isDeleted &&
           _prunable(event, session) &&
@@ -775,8 +788,16 @@ class LmsSyncService extends ChangeNotifier {
         );
         _check(session, epoch);
         deleted++;
+        deletedIds.add(event.id);
       }
     }
+    await _recordLearningChecks(
+      session,
+      epoch,
+      confirmedEventIds,
+      removed: deletedIds,
+      checkedAt: now,
+    );
     return LmsSyncResult(
       courses: courses.length,
       activities: activities.length,
@@ -795,6 +816,51 @@ class LmsSyncService extends ChangeNotifier {
       failedLearningCourses: failedLearningCourses,
       unresolvedQuizStatuses: unresolvedQuizStatuses,
     );
+  }
+
+  /// Stamps the lectures whose learning values were confirmed just now and
+  /// forgets deleted ones; the others keep the time of their last confirmation.
+  Future<void> _recordLearningChecks(
+    LmsSyncSession session,
+    int epoch,
+    Set<String> confirmed, {
+    required Set<String> removed,
+    required DateTime checkedAt,
+  }) async {
+    try {
+      final stored = _settings.lmsLearningCheckedAt(
+        ownerId: session.ownerId,
+        schoolId: session.schoolId,
+        lmsUserId: session.lmsUserId,
+      );
+      final next = {
+        for (final entry in stored.entries)
+          if (!removed.contains(entry.key)) entry.key: entry.value,
+        for (final id in confirmed) id: checkedAt.toUtc(),
+      };
+      _check(session, epoch);
+      await _settings.saveLmsLearningCheckedAt(
+        next,
+        ownerId: session.ownerId,
+        schoolId: session.schoolId,
+        lmsUserId: session.lmsUserId,
+      );
+    } on _Cancelled {
+      rethrow;
+    } on Object {
+      // A missing stamp only means the item shows the whole sync's time.
+    }
+  }
+
+  /// When this lecture's learning values were last confirmed by the school, or
+  /// null when that is not known (for example before this was recorded).
+  DateTime? learningCheckedAt(LmsEventMetadata metadata) {
+    final stored = _settings.lmsLearningCheckedAt(
+      ownerId: metadata.ownerId,
+      schoolId: metadata.schoolId,
+      lmsUserId: metadata.lmsUserId,
+    );
+    return stored[eventId(metadata)];
   }
 
   static bool _sameSource(CalendarEvent local, CalendarEvent incoming) =>

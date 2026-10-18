@@ -46,6 +46,24 @@ void main() {
       },
     );
   }
+  test(
+    'KNUE keeps the mixed semester-start row but not graduate-only rows',
+    () {
+      final events = KnueKunsanAcademicSource.parse(
+        fixture('knue', 2025),
+        2025,
+        knue: true,
+        requestedYear: 2025,
+      );
+      final start = events.singleWhere((e) => e.title == '제2학기 개강, 대학원 후기 입학일');
+      expect(start.start, DateTime(2025, 9, 1));
+      expect(start.end, DateTime(2025, 9, 2));
+      expect(start.sourceId, contains('1021'));
+      expect(events.any((e) => e.title.contains('대학원 외국어')), isFalse);
+      expect(events.any((e) => e.title.contains('입학전형')), isFalse);
+      expect(events.any((e) => e.title.contains('대학·대학원')), isTrue);
+    },
+  );
   test('Annual selection and twelve month coverage are required', () {
     final body = fixture('knue', 2026);
     expect(
