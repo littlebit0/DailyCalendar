@@ -1154,6 +1154,75 @@ void main() {
     },
   );
 
+  for (final saveFails in [false, true]) {
+    testWidgets('removing the month grid while an accepted drop saves is safe '
+        '(save ${saveFails ? "fails" : "succeeds"})', (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      final event = CalendarEvent(
+        id: 'removed-month-drag',
+        title: '저장 중 제거',
+        startAt: DateTime(2026, 5, 4, 9),
+        endAt: DateTime(2026, 5, 4, 10),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: DateTime(2026, 5, 1),
+        updatedAt: DateTime(2026, 5, 1),
+      );
+      final saveCompleter = Completer<void>();
+      var saves = 0;
+      final visualStates = <bool>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 390,
+              height: 720,
+              child: CalendarMonthGrid(
+                month: DateTime(2026, 5),
+                selectedDate: DateTime(2026, 5, 4),
+                events: [event],
+                weekStartsOnMonday: true,
+                showLunarDates: false,
+                onDateSelected: (_) {},
+                onEventDropped: (_, _, _) {
+                  saves += 1;
+                  return saveCompleter.future;
+                },
+                onEventDragStateChanged: visualStates.add,
+              ),
+            ),
+          ),
+        ),
+      );
+      final source = find.byKey(
+        const ValueKey('event-span-removed-month-drag-2026-5-4'),
+      );
+      final target = _dayNumberKey(DateTime(2026, 5, 6));
+      final gesture = await tester.startGesture(tester.getCenter(source));
+      await tester.pump(const Duration(milliseconds: 360));
+      await gesture.moveTo(tester.getCenter(target) + const Offset(0, 35));
+      await tester.pump();
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 220));
+      expect(saves, 1);
+
+      // The grid goes away before the pending save finishes.
+      await tester.pumpWidget(const MaterialApp(home: SizedBox.shrink()));
+      if (saveFails) {
+        saveCompleter.completeError(StateError('save failed'));
+      } else {
+        saveCompleter.complete();
+      }
+      await tester.pumpAndSettle();
+      expect(saves, 1);
+      expect(tester.takeException(), isNull);
+      expect(visualStates.last, isFalse);
+      debugDefaultTargetPlatformOverride = null;
+    });
+  }
+
   test('defines the requested full-app text scale choices', () {
     expect(AppTextSize.basic.scale, 0.8);
     expect(AppTextSize.large.scale, 1.0);

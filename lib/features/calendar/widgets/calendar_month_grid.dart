@@ -385,6 +385,8 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDragging(CalendarEvent event, bool active) {
+    // The drop's save can finish after this grid has been removed.
+    if (!mounted) return;
     if (_eventDragActive == active) {
       if (active && !_sameDraggedEvent(_draggingEvent, event)) {
         setState(() => _draggingEvent = event);
@@ -408,6 +410,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDragInteraction(CalendarEvent event, bool active) {
+    if (!mounted) return;
     if (_eventDragInteractionActive == active) {
       return;
     }
@@ -416,6 +419,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDropHover(CalendarEvent? event, DateTime? date, int? index) {
+    if (!mounted) return;
     if (event == null || date == null || index == null) {
       if (_dragHoverDate == null && _dragHoverIndex == null) return;
       setState(() {
@@ -437,6 +441,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDropAccepted(CalendarEvent event) {
+    if (!mounted) return;
     if (_eventDropAccepted) return;
     setState(() {
       _draggingEvent = event;
