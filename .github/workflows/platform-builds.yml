@@ -34,6 +34,11 @@ jobs:
       - name: Test Windows tray recovery wiring
         run: python3 -m unittest discover -s tool/tests -p test_windows_tray_recovery.py -v
 
+      - name: Test bug report receiver
+        run: python3 -m unittest discover -s test/tool -p analytics_receiver_test.py -v
+      - name: Test Linux reminder delivery
+        run: python3 -m unittest discover -s tool/tests -p test_linux_reminders_notify.py -v
+
       - name: Test
         run: flutter test
 
@@ -107,6 +112,9 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Test Android cookie expiry format
+        run: python3 -m unittest discover -s tool/tests -p test_android_cookie_expires.py -v
 
       - name: Build APK
         run: flutter build apk --debug --no-pub

@@ -524,6 +524,59 @@ void main() {
     },
   );
 
+  for (final scope in [
+    RecurringEditScope.onlyThis,
+    RecurringEditScope.future,
+  ]) {
+    test(
+      'detail edit $scope keeps a completed recurring event completed',
+      () async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        final database = AppDatabase.forTesting(NativeDatabase.memory());
+        addTearDown(database.close);
+        final repository = DriftEventRepository(database);
+        final original = _event('edit-source', EventCategory.basic).copyWith(
+          recurrence: const RecurrenceRule(
+            frequency: RecurrenceFrequency.daily,
+            count: 10,
+          ),
+          completed: true,
+        );
+        await repository.save(original);
+        final occurrence = original.copyWith(
+          startAt: DateTime(2026, 7, 31, 9),
+          endAt: DateTime(2026, 7, 31, 10),
+          occurrenceId: 'edit-source@2026-07-31',
+        );
+        final commands = EventCommandService(
+          repository: repository,
+          settingsRepository: settings,
+          notificationService: _CountingNotificationService(),
+          syncService: _CountingSyncService(),
+        );
+        final result = await commands.editRecurringOccurrence(
+          occurrence: occurrence,
+          draft: EventDraft(
+            title: 'only the title',
+            startAt: occurrence.startAt,
+            endAt: occurrence.endAt,
+            categoryChanged: false,
+            recurrence: occurrence.recurrence,
+          ),
+          scope: scope,
+        );
+        expect(result.event.title, 'only the title');
+        expect(result.event.completed, isTrue);
+        expect((await repository.findById(result.event.id))!.completed, isTrue);
+        // The rest of the series is untouched.
+        expect((await repository.findById(original.id))!.completed, isTrue);
+      },
+    );
+  }
+
   for (final scope in RecurringMoveScope.values) {
     for (final timeShift in [false, true]) {
       test(

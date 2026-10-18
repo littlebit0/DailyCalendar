@@ -11,6 +11,7 @@ import '../../../core/analytics/product_analytics.dart';
 import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/recurring_event_edit.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
+import '../../../core/calendar/event_display_filter.dart';
 import '../../../core/maps/map_launcher.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
@@ -99,8 +100,14 @@ class EventDetailsPanel extends ConsumerWidget {
           )
         : null;
     final liveEventsAsync = ref.watch(eventsInRangeProvider(_dayRange(date)));
+    final searchQuery = ref.watch(calendarSearchQueryProvider);
     final dayEvents = liveEventsAsync.maybeWhen(
-      data: (items) => _eventsForDay(items, date, settings),
+      // The live result is unfiltered: apply the calendar's display policy again.
+      data: (items) => _eventsForDay(
+        filterVisibleCalendarEvents(items, settings, searchQuery),
+        date,
+        settings,
+      ),
       orElse: () => sortedCalendarEvents(
         events,
         priority: settings.calendarEventSortPriority,

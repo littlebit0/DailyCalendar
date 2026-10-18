@@ -56,9 +56,18 @@ class LocalNotificationService implements NotificationService {
     required SettingsRepository settingsRepository,
     required EventRepository eventRepository,
     FlutterLocalNotificationsPlugin? plugin,
+    @visibleForTesting int? pendingRequestLimit,
   }) : _settingsRepository = settingsRepository,
        _eventRepository = eventRepository,
+       _pendingRequestLimit = pendingRequestLimit,
        _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+
+  final int? _pendingRequestLimit;
+
+  /// The app-wide pending request cap: iOS's 64, or a test override.
+  int? get _pendingLimit =>
+      _pendingRequestLimit ??
+      (defaultTargetPlatform == TargetPlatform.iOS ? _iosPendingLimit : null);
 
   static const _briefingId = 800000;
   static const _briefingScheduleDays = 14;
@@ -168,7 +177,23 @@ class LocalNotificationService implements NotificationService {
     final title = l10n.eventTitle(event.title, holiday: event.holiday);
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
+    final slotAllowance = event.recurrence.isRepeating
+        ? await _repeatingSlotAllowance(settings)
+        : null;
     for (final reminderMinutes in reminderMinutesList) {
+      if (event.recurrence.isRepeating) {
+        deliveredImmediateReminder = await _scheduleRepeatingReminders(
+          event,
+          reminderMinutes,
+          title: title,
+          settings: settings,
+          l10n: l10n,
+          allowImmediate: allowImmediate,
+          deliveredImmediateReminder: deliveredImmediateReminder,
+          slotAllowance: slotAllowance,
+        );
+        continue;
+      }
       final reminderAt = base.subtract(Duration(minutes: reminderMinutes));
       final plan = resolveReminderDeliveryPlan(
         reminderAt: reminderAt,
@@ -202,13 +227,7 @@ class LocalNotificationService implements NotificationService {
 
     for (final offset
         in event.showDday ? settings.dDayReminderOffsets.toSet() : <int>{}) {
-      final scheduled = DateTime(
-        event.startAt.year,
-        event.startAt.month,
-        event.startAt.day,
-        settings.allDayReminderHour,
-        settings.allDayReminderMinute,
-      ).add(Duration(days: offset));
+      final scheduled = _ddayReminderTime(event, settings, offset);
       await _deliverPlan(
         id: await _settingsRepository.notificationId(
           '${event.id}:dday:$offset',
@@ -226,7 +245,173 @@ class LocalNotificationService implements NotificationService {
         _legacyIds(event.id, reminderMinutesList),
         exceptEventId: event.id,
       );
+      await _trimOtherRepeatingSlots(settings, event.id);
     }
+  }
+
+  DateTime _ddayReminderTime(
+    CalendarEvent event,
+    AppSettings settings,
+    int offset,
+  ) => DateTime(
+    event.startAt.year,
+    event.startAt.month,
+    event.startAt.day,
+    settings.allDayReminderHour,
+    settings.allDayReminderMinute,
+  ).add(Duration(days: offset));
+
+  /// Saving or editing one event can use up room the other repeating events
+  /// were holding. Re-share the app-wide limit by cancelling their slots that
+  /// no longer fit, so pending requests never exceed it until the next restart.
+  Future<void> _trimOtherRepeatingSlots(
+    AppSettings settings,
+    String exceptEventId,
+  ) async {
+    final allowance = await _repeatingSlotAllowance(settings);
+    if (allowance == null) return;
+    for (final entry in allowance.entries) {
+      if (entry.key.startsWith('$exceptEventId:reminder:')) continue;
+      await _cancelSlotsFrom(entry.key, entry.value);
+    }
+  }
+
+  /// Cancels slot [fromSlot] and later of one `<id>:reminder:<min>` key.
+  Future<void> _cancelSlotsFrom(String baseKey, int fromSlot) async {
+    final existing = _settingsRepository.notificationIdsWithPrefix(baseKey);
+    for (final entry in existing.entries) {
+      final suffix = entry.key.substring(baseKey.length);
+      final slot = suffix.isEmpty
+          ? 0
+          : suffix.startsWith(':s')
+          ? int.tryParse(suffix.substring(2))
+          : null;
+      if (slot != null && slot >= fromSlot) {
+        await _cancelPendingNotification(entry.value);
+      }
+    }
+  }
+
+  /// iOS keeps only the soonest 64 pending requests for the whole app.
+  static const _iosPendingLimit = 64;
+
+  /// How many occurrence slots each repeating `<id>:reminder:<min>` key may use.
+  ///
+  /// Single-shot reminders, D-day reminders, the morning briefing and one slot
+  /// per repeating key are counted first; the remaining room goes to the
+  /// soonest upcoming occurrences of all repeating events together. Null on
+  /// platforms without the limit. Other events are only re-planned when they
+  /// are next scheduled (app start, edit, sync restore).
+  @visibleForTesting
+  Future<Map<String, int>?> repeatingSlotAllowance(AppSettings settings) =>
+      _repeatingSlotAllowance(settings);
+
+  Future<Map<String, int>?> _repeatingSlotAllowance(
+    AppSettings settings,
+  ) async {
+    final limit = _pendingLimit;
+    if (limit == null) return null;
+    final now = DateTime.now();
+    var fixed = settings.morningBriefingEnabled ? _briefingScheduleDays : 0;
+    final candidates = <MapEntry<String, DateTime>>[];
+    final keys = <String>[];
+    for (final other in await _eventRepository.allEventsForSync()) {
+      if (other.isDeleted ||
+          other.completed ||
+          other.systemEvent ||
+          other.readOnly) {
+        continue;
+      }
+      if (other.showDday) {
+        // Only D-day reminders that are still in the future are pending.
+        for (final offset in settings.dDayReminderOffsets.toSet()) {
+          if (_ddayReminderTime(other, settings, offset).isAfter(now)) fixed++;
+        }
+      }
+      for (final minutes in other.reminderMinutesBeforeList) {
+        if (!other.recurrence.isRepeating) {
+          final base = _baseReminderTime(other, settings);
+          final plan = resolveReminderDeliveryPlan(
+            reminderAt: base.subtract(Duration(minutes: minutes)),
+            fallbackAt: base,
+            eventEndAt: other.endAt,
+            now: now,
+            allowImmediate: false,
+            dueGrace: _dueReminderGrace,
+          );
+          if (plan.type == ReminderDeliveryType.scheduled) fixed++;
+          continue;
+        }
+        final key = '${other.id}:reminder:$minutes';
+        for (final request in planRecurringReminders(
+          event: other,
+          reminderMinutes: minutes,
+          baseTime: (occurrence) => _baseReminderTime(occurrence, settings),
+          now: now,
+          allowImmediate: false,
+          dueGrace: _dueReminderGrace,
+        )) {
+          candidates.add(MapEntry(key, request.plan.deliverAt!));
+        }
+        keys.add(key);
+      }
+    }
+    var room = (limit - fixed).clamp(0, limit);
+    // Earliest first, so each key keeps a contiguous prefix of its slots.
+    candidates.sort((a, b) => a.value.compareTo(b.value));
+    final allowance = {for (final key in keys) key: 0};
+    for (final candidate in candidates.take(room)) {
+      allowance[candidate.key] = allowance[candidate.key]! + 1;
+    }
+    return allowance;
+  }
+
+  /// Schedules the next occurrences of a repeating event for one offset.
+  ///
+  /// Slot 0 keeps the legacy single-event key; later slots get `:sN` keys, so
+  /// the id table stays bounded. Slots no longer needed are cancelled.
+  Future<bool> _scheduleRepeatingReminders(
+    CalendarEvent event,
+    int reminderMinutes, {
+    required String title,
+    required AppSettings settings,
+    required AppLocalizations l10n,
+    required bool allowImmediate,
+    required bool deliveredImmediateReminder,
+    Map<String, int>? slotAllowance,
+  }) async {
+    final baseKey = '${event.id}:reminder:$reminderMinutes';
+    final requests = planRecurringReminders(
+      event: event,
+      reminderMinutes: reminderMinutes,
+      slots: slotAllowance?[baseKey] ?? recurringReminderSlotsPerOffset,
+      baseTime: (occurrence) => _baseReminderTime(occurrence, settings),
+      now: DateTime.now(),
+      allowImmediate: allowImmediate,
+      dueGrace: _dueReminderGrace,
+    );
+    for (final request in requests) {
+      if (request.plan.type == ReminderDeliveryType.immediate) {
+        if (deliveredImmediateReminder) continue;
+        deliveredImmediateReminder = true;
+      }
+      final key = request.slot == 0 ? baseKey : '$baseKey:s${request.slot}';
+      await _deliverPlan(
+        id: await _settingsRepository.notificationId(key),
+        title: title,
+        body: reminderMinutes == 0 || request.plan.deliverAt == request.base
+            ? l10n.text('일정이 시작됩니다.')
+            : l10n.text(
+                '일정 시작 {time}입니다.',
+                args: {'time': _minutesLabel(reminderMinutes, l10n)},
+              ),
+        plan: request.plan,
+        payload: baseKey,
+      );
+    }
+    // Slots past the planned requests (an excluded, deleted or ended occurrence).
+    await _cancelSlotsFrom(baseKey, requests.length);
+    return deliveredImmediateReminder;
   }
 
   Future<void> confirmAlarmScheduled(CalendarEvent event) async {
@@ -346,6 +531,13 @@ class LocalNotificationService implements NotificationService {
       );
       if (id != null) await cancel(id);
     }
+    // Occurrence slots of a repeating event (`...:reminder:<min>:s<n>`).
+    for (final id
+        in _settingsRepository
+            .notificationIdsWithPrefix('$eventId:reminder:')
+            .values) {
+      await cancel(id);
+    }
     for (final offset in {
       ..._commonDdayOffsets,
       ..._settingsRepository.load().dDayReminderOffsets,
@@ -355,6 +547,13 @@ class LocalNotificationService implements NotificationService {
         '$eventId:dday:$offset',
       );
       if (id != null) await cancel(id);
+    }
+    // An offset removed from the settings (for example by a Drive restore) is
+    // in none of the lists above, so cancel every D-day id still registered.
+    for (final id in _settingsRepository
+        .notificationIdsWithPrefix('$eventId:dday:')
+        .values) {
+      await cancel(id);
     }
     await _retireLegacy(
       _legacyIds(eventId, reminderMinutesBeforeList, dday: dDayOffsets),

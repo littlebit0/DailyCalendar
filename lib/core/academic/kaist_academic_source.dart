@@ -53,6 +53,7 @@ class KaistAcademicSource implements AcademicSource {
     }
     final events = <AcademicEvent>[];
     final occurrences = <String, int>{};
+    final published = <String>{};
     final months = <int>{};
     for (final table in document.querySelectorAll('table.schedule_table')) {
       final section = table.parent?.parent?.parent;
@@ -108,6 +109,9 @@ class KaistAcademicSource implements AcademicSource {
           (n) => n + 1,
           ifAbsent: () => 0,
         );
+        // The same title and period listed twice is one event. The occurrence
+        // number above is still consumed so later IDs stay as they were.
+        if (!published.add('$title|$start|$last')) continue;
         events.add(
           AcademicEvent(
             sourceId: '$key:$occurrence',
