@@ -46,6 +46,18 @@ class AnalyticsVersionTests(unittest.TestCase):
         self.assertFalse(valid_batch(batch))
 
 
+class BuildNumberTests(unittest.TestCase):
+    def test_real_build_numbers_and_unknown_are_accepted(self):
+        for value in ("400", "4.0.0", "4.0.0.12", "unknown"):
+            payload = _payload()
+            payload["environment"]["buildNumber"] = value
+            self.assertIsNotNone(normalize_bug_report(payload), value)
+        for value in ("abc", "4.0.0+1", "1.2.3.4.5", "4 0"):
+            payload = _payload()
+            payload["environment"]["buildNumber"] = value
+            self.assertIsNone(normalize_bug_report(payload), value)
+
+
 class BugReportSizeContractTests(unittest.TestCase):
     """Whatever the form allows must fit the receiver's request limit."""
 

@@ -1249,19 +1249,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Future<_AppVersionInfo> _loadAppVersionInfo() async {
-    try {
-      final info = await PackageInfo.fromPlatform();
-      return _AppVersionInfo(
-        version: info.version.isEmpty ? _fallbackAppVersion : info.version,
-        buildNumber: info.version.isEmpty ? _fallbackAppVersion : info.version,
-        packageName: info.packageName,
-      );
-    } on Object {
-      return const _AppVersionInfo(
-        version: _fallbackAppVersion,
-        buildNumber: _fallbackAppVersion,
-      );
-    }
+    final resolved = await resolveAppVersionInfo(PackageInfo.fromPlatform);
+    return _AppVersionInfo(
+      version: resolved.version,
+      buildNumber: resolved.buildNumber,
+      packageName: resolved.packageName,
+    );
   }
 
   Future<void> _openGithubRepository() async {
@@ -3769,6 +3762,38 @@ class _BugReportDialogState extends State<_BugReportDialog> {
         actualBehavior: _actualController.text,
       ),
     );
+  }
+}
+
+/// The package's own version and build number. A missing build number is shown
+/// as `unknown` instead of repeating the version as if it were one.
+@visibleForTesting
+({String version, String buildNumber, String packageName})
+appVersionInfoFromPackage(
+  String version,
+  String buildNumber,
+  String packageName,
+) => (
+  version: version.isEmpty ? _fallbackAppVersion : version,
+  buildNumber: buildNumber.isEmpty ? 'unknown' : buildNumber,
+  packageName: packageName,
+);
+
+/// Looks the package metadata up. When the lookup itself fails, the version
+/// falls back to a known value but the build number is `unknown`: reusing the
+/// version there would invent a build number a report never had.
+@visibleForTesting
+Future<({String version, String buildNumber, String packageName})>
+resolveAppVersionInfo(Future<PackageInfo> Function() lookup) async {
+  try {
+    final info = await lookup();
+    return appVersionInfoFromPackage(
+      info.version,
+      info.buildNumber,
+      info.packageName,
+    );
+  } on Object {
+    return appVersionInfoFromPackage(_fallbackAppVersion, '', '');
   }
 }
 
