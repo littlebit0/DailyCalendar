@@ -279,6 +279,68 @@ void main() {
     },
   );
 
+  testWidgets('calendar search shows a failure with retry, not "no results"', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'defaultCalendarView': 'month',
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    final repository = _FakeEventRepository()..searchFailures = 1;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(repository),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.widgetWithText(TextField, '제목, 메모, 장소 검색'),
+      '회의',
+    );
+    // Typing starts the (debounced) search.
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.text('검색하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+    expect(find.text('검색 결과가 없습니다.'), findsNothing);
+
+    await tester.tap(find.text('다시 시도'));
+    await tester.pumpAndSettle();
+    expect(repository.searchCalls, greaterThanOrEqualTo(2));
+    expect(find.text('검색하지 못했습니다. 다시 시도해 주세요.'), findsNothing);
+    expect(find.text('검색 결과가 없습니다.'), findsOneWidget);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
     testWidgets(
       '${platform.name} resizes calendar navigation without losing date or view',
@@ -9558,6 +9620,8 @@ class _FakeEventRepository implements EventRepository {
   final List<CalendarEvent> _events;
   var clearAllCalls = 0;
   var failCategoryUpdate = false;
+  var searchFailures = 0;
+  var searchCalls = 0;
 
   @override
   Future<void> delete(String eventId) async {}
@@ -9569,7 +9633,14 @@ class _FakeEventRepository implements EventRepository {
   Future<void> saveAllAtomically(Iterable<CalendarEvent> events) async {}
 
   @override
-  Future<List<CalendarEvent>> search(String query) async => const [];
+  Future<List<CalendarEvent>> search(String query) async {
+    searchCalls += 1;
+    if (searchFailures > 0) {
+      searchFailures -= 1;
+      throw StateError('lookup failed');
+    }
+    return const [];
+  }
 
   @override
   Future<CalendarEvent?> findById(String id) async => null;
