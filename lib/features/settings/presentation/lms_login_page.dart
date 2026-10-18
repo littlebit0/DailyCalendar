@@ -58,6 +58,8 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
       await widget.session.beginLogin();
       if (mounted) setState(() => _ready = true);
     } catch (error) {
+      // Leaving the screen already reported a cancellation for this attempt.
+      if (_reportedOutcome) return;
       final failure = LmsLoginFailure.fromError(error);
       _report(
         AnalyticsLmsStage.prepare,
@@ -165,9 +167,12 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
   @override
   void dispose() {
     // Leaving the official login screen without finishing is a cancellation,
-    // not a failure; a screen that never became ready was already reported.
-    if (!_finished && _ready && !_reportedOutcome) {
-      _report(AnalyticsLmsStage.authentication, AnalyticsLmsResult.canceled);
+    // not a failure. A screen still preparing is canceled at the prepare stage.
+    if (!_finished && !_reportedOutcome) {
+      _report(
+        _ready ? AnalyticsLmsStage.authentication : AnalyticsLmsStage.prepare,
+        AnalyticsLmsResult.canceled,
+      );
     }
     if (!_finished) {
       unawaited(

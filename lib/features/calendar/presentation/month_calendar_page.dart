@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/analytics/product_analytics.dart';
+import '../../../core/analytics/startup_milestones.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/calendar_period_label.dart';
@@ -133,6 +134,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     super.initState();
     _quickAccessSelected =
         ref.read(appSettingsProvider).appStartView == AppStartView.quickView;
+    recordFirstCalendarFrame(context, ref);
     Future.microtask(() {
       if (!mounted) return;
       _recordAnalytics(AnalyticsRecord.screenView(AnalyticsScreen.calendar));
@@ -5419,6 +5421,8 @@ class _CalendarHeader extends ConsumerWidget {
     var showHolidays = settings.calendarShowHolidays;
     var ddayOnly = settings.calendarDdayOnly;
     final initialQuery = ref.read(calendarSearchQueryProvider);
+    // Taken now: the sheet can outlive this widget's ref.
+    final analytics = ref.read(productAnalyticsProvider);
 
     return showModalBottomSheet<void>(
       context: context,
@@ -5676,20 +5680,21 @@ class _CalendarHeader extends ConsumerWidget {
     ).whenComplete(() {
       // Closing the sheet without changing anything is not a use of the
       // filter, so it is recorded as canceled rather than succeeded (#153).
-      final finalSettings = ref.read(appSettingsProvider);
+      // Compared with the sheet's own values, which change the moment a switch
+      // is toggled: the settings providers only catch up after the (possibly
+      // still queued) save, and a quick dismissal would read the old ones.
       final applied = filterSheetChangedSettings(
         initialQuery: initialQuery,
-        finalQuery: ref.read(calendarSearchQueryProvider),
+        finalQuery: queryController.text,
         initialHiddenCategoryIds: settings.hiddenCategoryIds,
-        finalHiddenCategoryIds: finalSettings.hiddenCategoryIds,
+        finalHiddenCategoryIds: hidden,
         initialShowHolidays: settings.calendarShowHolidays,
-        finalShowHolidays: finalSettings.calendarShowHolidays,
+        finalShowHolidays: showHolidays,
         initialDdayOnly: settings.calendarDdayOnly,
-        finalDdayOnly: finalSettings.calendarDdayOnly,
+        finalDdayOnly: ddayOnly,
       );
       unawaited(
-        ref
-            .read(productAnalyticsProvider)
+        analytics
             .record(
               AnalyticsRecord.featureUsed(
                 AnalyticsFeature.filter,

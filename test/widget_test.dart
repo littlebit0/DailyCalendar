@@ -15,6 +15,7 @@ import 'package:daily/core/auth/apple_account.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/di/app_providers.dart';
+import 'package:daily/core/diagnostics/startup_timing.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/settings/settings_repository.dart';
@@ -278,6 +279,58 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     },
   );
+
+  testWidgets('a local-only user still reports both startup milestones once', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    StartupTiming.resetClaims();
+    addTearDown(StartupTiming.resetClaims);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final preferences = await SharedPreferences.getInstance();
+    final records = <AnalyticsRecord>[];
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          productAnalyticsProvider.overrideWithValue(_RecordingAnalytics(records)),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final milestones = [
+      for (final record in records)
+        if (record.name == AnalyticsEventName.startupMilestone)
+          record.attributes['milestone'],
+    ];
+    expect(milestones, containsAll(['firstCalendarFrame', 'localCalendarReady']));
+    expect(milestones.toSet().length, milestones.length, reason: 'once each');
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
     testWidgets(
@@ -8924,6 +8977,97 @@ void main() {
     );
   }
 
+  group('filter sheet usage analytics (#153)', () {
+    Future<(List<AnalyticsRecord>, _GatedSaveSettingsRepository)> pumpFilter(
+      WidgetTester tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(1440, 900));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': CalendarViewMode.month.name,
+      });
+      final settingsRepository = _GatedSaveSettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final records = <AnalyticsRecord>[];
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File('assets/academic/university_regions.json')
+                          .readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            productAnalyticsProvider.overrideWithValue(
+              _RecordingAnalytics(records),
+            ),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return (records, settingsRepository);
+    }
+
+    List<Object?> filterOutcomes(List<AnalyticsRecord> records) => [
+      for (final record in records)
+        if (record.name == AnalyticsEventName.featureUsed &&
+            record.attributes['feature'] == 'filter')
+          record.attributes['outcome'],
+    ];
+
+    Future<void> dismissSheet(WidgetTester tester) async {
+      await tester.tapAt(const Offset(10, 10)); // the barrier
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('a switch dismissed before its save finishes is still applied', (
+      tester,
+    ) async {
+      final (records, repository) = await pumpFilter(tester);
+      await tester.tap(find.byIcon(Icons.tune_rounded).first);
+      await tester.pumpAndSettle();
+      repository.holdNextSave();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(SwitchListTile).first,
+          matching: find.byType(Switch),
+        ),
+      );
+      await tester.pump();
+      await dismissSheet(tester); // the save has not completed yet
+      expect(filterOutcomes(records), ['succeeded']);
+      repository.releaseSave();
+      await tester.pumpAndSettle();
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('closing the sheet without a change is canceled', (tester) async {
+      final (records, _) = await pumpFilter(tester);
+      await tester.tap(find.byIcon(Icons.tune_rounded).first);
+      await tester.pumpAndSettle();
+      await dismissSheet(tester);
+      expect(filterOutcomes(records), ['canceled']);
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  });
+
   testWidgets(
     'calendar filter save preserves a concurrent unrelated setting change',
     (tester) async {
@@ -9856,6 +10000,41 @@ class _FailingLockSettingsRepository extends SettingsRepository {
     AppSettings? changedFrom,
   }) async {
     if (failSave) throw StateError('settings storage unavailable');
+    await super.save(
+      settings,
+      markSyncPending: markSyncPending,
+      changedFrom: changedFrom,
+    );
+  }
+}
+
+class _RecordingAnalytics extends NoopProductAnalytics {
+  _RecordingAnalytics(this.records);
+  final List<AnalyticsRecord> records;
+  @override
+  Future<void> record(AnalyticsRecord record) async => records.add(record);
+}
+
+/// A repository whose next save waits until [releaseSave] is called.
+class _GatedSaveSettingsRepository extends SettingsRepository {
+  _GatedSaveSettingsRepository({required super.preferences});
+
+  Completer<void>? _gate;
+
+  void holdNextSave() => _gate = Completer<void>();
+  void releaseSave() => _gate?.complete();
+
+  @override
+  Future<void> save(
+    AppSettings settings, {
+    bool markSyncPending = true,
+    AppSettings? changedFrom,
+  }) async {
+    final gate = _gate;
+    if (gate != null) {
+      _gate = null;
+      await gate.future;
+    }
     await super.save(
       settings,
       markSyncPending: markSyncPending,

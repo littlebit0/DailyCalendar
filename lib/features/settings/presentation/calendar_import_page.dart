@@ -220,17 +220,20 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
       _importBusy = true;
       _message = null;
     });
+    // Taken before the await: the page can be left while an import runs.
+    final analytics = ref.read(productAnalyticsProvider);
+    final importService = ref.read(calendarImportServiceProvider);
+    final settingsNotifier = ref.read(appSettingsProvider.notifier);
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    final driveSync = ref.read(googleDriveSyncServiceProvider);
+    var importFinished = false;
     try {
-      final result = await ref
-          .read(calendarImportServiceProvider)
-          .importCalendars(calendars);
-      ref.read(appSettingsProvider.notifier).state = ref
-          .read(settingsRepositoryProvider)
-          .load();
-      unawaited(
-        ref.read(googleDriveSyncServiceProvider).backupNow().catchError((_) {}),
-      );
-      _recordImportUsage(AnalyticsOutcome.succeeded);
+      final result = await importService.importCalendars(calendars);
+      importFinished = true;
+      _recordImportUsage(analytics, AnalyticsOutcome.succeeded);
+      // The imported events are saved whether or not the page is still open.
+      settingsNotifier.state = settingsRepository.load();
+      unawaited(driveSync.backupNow().catchError((_) {}));
       if (!mounted) {
         return;
       }
@@ -245,10 +248,11 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
         );
       });
     } on CalendarImportException catch (error) {
-      _recordImportUsage(AnalyticsOutcome.failed);
+      if (!importFinished) _recordImportUsage(analytics, AnalyticsOutcome.failed);
       _showError(error);
     } on Object catch (error) {
-      _recordImportUsage(AnalyticsOutcome.failed);
+      // An error after the import itself finished is not an import failure.
+      if (!importFinished) _recordImportUsage(analytics, AnalyticsOutcome.failed);
       _showError(error);
     } finally {
       if (mounted) {
@@ -259,10 +263,9 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
 
   /// One record per import action. Not measured: reading the calendar list or
   /// opening this page, so a missing record is not a zero-use signal.
-  void _recordImportUsage(AnalyticsOutcome outcome) {
+  void _recordImportUsage(ProductAnalytics analytics, AnalyticsOutcome outcome) {
     unawaited(
-      ref
-          .read(productAnalyticsProvider)
+      analytics
           .record(
             AnalyticsRecord.featureUsed(
               AnalyticsFeature.calendarImport,

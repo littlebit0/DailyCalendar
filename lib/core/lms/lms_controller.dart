@@ -323,10 +323,21 @@ class LmsController extends ChangeNotifier {
           AnalyticsLmsResult.failed,
           cause: LmsLoginFailure.secureStorage,
         );
+      } else {
+        _reportAutomatic(
+          AnalyticsLmsStage.credentials,
+          AnalyticsLmsResult.canceled,
+        );
       }
       return false;
     } // Keychain failure must not destroy normal session/cache.
-    if (!valid()) return false;
+    if (!valid()) {
+      _reportAutomatic(
+        AnalyticsLmsStage.credentials,
+        AnalyticsLmsResult.canceled,
+      );
+      return false;
+    }
     if (credentials == null) {
       _reportAutomaticSkip(key, AnalyticsLmsSkipReason.noCredentials);
       return false;
@@ -364,6 +375,7 @@ class LmsController extends ChangeNotifier {
           AnalyticsLmsResult.canceled,
         );
       }
+      _reportedAutomaticError = error;
       rethrow;
     }
     if (!valid()) {
@@ -409,6 +421,10 @@ class LmsController extends ChangeNotifier {
 
   final LmsLoginReporter _loginReporter;
   final Set<String> _reportedAutomaticSkips = {};
+
+  /// The error whose automatic attempt already has its terminal outcome, so the
+  /// outer recovery does not re-enter and emit a second one.
+  Object? _reportedAutomaticError;
 
   void _reportAutomatic(
     AnalyticsLmsStage stage,
@@ -534,7 +550,7 @@ class LmsController extends ChangeNotifier {
             error.code == LmsWebSessionError.authenticationRequired;
         if (expired) _stored = false;
         sync.markRestoreFailed(authenticationRequired: expired);
-        if (expired) {
+        if (expired && !identical(error, _reportedAutomaticError)) {
           try {
             await _tryAutomaticLogin(current, valid);
           } catch (_) {

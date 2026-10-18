@@ -1127,6 +1127,49 @@ void main() {
       expect(only()['result'], 'canceled');
     });
 
+    test('an authentication-required answer reports one outcome, not two', () async {
+      await LmsCredentialsStore().save(
+        'student@example.com',
+        'smu',
+        const LmsLocalCredentials('test-user', 'fixture-password'),
+      );
+      configure = (session) {
+        session.stored = false;
+        session.automaticError = const LmsWebSessionException(
+          LmsWebSessionError.authenticationRequired,
+        );
+      };
+      await create().refresh(force: true);
+      expect(sessions.single.automaticLogins, 1);
+      expect(only()['result'], 'failed');
+    });
+
+    test('an account change during the credential lookup is canceled', () async {
+      configure = (session) => session.stored = false;
+      final store = _DeferredCredentials();
+      final local = create(store: store);
+      final refresh = local.refresh(force: true);
+      // The first read shows the saved username; the second is the login's.
+      for (final index in [0, 1]) {
+        while (store.reads.length <= index) {
+          await Future<void>.delayed(Duration.zero);
+        }
+        if (index == 1) {
+          await settings.saveGoogleAccount(
+            const GoogleAccount(email: 'other@example.com'),
+          );
+          local.settingsChanged();
+        }
+        store.reads[index].complete(null);
+      }
+      await refresh;
+      expect(only(), {
+        'method': 'automatic',
+        'stage': 'credentials',
+        'result': 'canceled',
+      });
+    });
+
     test('every LmsLoginFailure has a matching analytics cause code', () {
       expect(
         LmsLoginFailure.values.map((value) => value.name).toSet(),

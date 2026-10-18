@@ -50,6 +50,10 @@ class DurationTruncationTests(unittest.TestCase):
     def event(self, name, attributes):
         return {**self.BASE, 'name': name, 'attributes': attributes}
 
+    def valid(self, name, attributes):
+        from tool.analytics_receiver import valid_event
+        return valid_event(self.event(name, attributes))
+
     def test_flag_is_optional_and_only_true_is_valid(self):
         from tool.analytics_receiver import valid_event
         self.assertTrue(valid_event(self.event('app_load_completed', {'durationMs': 120000})))
@@ -79,6 +83,19 @@ class DurationTruncationTests(unittest.TestCase):
             groups = list(aggregate['groups'].values())
             self.assertEqual(len(groups), 2)
             self.assertEqual(sorted('durationTruncated' in g['attributes'] for g in groups), [False, True])
+
+    def test_legacy_event_save_without_phase_is_still_accepted(self):
+        # Apps before `phase` existed send neither field; the receiver is deployed first.
+        self.assertTrue(self.valid('event_save_succeeded', {'operation': 'create', 'durationMs': 5}))
+        self.assertTrue(self.valid('event_save_failed', {
+            'operation': 'create', 'durationMs': 5, 'errorCode': 'unknown'}))
+        self.assertFalse(self.valid('event_save_succeeded', {
+            'operation': 'create', 'phase': 'later', 'durationMs': 5}))
+
+    def test_truncated_flag_requires_the_capped_duration(self):
+        self.assertTrue(self.valid('app_load_completed', {'durationMs': 120000, 'durationTruncated': True}))
+        self.assertFalse(self.valid('app_load_completed', {'durationMs': 5, 'durationTruncated': True}))
+        self.assertFalse(self.valid('app_load_completed', {'durationMs': 119999, 'durationTruncated': True}))
 
     def test_event_save_phase_matches_the_app(self):
         from tool.analytics_receiver import valid_event
@@ -150,7 +167,7 @@ class SyncAttemptTests(unittest.TestCase):
     def test_abandoned_event_contract(self):
         good = {'operation': 'backup', 'trigger': 'manual', 'reason': 'sessionChanged', 'durationMs': 5}
         self.assertTrue(self.valid('sync_abandoned', good))
-        self.assertTrue(self.valid('sync_abandoned', {**good, 'attempt': 3, 'durationTruncated': True}))
+        self.assertTrue(self.valid('sync_abandoned', {**good, 'attempt': 3, 'durationMs': 120000, 'durationTruncated': True}))
         self.assertFalse(self.valid('sync_abandoned', {**good, 'reason': 'crash'}))
         self.assertFalse(self.valid('sync_abandoned', {**good, 'errorCode': 'unknown'}))
 
