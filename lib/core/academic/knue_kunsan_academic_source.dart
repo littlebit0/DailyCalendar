@@ -205,8 +205,12 @@ class KnueKunsanAcademicSource implements AcademicSource {
           'Invalid calendar period: month $month, $start to $last, $title',
         );
       }
-      // Joint university/graduate enrolment applies to undergraduates too.
-      if (knue && title.contains('대학원') && !RegExp(r'대학[·ㆍ]').hasMatch(title)) {
+      // Joint university/graduate enrolment applies to undergraduates too, and so
+      // does a row that also names the undergraduate semester start.
+      if (knue &&
+          title.contains('대학원') &&
+          !RegExp(r'대학[·ㆍ]').hasMatch(title) &&
+          !RegExp(r'제\d학기\s*(?:개강|학기개시일)').hasMatch(title)) {
         continue;
       }
       if (events.containsKey(sourceId)) {
