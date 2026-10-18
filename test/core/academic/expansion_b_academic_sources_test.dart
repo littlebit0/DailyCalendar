@@ -44,6 +44,24 @@ void main() {
     },
   );
 
+  test('Hansei rows follow their month section across year boundaries', () {
+    final events = HanseiAcademicSource.parse(
+      fixture('hansei-2026.html'),
+      2026,
+    );
+    DateTime? endOf(String title, DateTime start) => events
+        .where((e) => e.title == title && e.start == start)
+        .map((e) => e.end)
+        .firstOrNull;
+    // Listed under January: starts the previous December.
+    expect(endOf('2학기 성적 정정', DateTime(2025, 12, 29)), DateTime(2026, 1, 3));
+    expect(endOf('동계 계절학기 수업', DateTime(2025, 12, 22)), DateTime(2026, 1, 14));
+    // Listed under December: ends in the next January.
+    expect(endOf('동계 계절학기 수업', DateTime(2026, 12, 22)), DateTime(2027, 1, 14));
+    // Rows inside one year are unchanged.
+    expect(endOf('1학기 복학 신청(2차)', DateTime(2026, 1, 26)), DateTime(2026, 2, 7));
+  });
+
   test('K2Web academic schedules use verified institution-specific years', () {
     final hyupsung = HyupsungAcademicSource();
     final sungkyul = SungkyulAcademicSource();

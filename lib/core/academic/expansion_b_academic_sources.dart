@@ -247,28 +247,53 @@ class HanseiAcademicSource extends _Source {
       throw const FormatException('Unexpected Hansei year');
     }
     final events = <AcademicEvent>[];
-    for (final row in doc.querySelectorAll('.schd_list .cont')) {
-      final dates = RegExp(
-        r'(\d{2})\.(\d{2})',
-      ).allMatches(row.querySelector('.date')?.text ?? '').toList();
-      final label = row.querySelector('.txt')?.text.trim() ?? '';
-      if (dates.isEmpty || dates.length > 2 || label.isEmpty) {
-        throw const FormatException('Invalid Hansei academic row');
+    // Each list is one month and also shows events that started the month
+    // before or end the month after, so a row's year follows its section.
+    for (final section in doc.querySelectorAll('.schd_list')) {
+      final sectionMonth = int.tryParse(
+        RegExp(
+              r'(\d{1,2})',
+            ).firstMatch(section.querySelector('.mont .ko')?.text ?? '')?[1] ??
+            '',
+      );
+      if (sectionMonth == null || sectionMonth < 1 || sectionMonth > 12) {
+        throw const FormatException('Invalid Hansei month section');
       }
-      final start = _date('$year-${dates.first[1]}-${dates.first[2]}');
-      final last = _date(
-        '${int.parse(dates.last[1]!) < start.month ? year + 1 : year}'
-        '-${dates.last[1]}-${dates.last[2]}',
-      );
-      events.add(
-        AcademicEvent(
-          sourceId: '${start.toIso8601String()}:$label',
-          title: label,
-          start: start,
-          end: DateTime(last.year, last.month, last.day + 1),
-          url: 'https://hansei.ac.kr/view.do?no=10302',
-        ),
-      );
+      int yearOf(int month) {
+        final distance = month - sectionMonth;
+        return distance > 6
+            ? year - 1
+            : distance < -6
+            ? year + 1
+            : year;
+      }
+
+      for (final row in section.querySelectorAll('.cont')) {
+        final dates = RegExp(
+          r'(\d{2})\.(\d{2})',
+        ).allMatches(row.querySelector('.date')?.text ?? '').toList();
+        final label = row.querySelector('.txt')?.text.trim() ?? '';
+        if (dates.isEmpty || dates.length > 2 || label.isEmpty) {
+          throw const FormatException('Invalid Hansei academic row');
+        }
+        final startMonth = int.parse(dates.first[1]!);
+        final start = _date(
+          '${yearOf(startMonth)}-${dates.first[1]}-${dates.first[2]}',
+        );
+        final endMonth = int.parse(dates.last[1]!);
+        final last = _date(
+          '${yearOf(endMonth)}-${dates.last[1]}-${dates.last[2]}',
+        );
+        events.add(
+          AcademicEvent(
+            sourceId: '${start.toIso8601String()}:$label',
+            title: label,
+            start: start,
+            end: DateTime(last.year, last.month, last.day + 1),
+            url: 'https://hansei.ac.kr/view.do?no=10302',
+          ),
+        );
+      }
     }
     return _within(events, year);
   }

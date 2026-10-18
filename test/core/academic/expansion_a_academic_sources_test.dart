@@ -46,6 +46,21 @@ void main() {
     );
     expect(rows.any((e) => e.title.contains('학위청구논문')), false);
   });
+  test('WSU January row keeps its previous-year December start', () {
+    final rows = WoosongAcademicSource.parse(
+      File('$folder/wsu-cal.html').readAsStringSync(),
+      2026,
+    );
+    final grading = rows.where((e) => e.title.contains('성적정정 및 이의신청'));
+    expect(
+      grading.any(
+        (e) =>
+            e.start == DateTime(2025, 12, 29) && e.end == DateTime(2026, 1, 3),
+      ),
+      isTrue,
+    );
+    expect(grading.any((e) => e.start == DateTime(2026, 12, 29)), isFalse);
+  });
   test('EWHA official annual native date ranges', () {
     final rows = EwhaAcademicSource.parse(
       File('$folder/ewha-cal.html').readAsStringSync(),
