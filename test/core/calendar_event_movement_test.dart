@@ -72,6 +72,50 @@ void main() {
     expect(shifted.frequency, RecurrenceFrequency.weekly);
   });
 
+  test('weekday conditions rotate with a moved weekly series', () {
+    const rule = RecurrenceRule(
+      frequency: RecurrenceFrequency.weekly,
+      byDay: ['MO', 'WE'],
+    );
+    expect(shiftRecurrenceRuleByDays(rule, 0).byDay, ['MO', 'WE']);
+    expect(shiftRecurrenceRuleByDays(rule, 1).byDay, ['TU', 'TH']);
+    expect(shiftRecurrenceRuleByDays(rule, -1).byDay, ['SU', 'TU']);
+  });
+
+  test('month position conditions reset when the series moves', () {
+    const rule = RecurrenceRule(
+      frequency: RecurrenceFrequency.monthly,
+      byDay: ['2TU'],
+    );
+    expect(shiftRecurrenceRuleByDays(rule, 0).byDay, ['2TU']);
+    expect(shiftRecurrenceRuleByDays(rule, 1).hasDetails, isFalse);
+  });
+
+  test('future-series move counts real occurrences for weekday rules', () {
+    final base = _event(
+      start: DateTime(2026, 10, 5, 9),
+      end: DateTime(2026, 10, 5, 10),
+      recurrence: const RecurrenceRule(
+        frequency: RecurrenceFrequency.weekly,
+        count: 6,
+        byDay: ['MO', 'WE'],
+      ),
+    );
+    // Occurrences: 10/5, 10/7, 10/12, 10/14, 10/19, 10/21. From 10/12 on, 4 remain.
+    final occurrence = base.copyWith(
+      occurrenceId: 'move@2026-10-12T09:00:00.000',
+      startAt: DateTime(2026, 10, 12, 9),
+      endAt: DateTime(2026, 10, 12, 10),
+    );
+    final moved = recurrenceRuleForMovedFuture(
+      base: base,
+      occurrence: occurrence,
+      targetDate: DateTime(2026, 10, 12),
+    );
+    expect(moved.count, 4);
+    expect(moved.byDay, ['MO', 'WE']);
+  });
+
   test('future-series move keeps only its remaining count and exclusions', () {
     final rule = RecurrenceRule(
       frequency: RecurrenceFrequency.daily,

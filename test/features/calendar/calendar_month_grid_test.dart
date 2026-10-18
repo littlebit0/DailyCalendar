@@ -601,6 +601,78 @@ void main() {
     );
   });
 
+  testWidgets('conflicting per-date manual orders give one stable layout', (
+    tester,
+  ) async {
+    CalendarEvent bar(String id, int startDay) => CalendarEvent(
+      id: id,
+      title: id,
+      startAt: DateTime(2026, 5, startDay),
+      endAt: DateTime(2026, 5, 6, 23),
+      allDay: true,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: DateTime(2026, 5, 1),
+      updatedAt: DateTime(2026, 5, 1),
+    );
+    final a = bar('bar-a', 4), b = bar('bar-b', 4), c = bar('bar-c', 5);
+    // 05-04 says A before B; 05-05 says B, C, A: pairwise reference dates would
+    // make A<B, B<C and C<A at once.
+    final orders = {
+      '2026-05-04': CalendarManualEventOrder(
+        eventKeys: const ['bar-a', 'bar-b'],
+        updatedAt: DateTime(2026, 5, 1, 1),
+        deviceId: 'test-device',
+      ),
+      '2026-05-05': CalendarManualEventOrder(
+        eventKeys: const ['bar-b', 'bar-c', 'bar-a'],
+        updatedAt: DateTime(2026, 5, 1, 2),
+        deviceId: 'test-device',
+      ),
+    };
+
+    Future<Map<String, double>> lanes(List<CalendarEvent> input) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 700,
+              height: 420,
+              child: CalendarMonthGrid(
+                month: DateTime(2026, 5),
+                selectedDate: DateTime(2026, 5, 5),
+                events: input,
+                weekStartsOnMonday: true,
+                showLunarDates: false,
+                manualEventOrders: orders,
+                onDateSelected: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pump();
+      double top(String id, int day) => tester
+          .getTopLeft(find.byKey(ValueKey('event-span-$id-2026-5-$day')))
+          .dy;
+      return {
+        'bar-a': top('bar-a', 4),
+        'bar-b': top('bar-b', 4),
+        'bar-c': top('bar-c', 4),
+      };
+    }
+
+    final forward = await lanes([a, b, c]);
+    final reversed = await lanes([c, b, a]);
+    final shuffled = await lanes([b, c, a]);
+    expect(reversed, forward);
+    expect(shuffled, forward);
+    // Bars starting on the same date follow that date's manual order, and the
+    // later-starting bar sits below them.
+    expect(forward['bar-a']!, lessThan(forward['bar-b']!));
+    expect(forward['bar-b']!, lessThan(forward['bar-c']!));
+  });
+
   testWidgets('uses fixed iPhone-width event capacity in month cells', (
     tester,
   ) async {
@@ -1153,6 +1225,75 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     },
   );
+
+  for (final saveFails in [false, true]) {
+    testWidgets('removing the month grid while an accepted drop saves is safe '
+        '(save ${saveFails ? "fails" : "succeeds"})', (tester) async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      final event = CalendarEvent(
+        id: 'removed-month-drag',
+        title: '저장 중 제거',
+        startAt: DateTime(2026, 5, 4, 9),
+        endAt: DateTime(2026, 5, 4, 10),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: DateTime(2026, 5, 1),
+        updatedAt: DateTime(2026, 5, 1),
+      );
+      final saveCompleter = Completer<void>();
+      var saves = 0;
+      final visualStates = <bool>[];
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 390,
+              height: 720,
+              child: CalendarMonthGrid(
+                month: DateTime(2026, 5),
+                selectedDate: DateTime(2026, 5, 4),
+                events: [event],
+                weekStartsOnMonday: true,
+                showLunarDates: false,
+                onDateSelected: (_) {},
+                onEventDropped: (_, _, _) {
+                  saves += 1;
+                  return saveCompleter.future;
+                },
+                onEventDragStateChanged: visualStates.add,
+              ),
+            ),
+          ),
+        ),
+      );
+      final source = find.byKey(
+        const ValueKey('event-span-removed-month-drag-2026-5-4'),
+      );
+      final target = _dayNumberKey(DateTime(2026, 5, 6));
+      final gesture = await tester.startGesture(tester.getCenter(source));
+      await tester.pump(const Duration(milliseconds: 360));
+      await gesture.moveTo(tester.getCenter(target) + const Offset(0, 35));
+      await tester.pump();
+      await gesture.up();
+      await tester.pump(const Duration(milliseconds: 220));
+      expect(saves, 1);
+
+      // The grid goes away before the pending save finishes.
+      await tester.pumpWidget(const MaterialApp(home: SizedBox.shrink()));
+      if (saveFails) {
+        saveCompleter.completeError(StateError('save failed'));
+      } else {
+        saveCompleter.complete();
+      }
+      await tester.pumpAndSettle();
+      expect(saves, 1);
+      expect(tester.takeException(), isNull);
+      expect(visualStates.last, isFalse);
+      debugDefaultTargetPlatformOverride = null;
+    });
+  }
 
   test('defines the requested full-app text scale choices', () {
     expect(AppTextSize.basic.scale, 0.8);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:crypto/crypto.dart';
 
@@ -25,6 +26,36 @@ import '../settings/settings_repository.dart';
 import 'google_drive_auth_service.dart';
 import 'sync_service.dart';
 import 'paced_http_client.dart';
+
+/// Our own budget for one `q` string, not a documented Drive limit; it keeps the
+/// encoded request URI well below the sizes servers and proxies commonly accept.
+const _maxDriveQueryLength = 4000;
+
+/// Splits `name = '...'` conditions into groups whose OR-joined text stays within
+/// [maxLength], keeping order and never dropping or repeating a condition. A
+/// single over-long condition still forms its own group.
+@visibleForTesting
+List<List<String>> splitDriveNameConditions(
+  Iterable<String> conditions, {
+  int maxLength = _maxDriveQueryLength,
+}) {
+  const separatorLength = 4; // ' or '
+  final groups = <List<String>>[];
+  var current = <String>[];
+  var length = 0;
+  for (final condition in conditions) {
+    final added = condition.length + (current.isEmpty ? 0 : separatorLength);
+    if (current.isNotEmpty && length + added > maxLength) {
+      groups.add(current);
+      current = <String>[];
+      length = 0;
+    }
+    length += condition.length + (current.isEmpty ? 0 : separatorLength);
+    current.add(condition);
+  }
+  if (current.isNotEmpty) groups.add(current);
+  return groups;
+}
 
 class GoogleDriveSyncService implements SyncService {
   GoogleDriveSyncService({
@@ -497,6 +528,14 @@ class GoogleDriveSyncService implements SyncService {
       _startSyncDrain();
     }
     return completer.future;
+  }
+
+  /// Completes once no sync is running or queued, so follow-up work that must
+  /// see the merged events (not a mid-restore snapshot) can wait for it.
+  Future<void> whenIdle() async {
+    while (_syncInFlight != null) {
+      await _syncInFlight!.catchError((Object _) {});
+    }
   }
 
   void _startSyncDrain() {
@@ -1521,13 +1560,15 @@ class GoogleDriveSyncService implements SyncService {
     }
     _validateSyncSession?.call();
     if (ids.isEmpty) return 0;
-    final remoteFiles = await _listEventFilesForIds(authHeaders, ids);
+    final remoteFilesById = <String, List<_DriveFile>>{};
+    for (final file in await _listEventFilesForIds(authHeaders, ids)) {
+      final id = _eventIdFromFileName(file.name);
+      if (id != null) (remoteFilesById[id] ??= []).add(file);
+    }
     final List<int> conflictCounts = await _mapSequentially<String, int>(ids, (
       eventId,
     ) async {
-      var files = remoteFiles
-          .where((file) => _eventIdFromFileName(file.name) == eventId)
-          .toList();
+      var files = List.of(remoteFilesById[eventId] ?? const <_DriveFile>[]);
       for (var attempt = 0; attempt < 4; attempt++) {
         _validateSyncSession?.call();
         final local = await _eventRepository.findById(eventId);
@@ -1650,18 +1691,27 @@ class GoogleDriveSyncService implements SyncService {
     if (eventIds.isEmpty) {
       return [];
     }
-    final nameQuery = eventIds
-        .map(_eventFileName)
-        .map((name) => "name = '${_escapeDriveQueryString(name)}'")
-        .join(' or ');
-    final files = await _listFiles(
-      authHeaders,
-      '($nameQuery) and trashed = false',
-      pageSize: eventIds.length,
-    );
-    return files
-        .where((file) => eventIds.contains(_eventIdFromFileName(file.name)))
-        .toList();
+    // One request per query batch, sent one after another so the existing
+    // request pacing still applies; each batch follows all of its pages.
+    final files = <_DriveFile>[];
+    final seenFileIds = <String>{};
+    for (final conditions in splitDriveNameConditions([
+      for (final id in eventIds)
+        "name = '${_escapeDriveQueryString(_eventFileName(id))}'",
+    ])) {
+      final batch = await _listFiles(
+        authHeaders,
+        '(${conditions.join(' or ')}) and trashed = false',
+        pageSize: min(conditions.length, 1000),
+      );
+      for (final file in batch) {
+        if (eventIds.contains(_eventIdFromFileName(file.name)) &&
+            seenFileIds.add(file.id)) {
+          files.add(file);
+        }
+      }
+    }
+    return files;
   }
 
   String _escapeDriveQueryString(String value) {
@@ -2016,6 +2066,7 @@ class GoogleDriveSyncService implements SyncService {
           .toList(),
       'recurrenceCount': normalized.recurrence.count,
       'recurrenceAnchorDay': normalized.recurrence.anchorDay,
+      'recurrenceDetails': normalized.recurrence.detailsJson,
       'recurrenceExcludedDates': normalized.recurrence.excludedDates
           .map((date) => DateTime(date.year, date.month, date.day))
           .map((date) => date.toUtc().toIso8601String())
@@ -2070,22 +2121,25 @@ class GoogleDriveSyncService implements SyncService {
       category: category,
       colorValue: colorValue ?? category.colorValue,
       reminderMinutesBeforeList: _reminderMinutesFromJson(json),
-      recurrence: RecurrenceRule(
-        frequency: RecurrenceFrequency.fromName(
-          json['recurrenceFrequency'] as String?,
+      recurrence: RecurrenceRule.withDetailsJson(
+        RecurrenceRule(
+          frequency: RecurrenceFrequency.fromName(
+            json['recurrenceFrequency'] as String?,
+          ),
+          interval: json['recurrenceInterval'] as int? ?? 1,
+          until: json.containsKey('recurrenceUntilDate')
+              ? _readAllDayDate(json['recurrenceUntilDate'])
+              : _readDate(json['recurrenceUntil']),
+          count: json['recurrenceCount'] as int?,
+          anchorDay: json['recurrenceAnchorDay'] as int?,
+          excludedDates: json['recurrenceExcludedDatesOnly'] is List
+              ? (json['recurrenceExcludedDatesOnly'] as List)
+                    .map(_readAllDayDate)
+                    .whereType<DateTime>()
+                    .toList()
+              : _dateListValue(json['recurrenceExcludedDates']),
         ),
-        interval: json['recurrenceInterval'] as int? ?? 1,
-        until: json.containsKey('recurrenceUntilDate')
-            ? _readAllDayDate(json['recurrenceUntilDate'])
-            : _readDate(json['recurrenceUntil']),
-        count: json['recurrenceCount'] as int?,
-        anchorDay: json['recurrenceAnchorDay'] as int?,
-        excludedDates: json['recurrenceExcludedDatesOnly'] is List
-            ? (json['recurrenceExcludedDatesOnly'] as List)
-                  .map(_readAllDayDate)
-                  .whereType<DateTime>()
-                  .toList()
-            : _dateListValue(json['recurrenceExcludedDates']),
+        json['recurrenceDetails'],
       ),
       createdAt: createdAt,
       updatedAt: updatedAt,
@@ -2267,6 +2321,11 @@ class GoogleDriveSyncService implements SyncService {
   List<int> _intListValue(Object? value, List<int> fallback) {
     if (value is! List) {
       return fallback;
+    }
+    // An explicit empty list (for example every D-day reminder switched off)
+    // is a real choice; only unreadable contents fall back.
+    if (value.isEmpty) {
+      return <int>[];
     }
     final items = value.whereType<int>().toList();
     return items.isEmpty ? fallback : (items..sort());
