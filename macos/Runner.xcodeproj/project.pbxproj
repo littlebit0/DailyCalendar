@@ -637,7 +637,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/daily.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/daily";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daily Test.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daily Test";
 			};
 			name = Debug;
 		};
@@ -652,7 +652,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/daily.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/daily";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daily.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daily";
 			};
 			name = Release;
 		};
@@ -667,7 +667,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.littlebit0.daily.RunnerTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/daily.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/daily";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Daily.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Daily";
 			};
 			name = Profile;
 		};
