@@ -360,6 +360,23 @@ List<int> _monthDays(int year, int month, RecurrenceRule rule, int startDay) {
   }.toList()..sort();
 }
 
+/// Keeps only the BYSETPOS-selected entries of one period's sorted [dates].
+void _applySetPositions(List<DateTime> dates, List<int> positions) {
+  if (positions.isEmpty) return;
+  final sorted = [...dates];
+  dates
+    ..clear()
+    ..addAll(
+      {
+        for (final position in positions)
+          if (position > 0 && position <= sorted.length)
+            sorted[position - 1]
+          else if (position < 0 && -position <= sorted.length)
+            sorted[sorted.length + position],
+      }.toList()..sort(),
+    );
+}
+
 Iterable<DateTime> _detailedStarts(
   DateTime start,
   RecurrenceRule rule,
@@ -441,6 +458,7 @@ Iterable<DateTime> _detailedStarts(
             candidates.add(at(day.year, day.month, day.day));
           }
         }
+        _applySetPositions(candidates, rule.bySetPos);
       case RecurrenceFrequency.monthly:
         final month = DateTime(start.year, start.month + period * interval);
         if (rule.byMonth.isEmpty || rule.byMonth.contains(month.month)) {
@@ -455,14 +473,25 @@ Iterable<DateTime> _detailedStarts(
         }
       case RecurrenceFrequency.yearly:
         final year = start.year + period * interval;
-        final months = rule.byMonth.isEmpty ? [start.month] : [...rule.byMonth]
-          ..sort();
+        // BYMONTHDAY alone (RFC 5545) applies to every month of the year.
+        final months = rule.byMonth.isNotEmpty
+            ? ([...rule.byMonth]..sort())
+            : rule.byMonthDay.isNotEmpty
+            ? [for (var month = 1; month <= 12; month++) month]
+            : [start.month];
         for (final month in months) {
           if (month < 1 || month > 12) continue;
-          for (final day in _monthDays(year, month, rule, start.day)) {
+          for (final day in _monthDays(
+            year,
+            month,
+            rule.copyWith(bySetPos: const []),
+            start.day,
+          )) {
             candidates.add(at(year, month, day));
           }
         }
+        // BYSETPOS selects within the whole year, not within each month.
+        _applySetPositions(candidates, rule.bySetPos);
       case RecurrenceFrequency.none:
         return;
     }

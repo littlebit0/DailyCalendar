@@ -2941,7 +2941,7 @@ private enum DailySiriDatabase {
       parts.year = year; parts.month = month; parts.day = day
       return calendar.date(from: parts)
     }
-    func monthDays(_ year: Int, _ month: Int) -> [Int] {
+    func monthDays(_ year: Int, _ month: Int, applySetPos: Bool = true) -> [Int] {
       let length = daysIn(year, month)
       var fromMonthDay: Set<Int>?
       if !details.byMonthDay.isEmpty {
@@ -2973,13 +2973,23 @@ private enum DailySiriDatabase {
         days = day <= length ? [day] : []
       }
       let sorted = days.sorted()
-      if details.bySetPos.isEmpty { return sorted }
+      if !applySetPos || details.bySetPos.isEmpty { return sorted }
       var picked = Set<Int>()
       for position in details.bySetPos {
         if position > 0 && position <= sorted.count { picked.insert(sorted[position - 1]) }
         else if position < 0 && -position <= sorted.count { picked.insert(sorted[sorted.count + position]) }
       }
       return picked.sorted()
+    }
+    // BYSETPOS selects within a whole week or year, not within each month.
+    func selectPositions(_ dates: [(Int, Int, Int)]) -> [(Int, Int, Int)] {
+      if details.bySetPos.isEmpty { return dates }
+      var picked = Set<Int>()
+      for position in details.bySetPos {
+        if position > 0 && position <= dates.count { picked.insert(position - 1) }
+        else if position < 0 && -position <= dates.count { picked.insert(dates.count + position) }
+      }
+      return picked.sorted().map { dates[$0] }
     }
     let wantedWeekdays = Set(details.byDay.map { $0.weekday })
     var result = [start]
@@ -3011,6 +3021,7 @@ private enum DailySiriDatabase {
             candidates.append((parts.year!, parts.month!, parts.day!))
           }
         }
+        candidates = selectPositions(candidates)
       case "monthly":
         guard let month = calendar.date(byAdding: .month, value: period * interval, to: firstOfMonth(startParts.year!, startParts.month!)) else { return result }
         periodStart = month
@@ -3021,9 +3032,13 @@ private enum DailySiriDatabase {
       case "yearly":
         let year = startParts.year! + period * interval
         periodStart = firstOfMonth(year, 1)
-        for month in (details.byMonth.isEmpty ? [startParts.month!] : details.byMonth.sorted()) where month >= 1 && month <= 12 {
-          for day in monthDays(year, month) { candidates.append((year, month, day)) }
+        // BYMONTHDAY alone (RFC 5545) applies to every month of the year.
+        let months = !details.byMonth.isEmpty ? details.byMonth.sorted()
+          : !details.byMonthDay.isEmpty ? Array(1...12) : [startParts.month!]
+        for month in months where month >= 1 && month <= 12 {
+          for day in monthDays(year, month, applySetPos: false) { candidates.append((year, month, day)) }
         }
+        candidates = selectPositions(candidates)
       default:
         return result
       }
