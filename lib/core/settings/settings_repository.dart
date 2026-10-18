@@ -95,6 +95,12 @@ class SettingsRepository {
 
   int? existingNotificationId(String key) => _notificationIds()[key];
 
+  /// Allocated notification ids whose logical key starts with [prefix].
+  Map<String, int> notificationIdsWithPrefix(String prefix) => {
+    for (final entry in _notificationIds().entries)
+      if (entry.key.startsWith(prefix)) entry.key: entry.value,
+  };
+
   Future<int> notificationId(String key) {
     final prior = _notificationIdTails[_preferences] ?? Future<void>.value();
     final operation = prior.then((_) async {
