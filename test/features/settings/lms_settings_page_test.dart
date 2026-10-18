@@ -56,6 +56,84 @@ void main() {
   });
 
   testWidgets(
+    'login fields are labelled ID and offered to the password chooser',
+    (tester) async {
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'student@example.com'),
+      );
+      await settings.saveAcademicProfile(
+        const AcademicProfile(
+          universityId: 'institution:academyinfo:0000117',
+          universityName: '상명대학교',
+          schoolKind: 'fourYear',
+        ),
+        expectedGoogleEmail: 'student@example.com',
+      );
+      final controller = LmsController(
+        settings: settings,
+        repository: _Repository(),
+        commands: _Commands(),
+        createSession: (owner, school) => _NoSession(owner, school),
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            settingsRepositoryProvider.overrideWithValue(settings),
+            lmsControllerProvider.overrideWith((ref) => controller),
+          ],
+          child: MaterialApp(home: const LmsSettingsPage()),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final configure = find.byKey(const ValueKey('lms-local-login-configure'));
+      await tester.ensureVisible(configure);
+      await tester.tap(configure);
+      await tester.pumpAndSettle();
+
+      final username = tester.widget<TextField>(
+        find.byKey(const ValueKey('lms-local-username')),
+      );
+      final password = tester.widget<TextField>(
+        find.byKey(const ValueKey('lms-local-password')),
+      );
+      expect(username.decoration!.labelText, 'ID');
+      expect(username.autofillHints, [AutofillHints.username]);
+      expect(password.autofillHints, [AutofillHints.password]);
+      // The password stays hidden and unlearned by the keyboard.
+      expect(password.obscureText, isTrue);
+      expect(password.enableIMEPersonalizedLearning, isFalse);
+      // Offering the pair to the chooser must not turn into a save prompt.
+      final group = tester.widget<AutofillGroup>(
+        find.ancestor(
+          of: find.byKey(const ValueKey('lms-local-username')),
+          matching: find.byType(AutofillGroup),
+        ),
+      );
+      expect(group.onDisposeAction, AutofillContextAction.cancel);
+      // Typing still enables saving with consent.
+      await tester.enterText(
+        find.byKey(const ValueKey('lms-local-username')),
+        'student',
+      );
+      await tester.enterText(
+        find.byKey(const ValueKey('lms-local-password')),
+        'secret',
+      );
+      await tester.tap(find.byKey(const ValueKey('lms-local-consent')));
+      await tester.pump();
+      expect(
+        tester
+            .widget<FilledButton>(find.byKey(const ValueKey('lms-local-save')))
+            .onPressed,
+        isNotNull,
+      );
+    },
+  );
+
+  testWidgets(
     'Mac password focus requests English input and restores on blur and dialog close',
     (tester) async {
       debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
