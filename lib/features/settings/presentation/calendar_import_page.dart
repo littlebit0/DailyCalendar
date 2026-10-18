@@ -57,9 +57,7 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
               DailyInfoCallout(
                 icon: Icons.move_to_inbox_outlined,
                 title: context.tr('캘린더 데이터 옮기기'),
-                text: context.tr(
-                  '가져올 캘린더를 선택하면 일정과 기존 분류 색상을 Daily에 복사합니다.',
-                ),
+                text: context.tr('가져올 캘린더를 선택하면 일정과 기존 분류 색상을 Daily에 복사합니다.'),
               ),
               if (nativeProvider != null) ...[
                 const SizedBox(height: 8),
@@ -108,9 +106,7 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: DailyUi.pageBackground(context),
-            border: Border(
-              top: BorderSide(color: DailyUi.separator(context)),
-            ),
+            border: Border(top: BorderSide(color: DailyUi.separator(context))),
           ),
           child: Center(
             child: ConstrainedBox(
@@ -238,7 +234,7 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
         return;
       }
       setState(() {
-        _message = context.tr(
+        final summary = context.tr(
           '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패',
           args: {
             'imported': result.imported,
@@ -246,6 +242,9 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
             'failed': result.failed,
           },
         );
+        _message = result.unsupportedRecurrence == 0
+            ? summary
+            : '$summary\n${context.tr('{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.', args: {'count': result.unsupportedRecurrence})}';
       });
     } on CalendarImportException catch (error) {
       if (!importFinished) _recordImportUsage(analytics, AnalyticsOutcome.failed);
@@ -342,10 +341,7 @@ class _ImportSourceSection extends StatelessWidget {
                   dimension: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : Icon(
-                  Icons.refresh_rounded,
-                  color: DailyUi.primary,
-                ),
+              : Icon(Icons.refresh_rounded, color: DailyUi.primary),
           onTap: busy ? null : onLoad,
         ),
         for (final calendar in calendars)

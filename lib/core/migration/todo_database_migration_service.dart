@@ -139,10 +139,11 @@ class TodoDatabaseMigrationService {
       }
 
       // Schema 8 already has Todo completion, exact sync timestamps and compact
-      // deletions. Schema 9 only adds nullable LMS metadata: it must not repeat
-      // the old cloud migration or turn every unchanged event into an upload.
+      // deletions. Schemas 9-11 only add nullable columns (LMS metadata, the
+      // recurrence anchor day, recurrence details): they must not repeat the old
+      // cloud migration or turn every unchanged event into an upload.
       final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 10;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 11;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {

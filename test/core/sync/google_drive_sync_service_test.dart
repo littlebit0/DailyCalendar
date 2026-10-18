@@ -320,6 +320,8 @@ void main() {
         );
         (payload['event'] as Map)['recurrenceFrequency'] = 'monthly';
         (payload['event'] as Map)['recurrenceAnchorDay'] = 31;
+        (payload['event'] as Map)['recurrenceDetails'] =
+            '{"byDay":["2TU"],"bySetPos":[1]}';
         return _jsonResponse(payload);
       }
       if (request.method == 'GET' &&
@@ -352,6 +354,8 @@ void main() {
     final saved = {for (final event in repository.events) event.id: event};
     expect(saved['iphone-all-day']!.allDay, isTrue);
     expect(saved['iphone-all-day']!.recurrence.anchorDay, 31);
+    expect(saved['iphone-all-day']!.recurrence.byDay, ['2TU']);
+    expect(saved['iphone-all-day']!.recurrence.bySetPos, [1]);
     expect(saved['iphone-all-day']!.startAt, DateTime(2026, 6, 1));
     expect(saved['iphone-all-day']!.endAt, DateTime(2026, 6, 2));
     expect(saved['iphone-all-day-offset']!.allDay, isTrue);
@@ -631,6 +635,7 @@ void main() {
             recurrence: const RecurrenceRule(
               frequency: RecurrenceFrequency.monthly,
               anchorDay: 31,
+              byDay: ['MO', 'WE'],
             ),
           );
       await repository.save(changed);
@@ -700,6 +705,7 @@ void main() {
       expect(event['title'], '6.20~21 캠핑 약속');
       expect(event['completed'], isTrue);
       expect(event['recurrenceAnchorDay'], 31);
+      expect(event['recurrenceDetails'], '{"byDay":["MO","WE"]}');
       expect((await repository.findById('queued-event'))!.syncStatus, 'synced');
       expect(
         requests.any(
@@ -1565,6 +1571,7 @@ void main() {
             'type': 'settings',
             'settings': {
               'defaultReminderMinutesList': [0, 10, 60],
+              'dDayReminderOffsets': <int>[],
               'categories': [
                 {
                   'id': 'basic',
@@ -1630,6 +1637,8 @@ void main() {
         CalendarEventSortPriority.category,
       );
       expect(restored.defaultReminderMinutesList, [0, 10, 60]);
+      // Switching every D-day reminder off is a choice, not a missing field.
+      expect(restored.dDayReminderOffsets, isEmpty);
       expect(restored.appTextSize, AppTextSize.large);
       expect(restored.appStartView, AppStartView.quickView);
       expect(restored.weekDayLayoutMode, WeekDayLayoutMode.schedule);
@@ -2625,6 +2634,35 @@ void main() {
     expect(service.statusNotifier.value.message, '동기화 실패');
   });
 
+  test('whenIdle waits for the running sync and the ones queued behind it', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final reached = Completer<void>();
+    final release = Completer<void>();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async {
+        if (!reached.isCompleted) reached.complete();
+        await release.future;
+        return http.Response('', 500);
+      }),
+    );
+    addTearDown(service.dispose);
+    await service.whenIdle(); // idle already: returns immediately
+
+    final running = service.restoreNow().catchError((Object _) {});
+    await reached.future;
+    var idle = false;
+    final waiting = service.whenIdle().then((_) => idle = true);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(idle, isFalse, reason: 'sync still in flight');
+    release.complete();
+    await Future.wait([running, waiting]);
+    expect(idle, isTrue);
+  });
+
   test(
     'sync analytics records categorized failure without changing the error',
     () async {
@@ -3240,6 +3278,63 @@ void _latestMergeTests() {
         );
       },
     );
+
+    test('issue121 large backups split the name query and lose no event', () async {
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'tester@example.com'),
+      );
+      const count = 150;
+      final ids = [for (var i = 0; i < count; i++) 'bulk-event-$i-${'x' * 20}'];
+      await repository.saveAllAtomically([
+        for (final id in ids)
+          _event(
+            id: id,
+            title: 'Local $id',
+            startAt: DateTime(2026, 9, 17),
+            endAt: DateTime(2026, 9, 18),
+            updatedAt: DateTime.utc(2026, 9, 15, 2),
+            syncStatus: 'pending',
+          ),
+      ]);
+      // Every second event already exists remotely with an older version.
+      for (var i = 0; i < count; i += 2) {
+        drive.seed(
+          'remote-$i',
+          'daily-sync-v2-event-${ids[i]}.json',
+          _eventFileJson(
+            id: ids[i],
+            title: 'Old $i',
+            startAt: '2026-09-17',
+            endAt: '2026-09-18',
+            updatedAt: '2026-09-15T01:00:00Z',
+          ),
+        );
+      }
+
+      await service.backupNow(eventIds: ids.toSet(), includeSettings: false);
+
+      final listQueries = [
+        for (final request in drive.requests)
+          if (request.method == 'GET' &&
+              request.url.path == '/drive/v3/files')
+            request.url.queryParameters['q'] ?? '',
+      ];
+      expect(listQueries.length, greaterThan(1));
+      expect(listQueries.every((q) => q.length <= 4100), isTrue);
+      for (var i = 0; i < count; i += 2) {
+        expect(
+          (drive.payload('remote-$i')['event'] as Map)['title'],
+          'Local ${ids[i]}',
+        );
+      }
+      final uploadedNames = {
+        for (final file in drive.files.values) file.name,
+      };
+      for (final id in ids) {
+        expect(uploadedNames, contains('daily-sync-v2-event-$id.json'));
+      }
+      expect(drive.files.length, count);
+    });
 
     test(
       'LMS upload and compact deletions stay with owner while personal events still upload',

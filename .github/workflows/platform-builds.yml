@@ -31,6 +31,14 @@ jobs:
       - name: Test fixture archive safety
         run: python3 -m unittest discover -s tool/tests -p test_prepare_test_fixtures.py -v
 
+      - name: Test Windows tray recovery wiring
+        run: python3 -m unittest discover -s tool/tests -p test_windows_tray_recovery.py -v
+
+      - name: Test bug report receiver
+        run: python3 -m unittest discover -s test/tool -p analytics_receiver_test.py -v
+      - name: Test Linux reminder delivery
+        run: python3 -m unittest discover -s tool/tests -p test_linux_reminders_notify.py -v
+
       - name: Test
         run: flutter test
 
@@ -53,6 +61,9 @@ jobs:
 
       - name: Test LMS authentication scripts
         run: python3 -m unittest discover -s tool/tests -p test_lms_login_scripts.py -v
+
+      - name: Test geolocator_apple one-time request cancellation
+        run: python3 -m unittest discover -s tool/tests -p test_geolocator_apple_cancel.py -v
 
       - name: Test Siri request ownership and recurrence mutations
         run: |
@@ -105,6 +116,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Test Android cookie expiry format
+        run: python3 -m unittest discover -s tool/tests -p test_android_cookie_expires.py -v
+
       - name: Build APK
         run: flutter build apk --debug --no-pub
 
@@ -112,6 +126,10 @@ jobs:
         working-directory: android
         # --stacktrace: the task failure reported no cause, so show it in the log.
         run: ./gradlew :app:testDebugUnitTest --stacktrace
+
+      - name: Test Android location cancellation patch
+        working-directory: .
+        run: python3 -m unittest discover -s tool/tests -p test_geolocator_android_cancel.py -v
 
       - name: Upload APK
         uses: actions/upload-artifact@v4

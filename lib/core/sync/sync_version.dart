@@ -77,6 +77,8 @@ Map<String, Object?> eventVersionValues(CalendarEvent event) => {
   'count': event.recurrence.count,
   if (event.recurrence.anchorDay != null)
     'anchorDay': event.recurrence.anchorDay,
+  if (event.recurrence.detailsJson != null)
+    'details': event.recurrence.detailsJson,
   'excluded': event.recurrence.excludedDates.map(_day).toList()..sort(),
   'createdAt': event.createdAt.toUtc().toIso8601String(),
   'updatedAt': event.updatedAt.toUtc().toIso8601String(),
