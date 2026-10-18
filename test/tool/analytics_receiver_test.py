@@ -1,4 +1,5 @@
 import json
+import os
 import stat
 import tempfile
 import unittest
@@ -164,6 +165,106 @@ class IncrementalStorageTests(DedupeAcrossMidnightTests):
             other['events'][0]['eventId'] = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'
             self.assertEqual(aggregator.accept(other), 1)
             self.assertEqual(self.count(directory), 6)
+
+
+class SqliteStateTests(DedupeAcrossMidnightTests):
+    def event_batch(self, event_id):
+        batch = self.batch()
+        batch['events'][0]['eventId'] = event_id
+        return batch
+
+    def test_importing_a_hash_seen_on_several_days_keeps_the_newest_day(self):
+        import hashlib
+        import sqlite3
+        from datetime import datetime, timezone
+        with tempfile.TemporaryDirectory() as directory:
+            event_id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
+            digest = hashlib.sha256(event_id.encode()).hexdigest()
+            for day in ('2026-10-05', '2026-10-01', '2026-10-03'):
+                (Path(directory) / f'dedupe-{day}.json').write_text(json.dumps([digest]))
+            clock = datetime(2026, 10, 9, 12, tzinfo=timezone.utc)
+            aggregator = Aggregator(directory, now=lambda: clock)
+            # Cleanup (cutoff Oct 2) must not drop the Oct 5 sighting.
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            with sqlite3.connect(Path(directory) / 'analytics-state.sqlite') as db:
+                days = db.execute('SELECT day FROM dedupe WHERE hash = ?', (digest,)).fetchall()
+            self.assertEqual(days, [('2026-10-05',)])
+
+    def test_sqlite_errors_become_storage_errors_for_the_http_handler(self):
+        import sqlite3
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            for error in (sqlite3.OperationalError('database is locked'),
+                          sqlite3.DatabaseError('file is not a database')):
+                with mock.patch.object(aggregator, '_count', side_effect=error):
+                    with self.assertRaises(OSError):
+                        aggregator.accept(self.batch())
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+
+    def test_state_is_private_even_under_a_permissive_umask(self):
+        import stat
+        old = os.umask(0o022)
+        try:
+            with tempfile.TemporaryDirectory() as parent:
+                directory = Path(parent) / 'analytics'
+                aggregator = Aggregator(directory)
+                self.assertEqual(aggregator.accept(self.batch()), 1)
+                self.assertEqual(stat.S_IMODE(directory.stat().st_mode), 0o700)
+                database = directory / 'analytics-state.sqlite'
+                self.assertEqual(stat.S_IMODE(database.stat().st_mode), 0o600)
+                for extra in directory.glob('analytics-state.sqlite-*'):
+                    self.assertEqual(stat.S_IMODE(extra.stat().st_mode) & 0o077, 0)
+        finally:
+            os.umask(old)
+
+    def test_retention_cleanup_uses_an_index_on_the_day(self):
+        import sqlite3
+        with tempfile.TemporaryDirectory() as directory:
+            Aggregator(directory).accept(self.batch())
+            with sqlite3.connect(Path(directory) / 'analytics-state.sqlite') as db:
+                indexes = [row[1] for row in db.execute('PRAGMA index_list(dedupe)')]
+                self.assertIn('dedupe_day', indexes)
+                plan = ' '.join(
+                    str(row[3]) for row in db.execute(
+                        "EXPLAIN QUERY PLAN DELETE FROM dedupe WHERE day < '2026-01-01'"))
+            self.assertIn('dedupe_day', plan)
+
+    def test_the_report_is_not_rewritten_on_every_request(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as directory:
+            clock = [datetime(2026, 10, 13, 12, tzinfo=timezone.utc)]
+            aggregator = Aggregator(directory, now=lambda: clock[0], export_interval=60)
+            report = None
+
+            def reported():
+                return self.count(directory)
+
+            self.assertEqual(aggregator.accept(self.event_batch('00000000-0000-4000-8000-000000000001')), 1)
+            self.assertEqual(reported(), 1)  # the first request exports
+            clock[0] += timedelta(seconds=10)
+            self.assertEqual(aggregator.accept(self.event_batch('00000000-0000-4000-8000-000000000002')), 1)
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+            self.assertEqual(reported(), 1, 'within the interval the report is not rebuilt')
+            # A duplicate-only request changes nothing and exports nothing.
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            clock[0] += timedelta(seconds=61)
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            self.assertEqual(reported(), 3, 'a due request catches the report up')
+            self.assertEqual(aggregator.accept(self.event_batch('00000000-0000-4000-8000-000000000003')), 1)
+            self.assertEqual(reported(), 3)
+            aggregator.flush_report()
+            self.assertEqual(reported(), 4, 'shutdown writes the pending report')
+
+    def test_a_new_day_exports_immediately(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as directory:
+            clock = [datetime(2026, 10, 13, 23, 59, 30, tzinfo=timezone.utc)]
+            aggregator = Aggregator(directory, now=lambda: clock[0], export_interval=3600)
+            aggregator.accept(self.event_batch('00000000-0000-4000-8000-000000000001'))
+            clock[0] += timedelta(seconds=60)
+            aggregator.accept(self.event_batch('00000000-0000-4000-8000-000000000002'))
+            self.assertTrue((Path(directory) / 'analytics-2026-10-14.json').exists())
 
 
 def _payload():

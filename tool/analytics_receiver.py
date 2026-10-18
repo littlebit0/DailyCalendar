@@ -24,6 +24,7 @@ MAX_BUG_REPORT_BYTES = 16 * 1024
 MAX_BUG_REPORTS_PER_HOUR = 5
 BUG_REPORT_RETENTION_DAYS = 365
 DEDUPE_RETENTION_DAYS = 7
+REPORT_EXPORT_INTERVAL_SECONDS = 60
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 GITHUB_API_VERSION = "2026-03-10"
 VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?$")
@@ -223,17 +224,47 @@ class Aggregator:
     transaction (a failure rolls both back). `analytics-YYYY-MM-DD.json` stays as
     the readable report and is rebuilt from the counter rows of that day, whose
     count is bounded by the number of distinct groups, not by the event count.
+    The report is a convenience copy: with `export_interval` seconds above zero
+    it is rewritten at most that often (and by `flush_report`), so a busy
+    receiver does not re-export every group on every request.
     """
 
-    def __init__(self, directory, now=None):
+    def __init__(self, directory, now=None, export_interval=0):
         self.directory = Path(directory)
         self.lock = threading.Lock()
         self._now = now or (lambda: datetime.now(timezone.utc))
         self._database = self.directory / "analytics-state.sqlite"
+        self._export_interval = export_interval
+        self._export_dirty = False
+        self._last_export = None
+        self._last_export_day = None
 
     def accept(self, batch):
+        # Storage failures surface as OSError, which the HTTP handler turns into
+        # a 500 store_failed response instead of an unhandled traceback.
+        try:
+            return self._accept(batch)
+        except sqlite3.Error as error:
+            raise OSError(f"analytics state store failed: {type(error).__name__}") from error
+
+    def flush_report(self):
+        """Writes the pending report now (used when the receiver shuts down)."""
         with self.lock:
-            self.directory.mkdir(parents=True, exist_ok=True)
+            if not self._export_dirty:
+                return
+            now = self._now()
+            try:
+                connection = self._connect()
+                try:
+                    self._export(connection, now.strftime("%Y-%m-%d"), now)
+                finally:
+                    connection.close()
+            except (sqlite3.Error, OSError):
+                pass
+
+    def _accept(self, batch):
+        with self.lock:
+            self._make_private(self.directory, directory=True)
             now = self._now()
             day = now.strftime("%Y-%m-%d")
             connection = self._connect()
@@ -258,12 +289,37 @@ class Aggregator:
                 except BaseException:
                     connection.execute("ROLLBACK")
                     raise
-                self._export(connection, day, now)
+                self._export_dirty = self._export_dirty or accepted > 0
+                if self._export_dirty and self._export_due(day, now):
+                    self._export(connection, day, now)
                 return accepted
             finally:
                 connection.close()
 
+    def _export_due(self, day, now):
+        return (
+            self._export_interval <= 0
+            or self._last_export is None
+            or self._last_export_day != day
+            or (now - self._last_export).total_seconds() >= self._export_interval
+        )
+
+    @staticmethod
+    def _make_private(path, directory=False):
+        """Directory 0700 / files 0600, whatever the process umask is."""
+        if directory:
+            path.mkdir(mode=0o700, parents=True, exist_ok=True)
+        try:
+            os.chmod(path, 0o700 if directory else 0o600)
+        except OSError:
+            pass
+
     def _connect(self):
+        # Create the file private before SQLite does; its journal and WAL files
+        # inherit the main file's mode.
+        if not self._database.exists():
+            os.close(os.open(self._database, os.O_CREAT | os.O_WRONLY, 0o600))
+        self._make_private(self._database)
         connection = sqlite3.connect(self._database, timeout=10, isolation_level=None)
         connection.execute(
             "CREATE TABLE IF NOT EXISTS dedupe(hash TEXT PRIMARY KEY, day TEXT NOT NULL)"
@@ -273,6 +329,8 @@ class Aggregator:
             "day TEXT NOT NULL, key TEXT NOT NULL, data TEXT NOT NULL, "
             "PRIMARY KEY(day, key))"
         )
+        # Retention cleanup filters on the day, which the hash key cannot serve.
+        connection.execute("CREATE INDEX IF NOT EXISTS dedupe_day ON dedupe(day)")
         connection.execute("CREATE TABLE IF NOT EXISTS meta(name TEXT PRIMARY KEY, value TEXT)")
         return connection
 
@@ -316,7 +374,10 @@ class Aggregator:
             self._write_json(self.directory / f"analytics-{day}.json", aggregate)
         except OSError:
             # The counters are already committed; the next request refreshes it.
-            pass
+            return
+        self._export_dirty = False
+        self._last_export = now
+        self._last_export_day = day
 
     def _migrate(self, connection):
         """One-time import of the earlier JSON aggregate and dedupe files."""
@@ -331,8 +392,11 @@ class Aggregator:
                     continue
                 for event_hash in self._read_json(path, []):
                     if isinstance(event_hash, str):
+                        # An event retried across UTC days sits in several files:
+                        # keep the newest day so cleanup cannot drop it early.
                         connection.execute(
-                            "INSERT OR IGNORE INTO dedupe(hash, day) VALUES (?, ?)",
+                            "INSERT INTO dedupe(hash, day) VALUES (?, ?) "
+                            "ON CONFLICT(hash) DO UPDATE SET day = MAX(day, excluded.day)",
                             (event_hash, match.group(1)),
                         )
             for path in self.directory.glob("analytics-*.json"):
@@ -723,7 +787,7 @@ def main():
     address = os.environ.get("DAILY_ANALYTICS_BIND", "127.0.0.1")
     port = int(os.environ.get("DAILY_ANALYTICS_PORT", "8787"))
     directory = os.environ.get("DAILY_ANALYTICS_DATA_DIR", "var/analytics")
-    ReceiverHandler.aggregator = Aggregator(directory)
+    ReceiverHandler.aggregator = Aggregator(directory, export_interval=REPORT_EXPORT_INTERVAL_SECONDS)
     ReceiverHandler.bug_reports = BugReportBackend(directory)
     server = ThreadingHTTPServer((address, port), ReceiverHandler)
     server.daemon_threads = True
@@ -735,6 +799,7 @@ def main():
     signal.signal(signal.SIGINT, stop)
     server.serve_forever()
     server.server_close()
+    ReceiverHandler.aggregator.flush_report()
 
 
 if __name__ == "__main__":
