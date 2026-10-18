@@ -36,6 +36,9 @@ enum AnalyticsTrigger { automatic, manual, startup, resume, localChange }
 /// earlier point: it ends when the data migration finishes.
 enum AnalyticsStartupMilestone { firstCalendarFrame, localCalendarReady }
 
+/// Why a started sync ended without a success or failure result.
+enum AnalyticsSyncAbandonReason { sessionChanged }
+
 enum AnalyticsBuildMode { debug, profile, release }
 
 enum AnalyticsOutcome { succeeded, failed, canceled }
@@ -67,7 +70,8 @@ enum AnalyticsEventName {
   syncFailed('sync_failed'),
   slowInteractionDetected('slow_interaction_detected'),
   frameSummary('frame_summary'),
-  startupMilestone('startup_milestone');
+  startupMilestone('startup_milestone'),
+  syncAbandoned('sync_abandoned');
 
   const AnalyticsEventName(this.wireName);
 
@@ -159,6 +163,7 @@ class AnalyticsRecord {
     required AnalyticsOutcome outcome,
     required int durationMs,
     AnalyticsErrorCode? errorCode,
+    int attempt = 1,
   }) {
     final name = switch (outcome) {
       AnalyticsOutcome.succeeded => AnalyticsEventName.syncSucceeded,
@@ -172,16 +177,38 @@ class AnalyticsRecord {
       ..._durationAttributes(durationMs),
       if (outcome != AnalyticsOutcome.succeeded)
         'errorCode': (errorCode ?? AnalyticsErrorCode.unknown).name,
+      ..._attemptAttributes(attempt),
+    });
+  }
+
+  /// A started sync that ended because the account or session changed under
+  /// it. It is neither a success nor a failure of the sync itself, so it must
+  /// not enter a success-rate denominator as a failure (#152).
+  factory AnalyticsRecord.syncAbandoned(
+    AnalyticsSyncOperation operation, {
+    required AnalyticsTrigger trigger,
+    required AnalyticsSyncAbandonReason reason,
+    required int durationMs,
+    int attempt = 1,
+  }) {
+    return AnalyticsRecord._(AnalyticsEventName.syncAbandoned, {
+      'operation': operation.name,
+      'trigger': trigger.name,
+      'reason': reason.name,
+      ..._durationAttributes(durationMs),
+      ..._attemptAttributes(attempt),
     });
   }
 
   factory AnalyticsRecord.syncStarted(
     AnalyticsSyncOperation operation, {
     required AnalyticsTrigger trigger,
+    int attempt = 1,
   }) {
     return AnalyticsRecord._(AnalyticsEventName.syncStarted, {
       'operation': operation.name,
       'trigger': trigger.name,
+      ..._attemptAttributes(attempt),
     });
   }
 
@@ -241,6 +268,14 @@ class AnalyticsRecord {
   /// from a longer run. Records written before this flag existed carry no
   /// `durationTruncated`, so a stored 120000 cannot be read as exact.
   static const maxDurationMs = 120000;
+
+  /// Automatic retries are numbered from 2; the first attempt carries no
+  /// `attempt`, which keeps the pre-existing record shape for it.
+  static const maxSyncAttempt = 6;
+
+  static Map<String, Object> _attemptAttributes(int attempt) => {
+    if (attempt > 1) 'attempt': attempt.clamp(2, maxSyncAttempt),
+  };
 
   static Map<String, Object> _durationAttributes(int value) => {
     'durationMs': value.clamp(0, maxDurationMs),

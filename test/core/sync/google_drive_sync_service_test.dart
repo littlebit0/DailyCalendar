@@ -2695,6 +2695,124 @@ void main() {
       );
     },
   );
+
+  test('issue152 a sync cut off by a session change reports abandoned, not failed',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final reached = Completer<void>();
+    final release = Completer<void>();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async {
+        if (!reached.isCompleted) reached.complete();
+        await release.future;
+        return http.Response('', 500);
+      }),
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
+
+    final running = service.restoreNow().catchError((Object _) {});
+    await reached.future;
+    final stopping = service.stop();
+    release.complete();
+    await Future.wait([running, stopping]);
+    await Future<void>.delayed(Duration.zero);
+
+    expect(analytics.records.map((record) => record.name), [
+      AnalyticsEventName.syncStarted,
+      AnalyticsEventName.syncAbandoned,
+    ]);
+    expect(analytics.records.last.attributes['reason'], 'sessionChanged');
+    expect(analytics.records.last.attributes.containsKey('errorCode'), isFalse);
+  });
+
+  test('issue152 later independent syncs are never labelled as retries', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      // The retry stays pending for the whole test.
+      automaticRetryDelays: const [Duration(hours: 1)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
+
+    await service.restoreNow().catchError((Object _) {});
+    // A retry is scheduled, but this is a new, independent sync.
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .toList();
+    expect(started, hasLength(2));
+    expect(started.every((record) => !record.attributes.containsKey('attempt')), isTrue);
+  });
+
+  test('issue152 after the retry budget is spent new syncs stay first attempts', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      automaticRetryDelays: const [Duration(milliseconds: 5)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
+
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 80)); // the one retry runs and fails
+    analytics.records.clear();
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .single;
+    expect(started.attributes.containsKey('attempt'), isFalse);
+  });
+
+  test('issue152 automatic retries are numbered and the first attempt is not',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      automaticRetryDelays: const [Duration(milliseconds: 5)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
+
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 80));
+
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .toList();
+    expect(started.length, greaterThanOrEqualTo(2));
+    expect(started.first.attributes.containsKey('attempt'), isFalse);
+    expect(started[1].attributes['attempt'], 2);
+    final failed = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncFailed)
+        .toList();
+    expect(failed[1].attributes['attempt'], 2);
+  });
 }
 
 GoogleDriveSyncService _service({

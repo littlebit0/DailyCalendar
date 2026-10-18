@@ -176,3 +176,19 @@ Dart `main`, whose first statement starts the clock (OS process launch and nativ
 events; external sync, LMS and Drive do not delay it, and local-only and Apple-only users, who skip the startup sync, report it too). A failed local load sends no
 `localCalendarReady`. Earlier `app_load_completed` records keep their meaning.
 Deploy the receiver before the app.
+
+## Sync attempts (#152)
+
+Every `sync_started` now ends in exactly one terminal event while the app keeps
+running: `sync_succeeded`, `sync_failed` (failed or canceled), or the new
+`sync_abandoned` (`reason: sessionChanged`, the account or session changed under the
+sync). `sync_abandoned` is not a failure of the sync and must not be counted in a
+failure rate. Automatic retries carry an optional `attempt` (2-6); the first attempt
+has none, so `sync_started` without `attempt` counts logical syncs and the rest are
+retries of them. No attempt identifier or other linking value is sent.
+
+A started sync with no terminal event in the same period is **unknown**, not failed:
+it may be still running, cut off by the app being closed, or lost with the pending
+queue (200 events / 7 days) or an unreachable receiver. Compute
+`unknown = started - (succeeded + failed + abandoned)` over a window that excludes
+the most recent minutes, and never treat it as a failure. Deploy the receiver first.

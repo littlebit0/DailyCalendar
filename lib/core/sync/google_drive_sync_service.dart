@@ -504,12 +504,14 @@ class GoogleDriveSyncService implements SyncService {
           includeTimetable: includeTimetable,
           initializeChangeToken: initializeChangeToken,
           completer: completer,
+          retryAttempt: Zone.current[_retryAttemptKey] as int?,
         );
         return completer.future;
       }
     }
 
     final request = _PendingSyncRequest(
+      retryAttempt: Zone.current[_retryAttemptKey] as int?,
       kind: kind,
       promptIfNecessary: promptIfNecessary,
       eventIds: eventIds == null ? null : Set<String>.from(eventIds),
@@ -612,10 +614,15 @@ class GoogleDriveSyncService implements SyncService {
     final stopwatch = Stopwatch()..start();
     final analyticsOperation = _analyticsOperation(request.kind);
     final analyticsTrigger = _analyticsTrigger(request);
+    // Only a request created by the automatic retry timer is numbered (from 2);
+    // every other sync, including a manual one that happens to run while a
+    // retry is pending, is a first attempt of its own.
+    final analyticsAttempt = request.retryAttempt ?? 1;
     _recordAnalytics(
       AnalyticsRecord.syncStarted(
         analyticsOperation,
         trigger: analyticsTrigger,
+        attempt: analyticsAttempt,
       ),
     );
     final message = switch (request.kind) {
@@ -793,6 +800,7 @@ class GoogleDriveSyncService implements SyncService {
           trigger: analyticsTrigger,
           outcome: AnalyticsOutcome.succeeded,
           durationMs: stopwatch.elapsedMilliseconds,
+          attempt: analyticsAttempt,
         ),
       );
     } on Object catch (error) {
@@ -800,6 +808,15 @@ class GoogleDriveSyncService implements SyncService {
         if (generation == _sessionGeneration) {
           statusNotifier.value = const GoogleDriveSyncStatus();
         }
+        _recordAnalytics(
+          AnalyticsRecord.syncAbandoned(
+            analyticsOperation,
+            trigger: analyticsTrigger,
+            reason: AnalyticsSyncAbandonReason.sessionChanged,
+            durationMs: stopwatch.elapsedMilliseconds,
+            attempt: analyticsAttempt,
+          ),
+        );
         rethrow;
       }
       _scheduleAutomaticRetry(request, error);
@@ -819,6 +836,7 @@ class GoogleDriveSyncService implements SyncService {
               : AnalyticsOutcome.failed,
           durationMs: stopwatch.elapsedMilliseconds,
           errorCode: categorizeAnalyticsError(error),
+          attempt: analyticsAttempt,
         ),
       );
       rethrow;
@@ -876,19 +894,26 @@ class GoogleDriveSyncService implements SyncService {
     }
     _automaticRetryKind = request.kind;
     final delay = _retryDelays[_automaticRetryIndex++];
+    // The first retry is attempt 2. The number travels with the request the
+    // timer creates (through the zone), not through scheduler state that later,
+    // unrelated requests of the same kind would also see.
+    final attempt = _automaticRetryIndex + 1;
     _automaticRetryTimer = Timer(delay, () {
       _automaticRetryTimer = null;
-      final retry = switch (request.kind) {
-        _SyncRequestKind.backupOnly => syncPendingChangesNow(),
-        _SyncRequestKind.detectRemoteChanges => checkForRemoteChangesNow(
-          initializeChangeToken: request.initializeChangeToken,
-        ),
-        _SyncRequestKind.backupThenDetectRemoteChanges => syncOnResume(),
-        _SyncRequestKind.backupThenRestore => syncPendingChangesNow(
-          restoreAfterBackup: true,
-        ),
-        _SyncRequestKind.restoreOnly => restoreNow(),
-      };
+      final retry = runZoned(
+        () => switch (request.kind) {
+          _SyncRequestKind.backupOnly => syncPendingChangesNow(),
+          _SyncRequestKind.detectRemoteChanges => checkForRemoteChangesNow(
+            initializeChangeToken: request.initializeChangeToken,
+          ),
+          _SyncRequestKind.backupThenDetectRemoteChanges => syncOnResume(),
+          _SyncRequestKind.backupThenRestore => syncPendingChangesNow(
+            restoreAfterBackup: true,
+          ),
+          _SyncRequestKind.restoreOnly => restoreNow(),
+        },
+        zoneValues: {_retryAttemptKey: attempt},
+      );
       unawaited(retry.catchError((_) {}));
     });
   }
@@ -2486,8 +2511,12 @@ class _ConcurrentDriveWrite implements Exception {
   const _ConcurrentDriveWrite();
 }
 
+/// Zone key carrying the attempt number of a request made by the retry timer.
+const _retryAttemptKey = #dailySyncRetryAttempt;
+
 class _PendingSyncRequest {
   _PendingSyncRequest({
+    this.retryAttempt,
     required this.kind,
     required this.promptIfNecessary,
     required this.completers,
@@ -2497,6 +2526,8 @@ class _PendingSyncRequest {
     this.eventIds,
   });
 
+  /// 2 or more for a request made by the automatic retry timer, else null.
+  int? retryAttempt;
   final _SyncRequestKind kind;
   bool promptIfNecessary;
   bool includeSettings;
@@ -2522,7 +2553,10 @@ class _PendingSyncRequest {
     required bool includeTimetable,
     required bool initializeChangeToken,
     required Completer<void> completer,
+    int? retryAttempt,
   }) {
+    // A request that is not itself a retry makes the merged sync a first attempt.
+    if (retryAttempt == null) this.retryAttempt = null;
     this.promptIfNecessary = this.promptIfNecessary || promptIfNecessary;
     this.includeSettings = this.includeSettings || includeSettings;
     this.includeTimetable = this.includeTimetable || includeTimetable;

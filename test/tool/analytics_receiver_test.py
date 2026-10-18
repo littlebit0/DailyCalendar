@@ -153,6 +153,28 @@ class StartupMilestoneTests(unittest.TestCase):
         self.assertFalse(self.valid({'milestone': 'firstCalendarFrame', 'durationMs': -1}))
 
 
+class SyncAttemptTests(unittest.TestCase):
+    BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z'}
+
+    def valid(self, name, attributes):
+        from tool.analytics_receiver import valid_event
+        return valid_event({**self.BASE, 'name': name, 'attributes': attributes})
+
+    def test_attempt_is_optional_and_only_two_to_six(self):
+        start = {'operation': 'backup', 'trigger': 'manual'}
+        self.assertTrue(self.valid('sync_started', start))
+        self.assertTrue(self.valid('sync_started', {**start, 'attempt': 2}))
+        for bad in (0, 1, 7, '2', None, 2.0):
+            self.assertFalse(self.valid('sync_started', {**start, 'attempt': bad}))
+
+    def test_abandoned_event_contract(self):
+        good = {'operation': 'backup', 'trigger': 'manual', 'reason': 'sessionChanged', 'durationMs': 5}
+        self.assertTrue(self.valid('sync_abandoned', good))
+        self.assertTrue(self.valid('sync_abandoned', {**good, 'attempt': 3, 'durationTruncated': True}))
+        self.assertFalse(self.valid('sync_abandoned', {**good, 'reason': 'crash'}))
+        self.assertFalse(self.valid('sync_abandoned', {**good, 'errorCode': 'unknown'}))
+
+
 class BuildNumberTests(unittest.TestCase):
     def test_real_build_numbers_and_unknown_are_accepted(self):
         for value in ("400", "4.0.0", "4.0.0.12", "unknown"):
