@@ -235,7 +235,9 @@ class Aggregator:
             # A retry can arrive after UTC midnight: the retained earlier days
             # still know the event, so they count as seen as well.
             seen = set(hashes)
-            for back in range(1, DEDUPE_RETENTION_DAYS):
+            # _delete_expired keeps files up to DEDUPE_RETENTION_DAYS old, so the
+            # same number of prior days is read.
+            for back in range(1, DEDUPE_RETENTION_DAYS + 1):
                 earlier = (now - timedelta(days=back)).strftime("%Y-%m-%d")
                 seen.update(self._read_json(self.directory / f"dedupe-{earlier}.json", []))
             environment = batch["environment"]
