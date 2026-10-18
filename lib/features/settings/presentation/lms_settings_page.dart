@@ -346,7 +346,10 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                               icon: const Icon(Icons.edit_outlined),
                               label: Text(context.tr('로그인 정보 저장·변경')),
                             ),
-                            if (controller.localLoginUsername != null)
+                            // Not while connected: a retry only signs in again
+                            // when the school session has ended.
+                            if (controller.localLoginUsername != null &&
+                                !controller.connected)
                               FilledButton.tonalIcon(
                                 key: const ValueKey('lms-local-login-retry'),
                                 onPressed: busy || controller.localLoginLoading

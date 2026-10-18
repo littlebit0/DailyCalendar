@@ -283,8 +283,11 @@ class LmsController extends ChangeNotifier {
   /// The user asked to sign in again with the login saved on this device.
   ///
   /// One request is one attempt: the per-process attempt limit and a paused
-  /// state from an earlier rejection are lifted for it, and a failure pauses
-  /// the login again, so nothing retries by itself. Nothing is deleted.
+  /// state from an earlier rejection are lifted for that attempt only. The
+  /// stored record is not touched up front: it is unpaused only after the school
+  /// has accepted the login, and a rejection or error leaves it paused, so
+  /// nothing retries by itself and an interrupted attempt cannot re-enable
+  /// automatic submission. Nothing is deleted.
   Future<void> retryAutomaticLogin() async {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
     final school = schoolId;
@@ -302,16 +305,8 @@ class LmsController extends ChangeNotifier {
       return;
     }
     if (stored == null || _disposed || _desiredKey != key) return;
-    if (stored.paused) {
-      await _credentials.save(
-        owner,
-        school,
-        LmsLocalCredentials(stored.username, stored.password),
-      );
-      if (_disposed || _desiredKey != key) return;
-    }
     _automaticAttempts.remove(key);
-    automaticLoginPaused = false;
+    _explicitRetryKey = key;
     lastLoginFailure = null;
     _notify();
     _configuringAutomaticLogin = true;
@@ -319,8 +314,12 @@ class LmsController extends ChangeNotifier {
       await refresh(force: true);
     } finally {
       _configuringAutomaticLogin = false;
+      if (_explicitRetryKey == key) _explicitRetryKey = null;
     }
   }
+
+  /// Account/school key of a requested re-login that is running right now.
+  String? _explicitRetryKey;
 
   Future<void> removeAutomaticLogin() async {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
@@ -360,7 +359,12 @@ class LmsController extends ChangeNotifier {
     } // Keychain failure must not destroy normal session/cache.
     if (!valid() || credentials == null) return false;
     automaticLoginPaused = credentials.paused;
-    if (credentials.paused) return false;
+    final explicit = _explicitRetryKey == key;
+    if (credentials.paused && !explicit) return false;
+    // The attempt submits the login as saved, whatever its paused flag says.
+    final submitted = credentials.paused
+        ? LmsLocalCredentials(credentials.username, credentials.password)
+        : credentials;
     _automaticAttempts.add(
       key,
     ); // Never automatically repeat a login this process.
@@ -370,7 +374,7 @@ class LmsController extends ChangeNotifier {
     final bool success;
     try {
       success = await current.loginAutomatically(
-        credentials,
+        submitted,
         expectedPrincipal: _settings.load().academicProfile?.lmsUserId,
       );
     } catch (error) {
@@ -403,6 +407,18 @@ class LmsController extends ChangeNotifier {
     lastLoginFailure = null;
     _stored = current.isAuthenticated;
     _restoredPrincipal = current.principalId;
+    if (credentials.paused) {
+      // The school accepted this login: only now is the pause lifted.
+      try {
+        await _credentials.save(current.ownerId, current.schoolId, submitted);
+        if (!valid()) return false;
+        automaticLoginPaused = false;
+      } catch (_) {
+        // The sign-in worked, but the record could not be updated: say so
+        // instead of keeping the earlier rejection on screen.
+        if (valid()) lastLoginFailure = LmsLoginFailure.secureStorage;
+      }
+    }
     await _saveConnection(current, enabled: true);
     if (!valid()) return false;
     await _refreshAuthenticatedSession(current, valid, force: true);

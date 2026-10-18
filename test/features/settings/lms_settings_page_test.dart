@@ -25,6 +25,17 @@ class _Repository extends Fake implements EventRepository {}
 
 class _Commands extends Fake implements EventCommandService {}
 
+class _ConnectedController extends LmsController {
+  _ConnectedController({
+    required super.settings,
+    required super.repository,
+    required super.commands,
+    required super.createSession,
+  });
+  @override
+  bool get connected => true;
+}
+
 class _NoSession extends LmsWebSession {
   _NoSession(String owner, String school)
     : super(ownerId: owner, schoolId: school);
@@ -104,6 +115,49 @@ void main() {
     await tester.pumpAndSettle();
     expect(sessions.last.submittedCredentials?.username, 'fixture-student');
     expect(sessions.last.submittedCredentials?.paused, isFalse);
+  });
+
+  testWidgets('the re-login button is hidden while the school is connected', (
+    tester,
+  ) async {
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'student@example.com'),
+    );
+    await settings.saveAcademicProfile(
+      const AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+      ),
+      expectedGoogleEmail: 'student@example.com',
+    );
+    await LmsCredentialsStore().save(
+      'student@example.com',
+      'smu',
+      const LmsLocalCredentials('fixture-student', 'synthetic', paused: true),
+    );
+    final controller = _ConnectedController(
+      settings: settings,
+      repository: _Repository(),
+      commands: _Commands(),
+      createSession: (owner, school) => _NoSession(owner, school),
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          lmsControllerProvider.overrideWith((ref) => controller),
+        ],
+        child: MaterialApp(home: const LmsSettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('lms-local-login-retry')), findsNothing);
+    // Deleting the saved login stays available.
+    expect(find.byKey(const ValueKey('lms-local-login-remove')), findsOneWidget);
   });
 
   testWidgets(
