@@ -14,6 +14,7 @@ import '../core/analytics/product_analytics.dart';
 import '../core/auth/google_account.dart';
 import '../core/security/biometric_auth_service.dart';
 import '../core/security/app_lock_privacy_service.dart';
+import '../core/notifications/notification_settings_change.dart';
 import '../core/settings/app_settings.dart';
 import '../core/localization/app_localizations.dart';
 import '../core/platform/windows_build_identity.dart';
@@ -1343,9 +1344,47 @@ class _AppHomeState extends ConsumerState<_AppHome>
       _scheduledLmsOwner = owner;
       unawaited(_reconcileAllEventSchedules().catchError((_) {}));
     }
-    ref.read(appSettingsProvider.notifier).state = ref
-        .read(settingsRepositoryProvider)
-        .load();
+    final previousSettings = ref.read(appSettingsProvider);
+    final nextSettings = ref.read(settingsRepositoryProvider).load();
+    ref.read(appSettingsProvider.notifier).state = nextSettings;
+    final change = NotificationSettingsChange.between(
+      previousSettings,
+      nextSettings,
+    );
+    if (!change.isEmpty) {
+      unawaited(_applyNotificationSettingsChange(change, nextSettings));
+    }
+  }
+
+  /// A restore changes the stored values only; scheduled OS notifications
+  /// still follow the old ones until they are rebuilt here.
+  Future<void> _applyNotificationSettingsChange(
+    NotificationSettingsChange change,
+    AppSettings settings,
+  ) async {
+    try {
+      final notificationService = ref.read(notificationServiceProvider);
+      if (change.briefing) {
+        if (settings.morningBriefingEnabled) {
+          await notificationService.scheduleMorningBriefing(
+            hour: settings.morningBriefingHour,
+            minute: settings.morningBriefingMinute,
+          );
+        } else {
+          await notificationService.cancelMorningBriefing();
+        }
+      }
+      if (change.eventReminders) {
+        // The settings can arrive in the middle of a Drive restore, before its
+        // events are merged. Reconcile from the merged events, not a snapshot.
+        await ref.read(googleDriveSyncServiceProvider).whenIdle();
+        if (!mounted) return;
+        await _reconcileAllEventSchedules();
+      }
+    } catch (error, stackTrace) {
+      // The restored values stay; the next start rebuilds the schedule again.
+      debugPrint('Notification settings follow-up failed: $error\n$stackTrace');
+    }
   }
 
   Future<void> _startLocalNotificationServices() async {

@@ -548,6 +548,13 @@ class LocalNotificationService implements NotificationService {
       );
       if (id != null) await cancel(id);
     }
+    // An offset removed from the settings (for example by a Drive restore) is
+    // in none of the lists above, so cancel every D-day id still registered.
+    for (final id in _settingsRepository
+        .notificationIdsWithPrefix('$eventId:dday:')
+        .values) {
+      await cancel(id);
+    }
     await _retireLegacy(
       _legacyIds(eventId, reminderMinutesBeforeList, dday: dDayOffsets),
       exceptEventId: eventId,
