@@ -2587,8 +2587,13 @@ private enum DailySiriDatabase {
     // Copy all native/Flutter fields (including completion and future columns).
     var columns: [String] = []
     guard sqlite3_prepare_v2(database, "PRAGMA table_info(event_records)", -1, &statement, nil) == SQLITE_OK else { throw DailySiriError.databaseUnavailable }
-    while sqlite3_step(statement) == SQLITE_ROW { columns.append(string(statement, 1)) }
+    var schemaStatus = sqlite3_step(statement)
+    while schemaStatus == SQLITE_ROW {
+      columns.append(string(statement, 1))
+      schemaStatus = sqlite3_step(statement)
+    }
     sqlite3_finalize(statement)
+    guard schemaStatus == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
     func quoted(_ column: String) -> String { "\"" + column.replacingOccurrences(of: "\"", with: "\"\"") + "\"" }
     let newID = UUID().uuidString
     let copied = columns.map { column -> String in
@@ -2657,7 +2662,11 @@ private enum DailySiriDatabase {
         }
       }
       var events: [DailySiriEvent] = []
-      while sqlite3_step(statement) == SQLITE_ROW {
+      var stepStatus = SQLITE_DONE
+      var reachedLimit = false
+      while true {
+        stepStatus = sqlite3_step(statement)
+        if stepStatus != SQLITE_ROW { break }
         let id = string(statement, 0)
         let metadata = optionalString(statement, 20)
         guard visibility.allows(id: id, metadata: metadata) else { continue }
@@ -2689,8 +2698,11 @@ private enum DailySiriDatabase {
         )
         // Apply limits after authorization, so hidden LMS rows cannot consume
         // the ordinary event search result limit.
-        if let limit, events.count >= limit { break }
+        if let limit, events.count >= limit { reachedLimit = true; break }
       }
+      // A failed step (BUSY, IOERR, ...) is not "no more rows": never hand back
+      // an empty or partial list as if the whole table had been read.
+      guard reachedLimit || stepStatus == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
       if visibility != lmsVisibility() { events.removeAll { $0.isLms } }
       return events
     }
@@ -2706,9 +2718,13 @@ private enum DailySiriDatabase {
       throw DailySiriError.databaseUnavailable
     }
     defer { sqlite3_finalize(statement) }
-    while sqlite3_step(statement) == SQLITE_ROW {
+    var status = sqlite3_step(statement)
+    while status == SQLITE_ROW {
       if string(statement, 1) == name { return true }
+      status = sqlite3_step(statement)
     }
+    // A failed schema read must not be reported as "column does not exist".
+    guard status == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
     return false
   }
 

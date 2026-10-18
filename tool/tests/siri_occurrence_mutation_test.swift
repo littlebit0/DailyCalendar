@@ -133,3 +133,39 @@ try addUntilSeries("until-long", hours: 48)
 try expectDays("until-long", localDate(27, 0), localDate(27, 12), [25, 26])
 try expectDays("until-long", localDate(29, 0), localDate(29, 12), [])
 print("Siri until-day inclusion checks passed")
+
+// #127: a failed read is an error, never an empty or "column missing" result.
+let probeStart = Date(timeIntervalSince1970: 1900000000)
+let probe = try DailySiriDatabase.add(title: "read failure probe", startAt: probeStart, endAt: probeStart.addingTimeInterval(3600),
+  allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+let probeFrom = probeStart.addingTimeInterval(-3600)
+let probeTo = probeStart.addingTimeInterval(7200)
+verify(try DailySiriDatabase.events(withIDs: [probe.id]).count == 1)
+var lockHolder: OpaquePointer?
+assert(sqlite3_open(testURL.path, &lockHolder) == SQLITE_OK)
+assert(sqlite3_exec(lockHolder, "BEGIN EXCLUSIVE", nil, nil, nil) == SQLITE_OK)
+rejected { _ = try DailySiriDatabase.events(from: probeFrom, to: probeTo) }
+rejected { _ = try DailySiriDatabase.events(withIDs: [probe.id]) }
+sqlite3_exec(lockHolder, "ROLLBACK", nil, nil, nil)
+sqlite3_close(lockHolder)
+verify(try DailySiriDatabase.events(withIDs: [probe.id]).count == 1)
+verify(try DailySiriDatabase.events(from: probeFrom, to: probeTo).contains { $0.id == probe.id })
+// The schema page is intact, so preparing succeeds and only stepping reports the
+// damaged table page: that must be an error, not "no events".
+var rootPage: Int32 = 0
+var pageSize: Int32 = 0
+var inspector: OpaquePointer?
+assert(sqlite3_open(testURL.path, &inspector) == SQLITE_OK)
+var inspect: OpaquePointer?
+sqlite3_prepare_v2(inspector, "SELECT (SELECT rootpage FROM sqlite_master WHERE name='event_records'), (SELECT page_size FROM pragma_page_size)", -1, &inspect, nil)
+assert(sqlite3_step(inspect) == SQLITE_ROW)
+rootPage = sqlite3_column_int(inspect, 0)
+pageSize = sqlite3_column_int(inspect, 1)
+sqlite3_finalize(inspect)
+sqlite3_close(inspector)
+let handle = try FileHandle(forUpdating: testURL)
+try handle.seek(toOffset: UInt64(rootPage - 1) * UInt64(pageSize))
+handle.write(Data(repeating: 0xFF, count: 8))
+try handle.close()
+rejected { _ = try DailySiriDatabase.events(from: probeFrom, to: probeTo) }
+print("Siri read failure checks passed")
