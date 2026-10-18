@@ -41,6 +41,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show OrdinalSortKey;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -8923,6 +8924,103 @@ void main() {
       },
     );
   }
+
+  testWidgets('quick view keeps category order for screen readers', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(393, 852);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final settingsRepository = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    const work = EventCategory(id: 'work', label: '업무', colorValue: 0xff7c3aed);
+    const study = EventCategory(id: 'study', label: '공부', colorValue: 0xff0f766e);
+    await settingsRepository.save(
+      settingsRepository.load().copyWith(
+        categories: const [EventCategory.basic, work, study],
+      ),
+    );
+    final now = DateTime.now();
+    CalendarEvent event(String id, EventCategory category, int day) {
+      final start = DateTime(now.year, now.month, day, 9);
+      return CalendarEvent(
+        id: id,
+        title: id,
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: category,
+        colorValue: category.colorValue,
+        createdAt: start,
+        updatedAt: start,
+      );
+    }
+
+    // The tall middle category pushes the third card under the first, so the
+    // columns hold categories [0, 2] and [1].
+    final repository = _StreamingEventRepository([
+      event('basic-1', EventCategory.basic, 5),
+      for (var i = 0; i < 6; i++) event('work-$i', work, 6 + i),
+      event('study-1', study, 20),
+    ]);
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(repository),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('빠른 보기'));
+    await tester.pumpAndSettle();
+
+    Finder card(String id) =>
+        find.byKey(ValueKey('quick-todo-category-$id'));
+    final basic = tester.getTopLeft(card('basic'));
+    final middle = tester.getTopLeft(card('work'));
+    final third = tester.getTopLeft(card('study'));
+    expect(third.dx, basic.dx, reason: 'third card sits under the first');
+    expect(middle.dx, greaterThan(basic.dx));
+
+    double sortKeyOf(String id) {
+      final semantics = find.ancestor(
+        of: card(id),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Semantics && widget.properties.sortKey != null,
+        ),
+      );
+      final key = tester.widget<Semantics>(semantics.first).properties.sortKey;
+      return (key! as OrdinalSortKey).order;
+    }
+
+    expect(sortKeyOf('basic'), lessThan(sortKeyOf('work')));
+    expect(sortKeyOf('work'), lessThan(sortKeyOf('study')));
+    handle.dispose();
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   testWidgets(
     'calendar filter save preserves a concurrent unrelated setting change',

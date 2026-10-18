@@ -1125,9 +1125,18 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                               columns;
                           // Cards keep their own height: each goes under the
                           // shortest column instead of waiting for the tallest
-                          // card of a row.
+                          // card of a row. Heights account for titles that
+                          // wrap to a second line at this card width.
                           final placement = assignQuickTodoColumns([
-                            for (final group in groups) group.events.length,
+                            for (final group in groups)
+                              quickTodoCardHeight([
+                                for (final event in group.events)
+                                  _quickTodoTitleLines(
+                                    context,
+                                    event,
+                                    cardWidth - _quickTodoRowChromeWidth,
+                                  ),
+                              ]),
                           ], columns);
                           return Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1141,7 +1150,14 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                       for (final index in placement[c]) ...[
                                         if (index != placement[c].first)
                                           const SizedBox(height: spacing),
-                                        _QuickTodoCategoryCard(
+                                        // Columns hold cards out of category
+                                        // order; the sort key restores it for
+                                        // screen readers.
+                                        Semantics(
+                                          sortKey: OrdinalSortKey(
+                                            index.toDouble(),
+                                          ),
+                                          child: _QuickTodoCategoryCard(
                                           group: groups[index],
                                           onCompletedChanged:
                                               (event, completed) => ref
@@ -1157,6 +1173,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                                 context,
                                                 event,
                                               ),
+                                          ),
                                         ),
                                       ],
                                     ],
@@ -1570,22 +1587,64 @@ class _AnimatedCalendarSidebarState extends State<_AnimatedCalendarSidebar>
 }
 
 /// Which card goes in which column of the quick view: each card (in category
-/// order) is placed under the column that is currently shortest, estimating a
-/// card's height from its event count. Returns the card indexes per column.
+/// order) is placed under the column that is currently shortest, given each
+/// card's estimated height. Returns the card indexes per column.
 @visibleForTesting
-List<List<int>> assignQuickTodoColumns(List<int> eventCounts, int columns) {
-  final heights = List<int>.filled(columns, 0);
+List<List<int>> assignQuickTodoColumns(List<num> cardHeights, int columns) {
+  final heights = List<double>.filled(columns, 0);
   final placement = List.generate(columns, (_) => <int>[]);
-  for (var index = 0; index < eventCounts.length; index++) {
+  for (var index = 0; index < cardHeights.length; index++) {
     var shortest = 0;
     for (var c = 1; c < columns; c++) {
       if (heights[c] < heights[shortest]) shortest = c;
     }
     placement[shortest].add(index);
-    // A card's title row counts like two events.
-    heights[shortest] += 2 + eventCounts[index];
+    heights[shortest] += cardHeights[index].toDouble();
   }
   return placement;
+}
+
+/// Width a quick-view row spends on its checkbox and padding; the rest holds
+/// the title text.
+const _quickTodoRowChromeWidth = 48.0 + 11.0;
+
+/// Estimated height of a quick-view card whose rows have the given number of
+/// title lines (a title wraps to at most two): the header plus each row, which
+/// is at least as tall as its checkbox, plus the dividers between rows.
+@visibleForTesting
+double quickTodoCardHeight(List<int> titleLines) {
+  var height = 44.0; // category header
+  for (var i = 0; i < titleLines.length; i++) {
+    final lines = titleLines[i].clamp(1, 2);
+    // padding 22 + title lines (14px * 1.25) + gap 2 + date line (11px * 1.25)
+    height += math.max(48.0, 22 + lines * 17.5 + 2 + 13.75);
+    if (i != titleLines.length - 1) height += 1;
+  }
+  return height;
+}
+
+int _quickTodoTitleLines(
+  BuildContext context,
+  CalendarEvent event,
+  double maxWidth,
+) {
+  if (maxWidth <= 0) return 2;
+  final painter = TextPainter(
+    text: TextSpan(
+      text: context.l10n.eventTitle(event.title, holiday: event.holiday),
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        fontWeight: FontWeight.w700,
+        fontSize: 14,
+        height: 1.25,
+        letterSpacing: 0,
+      ),
+    ),
+    textDirection: Directionality.of(context),
+    maxLines: 2,
+  )..layout(maxWidth: maxWidth);
+  final lines = painter.computeLineMetrics().length;
+  painter.dispose();
+  return lines.clamp(1, 2);
 }
 
 class _PaintOnlySearchLayout extends StatefulWidget {
