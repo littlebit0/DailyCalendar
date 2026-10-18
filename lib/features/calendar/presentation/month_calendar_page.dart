@@ -275,7 +275,10 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                       children: [
                                         if (_quickAccessSelected)
                                           Expanded(
-                                            child: _QuickMonthPageView(
+                                            child: Stack(
+                                              children: [
+                                                Positioned.fill(
+                                                  child: _QuickMonthPageView(
                                               month: month,
                                               onMonthChanged: (target) =>
                                                   _setVisibleMonth(
@@ -301,21 +304,38 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                                             ),
                                                   ),
                                             ),
+                                                ),
+                                                if (_searchOpen)
+                                                  // The search button also works
+                                                  // in quick view. The panel floats
+                                                  // over the page and sizes its
+                                                  // results to the space left, so a
+                                                  // short window cannot overflow.
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topCenter,
+                                                    child: LayoutBuilder(
+                                                      builder: (context, box) =>
+                                                          _buildInlineSearchPanel(
+                                                            maxResultsHeight:
+                                                                (box.maxHeight -
+                                                                        _inlineSearchChromeHeight)
+                                                                    .clamp(
+                                                                      0.0,
+                                                                      260.0,
+                                                                    ),
+                                                          ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
                                           )
                                         else
                                           Expanded(
                                             child: _PaintOnlySearchLayout(
                                               searchOpen: _searchOpen,
-                                              searchPanel: _InlineSearchPanel(
-                                                controller: _searchController,
-                                                focusNode: _searchFocusNode,
-                                                results: _searchResults,
-                                                onChanged: _handleSearchChanged,
-                                                onSubmitted: _runSearch,
-                                                onClose: _closeSearch,
-                                                onEventSelected:
-                                                    _selectSearchResult,
-                                              ),
+                                              searchPanel:
+                                                  _buildInlineSearchPanel(),
                                               child: RepaintBoundary(
                                                 key: const ValueKey(
                                                   'calendar-content-repaint-boundary',
@@ -470,6 +490,22 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       ),
     );
   }
+
+  /// Height the search field, its padding and a loading/empty row need.
+  static const _inlineSearchChromeHeight = 110.0;
+
+  _InlineSearchPanel _buildInlineSearchPanel({
+    double maxResultsHeight = 260,
+  }) => _InlineSearchPanel(
+    maxResultsHeight: maxResultsHeight,
+    controller: _searchController,
+    focusNode: _searchFocusNode,
+    results: _searchResults,
+    onChanged: _handleSearchChanged,
+    onSubmitted: _runSearch,
+    onClose: _closeSearch,
+    onEventSelected: _selectSearchResult,
+  );
 
   void _toggleSearch() {
     final opening = !_searchOpen;
@@ -855,6 +891,8 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       event.startAt.day,
     );
     _closeSearch();
+    // A result picked in quick view is shown on the calendar.
+    if (_quickAccessSelected) setState(() => _quickAccessSelected = false);
   }
 
   void _selectCalendarView(
@@ -2147,6 +2185,7 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
 
 class _InlineSearchPanel extends ConsumerWidget {
   const _InlineSearchPanel({
+    this.maxResultsHeight = 260,
     required this.controller,
     required this.focusNode,
     required this.results,
@@ -2156,6 +2195,7 @@ class _InlineSearchPanel extends ConsumerWidget {
     required this.onEventSelected,
   });
 
+  final double maxResultsHeight;
   final TextEditingController controller;
   final FocusNode focusNode;
   final Future<List<CalendarEvent>?>? results;
@@ -2270,8 +2310,9 @@ class _InlineSearchPanel extends ConsumerWidget {
                   ),
                 );
               }
+              if (maxResultsHeight <= 0) return const SizedBox.shrink();
               return ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 260),
+                constraints: BoxConstraints(maxHeight: maxResultsHeight),
                 child: ListView.separated(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(top: 10),

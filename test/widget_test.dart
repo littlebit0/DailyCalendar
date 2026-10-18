@@ -279,6 +279,179 @@ void main() {
     },
   );
 
+  testWidgets('the search button shows the search field in quick view', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appStartView': AppStartView.quickView.name,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsOneWidget);
+    // Closing leaves quick view as it was.
+    await tester.tap(find.byTooltip('닫기'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  Future<ProviderContainer> pumpQuickViewSearch(
+    WidgetTester tester,
+    List<CalendarEvent> events,
+    Size size,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = size;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appStartView': AppStartView.quickView.name,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(
+            _FakeEventRepository(events: events, searchable: true),
+          ),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    return ProviderScope.containerOf(tester.element(find.byType(MonthCalendarPage)));
+  }
+
+  CalendarEvent searchableEvent(String id, String title, DateTime start) =>
+      CalendarEvent(
+        id: id,
+        title: title,
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: start,
+        updatedAt: start,
+      );
+
+  testWidgets('picking a quick-view search result opens it on the calendar', (
+    tester,
+  ) async {
+    final target = DateTime(2031, 3, 15, 10);
+    final container = await pumpQuickViewSearch(tester, [
+      searchableEvent('hit', '검색대상회의', target),
+    ], const Size(390, 844));
+    expect(
+      find.byKey(const ValueKey('calendar-content-repaint-boundary')),
+      findsNothing,
+      reason: 'starts in quick view',
+    );
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.widgetWithText(TextField, '제목, 메모, 장소 검색'),
+      '검색대상',
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.text('검색대상회의'), findsOneWidget);
+
+    await tester.tap(find.text('검색대상회의'));
+    await tester.pumpAndSettle();
+
+    expect(container.read(selectedDateProvider), DateTime(2031, 3, 15));
+    expect(container.read(visibleMonthProvider), DateTime(2031, 3));
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('calendar-content-repaint-boundary')),
+      findsOneWidget,
+      reason: 'the result is shown on the calendar, not in quick view',
+    );
+    expect(tester.takeException(), isNull);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('quick-view search results do not overflow a short window', (
+    tester,
+  ) async {
+    final start = DateTime(2031, 3, 15, 10);
+    final events = [
+      for (var i = 0; i < 12; i++)
+        searchableEvent('e$i', '긴결과일정$i', start.add(Duration(days: i))),
+    ];
+    await pumpQuickViewSearch(tester, events, const Size(667, 375));
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.widgetWithText(TextField, '제목, 메모, 장소 검색'),
+      '긴결과',
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('긴결과일정0'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets('calendar search shows a failure with retry, not "no results"', (
     tester,
   ) async {
@@ -9614,8 +9787,13 @@ class _DelayedStartupEventRepository extends _FakeEventRepository {
 }
 
 class _FakeEventRepository implements EventRepository {
-  _FakeEventRepository({List<CalendarEvent> events = const []})
-    : _events = events;
+  _FakeEventRepository({
+    List<CalendarEvent> events = const [],
+    this.searchable = false,
+  }) : _events = events;
+
+  /// When true, `search` returns the events whose title contains the query.
+  final bool searchable;
 
   final List<CalendarEvent> _events;
   var clearAllCalls = 0;
@@ -9639,7 +9817,9 @@ class _FakeEventRepository implements EventRepository {
       searchFailures -= 1;
       throw StateError('lookup failed');
     }
-    return const [];
+    return searchable
+        ? _events.where((event) => event.title.contains(query)).toList()
+        : const [];
   }
 
   @override
