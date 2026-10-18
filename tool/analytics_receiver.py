@@ -235,6 +235,9 @@ class Aggregator:
     def accept(self, batch):
         with self.lock:
             self.directory.mkdir(parents=True, exist_ok=True)
+            # A transaction cut short by a failed write is finished first, so the
+            # totals and the dedupe record never disagree about an event.
+            self._recover_pending_transaction()
             self._delete_expired()
             now = self._now()
             day = now.strftime("%Y-%m-%d")
@@ -280,9 +283,46 @@ class Aggregator:
                 group["durationTotalMs"] += duration
                 group["durationMaxMs"] = max(group["durationMaxMs"], duration)
             aggregate["updatedAt"] = now.isoformat().replace("+00:00", "Z")
-            self._write_json(aggregate_path, aggregate)
-            self._write_json(dedupe_path, sorted(hashes))
+            if accepted:
+                # Two files cannot change together, and undoing the first change
+                # needs the same storage that just failed. So the complete result
+                # is recorded first as one atomic file; the two files are then
+                # written from it, and a crash or failure in between is finished
+                # by the next request (including the retry of this one).
+                self._write_json(
+                    self._journal_path,
+                    {
+                        "aggregate": {"name": aggregate_path.name, "value": aggregate},
+                        "dedupe": {"name": dedupe_path.name, "value": sorted(hashes)},
+                    },
+                )
+                self._apply_transaction(self._read_json(self._journal_path, None))
             return accepted
+
+    @property
+    def _journal_path(self):
+        return self.directory / "pending-transaction.json"
+
+    def _apply_transaction(self, transaction):
+        for part in ("aggregate", "dedupe"):
+            name = transaction[part]["name"]
+            if not re.fullmatch(r"(analytics|dedupe)-\d{4}-\d{2}-\d{2}\.json", name):
+                raise ValueError("Invalid transaction target")
+            self._write_json(self.directory / name, transaction[part]["value"])
+        self._journal_path.unlink(missing_ok=True)
+
+    def _recover_pending_transaction(self):
+        if not self._journal_path.exists():
+            return
+        transaction = self._read_json(self._journal_path, None)
+        if (
+            not isinstance(transaction, dict)
+            or not all(isinstance(transaction.get(part), dict) for part in ("aggregate", "dedupe"))
+        ):
+            # An unreadable record cannot be finished and must not block intake.
+            self._journal_path.unlink(missing_ok=True)
+            return
+        self._apply_transaction(transaction)
 
     def _read_json(self, path, fallback):
         try:
