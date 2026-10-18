@@ -16,6 +16,11 @@ enum StartupStage {
 
 class StartupTiming {
   static final _clock = Stopwatch()..start();
+
+  /// Starts the clock. Dart initializes statics lazily, so `main` calls this as
+  /// its first statement; otherwise the clock would start at the first `mark`
+  /// and every milestone would omit what ran before it.
+  static void begin() => _clock.elapsedTicks;
   static bool _firstFrameRecorded = false;
 
   static void mark(StartupStage stage, {int? durationUs, bool failed = false}) {

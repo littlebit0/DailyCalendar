@@ -2693,6 +2693,59 @@ void main() {
     expect(analytics.records.last.attributes.containsKey('errorCode'), isFalse);
   });
 
+  test('issue152 later independent syncs are never labelled as retries', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      // The retry stays pending for the whole test.
+      automaticRetryDelays: const [Duration(hours: 1)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
+
+    await service.restoreNow().catchError((Object _) {});
+    // A retry is scheduled, but this is a new, independent sync.
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .toList();
+    expect(started, hasLength(2));
+    expect(started.every((record) => !record.attributes.containsKey('attempt')), isTrue);
+  });
+
+  test('issue152 after the retry budget is spent new syncs stay first attempts', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      automaticRetryDelays: const [Duration(milliseconds: 5)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
+
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 80)); // the one retry runs and fails
+    analytics.records.clear();
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .single;
+    expect(started.attributes.containsKey('attempt'), isFalse);
+  });
+
   test('issue152 automatic retries are numbered and the first attempt is not',
       () async {
     SharedPreferences.setMockInitialValues({});

@@ -14,6 +14,7 @@ import 'core/settings/settings_repository.dart';
 import 'core/update/app_update_service.dart';
 
 Future<void> main() async {
+  StartupTiming.begin();
   WidgetsFlutterBinding.ensureInitialized();
   StartupTiming.mark(StartupStage.launch);
   runApp(StartupGate(initialize: _initializeApplication));
