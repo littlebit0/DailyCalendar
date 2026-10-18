@@ -107,7 +107,7 @@ def _valid_value(kind, value):
     if kind == "succeeded":
         return value == "succeeded"
     if kind == "failedOutcome":
-        return value in {"failed", "canceled"}
+        return isinstance(value, str) and value in {"failed", "canceled"}
     return isinstance(value, str) and value in ENUMS[kind]
 
 
@@ -130,6 +130,9 @@ def valid_event(event):
         return False
     if not _valid_timestamp(event["occurredAt"]):
         return False
+    # A list or object is valid JSON but unhashable: reject it, never raise.
+    if not isinstance(event["name"], str):
+        return False
     schema = SCHEMAS.get(event["name"])
     attributes = event["attributes"]
     if schema is None or not isinstance(attributes, dict) or set(attributes) != set(schema):
@@ -151,7 +154,13 @@ def valid_batch(batch):
         return False
     if not isinstance(environment["appVersion"], str) or not ANALYTICS_VERSION_PATTERN.fullmatch(environment["appVersion"]):
         return False
-    if environment["platform"] not in {"ios", "macos", "android", "windows", "linux"}:
+    if not isinstance(environment["platform"], str) or environment["platform"] not in {
+        "ios",
+        "macos",
+        "android",
+        "windows",
+        "linux",
+    }:
         return False
     if type(environment["osMajor"]) is not int:
         return False

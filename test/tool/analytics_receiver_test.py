@@ -45,6 +45,45 @@ class AnalyticsVersionTests(unittest.TestCase):
         self.assertFalse(valid_batch(batch))
 
 
+class MalformedTypeTests(unittest.TestCase):
+    """Valid JSON of the wrong type is rejected, never an exception."""
+
+    def batch(self):
+        return {
+            'schemaVersion': 1,
+            'sessionId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+            'environment': {'appVersion': '4.1.2', 'platform': 'macos', 'osMajor': 27},
+            'events': [{
+                'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+                'name': 'app_load_completed',
+                'occurredAt': '2026-10-13T00:00:00Z',
+                'attributes': {'durationMs': 25},
+            }],
+        }
+
+    def test_unhashable_platform_name_and_outcome_are_invalid_not_errors(self):
+        for bad in ([], {}, [1], {'a': 1}, None, 3):
+            batch = self.batch()
+            batch['environment']['platform'] = bad
+            self.assertFalse(valid_batch(batch), f'platform {bad!r}')
+            batch = self.batch()
+            batch['events'][0]['name'] = bad
+            self.assertFalse(valid_batch(batch), f'name {bad!r}')
+            batch = self.batch()
+            batch['events'][0]['name'] = 'sync_failed'
+            batch['events'][0]['attributes'] = {
+                'operation': 'upload',
+                'trigger': 'manual',
+                'outcome': bad,
+                'durationMs': 5,
+                'errorCode': 'network',
+            }
+            self.assertFalse(valid_batch(batch), f'outcome {bad!r}')
+
+    def test_the_normal_batch_is_still_accepted(self):
+        self.assertTrue(valid_batch(self.batch()))
+
+
 def _payload():
     return {
         "report": {
