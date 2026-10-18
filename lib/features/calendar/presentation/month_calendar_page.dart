@@ -1123,23 +1123,46 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                           final cardWidth =
                               (constraints.maxWidth - spacing * (columns - 1)) /
                               columns;
-                          return Wrap(
-                            spacing: spacing,
-                            runSpacing: spacing,
+                          // Cards keep their own height: each goes under the
+                          // shortest column instead of waiting for the tallest
+                          // card of a row.
+                          final placement = assignQuickTodoColumns([
+                            for (final group in groups) group.events.length,
+                          ], columns);
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              for (final group in groups)
+                              for (var c = 0; c < columns; c++) ...[
+                                if (c > 0) const SizedBox(width: spacing),
                                 SizedBox(
                                   width: cardWidth,
-                                  child: _QuickTodoCategoryCard(
-                                    group: group,
-                                    onCompletedChanged: (event, completed) =>
-                                        ref
-                                            .read(eventCommandServiceProvider)
-                                            .setCompleted(event, completed),
-                                    onOpen: (event) =>
-                                        _showQuickEventDetails(context, event),
+                                  child: Column(
+                                    children: [
+                                      for (final index in placement[c]) ...[
+                                        if (index != placement[c].first)
+                                          const SizedBox(height: spacing),
+                                        _QuickTodoCategoryCard(
+                                          group: groups[index],
+                                          onCompletedChanged:
+                                              (event, completed) => ref
+                                                  .read(
+                                                    eventCommandServiceProvider,
+                                                  )
+                                                  .setCompleted(
+                                                    event,
+                                                    completed,
+                                                  ),
+                                          onOpen: (event) =>
+                                              _showQuickEventDetails(
+                                                context,
+                                                event,
+                                              ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
+                              ],
                             ],
                           );
                         },
@@ -1544,6 +1567,25 @@ class _AnimatedCalendarSidebarState extends State<_AnimatedCalendarSidebar>
       ),
     );
   }
+}
+
+/// Which card goes in which column of the quick view: each card (in category
+/// order) is placed under the column that is currently shortest, estimating a
+/// card's height from its event count. Returns the card indexes per column.
+@visibleForTesting
+List<List<int>> assignQuickTodoColumns(List<int> eventCounts, int columns) {
+  final heights = List<int>.filled(columns, 0);
+  final placement = List.generate(columns, (_) => <int>[]);
+  for (var index = 0; index < eventCounts.length; index++) {
+    var shortest = 0;
+    for (var c = 1; c < columns; c++) {
+      if (heights[c] < heights[shortest]) shortest = c;
+    }
+    placement[shortest].add(index);
+    // A card's title row counts like two events.
+    heights[shortest] += 2 + eventCounts[index];
+  }
+  return placement;
 }
 
 class _PaintOnlySearchLayout extends StatefulWidget {
