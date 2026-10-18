@@ -227,4 +227,64 @@ void main() {
       ),
     );
   });
+
+  test(
+    'retries reuse the request ID and a different report gets a new one',
+    () async {
+      final seen = <String>[];
+      var failNext = true;
+      final client = MockClient((request) async {
+        seen.add(request.headers['idempotency-key']!);
+        if (failNext) {
+          failNext = false;
+          return http.Response('{"error":"upstream_unavailable"}', 503);
+        }
+        return http.Response(
+          jsonEncode({
+            'issueNumber': 7,
+            'issueUrl': 'https://github.com/littlebit0/DailyCalendar/issues/7',
+          }),
+          201,
+        );
+      });
+      final service = BugReportService(httpClient: client, endpoint: endpoint);
+      const headers = {'Authorization': 'Bearer google-access-token'};
+
+      await expectLater(
+        service.submit(
+          draft: draft,
+          environment: environment,
+          googleAuthorizationHeaders: headers,
+        ),
+        throwsA(isA<BugReportException>()),
+      );
+      await service.submit(
+        draft: draft,
+        environment: environment,
+        googleAuthorizationHeaders: headers,
+      );
+      expect(seen[0], seen[1]);
+
+      // After a success the same text is a new, separate report.
+      await service.submit(
+        draft: draft,
+        environment: environment,
+        googleAuthorizationHeaders: headers,
+      );
+      expect(seen[2], isNot(seen[1]));
+
+      await service.submit(
+        draft: const BugReportDraft(
+          title: '다른 제보',
+          description: '다른 문제입니다.',
+          reproductionSteps: '다른 단계',
+          expectedBehavior: '다른 기대',
+          actualBehavior: '다른 실제',
+        ),
+        environment: environment,
+        googleAuthorizationHeaders: headers,
+      );
+      expect(seen[3], isNot(seen[2]));
+    },
+  );
 }

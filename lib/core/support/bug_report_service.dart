@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
+import 'package:uuid/uuid.dart';
 
 class BugReportEnvironment {
   const BugReportEnvironment({
@@ -101,6 +103,27 @@ class BugReportService {
   final bool _ownsHttpClient;
   final Uri _endpoint;
 
+  /// One request ID per logical report, so a retry after a lost answer cannot
+  /// create a second issue. Cleared on success; a different report gets a new ID.
+  final Map<String, String> _requestIds = {};
+
+  String _requestIdFor(BugReportDraft draft, BugReportEnvironment environment) {
+    final fingerprint = sha256
+        .convert(
+          utf8.encode(
+            jsonEncode({
+              'report': draft.toJson(),
+              'environment': environment.toJson(),
+            }),
+          ),
+        )
+        .toString();
+    if (_requestIds.length >= 8 && !_requestIds.containsKey(fingerprint)) {
+      _requestIds.remove(_requestIds.keys.first);
+    }
+    return _requestIds.putIfAbsent(fingerprint, () => const Uuid().v4());
+  }
+
   Future<BugReportSubmission> submit({
     required BugReportDraft draft,
     required BugReportEnvironment environment,
@@ -127,6 +150,7 @@ class BugReportService {
         '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.',
       );
     }
+    final requestId = _requestIdFor(draft, environment);
     late final http.Response response;
     try {
       response = await _httpClient
@@ -135,10 +159,13 @@ class BugReportService {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': authorization,
+              // A header, so an older receiver that validates the body keys still accepts it.
+              'Idempotency-Key': requestId,
             },
             body: requestBody,
           )
-          .timeout(const Duration(seconds: 15));
+          // Covers the receiver's Google check and GitHub create/lookup budgets.
+          .timeout(const Duration(seconds: 40));
     } on Object {
       throw const BugReportException('network', '버그 제보 서버에 연결할 수 없습니다.');
     }
@@ -162,6 +189,7 @@ class BugReportService {
         '버그 제보 결과를 확인할 수 없습니다.',
       );
     }
+    _requestIds.removeWhere((_, id) => id == requestId);
     return BugReportSubmission(issueNumber: issueNumber, issueUrl: issueUrl);
   }
 

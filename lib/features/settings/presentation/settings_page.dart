@@ -1964,22 +1964,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     ref.read(appSettingsProvider.notifier).state = updated;
 
     final revision = ++_categoryReorderRevision;
+    // Queued saves outlive this screen, so take everything they need now:
+    // a disposed WidgetRef cannot be read once the screen has been closed.
+    final repository = ref.read(settingsRepositoryProvider);
+    final settingsState = ref.read(appSettingsProvider.notifier);
+    final syncService = ref.read(googleDriveSyncServiceProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final failureMessage = context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.');
     _categoryReorderSaveQueue = _categoryReorderSaveQueue.then((_) async {
       try {
-        await ref
-            .read(settingsRepositoryProvider)
-            .save(updated, changedFrom: settings);
+        await repository.save(updated, changedFrom: settings);
         if (revision == _categoryReorderRevision) {
-          _queueCategoryBackup();
+          unawaited(syncService.syncPendingChangesNow().catchError((_) {}));
         }
       } on Object {
-        if (!mounted || revision != _categoryReorderRevision) {
+        if (revision != _categoryReorderRevision) {
           return;
         }
-        ref.read(appSettingsProvider.notifier).state = settings;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
-        );
+        settingsState.state = settings;
+        if (mounted) {
+          messenger.showSnackBar(SnackBar(content: Text(failureMessage)));
+        }
       }
     });
   }
@@ -3979,6 +3984,12 @@ class _TimeFormatTile extends StatelessWidget {
   }
 }
 
+/// Chips for the D-day reminder offsets: the usual presets plus every stored
+/// value, so a custom offset can always be seen and switched off.
+@visibleForTesting
+List<int> ddayOffsetOptions(Iterable<int> stored) =>
+    ({-30, -14, -7, -3, -1, 0, ...stored}.toList()..sort());
+
 class _DdayOffsetsTile extends StatelessWidget {
   const _DdayOffsetsTile({
     required this.offsets,
@@ -3993,7 +4004,7 @@ class _DdayOffsetsTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final selected = offsets.toSet();
-    const presets = [-30, -14, -7, -3, -1, 0];
+    final options = ddayOffsetOptions(offsets);
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Column(
@@ -4021,7 +4032,7 @@ class _DdayOffsetsTile extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 6,
                   children: [
-                    for (final offset in presets)
+                    for (final offset in options)
                       FilterChip(
                         label: Text(_ddayLabel(offset)),
                         selected: selected.contains(offset),
