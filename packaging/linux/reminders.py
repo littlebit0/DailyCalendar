@@ -53,11 +53,25 @@ def validate(record):
         raise ValueError("Invalid repeat flag")
 
 
+def finish(path, record, now):
+    """Marks a handled reminder: repeating ones move to their next day."""
+    if record["repeatsDaily"]:
+        due = record["scheduledAt"]
+        record["scheduledAt"] = due + (int((now - due) // 86400) + 1) * 86400
+        save(path, record)
+    else:
+        path.unlink()
+
+
 def deliver(directory, now, notify):
+    # The slow part (talking to the notification service) must not run while the
+    # lock is held, or scheduling and cancelling would wait for it.
+    ready = []
     with locked(directory):
         for path in sorted(directory.glob("*.json")):
             try:
-                record = json.loads(path.read_text())
+                raw = path.read_text()
+                record = json.loads(raw)
                 validate(record)
             except (ValueError, TypeError):
                 # Preserve corrupt records for investigation, not repeated retries.
@@ -70,13 +84,26 @@ def deliver(directory, now, notify):
                 due = record["scheduledAt"]
                 if due > now:
                     continue
-                if now - due <= 300 and not notify(record):
-                    continue
-                if record["repeatsDaily"]:
-                    record["scheduledAt"] = due + (int((now - due) // 86400) + 1) * 86400
-                    save(path, record)
+                if now - due > 300:
+                    finish(path, record, now)  # too late to announce
                 else:
-                    path.unlink()
+                    ready.append((path, raw, record))
+            except Exception:
+                continue
+    delivered = []
+    for path, raw, record in ready:
+        try:
+            if notify(record):
+                delivered.append((path, raw, record))
+        except Exception:
+            continue
+    with locked(directory):
+        for path, raw, record in delivered:
+            try:
+                # Cancelled or rescheduled meanwhile: keep whatever is there now.
+                if path.read_text() != raw:
+                    continue
+                finish(path, record, now)
             except Exception:
                 continue
 
