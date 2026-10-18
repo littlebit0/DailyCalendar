@@ -1264,9 +1264,17 @@ class _WeekRowState extends State<_WeekRow> {
             .cast<_EventSegment>()
             .toList()
           ..sort((a, b) {
+            // A bar that starts earlier keeps the upper lane. Only bars starting
+            // on the same column are ordered by that date's manual order, so the
+            // reference date never depends on which pair is compared (a pairwise
+            // date could make A<B, B<C and C<A at the same time).
+            final startCompare = a.startCol.compareTo(b.startCol);
+            if (startCompare != 0) {
+              return startCompare;
+            }
             final comparisonDate = shiftCalendarDateByDays(
               weekStart,
-              math.max(a.startCol, b.startCol),
+              a.startCol,
             );
             final eventCompare = compareCalendarEvents(
               a.event,
@@ -1285,10 +1293,6 @@ class _WeekRowState extends State<_WeekRow> {
             );
             if (eventCompare != 0) {
               return eventCompare;
-            }
-            final startCompare = a.startCol.compareTo(b.startCol);
-            if (startCompare != 0) {
-              return startCompare;
             }
             final spanCompare = b.span.compareTo(a.span);
             if (spanCompare != 0) {
