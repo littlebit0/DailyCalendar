@@ -104,4 +104,41 @@ void main() {
       },
     );
   }
+
+  test(
+    'host departments keep their college while convergence majors stay grouped',
+    () {
+      final mappings =
+          (jsonDecode(
+                    File(
+                      'assets/timetable/organizations/dku.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>)['mappings']
+              as List;
+      Map<String, dynamic> mapping(String label, String campus) =>
+          mappings.cast<Map<String, dynamic>>().singleWhere(
+            (m) => m['sourceLabel'] == label && m['campus'] == campus,
+          );
+      for (final (label, campus, college) in [
+        ('공공인재대학 / 공공정책학과', 'cheonan', '공공인재대학'),
+        ('과학기술대학 / 수학과', 'cheonan', '과학기술대학'),
+        ('과학기술대학 / 제약공학과', 'cheonan', '과학기술대학'),
+        ('과학기술대학 / 화학과', 'cheonan', '과학기술대학'),
+        ('바이오융합대학 / 의생명과학부 생명과학전공', 'cheonan', '바이오융합대학'),
+        ('경영경제대학 / 경영학부 경영학전공', 'jukjeon', '경영경제대학'),
+        ('경영경제대학 / 무역학과', 'jukjeon', '경영경제대학'),
+        ('사회과학대학 / 행정학과', 'jukjeon', '사회과학대학'),
+      ]) {
+        final entry = mapping(label, campus);
+        expect(entry['college'], college, reason: label);
+        expect(entry['group'], isNull, reason: label);
+      }
+      // Genuine convergence programs keep their own group.
+      expect(
+        mappings.cast<Map<String, dynamic>>().any((m) => m['group'] == '융합전공'),
+        isTrue,
+      );
+    },
+  );
 }
