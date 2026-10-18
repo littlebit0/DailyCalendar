@@ -272,6 +272,68 @@ class SettingsRepository {
     });
   }
 
+  String _lmsLearningCheckedKey(
+    String ownerId,
+    String schoolId,
+    String lmsUserId,
+  ) {
+    final identity = jsonEncode([
+      ownerId.trim().toLowerCase(),
+      schoolId,
+      lmsUserId,
+    ]);
+    return 'daily.lms.learningChecked.v1.${sha256.convert(utf8.encode(identity))}';
+  }
+
+  /// When each lecture's learning values were last confirmed by the school
+  /// (event id -> UTC time), kept on this device only. A lecture the school did
+  /// not report on a later sync keeps its older time, so the app can say which
+  /// values may be stale instead of stamping them with the whole sync's time.
+  Map<String, DateTime> lmsLearningCheckedAt({
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) {
+    final raw = _preferences.get(
+      _lmsLearningCheckedKey(ownerId, schoolId, lmsUserId),
+    );
+    if (raw is! String) return const {};
+    try {
+      final decoded = jsonDecode(raw);
+      if (decoded is! Map) return const {};
+      return {
+        for (final entry in decoded.entries)
+          if (entry.key is String && entry.value is int)
+            entry.key as String: DateTime.fromMillisecondsSinceEpoch(
+              entry.value as int,
+              isUtc: true,
+            ),
+      };
+    } on FormatException {
+      return const {};
+    }
+  }
+
+  Future<void> saveLmsLearningCheckedAt(
+    Map<String, DateTime> checkedAt, {
+    required String ownerId,
+    required String schoolId,
+    required String lmsUserId,
+  }) async {
+    final key = _lmsLearningCheckedKey(ownerId, schoolId, lmsUserId);
+    if (checkedAt.isEmpty) {
+      await _preferences.remove(key);
+      return;
+    }
+    await _preferences.setString(
+      key,
+      jsonEncode({
+        for (final entry in checkedAt.entries)
+          entry.key: entry.value.toUtc().millisecondsSinceEpoch,
+      }),
+    );
+  }
+
   static const _defaultReminderKey = 'defaultReminderMinutes';
   static const _defaultReminderListKey = 'defaultReminderMinutesList';
   static const _allDayReminderHourKey = 'allDayReminderHour';

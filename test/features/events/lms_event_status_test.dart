@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class _Repository extends Fake implements EventRepository {}
@@ -39,6 +40,7 @@ LmsEventMetadata _lecture() => LmsEventMetadata(
 const _note = '일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.';
 
 void main() {
+  setUpAll(initializeDateFormatting);
   setUp(() {
     SharedPreferences.setMockInitialValues({});
     FlutterSecureStorage.setMockInitialValues({});
@@ -99,6 +101,65 @@ void main() {
     await pump(tester, _lecture(), partial);
     expect(find.text(_note), findsOneWidget);
   });
+
+  Future<void> stamp(
+    WidgetTester tester,
+    LmsController controller,
+    LmsEventMetadata metadata,
+    DateTime confirmed,
+    DateTime syncSuccess,
+  ) async {
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    await settings.saveLmsLearningCheckedAt(
+      {LmsSyncService.eventId(metadata): confirmed},
+      ownerId: metadata.ownerId,
+      schoolId: metadata.schoolId,
+      lmsUserId: metadata.lmsUserId,
+    );
+    controller.sync.lastSuccess = syncSuccess;
+  }
+
+  testWidgets(
+    'this lecture older than the latest sync is flagged even after a restart',
+    (tester) async {
+      final lecture = _lecture();
+      final controller = await pump(tester, lecture, null); // no lastResult
+      await stamp(
+        tester,
+        controller,
+        lecture,
+        DateTime.utc(2026, 10, 1, 12),
+        DateTime.utc(2026, 10, 5, 12),
+      );
+      controller.sync.notifyListeners();
+      await tester.pump();
+      expect(find.text(_note), findsOneWidget);
+      // The shown time is this lecture's, not the whole sync's.
+      expect(find.textContaining('2026. 10. 1.'), findsOneWidget);
+      expect(find.textContaining('2026. 10. 5.'), findsNothing);
+    },
+  );
+
+  testWidgets(
+    'a lecture confirmed in the latest sync is not flagged when another course failed',
+    (tester) async {
+      final lecture = _lecture();
+      final controller = await pump(tester, lecture, partial);
+      await stamp(
+        tester,
+        controller,
+        lecture,
+        DateTime.utc(2026, 10, 5, 12),
+        DateTime.utc(2026, 10, 5, 12),
+      );
+      controller.sync.notifyListeners();
+      await tester.pump();
+      expect(find.text(_note), findsNothing);
+      expect(find.textContaining('2026. 10. 5.'), findsOneWidget);
+    },
+  );
 
   testWidgets('a fully read sync shows no extra note', (tester) async {
     await pump(tester, _lecture(), complete);
