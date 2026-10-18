@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:daily/core/analytics/privacy_analytics_service.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
-import 'package:flutter/widgets.dart' show AppLifecycleState;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
