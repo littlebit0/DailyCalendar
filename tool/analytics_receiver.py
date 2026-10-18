@@ -69,6 +69,17 @@ ENUMS = {
     "buildMode": {"debug", "profile", "release"},
     "milestone": {"firstCalendarFrame", "localCalendarReady"},
     "abandonReason": {"sessionChanged"},
+    "lmsMethod": {"manual", "automatic"},
+    "lmsStage": {"credentials", "prepare", "authentication", "session"},
+    "lmsResult": {"succeeded", "failed", "skipped", "canceled"},
+    "lmsSkipReason": {"noCredentials", "paused", "attemptLimit"},
+    "lmsCause": {
+        "network", "timedOut", "additionalAuthentication", "credentialsRejected",
+        "accountLocked", "passwordExpired", "accountMismatch", "unsupportedForm",
+        "authenticationUnconfirmed", "invalidResponse", "hostUnavailable",
+        "viewUnavailable", "scriptUnavailable", "busy", "secureStorage",
+        "certificate", "serverRejected", "unknown",
+    },
     "feature": {"search", "filter", "widget", "calendarImport", "siri", "map"},
     "trigger": {"automatic", "manual", "startup", "resume", "localChange"},
     "outcome": {"succeeded", "failed", "canceled"},
@@ -93,6 +104,7 @@ OPTIONAL_SCHEMAS = {
         )
     },
     "sync_started": {"attempt": "syncAttempt"},
+    "lms_login": {"cause": "lmsCause", "skipReason": "lmsSkipReason"},
     **{
         name: {"durationTruncated": "truncatedFlag", "attempt": "syncAttempt"}
         for name in ("sync_succeeded", "sync_failed", "sync_abandoned")
@@ -120,6 +132,7 @@ SCHEMAS = {
         "operation": "syncOperation", "trigger": "trigger", "outcome": "succeeded",
         "durationMs": "duration",
     },
+    "lms_login": {"method": "lmsMethod", "stage": "lmsStage", "result": "lmsResult"},
     "sync_abandoned": {
         "operation": "syncOperation", "trigger": "trigger", "reason": "abandonReason",
         "durationMs": "duration",
@@ -195,6 +208,11 @@ def valid_event(event):
         return False
     kinds = {**optional, **schema}
     if not all(_valid_value(kinds[key], value) for key, value in attributes.items()):
+        return False
+    if event["name"] == "lms_login" and (
+        ("cause" in attributes) != (attributes["result"] == "failed")
+        or ("skipReason" in attributes) != (attributes["result"] == "skipped")
+    ):
         return False
     # The flag means the real duration was longer than the cap and was cut to it.
     if "durationTruncated" in attributes and attributes["durationMs"] != 120000:

@@ -3,13 +3,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
+import '../../../core/analytics/product_analytics.dart';
+import '../../../core/lms/lms_login_analytics.dart';
 import '../../../core/lms/lms_web_session.dart';
 import '../../../core/localization/app_localizations.dart';
 
 /// School credentials are entered only in the school's own web form.
 class LmsLoginPage extends StatefulWidget {
-  const LmsLoginPage({super.key, required this.session});
+  const LmsLoginPage({
+    super.key,
+    required this.session,
+    this.analytics = const NoopProductAnalytics(),
+  });
   final LmsWebSession session;
+  final ProductAnalytics analytics;
 
   @override
   State<LmsLoginPage> createState() => _LmsLoginPageState();
@@ -23,6 +30,22 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
   String? _visibleHost;
   double _progress = 0;
   final Set<DialogRoute<void>> _popupRoutes = {};
+  late final LmsLoginReporter _reporter = LmsLoginReporter(widget.analytics);
+  bool _reportedOutcome = false;
+
+  void _report(
+    AnalyticsLmsStage stage,
+    AnalyticsLmsResult result, {
+    LmsLoginFailure? cause,
+  }) {
+    _reportedOutcome = true;
+    _reporter.report(
+      method: AnalyticsLmsMethod.manual,
+      stage: stage,
+      result: result,
+      cause: cause,
+    );
+  }
 
   @override
   void initState() {
@@ -35,8 +58,16 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
       await widget.session.beginLogin();
       if (mounted) setState(() => _ready = true);
     } catch (error) {
+      // Leaving the screen already reported a cancellation for this attempt.
+      if (_reportedOutcome) return;
+      final failure = LmsLoginFailure.fromError(error);
+      _report(
+        AnalyticsLmsStage.prepare,
+        AnalyticsLmsResult.failed,
+        cause: failure,
+      );
       if (mounted) {
-        setState(() => _message = LmsLoginFailure.fromError(error).message);
+        setState(() => _message = failure.message);
       }
     }
   }
@@ -53,11 +84,17 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
       if (principal == null) {
         if (automatic) return;
         final failure = await widget.session.explainLoginFailure();
+        _report(
+          AnalyticsLmsStage.authentication,
+          AnalyticsLmsResult.failed,
+          cause: failure,
+        );
         if (mounted) setState(() => _message = failure.message);
         return;
       }
       await widget.session.finishLogin(authenticated: true);
       _finished = true;
+      _report(AnalyticsLmsStage.session, AnalyticsLmsResult.succeeded);
       if (mounted) {
         final navigator = Navigator.of(context);
         final loginRoute = ModalRoute.of(context);
@@ -75,6 +112,11 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
       }
     } catch (error) {
       final failure = await widget.session.explainLoginFailure(error);
+      _report(
+        AnalyticsLmsStage.authentication,
+        AnalyticsLmsResult.failed,
+        cause: failure,
+      );
       if (mounted) setState(() => _message = failure.message);
     } finally {
       if (mounted) setState(() => _checking = false);
@@ -124,6 +166,14 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
 
   @override
   void dispose() {
+    // Leaving the official login screen without finishing is a cancellation,
+    // not a failure. A screen still preparing is canceled at the prepare stage.
+    if (!_finished && !_reportedOutcome) {
+      _report(
+        _ready ? AnalyticsLmsStage.authentication : AnalyticsLmsStage.prepare,
+        AnalyticsLmsResult.canceled,
+      );
+    }
     if (!_finished) {
       unawaited(
         widget.session.finishLogin(authenticated: false).catchError((_) {}),

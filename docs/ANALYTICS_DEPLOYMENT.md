@@ -210,3 +210,20 @@ evidence of zero use**. The event's `outcome` means:
 Search text, imported event content, locations and Siri phrases are never recorded.
 Records written before this change used `succeeded` for every filter-sheet close;
 that older meaning is not reinterpreted. Receivers need no change (existing enums).
+
+## LMS login (#259)
+
+`lms_login` records one login outcome as fixed codes only: `method` (`manual` = the
+official login screen, including its own automatic completion check; `automatic` =
+the stored account), `stage` (`credentials`, `prepare`, `authentication`, `session`),
+`result` (`succeeded`, `failed`, `skipped`, `canceled`), plus `cause` (required for
+`failed`; the `LmsLoginFailure` codes, `unknown` when unsure) or `skipReason`
+(required for `skipped`: `noCredentials`, `paused`, `attemptLimit`). Skips and
+cancellations are never failures. A skipped automatic login is reported once per
+account/school/reason per process. Nothing else is collected: no account, ID, name,
+cookie, token, URL, form value, page content or exception/platform message ever
+enters the event, the queue or the server files; the app maps errors to the fixed
+codes at the source and both validators reject any other value. Drive sync failures
+stay in `sync_failed`. `cause` such as `timedOut` or `authenticationUnconfirmed` does
+not mean the password is wrong; only `credentialsRejected` reports the school's own
+wrong-credentials message. Deploy the receiver before the app.

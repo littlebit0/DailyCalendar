@@ -5,7 +5,9 @@ import 'package:flutter/foundation.dart';
 import '../../features/events/application/event_command_service.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_repository.dart';
+import '../analytics/product_analytics.dart';
 import '../settings/settings_repository.dart';
+import 'lms_login_analytics.dart';
 import 'lms_models.dart';
 import 'lms_sync_service.dart';
 import 'lms_web_session.dart';
@@ -21,7 +23,9 @@ class LmsController extends ChangeNotifier {
     LmsWebSession Function(String owner, String school)? createSession,
     FutureOr<void> Function()? onIntegrationChanged,
     LmsCredentialsStore? credentialsStore,
+    ProductAnalytics analytics = const NoopProductAnalytics(),
   }) : _credentials = credentialsStore ?? LmsCredentialsStore(),
+       _loginReporter = LmsLoginReporter(analytics),
        _settings = settings,
        _onIntegrationChanged = onIntegrationChanged,
        _createSession =
@@ -344,23 +348,47 @@ class LmsController extends ChangeNotifier {
     bool Function() valid,
   ) async {
     final key = _desiredKey;
-    if (_preparingLogin ||
-        key == null ||
-        !valid() ||
-        _automaticAttempts.contains(key)) {
+    if (_preparingLogin || key == null || !valid()) return false;
+    if (_automaticAttempts.contains(key)) {
+      _reportAutomaticSkip(key, AnalyticsLmsSkipReason.attemptLimit);
       return false;
     }
     LmsLocalCredentials? credentials;
     try {
       credentials = await _credentials.read(current.ownerId, current.schoolId);
     } catch (_) {
-      if (valid()) lastLoginFailure = LmsLoginFailure.secureStorage;
+      if (valid()) {
+        lastLoginFailure = LmsLoginFailure.secureStorage;
+        _reportAutomatic(
+          AnalyticsLmsStage.credentials,
+          AnalyticsLmsResult.failed,
+          cause: LmsLoginFailure.secureStorage,
+        );
+      } else {
+        _reportAutomatic(
+          AnalyticsLmsStage.credentials,
+          AnalyticsLmsResult.canceled,
+        );
+      }
       return false;
     } // Keychain failure must not destroy normal session/cache.
-    if (!valid() || credentials == null) return false;
+    if (!valid()) {
+      _reportAutomatic(
+        AnalyticsLmsStage.credentials,
+        AnalyticsLmsResult.canceled,
+      );
+      return false;
+    }
+    if (credentials == null) {
+      _reportAutomaticSkip(key, AnalyticsLmsSkipReason.noCredentials);
+      return false;
+    }
     automaticLoginPaused = credentials.paused;
     final explicit = _explicitRetryKey == key;
-    if (credentials.paused && !explicit) return false;
+    if (credentials.paused && !explicit) {
+      _reportAutomaticSkip(key, AnalyticsLmsSkipReason.paused);
+      return false;
+    }
     // The attempt submits the login as saved, whatever its paused flag says.
     final submitted = credentials.paused
         ? LmsLocalCredentials(credentials.username, credentials.password)
@@ -382,14 +410,37 @@ class LmsController extends ChangeNotifier {
         lastLoginFailure =
             current.lastAutomaticLoginFailure ??
             LmsLoginFailure.fromError(error);
+        _reportAutomatic(
+          AnalyticsLmsStage.authentication,
+          AnalyticsLmsResult.failed,
+          cause: lastLoginFailure,
+        );
+      } else {
+        _reportAutomatic(
+          AnalyticsLmsStage.authentication,
+          AnalyticsLmsResult.canceled,
+        );
       }
+      _reportedAutomaticError = error;
       rethrow;
     }
-    if (!valid()) return false;
+    if (!valid()) {
+      // The account or session changed while the school was answering.
+      _reportAutomatic(
+        AnalyticsLmsStage.authentication,
+        AnalyticsLmsResult.canceled,
+      );
+      return false;
+    }
     if (!success) {
       lastLoginFailure =
           current.lastAutomaticLoginFailure ??
           LmsLoginFailure.authenticationUnconfirmed;
+      _reportAutomatic(
+        AnalyticsLmsStage.authentication,
+        AnalyticsLmsResult.failed,
+        cause: lastLoginFailure,
+      );
       await _credentials.save(
         current.ownerId,
         current.schoolId,
@@ -407,6 +458,7 @@ class LmsController extends ChangeNotifier {
     lastLoginFailure = null;
     _stored = current.isAuthenticated;
     _restoredPrincipal = current.principalId;
+    _reportAutomatic(AnalyticsLmsStage.session, AnalyticsLmsResult.succeeded);
     if (credentials.paused) {
       // The school accepted this login: only now is the pause lifted.
       try {
@@ -423,6 +475,36 @@ class LmsController extends ChangeNotifier {
     if (!valid()) return false;
     await _refreshAuthenticatedSession(current, valid, force: true);
     return true;
+  }
+
+  final LmsLoginReporter _loginReporter;
+  final Set<String> _reportedAutomaticSkips = {};
+
+  /// The error whose automatic attempt already has its terminal outcome, so the
+  /// outer recovery does not re-enter and emit a second one.
+  Object? _reportedAutomaticError;
+
+  void _reportAutomatic(
+    AnalyticsLmsStage stage,
+    AnalyticsLmsResult result, {
+    LmsLoginFailure? cause,
+  }) => _loginReporter.report(
+    method: AnalyticsLmsMethod.automatic,
+    stage: stage,
+    result: result,
+    cause: cause,
+  );
+
+  /// A skipped automatic login is not a failure. It is reported once per
+  /// account/school and reason so repeated refreshes do not repeat it.
+  void _reportAutomaticSkip(String key, AnalyticsLmsSkipReason reason) {
+    if (!_reportedAutomaticSkips.add('$key:${reason.name}')) return;
+    _loginReporter.report(
+      method: AnalyticsLmsMethod.automatic,
+      stage: AnalyticsLmsStage.credentials,
+      result: AnalyticsLmsResult.skipped,
+      skipReason: reason,
+    );
   }
 
   Future<void> _refresh({required bool force}) async {
@@ -526,7 +608,7 @@ class LmsController extends ChangeNotifier {
             error.code == LmsWebSessionError.authenticationRequired;
         if (expired) _stored = false;
         sync.markRestoreFailed(authenticationRequired: expired);
-        if (expired) {
+        if (expired && !identical(error, _reportedAutomaticError)) {
           try {
             await _tryAutomaticLogin(current, valid);
           } catch (_) {
