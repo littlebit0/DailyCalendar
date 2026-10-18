@@ -100,6 +100,48 @@ void main() {
       expect(rule.count, 8);
     });
 
+    test('요일·서수 요일·월 내 날짜 조건을 보존한다', () {
+      var rule = CalendarImportService.recurrenceFromRrule(
+        'RRULE:FREQ=WEEKLY;BYDAY=MO,WE;COUNT=4',
+      );
+      expect(rule.byDay, ['MO', 'WE']);
+      expect(rule.count, 4);
+      rule = CalendarImportService.recurrenceFromRrule(
+        'FREQ=MONTHLY;BYDAY=2TU;COUNT=3',
+      );
+      expect(rule.byDay, ['2TU']);
+      rule = CalendarImportService.recurrenceFromRrule(
+        'FREQ=MONTHLY;BYDAY=MO,TU,WE,TH,FR;BYSETPOS=-1',
+      );
+      expect(rule.bySetPos, [-1]);
+      rule = CalendarImportService.recurrenceFromRrule(
+        'FREQ=MONTHLY;BYMONTHDAY=15,-1',
+      );
+      expect(rule.byMonthDay, [15, -1]);
+      rule = CalendarImportService.recurrenceFromRrule(
+        'FREQ=YEARLY;BYMONTH=11;BYDAY=4TH',
+      );
+      expect(rule.byMonth, [11]);
+      expect(rule.byDay, ['4TH']);
+      expect(rule.rawRule, isNull);
+    });
+
+    test('표현할 수 없는 조건은 단순 반복으로 바꾸지 않고 원문을 보존한다', () {
+      for (final text in [
+        'FREQ=YEARLY;BYWEEKNO=20;BYDAY=MO',
+        'FREQ=HOURLY;INTERVAL=2',
+        'FREQ=WEEKLY;BYDAY=2MO',
+        'FREQ=MONTHLY;BYSETPOS=1',
+        'FREQ=YEARLY;BYDAY=1MO',
+        'FREQ=WEEKLY;INTERVAL=2;WKST=SU;BYDAY=MO',
+        'FREQ=DAILY;BYHOUR=9',
+      ]) {
+        final rule = CalendarImportService.recurrenceFromRrule(text);
+        expect(rule.frequency, RecurrenceFrequency.none, reason: text);
+        expect(rule.rawRule, text, reason: text);
+      }
+    });
+
     test('UTC 종료 시각을 로컬 DateTime으로 변환한다', () {
       final rule = CalendarImportService.recurrenceFromRrule(
         'FREQ=DAILY;UNTIL=20260731T000000Z',
