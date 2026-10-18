@@ -39,6 +39,42 @@ enum AnalyticsStartupMilestone { firstCalendarFrame, localCalendarReady }
 /// Why a started sync ended without a success or failure result.
 enum AnalyticsSyncAbandonReason { sessionChanged }
 
+/// How a school (LMS) login was started. `manual` is the official login screen,
+/// including the screen's own automatic completion check; `automatic` is the
+/// stored-account login.
+enum AnalyticsLmsMethod { manual, automatic }
+
+/// The real boundary where a login attempt ended.
+enum AnalyticsLmsStage { credentials, prepare, authentication, session }
+
+enum AnalyticsLmsResult { succeeded, failed, skipped, canceled }
+
+/// Why no login was attempted. Never counted as a login failure.
+enum AnalyticsLmsSkipReason { noCredentials, paused, attemptLimit }
+
+/// Fixed safe cause codes; mirrors `LmsLoginFailure` (checked by a test) so no
+/// exception text can reach analytics.
+const analyticsLmsCauseValues = <String>{
+  'network',
+  'timedOut',
+  'additionalAuthentication',
+  'credentialsRejected',
+  'accountLocked',
+  'passwordExpired',
+  'accountMismatch',
+  'unsupportedForm',
+  'authenticationUnconfirmed',
+  'invalidResponse',
+  'hostUnavailable',
+  'viewUnavailable',
+  'scriptUnavailable',
+  'busy',
+  'secureStorage',
+  'certificate',
+  'serverRejected',
+  'unknown',
+};
+
 enum AnalyticsBuildMode { debug, profile, release }
 
 enum AnalyticsOutcome { succeeded, failed, canceled }
@@ -71,7 +107,8 @@ enum AnalyticsEventName {
   slowInteractionDetected('slow_interaction_detected'),
   frameSummary('frame_summary'),
   startupMilestone('startup_milestone'),
-  syncAbandoned('sync_abandoned');
+  syncAbandoned('sync_abandoned'),
+  lmsLogin('lms_login');
 
   const AnalyticsEventName(this.wireName);
 
@@ -234,6 +271,31 @@ class AnalyticsRecord {
     return AnalyticsRecord._(AnalyticsEventName.startupMilestone, {
       'milestone': milestone.name,
       ..._durationAttributes(durationMs),
+    });
+  }
+
+  /// One LMS login attempt outcome. [cause] is required for `failed` and
+  /// [skipReason] for `skipped`; neither is allowed otherwise. Only fixed codes
+  /// are accepted, never text from the school, the platform or the user.
+  factory AnalyticsRecord.lmsLogin({
+    required AnalyticsLmsMethod method,
+    required AnalyticsLmsStage stage,
+    required AnalyticsLmsResult result,
+    String? cause,
+    AnalyticsLmsSkipReason? skipReason,
+  }) {
+    final safeCause = result == AnalyticsLmsResult.failed
+        ? (cause != null && analyticsLmsCauseValues.contains(cause)
+              ? cause
+              : 'unknown')
+        : null;
+    return AnalyticsRecord._(AnalyticsEventName.lmsLogin, {
+      'method': method.name,
+      'stage': stage.name,
+      'result': result.name,
+      'cause': ?safeCause,
+      if (result == AnalyticsLmsResult.skipped)
+        'skipReason': (skipReason ?? AnalyticsLmsSkipReason.noCredentials).name,
     });
   }
 

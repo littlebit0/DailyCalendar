@@ -155,6 +155,53 @@ class SyncAttemptTests(unittest.TestCase):
         self.assertFalse(self.valid('sync_abandoned', {**good, 'errorCode': 'unknown'}))
 
 
+class LmsLoginTests(unittest.TestCase):
+    BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z',
+            'name': 'lms_login'}
+    COMMON = {'method': 'automatic', 'stage': 'authentication'}
+
+    def valid(self, **attributes):
+        from tool.analytics_receiver import valid_event
+        return valid_event({**self.BASE, 'attributes': {**self.COMMON, **attributes}})
+
+    def test_result_decides_which_detail_is_required(self):
+        self.assertTrue(self.valid(result='succeeded'))
+        self.assertTrue(self.valid(result='canceled'))
+        self.assertTrue(self.valid(result='failed', cause='timedOut'))
+        self.assertFalse(self.valid(result='failed'))
+        self.assertFalse(self.valid(result='succeeded', cause='timedOut'))
+        self.assertTrue(self.valid(result='skipped', skipReason='attemptLimit'))
+        self.assertFalse(self.valid(result='skipped'))
+        self.assertFalse(self.valid(result='failed', cause='timedOut', skipReason='paused'))
+
+    def test_only_fixed_codes_are_accepted(self):
+        self.assertFalse(self.valid(result='failed', cause='Exception: bad password for kim'))
+        self.assertFalse(self.valid(result='failed', cause='wrongPassword'))
+        self.assertFalse(self.valid(result='succeeded', stage='https://school.example/?ticket=1'))
+        self.assertFalse(self.valid(result='succeeded', username='kim'))
+
+    def test_accepted_events_are_aggregated_apart_from_drive_sync(self):
+        batch = {
+            'schemaVersion': 1,
+            'sessionId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+            'environment': {'appVersion': '4.1.2', 'platform': 'ios', 'osMajor': 27},
+            'events': [
+                {**self.BASE, 'attributes': {**self.COMMON, 'result': 'failed', 'cause': 'timedOut'}},
+                {**self.BASE, 'eventId': 'cccccccc-cccc-4ccc-8ccc-cccccccccccc', 'name': 'sync_failed',
+                 'attributes': {'operation': 'backup', 'trigger': 'manual', 'outcome': 'failed',
+                                'durationMs': 5, 'errorCode': 'timeout'}},
+            ],
+        }
+        self.assertTrue(valid_batch(batch))
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(Aggregator(directory).accept(batch), 2)
+            text = next(Path(directory).glob('analytics-*.json')).read_text()
+            groups = json.loads(text)['groups'].values()
+            self.assertEqual(sorted(g['name'] for g in groups), ['lms_login', 'sync_failed'])
+            for forbidden in ('password', 'ticket', 'student@'):
+                self.assertNotIn(forbidden, text)
+
+
 def _payload():
     return {
         "report": {

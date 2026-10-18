@@ -666,12 +666,24 @@ bool isSafeAnalyticsEvent(Object? value) {
     final validator = schema[entry.key] ?? optional[entry.key]!;
     if (!validator(entry.value)) return false;
   }
+  if (name == AnalyticsEventName.lmsLogin.wireName &&
+      !_lmsLoginConsistent(attributes)) {
+    return false;
+  }
   if (name == AnalyticsEventName.frameSummary.wireName &&
       (attributes['slowFrameCount'] as int) >
           (attributes['frameCount'] as int)) {
     return false;
   }
   return true;
+}
+
+bool _lmsLoginConsistent(Map<String, Object?> attributes) {
+  final result = attributes['result'];
+  return (attributes.containsKey('cause') ==
+          (result == AnalyticsLmsResult.failed.name)) &&
+      (attributes.containsKey('skipReason') ==
+          (result == AnalyticsLmsResult.skipped.name));
 }
 
 bool _isUuid(Object? value) {
@@ -717,6 +729,7 @@ final _analyticsOptionalAttributes =
         AnalyticsEventName.syncSucceeded: [_truncated, _attempt],
         AnalyticsEventName.syncFailed: [_truncated, _attempt],
         AnalyticsEventName.syncAbandoned: [_truncated, _attempt],
+        AnalyticsEventName.lmsLogin: [_lmsCause, _lmsSkipReason],
       }.entries)
         entry.key.wireName: {
           for (final attribute in entry.value)
@@ -726,6 +739,12 @@ final _analyticsOptionalAttributes =
 
 const _truncated = ('durationTruncated', _truncatedFlag);
 const _attempt = ('attempt', _syncAttempt);
+const _lmsCause = ('cause', _lmsCauseValue);
+const _lmsSkipReason = ('skipReason', _lmsSkipReasonValue);
+bool _lmsCauseValue(Object? value) =>
+    value is String && analyticsLmsCauseValues.contains(value);
+bool _lmsSkipReasonValue(Object? value) =>
+    _enumValue(value, AnalyticsLmsSkipReason.values);
 
 final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
   AnalyticsEventName.appLoadCompleted.wireName: {'durationMs': _duration},
@@ -769,6 +788,11 @@ final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
     'trigger': (value) => _enumValue(value, AnalyticsTrigger.values),
     'outcome': (value) => value == AnalyticsOutcome.succeeded.name,
     'durationMs': _duration,
+  },
+  AnalyticsEventName.lmsLogin.wireName: {
+    'method': (value) => _enumValue(value, AnalyticsLmsMethod.values),
+    'stage': (value) => _enumValue(value, AnalyticsLmsStage.values),
+    'result': (value) => _enumValue(value, AnalyticsLmsResult.values),
   },
   AnalyticsEventName.syncAbandoned.wireName: {
     'operation': (value) => _enumValue(value, AnalyticsSyncOperation.values),

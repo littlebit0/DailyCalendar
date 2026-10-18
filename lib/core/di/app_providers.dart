@@ -458,6 +458,7 @@ final lmsControllerProvider = ChangeNotifierProvider<LmsController>((ref) {
     settings: ref.watch(settingsRepositoryProvider),
     repository: ref.watch(eventRepositoryProvider),
     commands: ref.watch(eventCommandServiceProvider),
+    analytics: ref.watch(productAnalyticsProvider),
     onIntegrationChanged: () {
       ref.read(appSettingsProvider.notifier).state = ref
           .read(settingsRepositoryProvider)

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/analytics/privacy_analytics_service.dart';
+import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/lms/lms_controller.dart';
 import 'package:daily/core/lms/lms_credentials_store.dart';
@@ -16,6 +18,19 @@ import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+class _RecordingAnalytics extends NoopProductAnalytics {
+  final records = <AnalyticsRecord>[];
+  @override
+  Future<void> record(AnalyticsRecord record) async => records.add(record);
+}
+
+class _UnreadableCredentials extends LmsCredentialsStore {
+  @override
+  Future<LmsLocalCredentials?> read(String owner, String school) async {
+    throw StateError('fixture Keychain failure with secret-token-123');
+  }
+}
 
 class _DeferredCredentials extends LmsCredentialsStore {
   final reads = <Completer<LmsLocalCredentials?>>[];
@@ -974,4 +989,149 @@ void main() {
       expect(sessions.single.closes, 1);
     },
   );
+
+  group('LMS login analytics (#259)', () {
+    late _RecordingAnalytics analytics;
+    LmsController create({LmsCredentialsStore? store}) {
+      analytics = _RecordingAnalytics();
+      final local = LmsController(
+        settings: settings,
+        repository: repository,
+        commands: commands,
+        analytics: analytics,
+        credentialsStore: store,
+        createSession: (owner, school) {
+          final session = _Session(owner, school);
+          configure?.call(session);
+          sessions.add(session);
+          return session;
+        },
+      );
+      addTearDown(local.dispose);
+      return local;
+    }
+
+    Map<String, Object> only() {
+      expect(analytics.records, hasLength(1));
+      expect(analytics.records.single.name, AnalyticsEventName.lmsLogin);
+      final attributes = analytics.records.single.attributes;
+      expect(
+        isSafeAnalyticsEvent({
+          'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+          'name': 'lms_login',
+          'occurredAt': '2026-10-19T00:00:00Z',
+          'attributes': attributes,
+        }),
+        isTrue,
+      );
+      return attributes;
+    }
+
+    test('successful stored-account login is one automatic success', () async {
+      configure = (session) => session.stored = false;
+      await create().saveAutomaticLogin('test-user', 'fixture-password');
+      expect(only(), {
+        'method': 'automatic',
+        'stage': 'session',
+        'result': 'succeeded',
+      });
+    });
+
+    test('a rejected login reports the safe cause at the authentication stage', () async {
+      configure = (session) {
+        session.stored = false;
+        session.automaticSucceeds = false;
+      };
+      await create().saveAutomaticLogin('test-user', 'fixture-password');
+      expect(only(), {
+        'method': 'automatic',
+        'stage': 'authentication',
+        'result': 'failed',
+        'cause': 'authenticationUnconfirmed',
+      });
+    });
+
+    test('exception text and credentials never reach the record', () async {
+      configure = (session) {
+        session.stored = false;
+        session.automaticError = StateError(
+          'password=fixture-password token=secret-token-123 https://school.example/?ticket=abc',
+        );
+      };
+      await create()
+          .saveAutomaticLogin('test-user', 'fixture-password')
+          .catchError((Object _) {});
+      final json = analytics.records.single.attributes.toString();
+      for (final secret in [
+        'fixture-password',
+        'test-user',
+        'secret-token-123',
+        'school.example',
+        'ticket',
+        'student@example.com',
+      ]) {
+        expect(json, isNot(contains(secret)));
+      }
+      expect(only()['result'], 'failed');
+      expect(analyticsLmsCauseValues, contains(only()['cause']));
+    });
+
+    test('an unreadable credential store is a credentials-stage failure', () async {
+      configure = (session) => session.stored = false;
+      final local = create(store: _UnreadableCredentials());
+      await local.refresh(force: true);
+      expect(only(), {
+        'method': 'automatic',
+        'stage': 'credentials',
+        'result': 'failed',
+        'cause': 'secureStorage',
+      });
+    });
+
+    test('paused automatic login is a skip, reported once, not a failure', () async {
+      await LmsCredentialsStore().save(
+        'student@example.com',
+        'smu',
+        const LmsLocalCredentials('test-user', 'fixture-password', paused: true),
+      );
+      configure = (session) => session.stored = false;
+      final local = create();
+      await local.refresh(force: true);
+      await local.refresh(force: true);
+      expect(sessions.single.automaticLogins, 0);
+      expect(only(), {
+        'method': 'automatic',
+        'stage': 'credentials',
+        'result': 'skipped',
+        'skipReason': 'paused',
+      });
+    });
+
+    test('an account change during the school answer is canceled, not failed', () async {
+      final wait = Completer<void>();
+      configure = (session) {
+        session.stored = false;
+        session.automaticWait = wait;
+      };
+      final local = create();
+      final attempt = local.saveAutomaticLogin('test-user', 'fixture-password');
+      while (sessions.isEmpty || sessions.single.automaticLogins == 0) {
+        await Future<void>.delayed(Duration.zero);
+      }
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'other@example.com'),
+      );
+      local.settingsChanged();
+      wait.complete();
+      await attempt;
+      expect(only()['result'], 'canceled');
+    });
+
+    test('every LmsLoginFailure has a matching analytics cause code', () {
+      expect(
+        LmsLoginFailure.values.map((value) => value.name).toSet(),
+        analyticsLmsCauseValues,
+      );
+    });
+  });
 }
