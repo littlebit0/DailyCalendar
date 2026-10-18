@@ -5,6 +5,7 @@ import json
 import os
 import re
 import signal
+import sqlite3
 import tempfile
 import threading
 import uuid
@@ -215,74 +216,142 @@ class BugReportRateLimited(Exception):
 
 
 class Aggregator:
+    """Anonymous aggregate counters with hash-only duplicate protection.
+
+    State lives in one SQLite file so a request only touches its own events: a
+    duplicate hash is a primary-key conflict and the counters change in the same
+    transaction (a failure rolls both back). `analytics-YYYY-MM-DD.json` stays as
+    the readable report and is rebuilt from the counter rows of that day, whose
+    count is bounded by the number of distinct groups, not by the event count.
+    """
+
     def __init__(self, directory, now=None):
         self.directory = Path(directory)
         self.lock = threading.Lock()
         self._now = now or (lambda: datetime.now(timezone.utc))
+        self._database = self.directory / "analytics-state.sqlite"
 
     def accept(self, batch):
         with self.lock:
             self.directory.mkdir(parents=True, exist_ok=True)
-            self._delete_expired()
             now = self._now()
             day = now.strftime("%Y-%m-%d")
-            aggregate_path = self.directory / f"analytics-{day}.json"
-            dedupe_path = self.directory / f"dedupe-{day}.json"
-            aggregate_existed = aggregate_path.exists()
-            aggregate = self._read_json(
-                aggregate_path,
-                {"schemaVersion": 1, "date": day, "groups": {}},
-            )
-            previous_aggregate = copy.deepcopy(aggregate)
-            hashes = set(self._read_json(dedupe_path, []))
-            # A retry can arrive after UTC midnight: the retained earlier days
-            # still know the event, so they count as seen as well.
-            seen = set(hashes)
-            for back in range(1, DEDUPE_RETENTION_DAYS):
-                earlier = (now - timedelta(days=back)).strftime("%Y-%m-%d")
-                seen.update(self._read_json(self.directory / f"dedupe-{earlier}.json", []))
-            environment = batch["environment"]
-            accepted = 0
-            for event in batch["events"]:
-                event_hash = hashlib.sha256(event["eventId"].encode()).hexdigest()
-                if event_hash in seen:
-                    continue
-                seen.add(event_hash)
-                hashes.add(event_hash)
-                accepted += 1
-                attributes = dict(sorted(event["attributes"].items()))
-                key_data = {
-                    "appVersion": environment["appVersion"],
-                    "platform": environment["platform"],
-                    "osMajor": environment["osMajor"],
-                    "name": event["name"],
-                    "attributes": attributes,
-                }
-                key = json.dumps(key_data, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
-                group = aggregate["groups"].setdefault(
-                    key,
-                    {**key_data, "count": 0, "durationTotalMs": 0, "durationMaxMs": 0},
-                )
-                group["count"] += 1
-                duration = attributes.get("durationMs", 0)
-                group["durationTotalMs"] += duration
-                group["durationMaxMs"] = max(group["durationMaxMs"], duration)
-            aggregate["updatedAt"] = now.isoformat().replace("+00:00", "Z")
-            self._write_json(aggregate_path, aggregate)
+            connection = self._connect()
             try:
-                self._write_json(dedupe_path, sorted(hashes))
-            except BaseException:
-                # The two files cannot change together: put the totals back, so a
-                # retry of this request does not count the same events twice.
+                self._migrate(connection)
+                self._delete_expired(connection, now)
+                environment = batch["environment"]
+                accepted = 0
+                connection.execute("BEGIN IMMEDIATE")
                 try:
-                    if aggregate_existed:
-                        self._write_json(aggregate_path, previous_aggregate)
-                    else:
-                        aggregate_path.unlink(missing_ok=True)
-                except OSError:
-                    pass
-                raise
-            return accepted
+                    for event in batch["events"]:
+                        event_hash = hashlib.sha256(event["eventId"].encode()).hexdigest()
+                        inserted = connection.execute(
+                            "INSERT OR IGNORE INTO dedupe(hash, day) VALUES (?, ?)",
+                            (event_hash, day),
+                        ).rowcount
+                        if not inserted:
+                            continue
+                        accepted += 1
+                        self._count(connection, day, environment, event)
+                    connection.execute("COMMIT")
+                except BaseException:
+                    connection.execute("ROLLBACK")
+                    raise
+                self._export(connection, day, now)
+                return accepted
+            finally:
+                connection.close()
+
+    def _connect(self):
+        connection = sqlite3.connect(self._database, timeout=10, isolation_level=None)
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS dedupe(hash TEXT PRIMARY KEY, day TEXT NOT NULL)"
+        )
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS groups("
+            "day TEXT NOT NULL, key TEXT NOT NULL, data TEXT NOT NULL, "
+            "PRIMARY KEY(day, key))"
+        )
+        connection.execute("CREATE TABLE IF NOT EXISTS meta(name TEXT PRIMARY KEY, value TEXT)")
+        return connection
+
+    def _count(self, connection, day, environment, event):
+        attributes = dict(sorted(event["attributes"].items()))
+        key_data = {
+            "appVersion": environment["appVersion"],
+            "platform": environment["platform"],
+            "osMajor": environment["osMajor"],
+            "name": event["name"],
+            "attributes": attributes,
+        }
+        key = json.dumps(key_data, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+        row = connection.execute(
+            "SELECT data FROM groups WHERE day = ? AND key = ?", (day, key)
+        ).fetchone()
+        group = (
+            json.loads(row[0])
+            if row
+            else {**key_data, "count": 0, "durationTotalMs": 0, "durationMaxMs": 0}
+        )
+        group["count"] += 1
+        duration = attributes.get("durationMs", 0)
+        group["durationTotalMs"] += duration
+        group["durationMaxMs"] = max(group["durationMaxMs"], duration)
+        connection.execute(
+            "INSERT OR REPLACE INTO groups(day, key, data) VALUES (?, ?, ?)",
+            (day, key, json.dumps(group, ensure_ascii=True, sort_keys=True, separators=(",", ":"))),
+        )
+
+    def _export(self, connection, day, now):
+        """Rewrites the day's report from its counter rows (best effort)."""
+        rows = connection.execute("SELECT key, data FROM groups WHERE day = ?", (day,)).fetchall()
+        aggregate = {
+            "schemaVersion": 1,
+            "date": day,
+            "groups": {key: json.loads(data) for key, data in rows},
+            "updatedAt": now.isoformat().replace("+00:00", "Z"),
+        }
+        try:
+            self._write_json(self.directory / f"analytics-{day}.json", aggregate)
+        except OSError:
+            # The counters are already committed; the next request refreshes it.
+            pass
+
+    def _migrate(self, connection):
+        """One-time import of the earlier JSON aggregate and dedupe files."""
+        done = connection.execute("SELECT 1 FROM meta WHERE name = 'imported'").fetchone()
+        if done:
+            return
+        connection.execute("BEGIN IMMEDIATE")
+        try:
+            for path in self.directory.glob("dedupe-*.json"):
+                match = re.fullmatch(r"dedupe-(\d{4}-\d{2}-\d{2})\.json", path.name)
+                if not match:
+                    continue
+                for event_hash in self._read_json(path, []):
+                    if isinstance(event_hash, str):
+                        connection.execute(
+                            "INSERT OR IGNORE INTO dedupe(hash, day) VALUES (?, ?)",
+                            (event_hash, match.group(1)),
+                        )
+            for path in self.directory.glob("analytics-*.json"):
+                match = re.fullmatch(r"analytics-(\d{4}-\d{2}-\d{2})\.json", path.name)
+                groups = self._read_json(path, {}).get("groups", {}) if match else {}
+                for key, group in groups.items():
+                    connection.execute(
+                        "INSERT OR IGNORE INTO groups(day, key, data) VALUES (?, ?, ?)",
+                        (
+                            match.group(1),
+                            key,
+                            json.dumps(group, ensure_ascii=True, sort_keys=True, separators=(",", ":")),
+                        ),
+                    )
+            connection.execute("INSERT INTO meta(name, value) VALUES ('imported', '1')")
+            connection.execute("COMMIT")
+        except BaseException:
+            connection.execute("ROLLBACK")
+            raise
 
     def _read_json(self, path, fallback):
         try:
@@ -302,8 +371,12 @@ class Aggregator:
             if os.path.exists(temporary):
                 os.unlink(temporary)
 
-    def _delete_expired(self):
-        now = self._now().date()
+    def _delete_expired(self, connection, now):
+        today = now.date()
+        dedupe_cutoff = (today - timedelta(days=DEDUPE_RETENTION_DAYS)).strftime("%Y-%m-%d")
+        group_cutoff = (today - timedelta(days=90)).strftime("%Y-%m-%d")
+        connection.execute("DELETE FROM dedupe WHERE day < ?", (dedupe_cutoff,))
+        connection.execute("DELETE FROM groups WHERE day < ?", (group_cutoff,))
         for path in self.directory.glob("*.json"):
             match = re.fullmatch(r"(analytics|dedupe)-(\d{4}-\d{2}-\d{2})\.json", path.name)
             if not match:
@@ -313,7 +386,7 @@ class Aggregator:
             except ValueError:
                 continue
             retention = 90 if match.group(1) == "analytics" else DEDUPE_RETENTION_DAYS
-            if now - date > timedelta(days=retention):
+            if today - date > timedelta(days=retention):
                 path.unlink(missing_ok=True)
 
 

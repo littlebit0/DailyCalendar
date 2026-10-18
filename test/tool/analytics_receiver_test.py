@@ -89,25 +89,16 @@ class DedupeAcrossMidnightTests(unittest.TestCase):
 class AtomicAggregateTests(DedupeAcrossMidnightTests):
     """Same batch/count helpers as the midnight tests."""
 
-    def test_a_failed_dedupe_write_does_not_leave_the_totals_increased(self):
+    def test_a_failure_while_counting_leaves_neither_totals_nor_dedupe(self):
         from unittest import mock
         with tempfile.TemporaryDirectory() as directory:
             aggregator = Aggregator(directory)
-            original = aggregator._write_json
-            calls = {'dedupe': 0}
-
-            def flaky(path, value):
-                if path.name.startswith('dedupe-') and calls['dedupe'] == 0:
-                    calls['dedupe'] += 1
-                    raise OSError('disk full')
-                return original(path, value)
-
-            with mock.patch.object(aggregator, '_write_json', side_effect=flaky):
+            with mock.patch.object(aggregator, '_count', side_effect=OSError('disk full')):
                 with self.assertRaises(OSError):
                     aggregator.accept(self.batch())
-                # The failed request left no totals, so its retry counts once.
-                self.assertEqual(self.count(directory), 0)
-                self.assertEqual(aggregator.accept(self.batch()), 1)
+            # The failed request left nothing behind, so its retry counts once.
+            self.assertEqual(self.count(directory), 0)
+            self.assertEqual(aggregator.accept(self.batch()), 1)
             self.assertEqual(self.count(directory), 1)
 
     def test_totals_from_earlier_requests_survive_a_later_failure(self):
@@ -117,17 +108,62 @@ class AtomicAggregateTests(DedupeAcrossMidnightTests):
             self.assertEqual(aggregator.accept(self.batch()), 1)
             second = self.batch()
             second['events'][0]['eventId'] = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'
-            original = aggregator._write_json
-
-            def flaky(path, value):
-                if path.name.startswith('dedupe-'):
-                    raise OSError('disk full')
-                return original(path, value)
-
-            with mock.patch.object(aggregator, '_write_json', side_effect=flaky):
+            with mock.patch.object(aggregator, '_count', side_effect=OSError('disk full')):
                 with self.assertRaises(OSError):
                     aggregator.accept(second)
             self.assertEqual(self.count(directory), 1)
+            self.assertEqual(aggregator.accept(second), 1)
+            self.assertEqual(self.count(directory), 2)
+
+    def test_a_failed_report_export_does_not_fail_or_double_count(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            with mock.patch.object(aggregator, '_write_json', side_effect=OSError('read-only')):
+                self.assertEqual(aggregator.accept(self.batch()), 1)
+            # The retry is a duplicate; the report catches up on the next request.
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            self.assertEqual(self.count(directory), 1)
+
+
+class IncrementalStorageTests(DedupeAcrossMidnightTests):
+    def test_many_requests_never_write_a_growing_dedupe_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            for index in range(300):
+                batch = self.batch()
+                batch['events'][0]['eventId'] = f'00000000-0000-4000-8000-{index:012d}'
+                self.assertEqual(aggregator.accept(batch), 1)
+            self.assertEqual(self.count(directory), 300)
+            self.assertEqual(list(Path(directory).glob('dedupe-*.json')), [])
+            report = next(Path(directory).glob('analytics-*.json'))
+            # One counter group, however many events: the report stays small.
+            self.assertLess(report.stat().st_size, 2000)
+
+    def test_earlier_json_state_is_imported_once(self):
+        from datetime import datetime, timezone
+        import hashlib
+        with tempfile.TemporaryDirectory() as directory:
+            today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+            event_id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'
+            digest = hashlib.sha256(event_id.encode()).hexdigest()
+            group = {'appVersion': '4.1.2', 'platform': 'macos', 'osMajor': 27,
+                     'name': 'app_load_completed', 'attributes': {'durationMs': 25},
+                     'count': 5, 'durationTotalMs': 125, 'durationMaxMs': 25}
+            key = json.dumps({k: group[k] for k in ('appVersion', 'platform', 'osMajor', 'name', 'attributes')},
+                             ensure_ascii=True, sort_keys=True, separators=(',', ':'))
+            (Path(directory) / f'analytics-{today}.json').write_text(
+                json.dumps({'schemaVersion': 1, 'date': today, 'groups': {key: group}}))
+            (Path(directory) / f'dedupe-{today}.json').write_text(json.dumps([digest]))
+            aggregator = Aggregator(directory)
+            # The event seen before the upgrade is still a duplicate ...
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            # ... and the old totals were kept.
+            self.assertEqual(self.count(directory), 5)
+            other = self.batch()
+            other['events'][0]['eventId'] = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'
+            self.assertEqual(aggregator.accept(other), 1)
+            self.assertEqual(self.count(directory), 6)
 
 
 def _payload():
