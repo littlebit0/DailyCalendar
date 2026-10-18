@@ -64,8 +64,8 @@ void main() {
   });
 
   test('YU accepts the last day of a leap February and rejects beyond it', () {
-    String page(String start, String end) =>
-        "<script>var srYear = '2027'; var calData = [{\"startDt\":\"$start\","
+    String page(String start, String end, {int year = 2027}) =>
+        "<script>var srYear = '$year'; var calData = [{\"startDt\":\"$start\","
         '\"endDt\":\"$end\",\"etcChar2\":null,\"text\":\"겨울 일정\",'
         '\"categoryNm\":null,\"articleNo\":1,\"engTitle\":\"x\"}];</script>';
     final leap = YuAcademicSource.parse(page('2028-02-29', '2028-02-29'), 2027);
@@ -73,7 +73,10 @@ void main() {
     expect(leap.single.end, DateTime(2028, 3, 1));
     // 2027 is not a leap year, so its February ends on the 28th.
     expect(
-      () => YuAcademicSource.parse(page('2029-03-01', '2029-03-01'), 2028),
+      () => YuAcademicSource.parse(
+        page('2029-03-01', '2029-03-01', year: 2028),
+        2028,
+      ),
       throwsFormatException,
     );
     expect(
