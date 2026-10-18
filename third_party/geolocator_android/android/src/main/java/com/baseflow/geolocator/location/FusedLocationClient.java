@@ -45,6 +45,10 @@ class FusedLocationClient implements LocationClient {
   @Nullable private ErrorCallback errorCallback;
   @Nullable private PositionChangedCallback positionChangedCallback;
 
+  // Daily patch (#228): set by stopPositionUpdates so a settings check that is
+  // still pending cannot start the updates again after a cancellation.
+  private volatile boolean stopRequested = false;
+
   public FusedLocationClient(@NonNull Context context, @Nullable LocationOptions locationOptions) {
     this.context = context;
     this.fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
@@ -204,7 +208,8 @@ class FusedLocationClient implements LocationClient {
       if (resultCode == Activity.RESULT_OK) {
         if (this.locationOptions == null
             || this.positionChangedCallback == null
-            || this.errorCallback == null) {
+            || this.errorCallback == null
+            || stopRequested) {
           return false;
         }
 
@@ -229,6 +234,7 @@ class FusedLocationClient implements LocationClient {
 
     this.positionChangedCallback = positionChangedCallback;
     this.errorCallback = errorCallback;
+    this.stopRequested = false;
 
     LocationRequest locationRequest = buildLocationRequest(this.locationOptions);
     LocationSettingsRequest settingsRequest = buildLocationSettingsRequest(locationRequest);
@@ -237,9 +243,13 @@ class FusedLocationClient implements LocationClient {
     settingsClient
         .checkLocationSettings(settingsRequest)
         .addOnSuccessListener(
-            locationSettingsResponse -> requestPositionUpdates(this.locationOptions))
+            locationSettingsResponse -> {
+              if (stopRequested) return;
+              requestPositionUpdates(this.locationOptions);
+            })
         .addOnFailureListener(
             e -> {
+              if (stopRequested) return;
               if (e instanceof ResolvableApiException) {
                 // When we don't have an activity return an error code explaining the
                 // location services are not enabled
@@ -276,6 +286,7 @@ class FusedLocationClient implements LocationClient {
   }
 
   public void stopPositionUpdates() {
+    this.stopRequested = true;
     this.nmeaClient.stop();
     fusedLocationProviderClient.removeLocationUpdates(locationCallback);
   }

@@ -113,6 +113,10 @@ jobs:
         # --stacktrace: the task failure reported no cause, so show it in the log.
         run: ./gradlew :app:testDebugUnitTest --stacktrace
 
+      - name: Test Android location cancellation patch
+        working-directory: .
+        run: python3 -m unittest discover -s tool/tests -p test_geolocator_android_cancel.py -v
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
