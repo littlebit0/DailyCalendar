@@ -105,6 +105,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Test Android cookie expiry format
+        run: python3 -m unittest discover -s tool/tests -p test_android_cookie_expires.py -v
+
       - name: Build APK
         run: flutter build apk --debug --no-pub
 
