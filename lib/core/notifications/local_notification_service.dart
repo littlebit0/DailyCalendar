@@ -168,6 +168,9 @@ class LocalNotificationService implements NotificationService {
     final title = l10n.eventTitle(event.title, holiday: event.holiday);
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
+    final slotAllowance = event.recurrence.isRepeating
+        ? await _repeatingSlotAllowance(settings)
+        : null;
     for (final reminderMinutes in reminderMinutesList) {
       if (event.recurrence.isRepeating) {
         deliveredImmediateReminder = await _scheduleRepeatingReminders(
@@ -178,6 +181,7 @@ class LocalNotificationService implements NotificationService {
           l10n: l10n,
           allowImmediate: allowImmediate,
           deliveredImmediateReminder: deliveredImmediateReminder,
+          slotAllowance: slotAllowance,
         );
         continue;
       }
@@ -241,6 +245,76 @@ class LocalNotificationService implements NotificationService {
     }
   }
 
+  /// iOS keeps only the soonest 64 pending requests for the whole app.
+  static const _iosPendingLimit = 64;
+
+  /// How many occurrence slots each repeating `<id>:reminder:<min>` key may use.
+  ///
+  /// Single-shot reminders, D-day reminders, the morning briefing and one slot
+  /// per repeating key are counted first; the remaining room goes to the
+  /// soonest upcoming occurrences of all repeating events together. Null on
+  /// platforms without the limit. Other events are only re-planned when they
+  /// are next scheduled (app start, edit, sync restore).
+  @visibleForTesting
+  Future<Map<String, int>?> repeatingSlotAllowance(AppSettings settings) =>
+      _repeatingSlotAllowance(settings);
+
+  Future<Map<String, int>?> _repeatingSlotAllowance(
+    AppSettings settings,
+  ) async {
+    if (defaultTargetPlatform != TargetPlatform.iOS) return null;
+    final now = DateTime.now();
+    var fixed = settings.morningBriefingEnabled ? _briefingScheduleDays : 0;
+    final candidates = <MapEntry<String, DateTime>>[];
+    final keys = <String>[];
+    for (final other in await _eventRepository.allEventsForSync()) {
+      if (other.isDeleted ||
+          other.completed ||
+          other.systemEvent ||
+          other.readOnly) {
+        continue;
+      }
+      if (other.showDday) {
+        fixed += settings.dDayReminderOffsets.toSet().length;
+      }
+      for (final minutes in other.reminderMinutesBeforeList) {
+        if (!other.recurrence.isRepeating) {
+          final base = _baseReminderTime(other, settings);
+          final plan = resolveReminderDeliveryPlan(
+            reminderAt: base.subtract(Duration(minutes: minutes)),
+            fallbackAt: base,
+            eventEndAt: other.endAt,
+            now: now,
+            allowImmediate: false,
+            dueGrace: _dueReminderGrace,
+          );
+          if (plan.type == ReminderDeliveryType.scheduled) fixed++;
+          continue;
+        }
+        final key = '${other.id}:reminder:$minutes';
+        for (final request in planRecurringReminders(
+          event: other,
+          reminderMinutes: minutes,
+          baseTime: (occurrence) => _baseReminderTime(occurrence, settings),
+          now: now,
+          allowImmediate: false,
+          dueGrace: _dueReminderGrace,
+        )) {
+          candidates.add(MapEntry(key, request.plan.deliverAt!));
+        }
+        keys.add(key);
+      }
+    }
+    var room = (_iosPendingLimit - fixed).clamp(0, _iosPendingLimit);
+    // Earliest first, so each key keeps a contiguous prefix of its slots.
+    candidates.sort((a, b) => a.value.compareTo(b.value));
+    final allowance = {for (final key in keys) key: 0};
+    for (final candidate in candidates.take(room)) {
+      allowance[candidate.key] = allowance[candidate.key]! + 1;
+    }
+    return allowance;
+  }
+
   /// Schedules the next occurrences of a repeating event for one offset.
   ///
   /// Slot 0 keeps the legacy single-event key; later slots get `:sN` keys, so
@@ -253,16 +327,18 @@ class LocalNotificationService implements NotificationService {
     required AppLocalizations l10n,
     required bool allowImmediate,
     required bool deliveredImmediateReminder,
+    Map<String, int>? slotAllowance,
   }) async {
+    final baseKey = '${event.id}:reminder:$reminderMinutes';
     final requests = planRecurringReminders(
       event: event,
       reminderMinutes: reminderMinutes,
+      slots: slotAllowance?[baseKey] ?? recurringReminderSlotsPerOffset,
       baseTime: (occurrence) => _baseReminderTime(occurrence, settings),
       now: DateTime.now(),
       allowImmediate: allowImmediate,
       dueGrace: _dueReminderGrace,
     );
-    final baseKey = '${event.id}:reminder:$reminderMinutes';
     for (final request in requests) {
       if (request.plan.type == ReminderDeliveryType.immediate) {
         if (deliveredImmediateReminder) continue;

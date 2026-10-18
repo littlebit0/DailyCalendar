@@ -85,11 +85,22 @@ List<RecurringReminderRequest> planRecurringReminders({
   int slots = recurringReminderSlotsPerOffset,
 }) {
   final requests = <RecurringReminderRequest>[];
-  final occurrences = RecurrenceExpander().expand(
-    event,
-    now.subtract(event.duration + const Duration(days: 2)),
-    now.add(const Duration(days: 800)),
-  )..sort((a, b) => a.startAt.compareTo(b.startAt));
+  if (slots <= 0) return requests;
+  // Widen the search until a valid reminder exists, so a series whose next
+  // occurrence is years away (yearly, multi-year interval) keeps its reminder.
+  var occurrences = <CalendarEvent>[];
+  for (final days in const [800, 3700, 36600]) {
+    occurrences = RecurrenceExpander().expand(
+      event,
+      now.subtract(event.duration + const Duration(days: 2)),
+      now.add(Duration(days: days)),
+    )..sort((a, b) => a.startAt.compareTo(b.startAt));
+    final hasUpcoming = occurrences.any(
+      (o) =>
+          baseTime(o).isAfter(now.subtract(dueGrace)) || o.endAt.isAfter(now),
+    );
+    if (hasUpcoming) break;
+  }
   for (final occurrence in occurrences) {
     final base = baseTime(occurrence);
     final plan = resolveReminderDeliveryPlan(

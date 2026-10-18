@@ -201,6 +201,47 @@ void main() {
       }
     });
 
+    test(
+      'a first occurrence beyond the usual horizon still gets its reminder',
+      () {
+        final event = repeating(
+          DateTime(2029, 1, 1, 9),
+          const RecurrenceRule(frequency: RecurrenceFrequency.yearly),
+        );
+        final requests = plan(event, now: DateTime(2026, 10, 18));
+        expect(requests.first.plan.deliverAt, DateTime(2029, 1, 1, 8, 50));
+        final triennial = repeating(
+          DateTime(2020, 5, 1, 9),
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.yearly,
+            interval: 3,
+          ),
+        );
+        expect(
+          plan(triennial, now: DateTime(2026, 10, 18)).first.occurrence.startAt,
+          DateTime(2029, 5, 1, 9),
+        );
+      },
+    );
+
+    test('zero slots plan nothing', () {
+      final event = repeating(
+        DateTime(2026, 10, 14, 9),
+        const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+      );
+      expect(
+        planRecurringReminders(
+          event: event,
+          reminderMinutes: 10,
+          baseTime: (o) => o.startAt,
+          now: DateTime(2026, 10, 14, 8),
+          allowImmediate: false,
+          slots: 0,
+        ),
+        isEmpty,
+      );
+    });
+
     test('excluded dates and ended series produce no requests', () {
       final event = repeating(
         DateTime(2026, 10, 14, 9),

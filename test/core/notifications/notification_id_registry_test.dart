@@ -278,4 +278,61 @@ void main() {
       expect(ids.toSet().length, 100);
     },
   );
+
+  test('iOS shares its 64 pending requests across repeating events', () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final start = DateTime.now().add(const Duration(days: 1));
+    CalendarEvent series(String id, List<int> offsets) => CalendarEvent(
+      id: id,
+      title: id,
+      startAt: start,
+      endAt: start.add(const Duration(hours: 1)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: start,
+      updatedAt: start,
+      reminderMinutesBeforeList: offsets,
+      recurrence: const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+    );
+    // 9 series x 2 offsets would be 144 requests at 8 slots per offset.
+    for (var i = 0; i < 9; i++) {
+      await repository.save(series('s$i', [10, 30]));
+    }
+    final single = start.add(const Duration(days: 2));
+    await repository.save(
+      CalendarEvent(
+        id: 'single',
+        title: 'single',
+        startAt: single,
+        endAt: single.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: single,
+        updatedAt: single,
+        reminderMinutesBeforeList: [10],
+      ),
+    );
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    final service = LocalNotificationService(
+      settingsRepository: settings,
+      eventRepository: repository,
+    );
+    final allowance = (await service.repeatingSlotAllowance(settings.load()))!;
+    expect(allowance, hasLength(18));
+    // 14 briefing days and the single-shot reminder are reserved first.
+    expect(allowance.values.fold<int>(0, (a, b) => a + b), 64 - 14 - 1);
+    // The soonest occurrences are spread over every series, not one per series.
+    expect(allowance.values.every((slots) => slots > 0), isTrue);
+    debugDefaultTargetPlatformOverride = TargetPlatform.android;
+    expect(await service.repeatingSlotAllowance(settings.load()), isNull);
+  });
 }
