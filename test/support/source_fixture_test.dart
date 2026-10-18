@@ -33,7 +33,7 @@ void main() {
     'unknown absolute research input never falls back to the original machine',
     () {
       const recorded =
-          '/Users/kimhwi/Documents/Codex/littlebit0-daily-https-github-com-littlebit0/work/ci-unregistered-input.json';
+          '/Users/kimhwi/Documents/Codex/DailyCalendar/work/ci-unregistered-input.json';
       final file = fixtureFile(recorded);
       expect(file.path, isNot(recorded));
       expect(file.existsSync(), isFalse);
