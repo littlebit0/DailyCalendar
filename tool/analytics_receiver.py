@@ -60,6 +60,7 @@ ENUMS = {
     "phase": {"database", "followUp"},
     "buildMode": {"debug", "profile", "release"},
     "milestone": {"firstCalendarFrame", "localCalendarReady"},
+    "abandonReason": {"sessionChanged"},
     "feature": {"search", "filter", "widget", "calendarImport", "siri", "map"},
     "trigger": {"automatic", "manual", "startup", "resume", "localChange"},
     "outcome": {"succeeded", "failed", "canceled"},
@@ -75,12 +76,19 @@ ENUMS = {
 
 # Attributes a sender may add on top of the required ones; older apps omit them.
 OPTIONAL_SCHEMAS = {
-    name: {"durationTruncated": "truncatedFlag"}
-    for name in (
-        "app_load_completed", "event_editor_completed", "event_save_succeeded",
-        "event_save_failed", "sync_succeeded", "sync_failed",
-        "slow_interaction_detected", "frame_summary", "startup_milestone",
-    )
+    **{
+        name: {"durationTruncated": "truncatedFlag"}
+        for name in (
+            "app_load_completed", "event_editor_completed", "event_save_succeeded",
+            "event_save_failed", "slow_interaction_detected", "frame_summary",
+            "startup_milestone",
+        )
+    },
+    "sync_started": {"attempt": "syncAttempt"},
+    **{
+        name: {"durationTruncated": "truncatedFlag", "attempt": "syncAttempt"}
+        for name in ("sync_succeeded", "sync_failed", "sync_abandoned")
+    },
 }
 
 SCHEMAS = {
@@ -102,6 +110,10 @@ SCHEMAS = {
     "sync_started": {"operation": "syncOperation", "trigger": "trigger"},
     "sync_succeeded": {
         "operation": "syncOperation", "trigger": "trigger", "outcome": "succeeded",
+        "durationMs": "duration",
+    },
+    "sync_abandoned": {
+        "operation": "syncOperation", "trigger": "trigger", "reason": "abandonReason",
         "durationMs": "duration",
     },
     "sync_failed": {
@@ -130,6 +142,8 @@ def _valid_value(kind, value):
         return type(value) is int and 0 <= value <= 100000
     if kind == "refreshRate":
         return type(value) is int and 24 <= value <= 240
+    if kind == "syncAttempt":
+        return type(value) is int and 2 <= value <= 6
     if kind == "truncatedFlag":
         return value is True
     if kind == "frameCount":

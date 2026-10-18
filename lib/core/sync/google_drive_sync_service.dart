@@ -573,10 +573,15 @@ class GoogleDriveSyncService implements SyncService {
     final stopwatch = Stopwatch()..start();
     final analyticsOperation = _analyticsOperation(request.kind);
     final analyticsTrigger = _analyticsTrigger(request);
+    // Automatic retries of the same kind are numbered so one logical sync can
+    // be told apart from its single attempts.
+    final analyticsAttempt =
+        (_automaticRetryKind == request.kind ? _automaticRetryIndex : 0) + 1;
     _recordAnalytics(
       AnalyticsRecord.syncStarted(
         analyticsOperation,
         trigger: analyticsTrigger,
+        attempt: analyticsAttempt,
       ),
     );
     final message = switch (request.kind) {
@@ -754,6 +759,7 @@ class GoogleDriveSyncService implements SyncService {
           trigger: analyticsTrigger,
           outcome: AnalyticsOutcome.succeeded,
           durationMs: stopwatch.elapsedMilliseconds,
+          attempt: analyticsAttempt,
         ),
       );
     } on Object catch (error) {
@@ -761,6 +767,15 @@ class GoogleDriveSyncService implements SyncService {
         if (generation == _sessionGeneration) {
           statusNotifier.value = const GoogleDriveSyncStatus();
         }
+        _recordAnalytics(
+          AnalyticsRecord.syncAbandoned(
+            analyticsOperation,
+            trigger: analyticsTrigger,
+            reason: AnalyticsSyncAbandonReason.sessionChanged,
+            durationMs: stopwatch.elapsedMilliseconds,
+            attempt: analyticsAttempt,
+          ),
+        );
         rethrow;
       }
       _scheduleAutomaticRetry(request, error);
@@ -780,6 +795,7 @@ class GoogleDriveSyncService implements SyncService {
               : AnalyticsOutcome.failed,
           durationMs: stopwatch.elapsedMilliseconds,
           errorCode: categorizeAnalyticsError(error),
+          attempt: analyticsAttempt,
         ),
       );
       rethrow;

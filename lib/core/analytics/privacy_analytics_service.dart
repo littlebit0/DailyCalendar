@@ -689,6 +689,8 @@ bool _enumValue<T extends Enum>(Object? value, List<T> values) {
 bool _duration(Object? value) =>
     value is int && value >= 0 && value <= AnalyticsRecord.maxDurationMs;
 bool _truncatedFlag(Object? value) => value == true;
+bool _syncAttempt(Object? value) =>
+    value is int && value >= 2 && value <= AnalyticsRecord.maxSyncAttempt;
 bool _frameCount(Object? value) => value is int && value >= 0 && value <= 120;
 bool _framesInWindow(Object? value) =>
     value is int && value >= 1 && value <= AnalyticsRecord.maxFrameCount;
@@ -703,19 +705,27 @@ bool _refreshRate(Object? value) =>
 /// them, so receivers must accept both shapes.
 final _analyticsOptionalAttributes =
     <String, Map<String, bool Function(Object?)>>{
-      for (final name in [
-        AnalyticsEventName.appLoadCompleted,
-        AnalyticsEventName.eventEditorCompleted,
-        AnalyticsEventName.eventSaveSucceeded,
-        AnalyticsEventName.eventSaveFailed,
-        AnalyticsEventName.syncSucceeded,
-        AnalyticsEventName.syncFailed,
-        AnalyticsEventName.slowInteractionDetected,
-        AnalyticsEventName.frameSummary,
-        AnalyticsEventName.startupMilestone,
-      ])
-        name.wireName: {'durationTruncated': _truncatedFlag},
+      for (final entry in {
+        AnalyticsEventName.appLoadCompleted: [_truncated],
+        AnalyticsEventName.eventEditorCompleted: [_truncated],
+        AnalyticsEventName.eventSaveSucceeded: [_truncated],
+        AnalyticsEventName.eventSaveFailed: [_truncated],
+        AnalyticsEventName.slowInteractionDetected: [_truncated],
+        AnalyticsEventName.frameSummary: [_truncated],
+        AnalyticsEventName.startupMilestone: [_truncated],
+        AnalyticsEventName.syncStarted: [_attempt],
+        AnalyticsEventName.syncSucceeded: [_truncated, _attempt],
+        AnalyticsEventName.syncFailed: [_truncated, _attempt],
+        AnalyticsEventName.syncAbandoned: [_truncated, _attempt],
+      }.entries)
+        entry.key.wireName: {
+          for (final attribute in entry.value)
+            attribute.$1: attribute.$2,
+        },
     };
+
+const _truncated = ('durationTruncated', _truncatedFlag);
+const _attempt = ('attempt', _syncAttempt);
 
 final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
   AnalyticsEventName.appLoadCompleted.wireName: {'durationMs': _duration},
@@ -758,6 +768,12 @@ final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
     'operation': (value) => _enumValue(value, AnalyticsSyncOperation.values),
     'trigger': (value) => _enumValue(value, AnalyticsTrigger.values),
     'outcome': (value) => value == AnalyticsOutcome.succeeded.name,
+    'durationMs': _duration,
+  },
+  AnalyticsEventName.syncAbandoned.wireName: {
+    'operation': (value) => _enumValue(value, AnalyticsSyncOperation.values),
+    'trigger': (value) => _enumValue(value, AnalyticsTrigger.values),
+    'reason': (value) => _enumValue(value, AnalyticsSyncAbandonReason.values),
     'durationMs': _duration,
   },
   AnalyticsEventName.syncFailed.wireName: {
