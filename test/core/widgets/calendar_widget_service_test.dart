@@ -15,6 +15,85 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('per-day D-day lists are re-ranked and beyond the first six (#103)', () {
+    final now = DateTime(2026, 10, 1, 9);
+    // Seven D-days: one that has passed and six later ones. On the first day
+    // the past one is among the nearest six; ten days on, it no longer is and
+    // the seventh target has taken its place.
+    final events = [
+      _event(id: 'past', title: 'past', startAt: DateTime(2026, 9, 28, 9))
+          .copyWith(showDday: true),
+      for (var i = 0; i < 6; i++)
+        _event(
+          id: 'later-$i',
+          title: 'later-$i',
+          startAt: DateTime(2026, 10, 3 + i * 3, 9),
+        ).copyWith(showDday: true),
+    ];
+    final snapshot = CalendarWidgetSnapshotBuilder.build(
+      now: now,
+      settings: AppSettings(language: AppLanguage.korean),
+      gridStart: DateTime(2026, 9, 27),
+      monthEvents: const [],
+      allEvents: events,
+    );
+    List<String> idsOn(String date) => [
+      for (final view in (snapshot['dailyViews'] as List).cast<Map>())
+        if (view['date'] == date)
+          for (final dday in (view['ddays'] as List).cast<Map>())
+            dday['id'] as String,
+    ];
+    expect(idsOn('2026-10-01'), contains('past'));
+    expect(idsOn('2026-10-01'), isNot(contains('later-5')));
+    // From Oct 11 the nearest six no longer include the old target.
+    expect(idsOn('2026-10-11'), isNot(contains('past')));
+    expect(idsOn('2026-10-11'), contains('later-5'));
+  });
+
+  test('snapshot carries per-day views and D-day target dates (#103)', () {
+    final now = DateTime(2026, 10, 31, 9);
+    final gridStart = DateTime(2026, 9, 27);
+    final tomorrow = _event(
+      id: 'next',
+      title: 'Next day',
+      startAt: DateTime(2026, 11, 1, 10),
+    );
+    final dday = _event(
+      id: 'dday',
+      title: 'Exam',
+      startAt: DateTime(2026, 11, 10, 9),
+    ).copyWith(showDday: true);
+    final snapshot = CalendarWidgetSnapshotBuilder.build(
+      now: now,
+      settings: AppSettings(language: AppLanguage.korean),
+      gridStart: gridStart,
+      monthEvents: [tomorrow],
+      allEvents: [dday],
+    );
+
+    expect(snapshot['snapshotDate'], '2026-10-31');
+    final views = (snapshot['dailyViews'] as List).cast<Map>();
+    expect(views, hasLength(42));
+    expect(views.first['date'], '2026-09-27');
+    final today = views.firstWhere((view) => view['date'] == '2026-10-31');
+    final next = views.firstWhere((view) => view['date'] == '2026-11-01');
+    expect(today['todayEvents'], isEmpty);
+    expect((next['todayEvents'] as List).single['eventId'], 'next');
+    expect(next['todayTitle'], isNot(today['todayTitle']));
+    final ddays = (snapshot['ddays'] as List).cast<Map>();
+    expect(ddays.single['daysRemaining'], 10);
+    // Each cached day carries its own D-day list, measured from that day.
+    final remainingOn = {
+      for (final view in views)
+        view['date']: (view['ddays'] as List).cast<Map>().single['daysRemaining'],
+    };
+    expect(remainingOn['2026-10-31'], 10);
+    expect(remainingOn['2026-11-01'], 9);
+    expect(remainingOn['2026-11-07'], 3);
+    expect(snapshot['utcOffsetMinutes'], now.timeZoneOffset.inMinutes);
+    expect(snapshot['utcOffsetAtMs'], now.millisecondsSinceEpoch);
+  });
+
   test(
     'widget action retains the tapped date and rejects legacy whole-series ambiguity',
     () {

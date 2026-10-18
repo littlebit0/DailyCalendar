@@ -145,6 +145,16 @@ private enum DailyWidgetTodoActionStore {
       }
       snapshot["monthDays"] = days
     }
+    if var views = snapshot["dailyViews"] as? [[String: Any]] {
+      for index in views.indices {
+        for key in ["todayEvents", "ddays"] {
+          guard var events = views[index][key] as? [[String: Any]] else { continue }
+          update(&events, eventId: eventId, completed: completed, occurrenceId: occurrenceId)
+          views[index][key] = events
+        }
+      }
+      snapshot["dailyViews"] = views
+    }
     snapshot["generatedAt"] = Int64(Date().timeIntervalSince1970 * 1000)
     let updated = try JSONSerialization.data(withJSONObject: snapshot)
     try updated.write(to: url, options: .atomic)
@@ -387,6 +397,63 @@ struct DailyWidgetDday: Codable, Identifiable {
   }
 }
 
+// BEGIN WIDGET ROLLOVER
+/// Re-derives the "today" values of a stored snapshot for the device date.
+///
+/// Flutter computes todayTitle/todayEvents/weekTitle/isToday and the D-days for
+/// `snapshotDate` and, for every day of the cached month grid, a `dailyViews`
+/// entry with the same values for that day. When the date has moved on this
+/// switches to the matching entry, so no date arithmetic or ranking happens here.
+/// It returns nil when the snapshot cannot represent the situation (the date is
+/// outside the cached grid, or the time zone changed since the day buckets were
+/// built), so a widget never shows stale values as current (#103).
+enum DailyWidgetDateRollover {
+  /// yyyy-MM-dd in the Gregorian calendar and `timeZone`, whatever calendar the
+  /// user's region prefers (Buddhist, Islamic, ...).
+  static func dateKey(_ date: Date, timeZone: TimeZone = .current) -> String {
+    var calendar = Calendar(identifier: .gregorian)
+    calendar.timeZone = timeZone
+    let parts = calendar.dateComponents([.year, .month, .day], from: date)
+    return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
+  }
+
+  static func rollForward(
+    _ stored: [String: Any],
+    today: String,
+    timeZone: TimeZone = .current
+  ) -> [String: Any]? {
+    guard let snapshotDate = stored["snapshotDate"] as? String, !snapshotDate.isEmpty else {
+      return stored  // Written before this contract: no base date to compare.
+    }
+    // The day buckets were built with one UTC offset. A different offset at that
+    // same instant means the time zone changed, so a timed event may belong to
+    // another day than the one it was filed under.
+    if let built = (stored["utcOffsetMinutes"] as? NSNumber)?.intValue,
+       let builtAt = (stored["utcOffsetAtMs"] as? NSNumber)?.int64Value {
+      let now = timeZone.secondsFromGMT(for: Date(timeIntervalSince1970: Double(builtAt) / 1000)) / 60
+      if built != now { return nil }
+    }
+    if snapshotDate == today { return stored }
+    guard let views = stored["dailyViews"] as? [[String: Any]],
+          let view = views.first(where: { ($0["date"] as? String) == today }) else { return nil }
+    var rolled = stored
+    rolled["todayTitle"] = view["todayTitle"]
+    rolled["weekTitle"] = view["weekTitle"]
+    rolled["todayEvents"] = view["todayEvents"] ?? []
+    rolled["todayRemainingCount"] = view["todayRemainingCount"] ?? 0
+    rolled["ddays"] = view["ddays"] ?? []
+    rolled["snapshotDate"] = today
+    if var days = stored["monthDays"] as? [[String: Any]] {
+      for index in days.indices {
+        days[index]["isToday"] = (days[index]["date"] as? String) == today
+      }
+      rolled["monthDays"] = days
+    }
+    return rolled
+  }
+}
+// END WIDGET ROLLOVER
+
 struct DailyWidgetSnapshot: Codable {
   let generatedAt: Int64
   let themeMode: String?
@@ -399,6 +466,10 @@ struct DailyWidgetSnapshot: Codable {
   let todayRemainingCount: Int
   let scheduleEvents: [DailyWidgetEvent]?
   let ddays: [DailyWidgetDday]
+  // Present on snapshots written by newer app versions; only used for rollover.
+  var snapshotDate: String? = nil
+  /// Set on the placeholder shown when the cached data cannot cover today.
+  var needsRefresh: Bool? = nil
 
   func events(on date: Date) -> [DailyWidgetEvent] {
     guard let scheduleEvents else { return todayEvents }
@@ -417,7 +488,48 @@ struct DailyWidgetSnapshot: Codable {
     }
   }
 
-  static func load() -> DailyWidgetSnapshot {
+  /// Stored snapshot re-derived for `date`; a themed placeholder when it cannot cover that date.
+  static func load(for date: Date = .now) -> DailyWidgetSnapshot {
+    let stored = loadStored()
+    guard let raw = storedJSON() else { return stored }
+    guard let rolled = DailyWidgetDateRollover.rollForward(raw, today: DailyWidgetDateRollover.dateKey(date)),
+          let data = try? JSONSerialization.data(withJSONObject: rolled),
+          let snapshot = try? JSONDecoder().decode(DailyWidgetSnapshot.self, from: data) else {
+      return stored.refreshPlaceholder
+    }
+    return snapshot
+  }
+
+  static let refreshMessage = "앱을 열어 일정을 갱신하세요"
+
+  private var refreshPlaceholder: DailyWidgetSnapshot {
+    DailyWidgetSnapshot(
+      generatedAt: 0,
+      themeMode: themeMode,
+      monthTitle: "Daily",
+      weekTitle: nil,
+      weekStartsOnMonday: weekStartsOnMonday,
+      monthDays: [],
+      todayTitle: DailyWidgetSnapshot.refreshMessage,
+      todayEvents: [],
+      todayRemainingCount: 0,
+      scheduleEvents: [],
+      ddays: [],
+      needsRefresh: true
+    )
+  }
+
+  private static func storedJSON() -> [String: Any]? {
+    guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: appGroup
+          ),
+          let data = try? Data(contentsOf: containerURL.appendingPathComponent(snapshotFileName)) else {
+      return nil
+    }
+    return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+  }
+
+  private static func loadStored() -> DailyWidgetSnapshot {
     guard let containerURL = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: appGroup
           ),
@@ -457,14 +569,17 @@ struct DailyWidgetProvider: TimelineProvider {
   }
 
   func getSnapshot(in context: Context, completion: @escaping (DailyWidgetEntry) -> Void) {
-    completion(DailyWidgetEntry(date: .now, snapshot: DailyWidgetSnapshot.load()))
+    completion(DailyWidgetEntry(date: .now, snapshot: DailyWidgetSnapshot.load(for: .now)))
   }
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<DailyWidgetEntry>) -> Void) {
     let now = Date.now
-    let snapshot = DailyWidgetSnapshot.load()
+    let snapshot = DailyWidgetSnapshot.load(for: now)
     let entry = DailyWidgetEntry(date: now, snapshot: snapshot)
-    let midnight = Calendar.current.startOfDay(for: now).addingTimeInterval(24 * 60 * 60)
+    let calendar = Calendar.current
+    // Calendar arithmetic keeps the refresh on local midnight across DST changes.
+    let midnight = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))
+      ?? now.addingTimeInterval(24 * 60 * 60)
     let eventBoundaries = (snapshot.scheduleEvents ?? []).flatMap { event in
       [event.startDate, event.endDate].compactMap { $0 }.filter { $0 > now }
     }
@@ -681,6 +796,14 @@ struct DailyMonthWidgetView: View {
       .frame(height: 20)
       .layoutPriority(1)
 
+      if entry.snapshot.needsRefresh == true {
+        Spacer()
+        Text(DailyWidgetSnapshot.refreshMessage)
+          .font(.subheadline)
+          .foregroundStyle(Color.dailySecondary)
+          .multilineTextAlignment(.center)
+        Spacer()
+      } else {
       HStack(spacing: 2) {
         ForEach(Array(weekdayLabels.enumerated()), id: \.offset) { index, label in
           Text(label)
@@ -700,6 +823,7 @@ struct DailyMonthWidgetView: View {
         if weekIndex < 5 {
           Spacer(minLength: 0)
         }
+      }
       }
     }
     .dailyWidgetBackground(themeMode: entry.snapshot.themeMode)
@@ -736,7 +860,13 @@ struct DailyWeekWidgetView: View {
         systemImage: "calendar.badge.clock"
       )
 
-      if weekDays.isEmpty {
+      if entry.snapshot.needsRefresh == true {
+        Spacer()
+        Text(DailyWidgetSnapshot.refreshMessage)
+          .font(.subheadline)
+          .foregroundStyle(Color.dailySecondary)
+        Spacer()
+      } else if weekDays.isEmpty {
         Spacer()
         Text("이번 주 일정이 없습니다")
           .font(.subheadline)
@@ -831,7 +961,13 @@ struct DailyDdayWidgetView: View {
   var body: some View {
     VStack(alignment: .leading, spacing: 8) {
       DailyWidgetHeader(title: "D-day", systemImage: "flag")
-      if entry.snapshot.ddays.isEmpty {
+      if entry.snapshot.needsRefresh == true {
+        Spacer()
+        Text(DailyWidgetSnapshot.refreshMessage)
+          .font(.subheadline)
+          .foregroundStyle(Color.dailySecondary)
+        Spacer()
+      } else if entry.snapshot.ddays.isEmpty {
         Spacer()
         Text("표시할 D-day가 없습니다")
           .font(.subheadline)

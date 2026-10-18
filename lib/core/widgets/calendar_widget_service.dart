@@ -239,11 +239,15 @@ class CalendarWidgetSnapshotBuilder {
     );
     final localeName = locale.toLanguageTag();
     final l10n = AppLocalizations(locale);
-    final weekOffset = settings.weekStartsOnMonday
-        ? today.weekday - DateTime.monday
-        : today.weekday % DateTime.daysPerWeek;
-    final weekStart = shiftCalendarDateByDays(today, -weekOffset);
-    final weekEnd = shiftCalendarDateByDays(weekStart, 6);
+    String weekTitleFor(DateTime day) {
+      final offset = settings.weekStartsOnMonday
+          ? day.weekday - DateTime.monday
+          : day.weekday % DateTime.daysPerWeek;
+      final start = shiftCalendarDateByDays(day, -offset);
+      final end = shiftCalendarDateByDays(start, 6);
+      return '${DateFormat.MMMd(localeName).format(start)} - '
+          '${DateFormat.MMMd(localeName).format(end)}';
+    }
     final visibleMonthEvents = monthEvents
         .where((event) => _isVisible(event, settings))
         .toList(growable: false);
@@ -252,40 +256,88 @@ class CalendarWidgetSnapshotBuilder {
       gridStart,
       shiftCalendarDateByDays(gridStart, 42),
     );
-    final todayEvents =
-        List<CalendarEvent>.from(monthEventsByDay[_dateKey(today)] ?? const [])
+    List<CalendarEvent> eventsOn(DateTime day) =>
+        List<CalendarEvent>.from(monthEventsByDay[_dateKey(day)] ?? const [])
           ..sort((left, right) {
             if (left.allDay != right.allDay) {
               return left.allDay ? -1 : 1;
             }
             return left.startAt.compareTo(right.startAt);
           });
+    final todayEvents = eventsOn(today);
 
-    final ddayEvents =
-        allEvents
-            .where((event) => event.showDday && _isVisible(event, settings))
-            .toList()
-          ..sort((left, right) {
-            final leftDistance = _dateOnly(
-              left.startAt,
-            ).difference(today).inDays.abs();
-            final rightDistance = _dateOnly(
-              right.startAt,
-            ).difference(today).inDays.abs();
-            final distanceOrder = leftDistance.compareTo(rightDistance);
-            return distanceOrder != 0
-                ? distanceOrder
-                : left.startAt.compareTo(right.startAt);
-          });
+    final ddayCandidates = allEvents
+        .where((event) => event.showDday && _isVisible(event, settings))
+        .toList(growable: false);
+    // The six D-days shown on [day], nearest first, with the counter measured
+    // from that day. Each cached day carries its own list, so a widget opened
+    // days later neither keeps expired entries ahead of nearer targets nor
+    // misses a target that only became one of the six since.
+    List<Map<String, Object?>> ddaysFor(DateTime day) {
+      final sorted = ddayCandidates.toList()
+        ..sort((left, right) {
+          final leftDistance = calendarDayDifference(
+            day,
+            _dateOnly(left.startAt),
+          ).abs();
+          final rightDistance = calendarDayDifference(
+            day,
+            _dateOnly(right.startAt),
+          ).abs();
+          final distanceOrder = leftDistance.compareTo(rightDistance);
+          return distanceOrder != 0
+              ? distanceOrder
+              : left.startAt.compareTo(right.startAt);
+        });
+      return sorted
+          .take(6)
+          .map((event) {
+            final target = _dateOnly(event.startAt);
+            return {
+              'id': event.id,
+              'title': l10n.eventTitle(event.title, holiday: event.holiday),
+              'dateLabel':
+                  '${target.year}.${_two(target.month)}.${_two(target.day)}',
+              'daysRemaining': calendarDayDifference(target, day),
+              'color': event.colorValue,
+              'completed': event.completed,
+            };
+          })
+          .toList(growable: false);
+    }
 
     return {
       'generatedAt': now.millisecondsSinceEpoch,
+      // The UTC offset the day buckets were built with. A widget that finds the
+      // device now uses a different offset at that same instant (the time zone
+      // changed) must not trust them and asks the app to refresh.
+      'utcOffsetMinutes': now.timeZoneOffset.inMinutes,
+      'utcOffsetAtMs': now.millisecondsSinceEpoch,
       'localeTag': localeName,
       'themeMode': settings.themeMode.name,
       'monthTitle': DateFormat.yMMMM(localeName).format(now),
-      'weekTitle':
-          '${DateFormat.MMMd(localeName).format(weekStart)} - '
-          '${DateFormat.MMMd(localeName).format(weekEnd)}',
+      'weekTitle': weekTitleFor(today),
+      // The day the derived "today" values were computed for. Native widgets
+      // compare it with the device date and pick the matching `dailyViews`
+      // entry instead of showing yesterday's values (#103).
+      'snapshotDate': _dateKey(today),
+      'dailyViews': List.generate(42, (index) {
+        final day = _dateOnly(shiftCalendarDateByDays(gridStart, index));
+        final dayEvents = eventsOn(day);
+        return {
+          'date': _dateKey(day),
+          'todayTitle': DateFormat.MMMd(localeName).format(day),
+          'weekTitle': weekTitleFor(day),
+          'todayEvents': dayEvents
+              .take(8)
+              .map((event) => _eventJson(event, l10n))
+              .toList(growable: false),
+          'todayRemainingCount': dayEvents.length > 8
+              ? dayEvents.length - 8
+              : 0,
+          'ddays': ddaysFor(day),
+        };
+      }),
       'weekStartsOnMonday': settings.weekStartsOnMonday,
       'monthDays': List.generate(42, (index) {
         final date = shiftCalendarDateByDays(gridStart, index);
@@ -327,22 +379,7 @@ class CalendarWidgetSnapshotBuilder {
               }))
               .map((event) => _eventJson(event, l10n))
               .toList(growable: false),
-      'ddays': ddayEvents
-          .take(6)
-          .map((event) {
-            final target = _dateOnly(event.startAt);
-            final remaining = target.difference(today).inDays;
-            return {
-              'id': event.id,
-              'title': l10n.eventTitle(event.title, holiday: event.holiday),
-              'dateLabel':
-                  '${target.year}.${_two(target.month)}.${_two(target.day)}',
-              'daysRemaining': remaining,
-              'color': event.colorValue,
-              'completed': event.completed,
-            };
-          })
-          .toList(growable: false),
+      'ddays': ddaysFor(today),
     };
   }
 

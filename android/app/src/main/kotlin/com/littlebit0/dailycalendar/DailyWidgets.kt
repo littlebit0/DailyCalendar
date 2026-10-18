@@ -116,7 +116,7 @@ object DailyWidgetUpdater {
         kind: DailyWidgetKind,
     ) {
         if (widgetIds.isEmpty()) return
-        val snapshot = DailyAndroidWidgetStore.snapshot(context)
+        val snapshot = DailyAndroidWidgetStore.displaySnapshot(context)
         val palette = DailyWidgetPalette.resolve(context, snapshot?.optString("themeMode"))
         widgetIds.forEach { widgetId ->
             val views = when (kind) {
@@ -429,7 +429,7 @@ private class DailyMonthWidgetFactory(
     override fun hasStableIds(): Boolean = true
 
     private fun reload() {
-        snapshot = DailyAndroidWidgetStore.snapshot(context)
+        snapshot = DailyAndroidWidgetStore.displaySnapshot(context)
         days = snapshot?.optJSONArray("monthDays") ?: JSONArray()
         if (isWeeklyWidget(context, widgetId)) {
             val todayIndex = (0 until days.length()).firstOrNull {
@@ -518,7 +518,7 @@ private class DailyEventWidgetFactory(
     override fun hasStableIds(): Boolean = true
 
     private fun reload() {
-        snapshot = DailyAndroidWidgetStore.snapshot(context)
+        snapshot = DailyAndroidWidgetStore.displaySnapshot(context)
         events = snapshot?.optJSONArray(snapshotKey) ?: JSONArray()
         palette = DailyWidgetPalette.resolve(context, snapshot?.optString("themeMode"))
     }

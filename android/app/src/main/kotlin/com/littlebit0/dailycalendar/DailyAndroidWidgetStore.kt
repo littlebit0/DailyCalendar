@@ -35,6 +35,10 @@ object DailyAndroidWidgetStore {
         return runCatching { JSONObject(raw) }.getOrNull()
     }
 
+    /** The stored snapshot re-derived for today's date; null when it cannot cover today. */
+    fun displaySnapshot(context: Context): JSONObject? =
+        snapshot(context)?.let { DailyWidgetDateRollover.rollForward(it, DailyWidgetDateRollover.todayKey()) }
+
     @Synchronized
     fun enqueueTodoAction(
         context: Context,
@@ -150,6 +154,14 @@ object DailyAndroidWidgetStore {
         updateCompletionInEvents(snapshot.optJSONArray("todayEvents"), eventId, completed, occurrenceId)
         updateCompletionInEvents(snapshot.optJSONArray("scheduleEvents"), eventId, completed, occurrenceId)
         updateCompletionInEvents(snapshot.optJSONArray("ddays"), eventId, completed, occurrenceId)
+
+        snapshot.optJSONArray("dailyViews")?.let { views ->
+            for (viewIndex in 0 until views.length()) {
+                val view = views.optJSONObject(viewIndex)
+                updateCompletionInEvents(view?.optJSONArray("todayEvents"), eventId, completed, occurrenceId)
+                updateCompletionInEvents(view?.optJSONArray("ddays"), eventId, completed, occurrenceId)
+            }
+        }
 
         val monthDays = snapshot.optJSONArray("monthDays") ?: return
         for (dayIndex in 0 until monthDays.length()) {

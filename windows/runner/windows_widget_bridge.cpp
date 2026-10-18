@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <array>
+#include <cstdio>
 #include <cwctype>
 #include <ctime>
 #include <filesystem>
@@ -19,6 +20,7 @@
 #include <variant>
 
 #include "app_identity.h"
+#include "widget_date_rollover.h"
 #include "resource.h"
 
 namespace {
@@ -305,6 +307,47 @@ void WindowsWidgetBridge::HandleMethodCall(
   result->NotImplemented();
 }
 
+void WindowsWidgetBridge::RollSnapshotToToday() {
+  const std::time_t now = std::time(nullptr);
+  const std::string today = daily_widgets::LocalDateKey(now);
+  std::vector<std::string> view_dates;
+  view_dates.reserve(snapshot_.daily_views.size());
+  for (const auto& view : snapshot_.daily_views) {
+    view_dates.push_back(view.date);
+  }
+  const auto decision = daily_widgets::DecideRollover(
+      snapshot_.snapshot_date, today, snapshot_.has_utc_offset,
+      snapshot_.utc_offset_minutes,
+      daily_widgets::LocalUtcOffsetMinutes(static_cast<std::time_t>(
+          snapshot_.utc_offset_at_ms / 1000)),
+      view_dates);
+  if (decision.action == daily_widgets::RolloverAction::kKeep) {
+    return;
+  }
+  for (auto& day : snapshot_.month_days) {
+    day.is_today = !day.date.empty() && day.date == today;
+  }
+  if (decision.action == daily_widgets::RolloverAction::kNeedsRefresh) {
+    // The cache cannot represent today (outside the grid, or the time zone
+    // changed): do not present old values as current. Ask the user to open the
+    // app, which sends a fresh snapshot.
+    snapshot_.today_events.clear();
+    snapshot_.today_remaining_count = 0;
+    snapshot_.today_title = OpenLabel(snapshot_.locale_tag);
+    snapshot_.ddays.clear();
+    for (auto& day : snapshot_.month_days) {
+      day.is_today = false;
+    }
+    return;
+  }
+  const DailyView& view = snapshot_.daily_views[decision.view_index];
+  snapshot_.today_title = view.today_title;
+  snapshot_.today_events = view.today_events;
+  snapshot_.today_remaining_count = view.today_remaining_count;
+  snapshot_.ddays = view.ddays;
+  snapshot_.snapshot_date = today;
+}
+
 bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
   Snapshot parsed = BuildCurrentMonthFallback();
   parsed.month_title = Utf16FromUtf8(StringValue(map, "monthTitle"));
@@ -332,6 +375,7 @@ bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
         continue;
       }
       MonthDay day;
+      day.date = StringValue(*day_map, "date");
       day.day = static_cast<int>(
           std::clamp<std::int64_t>(IntegerValue(*day_map, "day"), 0, 31));
       day.in_month = BoolValue(*day_map, "inMonth");
@@ -362,9 +406,36 @@ bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
     }
   }
 
-  parsed.today_events.clear();
-  if (const auto* events = AsList(MapValue(map, "todayEvents"))) {
-    parsed.today_events.reserve(events->size());
+  const auto parse_ddays = [](const flutter::EncodableList* ddays) {
+    std::vector<DdayEvent> parsed_ddays;
+    if (ddays == nullptr) {
+      return parsed_ddays;
+    }
+    parsed_ddays.reserve(ddays->size());
+    for (const auto& encoded_dday : *ddays) {
+      const auto* dday_map = std::get_if<flutter::EncodableMap>(&encoded_dday);
+      if (dday_map == nullptr) {
+        continue;
+      }
+      DdayEvent dday;
+      dday.title = Utf16FromUtf8(StringValue(*dday_map, "title"));
+      dday.date_label = Utf16FromUtf8(StringValue(*dday_map, "dateLabel"));
+      dday.days_remaining = static_cast<int>(std::clamp<std::int64_t>(
+          IntegerValue(*dday_map, "daysRemaining"),
+          std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
+      dday.color = static_cast<std::uint32_t>(
+          IntegerValue(*dday_map, "color", 0xFF2563EB));
+      dday.completed = BoolValue(*dday_map, "completed");
+      parsed_ddays.push_back(std::move(dday));
+    }
+    return parsed_ddays;
+  };
+  const auto parse_today_events = [](const flutter::EncodableList* events) {
+    std::vector<TodayEvent> parsed_events;
+    if (events == nullptr) {
+      return parsed_events;
+    }
+    parsed_events.reserve(events->size());
     for (const auto& encoded_event : *events) {
       const auto* event_map =
           std::get_if<flutter::EncodableMap>(&encoded_event);
@@ -382,34 +453,44 @@ bool WindowsWidgetBridge::UpdateSnapshot(const flutter::EncodableMap& map) {
       event.color = static_cast<std::uint32_t>(
           IntegerValue(*event_map, "color", 0xFF2563EB));
       event.completed = BoolValue(*event_map, "completed");
-      parsed.today_events.push_back(std::move(event));
+      parsed_events.push_back(std::move(event));
     }
-  }
+    return parsed_events;
+  };
+  parsed.today_events = parse_today_events(AsList(MapValue(map, "todayEvents")));
 
-  parsed.ddays.clear();
-  if (const auto* ddays = AsList(MapValue(map, "ddays"))) {
-    parsed.ddays.reserve(ddays->size());
-    for (const auto& encoded_dday : *ddays) {
-      const auto* dday_map =
-          std::get_if<flutter::EncodableMap>(&encoded_dday);
-      if (dday_map == nullptr) {
+  parsed.snapshot_date = StringValue(map, "snapshotDate");
+  if (MapValue(map, "utcOffsetMinutes") != nullptr &&
+      MapValue(map, "utcOffsetAtMs") != nullptr) {
+    parsed.has_utc_offset = true;
+    parsed.utc_offset_minutes = static_cast<int>(
+        std::clamp<std::int64_t>(IntegerValue(map, "utcOffsetMinutes"), -1440, 1440));
+    parsed.utc_offset_at_ms = IntegerValue(map, "utcOffsetAtMs");
+  }
+  parsed.daily_views.clear();
+  if (const auto* views = AsList(MapValue(map, "dailyViews"))) {
+    parsed.daily_views.reserve(views->size());
+    for (const auto& encoded_view : *views) {
+      const auto* view_map = std::get_if<flutter::EncodableMap>(&encoded_view);
+      if (view_map == nullptr) {
         continue;
       }
-      DdayEvent dday;
-      dday.title = Utf16FromUtf8(StringValue(*dday_map, "title"));
-      dday.date_label =
-          Utf16FromUtf8(StringValue(*dday_map, "dateLabel"));
-      dday.days_remaining = static_cast<int>(std::clamp<std::int64_t>(
-          IntegerValue(*dday_map, "daysRemaining"),
-          std::numeric_limits<int>::min(), std::numeric_limits<int>::max()));
-      dday.color = static_cast<std::uint32_t>(
-          IntegerValue(*dday_map, "color", 0xFF2563EB));
-      dday.completed = BoolValue(*dday_map, "completed");
-      parsed.ddays.push_back(std::move(dday));
+      DailyView view;
+      view.date = StringValue(*view_map, "date");
+      view.today_title = Utf16FromUtf8(StringValue(*view_map, "todayTitle"));
+      view.today_remaining_count = static_cast<int>(std::clamp<std::int64_t>(
+          IntegerValue(*view_map, "todayRemainingCount"), 0, 100000));
+      view.today_events =
+          parse_today_events(AsList(MapValue(*view_map, "todayEvents")));
+      view.ddays = parse_ddays(AsList(MapValue(*view_map, "ddays")));
+      parsed.daily_views.push_back(std::move(view));
     }
   }
 
+  parsed.ddays = parse_ddays(AsList(MapValue(map, "ddays")));
+
   snapshot_ = std::move(parsed);
+  RollSnapshotToToday();
   ApplyWindowTheme();
   if (popup_ != nullptr) {
     InvalidateRect(popup_, nullptr, FALSE);
@@ -490,14 +571,21 @@ void WindowsWidgetBridge::ToggleEvent(std::size_t index) {
 
 void WindowsWidgetBridge::UpdateEventCompletion(const std::string& event_id,
                                                 bool completed) {
-  for (auto& event : snapshot_.today_events) {
-    if ((event.occurrence_id.empty() ? event.event_id : event.occurrence_id) == event_id) {
-      event.completed = completed;
+  const auto apply = [&](std::vector<TodayEvent>& events) {
+    for (auto& event : events) {
+      if ((event.occurrence_id.empty() ? event.event_id : event.occurrence_id) == event_id) {
+        event.completed = completed;
+      }
     }
+  };
+  apply(snapshot_.today_events);
+  for (auto& view : snapshot_.daily_views) {
+    apply(view.today_events);
   }
 }
 
 void WindowsWidgetBridge::ShowMiniCalendar() {
+  RollSnapshotToToday();
   EnsurePopupWindow();
   if (popup_ == nullptr) {
     return;
