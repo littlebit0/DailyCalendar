@@ -120,3 +120,16 @@ Automated coverage for these boundaries is in:
 - `test/core/analytics/analytics_receiver_test.dart`
 - `test/core/support/bug_report_service_test.dart`
 - `test/tool/analytics_receiver_test.py`
+
+## Test app version separation
+
+Packages ending in `.test` retain their actual installed version and report
+`appVersion` as `<version>-test` (for example, `4.0.0-test`). Production packages
+continue reporting the numeric version. Both Python and Dart receivers accept
+only this optional suffix and aggregate the two versions separately. The app's
+settings label identifies a test version without changing its bundle identity,
+version number, analytics consent, or user data.
+
+Update the deployed Python receiver before installing an app that sends the test
+suffix. Existing records without the suffix cannot be retroactively classified
+as production or test.

@@ -5,11 +5,43 @@ import unittest
 from pathlib import Path
 
 from tool.analytics_receiver import (
+    Aggregator,
     BugReportBackend,
     BugReportRateLimited,
     InvalidGoogleToken,
     normalize_bug_report,
+    valid_batch,
 )
+
+
+class AnalyticsVersionTests(unittest.TestCase):
+    def test_test_and_production_versions_are_valid_and_separate(self):
+        batch = {
+            'schemaVersion': 1,
+            'sessionId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+            'environment': {'appVersion': '4.1.2', 'platform': 'macos', 'osMajor': 27},
+            'events': [{
+                'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+                'name': 'app_load_completed',
+                'occurredAt': '2026-10-13T00:00:00Z',
+                'attributes': {'durationMs': 25},
+            }],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            self.assertTrue(valid_batch(batch))
+            self.assertEqual(aggregator.accept(batch), 1)
+            batch['environment']['appVersion'] = '4.1.2-test'
+            batch['events'][0]['eventId'] = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'
+            self.assertTrue(valid_batch(batch))
+            self.assertEqual(aggregator.accept(batch), 1)
+            aggregate = json.loads(next(Path(directory).glob('analytics-*.json')).read_text())
+            self.assertEqual(
+                {group['appVersion'] for group in aggregate['groups'].values()},
+                {'4.1.2', '4.1.2-test'},
+            )
+        batch['environment']['appVersion'] = '4.1.2-private-data'
+        self.assertFalse(valid_batch(batch))
 
 
 def _payload():
