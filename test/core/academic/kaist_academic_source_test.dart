@@ -37,6 +37,19 @@ void main() {
       expect(events.any((e) => e.start.year == 2025), isTrue);
     },
   );
+  test('KAIST lists a same-title same-period row only once', () {
+    final events = KaistAcademicSource.parse(
+      File('test/fixtures/academic/kaist-2025.html').readAsStringSync(),
+      2025,
+    );
+    expect(
+      events
+          .where((e) => e.title == '한글날' && e.start == DateTime(2025, 10, 9))
+          .length,
+      1,
+    );
+    expect(events.map((e) => e.sourceId).toSet().length, events.length);
+  });
   test('KAIST refuses stale year and malformed official date', () {
     final body = File(
       'test/fixtures/academic/kaist-2026.html',

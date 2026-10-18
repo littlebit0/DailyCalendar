@@ -29,7 +29,9 @@ void main() {
       addTearDown(source.close);
       final events = await source.fetch(2026);
       expect(years, [2025, 2026]);
-      expect(events.length, 71);
+      expect(events.length, 70);
+      // The published page lists this period twice; it is one event.
+      expect(events.where((e) => e.title == '2026학년도 제1학기 복학 신청기간').length, 1);
       expect(events.map((e) => e.sourceId).toSet().length, events.length);
       expect(events.any((e) => e.start.month == 1), isTrue);
       expect(events.every((e) => !e.title.contains('▪')), isTrue);

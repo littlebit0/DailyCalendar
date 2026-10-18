@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'coalescing_runner.dart';
 import '../core/di/app_providers.dart';
 import '../core/alarms/alarm_service.dart';
 import '../core/lms/lms_controller.dart';
@@ -13,6 +14,7 @@ import '../core/analytics/product_analytics.dart';
 import '../core/auth/google_account.dart';
 import '../core/security/biometric_auth_service.dart';
 import '../core/security/app_lock_privacy_service.dart';
+import '../core/notifications/notification_settings_change.dart';
 import '../core/settings/app_settings.dart';
 import '../core/localization/app_localizations.dart';
 import '../core/platform/windows_build_identity.dart';
@@ -722,8 +724,15 @@ class _AppHomeState extends ConsumerState<_AppHome>
   Future<void>? _academicRefreshOperation;
   ValueNotifier<int>? _settingsRevisionNotifier;
   VoidCallback? _settingsRevisionListener;
-  Future<void>? _siriChangeProcessing;
-  Future<void>? _widgetTodoProcessing;
+  late final CoalescingRunner _siriChangeRunner = CoalescingRunner(() {
+    final showFailure = _siriShowFailure;
+    _siriShowFailure = false;
+    return _processPendingSiriEventChangesImpl(showFailure);
+  });
+  late final CoalescingRunner _widgetTodoRunner = CoalescingRunner(
+    _processPendingWidgetTodoActionsImpl,
+  );
+  var _siriShowFailure = false;
   StreamSubscription<void>? _widgetTodoChangesSubscription;
 
   @override
@@ -793,28 +802,12 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   Future<void> _processPendingSiriEventChanges({bool showFailure = false}) {
-    final active = _siriChangeProcessing;
-    if (active != null) return active;
-    final operation = _processPendingSiriEventChangesImpl(showFailure);
-    _siriChangeProcessing = operation;
-    return operation.whenComplete(() {
-      if (identical(_siriChangeProcessing, operation)) {
-        _siriChangeProcessing = null;
-      }
-    });
+    _siriShowFailure = _siriShowFailure || showFailure;
+    return _siriChangeRunner.request();
   }
 
-  Future<void> _processPendingWidgetTodoActions() {
-    final active = _widgetTodoProcessing;
-    if (active != null) return active;
-    final operation = _processPendingWidgetTodoActionsImpl();
-    _widgetTodoProcessing = operation;
-    return operation.whenComplete(() {
-      if (identical(_widgetTodoProcessing, operation)) {
-        _widgetTodoProcessing = null;
-      }
-    });
-  }
+  Future<void> _processPendingWidgetTodoActions() =>
+      _widgetTodoRunner.request();
 
   Future<void> _processPendingWidgetTodoActionsImpl() async {
     final widgetService = ref.read(calendarWidgetServiceProvider);
@@ -824,8 +817,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
     final repository = ref.read(visibleEventRepositoryProvider);
     final commandService = ref.read(eventCommandServiceProvider);
     final acknowledged = <String>[];
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    final alreadyApplied = settingsRepository.appliedWidgetActionTokens();
+    final appliedNow = <String>[];
     var staleOccurrence = false;
     for (final action in actions) {
+      if (alreadyApplied.contains(action.token)) {
+        // Applied before; only its acknowledgement was missing.
+        acknowledged.add(action.token);
+        continue;
+      }
       final event = await repository.findById(action.eventId);
       if (event == null || event.isDeleted) {
         acknowledged.add(action.token);
@@ -840,8 +841,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
       try {
         await commandService.setCompleted(target, action.completed);
         acknowledged.add(action.token);
+        appliedNow.add(action.token);
       } on Object {
         break;
+      }
+    }
+    if (appliedNow.isNotEmpty) {
+      try {
+        await settingsRepository.rememberAppliedWidgetActionTokens(appliedNow);
+      } on Object {
+        // Best effort: the acknowledgement below is still attempted.
       }
     }
     await widgetService.acknowledgeTodoActions(acknowledged);
@@ -1335,9 +1344,47 @@ class _AppHomeState extends ConsumerState<_AppHome>
       _scheduledLmsOwner = owner;
       unawaited(_reconcileAllEventSchedules().catchError((_) {}));
     }
-    ref.read(appSettingsProvider.notifier).state = ref
-        .read(settingsRepositoryProvider)
-        .load();
+    final previousSettings = ref.read(appSettingsProvider);
+    final nextSettings = ref.read(settingsRepositoryProvider).load();
+    ref.read(appSettingsProvider.notifier).state = nextSettings;
+    final change = NotificationSettingsChange.between(
+      previousSettings,
+      nextSettings,
+    );
+    if (!change.isEmpty) {
+      unawaited(_applyNotificationSettingsChange(change, nextSettings));
+    }
+  }
+
+  /// A restore changes the stored values only; scheduled OS notifications
+  /// still follow the old ones until they are rebuilt here.
+  Future<void> _applyNotificationSettingsChange(
+    NotificationSettingsChange change,
+    AppSettings settings,
+  ) async {
+    try {
+      final notificationService = ref.read(notificationServiceProvider);
+      if (change.briefing) {
+        if (settings.morningBriefingEnabled) {
+          await notificationService.scheduleMorningBriefing(
+            hour: settings.morningBriefingHour,
+            minute: settings.morningBriefingMinute,
+          );
+        } else {
+          await notificationService.cancelMorningBriefing();
+        }
+      }
+      if (change.eventReminders) {
+        // The settings can arrive in the middle of a Drive restore, before its
+        // events are merged. Reconcile from the merged events, not a snapshot.
+        await ref.read(googleDriveSyncServiceProvider).whenIdle();
+        if (!mounted) return;
+        await _reconcileAllEventSchedules();
+      }
+    } catch (error, stackTrace) {
+      // The restored values stay; the next start rebuilds the schedule again.
+      debugPrint('Notification settings follow-up failed: $error\n$stackTrace');
+    }
   }
 
   Future<void> _startLocalNotificationServices() async {
