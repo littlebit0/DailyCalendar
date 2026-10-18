@@ -114,7 +114,8 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   final _bottomBarUiState = ValueNotifier(const _BottomBarUiState());
   Timer? _searchDebounce;
   Timer? _eventDragEdgeTimer;
-  Future<List<CalendarEvent>>? _searchResults;
+  // null once resolved means the lookup failed (an empty list is a real answer).
+  Future<List<CalendarEvent>?>? _searchResults;
   var _searchOpen = false;
   var _quickAccessSelected = false;
   var _timetableSelected = false;
@@ -831,10 +832,13 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           : ref
                 .read(visibleEventRepositoryProvider)
                 .search(query)
-                .then(
+                .then<List<CalendarEvent>?>(
                   (events) => events
                       .where(ref.read(lmsControllerProvider).isEventVisible)
                       .toList(),
+                  // Handled here so a failure is shown instead of reported as an
+                  // unhandled error; the panel offers a retry.
+                  onError: (Object _) => null,
                 );
     });
   }
@@ -2153,7 +2157,7 @@ class _InlineSearchPanel extends ConsumerWidget {
 
   final TextEditingController controller;
   final FocusNode focusNode;
-  final Future<List<CalendarEvent>>? results;
+  final Future<List<CalendarEvent>?>? results;
   final ValueChanged<String> onChanged;
   final VoidCallback onSubmitted;
   final VoidCallback onClose;
@@ -2217,7 +2221,7 @@ class _InlineSearchPanel extends ConsumerWidget {
               ),
             ),
           ),
-          FutureBuilder<List<CalendarEvent>>(
+          FutureBuilder<List<CalendarEvent>?>(
             future: results,
             builder: (context, snapshot) {
               if (results == null) {
@@ -2227,6 +2231,27 @@ class _InlineSearchPanel extends ConsumerWidget {
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 18),
                   child: LinearProgressIndicator(minHeight: 2),
+                );
+              }
+              if (snapshot.hasError || snapshot.data == null) {
+                // A failed lookup is not "no results": say so and allow a retry
+                // with the same query. The error text itself is never shown.
+                return Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.tr('검색하지 못했습니다. 다시 시도해 주세요.'),
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: onSubmitted,
+                        child: Text(context.tr('다시 시도')),
+                      ),
+                    ],
+                  ),
                 );
               }
               final events = (snapshot.data ?? const <CalendarEvent>[])
