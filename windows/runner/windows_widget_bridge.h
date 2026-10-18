@@ -77,7 +77,7 @@ class WindowsWidgetBridge final {
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
   bool UpdateSnapshot(const flutter::EncodableMap& map);
   flutter::EncodableList PendingActionsForFlutter() const;
-  void AcknowledgeActions(const flutter::EncodableMap* arguments);
+  bool AcknowledgeActions(const flutter::EncodableMap* arguments);
   void ToggleEvent(std::size_t index);
   void UpdateEventCompletion(const std::string& event_id, bool completed);
 

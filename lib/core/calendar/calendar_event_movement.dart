@@ -1,3 +1,4 @@
+import '../../features/events/data/recurrence_expander.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/recurrence_rule.dart';
 
@@ -92,18 +93,59 @@ DateTime shiftCalendarDateByDays(DateTime value, int days) {
   );
 }
 
+/// Weekday/position conditions after the series moves by [days].
+///
+/// Weekly and daily weekday lists rotate with the move. Month positions and
+/// month days only make sense relative to the old date, so a moved series goes
+/// back to repeating on its new date.
+RecurrenceRule _withShiftedDetails(
+  RecurrenceRule target,
+  RecurrenceRule rule,
+  int days,
+) {
+  if (!rule.hasDetails) return target;
+  if (days == 0) {
+    return target.copyWith(
+      byDay: rule.byDay,
+      byMonthDay: rule.byMonthDay,
+      byMonth: rule.byMonth,
+      bySetPos: rule.bySetPos,
+    );
+  }
+  final weekdayRule =
+      rule.frequency == RecurrenceFrequency.weekly ||
+      rule.frequency == RecurrenceFrequency.daily;
+  if (!weekdayRule) return target;
+  const codes = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+  final rotated = <String>[];
+  for (final token in rule.byDay) {
+    final index = codes.indexOf(token.replaceAll(RegExp(r'[^A-Z]'), ''));
+    if (index != -1) rotated.add(codes[(index + days) % 7]);
+  }
+  return target.copyWith(
+    byDay: rotated,
+    byMonth: rule.frequency == RecurrenceFrequency.daily
+        ? rule.byMonth
+        : const [],
+  );
+}
+
 RecurrenceRule shiftRecurrenceRuleByDays(RecurrenceRule rule, int days) {
-  return RecurrenceRule(
-    frequency: rule.frequency,
-    interval: rule.interval,
-    until: rule.until == null
-        ? null
-        : shiftCalendarDateByDays(rule.until!, days),
-    count: rule.count,
-    anchorDay: days == 0 ? rule.anchorDay : null,
-    excludedDates: rule.excludedDates
-        .map((date) => shiftCalendarDateByDays(date, days))
-        .toList(growable: false),
+  return _withShiftedDetails(
+    RecurrenceRule(
+      frequency: rule.frequency,
+      interval: rule.interval,
+      until: rule.until == null
+          ? null
+          : shiftCalendarDateByDays(rule.until!, days),
+      count: rule.count,
+      anchorDay: days == 0 ? rule.anchorDay : null,
+      excludedDates: rule.excludedDates
+          .map((date) => shiftCalendarDateByDays(date, days))
+          .toList(growable: false),
+    ),
+    rule,
+    days,
   );
 }
 
@@ -119,18 +161,22 @@ RecurrenceRule recurrenceRuleForMovedFuture({
     occurrence.startAt.month,
     occurrence.startAt.day,
   );
-  return RecurrenceRule(
-    frequency: rule.frequency,
-    interval: rule.interval,
-    until: rule.until == null
-        ? null
-        : shiftCalendarDateByDays(rule.until!, dayOffset),
-    count: _remainingRecurrenceCount(base, occurrence),
-    anchorDay: dayOffset == 0 ? rule.anchorDay ?? base.startAt.day : null,
-    excludedDates: rule.excludedDates
-        .where((date) => !_calendarDate(date).isBefore(occurrenceDate))
-        .map((date) => shiftCalendarDateByDays(date, dayOffset))
-        .toList(growable: false),
+  return _withShiftedDetails(
+    RecurrenceRule(
+      frequency: rule.frequency,
+      interval: rule.interval,
+      until: rule.until == null
+          ? null
+          : shiftCalendarDateByDays(rule.until!, dayOffset),
+      count: _remainingRecurrenceCount(base, occurrence),
+      anchorDay: dayOffset == 0 ? rule.anchorDay ?? base.startAt.day : null,
+      excludedDates: rule.excludedDates
+          .where((date) => !_calendarDate(date).isBefore(occurrenceDate))
+          .map((date) => shiftCalendarDateByDays(date, dayOffset))
+          .toList(growable: false),
+    ),
+    rule,
+    dayOffset,
   );
 }
 
@@ -138,6 +184,22 @@ int? _remainingRecurrenceCount(CalendarEvent base, CalendarEvent occurrence) {
   final totalCount = base.recurrence.count;
   if (totalCount == null) {
     return null;
+  }
+  if (base.recurrence.hasDetails) {
+    // Several dates can share one period, so count the real occurrences
+    // before this one (excluded dates still use up the series count).
+    final before = RecurrenceExpander().expand(
+      base.copyWith(
+        recurrence: base.recurrence.copyWith(
+          clearCount: true,
+          clearUntil: true,
+          excludedDates: const [],
+        ),
+      ),
+      base.startAt,
+      occurrence.startAt,
+    );
+    return (totalCount - before.length).clamp(1, totalCount).toInt();
   }
   final interval = base.recurrence.interval < 1 ? 1 : base.recurrence.interval;
   final elapsedOccurrences = switch (base.recurrence.frequency) {

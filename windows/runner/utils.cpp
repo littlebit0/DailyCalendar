@@ -33,7 +33,13 @@ std::vector<std::string> GetCommandLineArguments() {
 
   // Skip the first argument as it's the binary name.
   for (int i = 1; i < argc; i++) {
-    command_line_arguments.push_back(Utf8FromUtf16(argv[i]));
+    std::string argument = Utf8FromUtf16(argv[i]);
+    // A non-empty argument that cannot be converted is dropped instead of being
+    // passed on as an empty argument.
+    if (argument.empty() && argv[i][0] != L'\0') {
+      continue;
+    }
+    command_line_arguments.push_back(std::move(argument));
   }
 
   ::LocalFree(argv);
@@ -45,16 +51,19 @@ std::string Utf8FromUtf16(const wchar_t* utf16_string) {
   if (utf16_string == nullptr) {
     return std::string();
   }
-  unsigned int target_length = ::WideCharToMultiByte(
+  // The size query returns 0 on failure (for example an unpaired surrogate),
+  // so check it before removing the trailing null character.
+  const int required_length = ::WideCharToMultiByte(
       CP_UTF8, WC_ERR_INVALID_CHARS, utf16_string,
-      -1, nullptr, 0, nullptr, nullptr)
-    -1; // remove the trailing null character
-  int input_length = (int)wcslen(utf16_string);
+      -1, nullptr, 0, nullptr, nullptr);
   std::string utf8_string;
-  if (target_length == 0 || target_length > utf8_string.max_size()) {
+  if (required_length <= 1 ||
+      static_cast<size_t>(required_length - 1) > utf8_string.max_size()) {
     return utf8_string;
   }
-  utf8_string.resize(target_length);
+  const int target_length = required_length - 1;
+  const int input_length = (int)wcslen(utf16_string);
+  utf8_string.resize(static_cast<size_t>(target_length));
   int converted_length = ::WideCharToMultiByte(
       CP_UTF8, WC_ERR_INVALID_CHARS, utf16_string,
       input_length, utf8_string.data(), target_length, nullptr, nullptr);
