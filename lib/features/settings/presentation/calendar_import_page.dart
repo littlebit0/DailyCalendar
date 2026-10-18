@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/analytics/product_analytics.dart';
 import '../../../core/calendar_import/calendar_import_models.dart';
 import '../../../core/calendar_import/google_calendar_source.dart';
 import '../../../core/di/app_providers.dart';
@@ -229,6 +230,7 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
       unawaited(
         ref.read(googleDriveSyncServiceProvider).backupNow().catchError((_) {}),
       );
+      _recordImportUsage(AnalyticsOutcome.succeeded);
       if (!mounted) {
         return;
       }
@@ -243,14 +245,32 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
         );
       });
     } on CalendarImportException catch (error) {
+      _recordImportUsage(AnalyticsOutcome.failed);
       _showError(error);
     } on Object catch (error) {
+      _recordImportUsage(AnalyticsOutcome.failed);
       _showError(error);
     } finally {
       if (mounted) {
         setState(() => _importBusy = false);
       }
     }
+  }
+
+  /// One record per import action. Not measured: reading the calendar list or
+  /// opening this page, so a missing record is not a zero-use signal.
+  void _recordImportUsage(AnalyticsOutcome outcome) {
+    unawaited(
+      ref
+          .read(productAnalyticsProvider)
+          .record(
+            AnalyticsRecord.featureUsed(
+              AnalyticsFeature.calendarImport,
+              outcome: outcome,
+            ),
+          )
+          .catchError((_) {}),
+    );
   }
 
   void _showError(Object error) {
