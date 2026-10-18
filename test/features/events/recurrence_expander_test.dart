@@ -20,6 +20,109 @@ void main() {
             ).readAsStringSync(),
           )
           as List;
+  final detailCases =
+      jsonDecode(
+            File(
+              'test/fixtures/recurrence_detail_cases.json',
+            ).readAsStringSync(),
+          )
+          as List;
+  for (final item in detailCases) {
+    test('shared detail fixture ${item['name']}', () async {
+      final start = fixtureDate(item['start']);
+      final event = CalendarEvent(
+        id: item['name'],
+        title: 'detail',
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: 1,
+        createdAt: start,
+        updatedAt: start,
+        recurrence: RecurrenceRule(
+          frequency: RecurrenceFrequency.values.byName(item['frequency']),
+          interval: item['interval'],
+          count: item['count'],
+          until: item['until'] == null ? null : fixtureDate(item['until']),
+          byDay: List<String>.from(item['byDay'] ?? const []),
+          byMonthDay: List<int>.from(item['byMonthDay'] ?? const []),
+          byMonth: List<int>.from(item['byMonth'] ?? const []),
+          bySetPos: List<int>.from(item['bySetPos'] ?? const []),
+          excludedDates: [
+            for (final d in item['excluded'] ?? []) fixtureDate(d),
+          ],
+        ),
+      );
+      final db = AppDatabase.forTesting(NativeDatabase.memory());
+      final repository = DriftEventRepository(db);
+      try {
+        await repository.save(event);
+        final restored = (await repository.findById(event.id))!;
+        // The conditions survive the SQLite round trip.
+        expect(restored.recurrence.byDay, event.recurrence.byDay);
+        expect(restored.recurrence.byMonthDay, event.recurrence.byMonthDay);
+        expect(restored.recurrence.byMonth, event.recurrence.byMonth);
+        expect(restored.recurrence.bySetPos, event.recurrence.bySetPos);
+        final actual = RecurrenceExpander().expand(
+          restored,
+          fixtureDate(item['rangeStart']).subtract(const Duration(hours: 9)),
+          fixtureDate(item['rangeEnd']),
+        );
+        expect(
+          actual.map((e) => e.startAt.toIso8601String().substring(0, 10)),
+          item['expected'],
+        );
+        for (final occurrence in actual) {
+          expect(occurrence.startAt.hour, 9);
+        }
+      } finally {
+        await db.close();
+      }
+    });
+  }
+
+  test('lastPlannedEnd follows a rule with conditions', () {
+    final start = fixtureDate('2026-10-05');
+    CalendarEvent event(RecurrenceRule rule) => CalendarEvent(
+      id: 'end',
+      title: 'end',
+      startAt: start,
+      endAt: start.add(const Duration(hours: 1)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: 1,
+      createdAt: start,
+      updatedAt: start,
+      recurrence: rule,
+    );
+    final expander = RecurrenceExpander();
+    expect(
+      expander.lastPlannedEnd(
+        event(
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.weekly,
+            count: 4,
+            byDay: ['MO', 'WE'],
+          ),
+        ),
+      ),
+      DateTime(2026, 10, 14, 10),
+    );
+    expect(
+      expander.lastPlannedEnd(
+        event(
+          RecurrenceRule(
+            frequency: RecurrenceFrequency.weekly,
+            until: DateTime(2026, 10, 13),
+            byDay: const ['MO', 'WE'],
+          ),
+        ),
+      ),
+      DateTime(2026, 10, 12, 10),
+    );
+  });
+
   for (final item in cases) {
     test('shared anchor fixture ${item['name']}', () async {
       final start = fixtureDate(item['start']);

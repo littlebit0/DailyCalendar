@@ -42,6 +42,38 @@ selected university's official website. Daily does not send personal schedules
 or account credentials to that website. Imported events can be backed up through
 the optional Drive connection; subscription preferences remain device-local.
 
+## Optional School LMS Connection
+
+The school LMS connection is optional and requires a Google login in Daily.
+You authenticate on your school's official login page. Daily reads course
+names and the titles, deadlines, submission status and learning progress of
+assignments, quizzes and learning content, and turns them into events. Daily
+does not submit assignments or change anything in the LMS.
+
+On your device only: if you choose "save login for this device", your school
+username and password are stored in the operating system's secure storage
+(Keychain or Android encrypted storage) and are not synced to other devices.
+School session cookies are also kept in secure storage on the device. This
+saving is a separate, explicit choice, and Daily's own servers never receive
+your school credentials.
+
+Through Google Drive sync (if you use it): events imported from the LMS (with
+their source identifiers and completion state), your school user number and
+whether the connection is enabled are stored in the Daily AppData area of your
+Google account, like other synced data. School passwords, cookies and session
+data are never written to Drive.
+
+Disconnecting the school: deletes the saved login and school session on that
+device and stops new imports. Events already imported are not deleted and the
+school user number stays in settings until you connect again. "Delete saved
+login on this device" removes only the saved username and password. Daily
+does not currently let you delete an individual LMS event: events imported
+from the LMS can be removed only together with all other events on the device,
+through Settings > "Reset local data" (or "Delete Daily account", which also
+deletes the Daily AppData backup in Google Drive). You can also delete Drive
+data through your Google account's app data management. Existing Drive
+revision history and safety snapshots may retain older content.
+
 ## Data Use
 
 Daily uses your data only to provide app functionality, including calendar
