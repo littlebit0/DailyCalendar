@@ -3227,6 +3227,72 @@ enum DailySiriAction: String, AppEnum {
   ]
 }
 
+// BEGIN SIRI COMMAND CLASSIFIER
+enum DailySiriCommandClassifier {
+  static func classify(_ value: String?) -> DailySiriAction? {
+    guard let command = value?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
+          !command.isEmpty else { return nil }
+
+    // Mutating actions take precedence so a phrase such as "내일 일정 삭제" can
+    // never be downgraded to a read-only tomorrow query.
+    if containsAny(command, ["삭제", "지워", "지우기", "없애", "취소", "delete", "remove"]) {
+      return .delete
+    }
+    // "reschedule" changes an existing event; it must not match the verb "schedule".
+    if containsAny(command, ["수정", "변경", "바꿔", "고쳐", "update", "edit", "change", "reschedule"]) {
+      return .update
+    }
+    if containsAny(command, ["추가", "등록", "만들", "생성", "잡아", "add", "create"]) || schedulesSomething(command) {
+      return .add
+    }
+    if containsAny(command, ["검색", "찾아", "찾기", "search", "find"]) {
+      return .search
+    }
+    if containsAny(command, ["d-day", "d day", "dday", "디데이"]) {
+      return .dday
+    }
+    if containsAny(command, ["다음 일정", "가장 가까운", "다가오는", "예정된 다음", "next event", "what's next"]) {
+      return .next
+    }
+    if containsAny(command, ["어제", "yesterday", "昨日", "昨天"]) {
+      return .yesterday
+    }
+    if containsAny(command, ["내일", "tomorrow"]) {
+      return .tomorrow
+    }
+    if containsAny(command, ["오늘", "today"]) {
+      return .today
+    }
+    if containsAny(command, ["지정 날짜", "특정 날짜", "날짜별", "그날", "on a date", "specific date"]) {
+      return .date
+    }
+    return nil
+  }
+
+  /// "schedule" is a verb in "schedule a meeting" but a noun in "show today's
+  /// schedule", so only an imperative start or a verb + object counts as adding.
+  private static func schedulesSomething(_ command: String) -> Bool {
+    if command.hasPrefix("schedule ") { return true }
+    if command.range(
+      of: "\\bschedule\\s+(a|an|the|my|me|this|that|it|another|new)\\b",
+      options: .regularExpression
+    ) != nil { return true }
+    // A polite or desiring lead-in makes "schedule" a verb even before a bare
+    // object ("Please schedule lunch at noon"), unless it is followed by a
+    // word that makes it a noun ("what to schedule for today" stays a query).
+    return command.range(
+      of: "\\b(please|could you|can you|would you|will you|let's|lets|i want to|i need to|i'd like to|i would like to|need to|want to|help me)\\s+(please\\s+)?schedule\\s+(?!(for|on|of|today|tomorrow|yesterday|is|was|and|that|here)\\b)\\w",
+      options: .regularExpression
+    ) != nil
+  }
+
+  private static func containsAny(_ value: String, _ candidates: [String]) -> Bool {
+    candidates.contains { value.contains($0) }
+  }
+}
+// END SIRI COMMAND CLASSIFIER
+
+
 @available(iOS 16.0, macOS 13.0, *)
 struct AddDailyEventIntent: AppIntent {
   static var title: LocalizedStringResource = "Add Daily Event"
@@ -3838,45 +3904,7 @@ struct DailySignalCommandIntent: AppIntent {
   }
 
   private func classify(_ value: String?) -> DailySiriAction? {
-    guard let command = normalized(value)?.lowercased() else { return nil }
-
-    // Mutating actions take precedence so a phrase such as "내일 일정 삭제" can
-    // never be downgraded to a read-only tomorrow query.
-    if containsAny(command, ["삭제", "지워", "지우기", "없애", "취소", "delete", "remove"]) {
-      return .delete
-    }
-    if containsAny(command, ["수정", "변경", "바꿔", "고쳐", "update", "edit", "change"]) {
-      return .update
-    }
-    if containsAny(command, ["추가", "등록", "만들", "생성", "잡아", "add", "create", "schedule"]) {
-      return .add
-    }
-    if containsAny(command, ["검색", "찾아", "찾기", "search", "find"]) {
-      return .search
-    }
-    if containsAny(command, ["d-day", "d day", "dday", "디데이"]) {
-      return .dday
-    }
-    if containsAny(command, ["다음 일정", "가장 가까운", "다가오는", "예정된 다음", "next event", "what's next"]) {
-      return .next
-    }
-    if containsAny(command, ["어제", "yesterday", "昨日", "昨天"]) {
-      return .yesterday
-    }
-    if containsAny(command, ["내일", "tomorrow"]) {
-      return .tomorrow
-    }
-    if containsAny(command, ["오늘", "today"]) {
-      return .today
-    }
-    if containsAny(command, ["지정 날짜", "특정 날짜", "날짜별", "그날", "on a date", "specific date"]) {
-      return .date
-    }
-    return nil
-  }
-
-  private func containsAny(_ value: String, _ candidates: [String]) -> Bool {
-    candidates.contains { value.contains($0) }
+    DailySiriCommandClassifier.classify(normalized(value))
   }
 
   private func isMutating(_ action: DailySiriAction?) -> Bool {
