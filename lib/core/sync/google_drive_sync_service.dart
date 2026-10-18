@@ -2268,6 +2268,11 @@ class GoogleDriveSyncService implements SyncService {
     if (value is! List) {
       return fallback;
     }
+    // An explicit empty list (for example every D-day reminder switched off)
+    // is a real choice; only unreadable contents fall back.
+    if (value.isEmpty) {
+      return <int>[];
+    }
     final items = value.whereType<int>().toList();
     return items.isEmpty ? fallback : (items..sort());
   }

@@ -1565,6 +1565,7 @@ void main() {
             'type': 'settings',
             'settings': {
               'defaultReminderMinutesList': [0, 10, 60],
+              'dDayReminderOffsets': <int>[],
               'categories': [
                 {
                   'id': 'basic',
@@ -1630,6 +1631,8 @@ void main() {
         CalendarEventSortPriority.category,
       );
       expect(restored.defaultReminderMinutesList, [0, 10, 60]);
+      // Switching every D-day reminder off is a choice, not a missing field.
+      expect(restored.dDayReminderOffsets, isEmpty);
       expect(restored.appTextSize, AppTextSize.large);
       expect(restored.appStartView, AppStartView.quickView);
       expect(restored.weekDayLayoutMode, WeekDayLayoutMode.schedule);
