@@ -66,10 +66,13 @@ data are never written to Drive.
 Disconnecting the school: deletes the saved login and school session on that
 device and stops new imports. Events already imported are not deleted and the
 school user number stays in settings until you connect again. "Delete saved
-login on this device" removes only the saved username and password. To remove
-imported events, delete them in Daily; to remove Drive data, use your Google
-account's app data management. Existing Drive revision history and safety
-snapshots may retain older content.
+login on this device" removes only the saved username and password. Daily
+does not currently let you delete an individual LMS event: events imported
+from the LMS can be removed only together with all other events on the device,
+through Settings > "Reset local data" (or "Delete Daily account", which also
+deletes the Daily AppData backup in Google Drive). You can also delete Drive
+data through your Google account's app data management. Existing Drive
+revision history and safety snapshots may retain older content.
 
 ## Data Use
 
