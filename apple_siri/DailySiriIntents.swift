@@ -3334,6 +3334,7 @@ enum DailySiriAction: String, AppEnum {
 }
 
 // BEGIN SIRI COMMAND CLASSIFIER
+@available(iOS 16.0, macOS 13.0, *)
 enum DailySiriCommandClassifier {
   static func classify(_ value: String?) -> DailySiriAction? {
     guard let command = value?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(),
