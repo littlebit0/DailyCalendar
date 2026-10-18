@@ -255,6 +255,10 @@ const Map<String, Map<String, String>> _translations = {
     "로그인 정보를 확인하고 있습니다.": "Checking login information.",
     "저장된 로그인 정보를 확인하지 못했습니다.": "Could not read saved login information.",
     "저장된 로그인 정보가 없습니다.": "No login information saved.",
+    "연결하면 학교 LMS에서 수업명과 과제·퀴즈·학습 콘텐츠의 제목, 마감, 제출·학습 진행 상태를 읽어 일정으로 만듭니다. Google Drive 동기화를 사용하면 가져온 일정과 학교 사용자 번호, 연결 여부가 Google 계정의 앱 전용 저장 영역에 함께 저장됩니다. 학교 비밀번호·쿠키·세션은 Drive로 보내지 않습니다.":
+        "When connected, Daily reads course names and the titles, deadlines, and submission or learning progress of assignments, quizzes and learning content from your school LMS and turns them into events. If you use Google Drive sync, those events, your school user number and the connection status are stored in the app-only area of your Google account. Your school password, cookies and session are never sent to Drive.",
+    "연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.":
+        "Disconnecting deletes the login information and school session saved on this device and stops importing new items. Events already imported are not deleted, and your school user number stays in settings until you connect again. Data stored in Drive can be deleted through your Google account's app data management.",
     "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
         "Titles, deadlines and submission status update from school. Events you complete manually stay complete even if school reports incomplete. Notes, categories and reminders are kept separately.",
     "과제": "Assignment",
@@ -921,6 +925,8 @@ const Map<String, Map<String, String>> _translations = {
     '가져올 수 있는 {provider}가 없습니다.': 'No {provider} calendars are available.',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         'Import complete: {imported} added, {skipped} duplicates skipped, {failed} failed',
+    '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+        '{count} events have a repeat rule that is not supported, so they were imported once and the original rule was kept.',
     '캘린더 권한 또는 연결 상태를 확인해 주세요.':
         'Check calendar permission or connection status.',
     '가져올 캘린더를 선택해 주세요.': 'Select a calendar to import.',
@@ -1219,6 +1225,10 @@ const Map<String, Map<String, String>> _translations = {
     "로그인 정보를 확인하고 있습니다.": "ログイン情報を確認しています。",
     "저장된 로그인 정보를 확인하지 못했습니다.": "保存されたログイン情報を確認できませんでした。",
     "저장된 로그인 정보가 없습니다.": "ログイン情報は保存されていません。",
+    "연결하면 학교 LMS에서 수업명과 과제·퀴즈·학습 콘텐츠의 제목, 마감, 제출·학습 진행 상태를 읽어 일정으로 만듭니다. Google Drive 동기화를 사용하면 가져온 일정과 학교 사용자 번호, 연결 여부가 Google 계정의 앱 전용 저장 영역에 함께 저장됩니다. 학교 비밀번호·쿠키·세션은 Drive로 보내지 않습니다.":
+        "接続すると、学校LMSから授業名と課題・小テスト・学習コンテンツのタイトル、締切、提出・学習進捗を読み取り、予定として作成します。Google Drive同期を使用する場合、取り込んだ予定、学校ユーザー番号、接続状態がGoogleアカウントのアプリ専用領域に保存されます。学校のパスワード・Cookie・セッションはDriveに送信されません。",
+    "연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.":
+        "接続を解除すると、この端末に保存されたログイン情報と学校セッションが削除され、新しい項目の取り込みが停止します。すでに取り込んだ予定は削除されず、学校ユーザー番号は再接続するまで設定に残ります。Driveに保存されたデータはGoogleアカウントのアプリデータ管理から削除できます。",
     "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
         "タイトル・締切・提出状態は学校から更新されます。手動で完了した予定は学校の未完了状態で変更されません。メモ・分類・通知は別途保持されます。",
     "과제": "課題",
@@ -1803,6 +1813,8 @@ const Map<String, Map<String, String>> _translations = {
     '가져올 수 있는 {provider}가 없습니다.': '読み込める{provider}カレンダーがありません。',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         '読み込み完了：{imported}件追加、{skipped}件の重複を除外、{failed}件失敗',
+    '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+        '{count}件の予定は未対応の繰り返し条件があるため1回だけ読み込み、元のルールは保存しました。',
     '캘린더 권한 또는 연결 상태를 확인해 주세요.': 'カレンダーの権限または接続状態を確認してください。',
     '가져올 캘린더를 선택해 주세요.': '読み込むカレンダーを選択してください。',
     '설정에서 Daily의 캘린더 전체 접근을 허용해 주세요.': '設定でDailyにカレンダーへのフルアクセスを許可してください。',
@@ -2097,6 +2109,10 @@ const Map<String, Map<String, String>> _translations = {
     "로그인 정보를 확인하고 있습니다.": "正在確認登入資訊。",
     "저장된 로그인 정보를 확인하지 못했습니다.": "無法讀取已儲存的登入資訊。",
     "저장된 로그인 정보가 없습니다.": "尚未儲存登入資訊。",
+    "연결하면 학교 LMS에서 수업명과 과제·퀴즈·학습 콘텐츠의 제목, 마감, 제출·학습 진행 상태를 읽어 일정으로 만듭니다. Google Drive 동기화를 사용하면 가져온 일정과 학교 사용자 번호, 연결 여부가 Google 계정의 앱 전용 저장 영역에 함께 저장됩니다. 학교 비밀번호·쿠키·세션은 Drive로 보내지 않습니다.":
+        "連線後，Daily 會從學校 LMS 讀取課程名稱，以及作業、測驗和學習內容的標題、期限與提交或學習進度，並建立為行程。若使用 Google Drive 同步，匯入的行程、學校使用者編號和連線狀態會儲存在 Google 帳戶的應用程式專用區域。學校密碼、Cookie 和工作階段不會傳送到 Drive。",
+    "연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.":
+        "解除連線會刪除此裝置上儲存的登入資訊與學校工作階段，並停止匯入新項目。已匯入的行程不會被刪除，學校使用者編號會保留在設定中，直到再次連線。儲存在 Drive 的資料可透過 Google 帳戶的應用程式資料管理刪除。",
     "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
         "標題、期限和提交狀態會從學校更新。手動完成的行程不會因學校的未完成狀態而變更。備註、分類和提醒會分別保留。",
     "과제": "作業",
@@ -2668,6 +2684,8 @@ const Map<String, Map<String, String>> _translations = {
     '가져올 수 있는 {provider}가 없습니다.': '沒有可匯入的 {provider} 行事曆。',
     '가져오기 완료: {imported}개 추가, {skipped}개 중복 제외, {failed}개 실패':
         '匯入完成：新增 {imported} 個、略過 {skipped} 個重複項目、{failed} 個失敗',
+    '{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.':
+        '{count} 個行程的重複條件尚不支援，因此只匯入一次，並保留原始規則。',
     '캘린더 권한 또는 연결 상태를 확인해 주세요.': '請檢查行事曆權限或連線狀態。',
     '가져올 캘린더를 선택해 주세요.': '請選擇要匯入的行事曆。',
     '설정에서 Daily의 캘린더 전체 접근을 허용해 주세요.': '請在「設定」中允許 Daily 完整存取行事曆。',

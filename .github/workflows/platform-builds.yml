@@ -31,6 +31,9 @@ jobs:
       - name: Test fixture archive safety
         run: python3 -m unittest discover -s tool/tests -p test_prepare_test_fixtures.py -v
 
+      - name: Test Linux reminder delivery
+        run: python3 -m unittest discover -s tool/tests -p test_linux_reminders_notify.py -v
+
       - name: Test
         run: flutter test
 
