@@ -32,7 +32,7 @@ jobs:
         run: python3 -m unittest discover -s tool/tests -p test_prepare_test_fixtures.py -v
 
       - name: Test bug report receiver
-        run: python3 -m unittest test/tool/analytics_receiver_test.py -v
+        run: python3 -m unittest discover -s test/tool -p analytics_receiver_test.py -v
 
       - name: Test
         run: flutter test
