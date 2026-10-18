@@ -80,7 +80,8 @@ class YuAcademicSource implements AcademicSource {
       final end = DateTime(last.year, last.month, last.day + 1);
       if (last.isBefore(start) ||
           !end.isAfter(DateTime(year)) ||
-          start.isAfter(DateTime(year + 1, 2, 28))) {
+          // The last valid start is the final day of the next February (29th in a leap year).
+          !start.isBefore(DateTime(year + 1, 3, 1))) {
         throw const FormatException('Unexpected YU period');
       }
       final title = (row['text'] as String).trim();

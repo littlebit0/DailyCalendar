@@ -357,6 +357,64 @@ void main() {
   );
 
   test(
+    'each lecture keeps the time its own learning values were confirmed',
+    () async {
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning;
+      await h.service.refresh();
+      final first = h.service.lastSuccess!;
+      final lectures = h.repository.events.values
+          .where((e) => e.lms!.activityType == 'lecture')
+          .toList();
+      expect(lectures, hasLength(2));
+      for (final event in lectures) {
+        expect(h.service.learningCheckedAt(event.lms!), first);
+      }
+
+      // Later the school's learning report cannot be read for the course.
+      h.now = first.add(const Duration(hours: 3));
+      h.pages['/report/ubcompletion/user_progress.php'] = _learningMissing;
+      final result = await h.service.refresh(force: true);
+      expect(result!.failedLearningCourses, 1);
+      expect(h.service.lastSuccess!.isAfter(first), isTrue);
+      for (final event in lectures) {
+        // The whole sync succeeded now, but this lecture's values are older.
+        expect(h.service.learningCheckedAt(event.lms!), first);
+      }
+
+      // The stamp survives a restart (a new service over the same storage).
+      final reopened = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      expect(
+        reopened.lmsLearningCheckedAt(
+          ownerId: 'student@example.com',
+          schoolId: 'smu',
+          lmsUserId: '70001',
+        )[lectures.first.id],
+        first,
+      );
+
+      // Only the lecture the school reports again gets a new time.
+      h.now = first.add(const Duration(hours: 6));
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning.replaceFirst(
+        '</tbody>',
+        '$_unlearned</tbody>',
+      );
+      await h.service.refresh(force: true);
+      final times = {
+        for (final event in lectures)
+          event.lms!.activityId: h.service.learningCheckedAt(event.lms!),
+      };
+      expect(
+        times.values.every(
+          (time) => time != null && time.isAfter(first.add(const Duration(hours: 5))),
+        ),
+        isTrue,
+      );
+    },
+  );
+
+  test(
     'fresh learning time changes completion and keeps personal fields',
     () async {
       h.pages['/report/ubcompletion/user_progress.php'] = _learning;

@@ -265,6 +265,12 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                   const SizedBox(height: 12),
                   Text(
                     context.tr(
+                      '연결하면 학교 LMS에서 수업명과 과제·퀴즈·학습 콘텐츠의 제목, 마감, 제출·학습 진행 상태를 읽어 일정으로 만듭니다. Google Drive 동기화를 사용하면 가져온 일정과 학교 사용자 번호, 연결 여부가 Google 계정의 앱 전용 저장 영역에 함께 저장됩니다. 학교 비밀번호·쿠키·세션은 Drive로 보내지 않습니다.',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    context.tr(
                       '앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.',
                     ),
                   ),
@@ -555,6 +561,12 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                     ],
                   ),
                   const SizedBox(height: 16),
+                  Text(
+                    context.tr(
+                      '연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
                   Text(
                     context.tr(
                       '제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.',
