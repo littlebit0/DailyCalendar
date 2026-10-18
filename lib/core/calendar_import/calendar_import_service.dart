@@ -107,6 +107,13 @@ class CalendarImportService {
       imported: importedIds.length,
       skipped: skipped,
       failed: invalid + pending.length - importedIds.length,
+      unsupportedRecurrence: pending
+          .where(
+            (event) =>
+                importedIds.contains(event.id) &&
+                event.recurrence.rawRule != null,
+          )
+          .length,
     );
   }
 
@@ -207,17 +214,68 @@ class CalendarImportService {
       _ => RecurrenceFrequency.none,
     };
     if (frequency == RecurrenceFrequency.none) {
-      return const RecurrenceRule();
+      // HOURLY/MINUTELY/SECONDLY (or garbage) cannot be represented: keep the
+      // text instead of silently treating the event as a plain single event.
+      return fields.containsKey('FREQ')
+          ? RecurrenceRule(rawRule: body)
+          : const RecurrenceRule();
     }
     final interval = int.tryParse(fields['INTERVAL'] ?? '') ?? 1;
     final count = int.tryParse(fields['COUNT'] ?? '');
+    final days = _rruleList(fields['BYDAY']);
+    final monthDays = _rruleInts(fields['BYMONTHDAY']);
+    final months = _rruleInts(fields['BYMONTH']);
+    final positions = _rruleInts(fields['BYSETPOS']);
+    final dayPattern = RegExp(r'^[+-]?\d{0,2}(MO|TU|WE|TH|FR|SA|SU)$');
+    final hasOrdinal = days.any((day) => RegExp(r'\d').hasMatch(day));
+    final unsupported =
+        fields.containsKey('BYWEEKNO') ||
+        fields.containsKey('BYYEARDAY') ||
+        fields.containsKey('BYHOUR') ||
+        fields.containsKey('BYMINUTE') ||
+        fields.containsKey('BYSECOND') ||
+        days.any((day) => !dayPattern.hasMatch(day)) ||
+        monthDays.any((day) => day == 0 || day.abs() > 31) ||
+        months.any((month) => month < 1 || month > 12) ||
+        // Ordinal weekdays only mean something in a month (or a year with a
+        // month); BYSETPOS needs a set to pick from.
+        (hasOrdinal &&
+            frequency != RecurrenceFrequency.monthly &&
+            !(frequency == RecurrenceFrequency.yearly && months.isNotEmpty)) ||
+        (positions.isNotEmpty && days.isEmpty && monthDays.isEmpty) ||
+        (frequency == RecurrenceFrequency.yearly &&
+            days.isNotEmpty &&
+            months.isEmpty) ||
+        // A week start other than Monday changes which days share a week.
+        (frequency == RecurrenceFrequency.weekly &&
+            interval > 1 &&
+            (fields['WKST']?.toUpperCase() ?? 'MO') != 'MO');
+    if (unsupported) {
+      return RecurrenceRule(rawRule: body);
+    }
     return RecurrenceRule(
       frequency: frequency,
       interval: interval < 1 ? 1 : interval,
       until: _rruleDate(fields['UNTIL']),
       count: count != null && count > 0 ? count : null,
+      byDay: days,
+      byMonthDay: monthDays,
+      byMonth: months,
+      bySetPos: positions,
     );
   }
+
+  static List<String> _rruleList(String? value) => value == null
+      ? const []
+      : [
+          for (final part in value.split(','))
+            if (part.trim().isNotEmpty) part.trim().toUpperCase(),
+        ];
+
+  static List<int> _rruleInts(String? value) => [
+    for (final part in _rruleList(value))
+      if (int.tryParse(part) != null) int.parse(part),
+  ];
 
   static DateTime? _rruleDate(String? value) {
     if (value == null || value.isEmpty) {

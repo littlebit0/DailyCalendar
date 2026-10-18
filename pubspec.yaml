@@ -168,3 +168,6 @@ dependency_overrides:
     path: third_party/flutter_inappwebview_ios
   flutter_inappwebview_macos:
     path: third_party/flutter_inappwebview_macos
+  # #233: keep-alive WebViews must not leave null entries for engine detach.
+  flutter_inappwebview_android:
+    path: third_party/flutter_inappwebview_android

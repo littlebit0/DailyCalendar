@@ -40,13 +40,16 @@ extension EventRecordMapper on EventRecord {
         reminderMinutesBeforeList,
         reminderMinutesBefore,
       ),
-      recurrence: RecurrenceRule(
-        frequency: RecurrenceFrequency.fromName(recurrenceFrequency),
-        interval: recurrenceInterval,
-        until: recurrenceUntil,
-        count: recurrenceCount,
-        anchorDay: recurrenceAnchorDay,
-        excludedDates: _excludedDatesFromJson(recurrenceExcludedDates),
+      recurrence: RecurrenceRule.withDetailsJson(
+        RecurrenceRule(
+          frequency: RecurrenceFrequency.fromName(recurrenceFrequency),
+          interval: recurrenceInterval,
+          until: recurrenceUntil,
+          count: recurrenceCount,
+          anchorDay: recurrenceAnchorDay,
+          excludedDates: _excludedDatesFromJson(recurrenceExcludedDates),
+        ),
+        recurrenceDetails,
       ),
       createdAt: createdAt,
       updatedAt: updatedAt,
