@@ -53,12 +53,23 @@ class SnuAcademicSource implements AcademicSource {
     }
     final result = <AcademicEvent>[];
     final occurrences = <String, int>{};
+    final seenMonths = <int>{};
     for (final month in section.querySelectorAll('.work-wrap')) {
       final label = month.querySelector('.month-text')?.text.trim() ?? '';
       final match = RegExp(r'^(?:(\d{4})년\s*)?(\d{1,2})월$').firstMatch(label);
       if (match == null) throw const FormatException('Invalid SNU month');
       final year = int.tryParse(match.group(1) ?? '') ?? academicYear;
       final monthNumber = int.parse(match.group(2)!);
+      // An academic year runs March to the following February. Whether SNU
+      // ever omits a month without events is not observed (2021-2026 always
+      // list all twelve), so omission is accepted; repeated or out-of-window
+      // sections are not.
+      final inWindow = match.group(1) == null
+          ? monthNumber >= 3 && monthNumber <= 12
+          : year == academicYear + 1 && monthNumber >= 1 && monthNumber <= 2;
+      if (!inWindow || !seenMonths.add(year * 100 + monthNumber)) {
+        throw const FormatException('Invalid SNU month');
+      }
       for (final work in month.querySelectorAll('.work')) {
         final title = work.querySelector('.desc')?.text.trim() ?? '';
         final range = work.querySelector('.day')?.text.trim().split('~');
