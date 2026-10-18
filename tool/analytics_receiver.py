@@ -59,6 +59,7 @@ ENUMS = {
     },
     "phase": {"database", "followUp"},
     "buildMode": {"debug", "profile", "release"},
+    "milestone": {"firstCalendarFrame", "localCalendarReady"},
     "feature": {"search", "filter", "widget", "calendarImport", "siri", "map"},
     "trigger": {"automatic", "manual", "startup", "resume", "localChange"},
     "outcome": {"succeeded", "failed", "canceled"},
@@ -78,7 +79,7 @@ OPTIONAL_SCHEMAS = {
     for name in (
         "app_load_completed", "event_editor_completed", "event_save_succeeded",
         "event_save_failed", "sync_succeeded", "sync_failed",
-        "slow_interaction_detected", "frame_summary",
+        "slow_interaction_detected", "frame_summary", "startup_milestone",
     )
 }
 
@@ -107,6 +108,7 @@ SCHEMAS = {
         "operation": "syncOperation", "trigger": "trigger", "outcome": "failedOutcome",
         "durationMs": "duration", "errorCode": "errorCode",
     },
+    "startup_milestone": {"milestone": "milestone", "durationMs": "duration"},
     "frame_summary": {
         "frameCount": "framesInWindow", "slowFrameCount": "slowFramesInWindow",
         "durationMs": "duration", "refreshRateHz": "refreshRate",

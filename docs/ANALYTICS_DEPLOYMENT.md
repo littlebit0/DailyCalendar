@@ -156,3 +156,15 @@ and 144 Hz screens. Frames while the app is not resumed are not counted. `debug`
 `profile` windows should be excluded from release-quality statistics. Synthetic
 `FrameTiming` tests verify the rule; real jank on devices needs a profile/release
 measurement. Deploy the receiver before the app, as for every new event name.
+
+## Startup (#149)
+
+`app_load_completed` is unchanged: it ends when the data migration finishes (measured
+from the bootstrap widget) and says nothing about the calendar being visible. Two new
+`startup_milestone` events, each sent once per process, measure from the start of the
+Dart `main` (OS process launch and native splash time are not included):
+`firstCalendarFrame` (first frame after the calendar screen mounts) and
+`localCalendarReady` (the month, week and day providers have loaded the local
+events; external sync, LMS and Drive do not delay it). A failed local load sends no
+`localCalendarReady`. Earlier `app_load_completed` records keep their meaning.
+Deploy the receiver before the app.

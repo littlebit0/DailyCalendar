@@ -48,4 +48,16 @@ class StartupTiming {
     _firstFrameRecorded = true;
     mark(StartupStage.firstCalendarFrame);
   }
+
+  static final _claimedMilestones = <StartupStage>{};
+
+  /// Milliseconds since the Dart `main` began (OS process start is not included).
+  static int get sinceLaunchMs => _clock.elapsedMilliseconds;
+
+  /// True only the first time [stage] is claimed in this process, so a rebuilt
+  /// or recreated screen never reports the same startup milestone twice.
+  static bool claim(StartupStage stage) => _claimedMilestones.add(stage);
+
+  @visibleForTesting
+  static void resetClaims() => _claimedMilestones.clear();
 }

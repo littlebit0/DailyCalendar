@@ -117,6 +117,22 @@ class FrameSummaryTests(unittest.TestCase):
         self.assertFalse(self.valid(screen='calendar'))
 
 
+class StartupMilestoneTests(unittest.TestCase):
+    BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z',
+            'name': 'startup_milestone'}
+
+    def valid(self, attributes):
+        from tool.analytics_receiver import valid_event
+        return valid_event({**self.BASE, 'attributes': attributes})
+
+    def test_known_milestones_only(self):
+        self.assertTrue(self.valid({'milestone': 'firstCalendarFrame', 'durationMs': 800}))
+        self.assertTrue(self.valid({'milestone': 'localCalendarReady', 'durationMs': 120000, 'durationTruncated': True}))
+        self.assertFalse(self.valid({'milestone': 'syncDone', 'durationMs': 800}))
+        self.assertFalse(self.valid({'milestone': 'firstCalendarFrame'}))
+        self.assertFalse(self.valid({'milestone': 'firstCalendarFrame', 'durationMs': -1}))
+
+
 def _payload():
     return {
         "report": {

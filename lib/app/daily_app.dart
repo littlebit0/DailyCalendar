@@ -741,7 +741,12 @@ class _AppHomeState extends ConsumerState<_AppHome>
         null;
     _startupGateOpen = !_requiresStartupSync;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) StartupTiming.firstCalendarFrame();
+      if (!mounted) return;
+      StartupTiming.firstCalendarFrame();
+      _recordStartupMilestone(
+        StartupStage.firstCalendarFrame,
+        AnalyticsStartupMilestone.firstCalendarFrame,
+      );
     });
     WidgetsBinding.instance.addObserver(this);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
@@ -1053,15 +1058,38 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
   Future<void> _runStartupSync() async {
     unawaited(
-      StartupTiming.measure(
-        StartupStage.localCalendar,
-        _primeLocalCalendar,
-      ).catchError((_) {}),
+      StartupTiming.measure(StartupStage.localCalendar, _primeLocalCalendar)
+          .then(
+            (_) => _recordStartupMilestone(
+              StartupStage.localCalendar,
+              AnalyticsStartupMilestone.localCalendarReady,
+            ),
+          )
+          .catchError((_) {}),
     );
     await _tryStartSyncIfConnected(startup: true);
     if (!mounted) return;
     _refreshSettingsState();
     ref.invalidate(eventsInRangeProvider);
+  }
+
+  /// Reports a startup milestone once per process; never affects startup.
+  void _recordStartupMilestone(
+    StartupStage stage,
+    AnalyticsStartupMilestone milestone,
+  ) {
+    if (!StartupTiming.claim(stage)) return;
+    unawaited(
+      ref
+          .read(productAnalyticsProvider)
+          .record(
+            AnalyticsRecord.startupMilestone(
+              milestone,
+              durationMs: StartupTiming.sinceLaunchMs,
+            ),
+          )
+          .catchError((_) {}),
+    );
   }
 
   Future<void> _primeLocalCalendar() async {
