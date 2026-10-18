@@ -63,6 +63,7 @@ class DaeguAcademicSource implements AcademicSource {
     final events = <AcademicEvent>[];
     final months = <int>{};
     final occurrences = <String, int>{};
+    final published = <String>{};
     for (final row in document.querySelectorAll('table.tbl_cal tr')) {
       final header = row.querySelector('th');
       final cells = row.querySelectorAll('td');
@@ -124,6 +125,9 @@ class DaeguAcademicSource implements AcademicSource {
           (n) => n + 1,
           ifAbsent: () => 0,
         );
+        // The same title and period listed twice is one event. The occurrence
+        // number above is still consumed so later IDs stay as they were.
+        if (!published.add('$title|$start|$last')) continue;
         events.add(
           AcademicEvent(
             sourceId: '$key:$occurrence',

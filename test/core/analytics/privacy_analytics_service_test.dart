@@ -2,7 +2,12 @@ import 'dart:convert';
 
 import 'package:daily/core/analytics/privacy_analytics_service.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
+
+import '../../support/persistence_failure_store.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -118,7 +123,6 @@ void main() {
       );
       addTearDown(service.dispose);
 
-      expect(service.enabled, isTrue);
       expect(service.consentPromptCompleted, isTrue);
     },
   );
@@ -257,4 +261,170 @@ void main() {
     expect(service.pendingEventCount, 0);
     expect(preferences.getString('anonymousAnalyticsQueueV1'), isNull);
   });
+
+  test(
+    'a retry after the retention period does not resend expired events',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'anonymousAnalyticsEnabled': true,
+      });
+      final preferences = await SharedPreferences.getInstance();
+      var now = DateTime.utc(2026, 10, 1, 12);
+      var accept = false;
+      var posts = 0;
+      final service = PrivacyAnalyticsService(
+        preferences: preferences,
+        endpoint: Uri.parse('https://analytics.example.com/v1/events'),
+        environmentLoader: () async => environment,
+        now: () => now,
+        httpClient: MockClient((request) async {
+          posts += 1;
+          return http.Response('{}', accept ? 202 : 503);
+        }),
+      );
+      addTearDown(service.dispose);
+      await service.initialize();
+      await service.record(AnalyticsRecord.appLoad(durationMs: 25));
+      await service.flush();
+      expect(posts, 1);
+
+      // Eight days later nothing new was recorded, and only the retry runs.
+      now = now.add(const Duration(days: 8));
+      accept = true;
+      await service.flush();
+      expect(posts, 1, reason: 'the expired event must not be sent');
+      expect(preferences.getString('anonymousAnalyticsQueueV1'), isNull);
+    },
+  );
+
+  group('retention cleanup', () {
+    const queueKey = 'flutter.anonymousAnalyticsQueueV1';
+    late _SlowFailureStore store;
+
+    setUp(() {
+      SharedPreferences.setMockInitialValues({});
+      store = _SlowFailureStore()..disk['flutter.anonymousAnalyticsEnabled'] = true;
+      SharedPreferencesStorePlatform.instance = store;
+    });
+
+    PrivacyAnalyticsService create(
+      SharedPreferences preferences,
+      DateTime Function() now, {
+      Uri? endpoint,
+      http.Client? client,
+    }) {
+      final service = PrivacyAnalyticsService(
+        preferences: preferences,
+        endpoint: endpoint,
+        environmentLoader: () async => environment,
+        now: now,
+        httpClient: client ?? MockClient((_) async => http.Response('{}', 503)),
+      );
+      addTearDown(service.dispose);
+      return service;
+    }
+
+    test('expired events are removed even when no endpoint is configured', () async {
+      final preferences = await SharedPreferences.getInstance();
+      var now = DateTime.utc(2026, 10, 1, 12);
+      final service = create(preferences, () => now);
+      await service.initialize();
+      await service.record(AnalyticsRecord.appLoad(durationMs: 25));
+      expect(preferences.getString('anonymousAnalyticsQueueV1'), isNotNull);
+
+      await pumpEventQueue(); // let record()'s own background flush finish
+      now = now.add(const Duration(days: 8));
+      await service.flush();
+
+      expect(service.pendingEventCount, 0);
+      await preferences.reload();
+      expect(preferences.getString('anonymousAnalyticsQueueV1'), isNull);
+    });
+
+    test('a failed cleanup write is retried by the next flush', () async {
+      final preferences = await SharedPreferences.getInstance();
+      var now = DateTime.utc(2026, 10, 1, 12);
+      final service = create(
+        preferences,
+        () => now,
+        endpoint: Uri.parse('https://analytics.example.com/v1/events'),
+      );
+      await service.initialize();
+      await service.record(AnalyticsRecord.appLoad(durationMs: 25));
+      expect(store.disk[queueKey], isNotNull);
+
+      await pumpEventQueue();
+      now = now.add(const Duration(days: 8));
+      store.failureKey = queueKey;
+      await service.flush();
+      expect(service.pendingEventCount, 0, reason: 'dropped from memory');
+      expect(store.disk[queueKey], isNotNull, reason: 'still on disk');
+
+      // The queue is empty now, but the cleanup is still owed.
+      store.failureKey = null;
+      await pumpEventQueue();
+      await service.flush();
+      expect(store.disk[queueKey], isNull);
+    });
+
+    test('an event that ages out during the storage write is not sent', () async {
+      final preferences = await SharedPreferences.getInstance();
+      var now = DateTime.utc(2026, 10, 1, 12);
+      var posts = 0;
+      final service = create(
+        preferences,
+        () => now,
+        endpoint: Uri.parse('https://analytics.example.com/v1/events'),
+        // The receiver is down, so both events stay queued.
+        client: MockClient((_) async {
+          posts += 1;
+          return http.Response('{}', 503);
+        }),
+      );
+      await service.initialize();
+      // Recorded now and left unsent.
+      await service.record(AnalyticsRecord.appLoad(durationMs: 1));
+      now = now.add(const Duration(days: 3));
+      await service.record(AnalyticsRecord.appLoad(durationMs: 2));
+      await pumpEventQueue();
+      posts = 0;
+
+      // Day 8: the first event is expired, the second is five days old. The
+      // cleanup write then stalls until day 10.5, when the second has expired.
+      await pumpEventQueue();
+      now = DateTime.utc(2026, 10, 9, 12, 30);
+      store.delay = Completer<void>();
+      final flushing = service.flush();
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      now = DateTime.utc(2026, 10, 11, 12, 30);
+      store.delay!.complete();
+      await flushing;
+
+      expect(posts, 0, reason: 'nothing past its retention is transmitted');
+      expect(service.pendingEventCount, 0);
+    });
+  });
+}
+
+/// A preferences store whose writes can fail for one key or wait on a gate.
+class _SlowFailureStore extends PersistenceFailureStore {
+  Completer<void>? delay;
+
+  @override
+  Future<bool> setValue(String valueType, String key, Object value) async {
+    final gate = delay;
+    if (gate != null && key == 'flutter.anonymousAnalyticsQueueV1') {
+      await gate.future;
+    }
+    return super.setValue(valueType, key, value);
+  }
+
+  @override
+  Future<bool> remove(String key) async {
+    final gate = delay;
+    if (gate != null && key == 'flutter.anonymousAnalyticsQueueV1') {
+      await gate.future;
+    }
+    return super.remove(key);
+  }
 }

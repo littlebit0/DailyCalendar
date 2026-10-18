@@ -166,3 +166,14 @@ dependency_overrides:
   # #228: cancelled one-time Android location clients leave the manager list.
   geolocator_android:
     path: third_party/geolocator_android
+  # #226: the iOS SDK reads file dates, so its own privacy manifest must say so.
+  package_info_plus:
+    path: third_party/package_info_plus
+  # #246: page-controlled WebMessage input must not reach force casts.
+  flutter_inappwebview_ios:
+    path: third_party/flutter_inappwebview_ios
+  flutter_inappwebview_macos:
+    path: third_party/flutter_inappwebview_macos
+  # #233: keep-alive WebViews must not leave null entries for engine detach.
+  flutter_inappwebview_android:
+    path: third_party/flutter_inappwebview_android

@@ -355,7 +355,12 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
                       style: Theme.of(context).textTheme.labelMedium,
                     ),
                   Text(
-                    '${schools.length}${context.tr('개 대학')}',
+                    schools.length == 1
+                        ? context.tr('대학 1개')
+                        : context.tr(
+                            '대학 {count}개',
+                            args: {'count': schools.length},
+                          ),
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: colors.onSurfaceVariant,
                     ),

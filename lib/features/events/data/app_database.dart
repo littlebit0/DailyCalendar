@@ -31,6 +31,8 @@ class EventRecords extends Table {
   DateTimeColumn get recurrenceUntil => dateTime().nullable()();
   IntColumn get recurrenceCount => integer().nullable()();
   IntColumn get recurrenceAnchorDay => integer().nullable()();
+  // RFC 5545 BYDAY/BYMONTHDAY/BYMONTH/BYSETPOS conditions as JSON.
+  TextColumn get recurrenceDetails => text().nullable()();
   TextColumn get recurrenceExcludedDates =>
       text().withDefault(const Constant('[]'))();
   DateTimeColumn get createdAt => dateTime()();
@@ -51,7 +53,7 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 10;
+  static const currentSchemaVersion = 11;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,

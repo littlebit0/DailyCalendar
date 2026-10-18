@@ -273,20 +273,14 @@
       "campus": "cheonan"
     },
     {
-      "college": null,
+      "college": "공공인재대학",
       "department": "공공정책학과",
       "sourceLabel": "공공인재대학 / 공공정책학과",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 천안캠퍼스 연계전공 표의 정확한 전공명 공공정책학과; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl2.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-cheonan-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "cheonan",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "cheonan"
     },
     {
       "college": "공공인재대학",
@@ -489,20 +483,14 @@
       "campus": "cheonan"
     },
     {
-      "college": null,
+      "college": "과학기술대학",
       "department": "수학과",
       "sourceLabel": "과학기술대학 / 수학과",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 천안캠퍼스 연계전공 표의 정확한 전공명 수학과; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl2.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-cheonan-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "cheonan",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "cheonan"
     },
     {
       "college": "과학기술대학",
@@ -535,36 +523,24 @@
       "campus": "cheonan"
     },
     {
-      "college": null,
+      "college": "과학기술대학",
       "department": "제약공학과",
       "sourceLabel": "과학기술대학 / 제약공학과",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 천안캠퍼스 연계전공 표의 정확한 전공명 제약공학과; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl2.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-cheonan-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "cheonan",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "cheonan"
     },
     {
-      "college": null,
+      "college": "과학기술대학",
       "department": "화학과",
       "sourceLabel": "과학기술대학 / 화학과",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 천안캠퍼스 연계전공 표의 정확한 전공명 화학과; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl2.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-cheonan-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "cheonan",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "cheonan"
     },
     {
       "college": "문과대학",
@@ -667,20 +643,14 @@
       "campus": "cheonan"
     },
     {
-      "college": null,
+      "college": "바이오융합대학",
       "department": "의생명과학부 생명과학전공",
       "sourceLabel": "바이오융합대학 / 의생명과학부 생명과학전공",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 천안캠퍼스 연계전공 표의 정확한 전공명 의생명과학부 생명과학전공; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl2.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-cheonan-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "cheonan",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "cheonan"
     },
     {
       "college": "바이오융합대학",
@@ -2015,20 +1985,14 @@
       "campus": "jukjeon"
     },
     {
-      "college": null,
+      "college": "경영경제대학",
       "department": "경영학부 경영학전공",
       "sourceLabel": "경영경제대학 / 경영학부 경영학전공",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 죽전캠퍼스 연계전공 표의 정확한 전공명 경영학부 경영학전공; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-jukjeon-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "jukjeon",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "jukjeon"
     },
     {
       "college": "경영경제대학",
@@ -2061,20 +2025,14 @@
       "campus": "jukjeon"
     },
     {
-      "college": null,
+      "college": "경영경제대학",
       "department": "무역학과",
       "sourceLabel": "경영경제대학 / 무역학과",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 죽전캠퍼스 연계전공 표의 정확한 전공명 무역학과; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-jukjeon-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "jukjeon",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "jukjeon"
     },
     {
       "college": "경영경제대학",
@@ -2759,20 +2717,14 @@
       "campus": "jukjeon"
     },
     {
-      "college": null,
+      "college": "사회과학대학",
       "department": "행정학과",
       "sourceLabel": "사회과학대학 / 행정학과",
-      "sourceUrl": "https://gslp.dankook.ac.kr/web/kor/convergence-linked",
-      "evidence": "공식 융합/연계전공 제도 죽전캠퍼스 연계전공 표의 정확한 전공명 행정학과; 주관대학은 제도 그룹과 구별",
-      "sourceFile": "work/all-university-completion-20261012/b-sources/dku-system.html",
+      "sourceUrl": "https://webinfo.dankook.ac.kr/tiac/univ/lssn/lpci/views/lssnPopup/tmtbl.do",
+      "evidence": "Original published department label explicitly includes college hierarchy. This is affiliation evidence only.",
+      "sourceFile": "assets/timetable/dku-jukjeon-2026-2.json",
       "isOfferingUnit": false,
-      "campus": "jukjeon",
-      "group": "연계전공",
-      "officialGroups": [
-        "연계전공"
-      ],
-      "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "campus": "jukjeon"
     },
     {
       "college": "스포츠과학대학",
