@@ -24,6 +24,7 @@ BUG_REPORT_RETENTION_DAYS = 365
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 GITHUB_API_VERSION = "2026-03-10"
 VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?$")
+ANALYTICS_VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?(?:-test)?$")
 EMAIL_PATTERN = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 UUID_PATTERN = re.compile(
     r"^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
@@ -148,7 +149,7 @@ def valid_batch(batch):
     environment = batch["environment"]
     if not isinstance(environment, dict) or set(environment) != {"appVersion", "platform", "osMajor"}:
         return False
-    if not isinstance(environment["appVersion"], str) or not VERSION_PATTERN.fullmatch(environment["appVersion"]):
+    if not isinstance(environment["appVersion"], str) or not ANALYTICS_VERSION_PATTERN.fullmatch(environment["appVersion"]):
         return False
     if environment["platform"] not in {"ios", "macos", "android", "windows", "linux"}:
         return False

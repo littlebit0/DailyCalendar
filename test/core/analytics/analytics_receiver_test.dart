@@ -8,6 +8,40 @@ import '../../../tool/analytics_receiver.dart';
 
 void main() {
   test(
+    'receiver keeps test and production versions in separate groups',
+    () async {
+      final directory = await Directory.systemTemp.createTemp(
+        'daily-analytics-',
+      );
+      addTearDown(() => directory.delete(recursive: true));
+      final aggregator = DailyAnalyticsAggregator(
+        directory,
+        now: () => DateTime.utc(2026, 10, 13),
+      );
+      final production = _safeBatch();
+      final testBatch = _safeBatch();
+      (testBatch['environment'] as Map)['appVersion'] = '3.1.0-test';
+      ((testBatch['events'] as List).single as Map)['eventId'] =
+          'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
+      expect(await aggregator.accept(production), 1);
+      expect(await aggregator.accept(testBatch), 1);
+      final aggregate =
+          jsonDecode(
+                await File(
+                  '${directory.path}/analytics-2026-10-13.json',
+                ).readAsString(),
+              )
+              as Map;
+      final groups = (aggregate['groups'] as Map).values.cast<Map>();
+      expect(
+        groups.map((group) => group['appVersion']),
+        unorderedEquals(['3.1.0', '3.1.0-test']),
+      );
+      (testBatch['environment'] as Map)['appVersion'] = '3.1.0-private-data';
+      await expectLater(aggregator.accept(testBatch), throwsFormatException);
+    },
+  );
+  test(
     'HTTP receiver accepts safe batches and rejects content fields',
     () async {
       final directory = await Directory.systemTemp.createTemp(
