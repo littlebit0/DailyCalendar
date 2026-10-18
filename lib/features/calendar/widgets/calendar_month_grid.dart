@@ -385,6 +385,8 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDragging(CalendarEvent event, bool active) {
+    // The drop's save can finish after this grid has been removed.
+    if (!mounted) return;
     if (_eventDragActive == active) {
       if (active && !_sameDraggedEvent(_draggingEvent, event)) {
         setState(() => _draggingEvent = event);
@@ -408,6 +410,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDragInteraction(CalendarEvent event, bool active) {
+    if (!mounted) return;
     if (_eventDragInteractionActive == active) {
       return;
     }
@@ -416,6 +419,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDropHover(CalendarEvent? event, DateTime? date, int? index) {
+    if (!mounted) return;
     if (event == null || date == null || index == null) {
       if (_dragHoverDate == null && _dragHoverIndex == null) return;
       setState(() {
@@ -437,6 +441,7 @@ class _CalendarMonthGridState extends State<CalendarMonthGrid> {
   }
 
   void _setEventDropAccepted(CalendarEvent event) {
+    if (!mounted) return;
     if (_eventDropAccepted) return;
     setState(() {
       _draggingEvent = event;
@@ -1264,9 +1269,17 @@ class _WeekRowState extends State<_WeekRow> {
             .cast<_EventSegment>()
             .toList()
           ..sort((a, b) {
+            // A bar that starts earlier keeps the upper lane. Only bars starting
+            // on the same column are ordered by that date's manual order, so the
+            // reference date never depends on which pair is compared (a pairwise
+            // date could make A<B, B<C and C<A at the same time).
+            final startCompare = a.startCol.compareTo(b.startCol);
+            if (startCompare != 0) {
+              return startCompare;
+            }
             final comparisonDate = shiftCalendarDateByDays(
               weekStart,
-              math.max(a.startCol, b.startCol),
+              a.startCol,
             );
             final eventCompare = compareCalendarEvents(
               a.event,
@@ -1285,10 +1298,6 @@ class _WeekRowState extends State<_WeekRow> {
             );
             if (eventCompare != 0) {
               return eventCompare;
-            }
-            final startCompare = a.startCol.compareTo(b.startCol);
-            if (startCompare != 0) {
-              return startCompare;
             }
             final spanCompare = b.span.compareTo(a.span);
             if (spanCompare != 0) {

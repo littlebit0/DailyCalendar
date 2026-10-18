@@ -1,4 +1,8 @@
 import 'package:daily/core/notifications/reminder_delivery_plan.dart';
+import 'package:daily/features/events/data/recurrence_expander.dart';
+import 'package:daily/features/events/domain/calendar_event.dart';
+import 'package:daily/features/events/domain/event_category.dart';
+import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -109,5 +113,166 @@ void main() {
 
     expect(plan.type, ReminderDeliveryType.none);
     expect(plan.deliverAt, isNull);
+  });
+
+  group('planRecurringReminders', () {
+    CalendarEvent repeating(
+      DateTime start,
+      RecurrenceRule rule, {
+      bool allDay = false,
+      Duration length = const Duration(hours: 1),
+    }) => CalendarEvent(
+      id: 'series',
+      title: '반복',
+      startAt: start,
+      endAt: start.add(length),
+      allDay: allDay,
+      category: EventCategory.basic,
+      colorValue: 1,
+      createdAt: start,
+      updatedAt: start,
+      recurrence: rule,
+    );
+
+    List<RecurringReminderRequest> plan(
+      CalendarEvent event, {
+      int minutes = 10,
+      required DateTime now,
+      bool immediate = false,
+    }) => planRecurringReminders(
+      event: event,
+      reminderMinutes: minutes,
+      baseTime: (occurrence) => occurrence.startAt,
+      now: now,
+      allowImmediate: immediate,
+    );
+
+    test('daily series with a count schedules every later occurrence', () {
+      final event = repeating(
+        DateTime(2026, 10, 14, 9),
+        const RecurrenceRule(frequency: RecurrenceFrequency.daily, count: 3),
+      );
+      final requests = plan(event, now: DateTime(2026, 10, 14, 8));
+      expect(requests.map((r) => r.plan.deliverAt), [
+        DateTime(2026, 10, 14, 8, 50),
+        DateTime(2026, 10, 15, 8, 50),
+        DateTime(2026, 10, 16, 8, 50),
+      ]);
+      expect(requests.map((r) => r.slot), [0, 1, 2]);
+    });
+
+    test(
+      'a series that started long ago still reminds its next occurrences',
+      () {
+        final event = repeating(
+          DateTime(2026, 9, 1, 9),
+          const RecurrenceRule(frequency: RecurrenceFrequency.weekly),
+        );
+        final requests = plan(event, now: DateTime(2026, 10, 14, 12));
+        expect(requests, hasLength(recurringReminderSlotsPerOffset));
+        expect(requests.first.plan.deliverAt, DateTime(2026, 10, 20, 8, 50));
+        expect(requests[1].plan.deliverAt, DateTime(2026, 10, 27, 8, 50));
+      },
+    );
+
+    test('request times match the occurrences the calendar shows', () {
+      final now = DateTime(2026, 10, 14, 12);
+      for (final rule in [
+        const RecurrenceRule(frequency: RecurrenceFrequency.daily, interval: 3),
+        const RecurrenceRule(frequency: RecurrenceFrequency.weekly),
+        const RecurrenceRule(frequency: RecurrenceFrequency.monthly),
+        const RecurrenceRule(frequency: RecurrenceFrequency.yearly),
+      ]) {
+        final event = repeating(DateTime(2026, 9, 8, 9), rule);
+        final shown = RecurrenceExpander()
+            .expand(event, now, now.add(const Duration(days: 800)))
+            .map((o) => o.startAt)
+            .take(recurringReminderSlotsPerOffset);
+        final requests = plan(event, now: now);
+        expect(
+          requests.map((r) => r.occurrence.startAt),
+          shown,
+          reason: rule.frequency.name,
+        );
+        expect(
+          requests.map((r) => r.plan.deliverAt),
+          shown.map((s) => s.subtract(const Duration(minutes: 10))),
+        );
+      }
+    });
+
+    test(
+      'a first occurrence beyond the usual horizon still gets its reminder',
+      () {
+        final event = repeating(
+          DateTime(2029, 1, 1, 9),
+          const RecurrenceRule(frequency: RecurrenceFrequency.yearly),
+        );
+        final requests = plan(event, now: DateTime(2026, 10, 18));
+        expect(requests.first.plan.deliverAt, DateTime(2029, 1, 1, 8, 50));
+        final triennial = repeating(
+          DateTime(2020, 5, 1, 9),
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.yearly,
+            interval: 3,
+          ),
+        );
+        expect(
+          plan(triennial, now: DateTime(2026, 10, 18)).first.occurrence.startAt,
+          DateTime(2029, 5, 1, 9),
+        );
+      },
+    );
+
+    test('zero slots plan nothing', () {
+      final event = repeating(
+        DateTime(2026, 10, 14, 9),
+        const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+      );
+      expect(
+        planRecurringReminders(
+          event: event,
+          reminderMinutes: 10,
+          baseTime: (o) => o.startAt,
+          now: DateTime(2026, 10, 14, 8),
+          allowImmediate: false,
+          slots: 0,
+        ),
+        isEmpty,
+      );
+    });
+
+    test('excluded dates and ended series produce no requests', () {
+      final event = repeating(
+        DateTime(2026, 10, 14, 9),
+        RecurrenceRule(
+          frequency: RecurrenceFrequency.daily,
+          until: DateTime(2026, 10, 17),
+          excludedDates: [DateTime(2026, 10, 15)],
+        ),
+      );
+      final requests = plan(event, now: DateTime(2026, 10, 14, 8));
+      expect(requests.map((r) => r.occurrence.startAt.day), [14, 16, 17]);
+      expect(plan(event, now: DateTime(2026, 10, 18)), isEmpty);
+    });
+
+    test(
+      'an occurrence in progress is delivered immediately only when allowed',
+      () {
+        final event = repeating(
+          DateTime(2026, 10, 14, 9),
+          const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+          length: const Duration(hours: 2),
+        );
+        final now = DateTime(2026, 10, 15, 9, 30);
+        expect(
+          plan(event, now: now).first.plan.type,
+          ReminderDeliveryType.scheduled,
+        );
+        final immediate = plan(event, now: now, immediate: true);
+        expect(immediate.first.plan.type, ReminderDeliveryType.immediate);
+        expect(immediate[1].plan.type, ReminderDeliveryType.scheduled);
+      },
+    );
   });
 }
