@@ -105,7 +105,7 @@ class DedupeAcrossMidnightTests(unittest.TestCase):
 class AtomicAggregateTests(DedupeAcrossMidnightTests):
     """Same batch/count helpers as the midnight tests."""
 
-    def test_a_failed_dedupe_write_does_not_leave_the_totals_increased(self):
+    def test_a_failed_dedupe_write_is_finished_so_the_retry_counts_once(self):
         from unittest import mock
         with tempfile.TemporaryDirectory() as directory:
             aggregator = Aggregator(directory)
@@ -121,10 +121,50 @@ class AtomicAggregateTests(DedupeAcrossMidnightTests):
             with mock.patch.object(aggregator, '_write_json', side_effect=flaky):
                 with self.assertRaises(OSError):
                     aggregator.accept(self.batch())
-                # The failed request left no totals, so its retry counts once.
-                self.assertEqual(self.count(directory), 0)
-                self.assertEqual(aggregator.accept(self.batch()), 1)
+                # The retry finishes the interrupted request: the event is
+                # already counted, so it is not counted a second time.
+                self.assertEqual(aggregator.accept(self.batch()), 0)
             self.assertEqual(self.count(directory), 1)
+            self.assertFalse((Path(directory) / 'pending-transaction.json').exists())
+            self.assertEqual(len(list(Path(directory).glob('dedupe-*.json'))), 1)
+
+    def test_storage_that_stays_down_cannot_double_count_after_it_recovers(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            original = aggregator._write_json
+
+            def down(path, value):
+                # Only the single journal file can still be written.
+                if path.name.startswith(('analytics-', 'dedupe-')):
+                    raise OSError('I/O error')
+                return original(path, value)
+
+            with mock.patch.object(aggregator, '_write_json', side_effect=down):
+                for _ in range(3):  # several retries while storage is down
+                    with self.assertRaises(OSError):
+                        aggregator.accept(self.batch())
+            self.assertTrue((Path(directory) / 'pending-transaction.json').exists())
+            # Storage is back: the pending transaction is finished first.
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            self.assertEqual(self.count(directory), 1)
+            self.assertFalse((Path(directory) / 'pending-transaction.json').exists())
+
+    def test_a_failure_before_the_journal_changes_nothing(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            with mock.patch.object(aggregator, '_write_json', side_effect=OSError('full')):
+                with self.assertRaises(OSError):
+                    aggregator.accept(self.batch())
+            self.assertEqual(self.count(directory), 0)
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+            self.assertEqual(self.count(directory), 1)
+
+    def test_an_unreadable_journal_does_not_block_intake(self):
+        with tempfile.TemporaryDirectory() as directory:
+            (Path(directory) / 'pending-transaction.json').write_text('{not json')
+            self.assertEqual(Aggregator(directory).accept(self.batch()), 1)
 
     def test_totals_from_earlier_requests_survive_a_later_failure(self):
         from unittest import mock
@@ -143,7 +183,10 @@ class AtomicAggregateTests(DedupeAcrossMidnightTests):
             with mock.patch.object(aggregator, '_write_json', side_effect=flaky):
                 with self.assertRaises(OSError):
                     aggregator.accept(second)
-            self.assertEqual(self.count(directory), 1)
+            # Finished by the next request; neither event is lost or doubled.
+            self.assertEqual(aggregator.accept(second), 0)
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            self.assertEqual(self.count(directory), 2)
 
 
 def _payload():
