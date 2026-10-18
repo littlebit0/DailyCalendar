@@ -163,6 +163,9 @@ dependency_overrides:
     path: third_party/flutter_secure_storage_windows
   flutter_inappwebview_windows:
     path: third_party/flutter_inappwebview_windows
+  # #227: Apple one-time location requests must stop native updates on timeout.
+  geolocator_apple:
+    path: third_party/geolocator_apple
   # #228: cancelled one-time Android location clients leave the manager list.
   geolocator_android:
     path: third_party/geolocator_android

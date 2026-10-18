@@ -502,12 +502,11 @@ packages:
     source: path
     version: "5.0.3"
   geolocator_apple:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: geolocator_apple
-      sha256: "853803d6bb1713c094e935b4a5ae5f19c0308acf81da13fa9ff84fb4c70c0b73"
-      url: "https://pub.dev"
-    source: hosted
+      path: "third_party/geolocator_apple"
+      relative: true
+    source: path
     version: "2.3.14"
   geolocator_linux:
     dependency: transitive
