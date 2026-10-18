@@ -102,6 +102,30 @@ for item in fixtures {
   }
 }
 print("Shared recurrence anchor fixtures passed")
+
+// #100: weekday / month-position conditions, from the same fixture the Dart tests use.
+try sql("ALTER TABLE event_records ADD COLUMN recurrence_details TEXT")
+let detailFixtures = try JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: CommandLine.arguments[3]))) as! [[String: Any]]
+for item in detailFixtures {
+  let name = item["name"] as! String
+  let date = fixtureDate(item["start"] as! String)
+  let event = try DailySiriDatabase.add(title: name, startAt: date, endAt: date.addingTimeInterval(3600), allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+  let until = (item["until"] as? String).map { String(Int64(fixtureDate($0).timeIntervalSince1970)) } ?? "NULL"
+  let count = (item["count"] as? Int).map(String.init) ?? "NULL"
+  var details: [String: Any] = [:]
+  for key in ["byDay", "byMonthDay", "byMonth", "bySetPos"] where item[key] != nil { details[key] = item[key] }
+  let detailsJSON = String(data: try JSONSerialization.data(withJSONObject: details), encoding: .utf8)!
+  let exclusions = String(data: try JSONSerialization.data(withJSONObject: item["excluded"] as? [String] ?? []), encoding: .utf8)!
+  try sql("UPDATE event_records SET recurrence_frequency='\(item["frequency"]!)', recurrence_interval=\(item["interval"]!), recurrence_count=\(count), recurrence_until=\(until), recurrence_details='\(detailsJSON)', recurrence_excluded_dates='\(exclusions)' WHERE id='\(event.id)'")
+  let from = Calendar.current.startOfDay(for: fixtureDate(item["rangeStart"] as! String))
+  let to = fixtureDate(item["rangeEnd"] as! String)
+  let actual = try DailySiriDatabase.events(from: from, to: to)
+    .filter { DailySiriOccurrenceIdentity.parse($0.id)?.sourceID == event.id || $0.id == event.id }
+    .map { formatter.string(from: $0.startAt) }
+  if actual != item["expected"] as! [String] { fatalError("detail fixture \(name): expected \(item["expected"]!), got \(actual)") }
+}
+print("Siri recurrence detail fixtures passed")
+
 // #123: the until day is inclusive and a last occurrence may run past it.
 func localDate(_ day: Int, _ hour: Int) -> Date {
   Calendar.current.date(from: DateComponents(year: 2026, month: 8, day: day, hour: hour))!
