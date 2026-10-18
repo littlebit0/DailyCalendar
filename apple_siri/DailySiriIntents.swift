@@ -1694,30 +1694,74 @@ private enum DailyAppleIntelligenceNarrator {
     factualMessage: String,
     events: [DailySiriEvent]
   ) -> Bool {
-    guard !candidate.isEmpty,
-          candidate.split(separator: "\n", omittingEmptySubsequences: false).count ==
-            factualMessage.split(separator: "\n", omittingEmptySubsequences: false).count,
-          events.allSatisfy({ candidate.contains($0.title) }) else {
-      return false
-    }
-    let factualNumbers = numericTokens(in: factualMessage)
-    let candidateNumbers = numericTokens(in: candidate)
-    return factualNumbers == candidateNumbers
-  }
-
-  private static func numericTokens(in value: String) -> [String] {
-    guard let expression = try? NSRegularExpression(pattern: #"\d+"#) else {
-      return []
-    }
-    return expression.matches(
-      in: value,
-      range: NSRange(value.startIndex..., in: value)
-    ).compactMap { match in
-      guard let range = Range(match.range, in: value) else { return nil }
-      return String(value[range])
-    }
+    DailySiriNarrationValidator.isFaithful(
+      candidate,
+      to: factualMessage,
+      titles: events.map(\.title)
+    )
   }
 }
+
+// BEGIN SIRI NARRATION VALIDATOR
+/// A rewritten response is only spoken when every line still states the same
+/// facts as the original line: which events it names, its numbers, its
+/// weekdays and whether it says an event exists. Anything else falls back to
+/// the original message.
+enum DailySiriNarrationValidator {
+  static func isFaithful(_ candidate: String, to factual: String, titles: [String]) -> Bool {
+    let candidateLines = candidate.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    let factualLines = factual.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    guard !candidate.isEmpty, candidateLines.count == factualLines.count else { return false }
+    for (candidateLine, factualLine) in zip(candidateLines, factualLines) {
+      guard numbers(in: candidateLine) == numbers(in: factualLine),
+            weekdays(in: candidateLine) == weekdays(in: factualLine),
+            mentionedTitles(in: candidateLine, titles) == mentionedTitles(in: factualLine, titles),
+            negates(candidateLine) == negates(factualLine) else {
+        return false
+      }
+    }
+    // Every event must still be named somewhere (also covers repeated titles).
+    return titles.allSatisfy { candidate.contains($0) }
+  }
+
+  private static func numbers(in value: String) -> [String] {
+    guard let expression = try? NSRegularExpression(pattern: #"\d+"#) else { return [] }
+    return expression.matches(in: value, range: NSRange(value.startIndex..., in: value)).compactMap { match in
+      Range(match.range, in: value).map { String(value[$0]) }
+    }
+  }
+
+  private static let weekdayNames = [
+    "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+    "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日", "日曜日",
+    "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日", "星期天",
+  ]
+
+  private static func weekdays(in value: String) -> [String] {
+    let lowered = value.lowercased()
+    return weekdayNames.filter { lowered.contains($0) }.sorted()
+  }
+
+  /// Titles named in the line, ignoring a short title that only occurs inside a longer one.
+  private static func mentionedTitles(in value: String, _ titles: [String]) -> [String] {
+    let found = Set(titles.filter { !$0.isEmpty && value.contains($0) })
+    return found.filter { title in
+      !found.contains { $0 != title && $0.contains(title) }
+    }.sorted()
+  }
+
+  private static let negations = [
+    "없", "않", "못", "ない", "ません", "没有", "沒有", "无", "無",
+    " no ", "not", "none", "nothing", "without", "n't",
+  ]
+
+  private static func negates(_ value: String) -> Bool {
+    let padded = " " + value.lowercased() + " "
+    return negations.contains { padded.contains($0) }
+  }
+}
+// END SIRI NARRATION VALIDATOR
 
 // BEGIN SIRI OCCURRENCE IDENTITY
 struct DailySiriOccurrenceIdentity {
