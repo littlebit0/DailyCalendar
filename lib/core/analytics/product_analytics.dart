@@ -31,6 +31,8 @@ enum AnalyticsSyncOperation {
 
 enum AnalyticsTrigger { automatic, manual, startup, resume, localChange }
 
+enum AnalyticsBuildMode { debug, profile, release }
+
 enum AnalyticsOutcome { succeeded, failed, canceled }
 
 enum AnalyticsErrorCode {
@@ -58,7 +60,8 @@ enum AnalyticsEventName {
   syncStarted('sync_started'),
   syncSucceeded('sync_succeeded'),
   syncFailed('sync_failed'),
-  slowInteractionDetected('slow_interaction_detected');
+  slowInteractionDetected('slow_interaction_detected'),
+  frameSummary('frame_summary');
 
   const AnalyticsEventName(this.wireName);
 
@@ -190,6 +193,29 @@ class AnalyticsRecord {
       'slowFrameCount': slowFrameCount.clamp(0, 120),
     });
   }
+
+  /// Frame health over a window: [slowFrameCount] of [frameCount] frames took
+  /// longer than twice the display's frame budget at [refreshRateHz], so the
+  /// ratio is meaningful on 60, 120 and 144 Hz screens alike (#150).
+  factory AnalyticsRecord.frameSummary({
+    required int frameCount,
+    required int slowFrameCount,
+    required int maxFrameMs,
+    required int refreshRateHz,
+    required AnalyticsBuildMode buildMode,
+  }) {
+    return AnalyticsRecord._(AnalyticsEventName.frameSummary, {
+      'frameCount': frameCount.clamp(1, maxFrameCount),
+      'slowFrameCount': slowFrameCount.clamp(0, frameCount.clamp(1, maxFrameCount)),
+      ..._durationAttributes(maxFrameMs),
+      'refreshRateHz': refreshRateHz.clamp(minRefreshRateHz, maxRefreshRateHz),
+      'buildMode': buildMode.name,
+    });
+  }
+
+  static const maxFrameCount = 100000;
+  static const minRefreshRateHz = 24;
+  static const maxRefreshRateHz = 240;
 
   final AnalyticsEventName name;
   final Map<String, Object> attributes;

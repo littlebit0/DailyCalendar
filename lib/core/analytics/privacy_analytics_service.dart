@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/widgets.dart' show AppLifecycleState, WidgetsBinding;
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,7 +43,19 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     Future<AnalyticsEnvironment> Function()? environmentLoader,
     DateTime Function()? now,
     String Function()? idGenerator,
+    double Function()? refreshRateProvider,
+    bool Function()? foregroundProvider,
+    AnalyticsBuildMode? buildMode,
   }) : _preferences = preferences,
+       _refreshRateProvider = refreshRateProvider ?? _displayRefreshRate,
+       _foregroundProvider = foregroundProvider ?? _appInForeground,
+       _buildMode =
+           buildMode ??
+           (kReleaseMode
+               ? AnalyticsBuildMode.release
+               : kProfileMode
+               ? AnalyticsBuildMode.profile
+               : AnalyticsBuildMode.debug),
        _secureStorage = secureStorage ?? const FlutterSecureStorage(),
        _httpClient = httpClient ?? http.Client(),
        _ownsHttpClient = httpClient == null,
@@ -90,6 +103,10 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   final Future<AnalyticsEnvironment> Function() _environmentLoader;
   final DateTime Function() _now;
   final String Function() _idGenerator;
+  final double Function() _refreshRateProvider;
+  final bool Function() _foregroundProvider;
+  final AnalyticsBuildMode _buildMode;
+  _FrameWindow? _frameWindow;
   final ValueNotifier<bool> _enabled;
   final ValueNotifier<bool> _consentPromptCompleted;
   late final String _sessionId = _idGenerator();
@@ -275,6 +292,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
 
   @override
   Future<void> flush() {
+    _emitFrameSummary();
     final active = _flushOperation;
     if (active != null) return active;
     final operation = _flushImpl();
@@ -439,20 +457,63 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     }
   }
 
+  // A window ends after this many frames (about a minute of continuous 60 Hz
+  // drawing) or this much wall time, so frame data stays a handful of events.
+  static const _frameWindowFrames = 3600;
+  static const _frameWindowAge = Duration(minutes: 10);
+
+  static double _displayRefreshRate() {
+    final views = PlatformDispatcher.instance.views;
+    return views.isEmpty ? 60 : views.first.display.refreshRate;
+  }
+
+  static bool _appInForeground() {
+    final state = WidgetsBinding.instance.lifecycleState;
+    // No lifecycle event yet means the first frames of a running app.
+    return state == null || state == AppLifecycleState.resumed;
+  }
+
   void _onFrameTimings(List<FrameTiming> timings) {
-    final slow = timings
-        .where((timing) => timing.totalSpan > const Duration(milliseconds: 32))
-        .toList(growable: false);
-    if (slow.isEmpty) return;
-    final maxDuration = slow
-        .map((timing) => timing.totalSpan.inMilliseconds)
-        .reduce((left, right) => left > right ? left : right);
+    // Frames drawn while paused, hidden or inactive say nothing about UI jank.
+    if (!enabled || timings.isEmpty || !_foregroundProvider()) return;
+    final hz = _refreshRateProvider();
+    final refreshRate = (hz.isFinite && hz > 0 ? hz : 60.0).round().clamp(
+      AnalyticsRecord.minRefreshRateHz,
+      AnalyticsRecord.maxRefreshRateHz,
+    );
+    var window = _frameWindow;
+    if (window != null && window.refreshRateHz != refreshRate) {
+      _emitFrameSummary();
+      window = null;
+    }
+    window ??= _frameWindow = _FrameWindow(refreshRate, _now());
+    // A frame is slow when it needs more than two display periods, i.e. at
+    // least one visibly missed refresh at the actual refresh rate.
+    final slowAfter = Duration(microseconds: (2000000 / refreshRate).round());
+    for (final timing in timings) {
+      window.frames++;
+      final span = timing.totalSpan;
+      if (span > slowAfter) window.slow++;
+      if (span.inMilliseconds > window.maxMs) window.maxMs = span.inMilliseconds;
+    }
+    if (window.frames >= _frameWindowFrames ||
+        _now().difference(window.startedAt) >= _frameWindowAge) {
+      _emitFrameSummary();
+    }
+  }
+
+  void _emitFrameSummary() {
+    final window = _frameWindow;
+    _frameWindow = null;
+    if (window == null || window.frames == 0 || !enabled) return;
     unawaited(
       record(
-        AnalyticsRecord.slowInteraction(
-          interaction: 'frame_batch',
-          durationMs: maxDuration,
-          slowFrameCount: slow.length,
+        AnalyticsRecord.frameSummary(
+          frameCount: window.frames,
+          slowFrameCount: window.slow,
+          maxFrameMs: window.maxMs,
+          refreshRateHz: window.refreshRateHz,
+          buildMode: _buildMode,
         ),
       ),
     );
@@ -499,6 +560,16 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     final match = RegExp(r'(\d+)').firstMatch(version);
     return int.tryParse(match?.group(1) ?? '') ?? 0;
   }
+}
+
+class _FrameWindow {
+  _FrameWindow(this.refreshRateHz, this.startedAt);
+
+  final int refreshRateHz;
+  final DateTime startedAt;
+  int frames = 0;
+  int slow = 0;
+  int maxMs = 0;
 }
 
 class _QueuedAnalyticsEvent {
@@ -595,6 +666,11 @@ bool isSafeAnalyticsEvent(Object? value) {
     final validator = schema[entry.key] ?? optional[entry.key]!;
     if (!validator(entry.value)) return false;
   }
+  if (name == AnalyticsEventName.frameSummary.wireName &&
+      (attributes['slowFrameCount'] as int) >
+          (attributes['frameCount'] as int)) {
+    return false;
+  }
   return true;
 }
 
@@ -614,6 +690,14 @@ bool _duration(Object? value) =>
     value is int && value >= 0 && value <= AnalyticsRecord.maxDurationMs;
 bool _truncatedFlag(Object? value) => value == true;
 bool _frameCount(Object? value) => value is int && value >= 0 && value <= 120;
+bool _framesInWindow(Object? value) =>
+    value is int && value >= 1 && value <= AnalyticsRecord.maxFrameCount;
+bool _slowFramesInWindow(Object? value) =>
+    value is int && value >= 0 && value <= AnalyticsRecord.maxFrameCount;
+bool _refreshRate(Object? value) =>
+    value is int &&
+    value >= AnalyticsRecord.minRefreshRateHz &&
+    value <= AnalyticsRecord.maxRefreshRateHz;
 
 /// Attributes a sender may add on top of the required ones. Older senders omit
 /// them, so receivers must accept both shapes.
@@ -627,6 +711,7 @@ final _analyticsOptionalAttributes =
         AnalyticsEventName.syncSucceeded,
         AnalyticsEventName.syncFailed,
         AnalyticsEventName.slowInteractionDetected,
+        AnalyticsEventName.frameSummary,
       ])
         name.wireName: {'durationTruncated': _truncatedFlag},
     };
@@ -687,5 +772,12 @@ final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
     'interaction': (value) => analyticsInteractionValues.contains(value),
     'durationMs': _duration,
     'slowFrameCount': _frameCount,
+  },
+  AnalyticsEventName.frameSummary.wireName: {
+    'frameCount': _framesInWindow,
+    'slowFrameCount': _slowFramesInWindow,
+    'durationMs': _duration,
+    'refreshRateHz': _refreshRate,
+    'buildMode': (value) => _enumValue(value, AnalyticsBuildMode.values),
   },
 };

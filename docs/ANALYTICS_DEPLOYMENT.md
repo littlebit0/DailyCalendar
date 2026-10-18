@@ -143,3 +143,16 @@ older apps (and everything collected before this change) cannot tell exact 120 s
 from longer, so treat their 120000 values as "at least 120 s" and do not average
 them as true durations. `durationTruncated` is optional and only ever `true`; the
 receiver must be deployed before the app that sends it, or the batch is rejected.
+
+## Frame health (#150)
+
+`frame_summary` replaces per-batch `slow_interaction_detected`/`frame_batch` records
+for new apps (old records stay valid). Each event covers one window of foreground
+frames (up to 3600 frames or 10 minutes, or earlier at `flush`/refresh-rate change):
+`frameCount`, `slowFrameCount`, the longest frame `durationMs`, `refreshRateHz` and
+`buildMode`. A frame is slow when its total span exceeds **two display periods at the
+actual refresh rate**, so `slowFrameCount / frameCount` is comparable across 60, 120
+and 144 Hz screens. Frames while the app is not resumed are not counted. `debug` and
+`profile` windows should be excluded from release-quality statistics. Synthetic
+`FrameTiming` tests verify the rule; real jank on devices needs a profile/release
+measurement. Deploy the receiver before the app, as for every new event name.
