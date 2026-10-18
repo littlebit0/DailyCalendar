@@ -169,6 +169,18 @@ class LocalNotificationService implements NotificationService {
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
     for (final reminderMinutes in reminderMinutesList) {
+      if (event.recurrence.isRepeating) {
+        deliveredImmediateReminder = await _scheduleRepeatingReminders(
+          event,
+          reminderMinutes,
+          title: title,
+          settings: settings,
+          l10n: l10n,
+          allowImmediate: allowImmediate,
+          deliveredImmediateReminder: deliveredImmediateReminder,
+        );
+        continue;
+      }
       final reminderAt = base.subtract(Duration(minutes: reminderMinutes));
       final plan = resolveReminderDeliveryPlan(
         reminderAt: reminderAt,
@@ -227,6 +239,64 @@ class LocalNotificationService implements NotificationService {
         exceptEventId: event.id,
       );
     }
+  }
+
+  /// Schedules the next occurrences of a repeating event for one offset.
+  ///
+  /// Slot 0 keeps the legacy single-event key; later slots get `:sN` keys, so
+  /// the id table stays bounded. Slots no longer needed are cancelled.
+  Future<bool> _scheduleRepeatingReminders(
+    CalendarEvent event,
+    int reminderMinutes, {
+    required String title,
+    required AppSettings settings,
+    required AppLocalizations l10n,
+    required bool allowImmediate,
+    required bool deliveredImmediateReminder,
+  }) async {
+    final requests = planRecurringReminders(
+      event: event,
+      reminderMinutes: reminderMinutes,
+      baseTime: (occurrence) => _baseReminderTime(occurrence, settings),
+      now: DateTime.now(),
+      allowImmediate: allowImmediate,
+      dueGrace: _dueReminderGrace,
+    );
+    final baseKey = '${event.id}:reminder:$reminderMinutes';
+    for (final request in requests) {
+      if (request.plan.type == ReminderDeliveryType.immediate) {
+        if (deliveredImmediateReminder) continue;
+        deliveredImmediateReminder = true;
+      }
+      final key = request.slot == 0 ? baseKey : '$baseKey:s${request.slot}';
+      await _deliverPlan(
+        id: await _settingsRepository.notificationId(key),
+        title: title,
+        body: reminderMinutes == 0 || request.plan.deliverAt == request.base
+            ? l10n.text('일정이 시작됩니다.')
+            : l10n.text(
+                '일정 시작 {time}입니다.',
+                args: {'time': _minutesLabel(reminderMinutes, l10n)},
+              ),
+        plan: request.plan,
+        payload: baseKey,
+      );
+    }
+    // Slots past the planned requests (an excluded, deleted or ended occurrence).
+    final planned = requests.length;
+    final existing = _settingsRepository.notificationIdsWithPrefix(baseKey);
+    for (final entry in existing.entries) {
+      final suffix = entry.key.substring(baseKey.length);
+      final slot = suffix.isEmpty
+          ? 0
+          : suffix.startsWith(':s')
+          ? int.tryParse(suffix.substring(2))
+          : null;
+      if (slot != null && slot >= planned) {
+        await _cancelPendingNotification(entry.value);
+      }
+    }
+    return deliveredImmediateReminder;
   }
 
   Future<void> confirmAlarmScheduled(CalendarEvent event) async {
@@ -345,6 +415,13 @@ class LocalNotificationService implements NotificationService {
         '$eventId:reminder:$minutes',
       );
       if (id != null) await cancel(id);
+    }
+    // Occurrence slots of a repeating event (`...:reminder:<min>:s<n>`).
+    for (final id
+        in _settingsRepository
+            .notificationIdsWithPrefix('$eventId:reminder:')
+            .values) {
+      await cancel(id);
     }
     for (final offset in {
       ..._commonDdayOffsets,

@@ -3,6 +3,8 @@ import 'package:daily/features/events/data/app_database.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
+import 'package:daily/features/events/domain/recurrence_rule.dart';
+import 'package:daily/core/notifications/reminder_delivery_plan.dart';
 import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -75,6 +77,81 @@ void main() {
       expect(pending.containsKey(aID), isFalse);
       expect(pending.containsKey(bID), isTrue);
       await service.cancelEventReminder(b.id, includeDelivered: true);
+      expect(pending, isEmpty);
+    },
+  );
+
+  test(
+    'repeating event keeps bounded slots and cancel removes every slot',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = DriftEventRepository(database);
+      final start = DateTime.now().add(const Duration(days: 1));
+      final event = CalendarEvent(
+        id: 'daily-series',
+        title: '매일',
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: start,
+        updatedAt: start,
+        reminderMinutesBeforeList: [10],
+        recurrence: const RecurrenceRule(
+          frequency: RecurrenceFrequency.daily,
+          count: 20,
+        ),
+      );
+      await repository.save(event);
+      final pending = <int, String>{};
+      debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+      const channel = MethodChannel('daily/native_notifications');
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, (call) async {
+            if (call.method == 'initialize') return true;
+            final args = call.arguments as Map;
+            if (call.method == 'schedule') {
+              pending[args['id'] as int] = args['payload'] as String;
+            }
+            if (call.method == 'cancel' || call.method == 'cancelPending') {
+              pending.remove(args['id']);
+            }
+            return null;
+          });
+      addTearDown(() {
+        debugDefaultTargetPlatformOverride = null;
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(channel, null);
+      });
+      final service = LocalNotificationService(
+        settingsRepository: settings,
+        eventRepository: repository,
+      );
+      await service.scheduleEventReminder(event);
+      expect(pending, hasLength(recurringReminderSlotsPerOffset));
+      expect(pending.values.toSet(), {'daily-series:reminder:10'});
+      // Rescheduling reuses the same ids instead of allocating new ones.
+      final allocated = settings.notificationIdsWithPrefix('daily-series:');
+      await service.scheduleEventReminder(event);
+      expect(settings.notificationIdsWithPrefix('daily-series:'), allocated);
+      expect(pending, hasLength(recurringReminderSlotsPerOffset));
+      // An ended or shortened series drops the slots it no longer needs.
+      await service.scheduleEventReminder(
+        event.copyWith(
+          recurrence: const RecurrenceRule(
+            frequency: RecurrenceFrequency.daily,
+            count: 3,
+          ),
+        ),
+      );
+      expect(pending, hasLength(3));
+      await service.cancelEventReminder(event.id);
       expect(pending, isEmpty);
     },
   );
