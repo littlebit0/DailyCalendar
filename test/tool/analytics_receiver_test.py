@@ -86,6 +86,50 @@ class DedupeAcrossMidnightTests(unittest.TestCase):
             self.assertEqual(aggregator.accept(self.batch()), 1)
 
 
+class AtomicAggregateTests(DedupeAcrossMidnightTests):
+    """Same batch/count helpers as the midnight tests."""
+
+    def test_a_failed_dedupe_write_does_not_leave_the_totals_increased(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            original = aggregator._write_json
+            calls = {'dedupe': 0}
+
+            def flaky(path, value):
+                if path.name.startswith('dedupe-') and calls['dedupe'] == 0:
+                    calls['dedupe'] += 1
+                    raise OSError('disk full')
+                return original(path, value)
+
+            with mock.patch.object(aggregator, '_write_json', side_effect=flaky):
+                with self.assertRaises(OSError):
+                    aggregator.accept(self.batch())
+                # The failed request left no totals, so its retry counts once.
+                self.assertEqual(self.count(directory), 0)
+                self.assertEqual(aggregator.accept(self.batch()), 1)
+            self.assertEqual(self.count(directory), 1)
+
+    def test_totals_from_earlier_requests_survive_a_later_failure(self):
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            aggregator = Aggregator(directory)
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+            second = self.batch()
+            second['events'][0]['eventId'] = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'
+            original = aggregator._write_json
+
+            def flaky(path, value):
+                if path.name.startswith('dedupe-'):
+                    raise OSError('disk full')
+                return original(path, value)
+
+            with mock.patch.object(aggregator, '_write_json', side_effect=flaky):
+                with self.assertRaises(OSError):
+                    aggregator.accept(second)
+            self.assertEqual(self.count(directory), 1)
+
+
 def _payload():
     return {
         "report": {
