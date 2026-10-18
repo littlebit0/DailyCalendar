@@ -1713,10 +1713,17 @@ enum DailySiriNarrationValidator {
     let factualLines = factual.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
     guard !candidate.isEmpty, candidateLines.count == factualLines.count else { return false }
     for (candidateLine, factualLine) in zip(candidateLines, factualLines) {
+      // Blank separator lines stay blank, and text never turns into a blank.
+      let factualBlank = factualLine.trimmingCharacters(in: .whitespaces).isEmpty
+      let candidateBlank = candidateLine.trimmingCharacters(in: .whitespaces).isEmpty
+      guard factualBlank == candidateBlank else { return false }
+      if factualBlank { continue }
       guard numbers(in: candidateLine) == numbers(in: factualLine),
             weekdays(in: candidateLine) == weekdays(in: factualLine),
             mentionedTitles(in: candidateLine, titles) == mentionedTitles(in: factualLine, titles),
-            negates(candidateLine) == negates(factualLine) else {
+            negates(candidateLine) == negates(factualLine),
+            statesAllDay(candidateLine) == statesAllDay(factualLine),
+            titlesKeepTheirExactSpan(in: candidateLine, factual: factualLine, titles) else {
         return false
       }
     }
@@ -1752,13 +1759,68 @@ enum DailySiriNarrationValidator {
   }
 
   private static let negations = [
-    "없", "않", "못", "ない", "ません", "没有", "沒有", "无", "無",
+    "없", "않", "못", "ない", "ません", "没有", "沒有", "无", "無", "不存在", "不是", "沒", "没",
     " no ", "not", "none", "nothing", "without", "n't",
   ]
 
   private static func negates(_ value: String) -> Bool {
-    let padded = " " + value.lowercased() + " "
+    // Typographic apostrophes (isn’t) must match the ASCII "n't" form.
+    var normalized = value.lowercased()
+    for apostrophe in ["\u{2019}", "\u{2018}", "\u{02BC}", "\u{FF07}"] {
+      normalized = normalized.replacingOccurrences(of: apostrophe, with: "'")
+    }
+    let padded = " " + normalized + " "
     return negations.contains { padded.contains($0) }
+  }
+
+  private static let allDayMarkers = ["종일", "all-day", "all day", "終日", "全天", "整天"]
+
+  /// Whether the line states that an event lasts all day, so "all-day" cannot
+  /// become "half-day" (or the reverse) without falling back.
+  private static func statesAllDay(_ value: String) -> Bool {
+    let lowered = value.lowercased()
+    return allDayMarkers.contains { lowered.contains($0) }
+  }
+
+  /// Words that may precede a Latin title without becoming part of its name.
+  private static let titleLeadWords: Set<String> = [
+    "a", "an", "the", "your", "my", "this", "that", "its", "also", "and", "then",
+    "at", "on", "in", "for", "of", "with", "from", "to", "is", "are", "there",
+  ]
+
+  /// Every title named in the candidate must keep its exact span: no letters
+  /// glued before it ("정기회의"), none after a Latin title ("Meetings"), and no
+  /// new word in front of a Latin title ("Project Meeting").
+  private static func titlesKeepTheirExactSpan(in candidate: String, factual: String, _ titles: [String]) -> Bool {
+    let factualWords = Set(
+      factual.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }
+    )
+    for title in Set(titles) where !title.isEmpty && factual.contains(title) {
+      var searchRange = candidate.startIndex..<candidate.endIndex
+      while let found = candidate.range(of: title, range: searchRange) {
+        searchRange = found.upperBound..<candidate.endIndex
+        if found.lowerBound > candidate.startIndex {
+          let before = candidate[candidate.index(before: found.lowerBound)]
+          if before.isLetter || before.isNumber { return false }
+        }
+        let latin = title.last.map { $0.isASCII && ($0.isLetter || $0.isNumber) } ?? false
+        if latin, found.upperBound < candidate.endIndex {
+          let after = candidate[found.upperBound]
+          // A CJK particle after a Latin title ("A가") is grammar, not part of the name.
+          if after.isASCII, after.isLetter || after.isNumber { return false }
+        }
+        if title.first.map({ $0.isASCII && ($0.isLetter || $0.isNumber) }) == true {
+          let head = candidate[candidate.startIndex..<found.lowerBound]
+          let trimmed = head.trimmingCharacters(in: .whitespaces)
+          if head.last == " ", let word = trimmed.components(separatedBy: .whitespaces).last,
+             let last = word.last, last.isLetter {
+            let lowered = word.lowercased()
+            if !titleLeadWords.contains(lowered), !factualWords.contains(lowered) { return false }
+          }
+        }
+      }
+    }
+    return true
   }
 }
 // END SIRI NARRATION VALIDATOR
