@@ -5,7 +5,6 @@ import 'package:flutter_test/flutter_test.dart';
 // ignore: depend_on_referenced_packages
 import 'package:geolocator_apple/geolocator_apple.dart';
 // ignore: depend_on_referenced_packages
-import 'package:geolocator_platform_interface/geolocator_platform_interface.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
