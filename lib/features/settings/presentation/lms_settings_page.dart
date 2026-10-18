@@ -277,7 +277,7 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        context.tr('학교 아이디'),
+                                        context.tr('ID'),
                                         style: Theme.of(
                                           context,
                                         ).textTheme.labelLarge,
@@ -616,28 +616,40 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
           children: [
             Text(context.tr(_localLoginNotice)),
             const SizedBox(height: 16),
-            TextField(
-              controller: _username,
-              key: const ValueKey('lms-local-username'),
-              autocorrect: false,
-              enableSuggestions: false,
-              decoration: InputDecoration(labelText: context.tr('학교 아이디')),
-              textInputAction: TextInputAction.next,
-            ),
-            TextField(
-              controller: _password,
-              focusNode: _passwordFocus,
-              key: const ValueKey('lms-local-password'),
-              obscureText: true,
-              keyboardType: TextInputType.visiblePassword,
-              textInputAction: TextInputAction.done,
-              smartQuotesType: SmartQuotesType.disabled,
-              smartDashesType: SmartDashesType.disabled,
-              enableIMEPersonalizedLearning: false,
-              enableInlinePrediction: false,
-              autocorrect: false,
-              enableSuggestions: false,
-              decoration: InputDecoration(labelText: context.tr('비밀번호')),
+            // The fields are a username/password pair for the system password
+            // chooser. They are never offered back to it for saving: the login
+            // stays in this device's secure storage only (cancel on dispose).
+            AutofillGroup(
+              onDisposeAction: AutofillContextAction.cancel,
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _username,
+                    key: const ValueKey('lms-local-username'),
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    autofillHints: const [AutofillHints.username],
+                    decoration: InputDecoration(labelText: context.tr('ID')),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  TextField(
+                    controller: _password,
+                    focusNode: _passwordFocus,
+                    key: const ValueKey('lms-local-password'),
+                    obscureText: true,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
+                    smartQuotesType: SmartQuotesType.disabled,
+                    smartDashesType: SmartDashesType.disabled,
+                    enableIMEPersonalizedLearning: false,
+                    enableInlinePrediction: false,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    autofillHints: const [AutofillHints.password],
+                    decoration: InputDecoration(labelText: context.tr('비밀번호')),
+                  ),
+                ],
+              ),
             ),
             CheckboxListTile(
               value: _consent,
