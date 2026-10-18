@@ -1566,6 +1566,7 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
   static const _fallbackPanelExtent = 66.0;
 
   late final AnimationController _controller;
+  late final CurvedAnimation _animation;
   double _panelExtent = _fallbackPanelExtent;
   Widget? _retainedSearchPanel;
 
@@ -1577,6 +1578,11 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
       duration: const Duration(milliseconds: 180),
       reverseDuration: const Duration(milliseconds: 160),
       value: widget.searchOpen ? 1 : 0,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
     );
     _retainedSearchPanel = widget.searchOpen ? widget.searchPanel : null;
     _controller.addStatusListener(_handleAnimationStatus);
@@ -1601,6 +1607,7 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
   @override
   void dispose() {
     _controller.removeStatusListener(_handleAnimationStatus);
+    _animation.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -1624,11 +1631,7 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
   @override
   Widget build(BuildContext context) {
     final searchPanel = _retainedSearchPanel;
-    final animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic,
-      reverseCurve: Curves.easeInCubic,
-    );
+    final animation = _animation;
     return Stack(
       key: const ValueKey('paint-only-search-layout'),
       fit: StackFit.expand,
