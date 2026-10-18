@@ -65,6 +65,7 @@ ENUMS = {
         "backup", "restore", "backupThenRestore", "detectRemoteChanges",
         "backupThenDetectRemoteChanges",
     },
+    "phase": {"database", "followUp"},
     "feature": {"search", "filter", "widget", "calendarImport", "siri", "map"},
     "trigger": {"automatic", "manual", "startup", "resume", "localChange"},
     "outcome": {"succeeded", "failed", "canceled"},
@@ -78,6 +79,18 @@ ENUMS = {
     },
 }
 
+# Attributes a sender may add on top of the required ones; older apps omit them.
+OPTIONAL_SCHEMAS = {
+    name: {"durationTruncated": "truncatedFlag"}
+    for name in (
+        "app_load_completed", "event_editor_completed", "event_save_succeeded",
+        "event_save_failed", "sync_succeeded", "sync_failed",
+        "slow_interaction_detected",
+    )
+}
+for _name in ("event_save_succeeded", "event_save_failed"):
+    OPTIONAL_SCHEMAS[_name]["phase"] = "phase"
+
 SCHEMAS = {
     "app_load_completed": {"durationMs": "duration"},
     "screen_view": {"screen": "screen"},
@@ -86,6 +99,7 @@ SCHEMAS = {
     "event_editor_completed": {
         "mode": "mode", "outcome": "outcome", "durationMs": "duration",
     },
+    # `phase` is sent by newer apps only; apps before it send neither value.
     "event_save_succeeded": {"operation": "operation", "durationMs": "duration"},
     "event_save_failed": {
         "operation": "operation", "durationMs": "duration", "errorCode": "errorCode",
@@ -110,6 +124,8 @@ SCHEMAS = {
 def _valid_value(kind, value):
     if kind == "duration":
         return type(value) is int and 0 <= value <= 120000
+    if kind == "truncatedFlag":
+        return value is True
     if kind == "frameCount":
         return type(value) is int and 0 <= value <= 120
     if kind == "succeeded":
@@ -143,9 +159,19 @@ def valid_event(event):
         return False
     schema = SCHEMAS.get(event["name"])
     attributes = event["attributes"]
-    if schema is None or not isinstance(attributes, dict) or set(attributes) != set(schema):
+    if schema is None or not isinstance(attributes, dict):
         return False
-    return all(_valid_value(kind, attributes[key]) for key, kind in schema.items())
+    optional = OPTIONAL_SCHEMAS.get(event["name"], {})
+    keys = set(attributes)
+    if not set(schema) <= keys <= set(schema) | set(optional):
+        return False
+    kinds = {**optional, **schema}
+    if not all(_valid_value(kinds[key], value) for key, value in attributes.items()):
+        return False
+    # The flag means the real duration was longer than the cap and was cut to it.
+    if "durationTruncated" in attributes and attributes["durationMs"] != 120000:
+        return False
+    return True
 
 
 def valid_batch(batch):

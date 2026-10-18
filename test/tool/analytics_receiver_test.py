@@ -47,6 +47,67 @@ class AnalyticsVersionTests(unittest.TestCase):
         self.assertFalse(valid_batch(batch))
 
 
+class DurationTruncationTests(unittest.TestCase):
+    BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z'}
+
+    def event(self, name, attributes):
+        return {**self.BASE, 'name': name, 'attributes': attributes}
+
+    def valid(self, name, attributes):
+        from tool.analytics_receiver import valid_event
+        return valid_event(self.event(name, attributes))
+
+    def test_flag_is_optional_and_only_true_is_valid(self):
+        from tool.analytics_receiver import valid_event
+        self.assertTrue(valid_event(self.event('app_load_completed', {'durationMs': 120000})))
+        self.assertTrue(valid_event(self.event('app_load_completed', {'durationMs': 120000, 'durationTruncated': True})))
+        for bad in (False, 'true', 1, None):
+            self.assertFalse(valid_event(self.event('app_load_completed', {'durationMs': 5, 'durationTruncated': bad})))
+        self.assertFalse(valid_event(self.event('app_load_completed', {'durationMs': 120001})))
+        self.assertFalse(valid_event(self.event('app_load_completed', {'durationTruncated': True})))
+        self.assertFalse(valid_event(self.event('screen_view', {'screen': 'calendar', 'durationTruncated': True})))
+
+    def test_truncated_runs_are_aggregated_apart_from_exact_runs(self):
+        batch = {
+            'schemaVersion': 1,
+            'sessionId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+            'environment': {'appVersion': '4.1.2', 'platform': 'ios', 'osMajor': 27},
+            'events': [
+                {**self.BASE, 'name': 'app_load_completed', 'attributes': {'durationMs': 120000}},
+                {**self.BASE, 'eventId': 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+                 'name': 'app_load_completed',
+                 'attributes': {'durationMs': 120000, 'durationTruncated': True}},
+            ],
+        }
+        self.assertTrue(valid_batch(batch))
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(Aggregator(directory).accept(batch), 2)
+            aggregate = json.loads(next(Path(directory).glob('analytics-*.json')).read_text())
+            groups = list(aggregate['groups'].values())
+            self.assertEqual(len(groups), 2)
+            self.assertEqual(sorted('durationTruncated' in g['attributes'] for g in groups), [False, True])
+
+    def test_legacy_event_save_without_phase_is_still_accepted(self):
+        # Apps before `phase` existed send neither field; the receiver is deployed first.
+        self.assertTrue(self.valid('event_save_succeeded', {'operation': 'create', 'durationMs': 5}))
+        self.assertTrue(self.valid('event_save_failed', {
+            'operation': 'create', 'durationMs': 5, 'errorCode': 'unknown'}))
+        self.assertFalse(self.valid('event_save_succeeded', {
+            'operation': 'create', 'phase': 'later', 'durationMs': 5}))
+
+    def test_truncated_flag_requires_the_capped_duration(self):
+        self.assertTrue(self.valid('app_load_completed', {'durationMs': 120000, 'durationTruncated': True}))
+        self.assertFalse(self.valid('app_load_completed', {'durationMs': 5, 'durationTruncated': True}))
+        self.assertFalse(self.valid('app_load_completed', {'durationMs': 119999, 'durationTruncated': True}))
+
+    def test_event_save_phase_matches_the_app(self):
+        from tool.analytics_receiver import valid_event
+        self.assertTrue(valid_event(self.event('event_save_succeeded', {
+            'operation': 'create', 'phase': 'database', 'durationMs': 5})))
+        self.assertTrue(valid_event(self.event('event_save_failed', {
+            'operation': 'create', 'phase': 'followUp', 'durationMs': 5, 'errorCode': 'unknown'})))
+
+
 class BuildNumberTests(unittest.TestCase):
     def test_real_build_numbers_and_unknown_are_accepted(self):
         for value in ("400", "4.0.0", "4.0.0.12", "unknown"):
