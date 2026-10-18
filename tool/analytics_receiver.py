@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+import copy
 import hashlib
 import json
 import os
 import re
 import signal
+import sqlite3
 import tempfile
 import threading
 import uuid
@@ -24,6 +26,7 @@ MAX_BUG_REPORT_BYTES = 64 * 1024
 MAX_BUG_REPORTS_PER_HOUR = 5
 BUG_REPORT_RETENTION_DAYS = 365
 DEDUPE_RETENTION_DAYS = 7
+REPORT_EXPORT_INTERVAL_SECONDS = 60
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 GITHUB_API_VERSION = "2026-03-10"
 VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?$")
@@ -227,102 +230,205 @@ class BugReportRateLimited(Exception):
 
 
 class Aggregator:
-    def __init__(self, directory, now=None):
+    """Anonymous aggregate counters with hash-only duplicate protection.
+
+    State lives in one SQLite file so a request only touches its own events: a
+    duplicate hash is a primary-key conflict and the counters change in the same
+    transaction (a failure rolls both back). `analytics-YYYY-MM-DD.json` stays as
+    the readable report and is rebuilt from the counter rows of that day, whose
+    count is bounded by the number of distinct groups, not by the event count.
+    The report is a convenience copy: with `export_interval` seconds above zero
+    it is rewritten at most that often (and by `flush_report`), so a busy
+    receiver does not re-export every group on every request.
+    """
+
+    def __init__(self, directory, now=None, export_interval=0):
         self.directory = Path(directory)
         self.lock = threading.Lock()
         self._now = now or (lambda: datetime.now(timezone.utc))
+        self._database = self.directory / "analytics-state.sqlite"
+        self._export_interval = export_interval
+        self._export_dirty = False
+        self._last_export = None
+        self._last_export_day = None
 
     def accept(self, batch):
+        # Storage failures surface as OSError, which the HTTP handler turns into
+        # a 500 store_failed response instead of an unhandled traceback.
+        try:
+            return self._accept(batch)
+        except sqlite3.Error as error:
+            raise OSError(f"analytics state store failed: {type(error).__name__}") from error
+
+    def flush_report(self):
+        """Writes the pending report now (used when the receiver shuts down)."""
         with self.lock:
-            self.directory.mkdir(parents=True, exist_ok=True)
-            # A transaction cut short by a failed write is finished first, so the
-            # totals and the dedupe record never disagree about an event.
-            self._recover_pending_transaction()
-            self._delete_expired()
+            if not self._export_dirty:
+                return
+            now = self._now()
+            try:
+                connection = self._connect()
+                try:
+                    self._export(connection, now.strftime("%Y-%m-%d"), now)
+                finally:
+                    connection.close()
+            except (sqlite3.Error, OSError):
+                pass
+
+    def _accept(self, batch):
+        with self.lock:
+            self._make_private(self.directory, directory=True)
             now = self._now()
             day = now.strftime("%Y-%m-%d")
-            aggregate_path = self.directory / f"analytics-{day}.json"
-            dedupe_path = self.directory / f"dedupe-{day}.json"
-            aggregate = self._read_json(
-                aggregate_path,
-                {"schemaVersion": 1, "date": day, "groups": {}},
-            )
-            hashes = set(self._read_json(dedupe_path, []))
-            # A retry can arrive after UTC midnight: the retained earlier days
-            # still know the event, so they count as seen as well.
-            seen = set(hashes)
-            # _delete_expired keeps files up to DEDUPE_RETENTION_DAYS old, so the
-            # same number of prior days is read.
-            for back in range(1, DEDUPE_RETENTION_DAYS + 1):
-                earlier = (now - timedelta(days=back)).strftime("%Y-%m-%d")
-                seen.update(self._read_json(self.directory / f"dedupe-{earlier}.json", []))
-            environment = batch["environment"]
-            accepted = 0
-            for event in batch["events"]:
-                event_hash = hashlib.sha256(event["eventId"].encode()).hexdigest()
-                if event_hash in seen:
+            connection = self._connect()
+            try:
+                self._migrate(connection)
+                self._delete_expired(connection, now)
+                environment = batch["environment"]
+                accepted = 0
+                connection.execute("BEGIN IMMEDIATE")
+                try:
+                    for event in batch["events"]:
+                        event_hash = hashlib.sha256(event["eventId"].encode()).hexdigest()
+                        inserted = connection.execute(
+                            "INSERT OR IGNORE INTO dedupe(hash, day) VALUES (?, ?)",
+                            (event_hash, day),
+                        ).rowcount
+                        if not inserted:
+                            continue
+                        accepted += 1
+                        self._count(connection, day, environment, event)
+                    connection.execute("COMMIT")
+                except BaseException:
+                    connection.execute("ROLLBACK")
+                    raise
+                self._export_dirty = self._export_dirty or accepted > 0
+                if self._export_dirty and self._export_due(day, now):
+                    self._export(connection, day, now)
+                return accepted
+            finally:
+                connection.close()
+
+    def _export_due(self, day, now):
+        return (
+            self._export_interval <= 0
+            or self._last_export is None
+            or self._last_export_day != day
+            or (now - self._last_export).total_seconds() >= self._export_interval
+        )
+
+    @staticmethod
+    def _make_private(path, directory=False):
+        """Directory 0700 / files 0600, whatever the process umask is."""
+        if directory:
+            path.mkdir(mode=0o700, parents=True, exist_ok=True)
+        try:
+            os.chmod(path, 0o700 if directory else 0o600)
+        except OSError:
+            pass
+
+    def _connect(self):
+        # Create the file private before SQLite does; its journal and WAL files
+        # inherit the main file's mode.
+        if not self._database.exists():
+            os.close(os.open(self._database, os.O_CREAT | os.O_WRONLY, 0o600))
+        self._make_private(self._database)
+        connection = sqlite3.connect(self._database, timeout=10, isolation_level=None)
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS dedupe(hash TEXT PRIMARY KEY, day TEXT NOT NULL)"
+        )
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS groups("
+            "day TEXT NOT NULL, key TEXT NOT NULL, data TEXT NOT NULL, "
+            "PRIMARY KEY(day, key))"
+        )
+        # Retention cleanup filters on the day, which the hash key cannot serve.
+        connection.execute("CREATE INDEX IF NOT EXISTS dedupe_day ON dedupe(day)")
+        connection.execute("CREATE TABLE IF NOT EXISTS meta(name TEXT PRIMARY KEY, value TEXT)")
+        return connection
+
+    def _count(self, connection, day, environment, event):
+        attributes = dict(sorted(event["attributes"].items()))
+        key_data = {
+            "appVersion": environment["appVersion"],
+            "platform": environment["platform"],
+            "osMajor": environment["osMajor"],
+            "name": event["name"],
+            "attributes": attributes,
+        }
+        key = json.dumps(key_data, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+        row = connection.execute(
+            "SELECT data FROM groups WHERE day = ? AND key = ?", (day, key)
+        ).fetchone()
+        group = (
+            json.loads(row[0])
+            if row
+            else {**key_data, "count": 0, "durationTotalMs": 0, "durationMaxMs": 0}
+        )
+        group["count"] += 1
+        duration = attributes.get("durationMs", 0)
+        group["durationTotalMs"] += duration
+        group["durationMaxMs"] = max(group["durationMaxMs"], duration)
+        connection.execute(
+            "INSERT OR REPLACE INTO groups(day, key, data) VALUES (?, ?, ?)",
+            (day, key, json.dumps(group, ensure_ascii=True, sort_keys=True, separators=(",", ":"))),
+        )
+
+    def _export(self, connection, day, now):
+        """Rewrites the day's report from its counter rows (best effort)."""
+        rows = connection.execute("SELECT key, data FROM groups WHERE day = ?", (day,)).fetchall()
+        aggregate = {
+            "schemaVersion": 1,
+            "date": day,
+            "groups": {key: json.loads(data) for key, data in rows},
+            "updatedAt": now.isoformat().replace("+00:00", "Z"),
+        }
+        try:
+            self._write_json(self.directory / f"analytics-{day}.json", aggregate)
+        except OSError:
+            # The counters are already committed; the next request refreshes it.
+            return
+        self._export_dirty = False
+        self._last_export = now
+        self._last_export_day = day
+
+    def _migrate(self, connection):
+        """One-time import of the earlier JSON aggregate and dedupe files."""
+        done = connection.execute("SELECT 1 FROM meta WHERE name = 'imported'").fetchone()
+        if done:
+            return
+        connection.execute("BEGIN IMMEDIATE")
+        try:
+            for path in self.directory.glob("dedupe-*.json"):
+                match = re.fullmatch(r"dedupe-(\d{4}-\d{2}-\d{2})\.json", path.name)
+                if not match:
                     continue
-                seen.add(event_hash)
-                hashes.add(event_hash)
-                accepted += 1
-                attributes = dict(sorted(event["attributes"].items()))
-                key_data = {
-                    "appVersion": environment["appVersion"],
-                    "platform": environment["platform"],
-                    "osMajor": environment["osMajor"],
-                    "name": event["name"],
-                    "attributes": attributes,
-                }
-                key = json.dumps(key_data, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
-                group = aggregate["groups"].setdefault(
-                    key,
-                    {**key_data, "count": 0, "durationTotalMs": 0, "durationMaxMs": 0},
-                )
-                group["count"] += 1
-                duration = attributes.get("durationMs", 0)
-                group["durationTotalMs"] += duration
-                group["durationMaxMs"] = max(group["durationMaxMs"], duration)
-            aggregate["updatedAt"] = now.isoformat().replace("+00:00", "Z")
-            if accepted:
-                # Two files cannot change together, and undoing the first change
-                # needs the same storage that just failed. So the complete result
-                # is recorded first as one atomic file; the two files are then
-                # written from it, and a crash or failure in between is finished
-                # by the next request (including the retry of this one).
-                self._write_json(
-                    self._journal_path,
-                    {
-                        "aggregate": {"name": aggregate_path.name, "value": aggregate},
-                        "dedupe": {"name": dedupe_path.name, "value": sorted(hashes)},
-                    },
-                )
-                self._apply_transaction(self._read_json(self._journal_path, None))
-            return accepted
-
-    @property
-    def _journal_path(self):
-        return self.directory / "pending-transaction.json"
-
-    def _apply_transaction(self, transaction):
-        for part in ("aggregate", "dedupe"):
-            name = transaction[part]["name"]
-            if not re.fullmatch(r"(analytics|dedupe)-\d{4}-\d{2}-\d{2}\.json", name):
-                raise ValueError("Invalid transaction target")
-            self._write_json(self.directory / name, transaction[part]["value"])
-        self._journal_path.unlink(missing_ok=True)
-
-    def _recover_pending_transaction(self):
-        if not self._journal_path.exists():
-            return
-        transaction = self._read_json(self._journal_path, None)
-        if (
-            not isinstance(transaction, dict)
-            or not all(isinstance(transaction.get(part), dict) for part in ("aggregate", "dedupe"))
-        ):
-            # An unreadable record cannot be finished and must not block intake.
-            self._journal_path.unlink(missing_ok=True)
-            return
-        self._apply_transaction(transaction)
+                for event_hash in self._read_json(path, []):
+                    if isinstance(event_hash, str):
+                        # An event retried across UTC days sits in several files:
+                        # keep the newest day so cleanup cannot drop it early.
+                        connection.execute(
+                            "INSERT INTO dedupe(hash, day) VALUES (?, ?) "
+                            "ON CONFLICT(hash) DO UPDATE SET day = MAX(day, excluded.day)",
+                            (event_hash, match.group(1)),
+                        )
+            for path in self.directory.glob("analytics-*.json"):
+                match = re.fullmatch(r"analytics-(\d{4}-\d{2}-\d{2})\.json", path.name)
+                groups = self._read_json(path, {}).get("groups", {}) if match else {}
+                for key, group in groups.items():
+                    connection.execute(
+                        "INSERT OR IGNORE INTO groups(day, key, data) VALUES (?, ?, ?)",
+                        (
+                            match.group(1),
+                            key,
+                            json.dumps(group, ensure_ascii=True, sort_keys=True, separators=(",", ":")),
+                        ),
+                    )
+            connection.execute("INSERT INTO meta(name, value) VALUES ('imported', '1')")
+            connection.execute("COMMIT")
+        except BaseException:
+            connection.execute("ROLLBACK")
+            raise
 
     def _read_json(self, path, fallback):
         try:
@@ -342,8 +448,12 @@ class Aggregator:
             if os.path.exists(temporary):
                 os.unlink(temporary)
 
-    def _delete_expired(self):
-        now = self._now().date()
+    def _delete_expired(self, connection, now):
+        today = now.date()
+        dedupe_cutoff = (today - timedelta(days=DEDUPE_RETENTION_DAYS)).strftime("%Y-%m-%d")
+        group_cutoff = (today - timedelta(days=90)).strftime("%Y-%m-%d")
+        connection.execute("DELETE FROM dedupe WHERE day < ?", (dedupe_cutoff,))
+        connection.execute("DELETE FROM groups WHERE day < ?", (group_cutoff,))
         for path in self.directory.glob("*.json"):
             match = re.fullmatch(r"(analytics|dedupe)-(\d{4}-\d{2}-\d{2})\.json", path.name)
             if not match:
@@ -353,7 +463,7 @@ class Aggregator:
             except ValueError:
                 continue
             retention = 90 if match.group(1) == "analytics" else DEDUPE_RETENTION_DAYS
-            if now - date > timedelta(days=retention):
+            if today - date > timedelta(days=retention):
                 path.unlink(missing_ok=True)
 
 
@@ -849,7 +959,7 @@ def main():
     address = os.environ.get("DAILY_ANALYTICS_BIND", "127.0.0.1")
     port = int(os.environ.get("DAILY_ANALYTICS_PORT", "8787"))
     directory = os.environ.get("DAILY_ANALYTICS_DATA_DIR", "var/analytics")
-    ReceiverHandler.aggregator = Aggregator(directory)
+    ReceiverHandler.aggregator = Aggregator(directory, export_interval=REPORT_EXPORT_INTERVAL_SECONDS)
     ReceiverHandler.bug_reports = BugReportBackend(directory)
     server = ThreadingHTTPServer((address, port), ReceiverHandler)
     server.daemon_threads = True
@@ -861,6 +971,7 @@ def main():
     signal.signal(signal.SIGINT, stop)
     server.serve_forever()
     server.server_close()
+    ReceiverHandler.aggregator.flush_report()
 
 
 if __name__ == "__main__":
