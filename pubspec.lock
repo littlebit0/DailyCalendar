@@ -880,10 +880,9 @@ packages:
   package_info_plus:
     dependency: "direct main"
     description:
-      name: package_info_plus
-      sha256: f5c435dc0e0d461e5b32471a870f769b6a1cc46930637efe24fbc535314e78ad
-      url: "https://pub.dev"
-    source: hosted
+      path: "third_party/package_info_plus"
+      relative: true
+    source: path
     version: "10.2.0"
   package_info_plus_platform_interface:
     dependency: transitive
