@@ -72,6 +72,31 @@ void main() {
       true,
     );
   });
+  test('EWHA rejects a page whose year banner is not the requested year', () {
+    final body = File('$folder/ewha-cal.html').readAsStringSync();
+    expect(EwhaAcademicSource.parse(body, 2026), isNotEmpty);
+    expect(
+      () => EwhaAcademicSource.parse(body, 2025),
+      throwsA(isA<FormatException>()),
+    );
+    expect(
+      () => EwhaAcademicSource.parse(
+        body.replaceAll('<span>2026</span>', ''),
+        2026,
+      ),
+      throwsA(isA<FormatException>()),
+    );
+    expect(
+      () => EwhaAcademicSource.parse(
+        body.replaceFirst(
+          '<span>2026</span>',
+          '<span>2026</span><span>2027</span>',
+        ),
+        2026,
+      ),
+      throwsA(isA<FormatException>()),
+    );
+  });
   test('ICCU Songdo date ranges and source year', () {
     final rows = IccuAcademicSource.parse(
       File('$folder/iccu-cal.html').readAsStringSync(),
