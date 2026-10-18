@@ -76,6 +76,22 @@ class DedupeAcrossMidnightTests(unittest.TestCase):
             self.assertEqual(aggregator.accept(self.batch()), 0)
             self.assertEqual(self.count(directory), 1)
 
+    def test_a_retry_seven_calendar_days_later_is_still_deduplicated(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as directory:
+            # Accepted late on Oct 1, retried early on Oct 8: under seven days
+            # apart, and the Oct 1 dedupe file is still retained.
+            clock = [datetime(2026, 10, 1, 23, 30, tzinfo=timezone.utc)]
+            aggregator = Aggregator(directory, now=lambda: clock[0])
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+            clock[0] = datetime(2026, 10, 8, 1, 0, tzinfo=timezone.utc)
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            self.assertEqual(self.count(directory), 1)
+            self.assertTrue((Path(directory) / 'dedupe-2026-10-01.json').exists())
+            # One more day and the file is gone, so the event counts again.
+            clock[0] = datetime(2026, 10, 9, 1, 0, tzinfo=timezone.utc)
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+
     def test_an_event_older_than_the_retention_window_counts_again(self):
         from datetime import datetime, timedelta, timezone
         with tempfile.TemporaryDirectory() as directory:
