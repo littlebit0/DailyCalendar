@@ -15,6 +15,41 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('snapshot carries per-day views and D-day target dates (#103)', () {
+    final now = DateTime(2026, 10, 31, 9);
+    final gridStart = DateTime(2026, 9, 27);
+    final tomorrow = _event(
+      id: 'next',
+      title: 'Next day',
+      startAt: DateTime(2026, 11, 1, 10),
+    );
+    final dday = _event(
+      id: 'dday',
+      title: 'Exam',
+      startAt: DateTime(2026, 11, 10, 9),
+    ).copyWith(showDday: true);
+    final snapshot = CalendarWidgetSnapshotBuilder.build(
+      now: now,
+      settings: AppSettings(language: AppLanguage.korean),
+      gridStart: gridStart,
+      monthEvents: [tomorrow],
+      allEvents: [dday],
+    );
+
+    expect(snapshot['snapshotDate'], '2026-10-31');
+    final views = (snapshot['dailyViews'] as List).cast<Map>();
+    expect(views, hasLength(42));
+    expect(views.first['date'], '2026-09-27');
+    final today = views.firstWhere((view) => view['date'] == '2026-10-31');
+    final next = views.firstWhere((view) => view['date'] == '2026-11-01');
+    expect(today['todayEvents'], isEmpty);
+    expect((next['todayEvents'] as List).single['eventId'], 'next');
+    expect(next['todayTitle'], isNot(today['todayTitle']));
+    final ddays = (snapshot['ddays'] as List).cast<Map>();
+    expect(ddays.single['targetDate'], '2026-11-10');
+    expect(ddays.single['daysRemaining'], 10);
+  });
+
   test(
     'widget action retains the tapped date and rejects legacy whole-series ambiguity',
     () {

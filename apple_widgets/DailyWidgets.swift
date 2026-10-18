@@ -145,6 +145,14 @@ private enum DailyWidgetTodoActionStore {
       }
       snapshot["monthDays"] = days
     }
+    if var views = snapshot["dailyViews"] as? [[String: Any]] {
+      for index in views.indices {
+        guard var events = views[index]["todayEvents"] as? [[String: Any]] else { continue }
+        update(&events, eventId: eventId, completed: completed, occurrenceId: occurrenceId)
+        views[index]["todayEvents"] = events
+      }
+      snapshot["dailyViews"] = views
+    }
     snapshot["generatedAt"] = Int64(Date().timeIntervalSince1970 * 1000)
     let updated = try JSONSerialization.data(withJSONObject: snapshot)
     try updated.write(to: url, options: .atomic)
@@ -387,6 +395,65 @@ struct DailyWidgetDday: Codable, Identifiable {
   }
 }
 
+// BEGIN WIDGET ROLLOVER
+/// Re-derives the "today" values of a stored snapshot for the device date.
+///
+/// Flutter computes todayTitle/todayEvents/weekTitle/isToday/daysRemaining for
+/// `snapshotDate` only. When the date has moved on this switches to the matching
+/// precomputed `dailyViews` entry. It returns nil when the cached grid cannot
+/// represent the new date, so a widget never shows stale values as current (#103).
+enum DailyWidgetDateRollover {
+  static func dateKey(_ date: Date, calendar: Calendar = .current) -> String {
+    let parts = calendar.dateComponents([.year, .month, .day], from: date)
+    return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
+  }
+
+  static func rollForward(_ stored: [String: Any], today: String) -> [String: Any]? {
+    guard let snapshotDate = stored["snapshotDate"] as? String, !snapshotDate.isEmpty,
+          snapshotDate != today else { return stored }
+    guard let views = stored["dailyViews"] as? [[String: Any]],
+          let view = views.first(where: { ($0["date"] as? String) == today }) else { return nil }
+    var rolled = stored
+    rolled["todayTitle"] = view["todayTitle"]
+    rolled["weekTitle"] = view["weekTitle"]
+    rolled["todayEvents"] = view["todayEvents"] ?? []
+    rolled["todayRemainingCount"] = view["todayRemainingCount"] ?? 0
+    rolled["snapshotDate"] = today
+    if var days = stored["monthDays"] as? [[String: Any]] {
+      for index in days.indices {
+        days[index]["isToday"] = (days[index]["date"] as? String) == today
+      }
+      rolled["monthDays"] = days
+    }
+    if var ddays = stored["ddays"] as? [[String: Any]] {
+      for index in ddays.indices {
+        if let target = ddays[index]["targetDate"] as? String, !target.isEmpty,
+           let remaining = daysBetween(today, target) {
+          ddays[index]["daysRemaining"] = remaining
+        }
+      }
+      rolled["ddays"] = ddays
+    }
+    return rolled
+  }
+
+  /// Whole calendar days from `from` to `to` (yyyy-MM-dd), unaffected by DST.
+  static func daysBetween(_ from: String, _ to: String) -> Int? {
+    func epochDay(_ value: String) -> Int? {
+      let parts = value.split(separator: "-").compactMap { Int($0) }
+      guard parts.count == 3 else { return nil }
+      let year = parts[1] <= 2 ? parts[0] - 1 : parts[0]
+      let era = (year >= 0 ? year : year - 399) / 400
+      let yoe = year - era * 400
+      let doy = (153 * (parts[1] + (parts[1] > 2 ? -3 : 9)) + 2) / 5 + parts[2] - 1
+      return era * 146097 + yoe * 365 + yoe / 4 - yoe / 100 + doy - 719468
+    }
+    guard let start = epochDay(from), let end = epochDay(to) else { return nil }
+    return end - start
+  }
+}
+// END WIDGET ROLLOVER
+
 struct DailyWidgetSnapshot: Codable {
   let generatedAt: Int64
   let themeMode: String?
@@ -399,6 +466,8 @@ struct DailyWidgetSnapshot: Codable {
   let todayRemainingCount: Int
   let scheduleEvents: [DailyWidgetEvent]?
   let ddays: [DailyWidgetDday]
+  // Present on snapshots written by newer app versions; only used for rollover.
+  var snapshotDate: String? = nil
 
   func events(on date: Date) -> [DailyWidgetEvent] {
     guard let scheduleEvents else { return todayEvents }
@@ -417,7 +486,45 @@ struct DailyWidgetSnapshot: Codable {
     }
   }
 
-  static func load() -> DailyWidgetSnapshot {
+  /// Stored snapshot re-derived for `date`; a themed placeholder when it cannot cover that date.
+  static func load(for date: Date = .now) -> DailyWidgetSnapshot {
+    let stored = loadStored()
+    guard let raw = storedJSON() else { return stored }
+    guard let rolled = DailyWidgetDateRollover.rollForward(raw, today: DailyWidgetDateRollover.dateKey(date)),
+          let data = try? JSONSerialization.data(withJSONObject: rolled),
+          let snapshot = try? JSONDecoder().decode(DailyWidgetSnapshot.self, from: data) else {
+      return stored.needsRefresh
+    }
+    return snapshot
+  }
+
+  private var needsRefresh: DailyWidgetSnapshot {
+    DailyWidgetSnapshot(
+      generatedAt: 0,
+      themeMode: themeMode,
+      monthTitle: "Daily",
+      weekTitle: nil,
+      weekStartsOnMonday: weekStartsOnMonday,
+      monthDays: [],
+      todayTitle: "앱을 열어 일정을 갱신하세요",
+      todayEvents: [],
+      todayRemainingCount: 0,
+      scheduleEvents: [],
+      ddays: []
+    )
+  }
+
+  private static func storedJSON() -> [String: Any]? {
+    guard let containerURL = FileManager.default.containerURL(
+            forSecurityApplicationGroupIdentifier: appGroup
+          ),
+          let data = try? Data(contentsOf: containerURL.appendingPathComponent(snapshotFileName)) else {
+      return nil
+    }
+    return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+  }
+
+  private static func loadStored() -> DailyWidgetSnapshot {
     guard let containerURL = FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: appGroup
           ),
@@ -457,14 +564,17 @@ struct DailyWidgetProvider: TimelineProvider {
   }
 
   func getSnapshot(in context: Context, completion: @escaping (DailyWidgetEntry) -> Void) {
-    completion(DailyWidgetEntry(date: .now, snapshot: DailyWidgetSnapshot.load()))
+    completion(DailyWidgetEntry(date: .now, snapshot: DailyWidgetSnapshot.load(for: .now)))
   }
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<DailyWidgetEntry>) -> Void) {
     let now = Date.now
-    let snapshot = DailyWidgetSnapshot.load()
+    let snapshot = DailyWidgetSnapshot.load(for: now)
     let entry = DailyWidgetEntry(date: now, snapshot: snapshot)
-    let midnight = Calendar.current.startOfDay(for: now).addingTimeInterval(24 * 60 * 60)
+    let calendar = Calendar.current
+    // Calendar arithmetic keeps the refresh on local midnight across DST changes.
+    let midnight = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: now))
+      ?? now.addingTimeInterval(24 * 60 * 60)
     let eventBoundaries = (snapshot.scheduleEvents ?? []).flatMap { event in
       [event.startDate, event.endDate].compactMap { $0 }.filter { $0 > now }
     }

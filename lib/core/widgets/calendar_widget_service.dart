@@ -239,11 +239,15 @@ class CalendarWidgetSnapshotBuilder {
     );
     final localeName = locale.toLanguageTag();
     final l10n = AppLocalizations(locale);
-    final weekOffset = settings.weekStartsOnMonday
-        ? today.weekday - DateTime.monday
-        : today.weekday % DateTime.daysPerWeek;
-    final weekStart = shiftCalendarDateByDays(today, -weekOffset);
-    final weekEnd = shiftCalendarDateByDays(weekStart, 6);
+    String weekTitleFor(DateTime day) {
+      final offset = settings.weekStartsOnMonday
+          ? day.weekday - DateTime.monday
+          : day.weekday % DateTime.daysPerWeek;
+      final start = shiftCalendarDateByDays(day, -offset);
+      final end = shiftCalendarDateByDays(start, 6);
+      return '${DateFormat.MMMd(localeName).format(start)} - '
+          '${DateFormat.MMMd(localeName).format(end)}';
+    }
     final visibleMonthEvents = monthEvents
         .where((event) => _isVisible(event, settings))
         .toList(growable: false);
@@ -252,14 +256,15 @@ class CalendarWidgetSnapshotBuilder {
       gridStart,
       shiftCalendarDateByDays(gridStart, 42),
     );
-    final todayEvents =
-        List<CalendarEvent>.from(monthEventsByDay[_dateKey(today)] ?? const [])
+    List<CalendarEvent> eventsOn(DateTime day) =>
+        List<CalendarEvent>.from(monthEventsByDay[_dateKey(day)] ?? const [])
           ..sort((left, right) {
             if (left.allDay != right.allDay) {
               return left.allDay ? -1 : 1;
             }
             return left.startAt.compareTo(right.startAt);
           });
+    final todayEvents = eventsOn(today);
 
     final ddayEvents =
         allEvents
@@ -283,9 +288,27 @@ class CalendarWidgetSnapshotBuilder {
       'localeTag': localeName,
       'themeMode': settings.themeMode.name,
       'monthTitle': DateFormat.yMMMM(localeName).format(now),
-      'weekTitle':
-          '${DateFormat.MMMd(localeName).format(weekStart)} - '
-          '${DateFormat.MMMd(localeName).format(weekEnd)}',
+      'weekTitle': weekTitleFor(today),
+      // The day the derived "today" values were computed for. Native widgets
+      // compare it with the device date and pick the matching `dailyViews`
+      // entry instead of showing yesterday's values (#103).
+      'snapshotDate': _dateKey(today),
+      'dailyViews': List.generate(42, (index) {
+        final day = _dateOnly(shiftCalendarDateByDays(gridStart, index));
+        final dayEvents = eventsOn(day);
+        return {
+          'date': _dateKey(day),
+          'todayTitle': DateFormat.MMMd(localeName).format(day),
+          'weekTitle': weekTitleFor(day),
+          'todayEvents': dayEvents
+              .take(8)
+              .map((event) => _eventJson(event, l10n))
+              .toList(growable: false),
+          'todayRemainingCount': dayEvents.length > 8
+              ? dayEvents.length - 8
+              : 0,
+        };
+      }),
       'weekStartsOnMonday': settings.weekStartsOnMonday,
       'monthDays': List.generate(42, (index) {
         final date = shiftCalendarDateByDays(gridStart, index);
@@ -337,6 +360,7 @@ class CalendarWidgetSnapshotBuilder {
               'title': l10n.eventTitle(event.title, holiday: event.holiday),
               'dateLabel':
                   '${target.year}.${_two(target.month)}.${_two(target.day)}',
+              'targetDate': _dateKey(target),
               'daysRemaining': remaining,
               'color': event.colorValue,
               'completed': event.completed,

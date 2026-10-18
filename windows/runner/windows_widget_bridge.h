@@ -29,6 +29,7 @@ class WindowsWidgetBridge final {
 
  private:
   struct MonthDay {
+    std::string date;  // yyyy-MM-dd
     int day = 0;
     bool in_month = false;
     bool is_today = false;
@@ -48,12 +49,24 @@ class WindowsWidgetBridge final {
   struct DdayEvent {
     std::wstring title;
     std::wstring date_label;
+    std::string target_date;  // yyyy-MM-dd; empty on snapshots from older apps
     int days_remaining = 0;
     std::uint32_t color = 0xFF2563EB;
     bool completed = false;
   };
 
+  // Values Flutter precomputed for one calendar day of the cached grid.
+  struct DailyView {
+    std::string date;  // yyyy-MM-dd
+    std::wstring today_title;
+    int today_remaining_count = 0;
+    std::vector<TodayEvent> today_events;
+  };
+
   struct Snapshot {
+    // The day the "today" values were computed for; empty on older snapshots.
+    std::string snapshot_date;
+    std::vector<DailyView> daily_views;
     std::wstring month_title;
     std::wstring today_title;
     std::wstring theme_mode;
@@ -76,6 +89,9 @@ class WindowsWidgetBridge final {
       const flutter::MethodCall<flutter::EncodableValue>& call,
       std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>> result);
   bool UpdateSnapshot(const flutter::EncodableMap& map);
+  // Re-derives today's title, events, highlight and D-day counters for the
+  // device date from the cached daily views (#103).
+  void RollSnapshotToToday();
   flutter::EncodableList PendingActionsForFlutter() const;
   void AcknowledgeActions(const flutter::EncodableMap* arguments);
   void ToggleEvent(std::size_t index);
