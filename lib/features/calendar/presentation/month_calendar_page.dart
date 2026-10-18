@@ -271,6 +271,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                     enabled: androidMedium && !desktop,
                                     child: Column(
                                       children: [
+                                        if (_quickAccessSelected && _searchOpen)
+                                          // The search button also works in quick view.
+                                          _buildInlineSearchPanel(),
                                         if (_quickAccessSelected)
                                           Expanded(
                                             child: _QuickMonthPageView(
@@ -304,16 +307,8 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                           Expanded(
                                             child: _PaintOnlySearchLayout(
                                               searchOpen: _searchOpen,
-                                              searchPanel: _InlineSearchPanel(
-                                                controller: _searchController,
-                                                focusNode: _searchFocusNode,
-                                                results: _searchResults,
-                                                onChanged: _handleSearchChanged,
-                                                onSubmitted: _runSearch,
-                                                onClose: _closeSearch,
-                                                onEventSelected:
-                                                    _selectSearchResult,
-                                              ),
+                                              searchPanel:
+                                                  _buildInlineSearchPanel(),
                                               child: RepaintBoundary(
                                                 key: const ValueKey(
                                                   'calendar-content-repaint-boundary',
@@ -468,6 +463,16 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       ),
     );
   }
+
+  _InlineSearchPanel _buildInlineSearchPanel() => _InlineSearchPanel(
+    controller: _searchController,
+    focusNode: _searchFocusNode,
+    results: _searchResults,
+    onChanged: _handleSearchChanged,
+    onSubmitted: _runSearch,
+    onClose: _closeSearch,
+    onEventSelected: _selectSearchResult,
+  );
 
   void _toggleSearch() {
     final opening = !_searchOpen;
@@ -850,6 +855,8 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       event.startAt.day,
     );
     _closeSearch();
+    // A result picked in quick view is shown on the calendar.
+    if (_quickAccessSelected) setState(() => _quickAccessSelected = false);
   }
 
   void _selectCalendarView(

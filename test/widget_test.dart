@@ -279,6 +279,58 @@ void main() {
     },
   );
 
+  testWidgets('the search button shows the search field in quick view', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appStartView': AppStartView.quickView.name,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsOneWidget);
+    // Closing leaves quick view as it was.
+    await tester.tap(find.byTooltip('닫기'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
     testWidgets(
       '${platform.name} resizes calendar navigation without losing date or view',
