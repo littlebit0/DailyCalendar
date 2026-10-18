@@ -1187,7 +1187,7 @@ const Map<String, Map<String, String>> _translations = {
     '제목·마감·제출 상태는 학교에서 갱신됩니다. Daily의 메모·분류·알림·완료 표시는 별도로 유지됩니다.':
         'Title, deadline and submission status are updated from school. Daily keeps your notes, category, reminders and completion mark separately.',
     '지역 선택': 'Select region',
-    '학과 선택': 'Select department',
+    '학과 선택': 'Department',
     '학과·전공 선택': 'Select department or major',
     '해당 대학의 LMS 연결은 아직 지원하지 않습니다.':
         'LMS connection for this university is not supported yet.',
