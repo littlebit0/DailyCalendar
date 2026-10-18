@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:ui' show FramePhase;
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart' show AppLifecycleState, WidgetsBinding;
+import 'package:flutter/widgets.dart'
+    show AppLifecycleState, WidgetsBinding, WidgetsBindingObserver;
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -197,6 +199,7 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     if (!value) {
       _retryTimer?.cancel();
       _queue.clear();
+      _frameWindow = null;
     }
     final operation = _consentTail.then((_) async {
       if (value) {
@@ -262,6 +265,8 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     _retryTimer?.cancel();
     _retryTimer = null;
     _queue.clear();
+    // Frames counted so far are analytics data too: delete them with the queue.
+    _frameWindow = null;
     await _persistQueue();
   }
 
@@ -388,6 +393,9 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   }
 
   bool _isRecentDuplicate(_QueuedAnalyticsEvent candidate) {
+    // Each frame summary covers a different set of frames: equal numbers are a
+    // coincidence, not a resend, and dropping one would corrupt the totals.
+    if (candidate.name == AnalyticsEventName.frameSummary.wireName) return false;
     if (_queue.isEmpty) return false;
     final previous = _queue.last;
     return previous.name == candidate.name &&
@@ -450,9 +458,14 @@ class PrivacyAnalyticsService implements ProductAnalytics {
   void _updatePerformanceMonitoring() {
     if (enabled && !_performanceMonitoring) {
       SchedulerBinding.instance.addTimingsCallback(_onFrameTimings);
+      _lifecycleObserver ??= _LifecycleObserver(noteLifecycleState);
+      WidgetsBinding.instance.addObserver(_lifecycleObserver!);
       _performanceMonitoring = true;
     } else if (!enabled && _performanceMonitoring) {
       SchedulerBinding.instance.removeTimingsCallback(_onFrameTimings);
+      if (_lifecycleObserver != null) {
+        WidgetsBinding.instance.removeObserver(_lifecycleObserver!);
+      }
       _performanceMonitoring = false;
     }
   }
@@ -473,9 +486,35 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     return state == null || state == AppLifecycleState.resumed;
   }
 
+  // Foreground/background changes, oldest first. Timings arrive in batches up to
+  // about a second after the frames ran, so each frame is judged by the state
+  // that held when it ran, not by the state at delivery.
+  final _lifecycleChanges = <({DateTime at, bool foreground})>[];
+  bool? _lastForeground;
+  _LifecycleObserver? _lifecycleObserver;
+
+  @visibleForTesting
+  void noteLifecycleState(AppLifecycleState state, {DateTime? at}) {
+    final foreground = state == AppLifecycleState.resumed;
+    if (_lastForeground == foreground) return;
+    _lastForeground = foreground;
+    _lifecycleChanges.add((at: (at ?? _now()).toUtc(), foreground: foreground));
+    if (_lifecycleChanges.length > 64) _lifecycleChanges.removeAt(0);
+  }
+
+  bool _foregroundAt(DateTime time) {
+    if (_lifecycleChanges.isEmpty) return _foregroundProvider();
+    // Before the first recorded change the app was in the opposite state.
+    var foreground = !_lifecycleChanges.first.foreground;
+    for (final change in _lifecycleChanges) {
+      if (change.at.isAfter(time)) break;
+      foreground = change.foreground;
+    }
+    return foreground;
+  }
+
   void _onFrameTimings(List<FrameTiming> timings) {
-    // Frames drawn while paused, hidden or inactive say nothing about UI jank.
-    if (!enabled || timings.isEmpty || !_foregroundProvider()) return;
+    if (!enabled || timings.isEmpty) return;
     final hz = _refreshRateProvider();
     final refreshRate = (hz.isFinite && hz > 0 ? hz : 60.0).round().clamp(
       AnalyticsRecord.minRefreshRateHz,
@@ -491,6 +530,12 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     // least one visibly missed refresh at the actual refresh rate.
     final slowAfter = Duration(microseconds: (2000000 / refreshRate).round());
     for (final timing in timings) {
+      // Frames drawn while paused, hidden or inactive say nothing about UI jank.
+      final ran = DateTime.fromMicrosecondsSinceEpoch(
+        timing.timestampInMicroseconds(FramePhase.rasterFinishWallTime),
+        isUtc: true,
+      );
+      if (!_foregroundAt(ran)) continue;
       window.frames++;
       final span = timing.totalSpan;
       if (span > slowAfter) window.slow++;
@@ -524,6 +569,9 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     _retryTimer?.cancel();
     if (_performanceMonitoring) {
       SchedulerBinding.instance.removeTimingsCallback(_onFrameTimings);
+      if (_lifecycleObserver != null) {
+        WidgetsBinding.instance.removeObserver(_lifecycleObserver!);
+      }
     }
     _enabled.dispose();
     _consentPromptCompleted.dispose();
@@ -560,6 +608,15 @@ class PrivacyAnalyticsService implements ProductAnalytics {
     final match = RegExp(r'(\d+)').firstMatch(version);
     return int.tryParse(match?.group(1) ?? '') ?? 0;
   }
+}
+
+class _LifecycleObserver with WidgetsBindingObserver {
+  _LifecycleObserver(this._onState);
+
+  final void Function(AppLifecycleState state) _onState;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) => _onState(state);
 }
 
 class _FrameWindow {
@@ -666,6 +723,11 @@ bool isSafeAnalyticsEvent(Object? value) {
     final validator = schema[entry.key] ?? optional[entry.key]!;
     if (!validator(entry.value)) return false;
   }
+  // The flag means the real duration was longer than the cap and was cut to it.
+  if (attributes.containsKey('durationTruncated') &&
+      attributes['durationMs'] != AnalyticsRecord.maxDurationMs) {
+    return false;
+  }
   if (name == AnalyticsEventName.frameSummary.wireName &&
       (attributes['slowFrameCount'] as int) >
           (attributes['frameCount'] as int)) {
@@ -713,8 +775,16 @@ final _analyticsOptionalAttributes =
         AnalyticsEventName.slowInteractionDetected,
         AnalyticsEventName.frameSummary,
       ])
-        name.wireName: {'durationTruncated': _truncatedFlag},
+        name.wireName: {
+          'durationTruncated': _truncatedFlag,
+          // Apps before the save phase existed send event_save_* without it.
+          if (name == AnalyticsEventName.eventSaveSucceeded ||
+              name == AnalyticsEventName.eventSaveFailed)
+            'phase': _savePhase,
+        },
     };
+
+bool _savePhase(Object? value) => _enumValue(value, AnalyticsSavePhase.values);
 
 final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
   AnalyticsEventName.appLoadCompleted.wireName: {'durationMs': _duration},
@@ -735,12 +805,10 @@ final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
     'durationMs': _duration,
   },
   AnalyticsEventName.eventSaveSucceeded.wireName: {
-    'phase': (value) => _enumValue(value, AnalyticsSavePhase.values),
     'operation': (value) => _enumValue(value, AnalyticsOperation.values),
     'durationMs': _duration,
   },
   AnalyticsEventName.eventSaveFailed.wireName: {
-    'phase': (value) => _enumValue(value, AnalyticsSavePhase.values),
     'operation': (value) => _enumValue(value, AnalyticsOperation.values),
     'durationMs': _duration,
     'errorCode': (value) => _enumValue(value, AnalyticsErrorCode.values),
