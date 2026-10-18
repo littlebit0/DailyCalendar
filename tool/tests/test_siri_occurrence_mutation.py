@@ -34,3 +34,4 @@ class SiriOccurrenceMutationTest(unittest.TestCase):
             self.assertIn('Siri occurrence mutation checks passed', result.stdout)
             self.assertIn('Siri recurrence detail fixtures passed', result.stdout)
             self.assertIn('Siri until-day inclusion checks passed', result.stdout)
+            self.assertIn('Siri read failure checks passed', result.stdout)
