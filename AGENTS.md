@@ -7,7 +7,8 @@ memory.
 ## 1. Follow Workspace Rules
 
 - Also follow the workspace-level `AGENTS.md` at
-  `C:\Users\com\Documents\New project\AGENTS.md`.
+  `/Users/kimhwi/Documents/Codex/AGENTS.md` (macOS). The former Windows path
+  `C:\Users\com\Documents\New project\AGENTS.md` applies only on that Windows host.
 - If rules conflict, obey system/developer instructions first, then the user's
   latest explicit instruction, then this file.
 - Read relevant code, tests, and handoff notes before changing behavior.
@@ -154,6 +155,8 @@ instead of loading every skill for each task:
 - `daily-cross-platform-check`: affected-platform builds and verification evidence.
 
 These skills supplement the rules above and do not grant additional permissions.
+Claude Code does not auto-discover `.agents/skills/`; when running as Claude Code,
+open the relevant `SKILL.md` directly with the file-read tool before the task.
 Skill/configuration-only edits do not require updating or launching installed apps.
 See `docs/CODEX_SETUP.md` for discovery and external plugin connection boundaries.
 

@@ -125,3 +125,35 @@ for item in detailFixtures {
   if actual != item["expected"] as! [String] { fatalError("detail fixture \(name): expected \(item["expected"]!), got \(actual)") }
 }
 print("Siri recurrence detail fixtures passed")
+
+// #123: the until day is inclusive and a last occurrence may run past it.
+func localDate(_ day: Int, _ hour: Int) -> Date {
+  Calendar.current.date(from: DateComponents(year: 2026, month: 8, day: day, hour: hour))!
+}
+func addUntilSeries(_ id: String, hours: Int) throws {
+  let first = localDate(24, 9)
+  try sql("""
+  INSERT INTO event_records (id, title, start_at, end_at, all_day, category, color_value, recurrence_frequency,
+    recurrence_interval, recurrence_until, created_at, updated_at)
+  VALUES ('\(id)', '\(id)', \(Int64(first.timeIntervalSince1970)), \(Int64(first.addingTimeInterval(Double(hours) * 3600).timeIntervalSince1970)),
+    0, 'basic', 1, 'daily', 1, \(Int64(localDate(26, 0).timeIntervalSince1970)), 0, 0)
+  """)
+}
+func untilStarts(_ id: String, _ from: Date, _ to: Date) throws -> [Int] {
+  try DailySiriDatabase.events(from: from, to: to)
+    .filter { DailySiriOccurrenceIdentity.parse($0.id)?.sourceID == id || $0.id == id }
+    .map { Calendar.current.component(.day, from: $0.startAt) }
+}
+func expectDays(_ id: String, _ from: Date, _ to: Date, _ expected: [Int]) throws {
+  let actual = try untilStarts(id, from, to)
+  if actual != expected { fatalError("\(id) \(from)...\(to): expected \(expected), got \(actual)") }
+}
+try addUntilSeries("until-short", hours: 1)
+try expectDays("until-short", localDate(26, 8), localDate(26, 18), [26])
+try expectDays("until-short", localDate(24, 0), localDate(30, 0), [24, 25, 26])
+try expectDays("until-short", localDate(27, 8), localDate(27, 18), [])
+try addUntilSeries("until-long", hours: 48)
+// 48h occurrences: the 25th and the last one (26th, the until day) still run on the 27th.
+try expectDays("until-long", localDate(27, 0), localDate(27, 12), [25, 26])
+try expectDays("until-long", localDate(29, 0), localDate(29, 12), [])
+print("Siri until-day inclusion checks passed")

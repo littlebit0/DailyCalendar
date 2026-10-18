@@ -40,6 +40,7 @@ elif command -v flutter >/dev/null 2>&1; then
   flutter_bin="$(command -v flutter)"
 else
   flutter_root="$(select_existing_path "bin/flutter" \
+    "$project_root/development/flutter-sdk" \
     "$tool_root/flutter-sdk" \
     "$HOME/development/flutter" \
     "$HOME/flutter" \
@@ -55,7 +56,7 @@ if [[ ! -x "$flutter_bin" ]]; then
   exit 1
 fi
 
-export PUB_CACHE="${PUB_CACHE:-$tool_root/PubCache}"
+export PUB_CACHE="${PUB_CACHE:-$project_root/development/pub-cache}"
 export PATH="$(dirname "$flutter_bin"):$PATH"
 
 build_path="$project_root/build"
