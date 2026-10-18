@@ -24,6 +24,8 @@ BUG_REPORT_RETENTION_DAYS = 365
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 GITHUB_API_VERSION = "2026-03-10"
 VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?$")
+# A package build number is a plain integer or dotted number; 'unknown' when the platform has none.
+BUILD_NUMBER_PATTERN = re.compile(r"^(?:\d+(?:\.\d+){0,3}|unknown)$")
 ANALYTICS_VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?(?:-test)?$")
 EMAIL_PATTERN = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]+$")
 UUID_PATTERN = re.compile(
@@ -193,7 +195,7 @@ def normalize_bug_report(payload):
         clean_environment[key] = cleaned
     if not VERSION_PATTERN.fullmatch(clean_environment["version"]):
         return None
-    if not VERSION_PATTERN.fullmatch(clean_environment["buildNumber"]):
+    if not BUILD_NUMBER_PATTERN.fullmatch(clean_environment["buildNumber"]):
         return None
     if clean_environment["platform"] not in {"iOS", "macOS", "Android", "Windows", "Linux"}:
         return None

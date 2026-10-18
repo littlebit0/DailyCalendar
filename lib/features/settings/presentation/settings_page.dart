@@ -1248,10 +1248,15 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   Future<_AppVersionInfo> _loadAppVersionInfo() async {
     try {
       final info = await PackageInfo.fromPlatform();
+      final resolved = appVersionInfoFromPackage(
+        info.version,
+        info.buildNumber,
+        info.packageName,
+      );
       return _AppVersionInfo(
-        version: info.version.isEmpty ? _fallbackAppVersion : info.version,
-        buildNumber: info.version.isEmpty ? _fallbackAppVersion : info.version,
-        packageName: info.packageName,
+        version: resolved.version,
+        buildNumber: resolved.buildNumber,
+        packageName: resolved.packageName,
       );
     } on Object {
       return const _AppVersionInfo(
@@ -3703,6 +3708,20 @@ class _BugReportDialogState extends State<_BugReportDialog> {
     );
   }
 }
+
+/// The package's own version and build number. A missing build number is shown
+/// as `unknown` instead of repeating the version as if it were one.
+@visibleForTesting
+({String version, String buildNumber, String packageName})
+appVersionInfoFromPackage(
+  String version,
+  String buildNumber,
+  String packageName,
+) => (
+  version: version.isEmpty ? _fallbackAppVersion : version,
+  buildNumber: buildNumber.isEmpty ? 'unknown' : buildNumber,
+  packageName: packageName,
+);
 
 class _AppVersionInfo {
   const _AppVersionInfo({
