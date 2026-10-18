@@ -303,7 +303,7 @@ class SangjiAcademicSource extends _Source {
         await Future<void>.delayed(const Duration(milliseconds: 250));
       }
       all.addAll(
-        parse(
+        _rows(
           await read(
             Uri.https(
               'sangji.ac.kr',
@@ -317,14 +317,18 @@ class SangjiAcademicSource extends _Source {
               'Cookie': ?cookies,
             },
           ),
-          year,
         ),
       );
     }
+    // Only the combined result must reach the requested year: a valid previous
+    // academic-year response may legitimately have nothing in it.
     return _within(all, year);
   }
 
-  static List<AcademicEvent> parse(String body, int year) {
+  static List<AcademicEvent> parse(String body, int year) =>
+      _within(_rows(body), year);
+
+  static List<AcademicEvent> _rows(String body) {
     final groups = jsonDecode(body);
     if (groups is! List) throw const FormatException('Invalid Sangji calendar');
     final events = <AcademicEvent>[];
@@ -358,7 +362,7 @@ class SangjiAcademicSource extends _Source {
         );
       }
     }
-    return _within(events, year);
+    return events;
   }
 }
 
