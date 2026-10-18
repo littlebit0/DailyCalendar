@@ -47,6 +47,20 @@ class BugReportDraft {
   };
 }
 
+/// Room kept for the environment block and the JSON wrapper when checking
+/// whether report text can still be sent. The real body is checked again
+/// before sending.
+const bugReportEnvironmentAllowanceBytes = 4 * 1024;
+
+/// Whether [draft], encoded the way it is sent, fits the receiver's request
+/// limit. Counts UTF-8 bytes of the JSON, so a character made of many code
+/// points (such as a family emoji) costs what it really costs, unlike the
+/// text field's own character-based `maxLength`.
+bool bugReportDraftFits(BugReportDraft draft) {
+  final bytes = utf8.encode(jsonEncode({'report': draft.toJson()})).length;
+  return bytes + bugReportEnvironmentAllowanceBytes <= bugReportMaxRequestBytes;
+}
+
 class BugReportSubmission {
   const BugReportSubmission({
     required this.issueNumber,
