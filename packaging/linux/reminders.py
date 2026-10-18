@@ -41,6 +41,8 @@ def save(path, record):
 
 
 def validate(record):
+    if not isinstance(record, dict):
+        raise ValueError("Invalid reminder record")
     if type(record.get("id")) is not int or abs(record["id"]) > 2147483647:
         raise ValueError("Invalid reminder id")
     if not isinstance(record.get("title"), str) or not isinstance(record.get("body"), str):
@@ -61,16 +63,22 @@ def deliver(directory, now, notify):
                 # Preserve corrupt records for investigation, not repeated retries.
                 path.rename(path.with_suffix(".invalid"))
                 continue
-            due = record["scheduledAt"]
-            if due > now:
+            except OSError:
                 continue
-            if now - due <= 300 and not notify(record):
+            # One reminder failing must never stop the ones after it.
+            try:
+                due = record["scheduledAt"]
+                if due > now:
+                    continue
+                if now - due <= 300 and not notify(record):
+                    continue
+                if record["repeatsDaily"]:
+                    record["scheduledAt"] = due + (int((now - due) // 86400) + 1) * 86400
+                    save(path, record)
+                else:
+                    path.unlink()
+            except Exception:
                 continue
-            if record["repeatsDaily"]:
-                record["scheduledAt"] = due + (int((now - due) // 86400) + 1) * 86400
-                save(path, record)
-            else:
-                path.unlink()
 
 
 def notify(record):
