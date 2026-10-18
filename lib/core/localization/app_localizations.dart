@@ -1138,6 +1138,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': 'Display & Calendar',
     '화면 및 일정': 'Display & Schedule',
     '화면과 기능 사용': 'Screens and feature usage',
+    '일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.':
+        'Some learning information could not be read this time, so the values above may be from an earlier check.',
     '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.':
         'The report is too long. Please shorten it and try again.',
     '공개된 학과 주관 정보가 없습니다.': 'No published department hosting information.',
@@ -2099,6 +2101,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '表示とカレンダー',
     '화면 및 일정': '表示と予定',
     '화면과 기능 사용': '画面と機能の利用',
+    '일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.':
+        '一部の学習情報を今回確認できなかったため、上の学習情報は以前に確認した値の可能性があります。',
     '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.': '報告内容が長すぎます。内容を短くしてもう一度お試しください。',
     '공개된 학과 주관 정보가 없습니다.': '公開された学科の主管情報がありません。',
     '기존 분류가 없습니다. 분류를 다시 선택해 주세요.': '以前の分類がありません。分類を選び直してください。',
@@ -3029,6 +3033,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '顯示與行事曆',
     '화면 및 일정': '顯示與行程',
     '화면과 기능 사용': '畫面與功能使用',
+    '일부 학습 정보를 이번에 확인하지 못해 위 학습 정보는 이전에 확인한 값일 수 있습니다.':
+        '這次無法讀取部分學習資訊，因此上方學習資訊可能是先前確認的數值。',
     '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.': '回報內容過長，請縮短後再試一次。',
     '공개된 학과 주관 정보가 없습니다.': '沒有公開的系所開課單位資訊。',
     '기존 분류가 없습니다. 분류를 다시 선택해 주세요.': '原分類已不存在，請重新選擇分類。',
