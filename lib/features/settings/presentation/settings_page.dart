@@ -1246,24 +1246,12 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Future<_AppVersionInfo> _loadAppVersionInfo() async {
-    try {
-      final info = await PackageInfo.fromPlatform();
-      final resolved = appVersionInfoFromPackage(
-        info.version,
-        info.buildNumber,
-        info.packageName,
-      );
-      return _AppVersionInfo(
-        version: resolved.version,
-        buildNumber: resolved.buildNumber,
-        packageName: resolved.packageName,
-      );
-    } on Object {
-      return const _AppVersionInfo(
-        version: _fallbackAppVersion,
-        buildNumber: _fallbackAppVersion,
-      );
-    }
+    final resolved = await resolveAppVersionInfo(PackageInfo.fromPlatform);
+    return _AppVersionInfo(
+      version: resolved.version,
+      buildNumber: resolved.buildNumber,
+      packageName: resolved.packageName,
+    );
   }
 
   Future<void> _openGithubRepository() async {
@@ -3722,6 +3710,24 @@ appVersionInfoFromPackage(
   buildNumber: buildNumber.isEmpty ? 'unknown' : buildNumber,
   packageName: packageName,
 );
+
+/// Looks the package metadata up. When the lookup itself fails, the version
+/// falls back to a known value but the build number is `unknown`: reusing the
+/// version there would invent a build number a report never had.
+@visibleForTesting
+Future<({String version, String buildNumber, String packageName})>
+resolveAppVersionInfo(Future<PackageInfo> Function() lookup) async {
+  try {
+    final info = await lookup();
+    return appVersionInfoFromPackage(
+      info.version,
+      info.buildNumber,
+      info.packageName,
+    );
+  } on Object {
+    return appVersionInfoFromPackage(_fallbackAppVersion, '', '');
+  }
+}
 
 class _AppVersionInfo {
   const _AppVersionInfo({
