@@ -1694,30 +1694,136 @@ private enum DailyAppleIntelligenceNarrator {
     factualMessage: String,
     events: [DailySiriEvent]
   ) -> Bool {
-    guard !candidate.isEmpty,
-          candidate.split(separator: "\n", omittingEmptySubsequences: false).count ==
-            factualMessage.split(separator: "\n", omittingEmptySubsequences: false).count,
-          events.allSatisfy({ candidate.contains($0.title) }) else {
-      return false
-    }
-    let factualNumbers = numericTokens(in: factualMessage)
-    let candidateNumbers = numericTokens(in: candidate)
-    return factualNumbers == candidateNumbers
-  }
-
-  private static func numericTokens(in value: String) -> [String] {
-    guard let expression = try? NSRegularExpression(pattern: #"\d+"#) else {
-      return []
-    }
-    return expression.matches(
-      in: value,
-      range: NSRange(value.startIndex..., in: value)
-    ).compactMap { match in
-      guard let range = Range(match.range, in: value) else { return nil }
-      return String(value[range])
-    }
+    DailySiriNarrationValidator.isFaithful(
+      candidate,
+      to: factualMessage,
+      titles: events.map(\.title)
+    )
   }
 }
+
+// BEGIN SIRI NARRATION VALIDATOR
+/// A rewritten response is only spoken when every line still states the same
+/// facts as the original line: which events it names, its numbers, its
+/// weekdays and whether it says an event exists. Anything else falls back to
+/// the original message.
+enum DailySiriNarrationValidator {
+  static func isFaithful(_ candidate: String, to factual: String, titles: [String]) -> Bool {
+    let candidateLines = candidate.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    let factualLines = factual.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+    guard !candidate.isEmpty, candidateLines.count == factualLines.count else { return false }
+    for (candidateLine, factualLine) in zip(candidateLines, factualLines) {
+      // Blank separator lines stay blank, and text never turns into a blank.
+      let factualBlank = factualLine.trimmingCharacters(in: .whitespaces).isEmpty
+      let candidateBlank = candidateLine.trimmingCharacters(in: .whitespaces).isEmpty
+      guard factualBlank == candidateBlank else { return false }
+      if factualBlank { continue }
+      guard numbers(in: candidateLine) == numbers(in: factualLine),
+            weekdays(in: candidateLine) == weekdays(in: factualLine),
+            mentionedTitles(in: candidateLine, titles) == mentionedTitles(in: factualLine, titles),
+            negates(candidateLine) == negates(factualLine),
+            statesAllDay(candidateLine) == statesAllDay(factualLine),
+            titlesKeepTheirExactSpan(in: candidateLine, factual: factualLine, titles) else {
+        return false
+      }
+    }
+    // Every event must still be named somewhere (also covers repeated titles).
+    return titles.allSatisfy { candidate.contains($0) }
+  }
+
+  private static func numbers(in value: String) -> [String] {
+    guard let expression = try? NSRegularExpression(pattern: #"\d+"#) else { return [] }
+    return expression.matches(in: value, range: NSRange(value.startIndex..., in: value)).compactMap { match in
+      Range(match.range, in: value).map { String(value[$0]) }
+    }
+  }
+
+  private static let weekdayNames = [
+    "월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일",
+    "monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday",
+    "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日", "日曜日",
+    "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日", "星期天",
+  ]
+
+  private static func weekdays(in value: String) -> [String] {
+    let lowered = value.lowercased()
+    return weekdayNames.filter { lowered.contains($0) }.sorted()
+  }
+
+  /// Titles named in the line, ignoring a short title that only occurs inside a longer one.
+  private static func mentionedTitles(in value: String, _ titles: [String]) -> [String] {
+    let found = Set(titles.filter { !$0.isEmpty && value.contains($0) })
+    return found.filter { title in
+      !found.contains { $0 != title && $0.contains(title) }
+    }.sorted()
+  }
+
+  private static let negations = [
+    "없", "않", "못", "ない", "ません", "没有", "沒有", "无", "無", "不存在", "不是", "沒", "没",
+    " no ", "not", "none", "nothing", "without", "n't",
+  ]
+
+  private static func negates(_ value: String) -> Bool {
+    // Typographic apostrophes (isn’t) must match the ASCII "n't" form.
+    var normalized = value.lowercased()
+    for apostrophe in ["\u{2019}", "\u{2018}", "\u{02BC}", "\u{FF07}"] {
+      normalized = normalized.replacingOccurrences(of: apostrophe, with: "'")
+    }
+    let padded = " " + normalized + " "
+    return negations.contains { padded.contains($0) }
+  }
+
+  private static let allDayMarkers = ["종일", "all-day", "all day", "終日", "全天", "整天"]
+
+  /// Whether the line states that an event lasts all day, so "all-day" cannot
+  /// become "half-day" (or the reverse) without falling back.
+  private static func statesAllDay(_ value: String) -> Bool {
+    let lowered = value.lowercased()
+    return allDayMarkers.contains { lowered.contains($0) }
+  }
+
+  /// Words that may precede a Latin title without becoming part of its name.
+  private static let titleLeadWords: Set<String> = [
+    "a", "an", "the", "your", "my", "this", "that", "its", "also", "and", "then",
+    "at", "on", "in", "for", "of", "with", "from", "to", "is", "are", "there",
+  ]
+
+  /// Every title named in the candidate must keep its exact span: no letters
+  /// glued before it ("정기회의"), none after a Latin title ("Meetings"), and no
+  /// new word in front of a Latin title ("Project Meeting").
+  private static func titlesKeepTheirExactSpan(in candidate: String, factual: String, _ titles: [String]) -> Bool {
+    let factualWords = Set(
+      factual.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }
+    )
+    for title in Set(titles) where !title.isEmpty && factual.contains(title) {
+      var searchRange = candidate.startIndex..<candidate.endIndex
+      while let found = candidate.range(of: title, range: searchRange) {
+        searchRange = found.upperBound..<candidate.endIndex
+        if found.lowerBound > candidate.startIndex {
+          let before = candidate[candidate.index(before: found.lowerBound)]
+          if before.isLetter || before.isNumber { return false }
+        }
+        let latin = title.last.map { $0.isASCII && ($0.isLetter || $0.isNumber) } ?? false
+        if latin, found.upperBound < candidate.endIndex {
+          let after = candidate[found.upperBound]
+          // A CJK particle after a Latin title ("A가") is grammar, not part of the name.
+          if after.isASCII, after.isLetter || after.isNumber { return false }
+        }
+        if title.first.map({ $0.isASCII && ($0.isLetter || $0.isNumber) }) == true {
+          let head = candidate[candidate.startIndex..<found.lowerBound]
+          let trimmed = head.trimmingCharacters(in: .whitespaces)
+          if head.last == " ", let word = trimmed.components(separatedBy: .whitespaces).last,
+             let last = word.last, last.isLetter {
+            let lowered = word.lowercased()
+            if !titleLeadWords.contains(lowered), !factualWords.contains(lowered) { return false }
+          }
+        }
+      }
+    }
+    return true
+  }
+}
+// END SIRI NARRATION VALIDATOR
 
 // BEGIN SIRI OCCURRENCE IDENTITY
 struct DailySiriOccurrenceIdentity {
