@@ -49,6 +49,20 @@ class BugReportDraft {
   };
 }
 
+/// Room kept for the environment block and the JSON wrapper when checking
+/// whether report text can still be sent. The real body is checked again
+/// before sending.
+const bugReportEnvironmentAllowanceBytes = 4 * 1024;
+
+/// Whether [draft], encoded the way it is sent, fits the receiver's request
+/// limit. Counts UTF-8 bytes of the JSON, so a character made of many code
+/// points (such as a family emoji) costs what it really costs, unlike the
+/// text field's own character-based `maxLength`.
+bool bugReportDraftFits(BugReportDraft draft) {
+  final bytes = utf8.encode(jsonEncode({'report': draft.toJson()})).length;
+  return bytes + bugReportEnvironmentAllowanceBytes <= bugReportMaxRequestBytes;
+}
+
 class BugReportSubmission {
   const BugReportSubmission({
     required this.issueNumber,
@@ -68,6 +82,9 @@ class BugReportException implements Exception {
   @override
   String toString() => message;
 }
+
+/// What the receiver accepts for one request (UTF-8 bytes of the JSON body).
+const bugReportMaxRequestBytes = 64 * 1024;
 
 class BugReportService {
   BugReportService({http.Client? httpClient, Uri? endpoint})
@@ -122,6 +139,17 @@ class BugReportService {
       );
     }
 
+    final requestBody = jsonEncode({
+      'report': draft.toJson(),
+      'environment': environment.toJson(),
+    });
+    // Too large for the receiver: say so before sending; the text is kept.
+    if (utf8.encode(requestBody).length > bugReportMaxRequestBytes) {
+      throw const BugReportException(
+        'invalid_size',
+        '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.',
+      );
+    }
     final requestId = _requestIdFor(draft, environment);
     late final http.Response response;
     try {
@@ -134,10 +162,7 @@ class BugReportService {
               // A header, so an older receiver that validates the body keys still accepts it.
               'Idempotency-Key': requestId,
             },
-            body: jsonEncode({
-              'report': draft.toJson(),
-              'environment': environment.toJson(),
-            }),
+            body: requestBody,
           )
           // Covers the receiver's Google check and GitHub create/lookup budgets.
           .timeout(const Duration(seconds: 40));
@@ -177,6 +202,7 @@ class BugReportService {
     'invalid_google_token' => 'Google 로그인 상태를 확인한 뒤 다시 시도해 주세요.',
     'rate_limited' => '버그 제보 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.',
     'invalid_report' => '버그 제보 내용을 다시 확인해 주세요.',
+    'invalid_size' => '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.',
     'github_unavailable' => 'GitHub 이슈를 생성하지 못했습니다. 잠시 후 다시 시도해 주세요.',
     _ => '버그 제보를 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.',
   };

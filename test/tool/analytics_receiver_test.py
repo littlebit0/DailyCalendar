@@ -9,6 +9,7 @@ from tool.analytics_receiver import (
     BugReportBackend,
     BugReportRateLimited,
     InvalidGoogleToken,
+    MAX_BUG_REPORT_BYTES,
     UpstreamUnavailable,
     normalize_bug_report,
     valid_batch,
@@ -43,6 +44,45 @@ class AnalyticsVersionTests(unittest.TestCase):
             )
         batch['environment']['appVersion'] = '4.1.2-private-data'
         self.assertFalse(valid_batch(batch))
+
+
+class BugReportSizeContractTests(unittest.TestCase):
+    """Whatever the form allows must fit the receiver's request limit."""
+
+    def payload(self, text, lengths):
+        payload = _payload()
+        for key, length in lengths.items():
+            payload["report"][key] = text * length
+        return payload
+
+    def test_korean_reports_below_the_field_limits_fit_the_request_limit(self):
+        # The case from the report: 3000 Korean characters in two fields.
+        payload = self.payload("가", {"description": 3000, "reproductionSteps": 3000})
+        self.assertIsNotNone(normalize_bug_report(payload))
+        size = len(json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode())
+        self.assertLess(size, MAX_BUG_REPORT_BYTES)
+
+    def test_worst_case_form_input_fits(self):
+        lengths = {
+            "title": 120,
+            "description": 4000,
+            "reproductionSteps": 4000,
+            "expectedBehavior": 2000,
+            "actualBehavior": 2000,
+        }
+        for text in ("😀", "가", '"', "\n", "a"):
+            payload = self.payload(text, lengths)
+            if text == "\n":
+                # Newlines are kept; keep at least one visible character.
+                payload = self.payload("a\n", {k: v // 2 for k, v in lengths.items()})
+            if normalize_bug_report(payload) is None:
+                continue
+            # Dart's jsonEncode writes non-ASCII as raw UTF-8 (no \\u escapes).
+            size = len(json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode())
+            self.assertLess(size, MAX_BUG_REPORT_BYTES, text)
+
+    def test_the_request_limit_stays_bounded(self):
+        self.assertLessEqual(MAX_BUG_REPORT_BYTES, 128 * 1024)
 
 
 class MalformedTypeTests(unittest.TestCase):

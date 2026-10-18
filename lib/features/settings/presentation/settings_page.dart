@@ -113,6 +113,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   var _appleMessage = '';
   var _appleBusy = false;
   var _bugReportBusy = false;
+  // Kept when a submission fails, so the text is not lost.
+  BugReportDraft? _unsentBugReportDraft;
+  String? _unsentBugReportEmail;
   var _deviceAuthenticationAvailable = false;
   var _biometricAuthenticationAvailable = false;
   AppSettings? _pendingWindowsSettings;
@@ -1365,11 +1368,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       return;
     }
 
+    // A retained draft belongs to the account it was written under.
+    if (_unsentBugReportEmail != activeGoogle.email) {
+      _unsentBugReportDraft = null;
+    }
     final draft = await showDialog<BugReportDraft>(
       context: context,
-      builder: (context) => _BugReportDialog(email: activeGoogle.email),
+      builder: (context) => _BugReportDialog(
+        email: activeGoogle.email,
+        initialDraft: _unsentBugReportDraft,
+      ),
     );
     if (draft == null || !mounted) return;
+    _unsentBugReportDraft = draft;
+    _unsentBugReportEmail = activeGoogle.email;
 
     setState(() => _bugReportBusy = true);
     final info = await _appVersionInfo;
@@ -1396,6 +1408,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             environment: environment,
             googleAuthorizationHeaders: authorizationHeaders,
           );
+      _unsentBugReportDraft = null;
+      _unsentBugReportEmail = null;
       if (!mounted) return;
       await showDialog<void>(
         context: context,
@@ -2317,6 +2331,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         // cannot clear its cached Google session.
       }
       await ref.read(settingsRepositoryProvider).deleteGoogleAccount();
+      // A report draft written under the unlinked account must not follow the
+      // next account that is linked on this screen.
+      _unsentBugReportDraft = null;
+      _unsentBugReportEmail = null;
       if (mounted) {
         ref.read(appSettingsProvider.notifier).state = ref
             .read(settingsRepositoryProvider)
@@ -3487,10 +3505,24 @@ class _SettingsDescription extends StatelessWidget {
   }
 }
 
+/// Rejects an edit that would make the whole report too large to send.
+class _BugReportBudgetFormatter extends TextInputFormatter {
+  const _BugReportBudgetFormatter(this.fits);
+
+  final bool Function(String text) fits;
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) => fits(newValue.text) ? newValue : oldValue;
+}
+
 class _BugReportDialog extends StatefulWidget {
-  const _BugReportDialog({required this.email});
+  const _BugReportDialog({required this.email, this.initialDraft});
 
   final String email;
+  final BugReportDraft? initialDraft;
 
   @override
   State<_BugReportDialog> createState() => _BugReportDialogState();
@@ -3503,6 +3535,19 @@ class _BugReportDialogState extends State<_BugReportDialog> {
   final _reproductionController = TextEditingController();
   final _expectedController = TextEditingController();
   final _actualController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final draft = widget.initialDraft;
+    if (draft != null) {
+      _titleController.text = draft.title;
+      _descriptionController.text = draft.description;
+      _reproductionController.text = draft.reproductionSteps;
+      _expectedController.text = draft.expectedBehavior;
+      _actualController.text = draft.actualBehavior;
+    }
+  }
 
   @override
   void dispose() {
@@ -3652,6 +3697,21 @@ class _BugReportDialogState extends State<_BugReportDialog> {
     );
   }
 
+  BugReportDraft _draftWith(TextEditingController changed, String text) {
+    String value(TextEditingController controller) =>
+        identical(controller, changed) ? text : controller.text;
+    return BugReportDraft(
+      title: value(_titleController),
+      description: value(_descriptionController),
+      reproductionSteps: value(_reproductionController),
+      expectedBehavior: value(_expectedController),
+      actualBehavior: value(_actualController),
+    );
+  }
+
+  bool Function(String) _fitsWith(TextEditingController controller) =>
+      (text) => bugReportDraftFits(_draftWith(controller, text));
+
   Widget _field({
     required Key key,
     required TextEditingController controller,
@@ -3669,6 +3729,9 @@ class _BugReportDialogState extends State<_BugReportDialog> {
       minLines: minLines,
       maxLines: maxLines,
       maxLength: maxLength,
+      // The character limit alone cannot bound the request: a single emoji
+      // sequence is one character but dozens of bytes.
+      inputFormatters: [_BugReportBudgetFormatter(_fitsWith(controller))],
       textInputAction: maxLines == 1
           ? TextInputAction.next
           : TextInputAction.newline,
