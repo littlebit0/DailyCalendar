@@ -5662,9 +5662,9 @@ void main() {
           find.byWidgetPredicate(
             (widget) =>
                 widget is Text &&
-                (widget.data == '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기' ||
+                (widget.data == '버전 2.7.1 (1) · 더블 클릭하여 Github 확인하기' ||
                     widget.semanticsLabel ==
-                        '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기'),
+                        '버전 2.7.1 (1) · 더블 클릭하여 Github 확인하기'),
           ),
           findsOneWidget,
         );
