@@ -1128,6 +1128,9 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': 'Display & Calendar',
     '화면 및 일정': 'Display & Schedule',
     '화면과 기능 사용': 'Screens and feature usage',
+    '저장된 정보로 재로그인': 'Sign in again with saved login',
+    '비밀번호 표시': 'Show password',
+    '비밀번호 숨기기': 'Hide password',
   },
   'ja': {
     '앱을 시작하지 못했습니다': 'アプリを起動できませんでした',
@@ -2014,6 +2017,9 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '表示とカレンダー',
     '화면 및 일정': '表示と予定',
     '화면과 기능 사용': '画面と機能の利用',
+    '저장된 정보로 재로그인': '保存した情報で再ログイン',
+    '비밀번호 표시': 'パスワードを表示',
+    '비밀번호 숨기기': 'パスワードを隠す',
   },
   'zh_Hant': {
     '앱을 시작하지 못했습니다': '無法啟動應用程式',
@@ -2873,5 +2879,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '顯示與行事曆',
     '화면 및 일정': '顯示與行程',
     '화면과 기능 사용': '畫面與功能使用',
+    '저장된 정보로 재로그인': '以已儲存的資訊重新登入',
+    '비밀번호 표시': '顯示密碼',
+    '비밀번호 숨기기': '隱藏密碼',
   },
 };

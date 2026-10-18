@@ -974,4 +974,64 @@ void main() {
       expect(sessions.single.closes, 1);
     },
   );
+
+  test(
+    'a requested re-login makes one attempt with the saved login, even after a rejection',
+    () async {
+      configure = (s) {
+        s.stored = false;
+        s.automaticSucceeds = false;
+      };
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      expect(controller.automaticLoginPaused, isTrue);
+      expect(sessions.single.automaticLogins, 1);
+      // Nothing retries on its own.
+      await controller.refresh(force: true);
+      expect(sessions.single.automaticLogins, 1);
+
+      // The school accepts now; one tap signs in once with the same login.
+      sessions.single.automaticSucceeds = true;
+      await controller.retryAutomaticLogin();
+      expect(sessions.single.automaticLogins, 2);
+      expect(controller.automaticLoginPaused, isFalse);
+      expect(controller.lastLoginFailure, isNull);
+      final saved = await LmsCredentialsStore().read(
+        'student@example.com',
+        'smu',
+      );
+      expect(saved!.username, 'test-user');
+      expect(saved.paused, isFalse);
+    },
+  );
+
+  test(
+    'a failed requested re-login pauses again without deleting the login',
+    () async {
+      configure = (s) {
+        s.stored = false;
+        s.automaticSucceeds = false;
+      };
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      await controller.retryAutomaticLogin();
+      expect(sessions.single.automaticLogins, 2);
+      expect(controller.automaticLoginPaused, isTrue);
+      final saved = await LmsCredentialsStore().read(
+        'student@example.com',
+        'smu',
+      );
+      expect(saved!.username, 'test-user');
+      expect(saved.paused, isTrue);
+      await controller.retryAutomaticLogin();
+      expect(sessions.single.automaticLogins, 3);
+    },
+  );
+
+  test('re-login with nothing saved attempts nothing', () async {
+    configure = (s) => s.stored = false;
+    await controller.retryAutomaticLogin();
+    expect(
+      sessions.expand((s) => [s.automaticLogins]).fold(0, (a, b) => a + b),
+      0,
+    );
+  });
 }

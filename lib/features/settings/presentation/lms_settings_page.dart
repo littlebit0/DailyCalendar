@@ -112,6 +112,26 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
     }
   }
 
+  Future<void> _retrySavedLogin() async {
+    setState(() {
+      _savingLogin = true;
+      _failed = false;
+      _failureReason = null;
+    });
+    try {
+      await ref.read(lmsControllerProvider).retryAutomaticLogin();
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _failed = true;
+          _failureReason = LmsLoginFailure.fromError(error);
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _savingLogin = false);
+    }
+  }
+
   Future<void> _removeAutomaticLogin() async {
     setState(() {
       _savingLogin = true;
@@ -326,6 +346,15 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                               icon: const Icon(Icons.edit_outlined),
                               label: Text(context.tr('로그인 정보 저장·변경')),
                             ),
+                            if (controller.localLoginUsername != null)
+                              FilledButton.tonalIcon(
+                                key: const ValueKey('lms-local-login-retry'),
+                                onPressed: busy || controller.localLoginLoading
+                                    ? null
+                                    : _retrySavedLogin,
+                                icon: const Icon(Icons.login_rounded),
+                                label: Text(context.tr('저장된 정보로 재로그인')),
+                              ),
                             if (controller.localLoginUsername != null)
                               TextButton.icon(
                                 key: const ValueKey('lms-local-login-remove'),
@@ -547,7 +576,8 @@ class _LocalLmsLoginDialog extends StatefulWidget {
   State<_LocalLmsLoginDialog> createState() => _LocalLmsLoginDialogState();
 }
 
-class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
+class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog>
+    with WidgetsBindingObserver {
   final _username = TextEditingController();
   final _password = TextEditingController();
   final _passwordFocus = FocusNode();
@@ -557,6 +587,18 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
   void initState() {
     super.initState();
     _passwordFocus.addListener(_passwordFocusChanged);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  /// Only what is being typed can be shown, and it hides again when the app
+  /// leaves the foreground.
+  var _showPassword = false;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed && _showPassword) {
+      setState(() => _showPassword = false);
+    }
   }
 
   void _passwordFocusChanged() {
@@ -585,6 +627,7 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
   late final Listenable _loginFields = Listenable.merge([_username, _password]);
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _passwordFocus.removeListener(_passwordFocusChanged);
     unawaited(_setEnglishInput(false));
     _passwordFocus.dispose();
@@ -624,7 +667,7 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
                     controller: _password,
                     focusNode: _passwordFocus,
                     key: const ValueKey('lms-local-password'),
-                    obscureText: true,
+                    obscureText: !_showPassword,
                     keyboardType: TextInputType.visiblePassword,
                     textInputAction: TextInputAction.done,
                     smartQuotesType: SmartQuotesType.disabled,
@@ -634,7 +677,22 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
                     autocorrect: false,
                     enableSuggestions: false,
                     autofillHints: const [AutofillHints.password],
-                    decoration: InputDecoration(labelText: context.tr('비밀번호')),
+                    decoration: InputDecoration(
+                      labelText: context.tr('비밀번호'),
+                      suffixIcon: IconButton(
+                        key: const ValueKey('lms-local-password-visibility'),
+                        tooltip: context.tr(
+                          _showPassword ? '비밀번호 숨기기' : '비밀번호 표시',
+                        ),
+                        icon: Icon(
+                          _showPassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                        ),
+                        onPressed: () =>
+                            setState(() => _showPassword = !_showPassword),
+                      ),
+                    ),
                   ),
                 ],
               ),

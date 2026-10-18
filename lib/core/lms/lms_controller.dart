@@ -280,6 +280,48 @@ class LmsController extends ChangeNotifier {
     }
   }
 
+  /// The user asked to sign in again with the login saved on this device.
+  ///
+  /// One request is one attempt: the per-process attempt limit and a paused
+  /// state from an earlier rejection are lifted for it, and a failure pauses
+  /// the login again, so nothing retries by itself. Nothing is deleted.
+  Future<void> retryAutomaticLogin() async {
+    final owner = _settings.dailyAccount()?.googleAccount?.email;
+    final school = schoolId;
+    if (owner == null || !supported || school == null) return;
+    final key = _desiredKey;
+    LmsLocalCredentials? stored;
+    try {
+      stored = await _credentials.read(owner, school);
+    } catch (_) {
+      // An unreadable store is not "no saved login".
+      if (!_disposed && _desiredKey == key) {
+        lastLoginFailure = LmsLoginFailure.secureStorage;
+        _notify();
+      }
+      return;
+    }
+    if (stored == null || _disposed || _desiredKey != key) return;
+    if (stored.paused) {
+      await _credentials.save(
+        owner,
+        school,
+        LmsLocalCredentials(stored.username, stored.password),
+      );
+      if (_disposed || _desiredKey != key) return;
+    }
+    _automaticAttempts.remove(key);
+    automaticLoginPaused = false;
+    lastLoginFailure = null;
+    _notify();
+    _configuringAutomaticLogin = true;
+    try {
+      await refresh(force: true);
+    } finally {
+      _configuringAutomaticLogin = false;
+    }
+  }
+
   Future<void> removeAutomaticLogin() async {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
     final school = schoolId;
