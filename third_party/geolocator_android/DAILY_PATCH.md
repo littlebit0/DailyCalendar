@@ -1,6 +1,6 @@
 # Daily Android location cancel patch (#228)
 
-Vendored from pub.dev geolocator_android 5.0.3 (BSD-3-Clause; original LICENSE
+Vendored from pub.dev geolocator_android 5.0.3 (MIT; original LICENSE
 retained; upstream example and tests omitted).
 
 `cancelGetCurrentPosition` used to stop the native client but left it in the
