@@ -2016,6 +2016,7 @@ class GoogleDriveSyncService implements SyncService {
           .toList(),
       'recurrenceCount': normalized.recurrence.count,
       'recurrenceAnchorDay': normalized.recurrence.anchorDay,
+      'recurrenceDetails': normalized.recurrence.detailsJson,
       'recurrenceExcludedDates': normalized.recurrence.excludedDates
           .map((date) => DateTime(date.year, date.month, date.day))
           .map((date) => date.toUtc().toIso8601String())
@@ -2070,22 +2071,25 @@ class GoogleDriveSyncService implements SyncService {
       category: category,
       colorValue: colorValue ?? category.colorValue,
       reminderMinutesBeforeList: _reminderMinutesFromJson(json),
-      recurrence: RecurrenceRule(
-        frequency: RecurrenceFrequency.fromName(
-          json['recurrenceFrequency'] as String?,
+      recurrence: RecurrenceRule.withDetailsJson(
+        RecurrenceRule(
+          frequency: RecurrenceFrequency.fromName(
+            json['recurrenceFrequency'] as String?,
+          ),
+          interval: json['recurrenceInterval'] as int? ?? 1,
+          until: json.containsKey('recurrenceUntilDate')
+              ? _readAllDayDate(json['recurrenceUntilDate'])
+              : _readDate(json['recurrenceUntil']),
+          count: json['recurrenceCount'] as int?,
+          anchorDay: json['recurrenceAnchorDay'] as int?,
+          excludedDates: json['recurrenceExcludedDatesOnly'] is List
+              ? (json['recurrenceExcludedDatesOnly'] as List)
+                    .map(_readAllDayDate)
+                    .whereType<DateTime>()
+                    .toList()
+              : _dateListValue(json['recurrenceExcludedDates']),
         ),
-        interval: json['recurrenceInterval'] as int? ?? 1,
-        until: json.containsKey('recurrenceUntilDate')
-            ? _readAllDayDate(json['recurrenceUntilDate'])
-            : _readDate(json['recurrenceUntil']),
-        count: json['recurrenceCount'] as int?,
-        anchorDay: json['recurrenceAnchorDay'] as int?,
-        excludedDates: json['recurrenceExcludedDatesOnly'] is List
-            ? (json['recurrenceExcludedDatesOnly'] as List)
-                  .map(_readAllDayDate)
-                  .whereType<DateTime>()
-                  .toList()
-            : _dateListValue(json['recurrenceExcludedDates']),
+        json['recurrenceDetails'],
       ),
       createdAt: createdAt,
       updatedAt: updatedAt,
