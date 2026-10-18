@@ -232,6 +232,33 @@ class ClassOccurrence {
   );
 }
 
+/// Occurrence changes (`meetingId/yyyy-MM-dd`) that still point at a lesson date
+/// of their meeting. Moving a weekly block to another weekday leaves the old
+/// dates behind, and the synced document rejects them.
+Map<String, LectureMode> occurrenceOverridesForMeetings(
+  Iterable<ClassMeeting> meetings,
+  Map<String, LectureMode> overrides,
+) {
+  final weekdays = {
+    for (final meeting in meetings) meeting.id: meeting.weekday,
+  };
+  return {
+    for (final entry in overrides.entries)
+      if (_overrideMatches(entry.key, weekdays)) entry.key: entry.value,
+  };
+}
+
+bool _overrideMatches(String key, Map<String, int> weekdays) {
+  final slash = key.lastIndexOf('/');
+  if (slash < 0) return false;
+  final weekday = weekdays[key.substring(0, slash)];
+  final date = DateTime.tryParse(key.substring(slash + 1));
+  return weekday != null &&
+      date != null &&
+      key.substring(slash + 1) == timetableDateKey(date) &&
+      weekday == date.weekday;
+}
+
 List<ClassOccurrence> classOccurrences(
   Iterable<TimetableClass> classes,
   Iterable<DateTime> days, {

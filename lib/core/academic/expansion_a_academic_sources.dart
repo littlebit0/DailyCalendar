@@ -230,11 +230,19 @@ class WoosongAcademicSource extends _PublicSource {
           r'^\s*((?:\d{1,2}/)?\d{1,2})\s*(?:[~∼]\s*((?:\d{1,2}/)?\d{1,2}))?\s*:\s*(.+)$',
         ).firstMatch(text);
         if (record == null) throw const FormatException('Invalid WSU event');
+        // The table title only says which month the row is listed under: a January
+        // row may begin in the previous December, a December row may end in January.
         DateTime date(String value, int defaultMonth) {
           final parts = value.split('/');
+          final month = parts.length == 2 ? int.parse(parts[0]) : defaultMonth;
+          final distance = month - m;
           return _date(
-            year,
-            parts.length == 2 ? int.parse(parts[0]) : defaultMonth,
+            distance > 6
+                ? year - 1
+                : distance < -6
+                ? year + 1
+                : year,
+            month,
             int.parse(parts.last),
           );
         }
@@ -245,7 +253,7 @@ class WoosongAcademicSource extends _PublicSource {
           record[2] == null ? start.month : m,
         );
         if (last.isBefore(start) && !(record[2] ?? '').contains('/')) {
-          final next = DateTime(year, start.month + 1);
+          final next = DateTime(start.year, start.month + 1);
           last = _date(next.year, next.month, last.day);
         }
         events.add(
@@ -280,6 +288,15 @@ class EwhaAcademicSource extends _PublicSource {
   );
   static List<AcademicEvent> parse(String body, int year) {
     final doc = html.parse(body), events = <AcademicEvent>[];
+    // Month titles carry no year, so the page's own year banner is the only proof
+    // that the response is the requested year; never relabel another year's page.
+    final shownYears = {
+      for (final span in doc.querySelectorAll('.b-cal-day-box span'))
+        if (RegExp(r'^\d{4}$').hasMatch(span.text.trim())) span.text.trim(),
+    };
+    if (shownYears.length != 1 || shownYears.single != '$year') {
+      throw const FormatException('Unexpected EWHA year');
+    }
     for (final p in doc.querySelectorAll('p')) {
       final heading = RegExp(
         r'^(?:(\d{4})년\s*)?(\d{1,2})월$',

@@ -1055,6 +1055,41 @@ class _ClassEditorState extends State<_ClassEditor> {
     setState(() => _busy = true);
     final previous = widget.course;
     final ids = _meetings.map((m) => m.id).toSet();
+    final earlier = previous?.overrides ?? <String, LectureMode>{};
+    final kept = occurrenceOverridesForMeetings(_meetings, earlier);
+    // Changes of blocks that still exist but whose weekday moved can no longer
+    // apply; ask before dropping them (removed blocks drop theirs as before).
+    final lost = earlier.keys.where(
+      (key) => ids.contains(key.split('/').first) && !kept.containsKey(key),
+    );
+    if (lost.isNotEmpty) {
+      final proceed = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(context.tr('요일 변경')),
+          content: Text(
+            context.tr(
+              '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?',
+              args: {'count': '${lost.length}'},
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: Text(context.tr('취소')),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.pop(context, true),
+              child: Text(context.tr('삭제하고 저장')),
+            ),
+          ],
+        ),
+      );
+      if (proceed != true || !mounted) {
+        if (mounted) setState(() => _busy = false);
+        return;
+      }
+    }
     final course = TimetableClass(
       id: previous?.id ?? const Uuid().v4(),
       title: _title.text.trim(),
@@ -1068,11 +1103,7 @@ class _ClassEditorState extends State<_ClassEditor> {
       sourceType: previous?.sourceType ?? 'manual',
       sourceId: previous?.sourceId,
       period: previous?.period,
-      overrides: {
-        for (final entry
-            in (previous?.overrides ?? <String, LectureMode>{}).entries)
-          if (ids.contains(entry.key.split('/').first)) entry.key: entry.value,
-      },
+      overrides: kept,
     );
     final ok = await _save(context, () => widget.store.save(course));
     if (!mounted) return;
