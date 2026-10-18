@@ -136,6 +136,64 @@ class MalformedTypeTests(unittest.TestCase):
         self.assertTrue(valid_batch(self.batch()))
 
 
+class DedupeAcrossMidnightTests(unittest.TestCase):
+    def batch(self):
+        return {
+            'schemaVersion': 1,
+            'sessionId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+            'environment': {'appVersion': '4.1.2', 'platform': 'macos', 'osMajor': 27},
+            'events': [{
+                'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+                'name': 'app_load_completed',
+                'occurredAt': '2026-10-13T00:00:00Z',
+                'attributes': {'durationMs': 25},
+            }],
+        }
+
+    def count(self, directory):
+        total = 0
+        for path in Path(directory).glob('analytics-*.json'):
+            groups = json.loads(path.read_text())['groups'].values()
+            total += sum(group['count'] for group in groups)
+        return total
+
+    def test_a_retry_after_utc_midnight_is_not_counted_again(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as directory:
+            clock = [datetime(2026, 10, 13, 23, 59, tzinfo=timezone.utc)]
+            aggregator = Aggregator(directory, now=lambda: clock[0])
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            clock[0] += timedelta(minutes=2)  # the next UTC day
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            self.assertEqual(self.count(directory), 1)
+
+    def test_a_retry_seven_calendar_days_later_is_still_deduplicated(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as directory:
+            # Accepted late on Oct 1, retried early on Oct 8: under seven days
+            # apart, and the Oct 1 dedupe file is still retained.
+            clock = [datetime(2026, 10, 1, 23, 30, tzinfo=timezone.utc)]
+            aggregator = Aggregator(directory, now=lambda: clock[0])
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+            clock[0] = datetime(2026, 10, 8, 1, 0, tzinfo=timezone.utc)
+            self.assertEqual(aggregator.accept(self.batch()), 0)
+            self.assertEqual(self.count(directory), 1)
+            self.assertTrue((Path(directory) / 'dedupe-2026-10-01.json').exists())
+            # One more day and the file is gone, so the event counts again.
+            clock[0] = datetime(2026, 10, 9, 1, 0, tzinfo=timezone.utc)
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+
+    def test_an_event_older_than_the_retention_window_counts_again(self):
+        from datetime import datetime, timedelta, timezone
+        with tempfile.TemporaryDirectory() as directory:
+            clock = [datetime(2026, 10, 1, 12, tzinfo=timezone.utc)]
+            aggregator = Aggregator(directory, now=lambda: clock[0])
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+            clock[0] += timedelta(days=8)
+            self.assertEqual(aggregator.accept(self.batch()), 1)
+
+
 def _payload():
     return {
         "report": {

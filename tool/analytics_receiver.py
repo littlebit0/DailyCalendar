@@ -23,6 +23,7 @@ MAX_REQUESTS_PER_MINUTE = 120
 MAX_BUG_REPORT_BYTES = 64 * 1024
 MAX_BUG_REPORTS_PER_HOUR = 5
 BUG_REPORT_RETENTION_DAYS = 365
+DEDUPE_RETENTION_DAYS = 7
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 GITHUB_API_VERSION = "2026-03-10"
 VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?$")
@@ -226,15 +227,16 @@ class BugReportRateLimited(Exception):
 
 
 class Aggregator:
-    def __init__(self, directory):
+    def __init__(self, directory, now=None):
         self.directory = Path(directory)
         self.lock = threading.Lock()
+        self._now = now or (lambda: datetime.now(timezone.utc))
 
     def accept(self, batch):
         with self.lock:
             self.directory.mkdir(parents=True, exist_ok=True)
             self._delete_expired()
-            now = datetime.now(timezone.utc)
+            now = self._now()
             day = now.strftime("%Y-%m-%d")
             aggregate_path = self.directory / f"analytics-{day}.json"
             dedupe_path = self.directory / f"dedupe-{day}.json"
@@ -243,12 +245,21 @@ class Aggregator:
                 {"schemaVersion": 1, "date": day, "groups": {}},
             )
             hashes = set(self._read_json(dedupe_path, []))
+            # A retry can arrive after UTC midnight: the retained earlier days
+            # still know the event, so they count as seen as well.
+            seen = set(hashes)
+            # _delete_expired keeps files up to DEDUPE_RETENTION_DAYS old, so the
+            # same number of prior days is read.
+            for back in range(1, DEDUPE_RETENTION_DAYS + 1):
+                earlier = (now - timedelta(days=back)).strftime("%Y-%m-%d")
+                seen.update(self._read_json(self.directory / f"dedupe-{earlier}.json", []))
             environment = batch["environment"]
             accepted = 0
             for event in batch["events"]:
                 event_hash = hashlib.sha256(event["eventId"].encode()).hexdigest()
-                if event_hash in hashes:
+                if event_hash in seen:
                     continue
+                seen.add(event_hash)
                 hashes.add(event_hash)
                 accepted += 1
                 attributes = dict(sorted(event["attributes"].items()))
@@ -292,7 +303,7 @@ class Aggregator:
                 os.unlink(temporary)
 
     def _delete_expired(self):
-        now = datetime.now(timezone.utc).date()
+        now = self._now().date()
         for path in self.directory.glob("*.json"):
             match = re.fullmatch(r"(analytics|dedupe)-(\d{4}-\d{2}-\d{2})\.json", path.name)
             if not match:
@@ -301,7 +312,7 @@ class Aggregator:
                 date = datetime.strptime(match.group(2), "%Y-%m-%d").date()
             except ValueError:
                 continue
-            retention = 90 if match.group(1) == "analytics" else 7
+            retention = 90 if match.group(1) == "analytics" else DEDUPE_RETENTION_DAYS
             if now - date > timedelta(days=retention):
                 path.unlink(missing_ok=True)
 
