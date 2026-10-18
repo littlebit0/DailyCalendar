@@ -102,6 +102,46 @@ memory.
   release status, and remaining Mac/iPhone work.
 - Do not rely on chat memory for critical project state.
 
+## 9a. Roles: Claude implements, Codex reviews, the user merges
+
+- Claude does the main work: analysis, implementation, tests, build/run/install,
+  commits, pushes and opening pull requests. One issue per branch and per PR,
+  `Closes #N` in the PR body, Korean commit messages and PR text, no Claude
+  attribution lines. Verify once right before committing; rerun only the part
+  that failed.
+- Codex is the reviewer. It does not commit, push, edit the PR branch, or merge.
+  It reviews every pull request automatically when the PR is opened and again
+  when new commits are pushed, and reports only through PR review comments.
+- The only channel between the two is GitHub: Claude reads Codex's review
+  comments with `gh`, answers them in the PR, and pushes fixes to the same
+  branch. Neither agent merges; the user decides and merges.
+- If automatic review does not start, the user (or Claude, as a PR comment) asks
+  with `@codex review`.
+
+## Code Review Rules
+
+Codex: review pull requests against these rules. Report only findings you can
+tie to a specific file and line, and say what you did not verify.
+
+- Data loss and consistency: anything that can drop, overwrite or duplicate user
+  events, completion state, memos, exclusions, tombstones or credentials. Check
+  concurrent writes, partial failure and retry behaviour.
+- Sync (section 5): v2 per-event files, date-only all-day fields, tombstones,
+  event-only uploads. Flag whole-file sync, idle polling, or schema changes made
+  without the user's approval.
+- Cross-platform parity (section 4): the same behaviour on Windows, Android,
+  macOS and iOS. A Dart change that has Swift/Kotlin/C++ counterparts (Siri,
+  widgets, wallpaper, notifications) must update them or say why not.
+- Dates and recurrence: daylight-saving days, month ends, leap days, time zones,
+  all-day versus timed events.
+- Security and privacy: secrets, tokens, logging of personal data, credential
+  storage that deletes originals on failure.
+- Honest reporting: a PR must not claim more than it verified. Flag claims of
+  passing CI that rest on a partial run, skipped tests, or a different commit,
+  and flag missing tests for new non-trivial logic.
+- Out of scope for blocking: style-only comments, unrelated refactors, and
+  product behaviour that the linked issue did not ask to change.
+
 ## 9. Repository Codex Skills
 
 Project-scoped skills live in `.agents/skills/`. Select the relevant entrypoint
