@@ -15,6 +15,7 @@ import '../../../core/di/app_providers.dart';
 import '../../../core/analytics/product_analytics.dart';
 import '../../../core/analytics/startup_milestones.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
+import '../../../core/calendar/event_display_filter.dart';
 import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/calendar_period_label.dart';
 import '../../../core/settings/app_settings.dart';
@@ -115,7 +116,8 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   final _bottomBarUiState = ValueNotifier(const _BottomBarUiState());
   Timer? _searchDebounce;
   Timer? _eventDragEdgeTimer;
-  Future<List<CalendarEvent>>? _searchResults;
+  // null once resolved means the lookup failed (an empty list is a real answer).
+  Future<List<CalendarEvent>?>? _searchResults;
   var _searchOpen = false;
   var _quickAccessSelected = false;
   var _timetableSelected = false;
@@ -275,7 +277,10 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                       children: [
                                         if (_quickAccessSelected)
                                           Expanded(
-                                            child: _QuickMonthPageView(
+                                            child: Stack(
+                                              children: [
+                                                Positioned.fill(
+                                                  child: _QuickMonthPageView(
                                               month: month,
                                               onMonthChanged: (target) =>
                                                   _setVisibleMonth(
@@ -301,21 +306,38 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                                             ),
                                                   ),
                                             ),
+                                                ),
+                                                if (_searchOpen)
+                                                  // The search button also works
+                                                  // in quick view. The panel floats
+                                                  // over the page and sizes its
+                                                  // results to the space left, so a
+                                                  // short window cannot overflow.
+                                                  Align(
+                                                    alignment:
+                                                        Alignment.topCenter,
+                                                    child: LayoutBuilder(
+                                                      builder: (context, box) =>
+                                                          _buildInlineSearchPanel(
+                                                            maxResultsHeight:
+                                                                (box.maxHeight -
+                                                                        _inlineSearchChromeHeight)
+                                                                    .clamp(
+                                                                      0.0,
+                                                                      260.0,
+                                                                    ),
+                                                          ),
+                                                    ),
+                                                  ),
+                                              ],
+                                            ),
                                           )
                                         else
                                           Expanded(
                                             child: _PaintOnlySearchLayout(
                                               searchOpen: _searchOpen,
-                                              searchPanel: _InlineSearchPanel(
-                                                controller: _searchController,
-                                                focusNode: _searchFocusNode,
-                                                results: _searchResults,
-                                                onChanged: _handleSearchChanged,
-                                                onSubmitted: _runSearch,
-                                                onClose: _closeSearch,
-                                                onEventSelected:
-                                                    _selectSearchResult,
-                                              ),
+                                              searchPanel:
+                                                  _buildInlineSearchPanel(),
                                               child: RepaintBoundary(
                                                 key: const ValueKey(
                                                   'calendar-content-repaint-boundary',
@@ -470,6 +492,22 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       ),
     );
   }
+
+  /// Height the search field, its padding and a loading/empty row need.
+  static const _inlineSearchChromeHeight = 110.0;
+
+  _InlineSearchPanel _buildInlineSearchPanel({
+    double maxResultsHeight = 260,
+  }) => _InlineSearchPanel(
+    maxResultsHeight: maxResultsHeight,
+    controller: _searchController,
+    focusNode: _searchFocusNode,
+    results: _searchResults,
+    onChanged: _handleSearchChanged,
+    onSubmitted: _runSearch,
+    onClose: _closeSearch,
+    onEventSelected: _selectSearchResult,
+  );
 
   void _toggleSearch() {
     final opening = !_searchOpen;
@@ -833,10 +871,13 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           : ref
                 .read(visibleEventRepositoryProvider)
                 .search(query)
-                .then(
+                .then<List<CalendarEvent>?>(
                   (events) => events
                       .where(ref.read(lmsControllerProvider).isEventVisible)
                       .toList(),
+                  // Handled here so a failure is shown instead of reported as an
+                  // unhandled error; the panel offers a retry.
+                  onError: (Object _) => null,
                 );
     });
   }
@@ -852,6 +893,8 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       event.startAt.day,
     );
     _closeSearch();
+    // A result picked in quick view is shown on the calendar.
+    if (_quickAccessSelected) setState(() => _quickAccessSelected = false);
   }
 
   void _selectCalendarView(
@@ -1125,23 +1168,63 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                           final cardWidth =
                               (constraints.maxWidth - spacing * (columns - 1)) /
                               columns;
-                          return Wrap(
-                            spacing: spacing,
-                            runSpacing: spacing,
+                          // Cards keep their own height: each goes under the
+                          // shortest column instead of waiting for the tallest
+                          // card of a row. Heights account for titles that
+                          // wrap to a second line at this card width.
+                          final placement = assignQuickTodoColumns([
+                            for (final group in groups)
+                              quickTodoCardHeight([
+                                for (final event in group.events)
+                                  _quickTodoTitleLines(
+                                    context,
+                                    event,
+                                    cardWidth - _quickTodoRowChromeWidth,
+                                  ),
+                              ]),
+                          ], columns);
+                          return Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              for (final group in groups)
+                              for (var c = 0; c < columns; c++) ...[
+                                if (c > 0) const SizedBox(width: spacing),
                                 SizedBox(
                                   width: cardWidth,
-                                  child: _QuickTodoCategoryCard(
-                                    group: group,
-                                    onCompletedChanged: (event, completed) =>
-                                        ref
-                                            .read(eventCommandServiceProvider)
-                                            .setCompleted(event, completed),
-                                    onOpen: (event) =>
-                                        _showQuickEventDetails(context, event),
+                                  child: Column(
+                                    children: [
+                                      for (final index in placement[c]) ...[
+                                        if (index != placement[c].first)
+                                          const SizedBox(height: spacing),
+                                        // Columns hold cards out of category
+                                        // order; the sort key restores it for
+                                        // screen readers.
+                                        Semantics(
+                                          sortKey: OrdinalSortKey(
+                                            index.toDouble(),
+                                          ),
+                                          child: _QuickTodoCategoryCard(
+                                          group: groups[index],
+                                          onCompletedChanged:
+                                              (event, completed) => ref
+                                                  .read(
+                                                    eventCommandServiceProvider,
+                                                  )
+                                                  .setCompleted(
+                                                    event,
+                                                    completed,
+                                                  ),
+                                          onOpen: (event) =>
+                                              _showQuickEventDetails(
+                                                context,
+                                                event,
+                                              ),
+                                          ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
+                              ],
                             ],
                           );
                         },
@@ -1548,6 +1631,67 @@ class _AnimatedCalendarSidebarState extends State<_AnimatedCalendarSidebar>
   }
 }
 
+/// Which card goes in which column of the quick view: each card (in category
+/// order) is placed under the column that is currently shortest, given each
+/// card's estimated height. Returns the card indexes per column.
+@visibleForTesting
+List<List<int>> assignQuickTodoColumns(List<num> cardHeights, int columns) {
+  final heights = List<double>.filled(columns, 0);
+  final placement = List.generate(columns, (_) => <int>[]);
+  for (var index = 0; index < cardHeights.length; index++) {
+    var shortest = 0;
+    for (var c = 1; c < columns; c++) {
+      if (heights[c] < heights[shortest]) shortest = c;
+    }
+    placement[shortest].add(index);
+    heights[shortest] += cardHeights[index].toDouble();
+  }
+  return placement;
+}
+
+/// Width a quick-view row spends on its checkbox and padding; the rest holds
+/// the title text.
+const _quickTodoRowChromeWidth = 48.0 + 11.0;
+
+/// Estimated height of a quick-view card whose rows have the given number of
+/// title lines (a title wraps to at most two): the header plus each row, which
+/// is at least as tall as its checkbox, plus the dividers between rows.
+@visibleForTesting
+double quickTodoCardHeight(List<int> titleLines) {
+  var height = 44.0; // category header
+  for (var i = 0; i < titleLines.length; i++) {
+    final lines = titleLines[i].clamp(1, 2);
+    // padding 22 + title lines (14px * 1.25) + gap 2 + date line (11px * 1.25)
+    height += math.max(48.0, 22 + lines * 17.5 + 2 + 13.75);
+    if (i != titleLines.length - 1) height += 1;
+  }
+  return height;
+}
+
+int _quickTodoTitleLines(
+  BuildContext context,
+  CalendarEvent event,
+  double maxWidth,
+) {
+  if (maxWidth <= 0) return 2;
+  final painter = TextPainter(
+    text: TextSpan(
+      text: context.l10n.eventTitle(event.title, holiday: event.holiday),
+      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+        fontWeight: FontWeight.w700,
+        fontSize: 14,
+        height: 1.25,
+        letterSpacing: 0,
+      ),
+    ),
+    textDirection: Directionality.of(context),
+    maxLines: 2,
+  )..layout(maxWidth: maxWidth);
+  final lines = painter.computeLineMetrics().length;
+  painter.dispose();
+  return lines.clamp(1, 2);
+}
+
 class _PaintOnlySearchLayout extends StatefulWidget {
   const _PaintOnlySearchLayout({
     required this.searchOpen,
@@ -1568,6 +1712,7 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
   static const _fallbackPanelExtent = 66.0;
 
   late final AnimationController _controller;
+  late final CurvedAnimation _animation;
   double _panelExtent = _fallbackPanelExtent;
   Widget? _retainedSearchPanel;
 
@@ -1579,6 +1724,11 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
       duration: const Duration(milliseconds: 180),
       reverseDuration: const Duration(milliseconds: 160),
       value: widget.searchOpen ? 1 : 0,
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
     );
     _retainedSearchPanel = widget.searchOpen ? widget.searchPanel : null;
     _controller.addStatusListener(_handleAnimationStatus);
@@ -1603,6 +1753,7 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
   @override
   void dispose() {
     _controller.removeStatusListener(_handleAnimationStatus);
+    _animation.dispose();
     _controller.dispose();
     super.dispose();
   }
@@ -1626,11 +1777,7 @@ class _PaintOnlySearchLayoutState extends State<_PaintOnlySearchLayout>
   @override
   Widget build(BuildContext context) {
     final searchPanel = _retainedSearchPanel;
-    final animation = CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeOutCubic,
-      reverseCurve: Curves.easeInCubic,
-    );
+    final animation = _animation;
     return Stack(
       key: const ValueKey('paint-only-search-layout'),
       fit: StackFit.expand,
@@ -2144,6 +2291,7 @@ class _SignalVoicePanelState extends ConsumerState<_SignalVoicePanel>
 
 class _InlineSearchPanel extends ConsumerWidget {
   const _InlineSearchPanel({
+    this.maxResultsHeight = 260,
     required this.controller,
     required this.focusNode,
     required this.results,
@@ -2153,9 +2301,10 @@ class _InlineSearchPanel extends ConsumerWidget {
     required this.onEventSelected,
   });
 
+  final double maxResultsHeight;
   final TextEditingController controller;
   final FocusNode focusNode;
-  final Future<List<CalendarEvent>>? results;
+  final Future<List<CalendarEvent>?>? results;
   final ValueChanged<String> onChanged;
   final VoidCallback onSubmitted;
   final VoidCallback onClose;
@@ -2219,7 +2368,7 @@ class _InlineSearchPanel extends ConsumerWidget {
               ),
             ),
           ),
-          FutureBuilder<List<CalendarEvent>>(
+          FutureBuilder<List<CalendarEvent>?>(
             future: results,
             builder: (context, snapshot) {
               if (results == null) {
@@ -2229,6 +2378,27 @@ class _InlineSearchPanel extends ConsumerWidget {
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 18),
                   child: LinearProgressIndicator(minHeight: 2),
+                );
+              }
+              if (snapshot.hasError || snapshot.data == null) {
+                // A failed lookup is not "no results": say so and allow a retry
+                // with the same query. The error text itself is never shown.
+                return Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          context.tr('검색하지 못했습니다. 다시 시도해 주세요.'),
+                          style: Theme.of(context).textTheme.labelMedium,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: onSubmitted,
+                        child: Text(context.tr('다시 시도')),
+                      ),
+                    ],
+                  ),
                 );
               }
               final events = (snapshot.data ?? const <CalendarEvent>[])
@@ -2246,8 +2416,9 @@ class _InlineSearchPanel extends ConsumerWidget {
                   ),
                 );
               }
+              if (maxResultsHeight <= 0) return const SizedBox.shrink();
               return ConstrainedBox(
-                constraints: const BoxConstraints(maxHeight: 260),
+                constraints: BoxConstraints(maxHeight: maxResultsHeight),
                 child: ListView.separated(
                   shrinkWrap: true,
                   padding: const EdgeInsets.only(top: 10),
@@ -7876,38 +8047,7 @@ List<CalendarEvent> _filterVisibleEvents(
   List<CalendarEvent> events,
   AppSettings settings,
   String searchQuery,
-) {
-  final hidden = settings.hiddenCategoryIds.toSet();
-  final query = searchQuery.trim().toLowerCase();
-  final filtered = events.where((event) {
-    if (!settings.calendarShowHolidays && event.holiday) {
-      return false;
-    }
-    if (hidden.contains(event.category.id)) {
-      return false;
-    }
-    if (settings.calendarDdayOnly && !event.showDday) {
-      return false;
-    }
-    if (query.isEmpty) {
-      return true;
-    }
-    final searchable = [
-      event.title,
-      event.memo,
-      event.location,
-      event.url,
-      event.weather,
-      event.category.label,
-    ].whereType<String>().join(' ').toLowerCase();
-    return searchable.contains(query);
-  });
-  return sortedCalendarEvents(
-    filtered,
-    priority: settings.calendarEventSortPriority,
-    categoryOrder: settings.categories.map((category) => category.id).toList(),
-  );
-}
+) => filterVisibleCalendarEvents(events, settings, searchQuery);
 
 List<CalendarEvent> _eventsForDay(List<CalendarEvent> events, DateTime date) {
   final start = DateTime(date.year, date.month, date.day);

@@ -30,9 +30,12 @@ ingestion path, and expose only:
 
 The receiver limits a request to 64 KiB and 25 events, applies an in-memory
 per-address rate limit, revalidates the allowlist, and never logs request
-bodies. Daily aggregates are stored in `analytics-YYYY-MM-DD.json`; delivery
-dedupe hashes are stored separately. Aggregate files expire after 90 days and
-dedupe files after seven days.
+bodies. Counters and delivery dedupe hashes (SHA-256 of the event ID only) are
+kept in `analytics-state.sqlite` and updated in one transaction per request.
+The readable report `analytics-YYYY-MM-DD.json` is rebuilt from the day's
+counters. Counters expire after 90 days and dedupe hashes after seven days.
+Earlier `analytics-*.json` / `dedupe-*.json` files are imported once on the
+first request after the upgrade.
 
 ## Authenticated Bug Reports
 

@@ -117,6 +117,26 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
     }
   }
 
+  Future<void> _retrySavedLogin() async {
+    setState(() {
+      _savingLogin = true;
+      _failed = false;
+      _failureReason = null;
+    });
+    try {
+      await ref.read(lmsControllerProvider).retryAutomaticLogin();
+    } catch (error) {
+      if (mounted) {
+        setState(() {
+          _failed = true;
+          _failureReason = LmsLoginFailure.fromError(error);
+        });
+      }
+    } finally {
+      if (mounted) setState(() => _savingLogin = false);
+    }
+  }
+
   Future<void> _removeAutomaticLogin() async {
     setState(() {
       _savingLogin = true;
@@ -250,6 +270,12 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                   const SizedBox(height: 12),
                   Text(
                     context.tr(
+                      '연결하면 학교 LMS에서 수업명과 과제·퀴즈·학습 콘텐츠의 제목, 마감, 제출·학습 진행 상태를 읽어 일정으로 만듭니다. Google Drive 동기화를 사용하면 가져온 일정과 학교 사용자 번호, 연결 여부가 Google 계정의 앱 전용 저장 영역에 함께 저장됩니다. 학교 비밀번호·쿠키·세션은 Drive로 보내지 않습니다.',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    context.tr(
                       '앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.',
                     ),
                   ),
@@ -276,7 +302,7 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        context.tr('학교 아이디'),
+                                        context.tr('ID'),
                                         style: Theme.of(
                                           context,
                                         ).textTheme.labelLarge,
@@ -331,6 +357,18 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                               icon: const Icon(Icons.edit_outlined),
                               label: Text(context.tr('로그인 정보 저장·변경')),
                             ),
+                            // Not while connected: a retry only signs in again
+                            // when the school session has ended.
+                            if (controller.localLoginUsername != null &&
+                                !controller.connected)
+                              FilledButton.tonalIcon(
+                                key: const ValueKey('lms-local-login-retry'),
+                                onPressed: busy || controller.localLoginLoading
+                                    ? null
+                                    : _retrySavedLogin,
+                                icon: const Icon(Icons.login_rounded),
+                                label: Text(context.tr('저장된 정보로 재로그인')),
+                              ),
                             if (controller.localLoginUsername != null)
                               TextButton.icon(
                                 key: const ValueKey('lms-local-login-remove'),
@@ -530,6 +568,12 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
                   const SizedBox(height: 16),
                   Text(
                     context.tr(
+                      '연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.',
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    context.tr(
                       '제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.',
                     ),
                   ),
@@ -552,7 +596,8 @@ class _LocalLmsLoginDialog extends StatefulWidget {
   State<_LocalLmsLoginDialog> createState() => _LocalLmsLoginDialogState();
 }
 
-class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
+class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog>
+    with WidgetsBindingObserver {
   final _username = TextEditingController();
   final _password = TextEditingController();
   final _passwordFocus = FocusNode();
@@ -562,6 +607,18 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
   void initState() {
     super.initState();
     _passwordFocus.addListener(_passwordFocusChanged);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  /// Only what is being typed can be shown, and it hides again when the app
+  /// leaves the foreground.
+  var _showPassword = false;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed && _showPassword) {
+      setState(() => _showPassword = false);
+    }
   }
 
   void _passwordFocusChanged() {
@@ -590,6 +647,7 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
   late final Listenable _loginFields = Listenable.merge([_username, _password]);
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _passwordFocus.removeListener(_passwordFocusChanged);
     unawaited(_setEnglishInput(false));
     _passwordFocus.dispose();
@@ -609,28 +667,55 @@ class _LocalLmsLoginDialogState extends State<_LocalLmsLoginDialog> {
           children: [
             Text(context.tr(_localLoginNotice)),
             const SizedBox(height: 16),
-            TextField(
-              controller: _username,
-              key: const ValueKey('lms-local-username'),
-              autocorrect: false,
-              enableSuggestions: false,
-              decoration: InputDecoration(labelText: context.tr('학교 아이디')),
-              textInputAction: TextInputAction.next,
-            ),
-            TextField(
-              controller: _password,
-              focusNode: _passwordFocus,
-              key: const ValueKey('lms-local-password'),
-              obscureText: true,
-              keyboardType: TextInputType.visiblePassword,
-              textInputAction: TextInputAction.done,
-              smartQuotesType: SmartQuotesType.disabled,
-              smartDashesType: SmartDashesType.disabled,
-              enableIMEPersonalizedLearning: false,
-              enableInlinePrediction: false,
-              autocorrect: false,
-              enableSuggestions: false,
-              decoration: InputDecoration(labelText: context.tr('비밀번호')),
+            // The fields are a username/password pair for the system password
+            // chooser. They are never offered back to it for saving: the login
+            // stays in this device's secure storage only (cancel on dispose).
+            AutofillGroup(
+              onDisposeAction: AutofillContextAction.cancel,
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _username,
+                    key: const ValueKey('lms-local-username'),
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    autofillHints: const [AutofillHints.username],
+                    decoration: InputDecoration(labelText: context.tr('ID')),
+                    textInputAction: TextInputAction.next,
+                  ),
+                  TextField(
+                    controller: _password,
+                    focusNode: _passwordFocus,
+                    key: const ValueKey('lms-local-password'),
+                    obscureText: !_showPassword,
+                    keyboardType: TextInputType.visiblePassword,
+                    textInputAction: TextInputAction.done,
+                    smartQuotesType: SmartQuotesType.disabled,
+                    smartDashesType: SmartDashesType.disabled,
+                    enableIMEPersonalizedLearning: false,
+                    enableInlinePrediction: false,
+                    autocorrect: false,
+                    enableSuggestions: false,
+                    autofillHints: const [AutofillHints.password],
+                    decoration: InputDecoration(
+                      labelText: context.tr('비밀번호'),
+                      suffixIcon: IconButton(
+                        key: const ValueKey('lms-local-password-visibility'),
+                        tooltip: context.tr(
+                          _showPassword ? '비밀번호 숨기기' : '비밀번호 표시',
+                        ),
+                        icon: Icon(
+                          _showPassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                        ),
+                        onPressed: () =>
+                            setState(() => _showPassword = !_showPassword),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
             CheckboxListTile(
               value: _consent,

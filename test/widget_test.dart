@@ -42,6 +42,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart' show OrdinalSortKey;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -279,6 +280,241 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     },
   );
+
+  testWidgets('the search button shows the search field in quick view', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appStartView': AppStartView.quickView.name,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsOneWidget);
+    // Closing leaves quick view as it was.
+    await tester.tap(find.byTooltip('닫기'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  Future<ProviderContainer> pumpQuickViewSearch(
+    WidgetTester tester,
+    List<CalendarEvent> events,
+    Size size,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = size;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'appStartView': AppStartView.quickView.name,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(
+            _FakeEventRepository(events: events, searchable: true),
+          ),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    return ProviderScope.containerOf(tester.element(find.byType(MonthCalendarPage)));
+  }
+
+  CalendarEvent searchableEvent(String id, String title, DateTime start) =>
+      CalendarEvent(
+        id: id,
+        title: title,
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: start,
+        updatedAt: start,
+      );
+
+  testWidgets('picking a quick-view search result opens it on the calendar', (
+    tester,
+  ) async {
+    final target = DateTime(2031, 3, 15, 10);
+    final container = await pumpQuickViewSearch(tester, [
+      searchableEvent('hit', '검색대상회의', target),
+    ], const Size(390, 844));
+    expect(
+      find.byKey(const ValueKey('calendar-content-repaint-boundary')),
+      findsNothing,
+      reason: 'starts in quick view',
+    );
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.widgetWithText(TextField, '제목, 메모, 장소 검색'),
+      '검색대상',
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.text('검색대상회의'), findsOneWidget);
+
+    await tester.tap(find.text('검색대상회의'));
+    await tester.pumpAndSettle();
+
+    expect(container.read(selectedDateProvider), DateTime(2031, 3, 15));
+    expect(container.read(visibleMonthProvider), DateTime(2031, 3));
+    expect(find.widgetWithText(TextField, '제목, 메모, 장소 검색'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('calendar-content-repaint-boundary')),
+      findsOneWidget,
+      reason: 'the result is shown on the calendar, not in quick view',
+    );
+    expect(tester.takeException(), isNull);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('quick-view search results do not overflow a short window', (
+    tester,
+  ) async {
+    final start = DateTime(2031, 3, 15, 10);
+    final events = [
+      for (var i = 0; i < 12; i++)
+        searchableEvent('e$i', '긴결과일정$i', start.add(Duration(days: i))),
+    ];
+    await pumpQuickViewSearch(tester, events, const Size(667, 375));
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.widgetWithText(TextField, '제목, 메모, 장소 검색'),
+      '긴결과',
+    );
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('긴결과일정0'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('calendar search shows a failure with retry, not "no results"', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'defaultCalendarView': 'month',
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    final repository = _FakeEventRepository()..searchFailures = 1;
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(repository),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('검색').first);
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.widgetWithText(TextField, '제목, 메모, 장소 검색'),
+      '회의',
+    );
+    // Typing starts the (debounced) search.
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pumpAndSettle();
+    expect(find.text('검색하지 못했습니다. 다시 시도해 주세요.'), findsOneWidget);
+    expect(find.text('검색 결과가 없습니다.'), findsNothing);
+
+    await tester.tap(find.text('다시 시도'));
+    await tester.pumpAndSettle();
+    expect(repository.searchCalls, greaterThanOrEqualTo(2));
+    expect(find.text('검색하지 못했습니다. 다시 시도해 주세요.'), findsNothing);
+    expect(find.text('검색 결과가 없습니다.'), findsOneWidget);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   testWidgets('a local-only user still reports both startup milestones once', (
     tester,
@@ -5715,9 +5951,9 @@ void main() {
           find.byWidgetPredicate(
             (widget) =>
                 widget is Text &&
-                (widget.data == '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기' ||
+                (widget.data == '버전 2.7.1 (1) · 더블 클릭하여 Github 확인하기' ||
                     widget.semanticsLabel ==
-                        '버전 2.7.1 (2.7.1) · 더블 클릭하여 Github 확인하기'),
+                        '버전 2.7.1 (1) · 더블 클릭하여 Github 확인하기'),
           ),
           findsOneWidget,
         );
@@ -7312,6 +7548,79 @@ void main() {
     });
   }
 
+  testWidgets('queued category order save survives closing settings', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    FlutterSecureStorage.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final firstSaveGate = Completer<void>();
+    final settingsRepository = _GatedSettingsRepository(
+      preferences,
+      firstSaveGate,
+    );
+    final authService = _FakeGoogleDriveAuthService(account: null);
+    final notificationService = _FakeNotification();
+    final eventRepository = _FakeEventRepository();
+    final driveSyncService = _FakeGoogleDriveSyncService(
+      authService: authService,
+      eventRepository: eventRepository,
+      notificationService: notificationService,
+      settingsRepository: settingsRepository,
+    );
+    final overrides = [
+      universityRegionsProvider.overrideWith(
+        (ref) async => UniversityRegions.fromJson(
+          jsonDecode(
+                File(
+                  'assets/academic/university_regions.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>,
+        ),
+      ),
+      settingsRepositoryProvider.overrideWithValue(settingsRepository),
+      notificationServiceProvider.overrideWithValue(notificationService),
+      syncServiceProvider.overrideWithValue(_FakeSync()),
+      eventRepositoryProvider.overrideWithValue(eventRepository),
+      googleDriveAuthServiceProvider.overrideWithValue(authService),
+      googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+    ];
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: overrides,
+        child: const MaterialApp(home: SettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('category-settings-navigation')),
+    );
+    await tester.pumpAndSettle();
+    void reorder() => tester
+        .widget<ReorderableListView>(
+          find.byKey(const ValueKey('category-reorder-list')),
+        )
+        .onReorderItem!(0, 1);
+    reorder();
+    await tester.pump();
+    reorder();
+    await tester.pump();
+    // Close the settings screen while the first save is still pending.
+    await tester.pumpWidget(const SizedBox.shrink());
+    firstSaveGate.complete();
+    await tester.pumpAndSettle();
+    // Two swaps return to the original order; the second one must be on disk.
+    expect(
+      settingsRepository.load().categories.map((category) => category.id),
+      [EventCategory.basic.id, EventCategory.holiday.id],
+    );
+  });
+
   testWidgets('category RGB picker renders above the category editor', (
     tester,
   ) async {
@@ -8686,6 +8995,97 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  group('filter sheet usage analytics (#153)', () {
+    Future<(List<AnalyticsRecord>, _GatedSaveSettingsRepository)> pumpFilter(
+      WidgetTester tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(1440, 900));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': CalendarViewMode.month.name,
+      });
+      final settingsRepository = _GatedSaveSettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final records = <AnalyticsRecord>[];
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File('assets/academic/university_regions.json')
+                          .readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            productAnalyticsProvider.overrideWithValue(
+              _RecordingAnalytics(records),
+            ),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return (records, settingsRepository);
+    }
+
+    List<Object?> filterOutcomes(List<AnalyticsRecord> records) => [
+      for (final record in records)
+        if (record.name == AnalyticsEventName.featureUsed &&
+            record.attributes['feature'] == 'filter')
+          record.attributes['outcome'],
+    ];
+
+    Future<void> dismissSheet(WidgetTester tester) async {
+      await tester.tapAt(const Offset(10, 10)); // the barrier
+      await tester.pumpAndSettle();
+    }
+
+    testWidgets('a switch dismissed before its save finishes is still applied', (
+      tester,
+    ) async {
+      final (records, repository) = await pumpFilter(tester);
+      await tester.tap(find.byIcon(Icons.tune_rounded).first);
+      await tester.pumpAndSettle();
+      repository.holdNextSave();
+      await tester.tap(
+        find.descendant(
+          of: find.byType(SwitchListTile).first,
+          matching: find.byType(Switch),
+        ),
+      );
+      await tester.pump();
+      await dismissSheet(tester); // the save has not completed yet
+      expect(filterOutcomes(records), ['succeeded']);
+      repository.releaseSave();
+      await tester.pumpAndSettle();
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('closing the sheet without a change is canceled', (tester) async {
+      final (records, _) = await pumpFilter(tester);
+      await tester.tap(find.byIcon(Icons.tune_rounded).first);
+      await tester.pumpAndSettle();
+      await dismissSheet(tester);
+      expect(filterOutcomes(records), ['canceled']);
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+  });
+
   testWidgets(
     'settings keeps desktop Google auth active until the user cancels it',
     (tester) async {
@@ -8977,95 +9377,101 @@ void main() {
     );
   }
 
-  group('filter sheet usage analytics (#153)', () {
-    Future<(List<AnalyticsRecord>, _GatedSaveSettingsRepository)> pumpFilter(
-      WidgetTester tester,
-    ) async {
-      await tester.binding.setSurfaceSize(const Size(1440, 900));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
-      debugDefaultTargetPlatformOverride = TargetPlatform.windows;
-      addTearDown(() => debugDefaultTargetPlatformOverride = null);
-      SharedPreferences.setMockInitialValues({
-        'onboardingCompleted': true,
-        'defaultCalendarView': CalendarViewMode.month.name,
-      });
-      final settingsRepository = _GatedSaveSettingsRepository(
-        preferences: await SharedPreferences.getInstance(),
+  testWidgets('quick view keeps category order for screen readers', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(393, 852);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final settingsRepository = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    const work = EventCategory(id: 'work', label: '업무', colorValue: 0xff7c3aed);
+    const study = EventCategory(id: 'study', label: '공부', colorValue: 0xff0f766e);
+    await settingsRepository.save(
+      settingsRepository.load().copyWith(
+        categories: const [EventCategory.basic, work, study],
+      ),
+    );
+    final now = DateTime.now();
+    CalendarEvent event(String id, EventCategory category, int day) {
+      final start = DateTime(now.year, now.month, day, 9);
+      return CalendarEvent(
+        id: id,
+        title: id,
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        allDay: false,
+        category: category,
+        colorValue: category.colorValue,
+        createdAt: start,
+        updatedAt: start,
       );
-      final records = <AnalyticsRecord>[];
-      await tester.pumpWidget(
-        ProviderScope(
-          overrides: [
-            universityRegionsProvider.overrideWith(
-              (ref) async => UniversityRegions.fromJson(
-                jsonDecode(
-                      File('assets/academic/university_regions.json')
-                          .readAsStringSync(),
-                    )
-                    as Map<String, dynamic>,
-              ),
-            ),
-            settingsRepositoryProvider.overrideWithValue(settingsRepository),
-            productAnalyticsProvider.overrideWithValue(
-              _RecordingAnalytics(records),
-            ),
-            notificationServiceProvider.overrideWithValue(_FakeNotification()),
-            syncServiceProvider.overrideWithValue(_FakeSync()),
-            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
-            googleDriveAuthServiceProvider.overrideWithValue(
-              _FakeGoogleDriveAuthService(),
-            ),
-          ],
-          child: const DailyApp(),
-        ),
-      );
-      await tester.pumpAndSettle();
-      return (records, settingsRepository);
     }
 
-    List<Object?> filterOutcomes(List<AnalyticsRecord> records) => [
-      for (final record in records)
-        if (record.name == AnalyticsEventName.featureUsed &&
-            record.attributes['feature'] == 'filter')
-          record.attributes['outcome'],
-    ];
+    // The tall middle category pushes the third card under the first, so the
+    // columns hold categories [0, 2] and [1].
+    final repository = _StreamingEventRepository([
+      event('basic-1', EventCategory.basic, 5),
+      for (var i = 0; i < 6; i++) event('work-$i', work, 6 + i),
+      event('study-1', study, 20),
+    ]);
+    final handle = tester.ensureSemantics();
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(repository),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('빠른 보기'));
+    await tester.pumpAndSettle();
 
-    Future<void> dismissSheet(WidgetTester tester) async {
-      await tester.tapAt(const Offset(10, 10)); // the barrier
-      await tester.pumpAndSettle();
-    }
+    Finder card(String id) =>
+        find.byKey(ValueKey('quick-todo-category-$id'));
+    final basic = tester.getTopLeft(card('basic'));
+    final middle = tester.getTopLeft(card('work'));
+    final third = tester.getTopLeft(card('study'));
+    expect(third.dx, basic.dx, reason: 'third card sits under the first');
+    expect(middle.dx, greaterThan(basic.dx));
 
-    testWidgets('a switch dismissed before its save finishes is still applied', (
-      tester,
-    ) async {
-      final (records, repository) = await pumpFilter(tester);
-      await tester.tap(find.byIcon(Icons.tune_rounded).first);
-      await tester.pumpAndSettle();
-      repository.holdNextSave();
-      await tester.tap(
-        find.descendant(
-          of: find.byType(SwitchListTile).first,
-          matching: find.byType(Switch),
+    double sortKeyOf(String id) {
+      final semantics = find.ancestor(
+        of: card(id),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is Semantics && widget.properties.sortKey != null,
         ),
       );
-      await tester.pump();
-      await dismissSheet(tester); // the save has not completed yet
-      expect(filterOutcomes(records), ['succeeded']);
-      repository.releaseSave();
-      await tester.pumpAndSettle();
-      debugDefaultTargetPlatformOverride = null;
-      await tester.pumpWidget(const SizedBox.shrink());
-    });
+      final key = tester.widget<Semantics>(semantics.first).properties.sortKey;
+      return (key! as OrdinalSortKey).order;
+    }
 
-    testWidgets('closing the sheet without a change is canceled', (tester) async {
-      final (records, _) = await pumpFilter(tester);
-      await tester.tap(find.byIcon(Icons.tune_rounded).first);
-      await tester.pumpAndSettle();
-      await dismissSheet(tester);
-      expect(filterOutcomes(records), ['canceled']);
-      debugDefaultTargetPlatformOverride = null;
-      await tester.pumpWidget(const SizedBox.shrink());
-    });
+    expect(sortKeyOf('basic'), lessThan(sortKeyOf('work')));
+    expect(sortKeyOf('work'), lessThan(sortKeyOf('study')));
+    handle.dispose();
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
   });
 
   testWidgets(
@@ -9502,6 +9908,28 @@ class _FakeNotification implements NotificationService {
   Future<String> permissionSummary() async => '테스트 권한 · 예약 0개';
 }
 
+class _GatedSettingsRepository extends SettingsRepository {
+  _GatedSettingsRepository(SharedPreferences preferences, this.firstSaveGate)
+    : super(preferences: preferences);
+
+  final Completer<void> firstSaveGate;
+  var _saves = 0;
+
+  @override
+  Future<void> save(
+    AppSettings settings, {
+    bool markSyncPending = true,
+    AppSettings? changedFrom,
+  }) async {
+    if (_saves++ == 0) await firstSaveGate.future;
+    return super.save(
+      settings,
+      markSyncPending: markSyncPending,
+      changedFrom: changedFrom,
+    );
+  }
+}
+
 class _FakeSync implements SyncService {
   _FakeSync({this.startupCompletion});
   final Future<void>? startupCompletion;
@@ -9601,12 +10029,19 @@ class _DelayedStartupEventRepository extends _FakeEventRepository {
 }
 
 class _FakeEventRepository implements EventRepository {
-  _FakeEventRepository({List<CalendarEvent> events = const []})
-    : _events = events;
+  _FakeEventRepository({
+    List<CalendarEvent> events = const [],
+    this.searchable = false,
+  }) : _events = events;
+
+  /// When true, `search` returns the events whose title contains the query.
+  final bool searchable;
 
   final List<CalendarEvent> _events;
   var clearAllCalls = 0;
   var failCategoryUpdate = false;
+  var searchFailures = 0;
+  var searchCalls = 0;
 
   @override
   Future<void> delete(String eventId) async {}
@@ -9618,7 +10053,16 @@ class _FakeEventRepository implements EventRepository {
   Future<void> saveAllAtomically(Iterable<CalendarEvent> events) async {}
 
   @override
-  Future<List<CalendarEvent>> search(String query) async => const [];
+  Future<List<CalendarEvent>> search(String query) async {
+    searchCalls += 1;
+    if (searchFailures > 0) {
+      searchFailures -= 1;
+      throw StateError('lookup failed');
+    }
+    return searchable
+        ? _events.where((event) => event.title.contains(query)).toList()
+        : const [];
+  }
 
   @override
   Future<CalendarEvent?> findById(String id) async => null;

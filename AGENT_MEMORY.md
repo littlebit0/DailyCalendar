@@ -22,6 +22,12 @@
 - Include intertwined earlier issue implementations/dependencies in commit; preserve concurrent Dot awareness and unrelated deployment/policy/receiver files. Upstream vendored whitespace/CRLF is retained, not treated as changed product failure. Review: docs/reviews/PRIORITY11_CHECKPOINT_2026-10-16.md. Logs: work/priority11-onward-20261016/. No new university source work.
 
 
+## #160 LMS ID label and Apple Password AutoFill — 2026-10-19 (PR #325)
+
+- Changed (shared Dart, all platforms): the LMS login field is labelled `ID`, the username/password fields sit in an `AutofillGroup` (hints username/password, `onDisposeAction` cancel), so the saved login can be reused through the system password manager. Existing stored accounts, pause/retry rules and the Keychain/secure-storage code paths are unchanged.
+- NOT verified: real iPhone and Mac Password AutoFill selection (suggestion shown, saved account filled, "save password" prompt behaviour) — needs a device run on iOS and macOS before release. Android/Windows/Linux autofill behaviour also unverified. Unit/widget tests only check hints and the group.
+- Remaining Apple acceptance checks: (1) iPhone and Mac show a saved ID/password suggestion on the LMS settings form; (2) accepting it fills both fields without exposing them in logs; (3) cancelling the form does not save credentials; (4) the stored-account auto-login and its pause state still work afterwards.
+
 ## Workspace paths - 2026-10-15
 
 - Canonical repo: `/Users/kimhwi/Documents/Codex/DailyCalendar`. Previous long repo path no longer exists.

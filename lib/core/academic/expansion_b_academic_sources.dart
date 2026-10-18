@@ -4,6 +4,7 @@ import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 
 import 'academic_source.dart';
+import 'month_structure.dart';
 
 DateTime _date(String value) {
   final match = RegExp(r'^(\d{4})-(\d{2})-(\d{2})').firstMatch(value);
@@ -86,6 +87,13 @@ abstract class _K2Annual extends _Source {
     if (doc.querySelector('#year')?.attributes['value'] != '$year') {
       throw const FormatException('Unexpected K2Web calendar year');
     }
+    // Observed 2019-2027 on both schools: all twelve month headings are sent
+    // even when a month has no events, so a missing or repeated month means a
+    // damaged response.
+    requireTwelveMonths(
+      doc.querySelectorAll('#timeTableList h3').map((node) => node.text),
+      'K2Web',
+    );
     final events = <AcademicEvent>[];
     for (final row in doc.querySelectorAll('#timeTableList dt')) {
       final title = row.nextElementSibling;
@@ -247,28 +255,53 @@ class HanseiAcademicSource extends _Source {
       throw const FormatException('Unexpected Hansei year');
     }
     final events = <AcademicEvent>[];
-    for (final row in doc.querySelectorAll('.schd_list .cont')) {
-      final dates = RegExp(
-        r'(\d{2})\.(\d{2})',
-      ).allMatches(row.querySelector('.date')?.text ?? '').toList();
-      final label = row.querySelector('.txt')?.text.trim() ?? '';
-      if (dates.isEmpty || dates.length > 2 || label.isEmpty) {
-        throw const FormatException('Invalid Hansei academic row');
+    // Each list is one month and also shows events that started the month
+    // before or end the month after, so a row's year follows its section.
+    for (final section in doc.querySelectorAll('.schd_list')) {
+      final sectionMonth = int.tryParse(
+        RegExp(
+              r'(\d{1,2})',
+            ).firstMatch(section.querySelector('.mont .ko')?.text ?? '')?[1] ??
+            '',
+      );
+      if (sectionMonth == null || sectionMonth < 1 || sectionMonth > 12) {
+        throw const FormatException('Invalid Hansei month section');
       }
-      final start = _date('$year-${dates.first[1]}-${dates.first[2]}');
-      final last = _date(
-        '${int.parse(dates.last[1]!) < start.month ? year + 1 : year}'
-        '-${dates.last[1]}-${dates.last[2]}',
-      );
-      events.add(
-        AcademicEvent(
-          sourceId: '${start.toIso8601String()}:$label',
-          title: label,
-          start: start,
-          end: DateTime(last.year, last.month, last.day + 1),
-          url: 'https://hansei.ac.kr/view.do?no=10302',
-        ),
-      );
+      int yearOf(int month) {
+        final distance = month - sectionMonth;
+        return distance > 6
+            ? year - 1
+            : distance < -6
+            ? year + 1
+            : year;
+      }
+
+      for (final row in section.querySelectorAll('.cont')) {
+        final dates = RegExp(
+          r'(\d{2})\.(\d{2})',
+        ).allMatches(row.querySelector('.date')?.text ?? '').toList();
+        final label = row.querySelector('.txt')?.text.trim() ?? '';
+        if (dates.isEmpty || dates.length > 2 || label.isEmpty) {
+          throw const FormatException('Invalid Hansei academic row');
+        }
+        final startMonth = int.parse(dates.first[1]!);
+        final start = _date(
+          '${yearOf(startMonth)}-${dates.first[1]}-${dates.first[2]}',
+        );
+        final endMonth = int.parse(dates.last[1]!);
+        final last = _date(
+          '${yearOf(endMonth)}-${dates.last[1]}-${dates.last[2]}',
+        );
+        events.add(
+          AcademicEvent(
+            sourceId: '${start.toIso8601String()}:$label',
+            title: label,
+            start: start,
+            end: DateTime(last.year, last.month, last.day + 1),
+            url: 'https://hansei.ac.kr/view.do?no=10302',
+          ),
+        );
+      }
     }
     return _within(events, year);
   }
@@ -302,29 +335,34 @@ class SangjiAcademicSource extends _Source {
       if (selected == year) {
         await Future<void>.delayed(const Duration(milliseconds: 250));
       }
-      all.addAll(
-        parse(
-          await read(
-            Uri.https(
-              'sangji.ac.kr',
-              '/prog/schafsSchdul/kor/sub06_01_01/A/getScheduleList.do',
-            ),
-            body: {'searchKeywordFrom': '$selected', 'searchCondition2': 'A'},
-            headers: {
-              'Referer': website.toString(),
-              'User-Agent': 'Mozilla/5.0',
-              'X-Requested-With': 'XMLHttpRequest',
-              'Cookie': ?cookies,
-            },
+      final rows = _rows(
+        await read(
+          Uri.https(
+            'sangji.ac.kr',
+            '/prog/schafsSchdul/kor/sub06_01_01/A/getScheduleList.do',
           ),
-          year,
+          body: {'searchKeywordFrom': '$selected', 'searchCondition2': 'A'},
+          headers: {
+            'Referer': website.toString(),
+            'User-Agent': 'Mozilla/5.0',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Cookie': ?cookies,
+          },
         ),
       );
+      // The previous academic-year response may legitimately have nothing in
+      // the requested year, but the requested year's own response must: an
+      // empty or stale one is a failed refresh, not a partial success.
+      if (selected == year) _within(rows, year);
+      all.addAll(rows);
     }
     return _within(all, year);
   }
 
-  static List<AcademicEvent> parse(String body, int year) {
+  static List<AcademicEvent> parse(String body, int year) =>
+      _within(_rows(body), year);
+
+  static List<AcademicEvent> _rows(String body) {
     final groups = jsonDecode(body);
     if (groups is! List) throw const FormatException('Invalid Sangji calendar');
     final events = <AcademicEvent>[];
@@ -358,7 +396,7 @@ class SangjiAcademicSource extends _Source {
         );
       }
     }
-    return _within(events, year);
+    return events;
   }
 }
 
