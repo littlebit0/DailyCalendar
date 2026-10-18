@@ -25,6 +25,17 @@ class _Repository extends Fake implements EventRepository {}
 
 class _Commands extends Fake implements EventCommandService {}
 
+class _ConnectedController extends LmsController {
+  _ConnectedController({
+    required super.settings,
+    required super.repository,
+    required super.commands,
+    required super.createSession,
+  });
+  @override
+  bool get connected => true;
+}
+
 class _NoSession extends LmsWebSession {
   _NoSession(String owner, String school)
     : super(ownerId: owner, schoolId: school);
@@ -53,6 +64,100 @@ void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({});
     FlutterSecureStorage.setMockInitialValues({});
+  });
+
+  testWidgets('the re-login button signs in again with the saved login', (
+    tester,
+  ) async {
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'student@example.com'),
+    );
+    await settings.saveAcademicProfile(
+      const AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+      ),
+      expectedGoogleEmail: 'student@example.com',
+    );
+    await LmsCredentialsStore().save(
+      'student@example.com',
+      'smu',
+      const LmsLocalCredentials('fixture-student', 'synthetic', paused: true),
+    );
+    final sessions = <_NoSession>[];
+    final controller = LmsController(
+      settings: settings,
+      repository: _Repository(),
+      commands: _Commands(),
+      createSession: (owner, school) {
+        final session = _NoSession(owner, school);
+        sessions.add(session);
+        return session;
+      },
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          lmsControllerProvider.overrideWith((ref) => controller),
+        ],
+        child: MaterialApp(home: const LmsSettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final retry = find.byKey(const ValueKey('lms-local-login-retry'));
+    await tester.ensureVisible(retry);
+    await tester.tap(retry);
+    await tester.pumpAndSettle();
+    expect(sessions.last.submittedCredentials?.username, 'fixture-student');
+    expect(sessions.last.submittedCredentials?.paused, isFalse);
+  });
+
+  testWidgets('the re-login button is hidden while the school is connected', (
+    tester,
+  ) async {
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'student@example.com'),
+    );
+    await settings.saveAcademicProfile(
+      const AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+      ),
+      expectedGoogleEmail: 'student@example.com',
+    );
+    await LmsCredentialsStore().save(
+      'student@example.com',
+      'smu',
+      const LmsLocalCredentials('fixture-student', 'synthetic', paused: true),
+    );
+    final controller = _ConnectedController(
+      settings: settings,
+      repository: _Repository(),
+      commands: _Commands(),
+      createSession: (owner, school) => _NoSession(owner, school),
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          lmsControllerProvider.overrideWith((ref) => controller),
+        ],
+        child: MaterialApp(home: const LmsSettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('lms-local-login-retry')), findsNothing);
+    // Deleting the saved login stays available.
+    expect(find.byKey(const ValueKey('lms-local-login-remove')), findsOneWidget);
   });
 
   testWidgets(
@@ -113,6 +218,50 @@ void main() {
         ),
       );
       expect(group.onDisposeAction, AutofillContextAction.cancel);
+      // The password can be shown while typing, then hidden again.
+      await tester.enterText(
+        find.byKey(const ValueKey('lms-local-password')),
+        'secret',
+      );
+      expect(
+        tester
+            .widget<TextField>(find.byKey(const ValueKey('lms-local-password')))
+            .obscureText,
+        isTrue,
+      );
+      await tester.tap(
+        find.byKey(const ValueKey('lms-local-password-visibility')),
+      );
+      await tester.pump();
+      final shown = tester.widget<TextField>(
+        find.byKey(const ValueKey('lms-local-password')),
+      );
+      expect(shown.obscureText, isFalse);
+      expect(shown.controller!.text, 'secret');
+      await tester.tap(
+        find.byKey(const ValueKey('lms-local-password-visibility')),
+      );
+      await tester.pump();
+      expect(
+        tester
+            .widget<TextField>(find.byKey(const ValueKey('lms-local-password')))
+            .obscureText,
+        isTrue,
+      );
+      // Leaving the foreground hides a shown password.
+      await tester.tap(
+        find.byKey(const ValueKey('lms-local-password-visibility')),
+      );
+      await tester.pump();
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      await tester.pump();
+      expect(
+        tester
+            .widget<TextField>(find.byKey(const ValueKey('lms-local-password')))
+            .obscureText,
+        isTrue,
+      );
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
       // Typing still enables saving with consent.
       await tester.enterText(
         find.byKey(const ValueKey('lms-local-username')),
