@@ -824,8 +824,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
     final repository = ref.read(visibleEventRepositoryProvider);
     final commandService = ref.read(eventCommandServiceProvider);
     final acknowledged = <String>[];
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    final alreadyApplied = settingsRepository.appliedWidgetActionTokens();
+    final appliedNow = <String>[];
     var staleOccurrence = false;
     for (final action in actions) {
+      if (alreadyApplied.contains(action.token)) {
+        // Applied before; only its acknowledgement was missing.
+        acknowledged.add(action.token);
+        continue;
+      }
       final event = await repository.findById(action.eventId);
       if (event == null || event.isDeleted) {
         acknowledged.add(action.token);
@@ -840,8 +848,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
       try {
         await commandService.setCompleted(target, action.completed);
         acknowledged.add(action.token);
+        appliedNow.add(action.token);
       } on Object {
         break;
+      }
+    }
+    if (appliedNow.isNotEmpty) {
+      try {
+        await settingsRepository.rememberAppliedWidgetActionTokens(appliedNow);
+      } on Object {
+        // Best effort: the acknowledgement below is still attempted.
       }
     }
     await widgetService.acknowledgeTodoActions(acknowledged);
