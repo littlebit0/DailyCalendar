@@ -16,6 +16,11 @@ enum StartupStage {
 
 class StartupTiming {
   static final _clock = Stopwatch()..start();
+
+  /// Starts the clock. Dart initializes statics lazily, so `main` calls this as
+  /// its first statement; otherwise the clock would start at the first `mark`
+  /// and every milestone would omit what ran before it.
+  static void begin() => _clock.elapsedTicks;
   static bool _firstFrameRecorded = false;
 
   static void mark(StartupStage stage, {int? durationUs, bool failed = false}) {
@@ -48,4 +53,16 @@ class StartupTiming {
     _firstFrameRecorded = true;
     mark(StartupStage.firstCalendarFrame);
   }
+
+  static final _claimedMilestones = <StartupStage>{};
+
+  /// Milliseconds since the Dart `main` began (OS process start is not included).
+  static int get sinceLaunchMs => _clock.elapsedMilliseconds;
+
+  /// True only the first time [stage] is claimed in this process, so a rebuilt
+  /// or recreated screen never reports the same startup milestone twice.
+  static bool claim(StartupStage stage) => _claimedMilestones.add(stage);
+
+  @visibleForTesting
+  static void resetClaims() => _claimedMilestones.clear();
 }

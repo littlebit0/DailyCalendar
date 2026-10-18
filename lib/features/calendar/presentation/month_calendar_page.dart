@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/analytics/product_analytics.dart';
+import '../../../core/analytics/startup_milestones.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/calendar/event_display_filter.dart';
 import '../../../core/calendar/calendar_event_movement.dart';
@@ -135,6 +136,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     super.initState();
     _quickAccessSelected =
         ref.read(appSettingsProvider).appStartView == AppStartView.quickView;
+    recordFirstCalendarFrame(context, ref);
     Future.microtask(() {
       if (!mounted) return;
       _recordAnalytics(AnalyticsRecord.screenView(AnalyticsScreen.calendar));

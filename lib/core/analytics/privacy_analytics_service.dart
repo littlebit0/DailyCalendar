@@ -809,6 +809,7 @@ final _analyticsOptionalAttributes =
         AnalyticsEventName.syncFailed,
         AnalyticsEventName.slowInteractionDetected,
         AnalyticsEventName.frameSummary,
+        AnalyticsEventName.startupMilestone,
       ])
         name.wireName: {
           'durationTruncated': _truncatedFlag,
@@ -875,6 +876,10 @@ final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
     'interaction': (value) => analyticsInteractionValues.contains(value),
     'durationMs': _duration,
     'slowFrameCount': _frameCount,
+  },
+  AnalyticsEventName.startupMilestone.wireName: {
+    'milestone': (value) => _enumValue(value, AnalyticsStartupMilestone.values),
+    'durationMs': _duration,
   },
   AnalyticsEventName.frameSummary.wireName: {
     'frameCount': _framesInWindow,

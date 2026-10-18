@@ -11,6 +11,7 @@ import '../core/di/app_providers.dart';
 import '../core/alarms/alarm_service.dart';
 import '../core/lms/lms_controller.dart';
 import '../core/analytics/product_analytics.dart';
+import '../core/analytics/startup_milestones.dart';
 import '../core/auth/google_account.dart';
 import '../core/security/biometric_auth_service.dart';
 import '../core/security/app_lock_privacy_service.dart';
@@ -749,9 +750,6 @@ class _AppHomeState extends ConsumerState<_AppHome>
         ref.read(settingsRepositoryProvider).dailyAccount()?.googleAccount !=
         null;
     _startupGateOpen = !_requiresStartupSync;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) StartupTiming.firstCalendarFrame();
-    });
     WidgetsBinding.instance.addObserver(this);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
         defaultTargetPlatform == TargetPlatform.macOS) {
@@ -770,7 +768,12 @@ class _AppHomeState extends ConsumerState<_AppHome>
         await _processPendingWidgetTodoActions();
       }),
     );
-    if (!_requiresStartupSync) _startSyncIfConnected();
+    if (!_requiresStartupSync) {
+      _startSyncIfConnected();
+      // Local-only and Apple-only users never run the startup sync, so their
+      // local calendar readiness is measured here.
+      unawaited(_measureLocalCalendar());
+    }
     _refreshCalendarWidgets();
   }
 
@@ -1061,17 +1064,24 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   Future<void> _runStartupSync() async {
-    unawaited(
-      StartupTiming.measure(
-        StartupStage.localCalendar,
-        _primeLocalCalendar,
-      ).catchError((_) {}),
-    );
+    unawaited(_measureLocalCalendar());
     await _tryStartSyncIfConnected(startup: true);
     if (!mounted) return;
     _refreshSettingsState();
     ref.invalidate(eventsInRangeProvider);
   }
+
+  /// Primes the local calendar and reports when it is ready (once per process).
+  Future<void> _measureLocalCalendar() =>
+      StartupTiming.measure(StartupStage.localCalendar, _primeLocalCalendar)
+          .then(
+            (_) => recordStartupMilestone(
+              ref,
+              StartupStage.localCalendar,
+              AnalyticsStartupMilestone.localCalendarReady,
+            ),
+          )
+          .catchError((_) {});
 
   Future<void> _primeLocalCalendar() async {
     // Prime the actual stream providers used by the initial month/quick view,

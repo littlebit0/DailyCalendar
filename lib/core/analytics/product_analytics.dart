@@ -31,6 +31,11 @@ enum AnalyticsSyncOperation {
 
 enum AnalyticsTrigger { automatic, manual, startup, resume, localChange }
 
+/// Points on the way to a usable calendar, measured from the start of the Dart
+/// `main` (not the OS process launch). `app_load_completed` is a different,
+/// earlier point: it ends when the data migration finishes.
+enum AnalyticsStartupMilestone { firstCalendarFrame, localCalendarReady }
+
 enum AnalyticsBuildMode { debug, profile, release }
 
 enum AnalyticsOutcome { succeeded, failed, canceled }
@@ -61,7 +66,8 @@ enum AnalyticsEventName {
   syncSucceeded('sync_succeeded'),
   syncFailed('sync_failed'),
   slowInteractionDetected('slow_interaction_detected'),
-  frameSummary('frame_summary');
+  frameSummary('frame_summary'),
+  startupMilestone('startup_milestone');
 
   const AnalyticsEventName(this.wireName);
 
@@ -191,6 +197,16 @@ class AnalyticsRecord {
       'interaction': interaction,
       ..._durationAttributes(durationMs),
       'slowFrameCount': slowFrameCount.clamp(0, 120),
+    });
+  }
+
+  factory AnalyticsRecord.startupMilestone(
+    AnalyticsStartupMilestone milestone, {
+    required int durationMs,
+  }) {
+    return AnalyticsRecord._(AnalyticsEventName.startupMilestone, {
+      'milestone': milestone.name,
+      ..._durationAttributes(durationMs),
     });
   }
 
