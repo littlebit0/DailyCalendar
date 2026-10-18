@@ -44,6 +44,50 @@ class AnalyticsVersionTests(unittest.TestCase):
         self.assertFalse(valid_batch(batch))
 
 
+class DurationTruncationTests(unittest.TestCase):
+    BASE = {'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa', 'occurredAt': '2026-10-19T00:00:00Z'}
+
+    def event(self, name, attributes):
+        return {**self.BASE, 'name': name, 'attributes': attributes}
+
+    def test_flag_is_optional_and_only_true_is_valid(self):
+        from tool.analytics_receiver import valid_event
+        self.assertTrue(valid_event(self.event('app_load_completed', {'durationMs': 120000})))
+        self.assertTrue(valid_event(self.event('app_load_completed', {'durationMs': 120000, 'durationTruncated': True})))
+        for bad in (False, 'true', 1, None):
+            self.assertFalse(valid_event(self.event('app_load_completed', {'durationMs': 5, 'durationTruncated': bad})))
+        self.assertFalse(valid_event(self.event('app_load_completed', {'durationMs': 120001})))
+        self.assertFalse(valid_event(self.event('app_load_completed', {'durationTruncated': True})))
+        self.assertFalse(valid_event(self.event('screen_view', {'screen': 'calendar', 'durationTruncated': True})))
+
+    def test_truncated_runs_are_aggregated_apart_from_exact_runs(self):
+        batch = {
+            'schemaVersion': 1,
+            'sessionId': 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb',
+            'environment': {'appVersion': '4.1.2', 'platform': 'ios', 'osMajor': 27},
+            'events': [
+                {**self.BASE, 'name': 'app_load_completed', 'attributes': {'durationMs': 120000}},
+                {**self.BASE, 'eventId': 'cccccccc-cccc-4ccc-8ccc-cccccccccccc',
+                 'name': 'app_load_completed',
+                 'attributes': {'durationMs': 120000, 'durationTruncated': True}},
+            ],
+        }
+        self.assertTrue(valid_batch(batch))
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(Aggregator(directory).accept(batch), 2)
+            aggregate = json.loads(next(Path(directory).glob('analytics-*.json')).read_text())
+            groups = list(aggregate['groups'].values())
+            self.assertEqual(len(groups), 2)
+            self.assertEqual(sorted('durationTruncated' in g['attributes'] for g in groups), [False, True])
+
+    def test_event_save_phase_matches_the_app(self):
+        from tool.analytics_receiver import valid_event
+        self.assertTrue(valid_event(self.event('event_save_succeeded', {
+            'operation': 'create', 'phase': 'database', 'durationMs': 5})))
+        self.assertTrue(valid_event(self.event('event_save_failed', {
+            'operation': 'create', 'phase': 'followUp', 'durationMs': 5, 'errorCode': 'unknown'})))
+
+
 def _payload():
     return {
         "report": {

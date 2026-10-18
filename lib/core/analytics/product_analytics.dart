@@ -71,7 +71,7 @@ class AnalyticsRecord {
 
   factory AnalyticsRecord.appLoad({required int durationMs}) {
     return AnalyticsRecord._(AnalyticsEventName.appLoadCompleted, {
-      'durationMs': _boundedDuration(durationMs),
+      ..._durationAttributes(durationMs),
     });
   }
 
@@ -109,7 +109,7 @@ class AnalyticsRecord {
     return AnalyticsRecord._(AnalyticsEventName.eventEditorCompleted, {
       'mode': mode.name,
       'outcome': outcome.name,
-      'durationMs': _boundedDuration(durationMs),
+      ..._durationAttributes(durationMs),
     });
   }
 
@@ -127,7 +127,7 @@ class AnalyticsRecord {
       {
         'operation': operation.name,
         'phase': phase.name,
-        'durationMs': _boundedDuration(durationMs),
+        ..._durationAttributes(durationMs),
         if (!succeeded)
           'errorCode': (errorCode ?? AnalyticsErrorCode.unknown).name,
       },
@@ -160,7 +160,7 @@ class AnalyticsRecord {
       'operation': operation.name,
       'trigger': trigger.name,
       'outcome': outcome.name,
-      'durationMs': _boundedDuration(durationMs),
+      ..._durationAttributes(durationMs),
       if (outcome != AnalyticsOutcome.succeeded)
         'errorCode': (errorCode ?? AnalyticsErrorCode.unknown).name,
     });
@@ -186,7 +186,7 @@ class AnalyticsRecord {
     }
     return AnalyticsRecord._(AnalyticsEventName.slowInteractionDetected, {
       'interaction': interaction,
-      'durationMs': _boundedDuration(durationMs),
+      ..._durationAttributes(durationMs),
       'slowFrameCount': slowFrameCount.clamp(0, 120),
     });
   }
@@ -194,7 +194,16 @@ class AnalyticsRecord {
   final AnalyticsEventName name;
   final Map<String, Object> attributes;
 
-  static int _boundedDuration(int value) => value.clamp(0, 120000);
+  /// Longest duration sent as-is. Anything above is reported as this value
+  /// together with `durationTruncated`, so exactly 120 s stays distinguishable
+  /// from a longer run. Records written before this flag existed carry no
+  /// `durationTruncated`, so a stored 120000 cannot be read as exact.
+  static const maxDurationMs = 120000;
+
+  static Map<String, Object> _durationAttributes(int value) => {
+    'durationMs': value.clamp(0, maxDurationMs),
+    if (value > maxDurationMs) 'durationTruncated': true,
+  };
 }
 
 const analyticsInteractionValues = <String>{

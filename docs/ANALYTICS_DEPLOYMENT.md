@@ -133,3 +133,13 @@ version number, analytics consent, or user data.
 Update the deployed Python receiver before installing an app that sends the test
 suffix. Existing records without the suffix cannot be retroactively classified
 as production or test.
+
+## Reading durations (#151)
+
+Durations are capped at 120000 ms. Apps that send `durationTruncated: true` ran
+longer than the cap; a record with `durationMs` 120000 and no flag is exactly
+120 s **only if it came from an app that already sends the flag**. Records from
+older apps (and everything collected before this change) cannot tell exact 120 s
+from longer, so treat their 120000 values as "at least 120 s" and do not average
+them as true durations. `durationTruncated` is optional and only ever `true`; the
+receiver must be deployed before the app that sends it, or the batch is rejected.
