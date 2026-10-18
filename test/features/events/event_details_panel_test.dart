@@ -26,6 +26,69 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => initializeDateFormatting('ko'));
 
+  testWidgets('live day results keep the calendar display policy', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    const hiddenCategory = EventCategory(
+      id: 'hidden-category',
+      label: '숨김 분류',
+      colorValue: 0xff2563eb,
+    );
+    final shown = _event().copyWith(id: 'shown', title: '보이는 일정');
+    final hidden = _event().copyWith(
+      id: 'hidden',
+      title: '숨긴 분류 일정',
+      category: hiddenCategory,
+      colorValue: hiddenCategory.colorValue,
+    );
+    final repository = _MultipleEventRepository([shown, hidden]);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          eventRepositoryProvider.overrideWithValue(repository),
+          eventsInRangeProvider.overrideWith(
+            (ref, range) => Stream.value([shown, hidden]),
+          ),
+        ],
+        child: MaterialApp(
+          home: Scaffold(
+            body: EventDetailsPanel(date: shown.startAt, events: [shown]),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('보이는 일정'), findsOneWidget);
+    expect(find.text('숨긴 분류 일정'), findsOneWidget);
+
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(EventDetailsPanel)),
+    );
+    final settings = container.read(appSettingsProvider);
+    container.read(appSettingsProvider.notifier).state = settings.copyWith(
+      hiddenCategoryIds: [hiddenCategory.id],
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('보이는 일정'), findsOneWidget);
+    expect(find.text('숨긴 분류 일정'), findsNothing);
+
+    // D-day only and the current search apply to the live list as well.
+    container.read(appSettingsProvider.notifier).state = settings.copyWith(
+      calendarDdayOnly: true,
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('보이는 일정'), findsNothing);
+    container.read(appSettingsProvider.notifier).state = settings;
+    container.read(calendarSearchQueryProvider.notifier).state = '숨긴';
+    await tester.pumpAndSettle();
+    expect(find.text('보이는 일정'), findsNothing);
+    expect(find.text('숨긴 분류 일정'), findsOneWidget);
+  });
+
   for (final brightness in Brightness.values) {
     testWidgets(
       'details keep category and D-day text readable in $brightness',
