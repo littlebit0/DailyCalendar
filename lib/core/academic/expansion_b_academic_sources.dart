@@ -327,29 +327,34 @@ class SangjiAcademicSource extends _Source {
       if (selected == year) {
         await Future<void>.delayed(const Duration(milliseconds: 250));
       }
-      all.addAll(
-        parse(
-          await read(
-            Uri.https(
-              'sangji.ac.kr',
-              '/prog/schafsSchdul/kor/sub06_01_01/A/getScheduleList.do',
-            ),
-            body: {'searchKeywordFrom': '$selected', 'searchCondition2': 'A'},
-            headers: {
-              'Referer': website.toString(),
-              'User-Agent': 'Mozilla/5.0',
-              'X-Requested-With': 'XMLHttpRequest',
-              'Cookie': ?cookies,
-            },
+      final rows = _rows(
+        await read(
+          Uri.https(
+            'sangji.ac.kr',
+            '/prog/schafsSchdul/kor/sub06_01_01/A/getScheduleList.do',
           ),
-          year,
+          body: {'searchKeywordFrom': '$selected', 'searchCondition2': 'A'},
+          headers: {
+            'Referer': website.toString(),
+            'User-Agent': 'Mozilla/5.0',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Cookie': ?cookies,
+          },
         ),
       );
+      // The previous academic-year response may legitimately have nothing in
+      // the requested year, but the requested year's own response must: an
+      // empty or stale one is a failed refresh, not a partial success.
+      if (selected == year) _within(rows, year);
+      all.addAll(rows);
     }
     return _within(all, year);
   }
 
-  static List<AcademicEvent> parse(String body, int year) {
+  static List<AcademicEvent> parse(String body, int year) =>
+      _within(_rows(body), year);
+
+  static List<AcademicEvent> _rows(String body) {
     final groups = jsonDecode(body);
     if (groups is! List) throw const FormatException('Invalid Sangji calendar');
     final events = <AcademicEvent>[];
@@ -383,7 +388,7 @@ class SangjiAcademicSource extends _Source {
         );
       }
     }
-    return _within(events, year);
+    return events;
   }
 }
 

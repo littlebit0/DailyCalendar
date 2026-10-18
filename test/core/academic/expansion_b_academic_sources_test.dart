@@ -136,6 +136,74 @@ void main() {
     },
   );
 
+  group('Sangji previous-year response without overlap', () {
+    String month(int id, String start, String end) =>
+        '[{"month":"12","year":"2025","list":[{"code":"A","siteCode":"kor",'
+        '"subject":"지난 학년도 일정","cntNo":$id,"endde":"$end 00:00:00.0",'
+        '"bgnde":"$start 00:00:00.0"}]}]';
+    SangjiAcademicSource source(String previous, String current) =>
+        SangjiAcademicSource(
+          client: MockClient((r) async {
+            if (r.method == 'GET') {
+              return http.Response(
+                'calendar',
+                200,
+                headers: {'set-cookie': 'JSESSIONID=fixture; Path=/'},
+              );
+            }
+            final year = Uri.splitQueryString(r.body)['searchKeywordFrom'];
+            return http.Response(
+              year == '2025' ? previous : current,
+              200,
+              headers: {'content-type': 'application/json; charset=utf-8'},
+            );
+          }),
+        );
+
+    test(
+      'does not stop the refresh before the requested year is read',
+      () async {
+        final previous = source(
+          month(1, '2025-12-01', '2025-12-31'),
+          fixture('sangji-2026.json'),
+        );
+        addTearDown(previous.close);
+        final events = await previous.fetch(2026);
+        expect(events, isNotEmpty);
+        expect(events.every((e) => e.end.isAfter(DateTime(2026))), isTrue);
+      },
+    );
+
+    test(
+      'fails when only the previous response reaches the requested year',
+      () async {
+        // January 2026 sits in the 2025 academic-year response, but the 2026
+        // response itself is stale and does not overlap 2026.
+        final stale = source(
+          month(1, '2026-01-05', '2026-01-10'),
+          month(2, '2025-11-01', '2025-11-30'),
+        );
+        addTearDown(stale.close);
+        await expectLater(stale.fetch(2026), throwsFormatException);
+        final empty = source(month(1, '2026-01-05', '2026-01-10'), '[]');
+        addTearDown(empty.close);
+        await expectLater(empty.fetch(2026), throwsFormatException);
+      },
+    );
+
+    test(
+      'still fails when neither response reaches the requested year',
+      () async {
+        final empty = source(
+          month(1, '2025-12-01', '2025-12-31'),
+          month(2, '2025-11-01', '2025-11-30'),
+        );
+        addTearDown(empty.close);
+        await expectLater(empty.fetch(2026), throwsFormatException);
+      },
+    );
+  });
+
   test(
     'Sangji fetch reads both academic years with a sequential session',
     () async {
