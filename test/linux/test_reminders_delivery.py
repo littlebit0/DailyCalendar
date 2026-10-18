@@ -110,6 +110,47 @@ class LockScopeTest(unittest.TestCase):
         reminders.deliver(self.folder, NOW, notify)
         self.assertEqual(json.loads((self.folder / "000.json").read_text()), later)
 
+    def test_a_queued_reminder_cancelled_during_an_earlier_delivery_is_not_announced(self):
+        self.write("000.json", record(1))
+        self.write("001.json", record(2))
+        announced = []
+
+        def notify(value):
+            announced.append(value["id"])
+            (self.folder / "001.json").unlink(missing_ok=True)  # cancelled while 000 is slow
+            return True
+
+        reminders.deliver(self.folder, NOW, notify)
+        self.assertEqual(announced, [1])
+        self.assertFalse((self.folder / "001.json").exists())
+
+    def test_a_queued_reminder_rescheduled_during_an_earlier_delivery_is_not_announced(self):
+        self.write("000.json", record(1))
+        self.write("001.json", record(2))
+        later = record(2, scheduled=NOW + 3600)
+        announced = []
+
+        def notify(value):
+            announced.append(value["id"])
+            self.write("001.json", later)
+            return True
+
+        reminders.deliver(self.folder, NOW, notify)
+        self.assertEqual(announced, [1])
+        self.assertEqual(json.loads((self.folder / "001.json").read_text()), later)
+
+    def test_the_recheck_does_not_hold_the_lock_while_notifying(self):
+        self.write("000.json", record(1))
+        self.write("001.json", record(2))
+        observed = []
+
+        def notify(_value):
+            observed.append(self.lock_is_free())
+            return True
+
+        reminders.deliver(self.folder, NOW, notify)
+        self.assertEqual(observed, [True, True])
+
     def test_a_late_reminder_is_dropped_without_a_notification(self):
         self.write("000.json", record(1, scheduled=NOW - 1000))
         calls = []

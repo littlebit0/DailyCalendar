@@ -92,6 +92,14 @@ def deliver(directory, now, notify):
                 continue
     delivered = []
     for path, raw, record in ready:
+        # An earlier notification may have been slow: a reminder cancelled or
+        # rescheduled in the meantime must not be announced from the old snapshot.
+        try:
+            with locked(directory):
+                if path.read_text() != raw:
+                    continue
+        except Exception:
+            continue
         try:
             if notify(record):
                 delivered.append((path, raw, record))
