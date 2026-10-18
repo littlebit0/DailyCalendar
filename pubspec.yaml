@@ -163,3 +163,8 @@ dependency_overrides:
     path: third_party/flutter_secure_storage_windows
   flutter_inappwebview_windows:
     path: third_party/flutter_inappwebview_windows
+  # #246: page-controlled WebMessage input must not reach force casts.
+  flutter_inappwebview_ios:
+    path: third_party/flutter_inappwebview_ios
+  flutter_inappwebview_macos:
+    path: third_party/flutter_inappwebview_macos
