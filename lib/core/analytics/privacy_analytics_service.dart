@@ -291,6 +291,17 @@ class PrivacyAnalyticsService implements ProductAnalytics {
       return;
     }
     if (!_isAllowedEndpoint(_endpoint)) return;
+    // Retries can outlive the retention period: drop expired events before they
+    // are selected again, and stop the retry timer once nothing is left.
+    final queuedBefore = _queue.length;
+    _pruneQueue();
+    if (_queue.length != queuedBefore) {
+      await _persistQueue();
+      if (_queue.isEmpty) {
+        _retryTimer?.cancel();
+        return;
+      }
+    }
     final now = _now().toUtc();
     final ready = _queue
         .where(

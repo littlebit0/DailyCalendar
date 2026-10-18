@@ -257,4 +257,39 @@ void main() {
     expect(service.pendingEventCount, 0);
     expect(preferences.getString('anonymousAnalyticsQueueV1'), isNull);
   });
+
+  test(
+    'a retry after the retention period does not resend expired events',
+    () async {
+      SharedPreferences.setMockInitialValues({
+        'anonymousAnalyticsEnabled': true,
+      });
+      final preferences = await SharedPreferences.getInstance();
+      var now = DateTime.utc(2026, 10, 1, 12);
+      var accept = false;
+      var posts = 0;
+      final service = PrivacyAnalyticsService(
+        preferences: preferences,
+        endpoint: Uri.parse('https://analytics.example.com/v1/events'),
+        environmentLoader: () async => environment,
+        now: () => now,
+        httpClient: MockClient((request) async {
+          posts += 1;
+          return http.Response('{}', accept ? 202 : 503);
+        }),
+      );
+      addTearDown(service.dispose);
+      await service.initialize();
+      await service.record(AnalyticsRecord.appLoad(durationMs: 25));
+      await service.flush();
+      expect(posts, 1);
+
+      // Eight days later nothing new was recorded, and only the retry runs.
+      now = now.add(const Duration(days: 8));
+      accept = true;
+      await service.flush();
+      expect(posts, 1, reason: 'the expired event must not be sent');
+      expect(preferences.getString('anonymousAnalyticsQueueV1'), isNull);
+    },
+  );
 }
