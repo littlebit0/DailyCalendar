@@ -31,6 +31,9 @@ jobs:
       - name: Test fixture archive safety
         run: python3 -m unittest discover -s tool/tests -p test_prepare_test_fixtures.py -v
 
+      - name: Test Windows tray recovery wiring
+        run: python3 -m unittest discover -s tool/tests -p test_windows_tray_recovery.py -v
+
       - name: Test
         run: flutter test
 

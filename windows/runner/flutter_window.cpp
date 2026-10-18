@@ -17,6 +17,10 @@ constexpr UINT kTrayIconMessage = WM_APP + 1;
 constexpr UINT kTrayOpenCommand = 40001;
 constexpr UINT kTrayExitCommand = 40002;
 constexpr UINT kTrayMiniCalendarCommand = 40003;
+// Distinctive id: other code may also set timers on this window.
+constexpr UINT_PTR kTrayRetryTimerId = 0x7D01;
+constexpr UINT kTrayRetryIntervalMs = 2000;
+constexpr int kTrayRetryMaxAttempts = 10;
 
 using TaskDialogIndirectFn = HRESULT(WINAPI*)(
     const TASKDIALOGCONFIG*, int*, int*, BOOL*);
@@ -60,6 +64,13 @@ bool FlutterWindow::OnCreate() {
   flutter_controller_->ForceRedraw();
 
   taskbar_created_message_ = RegisterWindowMessageW(L"TaskbarCreated");
+  if (taskbar_created_message_ != 0) {
+    // An elevated instance is below Explorer's integrity level otherwise, and
+    // UIPI would drop this broadcast. If the filter cannot be set, the tray is
+    // still re-checked whenever the window is closed (EnsureTrayIcon).
+    ChangeWindowMessageFilterEx(GetHandle(), taskbar_created_message_,
+                                MSGFLT_ALLOW, nullptr);
+  }
   AddTrayIcon();
 
   return true;
@@ -154,6 +165,9 @@ void FlutterWindow::OpenMapChooser(
 }
 
 void FlutterWindow::OnDestroy() {
+  if (GetHandle()) {
+    KillTimer(GetHandle(), kTrayRetryTimerId);
+  }
   RemoveTrayIcon();
   windows_widget_bridge_.reset();
 
@@ -169,18 +183,27 @@ FlutterWindow::MessageHandler(HWND hwnd, UINT const message,
                               WPARAM const wparam,
                               LPARAM const lparam) noexcept {
   if (taskbar_created_message_ != 0 && message == taskbar_created_message_) {
-    // Explorer restarted: the shell forgot the icon, so add it again.
-    tray_icon_added_ = false;
-    AddTrayIcon();
+    // Explorer restarted (or the DPI changed): confirm the icon is still there,
+    // add it when it is not, and never create a duplicate.
+    if (!EnsureTrayIcon()) {
+      BeginTrayRecovery();
+    }
     return 0;
   }
   switch (message) {
+    case WM_TIMER:
+      if (wparam == kTrayRetryTimerId) {
+        ++tray_retry_attempts_;
+        if (EnsureTrayIcon() || tray_retry_attempts_ >= kTrayRetryMaxAttempts) {
+          KillTimer(hwnd, kTrayRetryTimerId);
+          tray_retry_attempts_ = 0;
+        }
+        return 0;
+      }
+      break;
     case WM_CLOSE:
       if (!exit_requested_) {
-        if (!tray_icon_added_) {
-          AddTrayIcon();
-        }
-        if (tray_icon_added_) {
+        if (EnsureTrayIcon()) {
           ShowWindow(hwnd, SW_HIDE);
         } else {
           // Nothing in the tray to restore from: keep a taskbar button instead
@@ -242,12 +265,47 @@ void FlutterWindow::AddTrayIcon() {
   if (tray_icon_added_) {
     return;
   }
+  EnsureTrayIcon();
+}
 
+bool FlutterWindow::EnsureTrayIcon() {
+  HWND hwnd = GetHandle();
+  if (!hwnd) {
+    return false;
+  }
+  FillTrayIconData();
+  // Believed present: confirm. NIM_MODIFY only succeeds for an existing icon.
+  if (tray_icon_added_ && Shell_NotifyIcon(NIM_MODIFY, &notify_icon_data_)) {
+    return true;
+  }
+  if (Shell_NotifyIcon(NIM_ADD, &notify_icon_data_) == TRUE) {
+    tray_icon_added_ = true;
+    notify_icon_data_.uVersion = NOTIFYICON_VERSION_4;
+    Shell_NotifyIcon(NIM_SETVERSION, &notify_icon_data_);
+    return true;
+  }
+  // The add failed: an icon that is already there (for example after a
+  // TaskbarCreated sent for a DPI change) answers to NIM_MODIFY.
+  tray_icon_added_ = Shell_NotifyIcon(NIM_MODIFY, &notify_icon_data_) == TRUE;
+  return tray_icon_added_;
+}
+
+void FlutterWindow::BeginTrayRecovery() {
   HWND hwnd = GetHandle();
   if (!hwnd) {
     return;
   }
+  // With no tray icon a hidden window has no way back: show it as a taskbar
+  // button, then keep trying to restore the icon for a short while.
+  if (!IsWindowVisible(hwnd)) {
+    ShowWindow(hwnd, SW_SHOWMINNOACTIVE);
+  }
+  tray_retry_attempts_ = 0;
+  SetTimer(hwnd, kTrayRetryTimerId, kTrayRetryIntervalMs, nullptr);
+}
 
+void FlutterWindow::FillTrayIconData() {
+  HWND hwnd = GetHandle();
   notify_icon_data_ = {};
   notify_icon_data_.cbSize = sizeof(NOTIFYICONDATA);
   notify_icon_data_.hWnd = hwnd;
@@ -257,12 +315,6 @@ void FlutterWindow::AddTrayIcon() {
   notify_icon_data_.hIcon =
       LoadIcon(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDI_APP_ICON));
   wcscpy_s(notify_icon_data_.szTip, daily::app_identity::kDisplayName);
-
-  tray_icon_added_ = Shell_NotifyIcon(NIM_ADD, &notify_icon_data_) == TRUE;
-  if (tray_icon_added_) {
-    notify_icon_data_.uVersion = NOTIFYICON_VERSION_4;
-    Shell_NotifyIcon(NIM_SETVERSION, &notify_icon_data_);
-  }
 }
 
 void FlutterWindow::RemoveTrayIcon() {
