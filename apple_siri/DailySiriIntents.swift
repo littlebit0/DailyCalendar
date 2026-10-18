@@ -2194,7 +2194,8 @@ private enum DailySiriDatabase {
       whereClause: """
         deleted_at IS NULL AND start_at < ? AND (
           (recurrence_frequency = 'none' AND end_at > ?) OR
-          (recurrence_frequency != 'none' AND (recurrence_until IS NULL OR recurrence_until >= ?))
+          (recurrence_frequency != 'none' AND (recurrence_until IS NULL OR
+            recurrence_until + 172800 + (end_at - start_at) > ?))
         )
         """,
       bindings: [
@@ -2203,6 +2204,9 @@ private enum DailySiriDatabase {
         .integer(Int64(start.timeIntervalSince1970)),
       ]
     )
+    // The SQL above only pre-selects: the until day is inclusive and its last
+    // occurrence can run past it, so keep a two-day margin (DST, time zones)
+    // and let occurrences() decide exactly.
     return baseEvents
       .flatMap { occurrences(of: $0, from: start, to: end) }
       .sorted { $0.startAt < $1.startAt }

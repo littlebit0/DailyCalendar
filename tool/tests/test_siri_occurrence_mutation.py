@@ -32,3 +32,4 @@ class SiriOccurrenceMutationTest(unittest.TestCase):
             result = subprocess.run([str(executable), str(Path(d) / 'events.sqlite'), str(ROOT / 'test/fixtures/recurrence_anchor_cases.json')], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn('Siri occurrence mutation checks passed', result.stdout)
+            self.assertIn('Siri until-day inclusion checks passed', result.stdout)

@@ -1,5 +1,12 @@
 # Daily Google Play 제출 준비
 
+## 2026-10-14 — 4.0.0 준비
+
+- CI 통과 커밋 `e20494b8`에서 서명 Release AAB `dist/google-play/4.0.0/Daily-4.0.0-code-400.aab` 생성. 별도 소스의 versionCode만400으로 설정, 원본 제품 코드/미커밋 변경 유지. 구조·993개 payload 서명·API36·64비트 ELF10개16KB 정렬 검사 통과.
+- 현재Console 최대code350, 업로드 인증서와 로컬키 일치. 과거 인증서 불일치는현재상태에서확인되지않음.
+- 프로덕션 신청은비공개테스터9명/필요12명·14일로잠김. 포그라운드서비스선언미완료, 데이터보안/정책본문갱신·Play서명OAuth등록확인·실기기수락검증필요. 선언/스토어 변경이나 AAB 업로드는하지않음.
+- 상세확인/수정초안/서명지문: `dist/google-play/4.0.0/submission-checklist.md`, `verification.json`, `release-notes-ko.txt`. 증거 `work/google-play-4.0.0-20261014/`. 대학작업중단유지. 아래과거제출정보는현재완료상태가아님.
+
 ## 2026-09-21 비공개 테스트용 3.5.0
 
 - 업로드 차단: 사용자가 Play Console에 제출했으나 업로드 키 불일치로 거절됨.
