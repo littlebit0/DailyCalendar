@@ -56,9 +56,18 @@ class LocalNotificationService implements NotificationService {
     required SettingsRepository settingsRepository,
     required EventRepository eventRepository,
     FlutterLocalNotificationsPlugin? plugin,
+    @visibleForTesting int? pendingRequestLimit,
   }) : _settingsRepository = settingsRepository,
        _eventRepository = eventRepository,
+       _pendingRequestLimit = pendingRequestLimit,
        _plugin = plugin ?? FlutterLocalNotificationsPlugin();
+
+  final int? _pendingRequestLimit;
+
+  /// The app-wide pending request cap: iOS's 64, or a test override.
+  int? get _pendingLimit =>
+      _pendingRequestLimit ??
+      (defaultTargetPlatform == TargetPlatform.iOS ? _iosPendingLimit : null);
 
   static const _briefingId = 800000;
   static const _briefingScheduleDays = 14;
@@ -218,13 +227,7 @@ class LocalNotificationService implements NotificationService {
 
     for (final offset
         in event.showDday ? settings.dDayReminderOffsets.toSet() : <int>{}) {
-      final scheduled = DateTime(
-        event.startAt.year,
-        event.startAt.month,
-        event.startAt.day,
-        settings.allDayReminderHour,
-        settings.allDayReminderMinute,
-      ).add(Duration(days: offset));
+      final scheduled = _ddayReminderTime(event, settings, offset);
       await _deliverPlan(
         id: await _settingsRepository.notificationId(
           '${event.id}:dday:$offset',
@@ -242,6 +245,50 @@ class LocalNotificationService implements NotificationService {
         _legacyIds(event.id, reminderMinutesList),
         exceptEventId: event.id,
       );
+      await _trimOtherRepeatingSlots(settings, event.id);
+    }
+  }
+
+  DateTime _ddayReminderTime(
+    CalendarEvent event,
+    AppSettings settings,
+    int offset,
+  ) => DateTime(
+    event.startAt.year,
+    event.startAt.month,
+    event.startAt.day,
+    settings.allDayReminderHour,
+    settings.allDayReminderMinute,
+  ).add(Duration(days: offset));
+
+  /// Saving or editing one event can use up room the other repeating events
+  /// were holding. Re-share the app-wide limit by cancelling their slots that
+  /// no longer fit, so pending requests never exceed it until the next restart.
+  Future<void> _trimOtherRepeatingSlots(
+    AppSettings settings,
+    String exceptEventId,
+  ) async {
+    final allowance = await _repeatingSlotAllowance(settings);
+    if (allowance == null) return;
+    for (final entry in allowance.entries) {
+      if (entry.key.startsWith('$exceptEventId:reminder:')) continue;
+      await _cancelSlotsFrom(entry.key, entry.value);
+    }
+  }
+
+  /// Cancels slot [fromSlot] and later of one `<id>:reminder:<min>` key.
+  Future<void> _cancelSlotsFrom(String baseKey, int fromSlot) async {
+    final existing = _settingsRepository.notificationIdsWithPrefix(baseKey);
+    for (final entry in existing.entries) {
+      final suffix = entry.key.substring(baseKey.length);
+      final slot = suffix.isEmpty
+          ? 0
+          : suffix.startsWith(':s')
+          ? int.tryParse(suffix.substring(2))
+          : null;
+      if (slot != null && slot >= fromSlot) {
+        await _cancelPendingNotification(entry.value);
+      }
     }
   }
 
@@ -262,7 +309,8 @@ class LocalNotificationService implements NotificationService {
   Future<Map<String, int>?> _repeatingSlotAllowance(
     AppSettings settings,
   ) async {
-    if (defaultTargetPlatform != TargetPlatform.iOS) return null;
+    final limit = _pendingLimit;
+    if (limit == null) return null;
     final now = DateTime.now();
     var fixed = settings.morningBriefingEnabled ? _briefingScheduleDays : 0;
     final candidates = <MapEntry<String, DateTime>>[];
@@ -275,7 +323,10 @@ class LocalNotificationService implements NotificationService {
         continue;
       }
       if (other.showDday) {
-        fixed += settings.dDayReminderOffsets.toSet().length;
+        // Only D-day reminders that are still in the future are pending.
+        for (final offset in settings.dDayReminderOffsets.toSet()) {
+          if (_ddayReminderTime(other, settings, offset).isAfter(now)) fixed++;
+        }
       }
       for (final minutes in other.reminderMinutesBeforeList) {
         if (!other.recurrence.isRepeating) {
@@ -305,7 +356,7 @@ class LocalNotificationService implements NotificationService {
         keys.add(key);
       }
     }
-    var room = (_iosPendingLimit - fixed).clamp(0, _iosPendingLimit);
+    var room = (limit - fixed).clamp(0, limit);
     // Earliest first, so each key keeps a contiguous prefix of its slots.
     candidates.sort((a, b) => a.value.compareTo(b.value));
     final allowance = {for (final key in keys) key: 0};
@@ -359,19 +410,7 @@ class LocalNotificationService implements NotificationService {
       );
     }
     // Slots past the planned requests (an excluded, deleted or ended occurrence).
-    final planned = requests.length;
-    final existing = _settingsRepository.notificationIdsWithPrefix(baseKey);
-    for (final entry in existing.entries) {
-      final suffix = entry.key.substring(baseKey.length);
-      final slot = suffix.isEmpty
-          ? 0
-          : suffix.startsWith(':s')
-          ? int.tryParse(suffix.substring(2))
-          : null;
-      if (slot != null && slot >= planned) {
-        await _cancelPendingNotification(entry.value);
-      }
-    }
+    await _cancelSlotsFrom(baseKey, requests.length);
     return deliveredImmediateReminder;
   }
 

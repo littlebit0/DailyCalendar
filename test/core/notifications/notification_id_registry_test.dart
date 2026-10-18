@@ -335,4 +335,129 @@ void main() {
     debugDefaultTargetPlatformOverride = TargetPlatform.android;
     expect(await service.repeatingSlotAllowance(settings.load()), isNull);
   });
+
+  CalendarEvent dailySeries(String id, DateTime start) => CalendarEvent(
+    id: id,
+    title: id,
+    startAt: start,
+    endAt: start.add(const Duration(hours: 1)),
+    allDay: false,
+    category: EventCategory.basic,
+    colorValue: EventCategory.basic.colorValue,
+    createdAt: start,
+    updatedAt: start,
+    reminderMinutesBeforeList: [10],
+    recurrence: const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+  );
+
+  test('past D-day events do not use up the pending request budget', () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final past = DateTime.now().subtract(const Duration(days: 60));
+    for (var i = 0; i < 13; i++) {
+      await repository.save(
+        CalendarEvent(
+          id: 'old-dday-$i',
+          title: 'old',
+          startAt: past,
+          endAt: past.add(const Duration(hours: 1)),
+          allDay: true,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: past,
+          updatedAt: past,
+          showDday: true,
+        ),
+      );
+    }
+    await repository.save(
+      dailySeries('future', DateTime.now().add(const Duration(days: 1))),
+    );
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    final service = LocalNotificationService(
+      settingsRepository: settings,
+      eventRepository: repository,
+    );
+    final allowance = (await service.repeatingSlotAllowance(settings.load()))!;
+    // 13 past D-day events (4 offsets each) used to leave no room at all.
+    expect(allowance['future:reminder:10'], greaterThan(0));
+  });
+
+  test('adding events keeps all pending requests within the shared limit', () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final pending = <int, String>{};
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    const channel = MethodChannel('daily/native_notifications');
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async {
+          if (call.method == 'initialize') return true;
+          final args = call.arguments as Map;
+          if (call.method == 'schedule') {
+            pending[args['id'] as int] = args['payload'] as String;
+          }
+          if (call.method == 'cancel' || call.method == 'cancelPending') {
+            pending.remove(args['id']);
+          }
+          return null;
+        });
+    addTearDown(() {
+      debugDefaultTargetPlatformOverride = null;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null);
+    });
+    final base = settings.load();
+    await settings.save(
+      base.copyWith(morningBriefingEnabled: false),
+      changedFrom: base,
+    );
+    const limit = 20;
+    final service = LocalNotificationService(
+      settingsRepository: settings,
+      eventRepository: repository,
+      pendingRequestLimit: limit,
+    );
+    final start = DateTime.now().add(const Duration(days: 1));
+    for (var i = 0; i < 6; i++) {
+      // Each later series starts earlier, so it takes slots from the others.
+      final event = dailySeries('s$i', start.subtract(Duration(hours: i)));
+      await repository.save(event);
+      await service.scheduleEventReminder(event);
+      expect(
+        pending.length,
+        lessThanOrEqualTo(limit),
+        reason: 'after adding series $i',
+      );
+      expect(pending.values, contains('s$i:reminder:10'));
+    }
+    // A single-shot event also claims room that repeating events must release.
+    final single = start.add(const Duration(days: 3));
+    final shot = CalendarEvent(
+      id: 'single',
+      title: 'single',
+      startAt: single,
+      endAt: single.add(const Duration(hours: 1)),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: single,
+      updatedAt: single,
+      reminderMinutesBeforeList: [10, 30],
+    );
+    await repository.save(shot);
+    await service.scheduleEventReminder(shot);
+    expect(pending.length, lessThanOrEqualTo(limit));
+    expect(pending.values, contains('single:reminder:10'));
+  });
 }
