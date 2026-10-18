@@ -13,6 +13,7 @@
 #include "../utils/vector.h"
 #include "../webview_environment/webview_environment_manager.h"
 #include "in_app_webview_manager.h"
+#include "../headless_in_app_webview/headless_in_app_webview_manager.h"
 
 namespace flutter_inappwebview_plugin
 {
@@ -103,6 +104,7 @@ namespace flutter_inappwebview_plugin
     auto initialUserScriptList = get_optional_fl_map_value<flutter::EncodableList>(*arguments, "initialUserScripts");
     auto webViewEnvironmentId = get_optional_fl_map_value<std::string>(*arguments, "webViewEnvironmentId");
     auto keepAliveId = get_optional_fl_map_value<std::string>(*arguments, "keepAliveId");
+    auto headlessWebViewId = get_optional_fl_map_value<std::string>(*arguments, "headlessWebViewId");
     auto windowId = get_optional_fl_map_value<int64_t>(*arguments, "windowId");
 
     RECT bounds;
@@ -177,6 +179,23 @@ namespace flutter_inappwebview_plugin
             std::move(inAppWebView));
 
           auto textureId = customPlatformView->texture_id();
+
+          // Daily #242: this visible view is a new WebView, so the running headless
+          // original it replaces must be released here, or it stays in the headless
+          // manager map with nothing left to dispose it.
+          if (headlessWebViewId.has_value() && plugin->headlessInAppWebViewManager) {
+            auto& headlessViews = plugin->headlessInAppWebViewManager->webViews;
+            if (map_contains(headlessViews, headlessWebViewId.value())) {
+              auto& headless = headlessViews.at(headlessWebViewId.value());
+              if (headless->channelDelegate) {
+                headless->channelDelegate->UnregisterMethodCallHandler();
+                if (headless->webView && headless->webView->channelDelegate) {
+                  headless->webView->channelDelegate->UnregisterMethodCallHandler();
+                }
+              }
+              headlessViews.erase(headlessWebViewId.value());
+            }
+          }
 
           if (keepAliveId.has_value()) {
             customPlatformView->view->initChannel(keepAliveId.value(), std::nullopt);

@@ -7259,6 +7259,79 @@ void main() {
     });
   }
 
+  testWidgets('queued category order save survives closing settings', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    FlutterSecureStorage.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final firstSaveGate = Completer<void>();
+    final settingsRepository = _GatedSettingsRepository(
+      preferences,
+      firstSaveGate,
+    );
+    final authService = _FakeGoogleDriveAuthService(account: null);
+    final notificationService = _FakeNotification();
+    final eventRepository = _FakeEventRepository();
+    final driveSyncService = _FakeGoogleDriveSyncService(
+      authService: authService,
+      eventRepository: eventRepository,
+      notificationService: notificationService,
+      settingsRepository: settingsRepository,
+    );
+    final overrides = [
+      universityRegionsProvider.overrideWith(
+        (ref) async => UniversityRegions.fromJson(
+          jsonDecode(
+                File(
+                  'assets/academic/university_regions.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>,
+        ),
+      ),
+      settingsRepositoryProvider.overrideWithValue(settingsRepository),
+      notificationServiceProvider.overrideWithValue(notificationService),
+      syncServiceProvider.overrideWithValue(_FakeSync()),
+      eventRepositoryProvider.overrideWithValue(eventRepository),
+      googleDriveAuthServiceProvider.overrideWithValue(authService),
+      googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+    ];
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: overrides,
+        child: const MaterialApp(home: SettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('category-settings-navigation')),
+    );
+    await tester.pumpAndSettle();
+    void reorder() => tester
+        .widget<ReorderableListView>(
+          find.byKey(const ValueKey('category-reorder-list')),
+        )
+        .onReorderItem!(0, 1);
+    reorder();
+    await tester.pump();
+    reorder();
+    await tester.pump();
+    // Close the settings screen while the first save is still pending.
+    await tester.pumpWidget(const SizedBox.shrink());
+    firstSaveGate.complete();
+    await tester.pumpAndSettle();
+    // Two swaps return to the original order; the second one must be on disk.
+    expect(
+      settingsRepository.load().categories.map((category) => category.id),
+      [EventCategory.basic.id, EventCategory.holiday.id],
+    );
+  });
+
   testWidgets('category RGB picker renders above the category editor', (
     tester,
   ) async {
@@ -9356,6 +9429,28 @@ class _FakeNotification implements NotificationService {
 
   @override
   Future<String> permissionSummary() async => '테스트 권한 · 예약 0개';
+}
+
+class _GatedSettingsRepository extends SettingsRepository {
+  _GatedSettingsRepository(SharedPreferences preferences, this.firstSaveGate)
+    : super(preferences: preferences);
+
+  final Completer<void> firstSaveGate;
+  var _saves = 0;
+
+  @override
+  Future<void> save(
+    AppSettings settings, {
+    bool markSyncPending = true,
+    AppSettings? changedFrom,
+  }) async {
+    if (_saves++ == 0) await firstSaveGate.future;
+    return super.save(
+      settings,
+      markSyncPending: markSyncPending,
+      changedFrom: changedFrom,
+    );
+  }
 }
 
 class _FakeSync implements SyncService {

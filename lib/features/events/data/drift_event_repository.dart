@@ -477,6 +477,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       recurrenceUntil: Value(event.recurrence.until),
       recurrenceCount: Value(event.recurrence.count),
       recurrenceAnchorDay: Value(event.recurrence.anchorDay),
+      recurrenceDetails: Value(event.recurrence.detailsJson),
       recurrenceExcludedDates: Value(
         jsonEncode(
           event.recurrence.excludedDates

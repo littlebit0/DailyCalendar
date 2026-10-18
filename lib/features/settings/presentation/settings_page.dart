@@ -1950,22 +1950,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     ref.read(appSettingsProvider.notifier).state = updated;
 
     final revision = ++_categoryReorderRevision;
+    // Queued saves outlive this screen, so take everything they need now:
+    // a disposed WidgetRef cannot be read once the screen has been closed.
+    final repository = ref.read(settingsRepositoryProvider);
+    final settingsState = ref.read(appSettingsProvider.notifier);
+    final syncService = ref.read(googleDriveSyncServiceProvider);
+    final messenger = ScaffoldMessenger.of(context);
+    final failureMessage = context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.');
     _categoryReorderSaveQueue = _categoryReorderSaveQueue.then((_) async {
       try {
-        await ref
-            .read(settingsRepositoryProvider)
-            .save(updated, changedFrom: settings);
+        await repository.save(updated, changedFrom: settings);
         if (revision == _categoryReorderRevision) {
-          _queueCategoryBackup();
+          unawaited(syncService.syncPendingChangesNow().catchError((_) {}));
         }
       } on Object {
-        if (!mounted || revision != _categoryReorderRevision) {
+        if (revision != _categoryReorderRevision) {
           return;
         }
-        ref.read(appSettingsProvider.notifier).state = settings;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(context.tr('선택을 저장하지 못했습니다. 다시 시도해 주세요.'))),
-        );
+        settingsState.state = settings;
+        if (mounted) {
+          messenger.showSnackBar(SnackBar(content: Text(failureMessage)));
+        }
       }
     });
   }

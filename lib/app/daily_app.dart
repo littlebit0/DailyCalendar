@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'coalescing_runner.dart';
 import '../core/di/app_providers.dart';
 import '../core/alarms/alarm_service.dart';
 import '../core/lms/lms_controller.dart';
@@ -723,8 +724,15 @@ class _AppHomeState extends ConsumerState<_AppHome>
   Future<void>? _academicRefreshOperation;
   ValueNotifier<int>? _settingsRevisionNotifier;
   VoidCallback? _settingsRevisionListener;
-  Future<void>? _siriChangeProcessing;
-  Future<void>? _widgetTodoProcessing;
+  late final CoalescingRunner _siriChangeRunner = CoalescingRunner(() {
+    final showFailure = _siriShowFailure;
+    _siriShowFailure = false;
+    return _processPendingSiriEventChangesImpl(showFailure);
+  });
+  late final CoalescingRunner _widgetTodoRunner = CoalescingRunner(
+    _processPendingWidgetTodoActionsImpl,
+  );
+  var _siriShowFailure = false;
   StreamSubscription<void>? _widgetTodoChangesSubscription;
 
   @override
@@ -794,28 +802,12 @@ class _AppHomeState extends ConsumerState<_AppHome>
   }
 
   Future<void> _processPendingSiriEventChanges({bool showFailure = false}) {
-    final active = _siriChangeProcessing;
-    if (active != null) return active;
-    final operation = _processPendingSiriEventChangesImpl(showFailure);
-    _siriChangeProcessing = operation;
-    return operation.whenComplete(() {
-      if (identical(_siriChangeProcessing, operation)) {
-        _siriChangeProcessing = null;
-      }
-    });
+    _siriShowFailure = _siriShowFailure || showFailure;
+    return _siriChangeRunner.request();
   }
 
-  Future<void> _processPendingWidgetTodoActions() {
-    final active = _widgetTodoProcessing;
-    if (active != null) return active;
-    final operation = _processPendingWidgetTodoActionsImpl();
-    _widgetTodoProcessing = operation;
-    return operation.whenComplete(() {
-      if (identical(_widgetTodoProcessing, operation)) {
-        _widgetTodoProcessing = null;
-      }
-    });
-  }
+  Future<void> _processPendingWidgetTodoActions() =>
+      _widgetTodoRunner.request();
 
   Future<void> _processPendingWidgetTodoActionsImpl() async {
     final widgetService = ref.read(calendarWidgetServiceProvider);
@@ -825,8 +817,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
     final repository = ref.read(visibleEventRepositoryProvider);
     final commandService = ref.read(eventCommandServiceProvider);
     final acknowledged = <String>[];
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    final alreadyApplied = settingsRepository.appliedWidgetActionTokens();
+    final appliedNow = <String>[];
     var staleOccurrence = false;
     for (final action in actions) {
+      if (alreadyApplied.contains(action.token)) {
+        // Applied before; only its acknowledgement was missing.
+        acknowledged.add(action.token);
+        continue;
+      }
       final event = await repository.findById(action.eventId);
       if (event == null || event.isDeleted) {
         acknowledged.add(action.token);
@@ -841,8 +841,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
       try {
         await commandService.setCompleted(target, action.completed);
         acknowledged.add(action.token);
+        appliedNow.add(action.token);
       } on Object {
         break;
+      }
+    }
+    if (appliedNow.isNotEmpty) {
+      try {
+        await settingsRepository.rememberAppliedWidgetActionTokens(appliedNow);
+      } on Object {
+        // Best effort: the acknowledgement below is still attempted.
       }
     }
     await widgetService.acknowledgeTodoActions(acknowledged);

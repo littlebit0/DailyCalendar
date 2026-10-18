@@ -33,6 +33,30 @@ class SettingsRepository {
        _now = now ?? DateTime.now;
 
   static const _notificationCleanupKey = 'notificationCleanup.v1';
+  static const _appliedWidgetActionsKey = 'widgetAppliedActionTokens.v1';
+  static const _appliedWidgetActionsLimit = 200;
+
+  /// Widget action tokens already applied to the database. A token that is
+  /// delivered again (its acknowledgement could not be saved) must not
+  /// overwrite a newer choice the user made in the app.
+  Set<String> appliedWidgetActionTokens() =>
+      (_preferences.getStringList(_appliedWidgetActionsKey) ?? const <String>[])
+          .toSet();
+
+  Future<void> rememberAppliedWidgetActionTokens(
+    Iterable<String> tokens,
+  ) async {
+    final merged = <String>[
+      ...(_preferences.getStringList(_appliedWidgetActionsKey) ??
+          const <String>[]),
+      ...tokens,
+    ];
+    final trimmed = merged.length > _appliedWidgetActionsLimit
+        ? merged.sublist(merged.length - _appliedWidgetActionsLimit)
+        : merged;
+    await _preferences.setStringList(_appliedWidgetActionsKey, trimmed);
+  }
+
   String? get notificationCleanupJournal =>
       _preferences.getString(_notificationCleanupKey);
 
@@ -95,7 +119,7 @@ class SettingsRepository {
 
   int? existingNotificationId(String key) => _notificationIds()[key];
 
-  /// Every registered notification id whose logical key starts with [prefix].
+  /// Allocated notification ids whose logical key starts with [prefix].
   Map<String, int> notificationIdsWithPrefix(String prefix) => {
     for (final entry in _notificationIds().entries)
       if (entry.key.startsWith(prefix)) entry.key: entry.value,

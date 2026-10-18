@@ -320,6 +320,8 @@ void main() {
         );
         (payload['event'] as Map)['recurrenceFrequency'] = 'monthly';
         (payload['event'] as Map)['recurrenceAnchorDay'] = 31;
+        (payload['event'] as Map)['recurrenceDetails'] =
+            '{"byDay":["2TU"],"bySetPos":[1]}';
         return _jsonResponse(payload);
       }
       if (request.method == 'GET' &&
@@ -352,6 +354,8 @@ void main() {
     final saved = {for (final event in repository.events) event.id: event};
     expect(saved['iphone-all-day']!.allDay, isTrue);
     expect(saved['iphone-all-day']!.recurrence.anchorDay, 31);
+    expect(saved['iphone-all-day']!.recurrence.byDay, ['2TU']);
+    expect(saved['iphone-all-day']!.recurrence.bySetPos, [1]);
     expect(saved['iphone-all-day']!.startAt, DateTime(2026, 6, 1));
     expect(saved['iphone-all-day']!.endAt, DateTime(2026, 6, 2));
     expect(saved['iphone-all-day-offset']!.allDay, isTrue);
@@ -631,6 +635,7 @@ void main() {
             recurrence: const RecurrenceRule(
               frequency: RecurrenceFrequency.monthly,
               anchorDay: 31,
+              byDay: ['MO', 'WE'],
             ),
           );
       await repository.save(changed);
@@ -700,6 +705,7 @@ void main() {
       expect(event['title'], '6.20~21 캠핑 약속');
       expect(event['completed'], isTrue);
       expect(event['recurrenceAnchorDay'], 31);
+      expect(event['recurrenceDetails'], '{"byDay":["MO","WE"]}');
       expect((await repository.findById('queued-event'))!.syncStatus, 'synced');
       expect(
         requests.any(
@@ -1565,6 +1571,7 @@ void main() {
             'type': 'settings',
             'settings': {
               'defaultReminderMinutesList': [0, 10, 60],
+              'dDayReminderOffsets': <int>[],
               'categories': [
                 {
                   'id': 'basic',
@@ -1630,6 +1637,8 @@ void main() {
         CalendarEventSortPriority.category,
       );
       expect(restored.defaultReminderMinutesList, [0, 10, 60]);
+      // Switching every D-day reminder off is a choice, not a missing field.
+      expect(restored.dDayReminderOffsets, isEmpty);
       expect(restored.appTextSize, AppTextSize.large);
       expect(restored.appStartView, AppStartView.quickView);
       expect(restored.weekDayLayoutMode, WeekDayLayoutMode.schedule);
