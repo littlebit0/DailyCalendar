@@ -31,6 +31,17 @@ typedef void (^GeolocatorResult)(CLLocation *_Nullable location);
                             resultHandler:(GeolocatorResult _Nonnull)resultHandler
                              errorHandler:(GeolocatorError _Nonnull)errorHandler;
 
+/// Like the request above, but remembers which request owns the one-time
+/// manager so only that request can cancel it.
+- (void)requestPositionWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
+                                 requestId:(NSString *_Nullable)requestId
+                             resultHandler:(GeolocatorResult _Nonnull)resultHandler
+                              errorHandler:(GeolocatorError _Nonnull)errorHandler;
+
+/// Stops the one-time manager only if [requestId] still owns it (a newer
+/// request replaced it otherwise). Returns whether anything was stopped.
+- (BOOL)cancelOneTimeRequestWithId:(NSString *_Nullable)requestId;
+
 - (void)stopOneTimeLocationListening;
 - (void)stopListening;
 + (BOOL) shouldEnableBackgroundLocationUpdates;

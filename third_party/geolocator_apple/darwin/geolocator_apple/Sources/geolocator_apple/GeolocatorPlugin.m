@@ -93,8 +93,11 @@
     [self onGetCurrentPositionWithArguments:call.arguments
                                      result:result];
   } else if ([@"cancelGetCurrentPosition" isEqualToString:call.method]) {
-    // Daily patch (#227): stop the one-time manager after a Dart-side timeout.
-    [[self createGeolocationHandler] stopOneTimeLocationListening];
+    // Daily patch (#227): stop the one-time manager after a Dart-side timeout,
+    // but only when the request that timed out still owns it.
+    NSDictionary *arguments = [call.arguments isKindOfClass:[NSDictionary class]]
+        ? call.arguments : nil;
+    [[self createGeolocationHandler] cancelOneTimeRequestWithId:arguments[@"requestId"]];
     result(nil);
   } else if([@"getLocationAccuracy" isEqualToString:call.method]) {
     [[self createLocationAccuracyHandler] getLocationAccuracyWithResult:result];
@@ -161,7 +164,10 @@
   CLLocationAccuracy accuracy = [LocationAccuracyMapper toCLLocationAccuracy:(NSNumber *)arguments[@"accuracy"]];
   GeolocationHandler *geolocationHandler = [self createGeolocationHandler];
   
+  NSString *requestId = [arguments isKindOfClass:[NSDictionary class]]
+      ? ((NSDictionary *)arguments)[@"requestId"] : nil;
   [geolocationHandler requestPositionWithDesiredAccuracy:accuracy
+                                               requestId:requestId
                                            resultHandler:^(CLLocation *location) {
     result([LocationMapper toDictionary:location]);
   }

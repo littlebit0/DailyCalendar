@@ -6,6 +6,8 @@ import 'package:geolocator_platform_interface/geolocator_platform_interface.dart
 
 /// An implementation of [GeolocatorPlatform] that uses method channels.
 class GeolocatorApple extends GeolocatorPlatform {
+  static int _nextRequestId = 0;
+
   /// The method channel used to interact with the native platform.
   static const _methodChannel =
       MethodChannel('flutter.baseflow.com/geolocator_apple');
@@ -104,17 +106,26 @@ class GeolocatorApple extends GeolocatorPlatform {
       Future<dynamic> positionFuture;
 
       var timeLimit = locationSettings?.timeLimit;
+      // Daily patch (#227): the id lets a timeout cancel only its own lookup.
+      final requestId = '${_nextRequestId++}';
+      final arguments = <String, dynamic>{
+        ...?locationSettings?.toJson(),
+        'requestId': requestId,
+      };
 
       if (timeLimit != null) {
         positionFuture = _methodChannel
             .invokeMethod(
               'getCurrentPosition',
-              locationSettings?.toJson(),
+              arguments,
             )
             .timeout(timeLimit, onTimeout: () async {
-          // Daily patch (#227): a timed-out request must stop native updates.
+          // A timed-out request must stop its native updates.
           try {
-            await _methodChannel.invokeMethod<void>('cancelGetCurrentPosition');
+            await _methodChannel.invokeMethod<void>(
+              'cancelGetCurrentPosition',
+              {'requestId': requestId},
+            );
           } on Object {
             // Cancelling is best effort; the timeout is still reported.
           }
@@ -126,7 +137,7 @@ class GeolocatorApple extends GeolocatorPlatform {
       } else {
         positionFuture = _methodChannel.invokeMethod(
           'getCurrentPosition',
-          locationSettings?.toJson(),
+          arguments,
         );
       }
 

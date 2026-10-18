@@ -20,6 +20,7 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 @property(strong, nonatomic) GeolocatorError oneTimeErrorHandler;
 
 @property(strong, nonatomic) GeolocatorResult currentLocationResultHandler;
+@property(copy, nonatomic) NSString *currentRequestId;
 @property(strong, nonatomic) GeolocatorResult listenerResultHandler;
 
 @end
@@ -73,6 +74,17 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
 - (void)requestPositionWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
                              resultHandler:(GeolocatorResult _Nonnull)resultHandler
                               errorHandler:(GeolocatorError _Nonnull)errorHandler {
+  [self requestPositionWithDesiredAccuracy:desiredAccuracy
+                                 requestId:nil
+                             resultHandler:resultHandler
+                              errorHandler:errorHandler];
+}
+
+- (void)requestPositionWithDesiredAccuracy:(CLLocationAccuracy)desiredAccuracy
+                                 requestId:(NSString *)requestId
+                             resultHandler:(GeolocatorResult _Nonnull)resultHandler
+                              errorHandler:(GeolocatorError _Nonnull)errorHandler {
+  self.currentRequestId = requestId;
   self.oneTimeErrorHandler = errorHandler;
   self.currentLocationResultHandler = resultHandler;
   
@@ -141,10 +153,21 @@ double const kMaxLocationLifeTimeInSeconds = 5.0;
   }
 }
 
+- (BOOL)cancelOneTimeRequestWithId:(NSString *)requestId {
+  // Daily patch (#227): an unknown or older request must not stop the newer
+  // lookup that has since taken over the shared one-time manager.
+  if (requestId == nil || ![requestId isEqualToString:self.currentRequestId]) {
+    return NO;
+  }
+  [self stopOneTimeLocationListening];
+  return YES;
+}
+
 - (void)stopOneTimeLocationListening {
   [[self getOneTimeLocationManager] stopUpdatingLocation];
   self.oneTimeErrorHandler = nil;
   self.currentLocationResultHandler = nil;
+  self.currentRequestId = nil;
 }
 
 - (void)stopListening {
