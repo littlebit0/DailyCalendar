@@ -82,6 +82,8 @@ OPTIONAL_SCHEMAS = {
         "slow_interaction_detected", "frame_summary", "startup_milestone",
     )
 }
+for _name in ("event_save_succeeded", "event_save_failed"):
+    OPTIONAL_SCHEMAS[_name]["phase"] = "phase"
 
 SCHEMAS = {
     "app_load_completed": {"durationMs": "duration"},
@@ -91,12 +93,10 @@ SCHEMAS = {
     "event_editor_completed": {
         "mode": "mode", "outcome": "outcome", "durationMs": "duration",
     },
-    "event_save_succeeded": {
-        "operation": "operation", "phase": "phase", "durationMs": "duration",
-    },
+    # `phase` is sent by newer apps only; apps before it send neither value.
+    "event_save_succeeded": {"operation": "operation", "durationMs": "duration"},
     "event_save_failed": {
-        "operation": "operation", "phase": "phase", "durationMs": "duration",
-        "errorCode": "errorCode",
+        "operation": "operation", "durationMs": "duration", "errorCode": "errorCode",
     },
     "feature_used": {"feature": "feature", "outcome": "outcome"},
     "sync_started": {"operation": "syncOperation", "trigger": "trigger"},
@@ -170,6 +170,9 @@ def valid_event(event):
         return False
     kinds = {**optional, **schema}
     if not all(_valid_value(kinds[key], value) for key, value in attributes.items()):
+        return False
+    # The flag means the real duration was longer than the cap and was cut to it.
+    if "durationTruncated" in attributes and attributes["durationMs"] != 120000:
         return False
     if event["name"] == "frame_summary" and attributes["slowFrameCount"] > attributes["frameCount"]:
         return False

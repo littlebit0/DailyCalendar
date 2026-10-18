@@ -106,4 +106,39 @@ void main() {
       isFalse,
     );
   });
+
+  test('the flag is only valid together with the capped duration', () {
+    Map<String, Object?> event(int ms, {bool flag = true}) => {
+      'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+      'name': 'app_load_completed',
+      'occurredAt': '2026-10-19T00:00:00Z',
+      'attributes': {'durationMs': ms, if (flag) 'durationTruncated': true},
+    };
+    expect(isSafeAnalyticsEvent(event(120000)), isTrue);
+    expect(isSafeAnalyticsEvent(event(5)), isFalse);
+    expect(isSafeAnalyticsEvent(event(119999)), isFalse);
+    expect(isSafeAnalyticsEvent(event(5, flag: false)), isTrue);
+  });
+
+  test('event_save records without a phase (older apps) stay valid', () {
+    Map<String, Object?> save(Map<String, Object?> attributes) => {
+      'eventId': 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+      'name': 'event_save_succeeded',
+      'occurredAt': '2026-10-19T00:00:00Z',
+      'attributes': attributes,
+    };
+    expect(isSafeAnalyticsEvent(save({'operation': 'create', 'durationMs': 5})), isTrue);
+    expect(
+      isSafeAnalyticsEvent(
+        save({'operation': 'create', 'phase': 'database', 'durationMs': 5}),
+      ),
+      isTrue,
+    );
+    expect(
+      isSafeAnalyticsEvent(
+        save({'operation': 'create', 'phase': 'later', 'durationMs': 5}),
+      ),
+      isFalse,
+    );
+  });
 }
