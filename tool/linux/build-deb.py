@@ -77,7 +77,7 @@ def build(bundle, output, version, arch):
              "--ignore-missing-info", *[f"-e{p}" for p in elfs]], cwd=root, text=True)
         dependencies = next(line.split("=", 1)[1] for line in result.splitlines()
                             if line.startswith("shlibs:Depends="))
-        dependencies += ", ca-certificates, gpgv, apt (>= 2.0), systemd, util-linux, procps, xdg-utils, python3, libnotify-bin, default-dbus-session-bus | dbus-session-bus, gnome-keyring | kwallet6 | kwalletmanager"
+        dependencies += ", ca-certificates, gpgv, apt (>= 2.0), systemd, util-linux, procps, xdg-utils, python3, default-dbus-session-bus | dbus-session-bus, gnome-keyring | kwallet6 | kwalletmanager"
         (root / "DEBIAN/control").write_text(
             f"Package: dailycalendar\nVersion: {version}\nArchitecture: {arch}\n"
             "Maintainer: littlebit0 <166241069+littlebit0@users.noreply.github.com>\n"
