@@ -4,6 +4,7 @@ import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 
 import 'academic_source.dart';
+import 'month_structure.dart';
 
 DateTime _date(String value) {
   final match = RegExp(r'^(\d{4})-(\d{2})-(\d{2})').firstMatch(value);
@@ -86,6 +87,13 @@ abstract class _K2Annual extends _Source {
     if (doc.querySelector('#year')?.attributes['value'] != '$year') {
       throw const FormatException('Unexpected K2Web calendar year');
     }
+    // Observed 2019-2027 on both schools: all twelve month headings are sent
+    // even when a month has no events, so a missing or repeated month means a
+    // damaged response.
+    requireTwelveMonths(
+      doc.querySelectorAll('#timeTableList h3').map((node) => node.text),
+      'K2Web',
+    );
     final events = <AcademicEvent>[];
     for (final row in doc.querySelectorAll('#timeTableList dt')) {
       final title = row.nextElementSibling;
