@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 import 'academic_source.dart';
+import 'month_structure.dart';
 import 'eulji_calendar_transport_stub.dart'
     if (dart.library.io) 'eulji_calendar_transport_io.dart'
     as eulji_transport;
@@ -95,6 +96,13 @@ class InjeAcademicSource extends _PublicSource {
     if (doc.querySelector('.yearPart h4')?.text.trim() != '$year년') {
       throw const FormatException('Unexpected INJE calendar year');
     }
+    // Observed 2019-2027: the server always sends twelve month cards, and a
+    // month without events is an empty card, so a missing, repeated or
+    // misnumbered card means a damaged response.
+    requireTwelveMonths(
+      doc.querySelectorAll('.monthCard .monthNum').map((node) => node.text),
+      'INJE',
+    );
     final events = <AcademicEvent>[];
     for (final row in doc.querySelectorAll('.eventList li')) {
       final title = row.querySelector('.titleTxt')?.text;
