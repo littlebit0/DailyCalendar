@@ -113,6 +113,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   var _appleMessage = '';
   var _appleBusy = false;
   var _bugReportBusy = false;
+  // Kept when a submission fails, so the text is not lost.
+  BugReportDraft? _unsentBugReportDraft;
   var _deviceAuthenticationAvailable = false;
   var _biometricAuthenticationAvailable = false;
   AppSettings? _pendingWindowsSettings;
@@ -1367,9 +1369,13 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
     final draft = await showDialog<BugReportDraft>(
       context: context,
-      builder: (context) => _BugReportDialog(email: activeGoogle.email),
+      builder: (context) => _BugReportDialog(
+        email: activeGoogle.email,
+        initialDraft: _unsentBugReportDraft,
+      ),
     );
     if (draft == null || !mounted) return;
+    _unsentBugReportDraft = draft;
 
     setState(() => _bugReportBusy = true);
     final info = await _appVersionInfo;
@@ -1396,6 +1402,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
             environment: environment,
             googleAuthorizationHeaders: authorizationHeaders,
           );
+      _unsentBugReportDraft = null;
       if (!mounted) return;
       await showDialog<void>(
         context: context,
@@ -3483,9 +3490,10 @@ class _SettingsDescription extends StatelessWidget {
 }
 
 class _BugReportDialog extends StatefulWidget {
-  const _BugReportDialog({required this.email});
+  const _BugReportDialog({required this.email, this.initialDraft});
 
   final String email;
+  final BugReportDraft? initialDraft;
 
   @override
   State<_BugReportDialog> createState() => _BugReportDialogState();
@@ -3498,6 +3506,19 @@ class _BugReportDialogState extends State<_BugReportDialog> {
   final _reproductionController = TextEditingController();
   final _expectedController = TextEditingController();
   final _actualController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final draft = widget.initialDraft;
+    if (draft != null) {
+      _titleController.text = draft.title;
+      _descriptionController.text = draft.description;
+      _reproductionController.text = draft.reproductionSteps;
+      _expectedController.text = draft.expectedBehavior;
+      _actualController.text = draft.actualBehavior;
+    }
+  }
 
   @override
   void dispose() {

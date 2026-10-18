@@ -108,4 +108,56 @@ void main() {
       ),
     );
   });
+
+  test('refuses a body over the receiver limit before sending it', () async {
+    var sent = false;
+    final service = BugReportService(
+      httpClient: MockClient((_) async {
+        sent = true;
+        return http.Response('', 500);
+      }),
+      endpoint: endpoint,
+    );
+    final huge = BugReportDraft(
+      title: draft.title,
+      description: '😀' * 20000,
+      reproductionSteps: draft.reproductionSteps,
+      expectedBehavior: draft.expectedBehavior,
+      actualBehavior: draft.actualBehavior,
+    );
+    await expectLater(
+      service.submit(
+        draft: huge,
+        environment: environment,
+        googleAuthorizationHeaders: const {'Authorization': 'Bearer t'},
+      ),
+      throwsA(
+        isA<BugReportException>().having((e) => e.code, 'code', 'invalid_size'),
+      ),
+    );
+    expect(sent, isFalse);
+  });
+
+  test('a 413 answer is explained, not shown as a generic failure', () async {
+    final service = BugReportService(
+      httpClient: MockClient(
+        (_) async => http.Response('{"error":"invalid_size"}', 413),
+      ),
+      endpoint: endpoint,
+    );
+    await expectLater(
+      service.submit(
+        draft: draft,
+        environment: environment,
+        googleAuthorizationHeaders: const {'Authorization': 'Bearer t'},
+      ),
+      throwsA(
+        isA<BugReportException>().having(
+          (e) => e.message,
+          'message',
+          contains('너무 깁니다'),
+        ),
+      ),
+    );
+  });
 }

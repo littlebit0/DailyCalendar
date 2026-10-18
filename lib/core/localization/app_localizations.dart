@@ -1128,6 +1128,8 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': 'Display & Calendar',
     '화면 및 일정': 'Display & Schedule',
     '화면과 기능 사용': 'Screens and feature usage',
+    '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.':
+        'The report is too long. Please shorten it and try again.',
   },
   'ja': {
     '앱을 시작하지 못했습니다': 'アプリを起動できませんでした',
@@ -2014,6 +2016,7 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '表示とカレンダー',
     '화면 및 일정': '表示と予定',
     '화면과 기능 사용': '画面と機能の利用',
+    '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.': '報告内容が長すぎます。内容を短くしてもう一度お試しください。',
   },
   'zh_Hant': {
     '앱을 시작하지 못했습니다': '無法啟動應用程式',
@@ -2873,5 +2876,6 @@ const Map<String, Map<String, String>> _translations = {
     '화면 및 달력': '顯示與行事曆',
     '화면 및 일정': '顯示與行程',
     '화면과 기능 사용': '畫面與功能使用',
+    '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.': '回報內容過長，請縮短後再試一次。',
   },
 };

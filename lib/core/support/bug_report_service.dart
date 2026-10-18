@@ -67,6 +67,9 @@ class BugReportException implements Exception {
   String toString() => message;
 }
 
+/// What the receiver accepts for one request (UTF-8 bytes of the JSON body).
+const bugReportMaxRequestBytes = 64 * 1024;
+
 class BugReportService {
   BugReportService({http.Client? httpClient, Uri? endpoint})
     : _httpClient = httpClient ?? http.Client(),
@@ -99,6 +102,17 @@ class BugReportService {
       );
     }
 
+    final requestBody = jsonEncode({
+      'report': draft.toJson(),
+      'environment': environment.toJson(),
+    });
+    // Too large for the receiver: say so before sending; the text is kept.
+    if (utf8.encode(requestBody).length > bugReportMaxRequestBytes) {
+      throw const BugReportException(
+        'invalid_size',
+        '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.',
+      );
+    }
     late final http.Response response;
     try {
       response = await _httpClient
@@ -108,10 +122,7 @@ class BugReportService {
               'Content-Type': 'application/json',
               'Authorization': authorization,
             },
-            body: jsonEncode({
-              'report': draft.toJson(),
-              'environment': environment.toJson(),
-            }),
+            body: requestBody,
           )
           .timeout(const Duration(seconds: 15));
     } on Object {
@@ -149,6 +160,7 @@ class BugReportService {
     'invalid_google_token' => 'Google 로그인 상태를 확인한 뒤 다시 시도해 주세요.',
     'rate_limited' => '버그 제보 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.',
     'invalid_report' => '버그 제보 내용을 다시 확인해 주세요.',
+    'invalid_size' => '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.',
     'github_unavailable' => 'GitHub 이슈를 생성하지 못했습니다. 잠시 후 다시 시도해 주세요.',
     _ => '버그 제보를 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.',
   };

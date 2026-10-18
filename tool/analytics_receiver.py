@@ -18,7 +18,9 @@ from urllib.request import Request, urlopen
 MAX_REQUEST_BYTES = 64 * 1024
 MAX_EVENTS = 25
 MAX_REQUESTS_PER_MINUTE = 120
-MAX_BUG_REPORT_BYTES = 16 * 1024
+# Field limits allow 12,120 characters; four-byte UTF-8 (emoji) is the worst case
+# at about 48.5 KB, so 64 KiB covers every form-valid report plus the environment.
+MAX_BUG_REPORT_BYTES = 64 * 1024
 MAX_BUG_REPORTS_PER_HOUR = 5
 BUG_REPORT_RETENTION_DAYS = 365
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
