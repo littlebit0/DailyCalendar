@@ -3161,6 +3161,63 @@ void _latestMergeTests() {
       },
     );
 
+    test('issue121 large backups split the name query and lose no event', () async {
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'tester@example.com'),
+      );
+      const count = 150;
+      final ids = [for (var i = 0; i < count; i++) 'bulk-event-$i-${'x' * 20}'];
+      await repository.saveAllAtomically([
+        for (final id in ids)
+          _event(
+            id: id,
+            title: 'Local $id',
+            startAt: DateTime(2026, 9, 17),
+            endAt: DateTime(2026, 9, 18),
+            updatedAt: DateTime.utc(2026, 9, 15, 2),
+            syncStatus: 'pending',
+          ),
+      ]);
+      // Every second event already exists remotely with an older version.
+      for (var i = 0; i < count; i += 2) {
+        drive.seed(
+          'remote-$i',
+          'daily-sync-v2-event-${ids[i]}.json',
+          _eventFileJson(
+            id: ids[i],
+            title: 'Old $i',
+            startAt: '2026-09-17',
+            endAt: '2026-09-18',
+            updatedAt: '2026-09-15T01:00:00Z',
+          ),
+        );
+      }
+
+      await service.backupNow(eventIds: ids.toSet(), includeSettings: false);
+
+      final listQueries = [
+        for (final request in drive.requests)
+          if (request.method == 'GET' &&
+              request.url.path == '/drive/v3/files')
+            request.url.queryParameters['q'] ?? '',
+      ];
+      expect(listQueries.length, greaterThan(1));
+      expect(listQueries.every((q) => q.length <= 4100), isTrue);
+      for (var i = 0; i < count; i += 2) {
+        expect(
+          (drive.payload('remote-$i')['event'] as Map)['title'],
+          'Local ${ids[i]}',
+        );
+      }
+      final uploadedNames = {
+        for (final file in drive.files.values) file.name,
+      };
+      for (final id in ids) {
+        expect(uploadedNames, contains('daily-sync-v2-event-$id.json'));
+      }
+      expect(drive.files.length, count);
+    });
+
     test(
       'LMS upload and compact deletions stay with owner while personal events still upload',
       () async {
