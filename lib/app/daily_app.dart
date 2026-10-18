@@ -1367,6 +1367,10 @@ class _AppHomeState extends ConsumerState<_AppHome>
         }
       }
       if (change.eventReminders) {
+        // The settings can arrive in the middle of a Drive restore, before its
+        // events are merged. Reconcile from the merged events, not a snapshot.
+        await ref.read(googleDriveSyncServiceProvider).whenIdle();
+        if (!mounted) return;
         await _reconcileAllEventSchedules();
       }
     } catch (error, stackTrace) {

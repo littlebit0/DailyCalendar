@@ -2625,6 +2625,35 @@ void main() {
     expect(service.statusNotifier.value.message, '동기화 실패');
   });
 
+  test('whenIdle waits for the running sync and the ones queued behind it', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final reached = Completer<void>();
+    final release = Completer<void>();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async {
+        if (!reached.isCompleted) reached.complete();
+        await release.future;
+        return http.Response('', 500);
+      }),
+    );
+    addTearDown(service.dispose);
+    await service.whenIdle(); // idle already: returns immediately
+
+    final running = service.restoreNow().catchError((Object _) {});
+    await reached.future;
+    var idle = false;
+    final waiting = service.whenIdle().then((_) => idle = true);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(idle, isFalse, reason: 'sync still in flight');
+    release.complete();
+    await Future.wait([running, waiting]);
+    expect(idle, isTrue);
+  });
+
   test(
     'sync analytics records categorized failure without changing the error',
     () async {

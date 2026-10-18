@@ -499,6 +499,14 @@ class GoogleDriveSyncService implements SyncService {
     return completer.future;
   }
 
+  /// Completes once no sync is running or queued, so follow-up work that must
+  /// see the merged events (not a mid-restore snapshot) can wait for it.
+  Future<void> whenIdle() async {
+    while (_syncInFlight != null) {
+      await _syncInFlight!.catchError((Object _) {});
+    }
+  }
+
   void _startSyncDrain() {
     final future = _drainSyncQueue().whenComplete(() {
       _syncInFlight = null;

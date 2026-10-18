@@ -201,4 +201,69 @@ void main() {
       expect(ids.toSet().length, 100);
     },
   );
+
+  test('cancel removes a D-day offset that settings no longer list', () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final start = DateTime.now().add(const Duration(days: 10));
+    final event = CalendarEvent(
+      id: 'dday-event',
+      title: 'exam',
+      startAt: start,
+      endAt: start.add(const Duration(hours: 1)),
+      allDay: true,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: start,
+      updatedAt: start,
+      showDday: true,
+    );
+    await repository.save(event);
+    final pending = <int, String>{};
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    const channel = MethodChannel('daily/native_notifications');
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(channel, (call) async {
+          if (call.method == 'initialize') return true;
+          final args = call.arguments as Map;
+          if (call.method == 'schedule') {
+            pending[args['id'] as int] = args['payload'] as String;
+          }
+          if (call.method == 'cancel' || call.method == 'cancelPending') {
+            pending.remove(args['id']);
+          }
+          return null;
+        });
+    addTearDown(() {
+      debugDefaultTargetPlatformOverride = null;
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(channel, null);
+    });
+    final before = settings.load();
+    await settings.save(
+      before.copyWith(dDayReminderOffsets: const [-2, 0]),
+      changedFrom: before,
+    );
+    final service = LocalNotificationService(
+      settingsRepository: settings,
+      eventRepository: repository,
+    );
+    await service.scheduleEventReminder(event);
+    expect(pending.values, contains('dday-event:dday:-2'));
+
+    // A Drive restore drops the custom -2 offset from the settings.
+    final restored = settings.load();
+    await settings.save(
+      restored.copyWith(dDayReminderOffsets: const [0]),
+      changedFrom: restored,
+    );
+    await service.cancelEventReminder(event.id);
+    expect(pending.values, isNot(contains('dday-event:dday:-2')));
+    expect(pending.values, isNot(contains('dday-event:dday:0')));
+  });
 }
