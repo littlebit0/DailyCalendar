@@ -15,6 +15,7 @@ import 'package:daily/core/auth/apple_account.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/di/app_providers.dart';
+import 'package:daily/core/diagnostics/startup_timing.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/app_settings.dart';
 import 'package:daily/core/settings/settings_repository.dart';
@@ -278,6 +279,58 @@ void main() {
       await tester.pumpWidget(const SizedBox.shrink());
     },
   );
+
+  testWidgets('a local-only user still reports both startup milestones once', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    StartupTiming.resetClaims();
+    addTearDown(StartupTiming.resetClaims);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final preferences = await SharedPreferences.getInstance();
+    final records = <AnalyticsRecord>[];
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          productAnalyticsProvider.overrideWithValue(_RecordingAnalytics(records)),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final milestones = [
+      for (final record in records)
+        if (record.name == AnalyticsEventName.startupMilestone)
+          record.attributes['milestone'],
+    ];
+    expect(milestones, containsAll(['firstCalendarFrame', 'localCalendarReady']));
+    expect(milestones.toSet().length, milestones.length, reason: 'once each');
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
 
   for (final platform in [TargetPlatform.iOS, TargetPlatform.android]) {
     testWidgets(
@@ -9862,4 +9915,11 @@ class _FailingLockSettingsRepository extends SettingsRepository {
       changedFrom: changedFrom,
     );
   }
+}
+
+class _RecordingAnalytics extends NoopProductAnalytics {
+  _RecordingAnalytics(this.records);
+  final List<AnalyticsRecord> records;
+  @override
+  Future<void> record(AnalyticsRecord record) async => records.add(record);
 }

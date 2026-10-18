@@ -144,6 +144,11 @@ from longer, so treat their 120000 values as "at least 120 s" and do not average
 them as true durations. `durationTruncated` is optional and only ever `true`; the
 receiver must be deployed before the app that sends it, or the batch is rejected.
 
+`durationTruncated: true` is only valid together with `durationMs` 120000 (the cap),
+in both receivers. `phase` on `event_save_*` is optional so that apps released before
+it existed (which send neither field) are still accepted when the receiver is
+deployed first.
+
 ## Frame health (#150)
 
 `frame_summary` replaces per-batch `slow_interaction_detected`/`frame_batch` records
@@ -162,10 +167,10 @@ measurement. Deploy the receiver before the app, as for every new event name.
 `app_load_completed` is unchanged: it ends when the data migration finishes (measured
 from the bootstrap widget) and says nothing about the calendar being visible. Two new
 `startup_milestone` events, each sent once per process, measure from the start of the
-Dart `main` (OS process launch and native splash time are not included):
-`firstCalendarFrame` (first frame after the calendar screen mounts) and
+Dart `main`, whose first statement starts the clock (OS process launch and native splash time are not included):
+`firstCalendarFrame` (first frame after the calendar page itself mounts, so the loading and announcement screens in front of it are not mistaken for it; a start that is hidden behind the app lock records no `firstCalendarFrame`, because the time would include entering the PIN) and
 `localCalendarReady` (the month, week and day providers have loaded the local
-events; external sync, LMS and Drive do not delay it). A failed local load sends no
+events; external sync, LMS and Drive do not delay it, and local-only and Apple-only users, who skip the startup sync, report it too). A failed local load sends no
 `localCalendarReady`. Earlier `app_load_completed` records keep their meaning.
 Deploy the receiver before the app.
 
