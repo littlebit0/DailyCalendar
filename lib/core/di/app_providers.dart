@@ -1,4 +1,5 @@
 import '../notifications/recoverable_notification_service.dart';
+import 'provider_retention.dart';
 import '../academic/kangnam_academic_source.dart';
 import '../academic/expansion_a_academic_sources.dart';
 import '../academic/expansion_b_academic_sources.dart';
@@ -509,8 +510,12 @@ final calendarViewModeProvider = StateProvider<CalendarViewMode>((ref) {
 
 final calendarSearchQueryProvider = StateProvider<String>((ref) => '');
 
-final eventsInRangeProvider =
-    StreamProvider.family<List<CalendarEvent>, CalendarRange>((ref, range) {
+/// How long an unused date range keeps its stream and result list (#170).
+const eventsInRangeRetention = Duration(minutes: 2);
+
+final eventsInRangeProvider = StreamProvider.autoDispose
+    .family<List<CalendarEvent>, CalendarRange>((ref, range) {
+      retainWhileRecentlyUsed(ref, eventsInRangeRetention);
       final lms = ref.watch(lmsControllerProvider);
       final holidayConfiguration = ref.watch(
         appSettingsProvider.select(
