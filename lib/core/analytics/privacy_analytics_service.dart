@@ -595,6 +595,11 @@ bool isSafeAnalyticsEvent(Object? value) {
     final validator = schema[entry.key] ?? optional[entry.key]!;
     if (!validator(entry.value)) return false;
   }
+  // The flag means the real duration was longer than the cap and was cut to it.
+  if (attributes.containsKey('durationTruncated') &&
+      attributes['durationMs'] != AnalyticsRecord.maxDurationMs) {
+    return false;
+  }
   return true;
 }
 
@@ -628,8 +633,16 @@ final _analyticsOptionalAttributes =
         AnalyticsEventName.syncFailed,
         AnalyticsEventName.slowInteractionDetected,
       ])
-        name.wireName: {'durationTruncated': _truncatedFlag},
+        name.wireName: {
+          'durationTruncated': _truncatedFlag,
+          // Apps before the save phase existed send event_save_* without it.
+          if (name == AnalyticsEventName.eventSaveSucceeded ||
+              name == AnalyticsEventName.eventSaveFailed)
+            'phase': _savePhase,
+        },
     };
+
+bool _savePhase(Object? value) => _enumValue(value, AnalyticsSavePhase.values);
 
 final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
   AnalyticsEventName.appLoadCompleted.wireName: {'durationMs': _duration},
@@ -650,12 +663,10 @@ final _analyticsSchemas = <String, Map<String, bool Function(Object?)>>{
     'durationMs': _duration,
   },
   AnalyticsEventName.eventSaveSucceeded.wireName: {
-    'phase': (value) => _enumValue(value, AnalyticsSavePhase.values),
     'operation': (value) => _enumValue(value, AnalyticsOperation.values),
     'durationMs': _duration,
   },
   AnalyticsEventName.eventSaveFailed.wireName: {
-    'phase': (value) => _enumValue(value, AnalyticsSavePhase.values),
     'operation': (value) => _enumValue(value, AnalyticsOperation.values),
     'durationMs': _duration,
     'errorCode': (value) => _enumValue(value, AnalyticsErrorCode.values),

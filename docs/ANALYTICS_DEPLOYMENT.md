@@ -143,3 +143,9 @@ older apps (and everything collected before this change) cannot tell exact 120 s
 from longer, so treat their 120000 values as "at least 120 s" and do not average
 them as true durations. `durationTruncated` is optional and only ever `true`; the
 receiver must be deployed before the app that sends it, or the batch is rejected.
+
+`durationTruncated: true` is only valid together with `durationMs` 120000 (the cap),
+in both receivers. `phase` on `event_save_*` is optional so that apps released before
+it existed (which send neither field) are still accepted when the receiver is
+deployed first.
+
