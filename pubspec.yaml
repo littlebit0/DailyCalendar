@@ -163,6 +163,9 @@ dependency_overrides:
     path: third_party/flutter_secure_storage_windows
   flutter_inappwebview_windows:
     path: third_party/flutter_inappwebview_windows
+  # #228: cancelled one-time Android location clients leave the manager list.
+  geolocator_android:
+    path: third_party/geolocator_android
   # #226: the iOS SDK reads file dates, so its own privacy manifest must say so.
   package_info_plus:
     path: third_party/package_info_plus
