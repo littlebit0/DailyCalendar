@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/weather/weather_widgets.dart';
 import '../../../core/di/app_providers.dart';
+import '../../../core/lms/lms_sync_service.dart';
 import '../../../core/analytics/product_analytics.dart';
 import '../../../core/analytics/startup_milestones.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
@@ -5191,6 +5192,25 @@ class _CalendarHeader extends ConsumerWidget {
         platform == TargetPlatform.android &&
         dailyWindowClassFor(windowSize) != DailyWindowClass.compact;
     final actionSize = androidTablet ? 48.0 : 40.0;
+    final lms = ref.watch(lmsControllerProvider);
+    final lmsBusy = lms.restoring || lms.sync.state == LmsSyncState.loading;
+    final lmsActions = [
+      if (lms.supported &&
+          (lms.connected ||
+              (lms.needsLogin &&
+                  ref
+                          .watch(appSettingsProvider)
+                          .academicProfile
+                          ?.lmsIntegrationEnabled ==
+                      true)))
+        DailyIconAction(
+          tooltip: context.tr('학교 LMS 동기화'),
+          onPressed: lmsBusy ? null : () => _syncLms(context, ref),
+          icon: Icons.sync_rounded,
+          size: actionSize,
+          borderless: true,
+        ),
+    ];
     final locale = Localizations.localeOf(context).toLanguageTag();
     final settings = ref.watch(appSettingsProvider);
     final fullDayLabel =
@@ -5210,7 +5230,10 @@ class _CalendarHeader extends ConsumerWidget {
       showFullDay: fullDayLabel,
     );
     final periodLabelMaxWidth = fullDayLabel && mobile
-        ? math.max(40.0, windowSize.width - 20 - actionSize * 4 - 44)
+        ? math.max(
+            40.0,
+            windowSize.width - 20 - actionSize * (4 + lmsActions.length) - 44,
+          )
         : mobile &&
               monthNavigationMode == MonthNavigationMode.vertical &&
               viewMode == CalendarViewMode.week
@@ -5242,7 +5265,11 @@ class _CalendarHeader extends ConsumerWidget {
         constraints: BoxConstraints(
           maxWidth: mobile
               ? (compact
-                    ? (windowSize.width - 20 - actionSize * 4 - 44).clamp(
+                    ? (windowSize.width -
+                              20 -
+                              actionSize * (4 + lmsActions.length) -
+                              44)
+                          .clamp(
                         40.0,
                         periodLabelMaxWidth,
                       )
@@ -5447,6 +5474,7 @@ class _CalendarHeader extends ConsumerWidget {
             if (!timetableSelected) ...[
               ...navigationActions,
               ...utilityActions.take(2),
+              ...lmsActions,
             ],
             llmButton,
             DailyIconAction(
@@ -5505,6 +5533,7 @@ class _CalendarHeader extends ConsumerWidget {
             navigationActions[2],
             utilityActions[0],
             utilityActions[1],
+            ...lmsActions,
             utilityActions[2],
           ],
         ),
@@ -5523,10 +5552,35 @@ class _CalendarHeader extends ConsumerWidget {
           if (!mobile) ...navigationActions.take(2),
           navigationActions[2],
           const SizedBox(width: 6),
-          ...utilityActions,
+          utilityActions[0],
+          utilityActions[1],
+          ...lmsActions,
+          utilityActions[2],
         ],
       ),
     );
+  }
+
+  /// Same action as "지금 동기화" in the LMS settings: it signs in again with
+  /// the saved login when the school session has expired.
+  Future<void> _syncLms(BuildContext context, WidgetRef ref) async {
+    final controller = ref.read(lmsControllerProvider);
+    await controller.refresh(force: true);
+    // The refresh can outlast this screen (for example local data was reset).
+    if (!context.mounted) return;
+    final failed =
+        controller.needsLogin ||
+        controller.sync.state == LmsSyncState.fallback;
+    final partial = controller.sync.lastResult?.hasUnverifiedInformation == true;
+    final message = failed
+        ? (controller.lastLoginFailure?.message ??
+              '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.')
+        : partial
+        ? '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.'
+        : '학교 데이터 동기화 완료';
+    ScaffoldMessenger.maybeOf(
+      context,
+    )?.showSnackBar(SnackBar(content: Text(context.tr(message))));
   }
 
   Future<void> _showMonthPicker(BuildContext context, WidgetRef ref) async {

@@ -24,7 +24,12 @@ class LmsController extends ChangeNotifier {
     FutureOr<void> Function()? onIntegrationChanged,
     LmsCredentialsStore? credentialsStore,
     ProductAnalytics analytics = const NoopProductAnalytics(),
+    List<Duration> automaticLoginRetryDelays = const [
+      Duration(seconds: 3),
+      Duration(seconds: 8),
+    ],
   }) : _credentials = credentialsStore ?? LmsCredentialsStore(),
+       _automaticLoginRetryDelays = automaticLoginRetryDelays,
        _loginReporter = LmsLoginReporter(analytics),
        _settings = settings,
        _onIntegrationChanged = onIntegrationChanged,
@@ -54,6 +59,7 @@ class LmsController extends ChangeNotifier {
   }
 
   final LmsCredentialsStore _credentials;
+  final List<Duration> _automaticLoginRetryDelays;
   final _automaticAttempts = <String>{};
   bool automaticLoginPaused = false;
   LmsLoginFailure? lastLoginFailure;
@@ -343,6 +349,53 @@ class LmsController extends ChangeNotifier {
     _notify();
   }
 
+  /// Failures that say nothing about the saved login. A rejected password or a
+  /// required extra step is never repeated: the same password would be sent to
+  /// the school again and could lock the account.
+  static const _transientLoginFailures = {
+    LmsLoginFailure.network,
+    LmsLoginFailure.timedOut,
+    LmsLoginFailure.serverRejected,
+  };
+
+  /// Submits the saved login, then repeats it after each delay in
+  /// [_automaticLoginRetryDelays] only while the failure is transient.
+  Future<bool> _loginAutomaticallyWithRetries(
+    LmsWebSession current,
+    LmsLocalCredentials submitted,
+    bool Function() valid,
+  ) async {
+    for (var attempt = 0; ; attempt++) {
+      Object? failedWith;
+      var success = false;
+      try {
+        success = await current.loginAutomatically(
+          submitted,
+          expectedPrincipal: _settings.load().academicProfile?.lmsUserId,
+        );
+      } catch (error) {
+        failedWith = error;
+      }
+      if (failedWith == null && success) return true;
+      final failure =
+          current.lastAutomaticLoginFailure ??
+          (failedWith == null
+              ? LmsLoginFailure.authenticationUnconfirmed
+              : LmsLoginFailure.fromError(failedWith));
+      if (attempt >= _automaticLoginRetryDelays.length ||
+          !_transientLoginFailures.contains(failure) ||
+          !valid()) {
+        if (failedWith != null) throw failedWith;
+        return false;
+      }
+      await Future<void>.delayed(_automaticLoginRetryDelays[attempt]);
+      if (!valid()) {
+        if (failedWith != null) throw failedWith;
+        return false;
+      }
+    }
+  }
+
   Future<bool> _tryAutomaticLogin(
     LmsWebSession current,
     bool Function() valid,
@@ -401,10 +454,7 @@ class LmsController extends ChangeNotifier {
     _notify();
     final bool success;
     try {
-      success = await current.loginAutomatically(
-        submitted,
-        expectedPrincipal: _settings.load().academicProfile?.lmsUserId,
-      );
+      success = await _loginAutomaticallyWithRetries(current, submitted, valid);
     } catch (error) {
       if (valid()) {
         lastLoginFailure =
@@ -474,6 +524,11 @@ class LmsController extends ChangeNotifier {
     await _saveConnection(current, enabled: true);
     if (!valid()) return false;
     await _refreshAuthenticatedSession(current, valid, force: true);
+    // A later session expiry may sign in again. Kept while the first sync did
+    // not become ready so a login the school keeps bouncing cannot loop.
+    if (valid() && sync.state == LmsSyncState.ready) {
+      _automaticAttempts.remove(key);
+    }
     return true;
   }
 
