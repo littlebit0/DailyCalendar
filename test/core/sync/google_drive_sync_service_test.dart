@@ -1315,11 +1315,13 @@ void main() {
     );
     expect(await repository.findById('remote-event'), isNotNull);
     expect((await repository.findById('local-event'))!.syncStatus, 'synced');
+    // #347: an event Drive has no file for is added even if marked synced.
+    await service.syncPendingChangesNow();
     expect(
       requests
           .where((request) => request.method == 'POST')
           .any((request) => request.body.contains('already-synced')),
-      isFalse,
+      isTrue,
     );
   });
 
@@ -3237,6 +3239,83 @@ void _latestMergeTests() {
           submissionStatus: '제출 완료',
           progressPercent: 100,
         );
+
+    test(
+      'full restore compares every event with Drive and adds local-only ones (#347)',
+      () async {
+        CalendarEvent synced(String id, String title, DateTime updatedAt) =>
+            _event(
+              id: id,
+              title: title,
+              startAt: DateTime(2026, 9, 17),
+              endAt: DateTime(2026, 9, 18),
+              updatedAt: updatedAt,
+            ).copyWith(createdAt: DateTime.utc(2026, 5, 29));
+        Map<String, Object?> file(String id, String title, String updated) =>
+            _eventFileJson(
+              id: id,
+              title: title,
+              startAt: '2026-09-17',
+              endAt: '2026-09-18',
+              updatedAt: updated,
+            );
+        final older = DateTime.utc(2026, 9, 10);
+        final newer = DateTime.utc(2026, 9, 15);
+        await repository.save(synced('a', 'Local A', older));
+        await repository.save(synced('b', 'Local B', newer));
+        await repository.save(synced('c', 'Same C', older));
+        await repository.save(synced('d', 'Local D', older));
+        await repository.save(synced('e', 'Only local E', older));
+        drive.seed(
+          'file-a',
+          'daily-sync-v2-event-a.json',
+          file('a', 'Drive A', '2026-09-15T00:00:00.000Z'),
+        );
+        drive.seed(
+          'file-b',
+          'daily-sync-v2-event-b.json',
+          file('b', 'Drive B', '2026-09-10T00:00:00.000Z'),
+        );
+        drive.seed(
+          'file-c',
+          'daily-sync-v2-event-c.json',
+          file('c', 'Same C', '2026-09-10T00:00:00.000Z'),
+        );
+        drive.seed('file-d', 'daily-sync-v2-event-d.json', {
+          'schemaVersion': 2,
+          'type': 'event',
+          'compacted': true,
+          'deletion': EventDeletion(
+            id: 'd',
+            deletedAt: DateTime.utc(2026, 9, 15),
+          ).toJson(),
+        });
+        final writesBefore = drive.writes;
+
+        await service.restoreNow();
+        await service.syncPendingChangesNow();
+
+        expect((await repository.findById('a'))!.title, 'Drive A');
+        expect((await repository.findById('b'))!.title, 'Local B');
+        expect(
+          (drive.payload('file-b')['event'] as Map)['title'],
+          'Local B',
+        );
+        expect((await repository.findById('c'))!.title, 'Same C');
+        expect(drive.payload('file-c')['event'], isNotNull);
+        final d = await repository.findById('d');
+        expect(d == null || d.isDeleted, isTrue);
+        final uploaded = {
+          for (final f in drive.files.values) f.name: f.data,
+        };
+        expect(
+          (uploaded['daily-sync-v2-event-e.json']!['event'] as Map)['title'],
+          'Only local E',
+        );
+        // Only B (local newer) and E (missing on Drive) were written.
+        expect(drive.writes - writesBefore, 2);
+      },
+    );
 
     test(
       'issue89 restored renamed category retains stable identity through SQLite edit',

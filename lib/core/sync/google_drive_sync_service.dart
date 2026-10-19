@@ -978,14 +978,36 @@ class GoogleDriveSyncService implements SyncService {
 
   Future<void> _restore(Map<String, String> authHeaders) async {
     final remoteSettings = await _downloadRestorableSettings(authHeaders);
-    final remoteEvents = await _downloadAllEvents(authHeaders);
+    final remoteFiles = await _listEventFiles(authHeaders);
+    final remoteEvents = await _downloadEventFiles(authHeaders, remoteFiles);
     final remoteTimetable = await _downloadRestorableTimetable(authHeaders);
     _validateSyncSession?.call();
     await _applyDownloadedEvents(remoteEvents);
+    await _queueEventsMissingFromDrive({
+      for (final file in remoteFiles) ?_eventIdFromFileName(file.name),
+    });
     if (remoteSettings != null) await _applyDownloadedSettings(remoteSettings);
     await _applyDownloadedTimetable(remoteTimetable);
     _academicSettingsBootstrapIdentity = _accountIdentity;
     await _refreshWidgets();
+  }
+
+  /// A full restore sees every Drive event file. A local event with no file
+  /// at all (not even a deletion record) is not on Drive yet, so it is queued
+  /// for the normal event upload whatever its sync status says.
+  Future<void> _queueEventsMissingFromDrive(Set<String> driveEventIds) async {
+    var queued = false;
+    for (final event in await _eventRepository.allEventsForSync()) {
+      _validateSyncSession?.call();
+      if (event.isDeleted ||
+          !_canSyncEvent(event) ||
+          driveEventIds.contains(event.id)) {
+        continue;
+      }
+      _queuedEventIds.add(event.id);
+      queued = true;
+    }
+    if (queued) _queueChangeSync();
   }
 
   Future<bool> _applyDownloadedEvents(List<_DownloadedEvent> records) async {
