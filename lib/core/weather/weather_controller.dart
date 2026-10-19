@@ -208,7 +208,8 @@ class WeatherController extends ChangeNotifier {
       try {
         await store.cache(selected.gridKey, xml, fetchedAt);
       } on Object {
-        status = WeatherStatus.storageError;
+        // A request reset or replaced while the cache was writing owns no state.
+        if (_current(revision)) status = WeatherStatus.storageError;
       }
       if (_current(revision)) _notify();
     } on Object {
