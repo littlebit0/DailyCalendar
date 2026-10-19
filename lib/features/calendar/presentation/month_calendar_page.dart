@@ -5590,6 +5590,7 @@ class _CalendarHeader extends ConsumerWidget {
         builder: (_) => _YearOverviewPage(
           initialMonth: month,
           navigationMode: monthNavigationMode,
+          weekStartsOnMonday: ref.read(appSettingsProvider).weekStartsOnMonday,
         ),
       ),
     );
@@ -6836,10 +6837,12 @@ class _YearOverviewPage extends StatefulWidget {
   const _YearOverviewPage({
     required this.initialMonth,
     required this.navigationMode,
+    required this.weekStartsOnMonday,
   });
 
   final DateTime initialMonth;
   final MonthNavigationMode navigationMode;
+  final bool weekStartsOnMonday;
 
   @override
   State<_YearOverviewPage> createState() => _YearOverviewPageState();
@@ -6997,7 +7000,7 @@ class _YearOverviewPageState extends State<_YearOverviewPage> {
   Widget _yearPage(int year) {
     return _YearCalendarPage(
       year: year,
-      weekStartsOnMonday: false,
+      weekStartsOnMonday: widget.weekStartsOnMonday,
       onMonthSelected: (month) =>
           Navigator.of(context).pop(DateTime(year, month)),
     );
@@ -7241,9 +7244,11 @@ class _MiniMonthPainter extends CustomPainter {
     final weekdayHeight = _scaledFontHeight(weekdayStyle);
     final cellWidth = contentWidth / 7;
     for (var column = 0; column < 7; column++) {
-      final color = column == 0
+      // Colour by the column's actual weekday (0 = Sunday), not its position.
+      final weekday = weekStartsOnMonday ? (column + 1) % 7 : column;
+      final color = weekday == 0
           ? sundayColor
-          : column == 6
+          : weekday == 6
           ? saturdayColor
           : weekdayColor;
       final painter = _textPainter(
