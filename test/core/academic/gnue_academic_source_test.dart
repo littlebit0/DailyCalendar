@@ -70,4 +70,25 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('each event links to the semester page and year it came from (#245)', () {
+    String page(int semester) => semester == 1
+        ? '4a9f18ab5c48fe8c015caa01ed5507e9'
+        : '4a9f18ab5c48fe8c015caa0228a707eb';
+    for (final (year, semester) in [(2025, 2), (2026, 1), (2026, 2)]) {
+      final events = GnueAcademicSource.parse(fixture(year, semester), year, semester);
+      for (final event in events) {
+        final url = Uri.parse(event.url!);
+        expect(url.scheme, 'https');
+        expect(url.host, 'www.gnue.ac.kr');
+        expect(url.queryParameters, {
+          'contentUid': page(semester),
+          'yyyy': '$year',
+        });
+      }
+    }
+    final opening = GnueAcademicSource.parse(fixture(2026, 2), 2026, 2)
+        .singleWhere((event) => event.title.contains('2학기 개강'));
+    expect(Uri.parse(opening.url!).queryParameters['contentUid'], page(2));
+  });
 }
