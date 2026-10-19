@@ -5195,7 +5195,14 @@ class _CalendarHeader extends ConsumerWidget {
     final lms = ref.watch(lmsControllerProvider);
     final lmsBusy = lms.restoring || lms.sync.state == LmsSyncState.loading;
     final lmsActions = [
-      if (lms.supported && (lms.connected || lms.needsLogin))
+      if (lms.supported &&
+          (lms.connected ||
+              (lms.needsLogin &&
+                  ref
+                          .watch(appSettingsProvider)
+                          .academicProfile
+                          ?.lmsIntegrationEnabled ==
+                      true)))
         DailyIconAction(
           tooltip: context.tr('학교 LMS 동기화'),
           onPressed: lmsBusy ? null : () => _syncLms(context, ref),
@@ -5258,7 +5265,11 @@ class _CalendarHeader extends ConsumerWidget {
         constraints: BoxConstraints(
           maxWidth: mobile
               ? (compact
-                    ? (windowSize.width - 20 - actionSize * 4 - 44).clamp(
+                    ? (windowSize.width -
+                              20 -
+                              actionSize * (4 + lmsActions.length) -
+                              44)
+                          .clamp(
                         40.0,
                         periodLabelMaxWidth,
                       )
@@ -5554,24 +5565,22 @@ class _CalendarHeader extends ConsumerWidget {
   /// the saved login when the school session has expired.
   Future<void> _syncLms(BuildContext context, WidgetRef ref) async {
     final controller = ref.read(lmsControllerProvider);
-    final messenger = ScaffoldMessenger.maybeOf(context);
-    final translate = context.tr;
     await controller.refresh(force: true);
+    // The refresh can outlast this screen (for example local data was reset).
+    if (!context.mounted) return;
     final failed =
         controller.needsLogin ||
         controller.sync.state == LmsSyncState.fallback;
-    messenger?.showSnackBar(
-      SnackBar(
-        content: Text(
-          translate(
-            failed
-                ? (controller.lastLoginFailure?.message ??
-                      '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.')
-                : '학교 데이터 동기화 완료',
-          ),
-        ),
-      ),
-    );
+    final partial = controller.sync.lastResult?.hasUnverifiedInformation == true;
+    final message = failed
+        ? (controller.lastLoginFailure?.message ??
+              '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.')
+        : partial
+        ? '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.'
+        : '학교 데이터 동기화 완료';
+    ScaffoldMessenger.maybeOf(
+      context,
+    )?.showSnackBar(SnackBar(content: Text(context.tr(message))));
   }
 
   Future<void> _showMonthPicker(BuildContext context, WidgetRef ref) async {

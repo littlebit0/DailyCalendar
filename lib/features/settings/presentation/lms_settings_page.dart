@@ -221,8 +221,7 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
         : switch (sync.state) {
             LmsSyncState.loading => '학교에서 최신 과제·퀴즈·학습 일정을 가져오고 있습니다.',
             LmsSyncState.ready =>
-              (result?.learningCoverageIncomplete == true ||
-                      (result?.unresolvedQuizStatuses ?? 0) > 0)
+              result?.hasUnverifiedInformation == true
                   ? '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.'
                   : '학교 데이터 동기화 완료',
             LmsSyncState.fallback => '학교에 연결하지 못해 마지막으로 확인한 데이터를 표시합니다.',

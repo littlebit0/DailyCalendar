@@ -68,6 +68,10 @@ class LmsSyncResult {
   final int failedLearningCourses;
   bool get learningCoverageIncomplete =>
       unresolvedLearningActivities > 0 || failedLearningCourses > 0;
+
+  /// Some school information could not be read or resolved this time.
+  bool get hasUnverifiedInformation =>
+      learningCoverageIncomplete || unresolvedQuizStatuses > 0;
 }
 
 typedef LmsFetchHtml = Future<LmsHtmlPage> Function(Uri url);

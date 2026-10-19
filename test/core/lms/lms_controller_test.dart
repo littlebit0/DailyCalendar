@@ -551,7 +551,7 @@ void main() {
     expect(controller.sync.state, LmsSyncState.ready);
   });
 
-  test('a rejected password is not retried and says so (#348)', () async {
+  test('a rejected ID or password is not retried and says so (#348)', () async {
     configure = (s) {
       s.stored = false;
       s.automaticOutcomes.add(false);
@@ -560,7 +560,7 @@ void main() {
     await controller.saveAutomaticLogin('test-user', 'fixture-password');
     expect(sessions.single.automaticLogins, 1);
     expect(controller.lastLoginFailure, LmsLoginFailure.credentialsRejected);
-    expect(controller.lastLoginFailure!.message, startsWith('비밀번호가 틀렸습니다.'));
+    expect(controller.lastLoginFailure!.message, startsWith('아이디 또는 비밀번호가 틀렸습니다.'));
   });
 
   test('a required extra verification is not retried and says so (#348)', () async {

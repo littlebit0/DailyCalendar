@@ -16,6 +16,7 @@ import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/di/app_providers.dart';
 import 'package:daily/core/lms/lms_controller.dart';
+import 'package:daily/core/lms/lms_sync_service.dart';
 import 'package:daily/core/diagnostics/startup_timing.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/app_settings.dart';
@@ -8996,117 +8997,181 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('the calendar toolbar has an LMS sync button (#348)', (
-    tester,
-  ) async {
-    await tester.binding.setSurfaceSize(const Size(1440, 900));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
-    addTearDown(() => debugDefaultTargetPlatformOverride = null);
-    SharedPreferences.setMockInitialValues({
-      'onboardingCompleted': true,
-      'defaultCalendarView': CalendarViewMode.month.name,
-    });
-    final preferences = await SharedPreferences.getInstance();
-    final refreshes = <bool>[];
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File('assets/academic/university_regions.json')
-                        .readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
+  group('calendar toolbar LMS sync button (#348)', () {
+    Future<_ToolbarLms> pumpToolbar(
+      WidgetTester tester, {
+      required bool connected,
+      bool needsLogin = false,
+      bool? integrationEnabled,
+      TargetPlatform platform = TargetPlatform.windows,
+      Size size = const Size(1440, 900),
+      Completer<void>? refreshWait,
+      List<bool>? refreshes,
+    }) async {
+      tester.view.devicePixelRatio = 1;
+      tester.view.physicalSize = size;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      debugDefaultTargetPlatformOverride = platform;
+      addTearDown(() => debugDefaultTargetPlatformOverride = null);
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': CalendarViewMode.month.name,
+      });
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      if (integrationEnabled != null) {
+        await settings.saveGoogleAccount(
+          const GoogleAccount(email: 'student@example.com'),
+        );
+        await settings.saveAcademicProfile(
+          const AcademicProfile(
+            universityId: 'institution:academyinfo:0000117',
+            universityName: '상명대학교',
+            schoolKind: 'fourYear',
+          ).withLmsConnection(enabled: integrationEnabled),
+          expectedGoogleEmail: 'student@example.com',
+        );
+      }
+      late _ToolbarLms controller;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File('assets/academic/university_regions.json')
+                          .readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
             ),
-          ),
-          settingsRepositoryProvider.overrideWithValue(
-            SettingsRepository(preferences: preferences),
-          ),
-          notificationServiceProvider.overrideWithValue(_FakeNotification()),
-          syncServiceProvider.overrideWithValue(_FakeSync()),
-          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
-          googleDriveAuthServiceProvider.overrideWithValue(
-            _FakeGoogleDriveAuthService(),
-          ),
-          lmsControllerProvider.overrideWith(
-            (ref) => _ToolbarLms(
-              settings: ref.watch(settingsRepositoryProvider),
-              repository: ref.watch(eventRepositoryProvider),
-              commands: ref.watch(eventCommandServiceProvider),
-              isConnected: () => false,
-              onRefresh: refreshes.add,
+            settingsRepositoryProvider.overrideWithValue(settings),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
             ),
-          ),
-        ],
-        child: const DailyApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
-    // Not connected: no button to press.
-    expect(find.byTooltip('학교 LMS 동기화'), findsNothing);
+            lmsControllerProvider.overrideWith(
+              (ref) => controller = _ToolbarLms(
+                settings: ref.watch(settingsRepositoryProvider),
+                repository: ref.watch(eventRepositoryProvider),
+                commands: ref.watch(eventCommandServiceProvider),
+                isConnected: () => connected,
+                isNeedsLogin: () => needsLogin,
+                refreshWait: refreshWait,
+                onRefresh: (force) => refreshes?.add(force),
+              ),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      return controller;
+    }
 
-    debugDefaultTargetPlatformOverride = null;
-    await tester.pumpWidget(const SizedBox.shrink());
-  });
+    Future<void> finish(WidgetTester tester) async {
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
 
-  testWidgets('pressing the LMS sync button refreshes with force (#348)', (
-    tester,
-  ) async {
-    await tester.binding.setSurfaceSize(const Size(1440, 900));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
-    addTearDown(() => debugDefaultTargetPlatformOverride = null);
-    SharedPreferences.setMockInitialValues({
-      'onboardingCompleted': true,
-      'defaultCalendarView': CalendarViewMode.month.name,
+    testWidgets('is hidden when the school is not connected', (tester) async {
+      await pumpToolbar(tester, connected: false);
+      expect(find.byTooltip('학교 LMS 동기화'), findsNothing);
+      await finish(tester);
     });
-    final preferences = await SharedPreferences.getInstance();
-    final refreshes = <bool>[];
-    await tester.pumpWidget(
-      ProviderScope(
-        overrides: [
-          universityRegionsProvider.overrideWith(
-            (ref) async => UniversityRegions.fromJson(
-              jsonDecode(
-                    File('assets/academic/university_regions.json')
-                        .readAsStringSync(),
-                  )
-                  as Map<String, dynamic>,
-            ),
-          ),
-          settingsRepositoryProvider.overrideWithValue(
-            SettingsRepository(preferences: preferences),
-          ),
-          notificationServiceProvider.overrideWithValue(_FakeNotification()),
-          syncServiceProvider.overrideWithValue(_FakeSync()),
-          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
-          googleDriveAuthServiceProvider.overrideWithValue(
-            _FakeGoogleDriveAuthService(),
-          ),
-          lmsControllerProvider.overrideWith(
-            (ref) => _ToolbarLms(
-              settings: ref.watch(settingsRepositoryProvider),
-              repository: ref.watch(eventRepositoryProvider),
-              commands: ref.watch(eventCommandServiceProvider),
-              isConnected: () => true,
-              onRefresh: refreshes.add,
-            ),
-          ),
-        ],
-        child: const DailyApp(),
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(find.byTooltip('학교 LMS 동기화'), findsOneWidget);
-    final before = refreshes.length;
-    await tester.tap(find.byTooltip('학교 LMS 동기화'));
-    await tester.pumpAndSettle();
-    expect(refreshes.skip(before), [true]);
-    expect(find.text('학교 데이터 동기화 완료'), findsOneWidget);
-    debugDefaultTargetPlatformOverride = null;
-    await tester.pumpWidget(const SizedBox.shrink());
+
+    testWidgets('is hidden after the user disconnected the school', (
+      tester,
+    ) async {
+      await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: false,
+      );
+      expect(find.byTooltip('학교 LMS 동기화'), findsNothing);
+      await finish(tester);
+    });
+
+    testWidgets('is shown when a connected school needs a new login', (
+      tester,
+    ) async {
+      await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+      );
+      expect(find.byTooltip('학교 LMS 동기화'), findsOneWidget);
+      await finish(tester);
+    });
+
+    testWidgets('refreshes with force and reports completion', (tester) async {
+      final refreshes = <bool>[];
+      await pumpToolbar(tester, connected: true, refreshes: refreshes);
+      final before = refreshes.length;
+      await tester.tap(find.byTooltip('학교 LMS 동기화'));
+      await tester.pumpAndSettle();
+      expect(refreshes.skip(before), [true]);
+      expect(find.text('학교 데이터 동기화 완료'), findsOneWidget);
+      await finish(tester);
+    });
+
+    testWidgets('reports an incomplete refresh instead of success', (
+      tester,
+    ) async {
+      final controller = await pumpToolbar(tester, connected: true);
+      controller.sync.lastResult = const LmsSyncResult(
+        courses: 1,
+        activities: 1,
+        unscheduled: 0,
+        added: 0,
+        updated: 0,
+        deleted: 0,
+        unchanged: 1,
+        unresolvedQuizStatuses: 1,
+      );
+      await tester.tap(find.byTooltip('학교 LMS 동기화'));
+      await tester.pumpAndSettle();
+      expect(find.text('학교 데이터 동기화 완료'), findsNothing);
+      expect(
+        find.text('학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.'),
+        findsOneWidget,
+      );
+      await finish(tester);
+    });
+
+    testWidgets('keeps the compact phone toolbar inside its width', (
+      tester,
+    ) async {
+      await pumpToolbar(
+        tester,
+        connected: true,
+        platform: TargetPlatform.iOS,
+        size: const Size(360, 800),
+      );
+      expect(find.byKey(const ValueKey('ios-calendar-toolbar')), findsOneWidget);
+      expect(find.byTooltip('학교 LMS 동기화'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await finish(tester);
+    });
+
+    testWidgets('a refresh finishing after the screen is gone is harmless', (
+      tester,
+    ) async {
+      final wait = Completer<void>();
+      await pumpToolbar(tester, connected: true, refreshWait: wait);
+      await tester.tap(find.byTooltip('학교 LMS 동기화'));
+      await tester.pump();
+      await finish(tester);
+      wait.complete();
+      await tester.pump();
+      expect(tester.takeException(), isNull);
+    });
   });
 
   group('filter sheet usage analytics (#153)', () {
@@ -10607,14 +10672,23 @@ class _ToolbarLms extends LmsController {
     required super.repository,
     required super.commands,
     required this.isConnected,
+    required this.isNeedsLogin,
     required this.onRefresh,
+    this.refreshWait,
   });
   final bool Function() isConnected;
+  final bool Function() isNeedsLogin;
   final void Function(bool force) onRefresh;
+  final Completer<void>? refreshWait;
   @override
   bool get supported => true;
   @override
   bool get connected => isConnected();
   @override
-  Future<void> refresh({bool force = false}) async => onRefresh(force);
+  bool get needsLogin => isNeedsLogin();
+  @override
+  Future<void> refresh({bool force = false}) async {
+    onRefresh(force);
+    await refreshWait?.future;
+  }
 }
