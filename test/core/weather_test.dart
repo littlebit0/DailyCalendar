@@ -205,6 +205,15 @@ void main() {
       '60,127',
     );
     expect(nearestWeatherRegion(regions, 35.68, 139.69), isNull);
+    // #257: regions without a position (0,0 in the index) are kept for manual
+    // choice but never matched to a real location such as 0,0.
+    final unplaced = regions
+        .where((r) => r.latitude == 0 && r.longitude == 0)
+        .toList();
+    expect(unplaced.map((r) => r.name).toSet(), {'이어도'});
+    expect(unplaced.map((r) => r.gridKey).toSet(), {'28,8'});
+    expect(nearestWeatherRegion(regions, 0, 0), isNull);
+    expect(nearestWeatherRegion(regions, 0.1, 0.1), isNull);
   });
 
   test(
