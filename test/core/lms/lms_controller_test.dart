@@ -135,6 +135,11 @@ class _Session extends LmsWebSession {
   bool automaticSucceeds = true;
   Completer<void>? automaticWait;
   Object? automaticError;
+  /// One entry per login call: true, false, or an exception to throw.
+  final automaticOutcomes = <Object>[];
+  LmsLoginFailure? automaticFailure;
+  @override
+  LmsLoginFailure? get lastAutomaticLoginFailure => automaticFailure;
   @override
   Future<bool> loginAutomatically(
     LmsLocalCredentials credentials, {
@@ -142,6 +147,12 @@ class _Session extends LmsWebSession {
   }) async {
     automaticLogins++;
     if (automaticWait != null) await automaticWait!.future;
+    if (automaticOutcomes.isNotEmpty) {
+      final outcome = automaticOutcomes.removeAt(0);
+      if (outcome is Exception) throw outcome;
+      authenticated = outcome == true;
+      return authenticated;
+    }
     if (automaticError != null) throw automaticError!;
     authenticated = automaticSucceeds;
     return automaticSucceeds;
@@ -264,6 +275,7 @@ void main() {
     repository = _Repository();
     commands = _Commands(repository);
     controller = LmsController(
+      automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
       settings: settings,
       repository: repository,
       commands: commands,
@@ -311,6 +323,7 @@ void main() {
     () async {
       final store = _DeferredCredentials();
       final local = LmsController(
+        automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
         settings: settings,
         repository: repository,
         commands: commands,
@@ -525,6 +538,59 @@ void main() {
     },
   );
 
+  const network = LmsWebSessionException(LmsWebSessionError.network);
+
+  test('a transient failure is retried twice and then succeeds (#348)', () async {
+    configure = (s) {
+      s.stored = false;
+      s.automaticOutcomes.addAll([network, network, true]);
+    };
+    await controller.saveAutomaticLogin('test-user', 'fixture-password');
+    expect(sessions.single.automaticLogins, 3);
+    expect(controller.lastLoginFailure, isNull);
+    expect(controller.sync.state, LmsSyncState.ready);
+  });
+
+  test('a rejected password is not retried and says so (#348)', () async {
+    configure = (s) {
+      s.stored = false;
+      s.automaticOutcomes.add(false);
+      s.automaticFailure = LmsLoginFailure.credentialsRejected;
+    };
+    await controller.saveAutomaticLogin('test-user', 'fixture-password');
+    expect(sessions.single.automaticLogins, 1);
+    expect(controller.lastLoginFailure, LmsLoginFailure.credentialsRejected);
+    expect(controller.lastLoginFailure!.message, startsWith('비밀번호가 틀렸습니다.'));
+  });
+
+  test('a required extra verification is not retried and says so (#348)', () async {
+    configure = (s) {
+      s.stored = false;
+      s.automaticOutcomes.add(false);
+      s.automaticFailure = LmsLoginFailure.additionalAuthentication;
+    };
+    await controller.saveAutomaticLogin('test-user', 'fixture-password');
+    expect(sessions.single.automaticLogins, 1);
+    expect(
+      controller.lastLoginFailure!.message,
+      startsWith('인증 절차가 필요하여 거부되었습니다.'),
+    );
+  });
+
+  test('a later session expiry signs in again with the saved login (#348)', () async {
+    configure = (s) => s.stored = false;
+    await controller.saveAutomaticLogin('test-user', 'fixture-password');
+    final session = sessions.single;
+    expect(session.automaticLogins, 1);
+    expect(controller.sync.state, LmsSyncState.ready);
+    session
+      ..authenticated = false
+      ..stored = false;
+    await controller.refresh(force: true);
+    expect(session.automaticLogins, 2);
+    expect(controller.sync.state, LmsSyncState.ready);
+  });
+
   test(
     'network failure during automatic login preserves credentials without repeated submission',
     () async {
@@ -536,7 +602,8 @@ void main() {
       };
       await controller.saveAutomaticLogin('test-user', 'fixture-password');
       await controller.refresh(force: true);
-      expect(sessions.single.automaticLogins, 1);
+      // The first attempt plus two retries; the later refresh adds none.
+      expect(sessions.single.automaticLogins, 3);
       expect(controller.lastLoginFailure, LmsLoginFailure.network);
       expect(
         (await LmsCredentialsStore().read(
@@ -1006,6 +1073,7 @@ void main() {
     LmsController create({LmsCredentialsStore? store}) {
       analytics = _RecordingAnalytics();
       final local = LmsController(
+        automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
         settings: settings,
         repository: repository,
         commands: commands,
@@ -1304,6 +1372,7 @@ void main() {
 
     test('a failed unpause write is reported as a secure-storage problem', () async {
       final local = LmsController(
+        automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
         settings: settings,
         repository: repository,
         commands: commands,

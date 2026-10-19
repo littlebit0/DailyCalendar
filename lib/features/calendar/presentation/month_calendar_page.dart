@@ -12,6 +12,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/weather/weather_widgets.dart';
 import '../../../core/di/app_providers.dart';
+import '../../../core/lms/lms_sync_service.dart';
 import '../../../core/analytics/product_analytics.dart';
 import '../../../core/analytics/startup_milestones.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
@@ -5191,6 +5192,18 @@ class _CalendarHeader extends ConsumerWidget {
         platform == TargetPlatform.android &&
         dailyWindowClassFor(windowSize) != DailyWindowClass.compact;
     final actionSize = androidTablet ? 48.0 : 40.0;
+    final lms = ref.watch(lmsControllerProvider);
+    final lmsBusy = lms.restoring || lms.sync.state == LmsSyncState.loading;
+    final lmsActions = [
+      if (lms.supported && (lms.connected || lms.needsLogin))
+        DailyIconAction(
+          tooltip: context.tr('학교 LMS 동기화'),
+          onPressed: lmsBusy ? null : () => _syncLms(context, ref),
+          icon: Icons.sync_rounded,
+          size: actionSize,
+          borderless: true,
+        ),
+    ];
     final locale = Localizations.localeOf(context).toLanguageTag();
     final settings = ref.watch(appSettingsProvider);
     final fullDayLabel =
@@ -5210,7 +5223,10 @@ class _CalendarHeader extends ConsumerWidget {
       showFullDay: fullDayLabel,
     );
     final periodLabelMaxWidth = fullDayLabel && mobile
-        ? math.max(40.0, windowSize.width - 20 - actionSize * 4 - 44)
+        ? math.max(
+            40.0,
+            windowSize.width - 20 - actionSize * (4 + lmsActions.length) - 44,
+          )
         : mobile &&
               monthNavigationMode == MonthNavigationMode.vertical &&
               viewMode == CalendarViewMode.week
@@ -5447,6 +5463,7 @@ class _CalendarHeader extends ConsumerWidget {
             if (!timetableSelected) ...[
               ...navigationActions,
               ...utilityActions.take(2),
+              ...lmsActions,
             ],
             llmButton,
             DailyIconAction(
@@ -5505,6 +5522,7 @@ class _CalendarHeader extends ConsumerWidget {
             navigationActions[2],
             utilityActions[0],
             utilityActions[1],
+            ...lmsActions,
             utilityActions[2],
           ],
         ),
@@ -5523,8 +5541,35 @@ class _CalendarHeader extends ConsumerWidget {
           if (!mobile) ...navigationActions.take(2),
           navigationActions[2],
           const SizedBox(width: 6),
-          ...utilityActions,
+          utilityActions[0],
+          utilityActions[1],
+          ...lmsActions,
+          utilityActions[2],
         ],
+      ),
+    );
+  }
+
+  /// Same action as "지금 동기화" in the LMS settings: it signs in again with
+  /// the saved login when the school session has expired.
+  Future<void> _syncLms(BuildContext context, WidgetRef ref) async {
+    final controller = ref.read(lmsControllerProvider);
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final translate = context.tr;
+    await controller.refresh(force: true);
+    final failed =
+        controller.needsLogin ||
+        controller.sync.state == LmsSyncState.fallback;
+    messenger?.showSnackBar(
+      SnackBar(
+        content: Text(
+          translate(
+            failed
+                ? (controller.lastLoginFailure?.message ??
+                      '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.')
+                : '학교 데이터 동기화 완료',
+          ),
+        ),
       ),
     );
   }

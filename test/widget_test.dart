@@ -15,6 +15,7 @@ import 'package:daily/core/auth/apple_account.dart';
 import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/analytics/product_analytics.dart';
 import 'package:daily/core/di/app_providers.dart';
+import 'package:daily/core/lms/lms_controller.dart';
 import 'package:daily/core/diagnostics/startup_timing.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/settings/app_settings.dart';
@@ -8995,6 +8996,119 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets('the calendar toolbar has an LMS sync button (#348)', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1440, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'defaultCalendarView': CalendarViewMode.month.name,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final refreshes = <bool>[];
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+          lmsControllerProvider.overrideWith(
+            (ref) => _ToolbarLms(
+              settings: ref.watch(settingsRepositoryProvider),
+              repository: ref.watch(eventRepositoryProvider),
+              commands: ref.watch(eventCommandServiceProvider),
+              isConnected: () => false,
+              onRefresh: refreshes.add,
+            ),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    // Not connected: no button to press.
+    expect(find.byTooltip('학교 LMS 동기화'), findsNothing);
+
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
+  testWidgets('pressing the LMS sync button refreshes with force (#348)', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(1440, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    debugDefaultTargetPlatformOverride = TargetPlatform.windows;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    SharedPreferences.setMockInitialValues({
+      'onboardingCompleted': true,
+      'defaultCalendarView': CalendarViewMode.month.name,
+    });
+    final preferences = await SharedPreferences.getInstance();
+    final refreshes = <bool>[];
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File('assets/academic/university_regions.json')
+                        .readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(
+            SettingsRepository(preferences: preferences),
+          ),
+          notificationServiceProvider.overrideWithValue(_FakeNotification()),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+          googleDriveAuthServiceProvider.overrideWithValue(
+            _FakeGoogleDriveAuthService(),
+          ),
+          lmsControllerProvider.overrideWith(
+            (ref) => _ToolbarLms(
+              settings: ref.watch(settingsRepositoryProvider),
+              repository: ref.watch(eventRepositoryProvider),
+              commands: ref.watch(eventCommandServiceProvider),
+              isConnected: () => true,
+              onRefresh: refreshes.add,
+            ),
+          ),
+        ],
+        child: const DailyApp(),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('학교 LMS 동기화'), findsOneWidget);
+    final before = refreshes.length;
+    await tester.tap(find.byTooltip('학교 LMS 동기화'));
+    await tester.pumpAndSettle();
+    expect(refreshes.skip(before), [true]);
+    expect(find.text('학교 데이터 동기화 완료'), findsOneWidget);
+    debugDefaultTargetPlatformOverride = null;
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   group('filter sheet usage analytics (#153)', () {
     Future<(List<AnalyticsRecord>, _GatedSaveSettingsRepository)> pumpFilter(
       WidgetTester tester,
@@ -10485,4 +10599,22 @@ class _GatedSaveSettingsRepository extends SettingsRepository {
       changedFrom: changedFrom,
     );
   }
+}
+
+class _ToolbarLms extends LmsController {
+  _ToolbarLms({
+    required super.settings,
+    required super.repository,
+    required super.commands,
+    required this.isConnected,
+    required this.onRefresh,
+  });
+  final bool Function() isConnected;
+  final void Function(bool force) onRefresh;
+  @override
+  bool get supported => true;
+  @override
+  bool get connected => isConnected();
+  @override
+  Future<void> refresh({bool force = false}) async => onRefresh(force);
 }

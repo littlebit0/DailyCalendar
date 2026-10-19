@@ -161,10 +161,10 @@ const Map<String, Map<String, String>> _translations = {
         "Could not connect to the school server. Check your network and try again.",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.":
         "School sign-in verification timed out. Please try again later.",
-    "학교에서 추가 인증 또는 보안문자 입력을 요구합니다. 수동 로그인으로 인증을 완료해 주세요.":
-        "The school requires additional verification or a CAPTCHA. Complete it with manual sign-in.",
-    "학교 로그인 화면에 아이디 또는 비밀번호 오류가 표시됐습니다. 저장된 정보를 확인해 주세요.":
-        "The school sign-in page reported an ID or password error. Check the saved credentials.",
+    "인증 절차가 필요하여 거부되었습니다. 수동 로그인으로 추가 인증 또는 보안문자 입력을 완료해 주세요.":
+        "Sign-in was refused because a verification step is required. Complete the extra verification or CAPTCHA with manual sign-in.",
+    "비밀번호가 틀렸습니다. 저장된 로그인 정보를 확인해 주세요.":
+        "The password is wrong. Check the saved sign-in information.",
     "학교에서 계정 잠금 또는 로그인 시도 제한을 안내했습니다. 학교 안내에 따라 해제한 뒤 다시 시도해 주세요.":
         "The school reported an account lock or sign-in attempt limit. Follow its instructions before retrying.",
     "학교에서 비밀번호 만료 또는 변경을 요구합니다. 학교 사이트에서 변경한 뒤 저장된 정보도 수정해 주세요.":
@@ -760,6 +760,7 @@ const Map<String, Map<String, String>> _translations = {
     '이 계정의 Google Drive에 일정, 설정, 시간표를 백업한 뒤 다른 기기의 변경을 가져옵니다.':
         'Back up events, settings, and timetables to this account’s Google Drive, then retrieve changes from other devices.',
     '지금 동기화': 'Sync now',
+    '학교 LMS 동기화': 'Sync school LMS',
     'Google 인증 세션이 없습니다. 다시 연결하면 자동 동기화가 재개됩니다.':
         'The Google session is unavailable. Reconnect to resume automatic sync.',
     'Google 로그인 시 Drive AppData 권한도 함께 승인합니다.':
@@ -1217,10 +1218,10 @@ const Map<String, Map<String, String>> _translations = {
         "学校サーバーに接続できません。ネットワークを確認して再試行してください。",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.":
         "学校ログインの確認がタイムアウトしました。後でもう一度お試しください。",
-    "학교에서 추가 인증 또는 보안문자 입력을 요구합니다. 수동 로그인으로 인증을 완료해 주세요.":
-        "学校側の追加認証または画像認証が必要です。手動ログインで完了してください。",
-    "학교 로그인 화면에 아이디 또는 비밀번호 오류가 표시됐습니다. 저장된 정보를 확인해 주세요.":
-        "学校ログイン画面にIDまたはパスワードのエラーが表示されました。保存情報を確認してください。",
+    "인증 절차가 필요하여 거부되었습니다. 수동 로그인으로 추가 인증 또는 보안문자 입력을 완료해 주세요.":
+        "認証手続きが必要なため拒否されました。手動ログインで追加認証または画像認証を完了してください。",
+    "비밀번호가 틀렸습니다. 저장된 로그인 정보를 확인해 주세요.":
+        "パスワードが間違っています。保存したログイン情報を確認してください。",
     "학교에서 계정 잠금 또는 로그인 시도 제한을 안내했습니다. 학교 안내에 따라 해제한 뒤 다시 시도해 주세요.":
         "学校側でアカウントのロックまたはログイン回数の制限が表示されました。学校の案内に従って解除してください。",
     "학교에서 비밀번호 만료 또는 변경을 요구합니다. 학교 사이트에서 변경한 뒤 저장된 정보도 수정해 주세요.":
@@ -1748,6 +1749,7 @@ const Map<String, Map<String, String>> _translations = {
     '이 계정의 Google Drive에 일정, 설정, 시간표를 백업한 뒤 다른 기기의 변경을 가져옵니다.':
         'このアカウントのGoogle Driveに予定・設定・時間割をバックアップしてから、ほかのデバイスの変更を取得します。',
     '지금 동기화': '今すぐ同期',
+    '학교 LMS 동기화': '大学LMSを同期',
     'Google 인증 세션이 없습니다. 다시 연결하면 자동 동기화가 재개됩니다.':
         'Google認証セッションがありません。再接続すると自動同期が再開します。',
     'Google 로그인 시 Drive AppData 권한도 함께 승인합니다.':
@@ -2177,10 +2179,10 @@ const Map<String, Map<String, String>> _translations = {
         '無法載入儲存的設定或準備應用程式。既有設定與行程並未重設。若問題持續，請聯絡支援。',
     "학교 서버에 연결하지 못했습니다. 네트워크 상태를 확인한 뒤 다시 시도해 주세요.": "無法連線學校伺服器。請檢查網路後重試。",
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.": "學校登入驗證逾時。請稍後重試。",
-    "학교에서 추가 인증 또는 보안문자 입력을 요구합니다. 수동 로그인으로 인증을 완료해 주세요.":
-        "學校要求額外驗證或驗證碼。請手動登入完成驗證。",
-    "학교 로그인 화면에 아이디 또는 비밀번호 오류가 표시됐습니다. 저장된 정보를 확인해 주세요.":
-        "學校登入頁面顯示帳號或密碼錯誤。請檢查已儲存的資訊。",
+    "인증 절차가 필요하여 거부되었습니다. 수동 로그인으로 추가 인증 또는 보안문자 입력을 완료해 주세요.":
+        "因需要驗證程序而被拒絕。請以手動登入完成額外驗證或驗證碼。",
+    "비밀번호가 틀렸습니다. 저장된 로그인 정보를 확인해 주세요.":
+        "密碼錯誤。請檢查已儲存的登入資訊。",
     "학교에서 계정 잠금 또는 로그인 시도 제한을 안내했습니다. 학교 안내에 따라 해제한 뒤 다시 시도해 주세요.":
         "學校提示帳號鎖定或登入次數限制。請依學校說明解除後重試。",
     "학교에서 비밀번호 만료 또는 변경을 요구합니다. 학교 사이트에서 변경한 뒤 저장된 정보도 수정해 주세요.":
@@ -2692,6 +2694,7 @@ const Map<String, Map<String, String>> _translations = {
     '이 계정의 Google Drive에 일정, 설정, 시간표를 백업한 뒤 다른 기기의 변경을 가져옵니다.':
         '將行程、設定和課表備份至此帳號的 Google Drive，再取得其他裝置的變更。',
     '지금 동기화': '立即同步',
+    '학교 LMS 동기화': '同步學校 LMS',
     'Google 인증 세션이 없습니다. 다시 연결하면 자동 동기화가 재개됩니다.':
         '沒有 Google 驗證工作階段。重新連結後會恢復自動同步。',
     'Google 로그인 시 Drive AppData 권한도 함께 승인합니다.':
