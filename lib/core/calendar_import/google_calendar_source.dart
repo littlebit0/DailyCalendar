@@ -86,6 +86,9 @@ class GoogleCalendarSource {
     }
     final events = <ExternalCalendarEvent>[];
     for (final calendar in selected) {
+      // Exceptions may arrive on any page, before or after their series, so the
+      // whole calendar is read before series and exceptions are joined.
+      final items = <Map<String, dynamic>>[];
       String? pageToken;
       do {
         var response = await _getEvents(
@@ -103,19 +106,145 @@ class GoogleCalendarSource {
         }
         _ensureSuccess(response);
         final body = _jsonMap(response.body);
-        for (final item in (body['items'] as List<Object?>? ?? const [])) {
-          if (item is! Map<String, dynamic> || item['status'] == 'cancelled') {
-            continue;
-          }
-          final event = _eventFromJson(calendar, item);
-          if (event != null) {
-            events.add(event);
-          }
-        }
+        items.addAll(
+          (body['items'] as List<Object?>? ?? const [])
+              .whereType<Map<String, dynamic>>(),
+        );
         pageToken = body['nextPageToken'] as String?;
       } while (pageToken != null && pageToken.isNotEmpty);
+      events.addAll(_eventsFromItems(calendar, items));
     }
     return events;
+  }
+
+  /// Joins recurring series with their exception instances. A cancelled
+  /// instance removes its original occurrence; a moved or edited instance
+  /// removes its original occurrence and is imported once as itself.
+  List<ExternalCalendarEvent> _eventsFromItems(
+    ImportableCalendar calendar,
+    List<Map<String, dynamic>> items,
+  ) {
+    final removedBySeries = <String, Set<DateTime>>{};
+    for (final item in items) {
+      final seriesId = item['recurringEventId'] as String?;
+      final original = _occurrenceDate(item['originalStartTime']);
+      if (seriesId != null && original != null) {
+        removedBySeries.putIfAbsent(seriesId, () => {}).add(original);
+      }
+    }
+    final events = <ExternalCalendarEvent>[];
+    for (final item in items) {
+      // A cancelled single event, or a cancelled instance already applied above.
+      if (item['status'] == 'cancelled') continue;
+      final event = _eventFromJson(
+        calendar,
+        item,
+        removedOccurrences: removedBySeries[item['id']] ?? const {},
+      );
+      if (event == null) continue;
+      events.add(event);
+      events.addAll(_extraOccurrences(item, event));
+    }
+    return events;
+  }
+
+  /// RDATE occurrences cannot be expressed by a Daily repeat rule, so each one
+  /// is imported as a single event with the series' duration.
+  Iterable<ExternalCalendarEvent> _extraOccurrences(
+    Map<String, dynamic> json,
+    ExternalCalendarEvent series,
+  ) sync* {
+    if (series.recurrenceRule == null) return;
+    final duration = series.endAt.difference(series.startAt);
+    for (final line in _recurrenceLines(json, 'RDATE')) {
+      for (final value in _icalValues(line)) {
+        final parsed = _icalDateTime(value);
+        if (parsed == null) continue;
+        final start = series.allDay || value.length == 8
+            ? DateTime(
+                parsed.year,
+                parsed.month,
+                parsed.day,
+                series.allDay ? 0 : series.startAt.hour,
+                series.allDay ? 0 : series.startAt.minute,
+              )
+            : parsed;
+        yield ExternalCalendarEvent(
+          sourceId: '${series.sourceId}#rdate#$value',
+          calendarId: series.calendarId,
+          provider: series.provider,
+          title: series.title,
+          memo: series.memo,
+          location: series.location,
+          url: series.url,
+          startAt: start,
+          endAt: start.add(duration),
+          allDay: series.allDay,
+          colorValue: series.colorValue,
+          reminderMinutesBeforeList: series.reminderMinutesBeforeList,
+        );
+      }
+    }
+  }
+
+  List<String> _recurrenceLines(Map<String, dynamic> json, String name) => [
+    for (final line
+        in (json['recurrence'] as List<Object?>? ?? const [])
+            .whereType<String>())
+      if (line.toUpperCase().startsWith('$name:') ||
+          line.toUpperCase().startsWith('$name;'))
+        line,
+  ];
+
+  /// The comma-separated values after a property's parameters.
+  List<String> _icalValues(String line) {
+    final colon = line.indexOf(':');
+    if (colon < 0) return const [];
+    return [
+      for (final value in line.substring(colon + 1).split(','))
+        if (value.trim().isNotEmpty) value.trim(),
+    ];
+  }
+
+  /// `YYYYMMDD`, `YYYYMMDDTHHMMSS` (floating or TZID time, read as written)
+  /// or `...Z` (UTC, converted to local time).
+  // shortcut: a TZID time is read as device-local time, so it can land on the
+  // wrong date when the device is in another zone; convert by TZID when the
+  // app gains a time-zone database.
+  DateTime? _icalDateTime(String value) {
+    final match = RegExp(
+      r'^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z?))?$',
+    ).firstMatch(value);
+    if (match == null) return null;
+    int part(int index) => int.parse(match[index] ?? '0');
+    if (match[4] == null) return DateTime(part(1), part(2), part(3));
+    final utc = match[7] == 'Z';
+    final values = [part(1), part(2), part(3), part(4), part(5), part(6)];
+    return utc
+        ? DateTime.utc(
+            values[0],
+            values[1],
+            values[2],
+            values[3],
+            values[4],
+            values[5],
+          ).toLocal()
+        : DateTime(
+            values[0],
+            values[1],
+            values[2],
+            values[3],
+            values[4],
+            values[5],
+          );
+  }
+
+  /// The local date of an occurrence's original start (`originalStartTime`).
+  DateTime? _occurrenceDate(Object? value) {
+    if (value is! Map<String, dynamic>) return null;
+    final allDay = value['date'] is String;
+    final date = _googleDate(value, allDay: allDay);
+    return date == null ? null : DateTime(date.year, date.month, date.day);
   }
 
   Future<Map<String, String>> _headers({
@@ -180,8 +309,9 @@ class GoogleCalendarSource {
 
   ExternalCalendarEvent? _eventFromJson(
     ImportableCalendar calendar,
-    Map<String, dynamic> json,
-  ) {
+    Map<String, dynamic> json, {
+    Set<DateTime> removedOccurrences = const {},
+  }) {
     final id = json['id'] as String?;
     final startValue = json['start'];
     final endValue = json['end'];
@@ -222,9 +352,29 @@ class GoogleCalendarSource {
       recurrenceRule: recurrenceRule == null || recurrenceRule.isEmpty
           ? null
           : recurrenceRule,
+      excludedDates: recurrenceRule == null || recurrenceRule.isEmpty
+          ? const []
+          : _excludedDates(json, removedOccurrences),
       colorValue: calendar.colorValue,
       reminderMinutesBeforeList: _eventReminderMinutes(json, calendar),
     );
+  }
+
+  /// EXDATE values plus occurrences removed by cancelled or moved instances.
+  List<DateTime> _excludedDates(
+    Map<String, dynamic> json,
+    Set<DateTime> removedOccurrences,
+  ) {
+    final dates = {...removedOccurrences};
+    for (final line in _recurrenceLines(json, 'EXDATE')) {
+      for (final value in _icalValues(line)) {
+        final parsed = _icalDateTime(value);
+        if (parsed != null) {
+          dates.add(DateTime(parsed.year, parsed.month, parsed.day));
+        }
+      }
+    }
+    return dates.toList()..sort();
   }
 
   List<int> _eventReminderMinutes(

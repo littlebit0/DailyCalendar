@@ -1,8 +1,12 @@
 import 'dart:convert';
 
 import 'package:daily/core/calendar_import/calendar_import_models.dart';
+import 'package:daily/core/calendar_import/calendar_import_service.dart';
 import 'package:daily/core/calendar_import/google_calendar_source.dart';
 import 'package:daily/core/sync/google_drive_auth_service.dart';
+import 'package:daily/features/events/data/recurrence_expander.dart';
+import 'package:daily/features/events/domain/calendar_event.dart';
+import 'package:daily/features/events/domain/event_category.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -101,6 +105,120 @@ void main() {
     expect(events.single.memo, '메모');
     expect(events.single.location, '서울');
     expect(events.single.reminderMinutesBeforeList, [10]);
+  });
+
+  test('취소·이동 회차와 EXDATE·RDATE를 반복 원본에 반영한다 (#101)', () async {
+    // The exceptions come on the first page, their series on the second.
+    final pages = [
+      {
+        'nextPageToken': 'page-2',
+        'items': [
+          {
+            'id': 'weekly_20261012T000000Z',
+            'status': 'cancelled',
+            'recurringEventId': 'weekly',
+            'originalStartTime': {'dateTime': '2026-10-12T09:00:00+09:00'},
+          },
+          {
+            'id': 'weekly_20261019T000000Z',
+            'status': 'confirmed',
+            'recurringEventId': 'weekly',
+            'originalStartTime': {'dateTime': '2026-10-19T09:00:00+09:00'},
+            'summary': '주간 회의',
+            'start': {'dateTime': '2026-10-20T11:00:00+09:00'},
+            'end': {'dateTime': '2026-10-20T12:00:00+09:00'},
+          },
+          {'id': 'deleted-single', 'status': 'cancelled'},
+        ],
+      },
+      {
+        'items': [
+          {
+            'id': 'weekly',
+            'status': 'confirmed',
+            'summary': '주간 회의',
+            'start': {'dateTime': '2026-10-05T09:00:00+09:00'},
+            'end': {'dateTime': '2026-10-05T10:00:00+09:00'},
+            'recurrence': [
+              'RRULE:FREQ=WEEKLY;BYDAY=MO',
+              'EXDATE;TZID=Asia/Seoul:20261026T090000',
+              'RDATE;TZID=Asia/Seoul:20261029T090000',
+            ],
+          },
+        ],
+      },
+    ];
+    final source = GoogleCalendarSource(
+      authService: _FakeAuth(),
+      httpClient: MockClient((request) async {
+        final page = request.url.queryParameters['pageToken'] == 'page-2'
+            ? pages[1]
+            : pages[0];
+        return http.Response(
+          jsonEncode(page),
+          200,
+          headers: const {'content-type': 'application/json; charset=utf-8'},
+        );
+      }),
+    );
+    const calendar = ImportableCalendar(
+      id: 'person@example.com',
+      title: '내 캘린더',
+      provider: CalendarImportProvider.google,
+    );
+
+    final events = await source.loadEvents(const [calendar]);
+
+    expect(events.map((event) => event.sourceId), [
+      'weekly_20261019T000000Z',
+      'weekly',
+      'weekly#rdate#20261029T090000',
+    ]);
+    final series = events.firstWhere((event) => event.sourceId == 'weekly');
+    DateTime day(String iso) {
+      final local = DateTime.parse(iso).toLocal();
+      return DateTime(local.year, local.month, local.day);
+    }
+
+    expect(series.excludedDates, [
+      day('2026-10-12T09:00:00+09:00'),
+      day('2026-10-19T09:00:00+09:00'),
+      DateTime(2026, 10, 26),
+    ]);
+
+    // Normalize as the import does and list the occurrences in October.
+    final stored = [
+      for (final event in events)
+        CalendarEvent(
+          id: CalendarImportService.externalEventId(event),
+          title: event.title,
+          startAt: event.startAt,
+          endAt: event.endAt,
+          allDay: event.allDay,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          recurrence: CalendarImportService.recurrenceFromRrule(
+            event.recurrenceRule,
+          ).copyWith(excludedDates: event.excludedDates),
+          createdAt: DateTime(2026, 10),
+          updatedAt: DateTime(2026, 10),
+        ),
+    ];
+    final expander = RecurrenceExpander();
+    final starts = [
+      for (final event in stored)
+        for (final occurrence in expander.expand(
+          event,
+          DateTime(2026, 10),
+          DateTime(2026, 11),
+        ))
+          occurrence.startAt,
+    ]..sort();
+    expect(starts, [
+      DateTime.parse('2026-10-05T09:00:00+09:00').toLocal(),
+      DateTime.parse('2026-10-20T11:00:00+09:00').toLocal(),
+      DateTime(2026, 10, 29, 9),
+    ]);
   });
 }
 

@@ -41,6 +41,7 @@ class ExternalCalendarEvent {
     this.location,
     this.url,
     this.recurrenceRule,
+    this.excludedDates = const <DateTime>[],
     this.colorValue,
     this.reminderMinutesBeforeList = const <int>[],
   });
@@ -56,6 +57,10 @@ class ExternalCalendarEvent {
   final DateTime endAt;
   final bool allDay;
   final String? recurrenceRule;
+
+  /// Local dates of repeat occurrences the source removed (EXDATE, cancelled
+  /// or moved instances). Empty for single events.
+  final List<DateTime> excludedDates;
   final int? colorValue;
   final List<int> reminderMinutesBeforeList;
 }
