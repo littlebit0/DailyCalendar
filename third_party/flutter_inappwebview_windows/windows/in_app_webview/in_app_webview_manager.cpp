@@ -236,13 +236,14 @@ namespace flutter_inappwebview_plugin
       return false;
     }
 
-    ABI::Windows::Graphics::Capture::IGraphicsCaptureSessionStatics*
+    // Daily #244: own the caller's factory reference so every return releases it.
+    winrt::com_ptr<ABI::Windows::Graphics::Capture::IGraphicsCaptureSessionStatics>
       capture_session_statics;
     if (FAILED(rohelper_->GetActivationFactory(
       className,
       __uuidof(
         ABI::Windows::Graphics::Capture::IGraphicsCaptureSessionStatics),
-      (void**)&capture_session_statics))) {
+      capture_session_statics.put_void()))) {
       return false;
     }
 
