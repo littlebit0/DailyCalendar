@@ -96,7 +96,7 @@ class UosAcademicSource implements AcademicSource {
         start: start,
         end: end,
         url:
-            'https://www.uos.ac.kr/korCalendarYear/list.do?list_id=CA1&menuid=2000003003001000000&identified=anonymous',
+            'https://www.uos.ac.kr/korCalendarYear/list.do?list_id=CA1&menuid=2000003003001000000&identified=anonymous&year_code=$year',
       );
     }
     if (months.length != 12 || events.isEmpty) {

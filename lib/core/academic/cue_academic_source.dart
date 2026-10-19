@@ -63,7 +63,7 @@ class CueAcademicSource implements AcademicSource {
             start: e.start,
             end: e.end,
             url:
-                'https://www.cue.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN052',
+                'https://www.cue.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN052&calendar_year=$year',
           ),
         )
         .toList();

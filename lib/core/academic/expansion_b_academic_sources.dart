@@ -298,7 +298,7 @@ class HanseiAcademicSource extends _Source {
             title: label,
             start: start,
             end: DateTime(last.year, last.month, last.day + 1),
-            url: 'https://hansei.ac.kr/view.do?no=10302',
+            url: 'https://hansei.ac.kr/view.do?no=10302&dateY=$year&dateM=0&tab=lst',
           ),
         );
       }

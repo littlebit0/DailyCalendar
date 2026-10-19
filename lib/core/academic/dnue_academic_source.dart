@@ -115,7 +115,7 @@ class DnueAcademicSource implements AcademicSource {
           start: start,
           end: end,
           url:
-              'https://www.dnue.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN119',
+              'https://www.dnue.ac.kr/kor/CMS/ScheduleMgr/YearList.do?mCode=MN119&calendar_year=$year',
         );
       }
     }
