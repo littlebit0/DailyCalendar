@@ -541,7 +541,8 @@ void main() {
 
     await tester.tap(find.text('열기'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('9:00 AM'));
+    // The editor follows the app's default 24-hour setting.
+    await tester.tap(find.text('09:00'));
     await tester.pumpAndSettle();
     await tester.tap(find.byIcon(Icons.keyboard_outlined));
     await tester.pumpAndSettle();
@@ -577,6 +578,48 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     }
   });
+  for (final use24HourTime in [true, false]) {
+    testWidgets(
+      'labels and time picker follow the app setting use24HourTime=$use24HourTime (#180)',
+      (tester) async {
+        final start = DateTime(2026, 10, 1, 14, 30);
+        final event = CalendarEvent(
+          id: 'timed',
+          title: 'afternoon',
+          startAt: start,
+          endAt: start.add(const Duration(hours: 1)),
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: start,
+          updatedAt: start,
+        );
+        // The test device formats times with 12 hours by default.
+        await tester.pumpWidget(
+          _DialogHost(
+            builder: (_) => EventEditorDialog(
+              initialDate: start,
+              event: event,
+              use24HourTime: use24HourTime,
+            ),
+            onSaved: (_) {},
+          ),
+        );
+        await tester.tap(find.text('열기'));
+        await tester.pumpAndSettle();
+        final startLabel = use24HourTime ? '14:30' : '2:30 PM';
+        expect(find.text(startLabel), findsOneWidget);
+        expect(find.text(use24HourTime ? '15:30' : '3:30 PM'), findsOneWidget);
+
+        await tester.tap(find.text(startLabel));
+        await tester.pumpAndSettle();
+        expect(find.text('PM'), use24HourTime ? findsNothing : findsOneWidget);
+        await tester.tap(find.text('Cancel'));
+        await tester.pumpAndSettle();
+        expect(find.text(startLabel), findsOneWidget);
+      },
+    );
+  }
 }
 
 class _AuthorizedAlarmService implements AlarmService {

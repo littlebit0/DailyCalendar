@@ -339,6 +339,7 @@ class EventDetailsPanel extends ConsumerWidget {
         categories: categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
         alarmService: ref.read(alarmServiceProvider),
+        use24HourTime: ref.read(appSettingsProvider).use24HourTime,
       ),
     );
     unawaited(
@@ -393,6 +394,7 @@ class EventDetailsPanel extends ConsumerWidget {
         loadCategories: () => settingsRepository.load().categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
         alarmService: ref.read(alarmServiceProvider),
+        use24HourTime: ref.read(appSettingsProvider).use24HourTime,
       ),
     );
     unawaited(
