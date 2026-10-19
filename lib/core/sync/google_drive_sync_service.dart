@@ -978,14 +978,55 @@ class GoogleDriveSyncService implements SyncService {
 
   Future<void> _restore(Map<String, String> authHeaders) async {
     final remoteSettings = await _downloadRestorableSettings(authHeaders);
-    final remoteEvents = await _downloadAllEvents(authHeaders);
+    final remoteFiles = await _listEventFiles(authHeaders);
+    final remoteEvents = await _downloadEventFiles(authHeaders, remoteFiles);
     final remoteTimetable = await _downloadRestorableTimetable(authHeaders);
     _validateSyncSession?.call();
     await _applyDownloadedEvents(remoteEvents);
+    await _queueEventsMissingFromDrive({
+      for (final file in remoteFiles) ?_eventIdFromFileName(file.name),
+    });
     if (remoteSettings != null) await _applyDownloadedSettings(remoteSettings);
     await _applyDownloadedTimetable(remoteTimetable);
     _academicSettingsBootstrapIdentity = _accountIdentity;
     await _refreshWidgets();
+  }
+
+  /// A full restore sees every Drive event file. A local event with no file
+  /// at all (not even a deletion record) is not on Drive yet, so it is marked
+  /// pending and queued for the normal event upload whatever its sync status
+  /// says. The pending mark is stored, so a failed upload is retried later.
+  Future<void> _queueEventsMissingFromDrive(Set<String> driveEventIds) async {
+    final missing = <CalendarEvent>[];
+    for (final event in await _eventRepository.allEventsForSync()) {
+      _validateSyncSession?.call();
+      if (event.isDeleted ||
+          !_canSyncEvent(event) ||
+          driveEventIds.contains(event.id)) {
+        continue;
+      }
+      missing.add(event);
+    }
+    if (missing.isEmpty) return;
+    // Only flip the status of a row that still matches what was read; a
+    // concurrent edit keeps its own (already pending) state.
+    CalendarEvent resolve(CalendarEvent? existing, CalendarEvent read) {
+      if (existing == null) return read;
+      return _sameEventSnapshot(existing, read)
+          ? existing.copyWith(syncStatus: 'pending')
+          : existing;
+    }
+
+    if (_maintenance != null) {
+      await _maintenance!.mergeSyncRecords(missing, [], resolve: resolve);
+    } else {
+      await _eventRepository.mergeRestoredEventsAtomically(
+        missing,
+        resolve: resolve,
+      );
+    }
+    _queuedEventIds.addAll(missing.map((event) => event.id));
+    _queueChangeSync();
   }
 
   Future<bool> _applyDownloadedEvents(List<_DownloadedEvent> records) async {
