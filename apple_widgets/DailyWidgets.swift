@@ -454,6 +454,27 @@ enum DailyWidgetDateRollover {
 }
 // END WIDGET ROLLOVER
 
+// BEGIN WIDGET WEEKDAY COLUMNS
+/// The weekday shown in a header column, 0 = Sunday ... 6 = Saturday.
+func dailyWeekdayOfColumn(_ column: Int, weekStartsOnMonday: Bool) -> Int {
+  weekStartsOnMonday ? (column + 1) % 7 : column
+}
+
+func dailyWeekdayLabels(weekStartsOnMonday: Bool) -> [String] {
+  let names = ["일", "월", "화", "수", "목", "금", "토"]
+  return (0..<7).map { names[dailyWeekdayOfColumn($0, weekStartsOnMonday: weekStartsOnMonday)] }
+}
+// END WIDGET WEEKDAY COLUMNS
+
+/// Sunday red, Saturday blue, weekdays secondary, whatever the week start.
+func dailyWeekdayColor(column: Int, weekStartsOnMonday: Bool) -> Color {
+  switch dailyWeekdayOfColumn(column, weekStartsOnMonday: weekStartsOnMonday) {
+  case 0: return .red
+  case 6: return .blue
+  default: return .dailySecondary
+  }
+}
+
 struct DailyWidgetSnapshot: Codable {
   let generatedAt: Int64
   let themeMode: String?
@@ -776,9 +797,7 @@ struct DailyMonthWidgetView: View {
   let entry: DailyWidgetEntry
 
   private var weekdayLabels: [String] {
-    entry.snapshot.weekStartsOnMonday
-      ? ["월", "화", "수", "목", "금", "토", "일"]
-      : ["일", "월", "화", "수", "목", "금", "토"]
+    dailyWeekdayLabels(weekStartsOnMonday: entry.snapshot.weekStartsOnMonday)
   }
 
   var body: some View {
@@ -809,7 +828,7 @@ struct DailyMonthWidgetView: View {
           Text(label)
             .font(.system(size: 10, weight: .semibold))
             .foregroundStyle(
-              index == 0 ? Color.red : (index == 6 ? Color.blue : Color.dailySecondary)
+              dailyWeekdayColor(column: index, weekStartsOnMonday: entry.snapshot.weekStartsOnMonday)
             )
             .frame(maxWidth: .infinity)
         }
@@ -845,9 +864,7 @@ struct DailyWeekWidgetView: View {
   }
 
   private var weekdayLabels: [String] {
-    entry.snapshot.weekStartsOnMonday
-      ? ["월", "화", "수", "목", "금", "토", "일"]
-      : ["일", "월", "화", "수", "목", "금", "토"]
+    dailyWeekdayLabels(weekStartsOnMonday: entry.snapshot.weekStartsOnMonday)
   }
 
   private var spans: [DailyWidgetEventSpan] { eventSpans(in: weekDays) }
@@ -892,7 +909,8 @@ struct DailyWeekWidgetView: View {
                     Text(weekdayLabels[index])
                       .font(.system(size: 10, weight: .semibold))
                       .foregroundStyle(
-                        index == 0 ? Color.red : (index == 6 ? Color.blue : Color.dailySecondary)
+                        dailyWeekdayColor(
+                          column: index, weekStartsOnMonday: entry.snapshot.weekStartsOnMonday)
                       )
                     Text("\(day.day)")
                       .font(.system(size: 10, weight: day.isToday ? .bold : .medium))

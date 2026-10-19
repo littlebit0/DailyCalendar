@@ -79,6 +79,9 @@ jobs:
       - name: Test widget date rollover wiring and Swift logic
         run: python3 -m unittest discover -s tool/tests -p test_widget_date_rollover_wiring.py -v
 
+      - name: Test Apple widget weekday header colours
+        run: python3 -m unittest discover -s tool/tests -p test_widget_weekday_columns.py -v
+
       - name: Test Apple LMS session paths without skips
         run: |
           flutter test --no-pub --reporter json test/core/lms/lms_web_session_test.dart > apple-lms-results.json
