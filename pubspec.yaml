@@ -180,3 +180,6 @@ dependency_overrides:
   # #233: keep-alive WebViews must not leave null entries for engine detach.
   flutter_inappwebview_android:
     path: third_party/flutter_inappwebview_android
+  # #222: 64-bit notification times past 2038 and reported schedule failures.
+  flutter_local_notifications_windows:
+    path: third_party/flutter_local_notifications_windows
