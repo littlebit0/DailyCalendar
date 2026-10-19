@@ -993,10 +993,11 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   /// A full restore sees every Drive event file. A local event with no file
-  /// at all (not even a deletion record) is not on Drive yet, so it is queued
-  /// for the normal event upload whatever its sync status says.
+  /// at all (not even a deletion record) is not on Drive yet, so it is marked
+  /// pending and queued for the normal event upload whatever its sync status
+  /// says. The pending mark is stored, so a failed upload is retried later.
   Future<void> _queueEventsMissingFromDrive(Set<String> driveEventIds) async {
-    var queued = false;
+    final missing = <CalendarEvent>[];
     for (final event in await _eventRepository.allEventsForSync()) {
       _validateSyncSession?.call();
       if (event.isDeleted ||
@@ -1004,10 +1005,28 @@ class GoogleDriveSyncService implements SyncService {
           driveEventIds.contains(event.id)) {
         continue;
       }
-      _queuedEventIds.add(event.id);
-      queued = true;
+      missing.add(event);
     }
-    if (queued) _queueChangeSync();
+    if (missing.isEmpty) return;
+    // Only flip the status of a row that still matches what was read; a
+    // concurrent edit keeps its own (already pending) state.
+    CalendarEvent resolve(CalendarEvent? existing, CalendarEvent read) {
+      if (existing == null) return read;
+      return _sameEventSnapshot(existing, read)
+          ? existing.copyWith(syncStatus: 'pending')
+          : existing;
+    }
+
+    if (_maintenance != null) {
+      await _maintenance!.mergeSyncRecords(missing, [], resolve: resolve);
+    } else {
+      await _eventRepository.mergeRestoredEventsAtomically(
+        missing,
+        resolve: resolve,
+      );
+    }
+    _queuedEventIds.addAll(missing.map((event) => event.id));
+    _queueChangeSync();
   }
 
   Future<bool> _applyDownloadedEvents(List<_DownloadedEvent> records) async {

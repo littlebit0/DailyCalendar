@@ -3318,6 +3318,57 @@ void _latestMergeTests() {
     );
 
     test(
+      'a failed upload of a local-only event is retried later (#347)',
+      () async {
+        await repository.save(
+          _event(
+            id: 'only-local',
+            title: 'Only local',
+            startAt: DateTime(2026, 9, 17),
+            endAt: DateTime(2026, 9, 18),
+            updatedAt: DateTime.utc(2026, 9, 10),
+          ),
+        );
+        var failures = 1;
+        drive.requestOverride = (request) {
+          if (request.method == 'POST' && failures-- > 0) {
+            return http.Response('unavailable', 503);
+          }
+          return null;
+        };
+
+        await service.restoreNow();
+        expect(
+          (await repository.findById('only-local'))!.syncStatus,
+          'pending',
+        );
+        await service.syncPendingChangesNow().catchError((Object _) {});
+        expect(
+          drive.files.values.any(
+            (f) => f.name == 'daily-sync-v2-event-only-local.json',
+          ),
+          isFalse,
+        );
+        expect(
+          (await repository.findById('only-local'))!.syncStatus,
+          'pending',
+        );
+
+        await service.syncPendingChangesNow();
+        expect(
+          drive.files.values.any(
+            (f) => f.name == 'daily-sync-v2-event-only-local.json',
+          ),
+          isTrue,
+        );
+        expect(
+          (await repository.findById('only-local'))!.syncStatus,
+          'synced',
+        );
+      },
+    );
+
+    test(
       'issue89 restored renamed category retains stable identity through SQLite edit',
       () async {
         await settings.saveGoogleAccount(
