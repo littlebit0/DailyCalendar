@@ -47,10 +47,14 @@ class FrequentPlaces {
   }
 
   List<String> recommend(Iterable<CalendarEvent> events, {int limit = 8}) {
+    // One settings snapshot per call, not one decode per event.
+    final data = _data;
+    final pinned = List<String>.from(data['pinned'] ?? []);
+    final hidden = Set<String>.from(data['hidden'] ?? []);
     final counts = <String, int>{};
     final recent = <String, DateTime>{};
     final seen = <String>{};
-    if (automatic) {
+    if (data['automatic'] != false) {
       for (final event in events) {
         final place = normalizePlace(event.location ?? '');
         if (event.isDeleted ||
