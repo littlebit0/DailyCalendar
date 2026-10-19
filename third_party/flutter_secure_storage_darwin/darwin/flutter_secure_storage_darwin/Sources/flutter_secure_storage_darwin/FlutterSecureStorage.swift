@@ -557,7 +557,7 @@ class FlutterSecureStorage {
             let query = baseQuery(from: params)
             let valueData = value.data(using: .utf8) as Any
             let status = PreservingKeychainWrite.perform(
-                update: { SecItemUpdate(query as CFDictionary, [kSecValueData: valueData] as CFDictionary) },
+                update: { SecItemUpdate(PreservingKeychainWrite.updateSearchQuery(query) as CFDictionary, [kSecValueData: valueData] as CFDictionary) },
                 add: {
                     var item = query
                     item[kSecValueData] = valueData
@@ -601,7 +601,7 @@ class FlutterSecureStorage {
                 let keyExists = (containsKey(params: keyParams).getOrElse(false))
                 var keyStatus: OSStatus
                 if keyExists {
-                    keyStatus = SecItemUpdate(keyQuery as CFDictionary, [kSecValueData: wrappedKey] as CFDictionary)
+                    keyStatus = SecItemUpdate(PreservingKeychainWrite.updateSearchQuery(keyQuery) as CFDictionary, [kSecValueData: wrappedKey] as CFDictionary)
                 } else {
                     keyStatus = SecItemAdd(keyQuery as CFDictionary, nil)
                 }
@@ -617,7 +617,7 @@ class FlutterSecureStorage {
                 let dataExists = (containsKey(params: params).getOrElse(false))
                 var dataStatus: OSStatus
                 if dataExists {
-                    dataStatus = SecItemUpdate(dataQuery as CFDictionary, [kSecValueData: blob] as CFDictionary)
+                    dataStatus = SecItemUpdate(PreservingKeychainWrite.updateSearchQuery(dataQuery) as CFDictionary, [kSecValueData: blob] as CFDictionary)
                 } else {
                     dataStatus = SecItemAdd(dataQuery as CFDictionary, nil)
                 }
@@ -633,7 +633,7 @@ class FlutterSecureStorage {
             var query = baseQuery(from: fallbackParams)
             if keyExists {
                 let update: [CFString: Any] = [kSecValueData: value.data(using: .utf8) as Any]
-                let status = SecItemUpdate(query as CFDictionary, update as CFDictionary)
+                let status = SecItemUpdate(PreservingKeychainWrite.updateSearchQuery(query) as CFDictionary, update as CFDictionary)
                 return FlutterSecureStorageResponse(status: status, value: nil)
             } else {
                 query[kSecValueData] = value.data(using: .utf8)
