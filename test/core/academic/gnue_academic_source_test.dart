@@ -78,7 +78,7 @@ void main() {
     for (final (year, semester) in [(2025, 2), (2026, 1), (2026, 2)]) {
       final events = GnueAcademicSource.parse(fixture(year, semester), year, semester);
       for (final event in events) {
-        final url = Uri.parse(event.url!);
+        final url = Uri.parse(event.url);
         expect(url.scheme, 'https');
         expect(url.host, 'www.gnue.ac.kr');
         expect(url.queryParameters, {
@@ -89,6 +89,6 @@ void main() {
     }
     final opening = GnueAcademicSource.parse(fixture(2026, 2), 2026, 2)
         .singleWhere((event) => event.title.contains('2학기 개강'));
-    expect(Uri.parse(opening.url!).queryParameters['contentUid'], page(2));
+    expect(Uri.parse(opening.url).queryParameters['contentUid'], page(2));
   });
 }
