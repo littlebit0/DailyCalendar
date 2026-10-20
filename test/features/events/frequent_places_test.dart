@@ -87,4 +87,38 @@ void main() {
     expect(saved.location, 'Office');
     expect(tester.testTextInput.isVisible, isFalse);
   });
+
+  test('one recommendation reads the settings once (#190)', () async {
+    final counting = _CountingPreferences(await SharedPreferences.getInstance());
+    final places = FrequentPlaces(counting);
+    await places.update(pinned: ['Home'], hidden: ['Gym']);
+    counting.reads = 0;
+    final events = [
+      for (var i = 0; i < 200; i++) event('$i', i.isEven ? 'Office' : 'Gym'),
+    ];
+    expect(places.recommend(events), ['Home', 'Office']);
+    expect(counting.reads, 1);
+    // A hidden or pinned change is seen by the very next call.
+    await places.update(hidden: []);
+    expect(places.recommend(events), ['Home', 'Gym', 'Office']);
+  });
+}
+
+class _CountingPreferences implements SharedPreferences {
+  _CountingPreferences(this._delegate);
+  final SharedPreferences _delegate;
+  var reads = 0;
+
+  @override
+  String? getString(String key) {
+    reads++;
+    return _delegate.getString(key);
+  }
+
+  @override
+  Future<bool> setString(String key, String value) =>
+      _delegate.setString(key, value);
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

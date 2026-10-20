@@ -90,7 +90,9 @@ class CalendarImportService {
               external.colorValue ??
               EventCategory.basic.colorValue,
           reminderMinutesBeforeList: external.reminderMinutesBeforeList,
-          recurrence: recurrenceFromRrule(external.recurrenceRule),
+          recurrence: recurrenceFromRrule(
+            external.recurrenceRule,
+          ).copyWith(excludedDates: external.excludedDates),
           createdAt: now,
           updatedAt: now,
           deviceId: deviceId,
