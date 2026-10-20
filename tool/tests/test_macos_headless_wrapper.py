@@ -1,8 +1,12 @@
+import shutil
+import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
-SWIFT = (ROOT / "third_party/flutter_inappwebview_macos/macos/Classes/HeadlessInAppWebView/HeadlessInAppWebView.swift").read_text()
+CLASSES = ROOT / "third_party/flutter_inappwebview_macos/macos/Classes/HeadlessInAppWebView"
+SWIFT = (CLASSES / "HeadlessInAppWebView.swift").read_text()
 
 
 def body(signature):
@@ -18,21 +22,26 @@ def body(signature):
 class HeadlessWrapperOwnershipTest(unittest.TestCase):
     """#235: a headless run leaves no empty wrapper in the window."""
 
-    def test_prepare_keeps_its_own_wrapper_and_replaces_an_old_one(self):
-        prepare = body("public func prepare(params: NSDictionary)")
-        self.assertLess(prepare.index("removeWrapperView()"), prepare.index("let wrapperView = NSView()"))
-        self.assertIn("self.wrapperView = wrapperView", prepare)
+    @unittest.skipUnless(shutil.which("swiftc"), "Swift compiler is required")
+    def test_wrapper_hierarchy_behavior(self):
+        with tempfile.TemporaryDirectory() as directory:
+            executable = Path(directory) / "headless_wrapper"
+            compiled = subprocess.run(
+                ["swiftc", "-parse-as-library", str(CLASSES / "HeadlessViewWrapper.swift"),
+                 str(ROOT / "tool/tests/headless_view_wrapper_test.swift"), "-o", str(executable)],
+                capture_output=True, text=True)
+            self.assertEqual(compiled.returncode, 0, compiled.stderr)
+            run = subprocess.run([str(executable)], capture_output=True, text=True)
+            self.assertEqual(run.returncode, 0, run.stdout + run.stderr)
 
-    def test_every_dispose_path_removes_only_the_stored_wrapper(self):
-        dispose = body("public func dispose(disposeWebView: Bool)")
-        self.assertIn("removeWrapperView()", dispose)
+    def test_headless_view_uses_the_wrapper_on_every_path(self):
+        self.assertIn("wrapper.attach(view, to: NSApplication.shared.mainWindow?.contentView)",
+                      body("public func prepare(params: NSDictionary)"))
+        self.assertIn("wrapper.remove()", body("public func dispose(disposeWebView: Bool)"))
         # The visible move and the plain dispose both go through dispose(disposeWebView:).
         self.assertIn("dispose(disposeWebView: false)", body("public func disposeAndGetFlutterWebView"))
         self.assertIn("dispose(disposeWebView: true)", body("public func dispose()"))
-        remove = body("private func removeWrapperView()")
-        self.assertIn("wrapperView?.removeFromSuperview()", remove)
-        self.assertIn("wrapperView = nil", remove)
-        self.assertNotIn("subviews", SWIFT)
+        self.assertNotIn("NSView()", SWIFT)
 
 
 if __name__ == "__main__":
