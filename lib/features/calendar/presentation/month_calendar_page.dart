@@ -5128,6 +5128,7 @@ Future<void> _openRangeEventEditor(
       categories: categories,
       defaultReminderMinutesList: defaultReminderMinutesList,
       alarmService: ref.read(alarmServiceProvider),
+      use24HourTime: ref.read(appSettingsProvider).use24HourTime,
     ),
   );
   unawaited(
