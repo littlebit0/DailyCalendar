@@ -136,9 +136,10 @@ class GoogleCalendarSource {
       final seriesId = item['recurringEventId'] as String?;
       final original = item['originalStartTime'];
       if (seriesId != null && original is Map<String, dynamic>) {
-        removedBySeries
-            .putIfAbsent(seriesId, _Exclusions.new)
-            .addOriginalStart(original);
+        _addOriginalStart(
+          removedBySeries.putIfAbsent(seriesId, _Exclusions.new),
+          original,
+        );
       }
     }
     final events = <ExternalCalendarEvent>[];
@@ -171,6 +172,44 @@ class GoogleCalendarSource {
     );
     return rule.isRepeating && rule.rawRule == null;
   }
+
+  /// `originalStartTime` of a cancelled or moved instance. An offsetless
+  /// `dateTime` is read in its `timeZone`.
+  void _addOriginalStart(_Exclusions target, Map<String, dynamic> value) {
+    final date = value['date'];
+    final dateTime = value['dateTime'];
+    if (date is String) {
+      final parsed = DateTime.tryParse(date);
+      if (parsed != null) {
+        target.days.add(DateTime(parsed.year, parsed.month, parsed.day));
+      }
+    } else if (dateTime is String) {
+      final parsed = DateTime.tryParse(dateTime);
+      if (parsed == null) return;
+      final location =
+          parsed.isUtc || RegExp(r'[+-]\d{2}:?\d{2}$').hasMatch(dateTime)
+          ? null
+          : _zone(value['timeZone'] as String?);
+      target.instants.add(
+        location == null
+            ? parsed.toLocal()
+            : _toLocal(
+                tz.TZDateTime(
+                  location,
+                  parsed.year,
+                  parsed.month,
+                  parsed.day,
+                  parsed.hour,
+                  parsed.minute,
+                  parsed.second,
+                ),
+              ),
+      );
+    }
+  }
+
+  DateTime _toLocal(tz.TZDateTime value) =>
+      DateTime.fromMillisecondsSinceEpoch(value.millisecondsSinceEpoch);
 
   /// EXDATE values plus the originals of cancelled or moved instances.
   _Exclusions _exclusionsOf(Map<String, dynamic> json, _Exclusions? removed) {
@@ -254,7 +293,7 @@ class GoogleCalendarSource {
           final endText = value.substring(slash + 1);
           final length = _icalDuration(endText);
           final explicitEnd = length != null
-              ? shiftCalendarDateByDays(start, length.days).add(length.time)
+              ? _addPeriod(startText, tzid, start, length)
               : _icalDateTime(endText, tzid: tzid);
           if (explicitEnd == null || !explicitEnd.isAfter(start)) continue;
           end = explicitEnd;
@@ -284,7 +323,8 @@ class GoogleCalendarSource {
           }
         }
         byStart[start] = ExternalCalendarEvent(
-          sourceId: '${series.sourceId}#rdate#$value',
+          sourceId:
+              '${series.sourceId}#rdate#${tzid == null ? '' : '$tzid:'}$value',
           calendarId: series.calendarId,
           provider: series.provider,
           title: series.title,
@@ -303,6 +343,35 @@ class GoogleCalendarSource {
       events: byStart.values.toList(),
       replacedDays: replacedDays,
       replacesMaster: replacesMaster,
+    );
+  }
+
+  /// [start] plus a duration whose days are nominal calendar days counted in
+  /// the declared zone (not the device zone) before the exact time part.
+  DateTime _addPeriod(
+    String startText,
+    String? tzid,
+    DateTime start,
+    ({int days, Duration time}) length,
+  ) {
+    final location = startText.endsWith('Z') ? null : _zone(tzid);
+    final wall = RegExp(
+      r'^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$',
+    ).firstMatch(startText);
+    if (location == null || wall == null) {
+      return shiftCalendarDateByDays(start, length.days).add(length.time);
+    }
+    int part(int index) => int.parse(wall[index]!);
+    return _toLocal(
+      tz.TZDateTime(
+        location,
+        part(1),
+        part(2),
+        part(3) + length.days,
+        part(4),
+        part(5),
+        part(6),
+      ).add(length.time),
     );
   }
 
@@ -384,7 +453,7 @@ class GoogleCalendarSource {
         values[4],
         values[5],
       );
-      return DateTime.fromMillisecondsSinceEpoch(zoned.millisecondsSinceEpoch);
+      return _toLocal(zoned);
     }
     return DateTime(
       values[0],
@@ -610,21 +679,6 @@ class CalendarImportException implements Exception {
 class _Exclusions {
   final instants = <DateTime>{};
   final days = <DateTime>{};
-
-  /// `originalStartTime` of a cancelled or moved instance.
-  void addOriginalStart(Map<String, dynamic> value) {
-    final date = value['date'];
-    final dateTime = value['dateTime'];
-    if (date is String) {
-      final parsed = DateTime.tryParse(date);
-      if (parsed != null) {
-        days.add(DateTime(parsed.year, parsed.month, parsed.day));
-      }
-    } else if (dateTime is String) {
-      final parsed = DateTime.tryParse(dateTime);
-      if (parsed != null) instants.add(parsed.toLocal());
-    }
-  }
 
   bool excludes(DateTime start) =>
       instants.contains(start) ||

@@ -172,7 +172,7 @@ void main() {
     expect(events.map((event) => event.sourceId), [
       'weekly_20261019T000000Z',
       'weekly',
-      'weekly#rdate#20261029T090000',
+      'weekly#rdate#Asia/Seoul:20261029T090000',
     ]);
     final series = events.firstWhere((event) => event.sourceId == 'weekly');
     DateTime day(String iso) {
@@ -401,6 +401,59 @@ void main() {
       DateTime(2026, 10, 12, 9): DateTime(2026, 10, 12, 11, 30),
       DateTime(2026, 10, 5, 9): DateTime(2026, 10, 5, 12),
     });
+  });
+
+  test('TZID가 다른 같은 벽시계 RDATE는 서로 다른 ID로 남는다', () async {
+    final events = await _load([
+      {
+        'id': 'multi-zone',
+        'summary': '회의',
+        'start': {'dateTime': '2026-10-05T09:00:00'},
+        'end': {'dateTime': '2026-10-05T10:00:00'},
+        'recurrence': [
+          'RDATE;TZID=America/New_York:20261029T090000',
+          'RDATE;TZID=America/Chicago:20261029T090000',
+        ],
+      },
+    ]);
+    final ids = events
+        .where((e) => e.sourceId.contains('#rdate#'))
+        .map((e) => e.sourceId)
+        .toSet();
+    expect(ids, hasLength(2));
+  });
+
+  test('PERIOD 일수는 선언한 TZID의 달력으로, 예외의 timeZone은 그 시간대로 읽는다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {'dateTime': '2026-10-05T13:00:00Z'},
+        'end': {'dateTime': '2026-10-05T14:00:00Z'},
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=MO',
+          // New York falls back on 2026-11-01: one nominal day is 25 hours.
+          'RDATE;TZID=America/New_York;VALUE=PERIOD:20261031T090000/P1D',
+        ],
+      },
+      {
+        'id': 'weekly_20261012',
+        'status': 'cancelled',
+        'recurringEventId': 'weekly',
+        // 09:00 in New York is 13:00Z, whatever the device zone.
+        'originalStartTime': {
+          'dateTime': '2026-10-12T09:00:00',
+          'timeZone': 'America/New_York',
+        },
+      },
+    ]);
+    final rdate = events.firstWhere((e) => e.sourceId.contains('#rdate#'));
+    expect(rdate.startAt, DateTime.utc(2026, 10, 31, 13).toLocal());
+    expect(rdate.endAt, DateTime.utc(2026, 11, 1, 14).toLocal());
+    final excluded = DateTime.utc(2026, 10, 12, 13).toLocal();
+    expect(events.firstWhere((e) => e.sourceId == 'weekly').excludedDates, [
+      DateTime(excluded.year, excluded.month, excluded.day),
+    ]);
   });
 }
 
