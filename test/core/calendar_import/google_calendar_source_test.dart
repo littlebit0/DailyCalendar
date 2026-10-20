@@ -183,7 +183,7 @@ void main() {
     expect(series.excludedDates, [
       day('2026-10-12T09:00:00+09:00'),
       day('2026-10-19T09:00:00+09:00'),
-      DateTime(2026, 10, 26),
+      day('2026-10-26T09:00:00+09:00'),
     ]);
 
     // Normalize as the import does and list the occurrences in October.
@@ -297,6 +297,129 @@ void main() {
       'trip#rdate#20261120': (DateTime(2026, 11, 20), DateTime(2026, 11, 22)),
     });
   });
+  test('시각이 있는 EXDATE는 정확한 시작 시각으로 RDATE와 비교한다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {'dateTime': '2026-10-05T09:00:00'},
+        'end': {'dateTime': '2026-10-05T10:00:00'},
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=MO',
+          'EXDATE:20261026T090000',
+          'RDATE:20261026T150000,20261026T090000',
+        ],
+      },
+    ]);
+    expect(
+      events.where((e) => e.sourceId.contains('#rdate#')).map((e) => e.startAt),
+      [DateTime(2026, 10, 26, 15)],
+    );
+  });
+
+  test('RDATE·EXDATE의 TZID를 기기 시간대가 아니라 지정한 시간대로 해석한다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {'dateTime': '2026-10-05T13:00:00Z'},
+        'end': {'dateTime': '2026-10-05T14:00:00Z'},
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=MO',
+          'EXDATE;TZID=America/New_York:20261026T090000',
+          'RDATE;TZID=America/New_York:20261029T090000',
+        ],
+      },
+    ]);
+    final series = events.firstWhere((e) => e.sourceId == 'weekly');
+    final excluded = DateTime.utc(2026, 10, 26, 13).toLocal();
+    expect(series.excludedDates, [
+      DateTime(excluded.year, excluded.month, excluded.day),
+    ]);
+    final rdate = events.firstWhere((e) => e.sourceId.contains('#rdate#'));
+    // New York is on daylight time (UTC-4) on both dates.
+    expect(rdate.startAt, DateTime.utc(2026, 10, 29, 13).toLocal());
+  });
+
+  test('EXDATE가 DTSTART와 같은 반복 없는 원본은 가져오지 않는다', () async {
+    final events = await _load([
+      {
+        'id': 'rdate-only',
+        'summary': '보강',
+        'start': {'dateTime': '2026-11-02T14:00:00'},
+        'end': {'dateTime': '2026-11-02T15:00:00'},
+        'recurrence': ['EXDATE:20261102T140000', 'RDATE:20261109T140000'],
+      },
+    ]);
+    expect(events.map((e) => e.sourceId), ['rdate-only#rdate#20261109T140000']);
+  });
+
+  test('PERIOD의 일·주 기간은 달력 일수로, 시간 부분은 정확한 길이로 더한다', () async {
+    final events = await _load([
+      {
+        'id': 'multi',
+        'summary': '행사',
+        'start': {'dateTime': '2026-10-05T09:00:00'},
+        'end': {'dateTime': '2026-10-05T10:00:00'},
+        'recurrence': [
+          'RDATE;VALUE=PERIOD:20261101T090000/P1DT2H,20261108T090000/P1W',
+        ],
+      },
+    ]);
+    final ends = {for (final e in events) e.sourceId: e.endAt};
+    expect(
+      ends['multi#rdate#20261101T090000/P1DT2H'],
+      DateTime(2026, 11, 2, 11),
+    );
+    expect(ends['multi#rdate#20261108T090000/P1W'], DateTime(2026, 11, 15, 9));
+  });
+
+  test('같은 시작의 PERIOD RDATE는 만들어진 회차를 PERIOD 길이로 대체한다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {'dateTime': '2026-10-05T09:00:00'},
+        'end': {'dateTime': '2026-10-05T10:00:00'},
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=MO',
+          'RDATE;VALUE=PERIOD:20261012T090000/20261012T113000,'
+              '20261005T090000/PT3H',
+        ],
+      },
+    ]);
+    final series = events.firstWhere((e) => e.sourceId == 'weekly');
+    expect(series.excludedDates, [
+      DateTime(2026, 10, 5),
+      DateTime(2026, 10, 12),
+    ]);
+    final extras = {
+      for (final e in events)
+        if (e.sourceId.contains('#rdate#')) e.startAt: e.endAt,
+    };
+    expect(extras, {
+      DateTime(2026, 10, 12, 9): DateTime(2026, 10, 12, 11, 30),
+      DateTime(2026, 10, 5, 9): DateTime(2026, 10, 5, 12),
+    });
+  });
+}
+
+Future<List<ExternalCalendarEvent>> _load(List<Map<String, Object?>> items) {
+  const calendar = ImportableCalendar(
+    id: 'person@example.com',
+    title: '내 캘린더',
+    provider: CalendarImportProvider.google,
+  );
+  return GoogleCalendarSource(
+    authService: _FakeAuth(),
+    httpClient: MockClient(
+      (request) async => http.Response(
+        jsonEncode({'items': items}),
+        200,
+        headers: const {'content-type': 'application/json; charset=utf-8'},
+      ),
+    ),
+  ).loadEvents(const [calendar]);
 }
 
 class _FakeAuth extends GoogleDriveAuthService {

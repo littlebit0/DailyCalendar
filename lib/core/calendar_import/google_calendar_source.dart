@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:timezone/data/latest.dart' as tz_data;
+import 'package:timezone/timezone.dart' as tz;
 
 import '../../features/events/data/recurrence_expander.dart';
 import '../../features/events/domain/calendar_event.dart';
@@ -129,49 +131,85 @@ class GoogleCalendarSource {
     ImportableCalendar calendar,
     List<Map<String, dynamic>> items,
   ) {
-    final removedBySeries = <String, Set<DateTime>>{};
+    final removedBySeries = <String, _Exclusions>{};
     for (final item in items) {
       final seriesId = item['recurringEventId'] as String?;
-      final original = _occurrenceDate(item['originalStartTime']);
-      if (seriesId != null && original != null) {
-        removedBySeries.putIfAbsent(seriesId, () => {}).add(original);
+      final original = item['originalStartTime'];
+      if (seriesId != null && original is Map<String, dynamic>) {
+        removedBySeries
+            .putIfAbsent(seriesId, _Exclusions.new)
+            .addOriginalStart(original);
       }
     }
     final events = <ExternalCalendarEvent>[];
     for (final item in items) {
       // A cancelled single event, or a cancelled instance already applied above.
       if (item['status'] == 'cancelled') continue;
-      final event = _eventFromJson(
-        calendar,
-        item,
-        removedOccurrences: removedBySeries[item['id']] ?? const {},
-      );
+      final exclusions = _exclusionsOf(item, removedBySeries[item['id']]);
+      var event = _eventFromJson(calendar, item, exclusions);
       if (event == null) continue;
-      events.add(event);
-      events.addAll(
-        _extraOccurrences(item, event, removedBySeries[item['id']] ?? const {}),
-      );
+      final rdates = _rdateOccurrences(item, event, exclusions);
+      final repeats = _repeatsByRule(event);
+      if (rdates.replacedDays.isNotEmpty && repeats) {
+        exclusions.days.addAll(rdates.replacedDays);
+        event = _eventFromJson(calendar, item, exclusions) ?? event;
+      }
+      // A master that Daily keeps as one plain event never consults the
+      // exclusions, so an excluded or replaced DTSTART is dropped here.
+      final dropMaster =
+          !repeats &&
+          (exclusions.excludes(event.startAt) || rdates.replacesMaster);
+      if (!dropMaster) events.add(event);
+      events.addAll(rdates.events);
     }
     return events;
   }
 
+  bool _repeatsByRule(ExternalCalendarEvent event) {
+    final rule = CalendarImportService.recurrenceFromRrule(
+      event.recurrenceRule,
+    );
+    return rule.isRepeating && rule.rawRule == null;
+  }
+
+  /// EXDATE values plus the originals of cancelled or moved instances.
+  _Exclusions _exclusionsOf(Map<String, dynamic> json, _Exclusions? removed) {
+    final result = _Exclusions();
+    if (removed != null) {
+      result.instants.addAll(removed.instants);
+      result.days.addAll(removed.days);
+    }
+    for (final line in _recurrenceLines(json, 'EXDATE')) {
+      final tzid = _icalTzid(line);
+      for (final value in _icalValues(line)) {
+        final parsed = _icalDateTime(value, tzid: tzid);
+        if (parsed == null) continue;
+        if (value.length == 8) {
+          result.days.add(parsed);
+        } else {
+          result.instants.add(parsed);
+        }
+      }
+    }
+    return result;
+  }
+
   /// RDATE occurrences cannot be expressed by a Daily repeat rule, so each one
   /// is imported as a single event with the series' duration (or, for a
-  /// PERIOD value, its own end). EXDATE and cancelled or moved instances take
-  /// precedence, and dates the RRULE or an earlier RDATE already produces are
-  /// imported once.
-  Iterable<ExternalCalendarEvent> _extraOccurrences(
+  /// PERIOD value, its own). EXDATE and cancelled or moved instances take
+  /// precedence by exact start. A start the RRULE or an earlier RDATE already
+  /// produces is imported once, with the PERIOD's duration when it has one.
+  _Rdates _rdateOccurrences(
     Map<String, dynamic> json,
     ExternalCalendarEvent series,
-    Set<DateTime> removedOccurrences,
-  ) sync* {
+    _Exclusions exclusions,
+  ) {
     final lines = _recurrenceLines(json, 'RDATE');
-    if (lines.isEmpty) return;
-    final excluded = _excludedDates(json, removedOccurrences).toSet();
+    if (lines.isEmpty) return const _Rdates();
     final rule = CalendarImportService.recurrenceFromRrule(
       series.recurrenceRule,
     );
-    final expandable = rule.isRepeating && rule.rawRule == null;
+    final expandable = _repeatsByRule(series);
     final master = CalendarEvent(
       id: series.sourceId,
       title: series.title,
@@ -189,12 +227,15 @@ class GoogleCalendarSource {
     // All-day spans are counted in calendar days so a daylight-saving change
     // inside the master span cannot shorten or lengthen the copy.
     final daySpan = calendarDayDifference(series.endAt, series.startAt);
-    final seen = <DateTime>{series.startAt};
+    final byStart = <DateTime, ExternalCalendarEvent>{};
+    final replacedDays = <DateTime>{};
+    var replacesMaster = false;
     for (final line in lines) {
+      final tzid = _icalTzid(line);
       for (final value in _icalValues(line)) {
         final slash = value.indexOf('/');
         final startText = slash < 0 ? value : value.substring(0, slash);
-        final parsed = _icalDateTime(startText);
+        final parsed = _icalDateTime(startText, tzid: tzid);
         if (parsed == null) continue;
         final start = series.allDay || startText.length == 8
             ? DateTime(
@@ -205,31 +246,44 @@ class GoogleCalendarSource {
                 series.allDay ? 0 : series.startAt.minute,
               )
             : parsed;
+        final hasPeriod = slash >= 0 && !series.allDay;
         final DateTime end;
         if (series.allDay) {
           end = shiftCalendarDateByDays(start, daySpan < 1 ? 1 : daySpan);
-        } else if (slash >= 0) {
+        } else if (hasPeriod) {
           final endText = value.substring(slash + 1);
           final length = _icalDuration(endText);
           final explicitEnd = length != null
-              ? start.add(length)
-              : _icalDateTime(endText);
+              ? shiftCalendarDateByDays(start, length.days).add(length.time)
+              : _icalDateTime(endText, tzid: tzid);
           if (explicitEnd == null || !explicitEnd.isAfter(start)) continue;
           end = explicitEnd;
         } else {
           end = start.add(duration);
         }
-        if (excluded.contains(DateTime(start.year, start.month, start.day))) {
-          continue;
+        if (exclusions.excludes(start)) continue;
+        if (byStart.containsKey(start)) {
+          if (!hasPeriod) continue;
+        } else {
+          final isMaster = start == series.startAt;
+          final generated =
+              isMaster ||
+              (expandable &&
+                  expander
+                      .expand(
+                        master,
+                        start,
+                        start.add(const Duration(minutes: 1)),
+                      )
+                      .any((occurrence) => occurrence.startAt == start));
+          if (generated) {
+            if (!hasPeriod) continue;
+            // The PERIOD occurrence replaces the generated one.
+            replacedDays.add(DateTime(start.year, start.month, start.day));
+            replacesMaster = replacesMaster || isMaster;
+          }
         }
-        if (!seen.add(start)) continue;
-        if (expandable &&
-            expander
-                .expand(master, start, start.add(const Duration(minutes: 1)))
-                .any((occurrence) => occurrence.startAt == start)) {
-          continue;
-        }
-        yield ExternalCalendarEvent(
+        byStart[start] = ExternalCalendarEvent(
           sourceId: '${series.sourceId}#rdate#$value',
           calendarId: series.calendarId,
           provider: series.provider,
@@ -245,10 +299,16 @@ class GoogleCalendarSource {
         );
       }
     }
+    return _Rdates(
+      events: byStart.values.toList(),
+      replacedDays: replacedDays,
+      replacesMaster: replacesMaster,
+    );
   }
 
-  /// RFC 5545 DURATION such as `PT2H`, `P1D` or `P1W`.
-  Duration? _icalDuration(String value) {
+  /// RFC 5545 DURATION such as `PT2H`, `P1D` or `P1W`. Day and week parts are
+  /// nominal calendar days; only the time part is an exact length.
+  ({int days, Duration time})? _icalDuration(String value) {
     final match = RegExp(
       r'^\+?P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$',
     ).firstMatch(value);
@@ -256,11 +316,9 @@ class GoogleCalendarSource {
       return null;
     }
     int part(int index) => int.parse(match[index] ?? '0');
-    return Duration(
+    return (
       days: part(1) * 7 + part(2),
-      hours: part(3),
-      minutes: part(4),
-      seconds: part(5),
+      time: Duration(hours: part(3), minutes: part(4), seconds: part(5)),
     );
   }
 
@@ -283,45 +341,72 @@ class GoogleCalendarSource {
     ];
   }
 
-  /// `YYYYMMDD`, `YYYYMMDDTHHMMSS` (floating or TZID time, read as written)
-  /// or `...Z` (UTC, converted to local time).
-  // shortcut: a TZID time is read as device-local time, so it can land on the
-  // wrong date when the device is in another zone; convert by TZID when the
-  // app gains a time-zone database.
-  DateTime? _icalDateTime(String value) {
+  /// The `TZID` parameter of a recurrence line, if any.
+  String? _icalTzid(String line) {
+    final colon = line.indexOf(':');
+    final head = colon < 0 ? line : line.substring(0, colon);
+    return RegExp(
+      r';TZID=([^;:]+)',
+      caseSensitive: false,
+    ).firstMatch(head)?[1]?.replaceAll('"', '');
+  }
+
+  static bool _zonesReady = false;
+
+  /// `YYYYMMDD`, `YYYYMMDDTHHMMSS` (read in [tzid] when it is a known zone,
+  /// else as device-local floating time) or `...Z` (UTC); local time.
+  DateTime? _icalDateTime(String value, {String? tzid}) {
     final match = RegExp(
       r'^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})(Z?))?$',
     ).firstMatch(value);
     if (match == null) return null;
     int part(int index) => int.parse(match[index] ?? '0');
     if (match[4] == null) return DateTime(part(1), part(2), part(3));
-    final utc = match[7] == 'Z';
     final values = [part(1), part(2), part(3), part(4), part(5), part(6)];
-    return utc
-        ? DateTime.utc(
-            values[0],
-            values[1],
-            values[2],
-            values[3],
-            values[4],
-            values[5],
-          ).toLocal()
-        : DateTime(
-            values[0],
-            values[1],
-            values[2],
-            values[3],
-            values[4],
-            values[5],
-          );
+    if (match[7] == 'Z') {
+      return DateTime.utc(
+        values[0],
+        values[1],
+        values[2],
+        values[3],
+        values[4],
+        values[5],
+      ).toLocal();
+    }
+    final location = _zone(tzid);
+    if (location != null) {
+      final zoned = tz.TZDateTime(
+        location,
+        values[0],
+        values[1],
+        values[2],
+        values[3],
+        values[4],
+        values[5],
+      );
+      return DateTime.fromMillisecondsSinceEpoch(zoned.millisecondsSinceEpoch);
+    }
+    return DateTime(
+      values[0],
+      values[1],
+      values[2],
+      values[3],
+      values[4],
+      values[5],
+    );
   }
 
-  /// The local date of an occurrence's original start (`originalStartTime`).
-  DateTime? _occurrenceDate(Object? value) {
-    if (value is! Map<String, dynamic>) return null;
-    final allDay = value['date'] is String;
-    final date = _googleDate(value, allDay: allDay);
-    return date == null ? null : DateTime(date.year, date.month, date.day);
+  tz.Location? _zone(String? tzid) {
+    if (tzid == null) return null;
+    if (!_zonesReady) {
+      tz_data.initializeTimeZones();
+      _zonesReady = true;
+    }
+    try {
+      return tz.getLocation(tzid);
+    } on tz.LocationNotFoundException {
+      return null;
+    }
   }
 
   Future<Map<String, String>> _headers({
@@ -386,9 +471,9 @@ class GoogleCalendarSource {
 
   ExternalCalendarEvent? _eventFromJson(
     ImportableCalendar calendar,
-    Map<String, dynamic> json, {
-    Set<DateTime> removedOccurrences = const {},
-  }) {
+    Map<String, dynamic> json,
+    _Exclusions exclusions,
+  ) {
     final id = json['id'] as String?;
     final startValue = json['start'];
     final endValue = json['end'];
@@ -431,27 +516,10 @@ class GoogleCalendarSource {
           : recurrenceRule,
       excludedDates: recurrenceRule == null || recurrenceRule.isEmpty
           ? const []
-          : _excludedDates(json, removedOccurrences),
+          : exclusions.ruleDates,
       colorValue: calendar.colorValue,
       reminderMinutesBeforeList: _eventReminderMinutes(json, calendar),
     );
-  }
-
-  /// EXDATE values plus occurrences removed by cancelled or moved instances.
-  List<DateTime> _excludedDates(
-    Map<String, dynamic> json,
-    Set<DateTime> removedOccurrences,
-  ) {
-    final dates = {...removedOccurrences};
-    for (final line in _recurrenceLines(json, 'EXDATE')) {
-      for (final value in _icalValues(line)) {
-        final parsed = _icalDateTime(value);
-        if (parsed != null) {
-          dates.add(DateTime(parsed.year, parsed.month, parsed.day));
-        }
-      }
-    }
-    return dates.toList()..sort();
   }
 
   List<int> _eventReminderMinutes(
@@ -535,4 +603,50 @@ class CalendarImportException implements Exception {
 
   @override
   String toString() => message;
+}
+
+/// Occurrences removed from a recurring series: exact local starts for timed
+/// ones, whole days for date values (all-day events and date-only EXDATEs).
+class _Exclusions {
+  final instants = <DateTime>{};
+  final days = <DateTime>{};
+
+  /// `originalStartTime` of a cancelled or moved instance.
+  void addOriginalStart(Map<String, dynamic> value) {
+    final date = value['date'];
+    final dateTime = value['dateTime'];
+    if (date is String) {
+      final parsed = DateTime.tryParse(date);
+      if (parsed != null) {
+        days.add(DateTime(parsed.year, parsed.month, parsed.day));
+      }
+    } else if (dateTime is String) {
+      final parsed = DateTime.tryParse(dateTime);
+      if (parsed != null) instants.add(parsed.toLocal());
+    }
+  }
+
+  bool excludes(DateTime start) =>
+      instants.contains(start) ||
+      days.contains(DateTime(start.year, start.month, start.day));
+
+  /// Daily's repeat rule excludes whole local days.
+  List<DateTime> get ruleDates => {
+    ...days,
+    for (final start in instants) DateTime(start.year, start.month, start.day),
+  }.toList()..sort();
+}
+
+class _Rdates {
+  const _Rdates({
+    this.events = const [],
+    this.replacedDays = const {},
+    this.replacesMaster = false,
+  });
+
+  final List<ExternalCalendarEvent> events;
+
+  /// Days of RRULE occurrences that a PERIOD RDATE replaces.
+  final Set<DateTime> replacedDays;
+  final bool replacesMaster;
 }
