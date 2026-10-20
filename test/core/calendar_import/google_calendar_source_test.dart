@@ -494,6 +494,53 @@ void main() {
     ]);
     expect(events.where((e) => e.sourceId.contains('#rdate#')), isEmpty);
   });
+
+  test('오프셋 없는 start.dateTime은 start.timeZone으로 읽어 RDATE 중복을 판단한다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {
+          'dateTime': '2026-10-05T09:00:00',
+          'timeZone': 'America/New_York',
+        },
+        'end': {
+          'dateTime': '2026-10-05T10:00:00',
+          'timeZone': 'America/New_York',
+        },
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=MO',
+          'RDATE;TZID=America/New_York:20261012T090000',
+        ],
+      },
+    ]);
+    final series = events.firstWhere((e) => e.sourceId == 'weekly');
+    expect(series.startAt, DateTime.utc(2026, 10, 5, 13).toLocal());
+    expect(events.where((e) => e.sourceId.contains('#rdate#')), isEmpty);
+  });
+
+  test('UTC UNTIL은 시리즈 시간대 벽시계로 옮겨 마지막 회차의 RDATE 중복을 거른다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {
+          'dateTime': '2026-10-05T00:30:00+09:00',
+          'timeZone': 'Asia/Tokyo',
+        },
+        'end': {
+          'dateTime': '2026-10-05T01:30:00+09:00',
+          'timeZone': 'Asia/Tokyo',
+        },
+        'recurrence': [
+          // 2026-10-26 00:30 Tokyo is the last occurrence (UNTIL is 15:30Z the day before).
+          'RRULE:FREQ=WEEKLY;BYDAY=MO;UNTIL=20261025T153000Z',
+          'RDATE;TZID=Asia/Tokyo:20261026T003000',
+        ],
+      },
+    ]);
+    expect(events.where((e) => e.sourceId.contains('#rdate#')), isEmpty);
+  });
 }
 
 Future<List<ExternalCalendarEvent>> _load(List<Map<String, Object?>> items) {

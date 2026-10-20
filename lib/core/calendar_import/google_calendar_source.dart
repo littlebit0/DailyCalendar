@@ -186,24 +186,8 @@ class GoogleCalendarSource {
     } else if (dateTime is String) {
       final parsed = DateTime.tryParse(dateTime);
       if (parsed == null) return;
-      final location =
-          parsed.isUtc || RegExp(r'[+-]\d{2}:?\d{2}$').hasMatch(dateTime)
-          ? null
-          : _zone(value['timeZone'] as String?);
       target.instants.add(
-        location == null
-            ? parsed.toLocal()
-            : _toLocal(
-                tz.TZDateTime(
-                  location,
-                  parsed.year,
-                  parsed.month,
-                  parsed.day,
-                  parsed.hour,
-                  parsed.minute,
-                  parsed.second,
-                ),
-              ),
+        _googleInstant(parsed, dateTime, value['timeZone'] as String?),
       );
     }
   }
@@ -283,9 +267,19 @@ class GoogleCalendarSource {
       );
     }
 
+    // A UTC `UNTIL` is an instant: move it to the same wall clock.
+    final until = rule.until;
     final wallMaster = master.copyWith(
       startAt: wall(series.startAt),
       endAt: wall(series.endAt),
+      recurrence:
+          until != null &&
+              (series.recurrenceRule?.toUpperCase().contains(
+                    RegExp(r'UNTIL=\d{8}T\d{6}Z'),
+                  ) ??
+                  false)
+          ? rule.copyWith(until: wall(until))
+          : rule,
     );
     final duration = series.endAt.difference(series.startAt);
     // All-day spans are counted in calendar days so a daylight-saving change
@@ -671,7 +665,27 @@ class GoogleCalendarSource {
     }
     return allDay
         ? DateTime(parsed.year, parsed.month, parsed.day)
-        : parsed.toLocal();
+        : _googleInstant(parsed, raw, value['timeZone'] as String?);
+  }
+
+  /// A parsed `dateTime` as a local instant. An offsetless one is a wall
+  /// clock in its `timeZone` (when known), not in the device zone.
+  DateTime _googleInstant(DateTime parsed, String raw, String? timeZone) {
+    final offsetless =
+        !parsed.isUtc && !RegExp(r'[+-]\d{2}:?\d{2}$').hasMatch(raw);
+    final location = offsetless ? _zone(timeZone) : null;
+    if (location == null) return parsed.toLocal();
+    return _toLocal(
+      tz.TZDateTime(
+        location,
+        parsed.year,
+        parsed.month,
+        parsed.day,
+        parsed.hour,
+        parsed.minute,
+        parsed.second,
+      ),
+    );
   }
 
   bool _needsAdditionalAuthorization(http.Response response) =>
