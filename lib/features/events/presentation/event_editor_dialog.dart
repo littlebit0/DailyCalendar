@@ -7,6 +7,7 @@ import 'package:flutter/semantics.dart';
 
 import '../../../core/alarms/alarm_service.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../core/localization/twelve_hour_material_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
@@ -1070,22 +1071,39 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     }
   }
 
-  String _formatTime(TimeOfDay time) => MaterialLocalizations.of(
-    context,
-  ).formatTimeOfDay(time, alwaysUse24HourFormat: widget.use24HourTime);
+  /// The localizations that honor the app's 12-hour setting, or null when
+  /// the inherited ones already do.
+  MaterialLocalizations? _twelveHourLocalizations(BuildContext context) =>
+      widget.use24HourTime
+      ? null
+      : twelveHourMaterialLocalizations(Localizations.localeOf(context));
+
+  String _formatTime(TimeOfDay time) =>
+      (_twelveHourLocalizations(context) ?? MaterialLocalizations.of(context))
+          .formatTimeOfDay(time, alwaysUse24HourFormat: widget.use24HourTime);
 
   Future<TimeOfDay?> _showTimePicker(TimeOfDay initialTime) {
     _dismissInput();
     return showTimePicker(
       context: context,
       initialTime: initialTime,
-      builder: (pickerContext, child) => MediaQuery(
-        data: MediaQuery.of(pickerContext).copyWith(
-          textScaler: TextScaler.noScaling,
-          alwaysUse24HourFormat: widget.use24HourTime,
-        ),
-        child: child!,
-      ),
+      builder: (pickerContext, child) {
+        final twelveHour = _twelveHourLocalizations(pickerContext);
+        final picker = MediaQuery(
+          data: MediaQuery.of(pickerContext).copyWith(
+            textScaler: TextScaler.noScaling,
+            alwaysUse24HourFormat: widget.use24HourTime,
+          ),
+          child: child!,
+        );
+        return twelveHour == null
+            ? picker
+            : Localizations.override(
+                context: pickerContext,
+                delegates: [FixedMaterialLocalizationsDelegate(twelveHour)],
+                child: picker,
+              );
+      },
     );
   }
 

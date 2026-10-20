@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:daily/core/alarms/alarm_service.dart';
+import 'package:daily/core/localization/app_localizations.dart';
 import 'package:daily/core/lms/lms_models.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
@@ -8,6 +9,7 @@ import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:daily/features/events/presentation/event_editor_dialog.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -620,6 +622,70 @@ void main() {
       },
     );
   }
+  for (final (locale, period) in [
+    // Flutter's Japanese translation abbreviates the day period as AM/PM.
+    (const Locale('ja'), 'PM'),
+    (const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'), '下午'),
+  ]) {
+    for (final use24HourTime in [true, false]) {
+      testWidgets(
+        '$locale defaults to 24 hours but follows use24HourTime=$use24HourTime (#180)',
+        (tester) async {
+          final start = DateTime(2026, 10, 1, 14, 30);
+          final event = CalendarEvent(
+            id: 'timed',
+            title: 'afternoon',
+            startAt: start,
+            endAt: start.add(const Duration(hours: 1)),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            createdAt: start,
+            updatedAt: start,
+          );
+          await tester.pumpWidget(
+            _DialogHost(
+              locale: locale,
+              builder: (_) => EventEditorDialog(
+                initialDate: start,
+                event: event,
+                use24HourTime: use24HourTime,
+              ),
+              onSaved: (_) {},
+            ),
+          );
+          await tester.tap(find.text('열기'));
+          await tester.pumpAndSettle();
+          final startLabel = use24HourTime ? '14:30' : '$period 2:30';
+          expect(find.text(startLabel), findsOneWidget);
+          expect(
+            find.text(use24HourTime ? '15:30' : '$period 3:30'),
+            findsOneWidget,
+          );
+
+          await tester.tap(find.text(startLabel));
+          await tester.pumpAndSettle();
+          expect(
+            find.text(period),
+            use24HourTime ? findsNothing : findsOneWidget,
+          );
+          final picker = find.byType(TimePickerDialog);
+          await tester.tap(
+            find.descendant(
+              of: picker,
+              matching: find.text(
+                MaterialLocalizations.of(
+                  tester.element(picker),
+                ).cancelButtonLabel,
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          expect(find.text(startLabel), findsOneWidget);
+        },
+      );
+    }
+  }
 }
 
 class _AuthorizedAlarmService implements AlarmService {
@@ -648,15 +714,29 @@ class _DialogHost extends StatelessWidget {
     required this.builder,
     required this.onSaved,
     this.textScaler,
+    this.locale,
   });
 
   final WidgetBuilder builder;
   final ValueChanged<EventDraft> onSaved;
   final TextScaler? textScaler;
+  final Locale? locale;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: locale,
+      supportedLocales: locale == null
+          ? const [Locale('en', 'US')]
+          : AppLocalizations.supportedLocales,
+      localizationsDelegates: locale == null
+          ? null
+          : const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
       builder: textScaler == null
           ? null
           : (context, child) => MediaQuery(
