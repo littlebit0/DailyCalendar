@@ -97,9 +97,14 @@ class YonseiAcademicSource implements AcademicSource {
         var last = start;
         if (range[5] != null) {
           final lastDay = int.parse(range[5]!);
-          final lastMonth = range[4] == null
-              ? startMonth + (lastDay < startDay ? 1 : 0)
-              : int.parse(range[4]!);
+          final explicitMonth = range[4] == null ? null : int.parse(range[4]!);
+          // A written end month is a calendar month; only an omitted one may
+          // roll over (December to the next January) by normalization below.
+          if (explicitMonth != null && (explicitMonth < 1 || explicitMonth > 12)) {
+            throw const FormatException('Invalid Yonsei date');
+          }
+          final lastMonth =
+              explicitMonth ?? startMonth + (lastDay < startDay ? 1 : 0);
           final normalized = DateTime(start.year, lastMonth, 1);
           final lastYear = range[4] != null && lastMonth < startMonth
               ? start.year + 1
