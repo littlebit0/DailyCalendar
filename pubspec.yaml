@@ -115,8 +115,6 @@ flutter:
     - assets/timetable/organizations/
     - assets/academic/
     - assets/academic/logos/
-    - assets/onboarding/
-    - assets/onboarding/dark/
     - assets/weather/
 
   # To add assets to your application, add an assets section, like this:
