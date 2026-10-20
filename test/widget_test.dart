@@ -1207,6 +1207,78 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets('year overview follows the week start setting (#189)', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 800);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    debugDefaultTargetPlatformOverride = TargetPlatform.macOS;
+    addTearDown(() => debugDefaultTargetPlatformOverride = null);
+    final labelsByStart = <bool, List<String>>{};
+    for (final monday in [false, true]) {
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'month',
+      });
+      final settingsRepository = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      await settingsRepository.save(
+        settingsRepository.load().copyWith(
+          weekStartsOnMonday: monday,
+          monthNavigationMode: MonthNavigationMode.vertical,
+        ),
+      );
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(DailyApp)),
+      );
+      final year = container.read(visibleMonthProvider).year;
+      await tester.tap(find.text('$year년').first);
+      await tester.pumpAndSettle();
+      final painter =
+          tester
+                  .widget<CustomPaint>(
+                    find.byKey(ValueKey('mini-month-canvas-$year-1')),
+                  )
+                  .painter
+              as dynamic;
+      expect(painter.weekStartsOnMonday, monday);
+      labelsByStart[monday] = List<String>.from(painter.weekdayLabels as List);
+      await tester.pumpWidget(const SizedBox.shrink());
+    }
+    // Monday start shows the same names shifted by one day.
+    final sunday = labelsByStart[false]!;
+    expect(labelsByStart[true], [...sunday.skip(1), sunday.first]);
+    debugDefaultTargetPlatformOverride = null;
+  });
+
   testWidgets(
     'macOS year overview shows two columns and moves to adjacent years',
     (tester) async {
