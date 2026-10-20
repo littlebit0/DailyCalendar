@@ -33,6 +33,8 @@ jobs:
 
       - name: Test Windows 64-bit notification time ABI
         run: python3 -m unittest discover -s tool/tests -p test_windows_notification_time64.py -v
+      - name: Test Windows known-folder path release
+        run: python3 -m unittest discover -s tool/tests -p test_path_provider_windows_release.py -v
 
       - name: Test Windows tray recovery wiring
         run: python3 -m unittest discover -s tool/tests -p test_windows_tray_recovery.py -v
@@ -81,6 +83,9 @@ jobs:
 
       - name: Test widget date rollover wiring and Swift logic
         run: python3 -m unittest discover -s tool/tests -p test_widget_date_rollover_wiring.py -v
+
+      - name: Test Apple widget weekday header colours
+        run: python3 -m unittest discover -s tool/tests -p test_widget_weekday_columns.py -v
 
       - name: Test Apple LMS session paths without skips
         run: |

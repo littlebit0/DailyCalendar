@@ -115,8 +115,6 @@ flutter:
     - assets/timetable/organizations/
     - assets/academic/
     - assets/academic/logos/
-    - assets/onboarding/
-    - assets/onboarding/dark/
     - assets/weather/
 
   # To add assets to your application, add an assets section, like this:
@@ -183,3 +181,6 @@ dependency_overrides:
   # #222: 64-bit notification times past 2038 and reported schedule failures.
   flutter_local_notifications_windows:
     path: third_party/flutter_local_notifications_windows
+  # #210: release the OS string returned by SHGetKnownFolderPath.
+  path_provider_windows:
+    path: third_party/path_provider_windows
