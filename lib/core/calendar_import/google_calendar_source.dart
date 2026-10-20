@@ -311,7 +311,10 @@ class GoogleCalendarSource {
           if (generated) {
             if (!hasPeriod) continue;
             // The PERIOD occurrence replaces the generated one.
-            replacedDays.add(DateTime(start.year, start.month, start.day));
+            replacedDays.add(
+              axis?.deviceDay(start) ??
+                  DateTime(start.year, start.month, start.day),
+            );
             replacesMaster = replacesMaster || isMaster;
           }
         }

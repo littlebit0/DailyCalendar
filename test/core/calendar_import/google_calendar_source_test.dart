@@ -598,6 +598,35 @@ void main() {
     ]);
     expect(events.where((e) => e.sourceId.contains('#rdate#')), isEmpty);
   });
+
+  test('PERIOD RDATE가 대체하는 회차도 기기에 저장된 시리즈의 같은 순서 날짜에서 제외한다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {
+          'dateTime': '2026-10-25T15:30:00-04:00',
+          'timeZone': 'America/New_York',
+        },
+        'end': {
+          'dateTime': '2026-10-25T16:30:00-04:00',
+          'timeZone': 'America/New_York',
+        },
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY',
+          // The 3rd occurrence (after the fall-back), made 2 hours long.
+          'RDATE;TZID=America/New_York;VALUE=PERIOD:20261108T153000/PT2H',
+        ],
+      },
+    ]);
+    final series = events.firstWhere((e) => e.sourceId == 'weekly');
+    final start = series.startAt;
+    expect(series.excludedDates, [
+      DateTime(start.year, start.month, start.day + 14),
+    ]);
+    final rdate = events.firstWhere((e) => e.sourceId.contains('#rdate#'));
+    expect(rdate.endAt.difference(rdate.startAt), const Duration(hours: 2));
+  });
 }
 
 Future<List<ExternalCalendarEvent>> _load(List<Map<String, Object?>> items) {
