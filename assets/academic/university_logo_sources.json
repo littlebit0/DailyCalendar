@@ -349,14 +349,15 @@
     "institution:academyinfo:0000231": {
       "name": "광주대학교",
       "asset": "assets/academic/logos/institution-academyinfo-0000231.png",
-      "url": "https://www.adiga.kr/cmm/com/file/imageFileDown.do?fileId=00000000000000009148&fileSn=1",
-      "sourcePage": "https://www.adiga.kr/ucp/uvt/uni/univDetailSelection.do?menuId=PCUVTINF2000&searchSyr=2026&unvCd=0000231",
-      "sha256": "bef005f437c24b0db1b3c6cef47e61b2ea051c182f4247633cfe0ccb038d8a5b",
+      "url": "https://www.gwangju.ac.kr/pages/gwangju/img/sub/symbol_emblem_01_1.png",
+      "sourcePage": "https://www.gwangju.ac.kr/page/?site=gwangju&mn=594",
+      "sha256": "c700b5811f64399b6683d49c85c27471644352b871b4a2d97b3b6a361162f679",
       "size": [
-        79,
-        85
+        150,
+        150
       ],
-      "presentation": "standalone school symbol or crest; attached university name excluded"
+      "presentation": "standalone school symbol or crest; attached university name excluded",
+      "identityNote": "Official emblem A type; school name only as original lettering inside the emblem"
     },
     "institution:academyinfo:0000076": {
       "name": "광주여자대학교",
