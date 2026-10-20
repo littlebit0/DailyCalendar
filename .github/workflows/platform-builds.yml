@@ -31,9 +31,6 @@ jobs:
       - name: Test fixture archive safety
         run: python3 -m unittest discover -s tool/tests -p test_prepare_test_fixtures.py -v
 
-      - name: Test macOS headless WebView wrapper ownership
-        run: python3 -m unittest discover -s tool/tests -p test_macos_headless_wrapper.py -v
-
       - name: Test Windows tray recovery wiring
         run: python3 -m unittest discover -s tool/tests -p test_windows_tray_recovery.py -v
 
@@ -81,6 +78,9 @@ jobs:
 
       - name: Test widget date rollover wiring and Swift logic
         run: python3 -m unittest discover -s tool/tests -p test_widget_date_rollover_wiring.py -v
+
+      - name: Test macOS headless WebView wrapper ownership
+        run: python3 -m unittest discover -s tool/tests -p test_macos_headless_wrapper.py -v
 
       - name: Test Apple LMS session paths without skips
         run: |

@@ -1,5 +1,6 @@
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -22,7 +23,7 @@ def body(signature):
 class HeadlessWrapperOwnershipTest(unittest.TestCase):
     """#235: a headless run leaves no empty wrapper in the window."""
 
-    @unittest.skipUnless(shutil.which("swiftc"), "Swift compiler is required")
+    @unittest.skipUnless(sys.platform == "darwin" and shutil.which("swiftc"), "AppKit and the Swift compiler need macOS")
     def test_wrapper_hierarchy_behavior(self):
         with tempfile.TemporaryDirectory() as directory:
             executable = Path(directory) / "headless_wrapper"
