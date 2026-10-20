@@ -57,6 +57,7 @@ class _FrequentPlacesFieldState extends State<FrequentPlacesField> {
   @override
   Widget build(BuildContext context) {
     final places = widget.store.recommend(_events);
+    final pinned = widget.store.pinned.toSet();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -82,7 +83,7 @@ class _FrequentPlacesFieldState extends State<FrequentPlacesField> {
               children: places
                   .map(
                     (place) => ActionChip(
-                      avatar: widget.store.pinned.contains(place)
+                      avatar: pinned.contains(place)
                           ? const Icon(Icons.push_pin, size: 16)
                           : null,
                       label: Text(place, overflow: TextOverflow.ellipsis),
@@ -146,6 +147,8 @@ class _PlaceManagerState extends State<_PlaceManager> {
   @override
   Widget build(BuildContext context) {
     final store = widget.store;
+    // Read once per build; presses below read the store again when saving.
+    final pinned = store.pinned.toSet();
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.fromLTRB(
@@ -194,10 +197,10 @@ class _PlaceManagerState extends State<_PlaceManager> {
                   title: Text(place),
                   leading: IconButton(
                     tooltip: context.tr(
-                      store.pinned.contains(place) ? '고정 해제' : '장소 고정',
+                      pinned.contains(place) ? '고정 해제' : '장소 고정',
                     ),
                     icon: Icon(
-                      store.pinned.contains(place)
+                      pinned.contains(place)
                           ? Icons.push_pin
                           : Icons.push_pin_outlined,
                     ),
