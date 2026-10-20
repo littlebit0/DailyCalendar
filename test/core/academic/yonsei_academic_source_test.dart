@@ -74,4 +74,24 @@ void main() {
       throwsFormatException,
     );
   });
+
+  test('an explicit end month outside 1-12 is rejected, a valid one kept (#239)', () {
+    String withEnd(String end) => fixture(2026).replaceAllMapped(
+      RegExp(r'(03-30\s*\(Mon\)\s*~\s*)04(\s*\(Sat\))'),
+      (m) => '${m[1]}$end${m[2]}',
+    );
+    for (final end in ['13-04', '00-04']) {
+      expect(
+        () => YonseiAcademicSource.parse(withEnd(end), 2026),
+        throwsFormatException,
+        reason: end,
+      );
+    }
+    final holyWeek = YonseiAcademicSource.parse(
+      withEnd('04-04'),
+      2026,
+    ).singleWhere((event) => event.title == '고난주간');
+    expect(holyWeek.start, DateTime(2026, 3, 30));
+    expect(holyWeek.end, DateTime(2026, 4, 5));
+  });
 }

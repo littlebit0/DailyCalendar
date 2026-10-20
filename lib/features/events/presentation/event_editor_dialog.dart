@@ -7,6 +7,7 @@ import 'package:flutter/semantics.dart';
 
 import '../../../core/alarms/alarm_service.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../core/localization/twelve_hour_material_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
@@ -33,6 +34,7 @@ class EventEditorDialog extends StatefulWidget {
     this.alarmService = const UnsupportedAlarmService(),
     this.frequentPlaces,
     this.loadPlaceEvents,
+    this.use24HourTime = true,
   });
 
   final DateTime initialDate;
@@ -46,6 +48,10 @@ class EventEditorDialog extends StatefulWidget {
   final AlarmService alarmService;
   final FrequentPlaces? frequentPlaces;
   final Future<List<CalendarEvent>> Function()? loadPlaceEvents;
+
+  /// The app's time display setting; labels and pickers follow it instead of
+  /// the device default.
+  final bool use24HourTime;
 
   @override
   State<EventEditorDialog> createState() => _EventEditorDialogState();
@@ -176,8 +182,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     };
     final startDateLabel = _formatDate(_startDate);
     final endDateLabel = _formatDate(_endDate);
-    final startTimeLabel = _startTime.format(context);
-    final endTimeLabel = _endTime.format(context);
+    final startTimeLabel = _formatTime(_startTime);
+    final endTimeLabel = _formatTime(_endTime);
     final contentMaxHeight = MediaQuery.sizeOf(context).height * 0.72;
 
     final editorTheme = Theme.of(context).copyWith(
@@ -455,7 +461,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           _LabeledPickerButton(
                             label: context.tr('종일 일정 알람 시각'),
                             icon: Icons.alarm,
-                            value: _allDayAlarmTime.format(context),
+                            value: _formatTime(_allDayAlarmTime),
                             onPressed: _pickAllDayAlarmTime,
                           ),
                         ],
@@ -1065,17 +1071,39 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     }
   }
 
+  /// The localizations that honor the app's 12-hour setting, or null when
+  /// the inherited ones already do.
+  MaterialLocalizations? _twelveHourLocalizations(BuildContext context) =>
+      widget.use24HourTime
+      ? null
+      : twelveHourMaterialLocalizations(Localizations.localeOf(context));
+
+  String _formatTime(TimeOfDay time) =>
+      (_twelveHourLocalizations(context) ?? MaterialLocalizations.of(context))
+          .formatTimeOfDay(time, alwaysUse24HourFormat: widget.use24HourTime);
+
   Future<TimeOfDay?> _showTimePicker(TimeOfDay initialTime) {
     _dismissInput();
     return showTimePicker(
       context: context,
       initialTime: initialTime,
-      builder: (pickerContext, child) => MediaQuery(
-        data: MediaQuery.of(
-          pickerContext,
-        ).copyWith(textScaler: TextScaler.noScaling),
-        child: child!,
-      ),
+      builder: (pickerContext, child) {
+        final twelveHour = _twelveHourLocalizations(pickerContext);
+        final picker = MediaQuery(
+          data: MediaQuery.of(pickerContext).copyWith(
+            textScaler: TextScaler.noScaling,
+            alwaysUse24HourFormat: widget.use24HourTime,
+          ),
+          child: child!,
+        );
+        return twelveHour == null
+            ? picker
+            : Localizations.override(
+                context: pickerContext,
+                delegates: [FixedMaterialLocalizationsDelegate(twelveHour)],
+                child: picker,
+              );
+      },
     );
   }
 
