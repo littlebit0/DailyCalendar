@@ -220,6 +220,83 @@ void main() {
       DateTime(2026, 10, 29, 9),
     ]);
   });
+
+  test('RDATE는 EXDATE·RRULE 회차와 겹치면 빼고 PERIOD와 RRULE 없는 반복도 읽는다', () async {
+    final items = [
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {'dateTime': '2026-10-05T09:00:00'},
+        'end': {'dateTime': '2026-10-05T10:00:00'},
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=MO',
+          'EXDATE:20261030T090000',
+          // Already a Monday occurrence, excluded, duplicated, then new.
+          'RDATE:20261012T090000,20261030T090000,20261029T090000',
+          'RDATE:20261029T090000',
+          'RDATE;VALUE=PERIOD:20261031T090000/20261031T113000,'
+              '20261101T090000/PT2H',
+        ],
+      },
+      {
+        'id': 'rdate-only',
+        'summary': '보강',
+        'start': {'dateTime': '2026-11-02T14:00:00'},
+        'end': {'dateTime': '2026-11-02T15:00:00'},
+        'recurrence': ['RDATE:20261109T140000'],
+      },
+      {
+        'id': 'trip',
+        'summary': '여행',
+        'start': {'date': '2026-11-06'},
+        'end': {'date': '2026-11-08'},
+        'recurrence': ['RRULE:FREQ=YEARLY', 'RDATE;VALUE=DATE:20261120'],
+      },
+    ];
+    final source = GoogleCalendarSource(
+      authService: _FakeAuth(),
+      httpClient: MockClient(
+        (request) async => http.Response(
+          jsonEncode({'items': items}),
+          200,
+          headers: const {'content-type': 'application/json; charset=utf-8'},
+        ),
+      ),
+    );
+    const calendar = ImportableCalendar(
+      id: 'person@example.com',
+      title: '내 캘린더',
+      provider: CalendarImportProvider.google,
+    );
+
+    final events = await source.loadEvents(const [calendar]);
+    final extras = {
+      for (final event in events)
+        if (event.sourceId.contains('#rdate#'))
+          event.sourceId: (event.startAt, event.endAt),
+    };
+
+    expect(extras, {
+      'weekly#rdate#20261029T090000': (
+        DateTime(2026, 10, 29, 9),
+        DateTime(2026, 10, 29, 10),
+      ),
+      'weekly#rdate#20261031T090000/20261031T113000': (
+        DateTime(2026, 10, 31, 9),
+        DateTime(2026, 10, 31, 11, 30),
+      ),
+      'weekly#rdate#20261101T090000/PT2H': (
+        DateTime(2026, 11, 1, 9),
+        DateTime(2026, 11, 1, 11),
+      ),
+      'rdate-only#rdate#20261109T140000': (
+        DateTime(2026, 11, 9, 14),
+        DateTime(2026, 11, 9, 15),
+      ),
+      // Two calendar days, whatever the elapsed hours of the master span.
+      'trip#rdate#20261120': (DateTime(2026, 11, 20), DateTime(2026, 11, 22)),
+    });
+  });
 }
 
 class _FakeAuth extends GoogleDriveAuthService {

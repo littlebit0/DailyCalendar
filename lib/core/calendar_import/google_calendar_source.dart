@@ -2,8 +2,13 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../../features/events/data/recurrence_expander.dart';
+import '../../features/events/domain/calendar_event.dart';
+import '../../features/events/domain/event_category.dart';
+import '../calendar/calendar_event_movement.dart';
 import '../sync/google_drive_auth_service.dart';
 import 'calendar_import_models.dart';
+import 'calendar_import_service.dart';
 
 class GoogleCalendarSource {
   GoogleCalendarSource({
@@ -143,24 +148,55 @@ class GoogleCalendarSource {
       );
       if (event == null) continue;
       events.add(event);
-      events.addAll(_extraOccurrences(item, event));
+      events.addAll(
+        _extraOccurrences(item, event, removedBySeries[item['id']] ?? const {}),
+      );
     }
     return events;
   }
 
   /// RDATE occurrences cannot be expressed by a Daily repeat rule, so each one
-  /// is imported as a single event with the series' duration.
+  /// is imported as a single event with the series' duration (or, for a
+  /// PERIOD value, its own end). EXDATE and cancelled or moved instances take
+  /// precedence, and dates the RRULE or an earlier RDATE already produces are
+  /// imported once.
   Iterable<ExternalCalendarEvent> _extraOccurrences(
     Map<String, dynamic> json,
     ExternalCalendarEvent series,
+    Set<DateTime> removedOccurrences,
   ) sync* {
-    if (series.recurrenceRule == null) return;
+    final lines = _recurrenceLines(json, 'RDATE');
+    if (lines.isEmpty) return;
+    final excluded = _excludedDates(json, removedOccurrences).toSet();
+    final rule = CalendarImportService.recurrenceFromRrule(
+      series.recurrenceRule,
+    );
+    final expandable = rule.isRepeating && rule.rawRule == null;
+    final master = CalendarEvent(
+      id: series.sourceId,
+      title: series.title,
+      startAt: series.startAt,
+      endAt: series.endAt,
+      allDay: series.allDay,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      recurrence: rule,
+      createdAt: series.startAt,
+      updatedAt: series.startAt,
+    );
+    final expander = RecurrenceExpander();
     final duration = series.endAt.difference(series.startAt);
-    for (final line in _recurrenceLines(json, 'RDATE')) {
+    // All-day spans are counted in calendar days so a daylight-saving change
+    // inside the master span cannot shorten or lengthen the copy.
+    final daySpan = calendarDayDifference(series.endAt, series.startAt);
+    final seen = <DateTime>{series.startAt};
+    for (final line in lines) {
       for (final value in _icalValues(line)) {
-        final parsed = _icalDateTime(value);
+        final slash = value.indexOf('/');
+        final startText = slash < 0 ? value : value.substring(0, slash);
+        final parsed = _icalDateTime(startText);
         if (parsed == null) continue;
-        final start = series.allDay || value.length == 8
+        final start = series.allDay || startText.length == 8
             ? DateTime(
                 parsed.year,
                 parsed.month,
@@ -169,6 +205,30 @@ class GoogleCalendarSource {
                 series.allDay ? 0 : series.startAt.minute,
               )
             : parsed;
+        final DateTime end;
+        if (series.allDay) {
+          end = shiftCalendarDateByDays(start, daySpan < 1 ? 1 : daySpan);
+        } else if (slash >= 0) {
+          final endText = value.substring(slash + 1);
+          final length = _icalDuration(endText);
+          final explicitEnd = length != null
+              ? start.add(length)
+              : _icalDateTime(endText);
+          if (explicitEnd == null || !explicitEnd.isAfter(start)) continue;
+          end = explicitEnd;
+        } else {
+          end = start.add(duration);
+        }
+        if (excluded.contains(DateTime(start.year, start.month, start.day))) {
+          continue;
+        }
+        if (!seen.add(start)) continue;
+        if (expandable &&
+            expander
+                .expand(master, start, start.add(const Duration(minutes: 1)))
+                .any((occurrence) => occurrence.startAt == start)) {
+          continue;
+        }
         yield ExternalCalendarEvent(
           sourceId: '${series.sourceId}#rdate#$value',
           calendarId: series.calendarId,
@@ -178,13 +238,30 @@ class GoogleCalendarSource {
           location: series.location,
           url: series.url,
           startAt: start,
-          endAt: start.add(duration),
+          endAt: end,
           allDay: series.allDay,
           colorValue: series.colorValue,
           reminderMinutesBeforeList: series.reminderMinutesBeforeList,
         );
       }
     }
+  }
+
+  /// RFC 5545 DURATION such as `PT2H`, `P1D` or `P1W`.
+  Duration? _icalDuration(String value) {
+    final match = RegExp(
+      r'^\+?P(?:(\d+)W)?(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?)?$',
+    ).firstMatch(value);
+    if (match == null || value.endsWith('P') || value.endsWith('T')) {
+      return null;
+    }
+    int part(int index) => int.parse(match[index] ?? '0');
+    return Duration(
+      days: part(1) * 7 + part(2),
+      hours: part(3),
+      minutes: part(4),
+      seconds: part(5),
+    );
   }
 
   List<String> _recurrenceLines(Map<String, dynamic> json, String name) => [
