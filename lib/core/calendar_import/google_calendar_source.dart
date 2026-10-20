@@ -248,39 +248,12 @@ class GoogleCalendarSource {
     final expander = RecurrenceExpander();
     // Google expands the series in its own `start.timeZone`, so RDATEs are
     // compared with the series in that zone's wall-clock time.
-    final startValue = json['start'];
-    final sourceZone = _zone(
-      startValue is Map<String, dynamic>
-          ? startValue['timeZone'] as String?
-          : null,
-    );
-    DateTime wall(DateTime instant) {
-      if (sourceZone == null) return instant;
-      final zoned = tz.TZDateTime.from(instant, sourceZone);
-      return DateTime(
-        zoned.year,
-        zoned.month,
-        zoned.day,
-        zoned.hour,
-        zoned.minute,
-        zoned.second,
-      );
-    }
-
-    // A UTC `UNTIL` is an instant: move it to the same wall clock.
-    final until = rule.until;
-    final wallMaster = master.copyWith(
-      startAt: wall(series.startAt),
-      endAt: wall(series.endAt),
-      recurrence:
-          until != null &&
-              (series.recurrenceRule?.toUpperCase().contains(
-                    RegExp(r'UNTIL=\d{8}T\d{6}Z'),
-                  ) ??
-                  false)
-          ? rule.copyWith(until: wall(until))
-          : rule,
-    );
+    final sourceZone = _sourceZone(json);
+    final axis = expandable && !series.allDay
+        ? _WallAxis.of(sourceZone, master, series.recurrenceRule)
+        : null;
+    DateTime wall(DateTime instant) => _WallAxis.wallOf(sourceZone, instant);
+    final wallMaster = axis?.wallMaster ?? master;
     final duration = series.endAt.difference(series.startAt);
     // All-day spans are counted in calendar days so a daylight-saving change
     // inside the master span cannot shorten or lengthen the copy.
@@ -594,6 +567,20 @@ class GoogleCalendarSource {
       (value) => value.startsWith('RRULE:'),
       orElse: () => '',
     );
+    final endAt = end.isAfter(start)
+        ? end
+        : start.add(
+            allDay ? const Duration(days: 1) : const Duration(hours: 1),
+          );
+    final repeats = recurrenceRule != null && recurrenceRule.isNotEmpty;
+    // Exclusions must land on the dates Daily expands the stored series on.
+    final axis = repeats && !allDay
+        ? _WallAxis.of(
+            _sourceZone(json),
+            _masterOf(id, start, endAt, allDay, recurrenceRule),
+            recurrenceRule,
+          )
+        : null;
     return ExternalCalendarEvent(
       sourceId: id,
       calendarId: calendar.id,
@@ -605,22 +592,41 @@ class GoogleCalendarSource {
       location: json['location'] as String?,
       url: json['htmlLink'] as String?,
       startAt: start,
-      endAt: end.isAfter(start)
-          ? end
-          : start.add(
-              allDay ? const Duration(days: 1) : const Duration(hours: 1),
-            ),
+      endAt: endAt,
       allDay: allDay,
-      recurrenceRule: recurrenceRule == null || recurrenceRule.isEmpty
-          ? null
-          : recurrenceRule,
-      excludedDates: recurrenceRule == null || recurrenceRule.isEmpty
-          ? const []
-          : exclusions.ruleDates,
+      recurrenceRule: repeats ? recurrenceRule : null,
+      excludedDates: repeats ? exclusions.ruleDates(axis?.deviceDay) : const [],
       colorValue: calendar.colorValue,
       reminderMinutesBeforeList: _eventReminderMinutes(json, calendar),
     );
   }
+
+  tz.Location? _sourceZone(Map<String, dynamic> json) {
+    final start = json['start'];
+    return _zone(
+      start is Map<String, dynamic> ? start['timeZone'] as String? : null,
+    );
+  }
+
+  /// The series as Daily would store it, without any exclusions.
+  CalendarEvent _masterOf(
+    String id,
+    DateTime start,
+    DateTime end,
+    bool allDay,
+    String? rawRule,
+  ) => CalendarEvent(
+    id: id,
+    title: id,
+    startAt: start,
+    endAt: end,
+    allDay: allDay,
+    category: EventCategory.basic,
+    colorValue: EventCategory.basic.colorValue,
+    recurrence: CalendarImportService.recurrenceFromRrule(rawRule),
+    createdAt: start,
+    updatedAt: start,
+  );
 
   List<int> _eventReminderMinutes(
     Map<String, dynamic> json,
@@ -735,11 +741,93 @@ class _Exclusions {
       instants.contains(start) ||
       days.contains(DateTime(start.year, start.month, start.day));
 
-  /// Daily's repeat rule excludes whole local days.
-  List<DateTime> get ruleDates => {
+  /// Daily's repeat rule excludes whole local days; [dayOf] maps a timed
+  /// start to the stored series' date when that differs from its local date.
+  List<DateTime> ruleDates([DateTime? Function(DateTime)? dayOf]) => {
     ...days,
-    for (final start in instants) DateTime(start.year, start.month, start.day),
+    for (final start in instants)
+      dayOf?.call(start) ?? DateTime(start.year, start.month, start.day),
   }.toList()..sort();
+}
+
+/// A recurring series in its source zone's wall clock, which is how Google
+/// expands it, next to [device]: the series as Daily stores and expands it in
+/// device-local time. The two can differ when daylight saving changes differ.
+class _WallAxis {
+  _WallAxis._(this.zone, this.device, this.wallMaster);
+
+  static _WallAxis? of(
+    tz.Location? zone,
+    CalendarEvent device,
+    String? rawRule,
+  ) {
+    if (zone == null ||
+        !device.recurrence.isRepeating ||
+        device.recurrence.rawRule != null) {
+      return null;
+    }
+    final until = device.recurrence.until;
+    // A UTC `UNTIL` is an instant: move it to the same wall clock.
+    final utcUntil =
+        until != null &&
+        (rawRule?.toUpperCase().contains(RegExp(r'UNTIL=\d{8}T\d{6}Z')) ??
+            false);
+    final start = wallOf(zone, device.startAt);
+    // The wall-clock end can fall at or before the start across a daylight
+    // saving fall-back, so keep the real length.
+    final length = device.endAt.difference(device.startAt);
+    return _WallAxis._(
+      zone,
+      device,
+      device.copyWith(
+        startAt: start,
+        endAt: start.add(length.isNegative ? Duration.zero : length),
+        recurrence: utcUntil
+            ? device.recurrence.copyWith(until: wallOf(zone, until))
+            : device.recurrence,
+      ),
+    );
+  }
+
+  final tz.Location zone;
+  final CalendarEvent device;
+  final CalendarEvent wallMaster;
+
+  static DateTime wallOf(tz.Location? zone, DateTime instant) {
+    if (zone == null) return instant;
+    final zoned = tz.TZDateTime.from(instant, zone);
+    return DateTime(
+      zoned.year,
+      zoned.month,
+      zoned.day,
+      zoned.hour,
+      zoned.minute,
+      zoned.second,
+    );
+  }
+
+  /// The date of the stored series' occurrence that stands for the one Google
+  /// has at [instant]: the same position in the series, in device time.
+  DateTime? deviceDay(DateTime instant) {
+    final wall = wallOf(zone, instant);
+    final expander = RecurrenceExpander();
+    final index = expander
+        .expand(
+          wallMaster,
+          wallMaster.startAt,
+          wall.add(const Duration(minutes: 1)),
+        )
+        .indexWhere((occurrence) => occurrence.startAt == wall);
+    if (index < 0) return null;
+    final stored = expander.expand(
+      device,
+      device.startAt,
+      wall.add(const Duration(days: 2)),
+    );
+    if (index >= stored.length) return null;
+    final start = stored[index].startAt;
+    return DateTime(start.year, start.month, start.day);
+  }
 }
 
 class _Rdates {

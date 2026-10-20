@@ -541,6 +541,63 @@ void main() {
     ]);
     expect(events.where((e) => e.sourceId.contains('#rdate#')), isEmpty);
   });
+
+  test('취소된 회차의 제외 날짜는 기기에 저장된 시리즈의 같은 순서 회차 날짜에 맞춘다', () async {
+    // New York falls back on 2026-11-01. The device keeps the wall clock of
+    // its own zone, so the cancelled 3rd occurrence (2026-11-08 15:30 New York)
+    // is the stored series' 3rd occurrence, whatever date its instant has.
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {
+          'dateTime': '2026-10-25T15:30:00-04:00',
+          'timeZone': 'America/New_York',
+        },
+        'end': {
+          'dateTime': '2026-10-25T16:30:00-04:00',
+          'timeZone': 'America/New_York',
+        },
+        'recurrence': ['RRULE:FREQ=WEEKLY'],
+      },
+      {
+        'id': 'weekly_20261108',
+        'status': 'cancelled',
+        'recurringEventId': 'weekly',
+        'originalStartTime': {
+          'dateTime': '2026-11-08T15:30:00-05:00',
+          'timeZone': 'America/New_York',
+        },
+      },
+    ]);
+    final series = events.firstWhere((e) => e.sourceId == 'weekly');
+    final start = series.startAt;
+    expect(series.excludedDates, [
+      DateTime(start.year, start.month, start.day + 14),
+    ]);
+  });
+
+  test('DST 종료 구간을 가로지르는 일정도 RDATE 중복 판단에서 길이가 유지된다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '심야 회의',
+        'start': {
+          'dateTime': '2026-11-01T01:30:00-04:00',
+          'timeZone': 'America/New_York',
+        },
+        'end': {
+          'dateTime': '2026-11-01T01:30:00-05:00',
+          'timeZone': 'America/New_York',
+        },
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=SU',
+          'RDATE;TZID=America/New_York:20261108T013000',
+        ],
+      },
+    ]);
+    expect(events.where((e) => e.sourceId.contains('#rdate#')), isEmpty);
+  });
 }
 
 Future<List<ExternalCalendarEvent>> _load(List<Map<String, Object?>> items) {
