@@ -178,3 +178,6 @@ dependency_overrides:
   # #233: keep-alive WebViews must not leave null entries for engine detach.
   flutter_inappwebview_android:
     path: third_party/flutter_inappwebview_android
+  # #210: release the OS string returned by SHGetKnownFolderPath.
+  path_provider_windows:
+    path: third_party/path_provider_windows
