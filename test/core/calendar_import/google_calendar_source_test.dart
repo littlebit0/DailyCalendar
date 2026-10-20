@@ -117,16 +117,16 @@ void main() {
             'id': 'weekly_20261012T000000Z',
             'status': 'cancelled',
             'recurringEventId': 'weekly',
-            'originalStartTime': {'dateTime': '2026-10-12T09:00:00+09:00'},
+            'originalStartTime': {'dateTime': '2026-10-12T09:00:00'},
           },
           {
             'id': 'weekly_20261019T000000Z',
             'status': 'confirmed',
             'recurringEventId': 'weekly',
-            'originalStartTime': {'dateTime': '2026-10-19T09:00:00+09:00'},
+            'originalStartTime': {'dateTime': '2026-10-19T09:00:00'},
             'summary': '주간 회의',
-            'start': {'dateTime': '2026-10-20T11:00:00+09:00'},
-            'end': {'dateTime': '2026-10-20T12:00:00+09:00'},
+            'start': {'dateTime': '2026-10-20T11:00:00'},
+            'end': {'dateTime': '2026-10-20T12:00:00'},
           },
           {'id': 'deleted-single', 'status': 'cancelled'},
         ],
@@ -137,12 +137,12 @@ void main() {
             'id': 'weekly',
             'status': 'confirmed',
             'summary': '주간 회의',
-            'start': {'dateTime': '2026-10-05T09:00:00+09:00'},
-            'end': {'dateTime': '2026-10-05T10:00:00+09:00'},
+            'start': {'dateTime': '2026-10-05T09:00:00'},
+            'end': {'dateTime': '2026-10-05T10:00:00'},
             'recurrence': [
               'RRULE:FREQ=WEEKLY;BYDAY=MO',
-              'EXDATE;TZID=Asia/Seoul:20261026T090000',
-              'RDATE;TZID=Asia/Seoul:20261029T090000',
+              'EXDATE:20261026T090000',
+              'RDATE:20261029T090000',
             ],
           },
         ],
@@ -172,18 +172,18 @@ void main() {
     expect(events.map((event) => event.sourceId), [
       'weekly_20261019T000000Z',
       'weekly',
-      'weekly#rdate#Asia/Seoul:20261029T090000',
+      'weekly#rdate#20261029T090000',
     ]);
     final series = events.firstWhere((event) => event.sourceId == 'weekly');
     DateTime day(String iso) {
-      final local = DateTime.parse(iso).toLocal();
-      return DateTime(local.year, local.month, local.day);
+      final date = DateTime.parse(iso);
+      return DateTime(date.year, date.month, date.day);
     }
 
     expect(series.excludedDates, [
-      day('2026-10-12T09:00:00+09:00'),
-      day('2026-10-19T09:00:00+09:00'),
-      day('2026-10-26T09:00:00+09:00'),
+      day('2026-10-12T09:00:00'),
+      day('2026-10-19T09:00:00'),
+      day('2026-10-26T09:00:00'),
     ]);
 
     // Normalize as the import does and list the occurrences in October.
@@ -215,8 +215,8 @@ void main() {
           occurrence.startAt,
     ]..sort();
     expect(starts, [
-      DateTime.parse('2026-10-05T09:00:00+09:00').toLocal(),
-      DateTime.parse('2026-10-20T11:00:00+09:00').toLocal(),
+      DateTime(2026, 10, 5, 9),
+      DateTime(2026, 10, 20, 11),
       DateTime(2026, 10, 29, 9),
     ]);
   });
@@ -454,6 +454,45 @@ void main() {
     expect(events.firstWhere((e) => e.sourceId == 'weekly').excludedDates, [
       DateTime(excluded.year, excluded.month, excluded.day),
     ]);
+  });
+
+  test('UTC PERIOD 일수는 UTC 달력으로 더한다', () async {
+    final events = await _load([
+      {
+        'id': 'utc',
+        'summary': '행사',
+        'start': {'dateTime': '2026-10-05T13:00:00Z'},
+        'end': {'dateTime': '2026-10-05T14:00:00Z'},
+        'recurrence': ['RDATE;VALUE=PERIOD:20261031T130000Z/P1D'],
+      },
+    ]);
+    final rdate = events.firstWhere((e) => e.sourceId.contains('#rdate#'));
+    expect(rdate.startAt, DateTime.utc(2026, 10, 31, 13).toLocal());
+    // New York falls back on 2026-11-01, but the day is added in UTC.
+    expect(rdate.endAt, DateTime.utc(2026, 11, 1, 13).toLocal());
+  });
+
+  test('RDATE 중복은 시리즈의 start.timeZone 벽시계로 판단한다', () async {
+    final events = await _load([
+      {
+        'id': 'weekly',
+        'summary': '주간 회의',
+        'start': {
+          'dateTime': '2026-10-05T09:00:00-04:00',
+          'timeZone': 'America/New_York',
+        },
+        'end': {
+          'dateTime': '2026-10-05T10:00:00-04:00',
+          'timeZone': 'America/New_York',
+        },
+        'recurrence': [
+          'RRULE:FREQ=WEEKLY;BYDAY=MO',
+          // 09:00 New York on the Monday after the fall-back: already in the series.
+          'RDATE;TZID=America/New_York:20261102T090000',
+        ],
+      },
+    ]);
+    expect(events.where((e) => e.sourceId.contains('#rdate#')), isEmpty);
   });
 }
 

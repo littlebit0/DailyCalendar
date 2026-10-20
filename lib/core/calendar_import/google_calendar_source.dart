@@ -262,6 +262,31 @@ class GoogleCalendarSource {
       updatedAt: series.startAt,
     );
     final expander = RecurrenceExpander();
+    // Google expands the series in its own `start.timeZone`, so RDATEs are
+    // compared with the series in that zone's wall-clock time.
+    final startValue = json['start'];
+    final sourceZone = _zone(
+      startValue is Map<String, dynamic>
+          ? startValue['timeZone'] as String?
+          : null,
+    );
+    DateTime wall(DateTime instant) {
+      if (sourceZone == null) return instant;
+      final zoned = tz.TZDateTime.from(instant, sourceZone);
+      return DateTime(
+        zoned.year,
+        zoned.month,
+        zoned.day,
+        zoned.hour,
+        zoned.minute,
+        zoned.second,
+      );
+    }
+
+    final wallMaster = master.copyWith(
+      startAt: wall(series.startAt),
+      endAt: wall(series.endAt),
+    );
     final duration = series.endAt.difference(series.startAt);
     // All-day spans are counted in calendar days so a daylight-saving change
     // inside the master span cannot shorten or lengthen the copy.
@@ -304,17 +329,18 @@ class GoogleCalendarSource {
         if (byStart.containsKey(start)) {
           if (!hasPeriod) continue;
         } else {
-          final isMaster = start == series.startAt;
+          final startWall = wall(start);
+          final isMaster = startWall == wall(series.startAt);
           final generated =
               isMaster ||
               (expandable &&
                   expander
                       .expand(
-                        master,
-                        start,
-                        start.add(const Duration(minutes: 1)),
+                        wallMaster,
+                        startWall,
+                        startWall.add(const Duration(minutes: 1)),
                       )
-                      .any((occurrence) => occurrence.startAt == start));
+                      .any((occurrence) => occurrence.startAt == startWall));
           if (generated) {
             if (!hasPeriod) continue;
             // The PERIOD occurrence replaces the generated one.
@@ -354,17 +380,28 @@ class GoogleCalendarSource {
     DateTime start,
     ({int days, Duration time}) length,
   ) {
-    final location = startText.endsWith('Z') ? null : _zone(tzid);
+    final utc = startText.endsWith('Z');
+    final location = utc ? null : _zone(tzid);
     final wall = RegExp(
-      r'^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})$',
+      r'^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z?$',
     ).firstMatch(startText);
-    if (location == null || wall == null) {
+    if ((location == null && !utc) || wall == null) {
       return shiftCalendarDateByDays(start, length.days).add(length.time);
     }
     int part(int index) => int.parse(wall[index]!);
+    if (utc) {
+      return DateTime.utc(
+        part(1),
+        part(2),
+        part(3) + length.days,
+        part(4),
+        part(5),
+        part(6),
+      ).add(length.time).toLocal();
+    }
     return _toLocal(
       tz.TZDateTime(
-        location,
+        location!,
         part(1),
         part(2),
         part(3) + length.days,
