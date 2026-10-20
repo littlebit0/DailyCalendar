@@ -14,6 +14,8 @@ public class HeadlessInAppWebView: Disposable {
     var channelDelegate: HeadlessWebViewChannelDelegate?
     var flutterWebView: FlutterWebViewController?
     var plugin: InAppWebViewFlutterPlugin?
+    /// Daily #235: owns the zero-frame wrapper this headless view adds to the window.
+    private let wrapper = HeadlessViewWrapper()
     
     public init(plugin: InAppWebViewFlutterPlugin, id: String, flutterWebView: FlutterWebViewController) {
         self.id = id
@@ -43,9 +45,7 @@ public class HeadlessInAppWebView: Disposable {
             /// won't be executed sometimes.
             /// So, add the headless WKWebView to the view hierarchy.
             /// This way is also possible to take screenshots.
-            let wrapperView = NSView() // wrapper view with frame zero
-            wrapperView.addSubview(view, positioned: .below, relativeTo: nil)
-            NSApplication.shared.mainWindow?.contentView?.addSubview(wrapperView, positioned: .below, relativeTo: nil)
+            wrapper.attach(view, to: NSApplication.shared.mainWindow?.contentView)
         }
     }
     
@@ -87,6 +87,8 @@ public class HeadlessInAppWebView: Disposable {
         }
         flutterWebView = nil
         plugin = nil
+        // Both the plain dispose and the move to a visible view end here.
+        wrapper.remove()
     }
     
     public func dispose() {
