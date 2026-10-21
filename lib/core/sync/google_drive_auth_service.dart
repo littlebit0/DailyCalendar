@@ -28,13 +28,16 @@ class GoogleDriveAuthService {
     desktopAuthorizationCode,
     @visibleForTesting bool? useAndroidAuthorizationRecovery,
     @visibleForTesting Duration? mobileUserApprovalTimeout,
+    @visibleForTesting Duration? mobileBackgroundSettleTimeout,
   }) : _secureStorage = secureStorage ?? const FlutterSecureStorage(),
        _httpClient = httpClient ?? http.Client(),
        _linkedGoogleEmail = linkedGoogleEmail,
        _desktopOAuthOverride = useDesktopOAuth,
        _desktopAuthorizationCode = desktopAuthorizationCode,
        _androidAuthorizationRecoveryOverride = useAndroidAuthorizationRecovery,
-       _mobileUserApprovalTimeoutOverride = mobileUserApprovalTimeout;
+       _mobileUserApprovalTimeoutOverride = mobileUserApprovalTimeout,
+       _mobileBackgroundSettleTimeout =
+           mobileBackgroundSettleTimeout ?? const Duration(seconds: 10);
 
   static const driveAppDataScope =
       'https://www.googleapis.com/auth/drive.appdata';
@@ -101,6 +104,10 @@ class GoogleDriveAuthService {
   final bool? _desktopOAuthOverride;
   final bool? _androidAuthorizationRecoveryOverride;
   final Duration? _mobileUserApprovalTimeoutOverride;
+
+  /// How long account selection waits for background Credential Manager work
+  /// (credential clear, silent authorization) before opening the chooser.
+  final Duration _mobileBackgroundSettleTimeout;
   String? _defaultAuthorizationAccountId;
   final _accountController = StreamController<GoogleDriveAccount?>.broadcast();
   Future<void>? _initializeFuture;
@@ -112,6 +119,10 @@ class GoogleDriveAuthService {
   var _androidAuthenticationEventsPending = 0;
   var _androidCredentialClearEventsPending = 0;
   final _pendingAndroidNativeOperations = <Future<void>>{};
+
+  /// The subset of [_pendingAndroidNativeOperations] that can show Google UI
+  /// (account chooser or consent). Only these make a new login wait for the user.
+  final _pendingAndroidInteractiveOperations = <Future<void>>{};
   var _androidRestorationBlocked = false;
   final Future<({String code, String redirectUri, String codeVerifier})>
   Function()?
@@ -501,11 +512,12 @@ class GoogleDriveAuthService {
         if (!_isAvailable || !GoogleSignIn.instance.supportsAuthenticate()) {
           throw UnsupportedError('현재 플랫폼에서는 Google Drive 연결을 지원하지 않습니다.');
         }
-        if (_pendingAndroidNativeOperations.isNotEmpty) {
+        if (_pendingAndroidInteractiveOperations.isNotEmpty) {
           throw const GoogleDriveAuthException(
             'Google 로그인 창의 응답을 기다리고 있습니다. 열려 있는 창을 닫은 뒤 다시 시도해 주세요.',
           );
         }
+        await _settleAndroidBackgroundOperations();
         if (!forceAccountSelection && _currentUser != null) {
           return currentAccount;
         }
@@ -517,11 +529,11 @@ class GoogleDriveAuthService {
         if (forceAccountSelection) {
           await _clearMobileAccountForSelection();
           if (!isCurrent()) return null;
-          if (_pendingAndroidNativeOperations.isNotEmpty) {
-            throw const GoogleDriveAuthException(
-              'Google 계정 선택 준비가 완료되지 않았습니다. 잠시 후 다시 연결해 주세요.',
-            );
-          }
+          // Clearing Credential Manager state often outlasts the clear timeout
+          // while Play services starts. It shows no UI, so let it finish rather
+          // than refusing to open the account chooser.
+          await _settleAndroidBackgroundOperations();
+          if (!isCurrent()) return null;
         }
         final user = await _awaitAndroidNativeOperation(
           () => GoogleSignIn.instance.authenticate(scopeHint: scopes),
@@ -536,6 +548,7 @@ class GoogleDriveAuthService {
               promptIfNecessary: true,
               connectionGeneration: generation,
             ),
+            interactive: true,
           );
           if (!isCurrent()) return null;
           // A null token without an explicit SDK cancellation is a real failure.
@@ -578,18 +591,24 @@ class GoogleDriveAuthService {
   Future<T> _awaitAndroidNativeOperation<T>(
     Future<T> Function() operation, {
     bool authentication = false,
+    bool interactive = false,
   }) => _trackAndroidNativeOperation(
     operation,
     authentication: authentication,
+    interactive: interactive,
   ).timeout(_mobileUserApprovalTimeoutOverride ?? _mobileUserApprovalTimeout);
 
   Future<T> _trackAndroidNativeOperation<T>(
     Future<T> Function() operation, {
     bool authentication = false,
     bool credentialClear = false,
+    bool interactive = false,
   }) {
     final complete = Completer<void>();
     _pendingAndroidNativeOperations.add(complete.future);
+    if (authentication || interactive) {
+      _pendingAndroidInteractiveOperations.add(complete.future);
+    }
     if (authentication) _androidAuthenticationEventsPending++;
     if (credentialClear) _androidCredentialClearEventsPending++;
     final pending = Future<T>.sync(operation)
@@ -604,10 +623,27 @@ class GoogleDriveAuthService {
         .whenComplete(() {
           complete.complete();
           _pendingAndroidNativeOperations.remove(complete.future);
+          _pendingAndroidInteractiveOperations.remove(complete.future);
         });
     // timeout does not cancel a native Activity. Keep ownership until its real
     // result arrives so neither a late stream event nor a retry can overlap it.
     return pending;
+  }
+
+  /// Waits for background native work that shows no UI. Each pending future
+  /// only completes, never fails. If one never answers, the chooser still
+  /// opens; its late SDK event is consumed by the pending-event counters.
+  Future<void> _settleAndroidBackgroundOperations() async {
+    if (_pendingAndroidNativeOperations.isEmpty) return;
+    try {
+      await Future.wait(
+        _pendingAndroidNativeOperations.toList(),
+      ).timeout(_mobileBackgroundSettleTimeout);
+    } on TimeoutException {
+      debugPrint(
+        'GoogleAuth: background Credential Manager work still running',
+      );
+    }
   }
 
   Future<GoogleDriveAccount?> _runSerializedMobileSignIn(
@@ -865,6 +901,7 @@ class GoogleDriveAuthService {
         () => promptIfNecessary
             ? client.authorizeScopes(authorizationScopes)
             : client.authorizationForScopes(authorizationScopes),
+        interactive: promptIfNecessary,
       );
     } on GoogleSignInException catch (error) {
       if (!promptIfNecessary && _isMissingAuthorizationCredential(error)) {
@@ -935,7 +972,10 @@ class GoogleDriveAuthService {
               promptIfNecessary: promptIfNecessary,
             );
         return await (canRecover
-            ? _trackAndroidNativeOperation(request)
+            ? _trackAndroidNativeOperation(
+                request,
+                interactive: promptIfNecessary,
+              )
             : request());
       } on GoogleSignInException catch (error) {
         if (!canRecover || !_isMissingAuthorizationCredential(error)) {
@@ -964,6 +1004,7 @@ class GoogleDriveAuthService {
         () => promptIfNecessary
             ? client.authorizeScopes(recoveryScopes)
             : client.authorizationForScopes(recoveryScopes),
+        interactive: promptIfNecessary,
       );
     } on GoogleSignInException catch (error) {
       if (!promptIfNecessary && _isMissingAuthorizationCredential(error)) {
