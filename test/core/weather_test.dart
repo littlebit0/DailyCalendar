@@ -75,6 +75,20 @@ class FailingWeatherStore extends WeatherStore {
   }
 }
 
+/// The cache write waits for [release] and then fails, like a storage error
+/// that arrives after the request was reset.
+class LateFailingCacheStore extends WeatherStore {
+  LateFailingCacheStore(super.preferences);
+  final release = Completer<void>();
+  final writeStarted = Completer<void>();
+  @override
+  Future<void> cache(String grid, String xml, DateTime now) async {
+    writeStarted.complete();
+    await release.future;
+    throw StateError('cache write failed');
+  }
+}
+
 Future<WeatherStore> weatherStore([
   WeatherSettings settings = const WeatherSettings(),
 ]) async {
@@ -268,6 +282,53 @@ void main() {
       expect(service.requests, 1);
     },
   );
+
+  test('a cache failure after a reset leaves the reset state alone (#262)', () async {
+    SharedPreferences.setMockInitialValues({});
+    final store = LateFailingCacheStore(await SharedPreferences.getInstance());
+    await store.save(
+      const WeatherSettings(enabled: true, regionId: '1100000000'),
+    );
+    final controller = WeatherController(
+      store: store,
+      service: TestWeatherService(),
+      location: TestWeatherLocation(),
+      clock: () => weatherClock,
+    );
+    addTearDown(controller.dispose);
+    final refresh = controller.refresh(force: true);
+    await store.writeStarted.future;
+    await store.clear(); // e.g. account data reset while the cache is writing
+    expect(controller.status, WeatherStatus.idle);
+    var notified = 0;
+    controller.addListener(() => notified++);
+    store.release.complete();
+    await refresh;
+    expect(controller.status, WeatherStatus.idle);
+    expect(controller.forecast, isNull);
+    expect(notified, 0);
+  });
+
+  test('a cache failure of the current request is still reported (#262)', () async {
+    SharedPreferences.setMockInitialValues({});
+    final store = LateFailingCacheStore(await SharedPreferences.getInstance());
+    await store.save(
+      const WeatherSettings(enabled: true, regionId: '1100000000'),
+    );
+    final controller = WeatherController(
+      store: store,
+      service: TestWeatherService(),
+      location: TestWeatherLocation(),
+      clock: () => weatherClock,
+    );
+    addTearDown(controller.dispose);
+    final refresh = controller.refresh(force: true);
+    await store.writeStarted.future;
+    store.release.complete();
+    await refresh;
+    expect(controller.status, WeatherStatus.storageError);
+    expect(controller.forecast, isNotNull);
+  });
 
   test('failed setting write preserves the prior visible forecast', () async {
     SharedPreferences.setMockInitialValues({});
