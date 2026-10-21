@@ -107,6 +107,9 @@ WeatherRegion? nearestWeatherRegion(
   WeatherRegion? nearest;
   var shortest = double.infinity;
   for (final region in regions) {
+    // The index writes 0,0 for a region it has no position for (이어도); such
+    // a region stays selectable by hand but is never an automatic match.
+    if (region.latitude == 0 && region.longitude == 0) continue;
     final distance = Geolocator.distanceBetween(
       latitude,
       longitude,
