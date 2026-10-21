@@ -45,6 +45,7 @@ void main() {
     bool recovery = true,
     bool signIn = true,
     Duration? approvalTimeout,
+    Duration? settleTimeout,
     Future<http.Response> Function(http.Request)? identityResponse,
   }) async {
     service = GoogleDriveAuthService(
@@ -52,6 +53,7 @@ void main() {
       useAndroidAuthorizationRecovery: recovery,
       linkedGoogleEmail: () => linkedEmail,
       mobileUserApprovalTimeout: approvalTimeout,
+      mobileBackgroundSettleTimeout: settleTimeout,
       httpClient: MockClient((request) async {
         identityRequests.add(request);
         return identityResponse != null
@@ -564,36 +566,43 @@ void main() {
     },
   );
 
+  test(
+    'a credential clear slower than its timeout still opens the chooser',
+    () async {
+      await initialize();
+      // Play services often needs more than the 2 s clear timeout on a cold
+      // start. Login used to fail with "계정 선택 준비가 완료되지 않았습니다".
+      platform.clearCredentialState = () =>
+          Future<void>.delayed(const Duration(seconds: 3));
+      final account = await service.connectToDrive();
+      expect(account?.email, 'signed-in@example.com');
+      expect(platform.signInCalls, 2);
+    },
+  );
+
   for (final logout in [false, true]) {
     test(
-      'timed-out credential clear during ${logout ? 'logout' : 'selection'} blocks new native work',
+      'a credential clear that never answers after ${logout ? 'logout' : 'selection'} does not keep the chooser closed',
       () async {
-        await initialize();
+        await initialize(settleTimeout: const Duration(milliseconds: 50));
         final clear = Completer<void>();
         platform.clearCredentialState = () => clear.future;
         if (logout) {
           await service.signOut();
-        } else {
-          await expectLater(
-            service.connectToDrive(),
-            throwsA(isA<GoogleDriveAuthException>()),
+          // Silent and consent requests still wait for the pending clear.
+          expect(
+            await service.authorizationHeaders(promptIfNecessary: true),
+            isNull,
           );
+          expect(platform.requests, isEmpty);
         }
-        expect(platform.signInCalls, 1);
-        await expectLater(
-          service.connectToDrive(),
-          throwsA(isA<GoogleDriveAuthException>()),
-        );
-        expect(
-          await service.authorizationHeaders(promptIfNecessary: true),
-          isNull,
-        );
-        expect(platform.requests, isEmpty);
-        expect(platform.signInCalls, 1);
+        final account = await service.connectToDrive();
+        expect(account?.email, 'signed-in@example.com');
+        expect(platform.signInCalls, 2);
+        // The late sign-out event belongs to the old clear, not the new login.
         clear.complete();
         await Future<void>.delayed(Duration.zero);
-        platform.clearCredentialState = null;
-        expect(await service.connectToDrive(), isNotNull);
+        expect(service.currentAccount?.email, 'signed-in@example.com');
       },
     );
   }
