@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
+import 'package:crypto/crypto.dart';
 
 import 'package:daily/core/academic/university_directory.dart';
 import 'package:daily/core/academic/university_regions.dart';
@@ -122,10 +123,20 @@ void main() {
         }
         expect(entry['presentation'], isNotEmpty);
         final bytes = File(entry['asset'] as String).readAsBytesSync();
+        expect(
+          sha256.convert(bytes).toString(),
+          entry['sha256'],
+          reason: school.name,
+        );
         final codec = await ui.instantiateImageCodec(bytes);
         final frame = await codec.getNextFrame();
         expect(frame.image.width, greaterThan(8), reason: school.name);
         expect(frame.image.height, greaterThan(8), reason: school.name);
+        expect(
+          [frame.image.width, frame.image.height],
+          entry['size'],
+          reason: school.name,
+        );
         frame.image.dispose();
         codec.dispose();
       }
