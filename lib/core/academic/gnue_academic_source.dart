@@ -113,7 +113,11 @@ class GnueAcademicSource implements AcademicSource {
             title: title,
             start: start,
             end: end,
-            url: 'https://www.gnue.ac.kr/index.9is?contentUid=$_first',
+            // The page this event was read from: its semester and year.
+            url: Uri.https('www.gnue.ac.kr', '/index.9is', {
+              'contentUid': semester == 1 ? _first : _second,
+              'yyyy': '$year',
+            }).toString(),
           ),
         );
       }
