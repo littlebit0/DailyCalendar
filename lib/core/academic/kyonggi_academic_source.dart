@@ -107,7 +107,7 @@ class KyonggiAcademicSource implements AcademicSource {
             start: start,
             end: end,
             url:
-                'https://www.kyonggi.ac.kr/www/selectTnSchafsSchdulListUS.do?key=5819&sc1=10',
+                'https://www.kyonggi.ac.kr/www/selectTnSchafsSchdulListUS.do?key=5819&sc1=10&sc3=$year',
           );
         }
       }
