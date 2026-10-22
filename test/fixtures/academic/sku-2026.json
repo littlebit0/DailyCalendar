@@ -1,0 +1,717 @@
+{
+  "kind": "calendar#events",
+  "summary": "포탈 학부/학사",
+  "description": "서경대학교 학사일정",
+  "updated": "2026-10-13T01:08:03.715Z",
+  "timeZone": "Asia/Seoul",
+  "items": [
+    {
+      "kind": "calendar#event",
+      "id": "1lkfr2jo7brdibeuro5baakufj",
+      "status": "confirmed",
+      "summary": "2학기 성적발표",
+      "start": {
+        "date": "2026-01-12"
+      },
+      "end": {
+        "date": "2026-01-13"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4r6vfl863p9v13uon2igkau858",
+      "status": "confirmed",
+      "summary": "1학기 휴학, 복학, 재입학, 전과신청",
+      "start": {
+        "date": "2026-01-19"
+      },
+      "end": {
+        "date": "2026-01-31"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "00c7f3qet2cn0804aneio2f2s0",
+      "status": "confirmed",
+      "summary": "설날연휴(※휴일)",
+      "start": {
+        "date": "2026-02-16"
+      },
+      "end": {
+        "date": "2026-02-19"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7220168lj0v5qd7h788c96l38p",
+      "status": "confirmed",
+      "summary": "2학기 성적열람 및 정정(기말강의평가)",
+      "start": {
+        "date": "2025-12-31"
+      },
+      "end": {
+        "date": "2026-01-10"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7hf6nhmocaab63aedj4cv6co5n",
+      "status": "confirmed",
+      "summary": "2025학년도 동계계절학기",
+      "start": {
+        "date": "2025-12-26"
+      },
+      "end": {
+        "date": "2026-01-17"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4rlkgupambm5449l825dmm1dpg",
+      "status": "confirmed",
+      "summary": "2026학년도 1학기 개강",
+      "start": {
+        "date": "2026-03-03"
+      },
+      "end": {
+        "date": "2026-03-04"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "479ea4ofacnjabancq6bdnk1fn",
+      "status": "confirmed",
+      "summary": "2026학년도 1학기 수강신청 정정",
+      "start": {
+        "date": "2026-03-03"
+      },
+      "end": {
+        "date": "2026-03-10"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4knihu1irkf34lrgil6r7mpk7n",
+      "status": "confirmed",
+      "summary": "학기개시 30일",
+      "start": {
+        "date": "2026-04-01"
+      },
+      "end": {
+        "date": "2026-04-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "104q4sc9nm3mkk0ph8n1em38bd",
+      "status": "confirmed",
+      "summary": "1학기 중간시험(8주차)",
+      "start": {
+        "date": "2026-04-21"
+      },
+      "end": {
+        "date": "2026-04-28"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5dha8u5qlg62esq3u0mqh1ukr4",
+      "status": "confirmed",
+      "summary": "1학기 중간강의평가",
+      "start": {
+        "date": "2026-04-21"
+      },
+      "end": {
+        "date": "2026-05-05"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5s1ko95bf50o4eao788casl8qq",
+      "status": "confirmed",
+      "summary": "수업일수 2/4선",
+      "start": {
+        "date": "2026-04-22"
+      },
+      "end": {
+        "date": "2026-04-23"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "11987vpt748kc96jvv0k8e3qtf",
+      "status": "confirmed",
+      "summary": "노동절(*휴일), 학기개시 60일",
+      "start": {
+        "date": "2026-05-01"
+      },
+      "end": {
+        "date": "2026-05-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "32dardlkcpnjiih32gaq7g49n4",
+      "status": "confirmed",
+      "summary": "수업일수 3/4선",
+      "start": {
+        "date": "2026-05-22"
+      },
+      "end": {
+        "date": "2026-05-23"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6vl7mk49l3mlevuhqgfhgclh8t",
+      "status": "confirmed",
+      "summary": "학기개시 90일",
+      "start": {
+        "date": "2026-05-31"
+      },
+      "end": {
+        "date": "2026-06-01"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4l03u9toimg5lt95e0qevfbgta",
+      "status": "confirmed",
+      "summary": "1학기 기말시험",
+      "start": {
+        "date": "2026-06-09"
+      },
+      "end": {
+        "date": "2026-06-16"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7qf0dkn9r7pctpqqt8924bhkjk",
+      "status": "confirmed",
+      "summary": "1학기 기말시험(*무전공전형 입학자만 해당)",
+      "start": {
+        "date": "2026-06-09"
+      },
+      "end": {
+        "date": "2026-06-17"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "49864rd5h15o084423k565htvo",
+      "status": "confirmed",
+      "summary": "1학기 하계방학",
+      "start": {
+        "date": "2026-06-17"
+      },
+      "end": {
+        "date": "2026-06-18"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "531houtr2n0hgf3sg8l0640726",
+      "status": "confirmed",
+      "summary": "2026학년도 하계계절학기",
+      "start": {
+        "date": "2026-06-18"
+      },
+      "end": {
+        "date": "2026-07-09"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6ors1e3a61724em7gtfi6j96q2",
+      "status": "confirmed",
+      "summary": "1학기 최종성적발표",
+      "start": {
+        "date": "2026-07-03"
+      },
+      "end": {
+        "date": "2026-07-04"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "0dg8jvv6vkd0ck9qqe3k4ej0is",
+      "status": "confirmed",
+      "summary": "2학기 휴,복학, 재입학, 전과신청 접수",
+      "start": {
+        "date": "2026-07-20"
+      },
+      "end": {
+        "date": "2026-08-01"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6f2fa7kamghhm7ogh5kd5e2uno",
+      "status": "confirmed",
+      "summary": "제 76회 후기 학위수여일",
+      "start": {
+        "date": "2026-08-13"
+      },
+      "end": {
+        "date": "2026-08-14"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5kqopch17it0s7qh47kijqkvds",
+      "status": "confirmed",
+      "summary": "2026학년도 1학기 수강신청",
+      "start": {
+        "date": "2026-02-09"
+      },
+      "end": {
+        "date": "2026-02-12"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5qbaghjlfoq8ftcjjdqbktv1tp",
+      "status": "confirmed",
+      "summary": "2026학년도 2학기 수강신청",
+      "start": {
+        "date": "2026-08-18"
+      },
+      "end": {
+        "date": "2026-08-21"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4f169t45gqeo1if8dn1b1gr74t",
+      "status": "confirmed",
+      "summary": "2026학년도 2학기 개강일",
+      "start": {
+        "date": "2026-09-01"
+      },
+      "end": {
+        "date": "2026-09-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2biqcq1qqbumgmpchabj5gf435",
+      "status": "confirmed",
+      "summary": "2026학년도 2학기 수강신청 정정",
+      "start": {
+        "date": "2026-09-01"
+      },
+      "end": {
+        "date": "2026-09-08"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6395nnqshbq02s89abshn0jrpi",
+      "status": "confirmed",
+      "summary": "수업일수 1/4선",
+      "start": {
+        "date": "2026-09-29"
+      },
+      "end": {
+        "date": "2026-09-30"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7hrdjbkqlhf1p9u1jfv9ik3o9b",
+      "status": "confirmed",
+      "summary": "학기개시 30일",
+      "start": {
+        "date": "2026-09-30"
+      },
+      "end": {
+        "date": "2026-10-01"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "3cinj4785rut79bs2tdddev2o8",
+      "status": "confirmed",
+      "summary": "2학기 중간시험(8주차)",
+      "start": {
+        "date": "2026-10-20"
+      },
+      "end": {
+        "date": "2026-10-27"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "74fr3krlhskagiol88e3f3h6t2",
+      "status": "confirmed",
+      "summary": "2학기 중간 강의평가",
+      "start": {
+        "date": "2026-10-20"
+      },
+      "end": {
+        "date": "2026-11-03"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1djim8rofru971c9emg5tma9mq",
+      "status": "confirmed",
+      "summary": "개교기념일(79주년)* 정상수업 진행",
+      "start": {
+        "date": "2026-10-22"
+      },
+      "end": {
+        "date": "2026-10-23"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6sf7967mktiegf56i45fv7u89p",
+      "status": "confirmed",
+      "summary": "수업일수 2/4선",
+      "start": {
+        "date": "2026-10-28"
+      },
+      "end": {
+        "date": "2026-10-29"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "0ienmjlve92msd3cm34rpnmd0m",
+      "status": "confirmed",
+      "summary": "학기개시 60일",
+      "start": {
+        "date": "2026-10-30"
+      },
+      "end": {
+        "date": "2026-10-31"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2qe2mt518vmam2m4tupiu8r9jb",
+      "status": "confirmed",
+      "summary": "수업일수 3/4선",
+      "start": {
+        "date": "2026-11-24"
+      },
+      "end": {
+        "date": "2026-11-25"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "030jib0lo22d83ikjegq1f9c3j",
+      "status": "confirmed",
+      "summary": "학기개시 90일",
+      "start": {
+        "date": "2026-11-29"
+      },
+      "end": {
+        "date": "2026-11-30"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5eoe3m7bimrqaptbfpj6cmhvmr",
+      "status": "confirmed",
+      "summary": "2학기 기말시험",
+      "start": {
+        "date": "2026-12-08"
+      },
+      "end": {
+        "date": "2026-12-15"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6fshhbapi2mgtf3fgi79e9u8bt",
+      "status": "confirmed",
+      "summary": "2학기 기말시험(* 무전공전형 입학자만 해당)",
+      "start": {
+        "date": "2026-12-08"
+      },
+      "end": {
+        "date": "2026-12-16"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7c6p2tbjsclormajki00td830h",
+      "status": "confirmed",
+      "summary": "2학기 동계방학",
+      "start": {
+        "date": "2026-12-16"
+      },
+      "end": {
+        "date": "2026-12-17"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6b5rfil6efqo8a6v5t4dl2lp3e",
+      "status": "confirmed",
+      "summary": "2026학년도 동계계절학기",
+      "start": {
+        "date": "2026-12-17"
+      },
+      "end": {
+        "date": "2027-01-09"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "49o45gpj71i86i6ur8tvk2bc68",
+      "status": "confirmed",
+      "summary": "수업일수 1/4선",
+      "start": {
+        "date": "2026-03-27"
+      },
+      "end": {
+        "date": "2026-03-28"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2grrqcd91fja6852c2bloo1obr",
+      "status": "confirmed",
+      "summary": "제 76회 학위수여식",
+      "start": {
+        "date": "2026-02-10"
+      },
+      "end": {
+        "date": "2026-02-11"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5h4rpen1t6tkbabt6amp6ur9d2",
+      "status": "confirmed",
+      "summary": "2026학년도 입학식",
+      "start": {
+        "date": "2026-02-26"
+      },
+      "end": {
+        "date": "2026-02-27"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6195vp1ej9f04af8crej0mg3r9",
+      "status": "confirmed",
+      "summary": "2026학년도 1학기 학부(재학생) 등록금 납부기간",
+      "start": {
+        "date": "2026-02-20"
+      },
+      "end": {
+        "date": "2026-02-28"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "0l7iqdnk2taatfrpbpdaooujgp",
+      "status": "confirmed",
+      "summary": "성탄절(*휴일)",
+      "start": {
+        "date": "2026-12-25"
+      },
+      "end": {
+        "date": "2026-12-26"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1sg4qu7bpf4dcid4jm5v1e0233",
+      "status": "confirmed",
+      "summary": "임시 휴업일(*휴일)",
+      "start": {
+        "date": "2026-05-04"
+      },
+      "end": {
+        "date": "2026-05-05"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2rbm959if6eea0l3oni33ae3bk",
+      "status": "confirmed",
+      "summary": "개천절 대체공휴일(*휴일)",
+      "start": {
+        "date": "2026-10-05"
+      },
+      "end": {
+        "date": "2026-10-06"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "33msm0drg6recdoimm59ms9p58",
+      "status": "confirmed",
+      "summary": "어린이날(*휴일)",
+      "start": {
+        "date": "2026-05-05"
+      },
+      "end": {
+        "date": "2026-05-06"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4d4b76m82rud4levd8v4qhgiea",
+      "status": "confirmed",
+      "summary": "지방선거일(*휴일)",
+      "start": {
+        "date": "2026-06-03"
+      },
+      "end": {
+        "date": "2026-06-04"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4k46ppeam77a3dcrurdq3qajis",
+      "status": "confirmed",
+      "summary": "추석연휴(*휴일)",
+      "start": {
+        "date": "2026-09-24"
+      },
+      "end": {
+        "date": "2026-09-26"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "51531lbnfn0h9p095tauq1djo0",
+      "status": "confirmed",
+      "summary": "부처님오신날 대체공휴일(*휴일)",
+      "start": {
+        "date": "2026-05-25"
+      },
+      "end": {
+        "date": "2026-05-26"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5mhfj8ob63ptk92cv0lt705id3",
+      "status": "confirmed",
+      "summary": "삼일절 대체공휴일(*휴일)",
+      "start": {
+        "date": "2026-03-02"
+      },
+      "end": {
+        "date": "2026-03-03"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6763j7795lam0f6vlpd2q30u14",
+      "status": "confirmed",
+      "summary": "광복절 대체공휴일(*휴일)",
+      "start": {
+        "date": "2026-08-17"
+      },
+      "end": {
+        "date": "2026-08-18"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "716hcn6dkup0b1mb7r5atou3au",
+      "status": "confirmed",
+      "summary": "개교기념일(79주년) 대체휴업일(*휴일)",
+      "start": {
+        "date": "2026-10-23"
+      },
+      "end": {
+        "date": "2026-10-24"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7ev415nin5t80ad56bupa12g8n",
+      "status": "confirmed",
+      "summary": "한글날(*휴일)",
+      "start": {
+        "date": "2026-10-09"
+      },
+      "end": {
+        "date": "2026-10-10"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "21tojk8eml8cio7a461ifcbbqi",
+      "status": "confirmed",
+      "summary": "1학기 성적평가입력(교원)",
+      "start": {
+        "date": "2026-06-16"
+      },
+      "end": {
+        "date": "2026-06-26"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1o169e7kt5qmviqg61do61am6l",
+      "status": "confirmed",
+      "summary": "1학기 성적열람 및 정정(기말강의평가)",
+      "start": {
+        "date": "2026-06-26"
+      },
+      "end": {
+        "date": "2026-07-03"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1rd6v8bmoj9cf2867qa3g5stlo",
+      "status": "confirmed",
+      "summary": "2학기 성적평가입력(교원)",
+      "start": {
+        "date": "2026-12-15"
+      },
+      "end": {
+        "date": "2026-12-25"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "66264e42gat6574mriehgoic8m",
+      "status": "confirmed",
+      "summary": "2학기 성적열람 및 정정(기말강의평가)",
+      "start": {
+        "date": "2026-12-25"
+      },
+      "end": {
+        "date": "2027-01-01"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2oo6poroikku426umin9hat52d",
+      "status": "confirmed",
+      "summary": "제헌절(*휴일)",
+      "start": {
+        "date": "2026-07-17"
+      },
+      "end": {
+        "date": "2026-07-18"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5k3tovb3nkd867n9lr21ajk898",
+      "status": "confirmed",
+      "summary": "2026학년도 2학기 학부(재학생) 등록금 납부기간",
+      "start": {
+        "date": "2026-08-21"
+      },
+      "end": {
+        "date": "2026-09-05"
+      }
+    }
+  ]
+}
