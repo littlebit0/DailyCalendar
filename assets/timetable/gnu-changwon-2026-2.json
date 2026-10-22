@@ -1,0 +1,3902 @@
+{
+  "schemaVersion": 2,
+  "universityId": "gnu",
+  "campus": "changwon",
+  "campusName": "창원캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-07-24",
+  "sourceUrl": "https://www.gnu.ac.kr/main/na/ntt/selectNttInfo.do?mi=1127&bbsId=1029&nttSn=7823022",
+  "researchOnly": false,
+  "completionClaim": false,
+  "courses": [
+    {
+      "sourceId": "gnu/changwon/2026-2/11023216-336",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023216",
+      "courseName": "꿈·미래개척",
+      "section": "336",
+      "professor": "추원식",
+      "classification": "일반선택",
+      "credits": 0.5,
+      "departmentCredits": {
+        "기계융합공학과": 0.5
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "일반선택"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. \n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "area": "",
+          "method": "대면수업",
+          "college": "공과대학",
+          "department": "기계융합공학과",
+          "major": "",
+          "dayNight": "주간",
+          "credits": "0.5",
+          "theory": "0",
+          "practice": "0",
+          "remoteType": "",
+          "professor": "추원식",
+          "sourceFile": "gnu-liberal-2026-2.xlsx",
+          "sourceRow": 1327,
+          "code": "11023216",
+          "section": "336",
+          "title": "꿈·미래개척",
+          "category": "일반선택",
+          "schedule": "",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "liberal-teaching-general",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023216-337",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023216",
+      "courseName": "꿈·미래개척",
+      "section": "337",
+      "professor": "김산",
+      "classification": "일반선택",
+      "credits": 0.5,
+      "departmentCredits": {
+        "기계융합공학과": 0.5
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "일반선택"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. \n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "area": "",
+          "method": "대면수업",
+          "college": "공과대학",
+          "department": "기계융합공학과",
+          "major": "",
+          "dayNight": "주간",
+          "credits": "0.5",
+          "theory": "0",
+          "practice": "0",
+          "remoteType": "",
+          "professor": "김산",
+          "sourceFile": "gnu-liberal-2026-2.xlsx",
+          "sourceRow": 1328,
+          "code": "11023216",
+          "section": "337",
+          "title": "꿈·미래개척",
+          "category": "일반선택",
+          "schedule": "",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "liberal-teaching-general",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023216-338",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023216",
+      "courseName": "꿈·미래개척",
+      "section": "338",
+      "professor": "문상준",
+      "classification": "일반선택",
+      "credits": 0.5,
+      "departmentCredits": {
+        "기계융합공학과": 0.5
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "일반선택"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. \n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "area": "",
+          "method": "대면수업",
+          "college": "공과대학",
+          "department": "기계융합공학과",
+          "major": "",
+          "dayNight": "주간",
+          "credits": "0.5",
+          "theory": "0",
+          "practice": "0",
+          "remoteType": "",
+          "professor": "문상준",
+          "sourceFile": "gnu-liberal-2026-2.xlsx",
+          "sourceRow": 1329,
+          "code": "11023216",
+          "section": "338",
+          "title": "꿈·미래개척",
+          "category": "일반선택",
+          "schedule": "",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "liberal-teaching-general",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023216-339",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023216",
+      "courseName": "꿈·미래개척",
+      "section": "339",
+      "professor": "최현",
+      "classification": "일반선택",
+      "credits": 0.5,
+      "departmentCredits": {
+        "기계융합공학과": 0.5
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "일반선택"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. \n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "area": "",
+          "method": "대면수업",
+          "college": "공과대학",
+          "department": "기계융합공학과",
+          "major": "",
+          "dayNight": "주간",
+          "credits": "0.5",
+          "theory": "0",
+          "practice": "0",
+          "remoteType": "",
+          "professor": "최현",
+          "sourceFile": "gnu-liberal-2026-2.xlsx",
+          "sourceRow": 1330,
+          "code": "11023216",
+          "section": "339",
+          "title": "꿈·미래개척",
+          "category": "일반선택",
+          "schedule": "",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "liberal-teaching-general",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023216-340",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023216",
+      "courseName": "꿈·미래개척",
+      "section": "340",
+      "professor": "서재우",
+      "classification": "일반선택",
+      "credits": 0.5,
+      "departmentCredits": {
+        "기계융합공학과": 0.5
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "일반선택"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. \n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "area": "",
+          "method": "대면수업",
+          "college": "공과대학",
+          "department": "기계융합공학과",
+          "major": "",
+          "dayNight": "주간",
+          "credits": "0.5",
+          "theory": "0",
+          "practice": "0",
+          "remoteType": "",
+          "professor": "서재우",
+          "sourceFile": "gnu-liberal-2026-2.xlsx",
+          "sourceRow": 1331,
+          "code": "11023216",
+          "section": "340",
+          "title": "꿈·미래개척",
+          "category": "일반선택",
+          "schedule": "",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "liberal-teaching-general",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023216-342",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023216",
+      "courseName": "꿈·미래개척",
+      "section": "342",
+      "professor": "이진광",
+      "classification": "일반선택",
+      "credits": 0.5,
+      "departmentCredits": {
+        "기계융합공학과": 0.5
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "일반선택"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. \n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "area": "",
+          "method": "대면수업",
+          "college": "공과대학",
+          "department": "기계융합공학과",
+          "major": "",
+          "dayNight": "주간",
+          "credits": "0.5",
+          "theory": "0",
+          "practice": "0",
+          "remoteType": "",
+          "professor": "이진광",
+          "sourceFile": "gnu-liberal-2026-2.xlsx",
+          "sourceRow": 1333,
+          "code": "11023216",
+          "section": "342",
+          "title": "꿈·미래개척",
+          "category": "일반선택",
+          "schedule": "",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "liberal-teaching-general",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023077-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023077",
+      "courseName": "컴퓨터프로그래밍기초",
+      "section": "001",
+      "professor": "박지성",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "화5,6,7[402-0102]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "402-0102"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "1학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "1",
+          "practice": "2",
+          "professor": "박지성",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 959,
+          "code": "11023077",
+          "section": "001",
+          "title": "컴퓨터프로그래밍기초",
+          "category": "전선",
+          "schedule": "화5,6,7[402-0102]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003922-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003922",
+      "courseName": "고체역학",
+      "section": "001",
+      "professor": "김산",
+      "classification": "전필",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전필"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "화1,2[104-0406],목3[104-0406]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "2학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "김산",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 960,
+          "code": "11003922",
+          "section": "001",
+          "title": "고체역학",
+          "category": "전필",
+          "schedule": "화1,2[104-0406],목3[104-0406]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003928-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003928",
+      "courseName": "동역학",
+      "section": "001",
+      "professor": "최현",
+      "classification": "전필",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전필"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "화3[104-0406],금1,2[104-0406]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-16",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-23",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-11",
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "2학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "최현",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 961,
+          "code": "11003928",
+          "section": "001",
+          "title": "동역학",
+          "category": "전필",
+          "schedule": "화3[104-0406],금1,2[104-0406]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003930-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003930",
+      "courseName": "공학수학2",
+      "section": "001",
+      "professor": "문상준",
+      "classification": "전필",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전필"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "목5,6,7[104-0406]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "2학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "문상준",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 962,
+          "code": "11003930",
+          "section": "001",
+          "title": "공학수학2",
+          "category": "전필",
+          "schedule": "목5,6,7[104-0406]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003929-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003929",
+      "courseName": "유체역학",
+      "section": "001",
+      "professor": "이진광",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "화8,9[104-0406],목9[104-0406]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0406"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "2학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "이진광",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 963,
+          "code": "11003929",
+          "section": "001",
+          "title": "유체역학",
+          "category": "전선",
+          "schedule": "화8,9[104-0406],목9[104-0406]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003953-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003953",
+      "courseName": "전기전자기초",
+      "section": "001",
+      "professor": "최현",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "월3[104-0406],목1,2[104-0406]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0406"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "2학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "최현",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 964,
+          "code": "11003953",
+          "section": "001",
+          "title": "전기전자기초",
+          "category": "전선",
+          "schedule": "월3[104-0406],목1,2[104-0406]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003959-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003959",
+      "courseName": "제조공정",
+      "section": "001",
+      "professor": "추원식",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "월6,7[104-0408],수6,7[104-0408]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "104-0408"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "2학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "추원식",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 965,
+          "code": "11003959",
+          "section": "001",
+          "title": "제조공정",
+          "category": "전선",
+          "schedule": "월6,7[104-0408],수6,7[104-0408]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023076-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023076",
+      "courseName": "창의적공학설계",
+      "section": "001",
+      "professor": "박지성",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "월8,9,10[104-0406]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0406"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "2학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "0",
+          "practice": "3",
+          "professor": "박지성",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 966,
+          "code": "11023076",
+          "section": "001",
+          "title": "창의적공학설계",
+          "category": "전선",
+          "schedule": "월8,9,10[104-0406]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11025758-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11025758",
+      "courseName": "제품개발설계",
+      "section": "001",
+      "professor": "최현",
+      "classification": "전필",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전필"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "화5,6,7[104-0406]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0406"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "0",
+          "practice": "3",
+          "professor": "최현",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 967,
+          "code": "11025758",
+          "section": "001",
+          "title": "제품개발설계",
+          "category": "전필",
+          "schedule": "화5,6,7[104-0406]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11025758-002",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11025758",
+      "courseName": "제품개발설계",
+      "section": "002",
+      "professor": "서재우",
+      "classification": "전필",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전필"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "화5,6,7[104-0407]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0407"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "0",
+          "practice": "3",
+          "professor": "서재우",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 968,
+          "code": "11025758",
+          "section": "002",
+          "title": "제품개발설계",
+          "category": "전필",
+          "schedule": "화5,6,7[104-0407]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003936-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003936",
+      "courseName": "기계요소설계",
+      "section": "001",
+      "professor": "서재우",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "목5,6,7[104-0409]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "서재우",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 969,
+          "code": "11003936",
+          "section": "001",
+          "title": "기계요소설계",
+          "category": "전선",
+          "schedule": "목5,6,7[104-0409]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11003961-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11003961",
+      "courseName": "생산시스템공학",
+      "section": "001",
+      "professor": "추원식",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "화8,9[104-0409],목9[104-0409]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-01",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-08",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-15",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-22",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-29",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-06",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-13",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-27",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-03",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-10",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-17",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-24",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-01",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-08",
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1070,
+          "classroom": "104-0409"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "추원식",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 970,
+          "code": "11003961",
+          "section": "001",
+          "title": "생산시스템공학",
+          "category": "전선",
+          "schedule": "화8,9[104-0409],목9[104-0409]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023840-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023840",
+      "courseName": "현장형LabviewAI",
+      "section": "001",
+      "professor": "문상준",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "목1,2,3[104-0401]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "104-0401"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "1",
+          "practice": "2",
+          "professor": "문상준",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 971,
+          "code": "11023840",
+          "section": "001",
+          "title": "현장형LabviewAI",
+          "category": "전선",
+          "schedule": "목1,2,3[104-0401]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11025756-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11025756",
+      "courseName": "열에너지시스템",
+      "section": "001",
+      "professor": "이진광",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "월8,9,10[104-0409]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "104-0409"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "1",
+          "practice": "2",
+          "professor": "이진광",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 972,
+          "code": "11025756",
+          "section": "001",
+          "title": "열에너지시스템",
+          "category": "전선",
+          "schedule": "월8,9,10[104-0409]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11025762-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11025762",
+      "courseName": "확률론적로보틱스",
+      "section": "001",
+      "professor": "박지성",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "월1,2[104-0409],수3[104-0409]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 710,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "104-0409"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "박지성",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 973,
+          "code": "11025762",
+          "section": "001",
+          "title": "확률론적로보틱스",
+          "category": "전선",
+          "schedule": "월1,2[104-0409],수3[104-0409]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11026242-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11026242",
+      "courseName": "FEM응용설계",
+      "section": "001",
+      "professor": "김산",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "기계융합공학과": 3.0
+      },
+      "departments": [
+        "기계융합공학과"
+      ],
+      "departmentClassifications": {
+        "기계융합공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본의 요일·교시·강의실과 현재 2026-2 공식 학부 수강신청 안내문의 일반 교시표(0~11교시)에 따른 정규 주간 예약 계획입니다. 일반 학부 안내의 공통 교시 범위에 적용하며 물리 캠퍼스는 원본 값을 보존합니다. 캠퍼스 미공개 행의 실제 물리 캠퍼스는 미확인입니다. 실제 개별 출석일 확정 자료가 아니며 최신 변경은 통합서비스에서 확인해야 합니다. 공식 2026-2 학기 범위는 9월 1일~12월 21일입니다. 공개 지정보강일은 원래 휴강일의 시각·실로 예약하고, 12월 15~21일 기말시험의 개별 시각 및 10월 3일 토요일의 개별 보강은 미확정으로 추가하지 않았습니다. 연속 교시 사이 쉬는 시간은 예약 블록에 포함됩니다. 원본 대면수업 방식은 보존하되 예약 방식은 사용자가 선택합니다. ",
+      "sourceSchedule": "월5,6,7[104-0409]",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "104-0409"
+        }
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "기계융합공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "0",
+          "practice": "3",
+          "professor": "김산",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 974,
+          "code": "11026242",
+          "section": "001",
+          "title": "FEM응용설계",
+          "category": "전선",
+          "schedule": "월5,6,7[104-0409]",
+          "campus": "창원캠퍼스",
+          "remarks": "",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": true,
+        "holdReason": null,
+        "reservationBasis": "nativeWeeklyPlanWithOfficialTermAndCurrent2026SecondSemesterUndergraduateGuide",
+        "clockSource": "current2026-2-university-undergraduate-clock-education.json"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11026250-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11026250",
+      "courseName": "FEM응용설계",
+      "section": "001",
+      "professor": "김산",
+      "classification": "전필",
+      "credits": 3.0,
+      "departmentCredits": {
+        "지능시스템공학과": 3.0
+      },
+      "departments": [
+        "지능시스템공학과"
+      ],
+      "departmentClassifications": {
+        "지능시스템공학과": "전필"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. [야간]\n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "토5,6,7[104-0409]",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "지능시스템공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "0",
+          "practice": "3",
+          "professor": "김산",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 1016,
+          "code": "11026250",
+          "section": "001",
+          "title": "FEM응용설계",
+          "category": "전필",
+          "schedule": "토5,6,7[104-0409]",
+          "campus": "창원캠퍼스",
+          "remarks": "[야간]",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023332-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023332",
+      "courseName": "메카트로닉스및실습",
+      "section": "001",
+      "professor": "문상준",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "지능시스템공학과": 3.0
+      },
+      "departments": [
+        "지능시스템공학과"
+      ],
+      "departmentClassifications": {
+        "지능시스템공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. [야간]\n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "토1,2,3[104-0412]",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "지능시스템공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "1",
+          "practice": "2",
+          "professor": "문상준",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 1018,
+          "code": "11023332",
+          "section": "001",
+          "title": "메카트로닉스및실습",
+          "category": "전선",
+          "schedule": "토1,2,3[104-0412]",
+          "campus": "창원캠퍼스",
+          "remarks": "[야간]",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023333-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023333",
+      "courseName": "기계가공시스템",
+      "section": "001",
+      "professor": "추원식",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "지능시스템공학과": 3.0
+      },
+      "departments": [
+        "지능시스템공학과"
+      ],
+      "departmentClassifications": {
+        "지능시스템공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. [야간]\n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "토8,9,10[104-0814]",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "지능시스템공학과",
+          "targetYear": "3학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "추원식",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 1019,
+          "code": "11023333",
+          "section": "001",
+          "title": "기계가공시스템",
+          "category": "전선",
+          "schedule": "토8,9,10[104-0814]",
+          "campus": "창원캠퍼스",
+          "remarks": "[야간]",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11023348-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11023348",
+      "courseName": "CAD/CAM프로그래밍",
+      "section": "001",
+      "professor": "서재우",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "지능시스템공학과": 3.0
+      },
+      "departments": [
+        "지능시스템공학과"
+      ],
+      "departmentClassifications": {
+        "지능시스템공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. [야간]\n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "토5,6,7[104-0408]",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "지능시스템공학과",
+          "targetYear": "4학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "3",
+          "practice": "0",
+          "professor": "서재우",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 1023,
+          "code": "11023348",
+          "section": "001",
+          "title": "CAD/CAM프로그래밍",
+          "category": "전선",
+          "schedule": "토5,6,7[104-0408]",
+          "campus": "창원캠퍼스",
+          "remarks": "[야간]",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    },
+    {
+      "sourceId": "gnu/changwon/2026-2/11024436-001",
+      "campus": "changwon",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "11024436",
+      "courseName": "에너지시스템및실습",
+      "section": "001",
+      "professor": "이진광",
+      "classification": "전선",
+      "credits": 3.0,
+      "departmentCredits": {
+        "지능시스템공학과": 3.0
+      },
+      "departments": [
+        "지능시스템공학과"
+      ],
+      "departmentClassifications": {
+        "지능시스템공학과": "전선"
+      },
+      "remarks": "2026-07-24 공개 원본과 2026-07-29 산업경영학과 수정 공지에 따른 계획이며 최신 변경은 통합서비스에서 확인해야 합니다. 공개 시각·현재 운영 변경 확인 중. 토요일 실제 시각은 수정 공지의 0·1·2교시=09:00~11:00, 3·4·5교시=11:00~13:00, 7·8·9교시=14:00~16:00, 10·11·12교시=16:00~18:00을 적용했습니다. 금요일 야간 11~13교시는 학과 학부 교시표의 19:00~21:25(각 45분) 공개 예약 블록입니다. 실제 출석 기록이 아닙니다. 10월 3일 토요일 개천절의 개별 보강 시각 및 12월 15~21일 기말시험의 개별 시각은 확인되지 않아 추가하지 않았습니다. [야간]\n편입생은 보관 중인 학점 인정 내역으로 졸업 소요 학점 본인이 확인 후 수강신청 바람\n전공필수 중복 시간표로 이수 못할 시 다음 2학기 이수 바람\n꿈미래개척 0.5학점 재학기간 동안 총 2학점(0.5학점*4개 학기)을 이수하여야 졸업 가능\n학과에서 꿈미래개척 담당 교원은 추후 인원 조정으로 수강반 변경할 수 있음",
+      "sourceSchedule": "토1,2,3[104-0814]",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      },
+      "metadata": {
+        "originalEducationalFields": {
+          "department": "지능시스템공학과",
+          "targetYear": "4학년",
+          "method": "대면수업",
+          "credits": "3",
+          "theory": "1",
+          "practice": "2",
+          "professor": "이진광",
+          "remoteType": "",
+          "sourceFile": "gnu-major-2026-2.xlsx",
+          "sourceRow": 1024,
+          "code": "11024436",
+          "section": "001",
+          "title": "에너지시스템및실습",
+          "category": "전선",
+          "schedule": "토1,2,3[104-0814]",
+          "campus": "창원캠퍼스",
+          "remarks": "[야간]",
+          "sourceGroup": "major",
+          "closedFirstAnnouncement": false,
+          "closedSecondAnnouncement": false
+        },
+        "researchOnly": false,
+        "actualAttendanceConfirmed": false,
+        "wholeLatestChangesConfirmed": false,
+        "clockSecondSemesterApplicabilityConfirmed": false,
+        "holdReason": "공개 시각·현재 운영 변경 확인 중"
+      }
+    }
+  ],
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}

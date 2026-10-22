@@ -7,6 +7,10 @@
     "sha256": "aeea83387a3b13285a7b08a211d01d4ef2c564d6b154779118a379d36cefaca2",
     "reason": "#92 단국대 퇴계·율곡혁신칼리지 광역 모집단위와 토탈분석기기융합학 연계전공 배정"
   },
+  "assets/timetable/organizations/gnu.json": {
+    "sha256": "7bde134709656167a4ae2d92d294b2155f946773832eb92574f53b0a38a8dd10",
+    "reason": "#557 경상국립대 원자료 분류 21개를 공식 단과대학 안내(2026학년도 이후) 기준 소속과 융합전공 제도 묶음으로 배정"
+  },
   "assets/timetable/organizations/hongik.json": {
     "sha256": "34745ee3ed6272096ca5a91f981f4d2856fbe4d582fbab99b0f45486631a6330",
     "reason": "#92 홍익대 교학과 3곳을 해당 단과대 개설로, 미술대학 학과 2개, 게임학부 전공 2개, 교양과 2곳 등록"
