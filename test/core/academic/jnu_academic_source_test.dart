@@ -139,18 +139,21 @@ void main() {
   );
 
   test(
-    'Chonnam requests undergraduate mode and requested year without credentials',
+    'Chonnam requests undergraduate mode for previous and requested year without credentials',
     () async {
+      final requested = <String>[];
       final client = _TrackedClient((request) async {
         expect(request.method, 'GET');
-        expect(
-          request.url,
-          Uri.parse('https://events.jnu.ac.kr/Schedule.aspx?mode=1&YY=2026'),
-        );
+        expect(request.url.scheme, 'https');
+        expect(request.url.host, 'events.jnu.ac.kr');
+        expect(request.url.path, '/Schedule.aspx');
+        expect(request.url.queryParameters['mode'], '1');
         expect(request.headers.containsKey('authorization'), isFalse);
         expect(request.body, isEmpty);
+        final year = request.url.queryParameters['YY']!;
+        requested.add(year);
         return http.Response(
-          fixture(2026),
+          fixture(int.parse(year)),
           200,
           headers: {'content-type': 'text/html; charset=utf-8'},
         );
@@ -158,11 +161,84 @@ void main() {
       final source = ChonnamAcademicSource(client: client);
       expect(source.id, 'jnu');
       expect(source.name, '전남대학교');
-      expect(await source.fetch(2026), hasLength(56));
+      // 56 rows of 2026 plus three 2025 periods ending in January 2026.
+      expect(await source.fetch(2026), hasLength(59));
+      expect(requested, ['2025', '2026']);
       source.close();
       expect(client.closed, isTrue);
     },
   );
+
+  test(
+    'Chonnam keeps a previous-year period running into January with its own ID',
+    () async {
+      final source = ChonnamAcademicSource(
+        client: MockClient(
+          (request) async => http.Response(
+            fixture(int.parse(request.url.queryParameters['YY']!)),
+            200,
+            headers: {'content-type': 'text/html; charset=utf-8'},
+          ),
+        ),
+      );
+      final events = await source.fetch(2026);
+      source.close();
+      final winters = events.where((e) => e.title == '동계 계절학기').toList();
+      expect(winters.map((e) => (e.start, e.end)), [
+        (DateTime(2025, 12, 26), DateTime(2026, 1, 23)),
+        (DateTime(2026, 12, 28), DateTime(2027, 1, 23)),
+      ]);
+      final previous = ChonnamAcademicSource.parse(fixture(2025), 2025);
+      final carried = previous.singleWhere((e) => e.title == '동계 계절학기');
+      expect(winters.first.sourceId, carried.sourceId);
+      expect(winters.first.url, carried.url);
+      expect(winters.first.sourceId, isNot(winters.last.sourceId));
+      // Only periods overlapping the requested year are carried over.
+      final carriedOver = {
+        for (final e in events.where((e) => e.start.year == 2025))
+          e.title: (e.start, e.end),
+      };
+      expect(carriedOver, {
+        '제2학기 교수수업개선서(CQI) 입력': (DateTime(2025, 12, 16), DateTime(2026, 1, 10)),
+        '제2학기 최종 수업평가': (DateTime(2025, 12, 16), DateTime(2026, 1, 6)),
+        '동계 계절학기': (DateTime(2025, 12, 26), DateTime(2026, 1, 23)),
+      });
+      final previousIds = previous.map((e) => e.sourceId).toSet();
+      expect(
+        events
+            .where((e) => e.start.year == 2025)
+            .every((e) => previousIds.contains(e.sourceId)),
+        isTrue,
+      );
+      expect(events.map((e) => e.sourceId).toSet(), hasLength(events.length));
+      expect(
+        events.every(
+          (e) =>
+              e.start.isBefore(DateTime(2027)) && e.end.isAfter(DateTime(2026)),
+        ),
+        isTrue,
+      );
+    },
+  );
+
+  test('Chonnam rejects the year when either annual page fails', () async {
+    for (final failing in ['2025', '2026']) {
+      final source = ChonnamAcademicSource(
+        client: MockClient((request) async {
+          final year = request.url.queryParameters['YY']!;
+          return year == failing
+              ? http.Response('unavailable', 503)
+              : http.Response(
+                  fixture(int.parse(year)),
+                  200,
+                  headers: {'content-type': 'text/html; charset=utf-8'},
+                );
+        }),
+      );
+      await expectLater(source.fetch(2026), throwsFormatException);
+      source.close();
+    }
+  });
 
   test('public source jnu rejects failed and oversized replies', () async {
     for (final response in [

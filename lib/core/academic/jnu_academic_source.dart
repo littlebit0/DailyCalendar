@@ -19,11 +19,28 @@ class ChonnamAcademicSource implements AcademicSource {
 
   @override
   Future<List<AcademicEvent>> fetch(int year) async {
-    final response = await _client
-        .get(website.replace(queryParameters: {'mode': '1', 'YY': '$year'}))
-        .timeout(const Duration(seconds: 20));
-    checkAcademicResponse(response);
-    return parse(utf8.decode(response.bodyBytes), year);
+    final events = <String, AcademicEvent>{};
+    // Each annual page lists only rows starting that year, so a December
+    // period running into January appears only on the previous year's page.
+    // Those rows keep the previous year's IDs, matching that year's import.
+    for (final selected in [year - 1, year]) {
+      if (selected == year) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+      }
+      final response = await _client
+          .get(
+            website.replace(queryParameters: {'mode': '1', 'YY': '$selected'}),
+          )
+          .timeout(const Duration(seconds: 20));
+      checkAcademicResponse(response);
+      for (final event in parse(utf8.decode(response.bodyBytes), selected)) {
+        if (event.start.isBefore(DateTime(year + 1)) &&
+            event.end.isAfter(DateTime(year))) {
+          events[event.sourceId] = event;
+        }
+      }
+    }
+    return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
   static List<AcademicEvent> parse(String body, int year) {
