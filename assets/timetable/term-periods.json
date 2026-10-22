@@ -350,6 +350,24 @@
           }
         }
       ]
+    },
+    {
+      "university": "knu",
+      "sourceUrl": "https://www.knu.ac.kr/wbbs/wbbs/user/yearSchedule/index.action?menu_idx=43",
+      "checkedAt": "2026-10-07",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18",
+          "sourceTitles": [
+            "2학기 개강",
+            "보강 및 기말고사",
+            "동계 방학 시작"
+          ]
+        }
+      ]
     }
   ]
 }
