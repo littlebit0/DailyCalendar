@@ -17,6 +17,7 @@ import '../weather/weather_store.dart';
 import '../widgets/lock_screen_wallpaper_service.dart';
 import 'app_settings.dart';
 import '../../features/onboarding/feature_announcements.dart';
+import '../academic/academic_store.dart';
 import '../academic/academic_profile.dart';
 import '../../features/events/domain/frequent_places.dart';
 import '../sync/settings_sync_document.dart';
@@ -219,6 +220,7 @@ class SettingsRepository {
   late final announcements = FeatureAnnouncementStore(_preferences);
   late final frequentPlaces = FrequentPlaces(_preferences);
   late final weatherStore = WeatherStore(_preferences);
+  late final academicStore = AcademicStore(_preferences);
   late final timetableStore = TimetableStore(_preferences, now: _now);
   final FlutterSecureStorage _secureStorage;
   final DateTime Function() _now;
@@ -524,6 +526,71 @@ class SettingsRepository {
       ),
     );
   }
+
+  /// Adds [category] to the latest list inside the settings queue unless its
+  /// id already exists, so a concurrent category edit is never overwritten by
+  /// an older snapshot. Completes with the stored category.
+  Future<EventCategory> ensureCategory(EventCategory category) async {
+    EventCategory? stored;
+    await _enqueueSettingsMutation(() async {
+      final latest = load();
+      stored = latest.categories.where((c) => c.id == category.id).firstOrNull;
+      if (stored != null) return;
+      await _saveSettings(
+        latest.copyWith(categories: [...latest.categories, category]),
+        markSyncPending: true,
+        changedFrom: latest,
+      );
+      stored = category;
+    });
+    return stored!;
+  }
+
+  /// Replaces one category in the latest list inside the settings queue, so
+  /// concurrent edits to other categories are kept. Completes with the
+  /// replaced and new values, or null when [id] is missing.
+  Future<({EventCategory previous, EventCategory updated})?> updateCategory(
+    String id,
+    EventCategory Function(EventCategory current) update, {
+    bool Function()? isCurrent,
+  }) async {
+    ({EventCategory previous, EventCategory updated})? change;
+    await _enqueueSettingsMutation(() async {
+      // Checked in the queue, after any account switch queued before it.
+      if (isCurrent != null && !isCurrent()) {
+        throw StateError('Category update cancelled');
+      }
+      final latest = load();
+      final current = latest.categories.where((c) => c.id == id).firstOrNull;
+      if (current == null) return;
+      final updated = update(current);
+      await _saveSettings(
+        latest.copyWith(
+          categories: [
+            for (final c in latest.categories) c.id == id ? updated : c,
+          ],
+        ),
+        markSyncPending: true,
+        changedFrom: latest,
+      );
+      change = (previous: current, updated: updated);
+    });
+    return change;
+  }
+
+  /// Shows or hides one category in the latest hidden list inside the
+  /// settings queue, keeping concurrent changes to other categories.
+  Future<void> setCategoryHidden(String id, bool hidden) =>
+      _enqueueSettingsMutation(() async {
+        final latest = load();
+        final ids = latest.hiddenCategoryIds.toSet();
+        if (!(hidden ? ids.add(id) : ids.remove(id))) return;
+        await _saveSettings(
+          latest.copyWith(hiddenCategoryIds: ids.toList()),
+          markSyncPending: true,
+          changedFrom: latest,
+        );
+      });
 
   /// A stale editor must not write academic details into a different account.
   Future<void> saveAcademicProfile(
@@ -1370,14 +1437,14 @@ class SettingsRepository {
   }
 
   Future<void> resetAll() {
+    academicStore.invalidate();
     timetableStore.invalidate();
     _settingsMutationGeneration += 1;
     return _enqueueSettingsMutation(_resetAll);
   }
 
   Future<void> _resetAll() async {
-    // Subscriptions left by the removed academic calendar feature.
-    await _preferences.remove('academic.subscriptions.v1');
+    await academicStore.clear();
     await timetableStore.clearLocal();
     await LockScreenWallpaperService.reset();
     await weatherStore.clear();

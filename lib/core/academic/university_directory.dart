@@ -64,6 +64,7 @@ class University {
   );
 
   bool get supportsAcademicFeatures => _supportProfile.timetableSupported;
+  bool get supportsAcademicCalendar => _supportProfile.academicSourceId != null;
 
   String get displayName => campus == null || institutionName.contains(campus!)
       ? institutionName
@@ -106,6 +107,8 @@ class UniversityInstitution {
   bool get campusSelectionRequired => campuses.first.campusSelectionRequired;
   bool get supportsAcademicFeatures =>
       campuses.any((campus) => campus.supportsAcademicFeatures);
+  bool get supportsAcademicCalendar =>
+      campuses.any((campus) => campus.supportsAcademicCalendar);
 
   /// Official campus names only. Generic disclosure labels such as 본교 do not
   /// claim a physical campus name and are not replaced with a region name.

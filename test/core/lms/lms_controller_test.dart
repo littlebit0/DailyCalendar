@@ -86,6 +86,7 @@ class _Commands implements EventCommandService {
     bool Function()? isCurrent,
     EventCategory? Function()? lmsCategory,
     bool preserveLmsSource = false,
+    Set<String>? skippedDeleted,
   }) async {
     final saved = <String>{};
     for (final event in events) {
@@ -135,6 +136,7 @@ class _Session extends LmsWebSession {
   bool automaticSucceeds = true;
   Completer<void>? automaticWait;
   Object? automaticError;
+
   /// One entry per login call: true, false, or an exception to throw.
   final automaticOutcomes = <Object>[];
   LmsLoginFailure? automaticFailure;
@@ -540,16 +542,19 @@ void main() {
 
   const network = LmsWebSessionException(LmsWebSessionError.network);
 
-  test('a transient failure is retried twice and then succeeds (#348)', () async {
-    configure = (s) {
-      s.stored = false;
-      s.automaticOutcomes.addAll([network, network, true]);
-    };
-    await controller.saveAutomaticLogin('test-user', 'fixture-password');
-    expect(sessions.single.automaticLogins, 3);
-    expect(controller.lastLoginFailure, isNull);
-    expect(controller.sync.state, LmsSyncState.ready);
-  });
+  test(
+    'a transient failure is retried twice and then succeeds (#348)',
+    () async {
+      configure = (s) {
+        s.stored = false;
+        s.automaticOutcomes.addAll([network, network, true]);
+      };
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      expect(sessions.single.automaticLogins, 3);
+      expect(controller.lastLoginFailure, isNull);
+      expect(controller.sync.state, LmsSyncState.ready);
+    },
+  );
 
   test('a rejected ID or password is not retried and says so (#348)', () async {
     configure = (s) {
@@ -560,36 +565,45 @@ void main() {
     await controller.saveAutomaticLogin('test-user', 'fixture-password');
     expect(sessions.single.automaticLogins, 1);
     expect(controller.lastLoginFailure, LmsLoginFailure.credentialsRejected);
-    expect(controller.lastLoginFailure!.message, startsWith('아이디 또는 비밀번호가 틀렸습니다.'));
-  });
-
-  test('a required extra verification is not retried and says so (#348)', () async {
-    configure = (s) {
-      s.stored = false;
-      s.automaticOutcomes.add(false);
-      s.automaticFailure = LmsLoginFailure.additionalAuthentication;
-    };
-    await controller.saveAutomaticLogin('test-user', 'fixture-password');
-    expect(sessions.single.automaticLogins, 1);
     expect(
       controller.lastLoginFailure!.message,
-      startsWith('인증 절차가 필요하여 거부되었습니다.'),
+      startsWith('아이디 또는 비밀번호가 틀렸습니다.'),
     );
   });
 
-  test('a later session expiry signs in again with the saved login (#348)', () async {
-    configure = (s) => s.stored = false;
-    await controller.saveAutomaticLogin('test-user', 'fixture-password');
-    final session = sessions.single;
-    expect(session.automaticLogins, 1);
-    expect(controller.sync.state, LmsSyncState.ready);
-    session
-      ..authenticated = false
-      ..stored = false;
-    await controller.refresh(force: true);
-    expect(session.automaticLogins, 2);
-    expect(controller.sync.state, LmsSyncState.ready);
-  });
+  test(
+    'a required extra verification is not retried and says so (#348)',
+    () async {
+      configure = (s) {
+        s.stored = false;
+        s.automaticOutcomes.add(false);
+        s.automaticFailure = LmsLoginFailure.additionalAuthentication;
+      };
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      expect(sessions.single.automaticLogins, 1);
+      expect(
+        controller.lastLoginFailure!.message,
+        startsWith('인증 절차가 필요하여 거부되었습니다.'),
+      );
+    },
+  );
+
+  test(
+    'a later session expiry signs in again with the saved login (#348)',
+    () async {
+      configure = (s) => s.stored = false;
+      await controller.saveAutomaticLogin('test-user', 'fixture-password');
+      final session = sessions.single;
+      expect(session.automaticLogins, 1);
+      expect(controller.sync.state, LmsSyncState.ready);
+      session
+        ..authenticated = false
+        ..stored = false;
+      await controller.refresh(force: true);
+      expect(session.automaticLogins, 2);
+      expect(controller.sync.state, LmsSyncState.ready);
+    },
+  );
 
   test(
     'network failure during automatic login preserves credentials without repeated submission',
@@ -1116,19 +1130,22 @@ void main() {
       });
     });
 
-    test('a rejected login reports the safe cause at the authentication stage', () async {
-      configure = (session) {
-        session.stored = false;
-        session.automaticSucceeds = false;
-      };
-      await create().saveAutomaticLogin('test-user', 'fixture-password');
-      expect(only(), {
-        'method': 'automatic',
-        'stage': 'authentication',
-        'result': 'failed',
-        'cause': 'authenticationUnconfirmed',
-      });
-    });
+    test(
+      'a rejected login reports the safe cause at the authentication stage',
+      () async {
+        configure = (session) {
+          session.stored = false;
+          session.automaticSucceeds = false;
+        };
+        await create().saveAutomaticLogin('test-user', 'fixture-password');
+        expect(only(), {
+          'method': 'automatic',
+          'stage': 'authentication',
+          'result': 'failed',
+          'cause': 'authenticationUnconfirmed',
+        });
+      },
+    );
 
     test('exception text and credentials never reach the record', () async {
       configure = (session) {
@@ -1155,99 +1172,121 @@ void main() {
       expect(analyticsLmsCauseValues, contains(only()['cause']));
     });
 
-    test('an unreadable credential store is a credentials-stage failure', () async {
-      configure = (session) => session.stored = false;
-      final local = create(store: _UnreadableCredentials());
-      await local.refresh(force: true);
-      expect(only(), {
-        'method': 'automatic',
-        'stage': 'credentials',
-        'result': 'failed',
-        'cause': 'secureStorage',
-      });
-    });
+    test(
+      'an unreadable credential store is a credentials-stage failure',
+      () async {
+        configure = (session) => session.stored = false;
+        final local = create(store: _UnreadableCredentials());
+        await local.refresh(force: true);
+        expect(only(), {
+          'method': 'automatic',
+          'stage': 'credentials',
+          'result': 'failed',
+          'cause': 'secureStorage',
+        });
+      },
+    );
 
-    test('paused automatic login is a skip, reported once, not a failure', () async {
-      await LmsCredentialsStore().save(
-        'student@example.com',
-        'smu',
-        const LmsLocalCredentials('test-user', 'fixture-password', paused: true),
-      );
-      configure = (session) => session.stored = false;
-      final local = create();
-      await local.refresh(force: true);
-      await local.refresh(force: true);
-      expect(sessions.single.automaticLogins, 0);
-      expect(only(), {
-        'method': 'automatic',
-        'stage': 'credentials',
-        'result': 'skipped',
-        'skipReason': 'paused',
-      });
-    });
-
-    test('an account change during the school answer is canceled, not failed', () async {
-      final wait = Completer<void>();
-      configure = (session) {
-        session.stored = false;
-        session.automaticWait = wait;
-      };
-      final local = create();
-      final attempt = local.saveAutomaticLogin('test-user', 'fixture-password');
-      while (sessions.isEmpty || sessions.single.automaticLogins == 0) {
-        await Future<void>.delayed(Duration.zero);
-      }
-      await settings.saveGoogleAccount(
-        const GoogleAccount(email: 'other@example.com'),
-      );
-      local.settingsChanged();
-      wait.complete();
-      await attempt;
-      expect(only()['result'], 'canceled');
-    });
-
-    test('an authentication-required answer reports one outcome, not two', () async {
-      await LmsCredentialsStore().save(
-        'student@example.com',
-        'smu',
-        const LmsLocalCredentials('test-user', 'fixture-password'),
-      );
-      configure = (session) {
-        session.stored = false;
-        session.automaticError = const LmsWebSessionException(
-          LmsWebSessionError.authenticationRequired,
+    test(
+      'paused automatic login is a skip, reported once, not a failure',
+      () async {
+        await LmsCredentialsStore().save(
+          'student@example.com',
+          'smu',
+          const LmsLocalCredentials(
+            'test-user',
+            'fixture-password',
+            paused: true,
+          ),
         );
-      };
-      await create().refresh(force: true);
-      expect(sessions.single.automaticLogins, 1);
-      expect(only()['result'], 'failed');
-    });
+        configure = (session) => session.stored = false;
+        final local = create();
+        await local.refresh(force: true);
+        await local.refresh(force: true);
+        expect(sessions.single.automaticLogins, 0);
+        expect(only(), {
+          'method': 'automatic',
+          'stage': 'credentials',
+          'result': 'skipped',
+          'skipReason': 'paused',
+        });
+      },
+    );
 
-    test('an account change during the credential lookup is canceled', () async {
-      configure = (session) => session.stored = false;
-      final store = _DeferredCredentials();
-      final local = create(store: store);
-      final refresh = local.refresh(force: true);
-      // The first read shows the saved username; the second is the login's.
-      for (final index in [0, 1]) {
-        while (store.reads.length <= index) {
+    test(
+      'an account change during the school answer is canceled, not failed',
+      () async {
+        final wait = Completer<void>();
+        configure = (session) {
+          session.stored = false;
+          session.automaticWait = wait;
+        };
+        final local = create();
+        final attempt = local.saveAutomaticLogin(
+          'test-user',
+          'fixture-password',
+        );
+        while (sessions.isEmpty || sessions.single.automaticLogins == 0) {
           await Future<void>.delayed(Duration.zero);
         }
-        if (index == 1) {
-          await settings.saveGoogleAccount(
-            const GoogleAccount(email: 'other@example.com'),
+        await settings.saveGoogleAccount(
+          const GoogleAccount(email: 'other@example.com'),
+        );
+        local.settingsChanged();
+        wait.complete();
+        await attempt;
+        expect(only()['result'], 'canceled');
+      },
+    );
+
+    test(
+      'an authentication-required answer reports one outcome, not two',
+      () async {
+        await LmsCredentialsStore().save(
+          'student@example.com',
+          'smu',
+          const LmsLocalCredentials('test-user', 'fixture-password'),
+        );
+        configure = (session) {
+          session.stored = false;
+          session.automaticError = const LmsWebSessionException(
+            LmsWebSessionError.authenticationRequired,
           );
-          local.settingsChanged();
+        };
+        await create().refresh(force: true);
+        expect(sessions.single.automaticLogins, 1);
+        expect(only()['result'], 'failed');
+      },
+    );
+
+    test(
+      'an account change during the credential lookup is canceled',
+      () async {
+        configure = (session) => session.stored = false;
+        final store = _DeferredCredentials();
+        final local = create(store: store);
+        final refresh = local.refresh(force: true);
+        // The first read shows the saved username; the second is the login's.
+        for (final index in [0, 1]) {
+          while (store.reads.length <= index) {
+            await Future<void>.delayed(Duration.zero);
+          }
+          if (index == 1) {
+            await settings.saveGoogleAccount(
+              const GoogleAccount(email: 'other@example.com'),
+            );
+            local.settingsChanged();
+          }
+          store.reads[index].complete(null);
         }
-        store.reads[index].complete(null);
-      }
-      await refresh;
-      expect(only(), {
-        'method': 'automatic',
-        'stage': 'credentials',
-        'result': 'canceled',
-      });
-    });
+        await refresh;
+        expect(only(), {
+          'method': 'automatic',
+          'stage': 'credentials',
+          'result': 'canceled',
+        });
+      },
+    );
 
     test('every LmsLoginFailure has a matching analytics cause code', () {
       expect(
@@ -1353,53 +1392,63 @@ void main() {
       await retry;
     });
 
-    test('switching accounts during the attempt changes no stored login', () async {
-      await pausedLogin();
-      final wait = Completer<void>();
-      sessions.single.automaticWait = wait;
-      sessions.single.automaticSucceeds = true;
-      final retry = controller.retryAutomaticLogin();
-      while (sessions.single.automaticLogins < 2) {
-        await Future<void>.delayed(Duration.zero);
-      }
-      await account('other@example.com');
-      controller.settingsChanged();
-      wait.complete();
-      await retry;
-      await account('student@example.com');
-      expect((await stored())!.paused, isTrue);
-    });
+    test(
+      'switching accounts during the attempt changes no stored login',
+      () async {
+        await pausedLogin();
+        final wait = Completer<void>();
+        sessions.single.automaticWait = wait;
+        sessions.single.automaticSucceeds = true;
+        final retry = controller.retryAutomaticLogin();
+        while (sessions.single.automaticLogins < 2) {
+          await Future<void>.delayed(Duration.zero);
+        }
+        await account('other@example.com');
+        controller.settingsChanged();
+        wait.complete();
+        await retry;
+        await account('student@example.com');
+        expect((await stored())!.paused, isTrue);
+      },
+    );
 
-    test('a failed unpause write is reported as a secure-storage problem', () async {
-      final local = LmsController(
-        automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
-        settings: settings,
-        repository: repository,
-        commands: commands,
-        credentialsStore: _UnpauseFailingCredentials(),
-        createSession: (owner, school) {
-          final session = _Session(owner, school);
-          configure?.call(session);
-          sessions.add(session);
-          return session;
-        },
-      );
-      addTearDown(local.dispose);
-      configure = (s) {
-        s.stored = false;
-        s.automaticSucceeds = true;
-      };
-      await LmsCredentialsStore().save(
-        'student@example.com',
-        'smu',
-        const LmsLocalCredentials('test-user', 'fixture-password', paused: true),
-      );
-      await local.retryAutomaticLogin();
-      expect(local.lastLoginFailure, LmsLoginFailure.secureStorage);
-      // The record keeps its original (paused) state and is not lost.
-      final record = await stored();
-      expect(record!.username, 'test-user');
-      expect(record.paused, isTrue);
-    });
+    test(
+      'a failed unpause write is reported as a secure-storage problem',
+      () async {
+        final local = LmsController(
+          automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
+          settings: settings,
+          repository: repository,
+          commands: commands,
+          credentialsStore: _UnpauseFailingCredentials(),
+          createSession: (owner, school) {
+            final session = _Session(owner, school);
+            configure?.call(session);
+            sessions.add(session);
+            return session;
+          },
+        );
+        addTearDown(local.dispose);
+        configure = (s) {
+          s.stored = false;
+          s.automaticSucceeds = true;
+        };
+        await LmsCredentialsStore().save(
+          'student@example.com',
+          'smu',
+          const LmsLocalCredentials(
+            'test-user',
+            'fixture-password',
+            paused: true,
+          ),
+        );
+        await local.retryAutomaticLogin();
+        expect(local.lastLoginFailure, LmsLoginFailure.secureStorage);
+        // The record keeps its original (paused) state and is not lost.
+        final record = await stored();
+        expect(record!.username, 'test-user');
+        expect(record.paused, isTrue);
+      },
+    );
   });
 }

@@ -1,3 +1,4 @@
+import 'academic_source_registry.dart';
 import 'university_support_policy.dart';
 
 /// User-selected school, stored in the linked account's Drive settings.
@@ -432,6 +433,8 @@ class AcademicProfile {
   bool get timetableSupported =>
       timetableCampus != null &&
       UniversitySupportPolicy.timetableAvailable(timetableUniversity);
+  String? get academicSourceId => academicSourceIdFor(universityId, campusId);
+  bool get supported => academicSourceId != null || timetableSupported;
   String get displayName => universityName;
 
   Map<String, Object?> toJson() => {

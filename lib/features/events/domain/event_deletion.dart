@@ -67,6 +67,15 @@ abstract interface class EventSyncMaintenance {
     required RestoredEventResolver resolve,
   });
   Future<List<EventDeletion>> deletionRecords({bool pendingOnly = false});
+
+  /// [EventRepository.mergeRestoredEventsAtomically] for imports: in the same
+  /// transaction, an event whose row is gone but whose deletion record remains
+  /// is left out (never recreated) and its id is added to [skipped].
+  Future<List<EventRestoreMutation>> mergeUndeletedEventsAtomically(
+    Iterable<CalendarEvent> events, {
+    required RestoredEventResolver resolve,
+    required Set<String> skipped,
+  });
   Future<void> mergeDeletionRecords(Iterable<EventDeletion> records);
   Future<void> compactDeletedEvents(DateTime now);
   Future<void> markDeletionSynced(EventDeletion deletion);

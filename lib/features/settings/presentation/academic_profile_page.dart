@@ -403,6 +403,7 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
                           schoolKind: school.kind.name,
                         );
                         final hasTimetable = profile.timetableSupported;
+                        final hasCalendar = profile.academicSourceId != null;
                         final hasLms = LmsController.supportsSchool(
                           profile.timetableUniversity,
                         );
@@ -521,6 +522,11 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
                                   spacing: 6,
                                   runSpacing: 5,
                                   children: [
+                                    _supportTag(
+                                      hasCalendar ? '학사일정 지원' : '학사일정 준비 중',
+                                      Icons.calendar_month_outlined,
+                                      active: hasCalendar,
+                                    ),
                                     _supportTag(
                                       hasTimetable ? '시간표 연결' : '시간표 준비 중',
                                       Icons.grid_view_outlined,
@@ -766,14 +772,24 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
                                                 ).textTheme.bodySmall,
                                               ),
                                             ),
-                                          if (!AcademicProfile(
-                                            universityId:
-                                                selectedInstitution.id,
-                                            universityName:
-                                                selectedInstitution.name,
-                                            schoolKind:
-                                                selectedInstitution.kind.name,
-                                          ).timetableSupported)
+                                          if (AcademicProfile(
+                                                universityId:
+                                                    selectedInstitution.id,
+                                                universityName:
+                                                    selectedInstitution.name,
+                                                schoolKind: selectedInstitution
+                                                    .kind
+                                                    .name,
+                                                // Same campus as the save, so a
+                                                // main-campus adapter never hides
+                                                // an unsupported chosen campus.
+                                                campusId:
+                                                    selectedInstitution
+                                                        .campusSelectionRequired
+                                                    ? selectedCampus?.id
+                                                    : null,
+                                              ).supported ==
+                                              false)
                                             Text(
                                               context.tr(
                                                 '학사 정보는 저장할 수 있습니다. 이 대학의 학사일정·시간표 연동은 준비 중입니다.',
@@ -864,16 +880,22 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
 
 /// Availability follows the saved school rather than a global SMU assumption.
 class AcademicFeatureGate extends ConsumerWidget {
-  const AcademicFeatureGate({super.key, required this.child});
+  const AcademicFeatureGate({
+    super.key,
+    required this.child,
+    this.calendar = false,
+  });
   final Widget child;
+  final bool calendar;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(appSettingsProvider).academicProfile;
-    if (profile?.timetableSupported == true ||
-        (profile?.timetableCampus != null &&
-            UniversitySupportPolicy.suspendedTimetableUniversities.contains(
-              profile!.timetableUniversity,
-            ))) {
+    if (calendar
+        ? ref.watch(academicSourceIdProvider) != null
+        : profile?.timetableSupported == true ||
+              (profile?.timetableCampus != null &&
+                  UniversitySupportPolicy.suspendedTimetableUniversities
+                      .contains(profile!.timetableUniversity))) {
       return child;
     }
     return Center(
@@ -893,7 +915,7 @@ class AcademicFeatureGate extends ConsumerWidget {
               Text(
                 context.tr(
                   profile == null
-                      ? '학사 정보를 설정하면 지원되는 대학의 시간표를 사용할 수 있습니다.'
+                      ? '학사 정보를 설정하면 지원되는 대학의 학사일정과 시간표를 사용할 수 있습니다.'
                       : '이 대학의 학사일정·시간표 연동은 준비 중입니다.',
                 ),
               ),

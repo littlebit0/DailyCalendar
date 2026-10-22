@@ -205,6 +205,39 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   }
 
   @override
+  Future<List<EventRestoreMutation>> mergeUndeletedEventsAtomically(
+    Iterable<CalendarEvent> events, {
+    required RestoredEventResolver resolve,
+    required Set<String> skipped,
+  }) {
+    final incoming = events.toList();
+    if (incoming.isEmpty) return Future.value(const <EventRestoreMutation>[]);
+    return _database.transaction(() async {
+      final removed = <String>{};
+      for (final event in incoming) {
+        final recorded = await _database
+            .customSelect(
+              'SELECT 1 FROM sync_event_deletions WHERE id = ? LIMIT 1',
+              variables: [Variable.withString(event.id)],
+            )
+            .getSingleOrNull();
+        if (recorded == null) continue;
+        final row = await (_database.select(
+          _database.eventRecords,
+        )..where((table) => table.id.equals(event.id))).getSingleOrNull();
+        if (row == null) removed.add(event.id);
+      }
+      skipped.addAll(removed);
+      // Joins this transaction, so no deletion can land between the check
+      // and the write.
+      return mergeRestoredEventsAtomically(
+        incoming.where((event) => !removed.contains(event.id)),
+        resolve: resolve,
+      );
+    });
+  }
+
+  @override
   Future<List<CalendarEvent>> updateCategoryReferences({
     required EventCategory previous,
     required EventCategory updated,

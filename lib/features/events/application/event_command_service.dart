@@ -15,6 +15,7 @@ import '../../../core/time/korea_time.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_draft.dart';
 import '../domain/event_category.dart';
+import '../domain/event_deletion.dart';
 import '../domain/event_repository.dart';
 import '../domain/recurrence_rule.dart';
 
@@ -676,6 +677,7 @@ class EventCommandService {
     EventCategory? Function()? lmsCategory,
     bool preserveLmsSource = false,
     bool Function()? isCurrent,
+    Set<String>? skippedDeleted,
   }) async {
     final importedIds = <String>{};
     for (final event in events) {
@@ -687,23 +689,35 @@ class EventCommandService {
           // so an edit or deletion saved while the import ran cannot be
           // overwritten by an older snapshot. Returning null keeps the row.
           CalendarEvent? decided;
-          final mutations = await _repository.mergeRestoredEventsAtomically(
-            [event],
-            resolve: (latest, incoming) {
-              if (isCurrent != null && !isCurrent()) {
-                throw StateError('가져오기 대상이 변경되었습니다.');
-              }
-              final result = resolveLatest(latest, incoming);
-              if (result == null) {
-                if (latest == null) throw StateError('저장할 일정이 없습니다.');
-                return latest;
-              }
-              decided = result
-                  .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
-                  .normalizeAllDayBounds();
-              return decided!;
-            },
-          );
+          CalendarEvent resolve(CalendarEvent? latest, CalendarEvent incoming) {
+            if (isCurrent != null && !isCurrent()) {
+              throw StateError('가져오기 대상이 변경되었습니다.');
+            }
+            final result = resolveLatest(latest, incoming);
+            if (result == null) {
+              if (latest == null) throw StateError('저장할 일정이 없습니다.');
+              return latest;
+            }
+            decided = result
+                .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
+                .normalizeAllDayBounds();
+            return decided!;
+          }
+
+          // With [skippedDeleted], a recorded deletion is checked in the
+          // write transaction so a compacted deletion is never recreated.
+          final repository = _repository;
+          final mutations =
+              skippedDeleted != null && repository is EventSyncMaintenance
+              ? await (repository as EventSyncMaintenance)
+                    .mergeUndeletedEventsAtomically(
+                      [event],
+                      resolve: resolve,
+                      skipped: skippedDeleted,
+                    )
+              : await _repository.mergeRestoredEventsAtomically([
+                  event,
+                ], resolve: resolve);
           if (isCurrent != null && !isCurrent()) break;
           if (mutations.isEmpty || decided == null) continue;
           imported = decided!;
@@ -856,9 +870,14 @@ class EventCommandService {
   Future<void> updateCategoryUsage({
     required EventCategory previous,
     required EventCategory updated,
+    bool Function()? isCurrent,
   }) {
     final operation = _categoryUpdateTail.then(
-      (_) => _updateCategoryUsage(previous: previous, updated: updated),
+      (_) => _updateCategoryUsage(
+        previous: previous,
+        updated: updated,
+        isCurrent: isCurrent,
+      ),
     );
     _categoryUpdateTail = operation.then<void>(
       (_) {},
@@ -870,7 +889,11 @@ class EventCommandService {
   Future<void> _updateCategoryUsage({
     required EventCategory previous,
     required EventCategory updated,
+    bool Function()? isCurrent,
   }) async {
+    if (isCurrent != null && !isCurrent()) {
+      throw StateError('Category update cancelled');
+    }
     final affected = await _repository.updateCategoryReferences(
       previous: previous,
       updated: updated,
@@ -883,6 +906,8 @@ class EventCommandService {
     // The rows are already saved as pending; a failed upload is retried by the
     // next sync and must not look like a failed category update.
     for (final event in affected) {
+      // Rows stay pending; a cancelled caller only stops queueing uploads.
+      if (isCurrent != null && !isCurrent()) break;
       try {
         await _syncService.queueEventUpsert(event);
       } on Object {
