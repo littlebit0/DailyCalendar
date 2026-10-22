@@ -157,6 +157,18 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                       ),
                     ),
                   ),
+                  // Disconnect or removal failures must stay visible here too.
+                  if (service.unavailable || _localError)
+                    Padding(
+                      key: const ValueKey('academic-operation-failed'),
+                      padding: const EdgeInsets.only(top: 12),
+                      child: Text(
+                        text(AcademicText.unavailable),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.error,
+                        ),
+                      ),
+                    ),
                   ..._subscriptionSection(service, settings),
                   const SizedBox(height: 32),
                 ],

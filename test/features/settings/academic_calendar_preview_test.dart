@@ -93,6 +93,17 @@ class _CalendarService extends ChangeNotifier
     importedSources.add(preview.source.id);
   }
 
+  /// Fails like a storage or database error part-way through removal.
+  bool failRemoval = false;
+  @override
+  Future<void> removeImported(String universityId) async {
+    if (failRemoval) {
+      unavailable = true;
+      notifyListeners();
+      throw StateError('removal write failed');
+    }
+  }
+
   void notifyForTest() => notifyListeners();
 
   @override
@@ -238,6 +249,38 @@ void main() {
       expect(find.byKey(const ValueKey('academic-preview')), findsNothing);
     },
   );
+
+  testWidgets('failed removal without an adapter shows the failure', (
+    tester,
+  ) async {
+    container.dispose();
+    container = ProviderContainer(
+      overrides: [
+        settingsRepositoryProvider.overrideWithValue(settings),
+        academicCalendarServiceProvider.overrideWithValue(service),
+        academicSourceRegistrationsProvider.overrideWithValue(const []),
+      ],
+    );
+    service
+      ..retained = {
+        'retired': AcademicSubscription(universityId: 'retired', year: 2026),
+      }
+      ..failRemoval = true;
+    await mount(tester);
+    expect(
+      find.byKey(const ValueKey('academic-operation-failed')),
+      findsNothing,
+    );
+    await tester.tap(find.byIcon(Icons.delete_outline));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, '가져온 일정 제거').last);
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('academic-operation-failed')),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets(
     'restored school change discards old preview and its captured import action',
