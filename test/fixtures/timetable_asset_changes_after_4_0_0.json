@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/khu.json": {
+    "sha256": "68fca94c05ea1ebb65e3687879c8b34768cbdbc95d8f4029707429e840550931",
+    "reason": "#559 경희대 원자료 분류 13개 배정: 무용학부 전공 3개·자율전공학부 전공 2개(공식 대학 안내), 학생설계전공 3개(2026 학사안내), 공식 수강신청 학과 트리의 자연계열 전공기초 5개"
   }
 }
