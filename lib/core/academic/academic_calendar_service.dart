@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' show DateUtils;
 import 'package:flutter/foundation.dart';
 import '../../features/events/application/event_command_service.dart';
 import '../../features/events/domain/calendar_event.dart';
+import '../../features/events/domain/event_deletion.dart';
 import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../settings/settings_repository.dart';
@@ -10,11 +11,20 @@ import 'academic_source.dart';
 import 'academic_store.dart';
 
 class AcademicPreview {
-  const AcademicPreview(this.source, this.year, this.events, this.generation);
+  const AcademicPreview(
+    this.source,
+    this.year,
+    this.events,
+    this.generation, [
+    this.account,
+  ]);
   final AcademicSource source;
   final int year;
   final List<AcademicEvent> events;
   final int generation;
+
+  /// Google account active when the preview was fetched.
+  final String? account;
 }
 
 class AcademicResult {
@@ -112,8 +122,21 @@ class AcademicCalendarService extends ChangeNotifier {
     if (!_disposed) notifyListeners();
   }
 
+  /// Google account active for the running operation.
+  String? _operationAccount;
+
+  String? _account() =>
+      _settings.dailyAccount()?.googleAccount?.email.trim().toLowerCase();
+
+  /// A reset (store generation) or account switch cancels remaining work, so a
+  /// late write never lands in, or uploads for, a different account.
+  bool _isCurrent(int generation) =>
+      !_disposed &&
+      generation == _store.generation &&
+      _account() == _operationAccount;
+
   void _check(int generation) {
-    if (_disposed || generation != _store.generation) {
+    if (!_isCurrent(generation)) {
       throw StateError('Academic operation cancelled');
     }
   }
@@ -126,11 +149,12 @@ class AcademicCalendarService extends ChangeNotifier {
     unavailable = false;
     result = null;
     final generation = _store.generation;
+    _operationAccount = _account();
     _notify();
     try {
       return await action(generation);
     } on Object {
-      if (generation == _store.generation) unavailable = true;
+      if (_isCurrent(generation)) unavailable = true;
       rethrow;
     } finally {
       busy = false;
@@ -143,7 +167,7 @@ class AcademicCalendarService extends ChangeNotifier {
         final events = await source.fetch(year);
         _check(generation);
         if (events.isEmpty) throw const FormatException('No academic records');
-        return AcademicPreview(source, year, events, generation);
+        return AcademicPreview(source, year, events, generation, _account());
       });
 
   Future<void> importSelection(
@@ -151,7 +175,8 @@ class AcademicCalendarService extends ChangeNotifier {
     Set<String> selected, {
     int? colorValue,
   }) => _run((generation) async {
-    if (preview.generation != generation) {
+    if (preview.generation != generation ||
+        preview.account != _operationAccount) {
       throw StateError('Stale academic preview');
     }
     if (selected.isEmpty) {
@@ -299,9 +324,33 @@ class AcademicCalendarService extends ChangeNotifier {
     await _store.save(_subscriptions, generation);
     final unchanged = <String>{};
     var preserved = 0;
+    // Sync compaction drops deleted rows and keeps only a deletion record; a
+    // missing row that was imported before is a deletion too. Neither may be
+    // re-imported, or the user's deletion would return and re-upload.
+    final repository = _repository;
+    final deletedIds = repository is EventSyncMaintenance
+        ? {
+            for (final record
+                in await (repository as EventSyncMaintenance).deletionRecords())
+              record.id,
+          }
+        : const <String>{};
+    _check(generation);
+    final importing = <CalendarEvent>[];
+    for (final candidate in candidates) {
+      if (deletedIds.contains(candidate.id) ||
+          (subscription.baselines.containsKey(candidate.id) &&
+              await _repository.findById(candidate.id) == null)) {
+        preserved++;
+        unchanged.add(candidate.id);
+      } else {
+        importing.add(candidate);
+      }
+    }
+    _check(generation);
     final saved = await _commands.importBatch(
-      candidates,
-      isCurrent: () => !_disposed && generation == _store.generation,
+      importing,
+      isCurrent: () => _isCurrent(generation),
       resolveLatest: (local, incoming) {
         _check(generation);
         if (local == null) {
@@ -385,10 +434,7 @@ class AcademicCalendarService extends ChangeNotifier {
       final local = await _repository.findById(id);
       _check(generation);
       if (local != null && !local.isDeleted) {
-        await _commands.delete(
-          id,
-          isCurrent: () => !_disposed && generation == _store.generation,
-        );
+        await _commands.delete(id, isCurrent: () => _isCurrent(generation));
       }
     }
   });

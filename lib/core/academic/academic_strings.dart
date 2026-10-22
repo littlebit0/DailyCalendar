@@ -11,6 +11,7 @@ enum AcademicText {
   automatic,
   source,
   unavailable,
+  notSupported,
   lastUpdated,
   never,
   selection,
@@ -72,6 +73,12 @@ const _strings = <AcademicText, List<String>>{
     'Could not load or save the calendar. Existing events are kept.',
     '学年暦の取得または保存に失敗しました。既存の予定は保持されます。',
     '無法載入或儲存行事曆，既有行程會保留。',
+  ],
+  AcademicText.notSupported: [
+    '이 대학의 학사일정 연동은 준비 중입니다. 저장된 연결은 아래에서 관리할 수 있습니다.',
+    'Calendar integration for this university is not available yet. Saved connections can be managed below.',
+    'この大学の学年暦連携は準備中です。保存済みの連携は下で管理できます。',
+    '此大學的行事曆整合尚在準備中。已儲存的連結可在下方管理。',
   ],
   AcademicText.lastUpdated: [
     '마지막 업데이트: {date}',

@@ -13,7 +13,9 @@ import 'package:daily/core/sync/sync_service.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/data/app_database.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
+import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
+import 'package:daily/features/events/domain/event_deletion.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:daily/features/settings/presentation/academic_calendar_page.dart';
@@ -61,8 +63,13 @@ class Source implements AcademicSource {
   void close() {}
 }
 
-class Repository implements EventRepository {
+class Repository implements EventRepository, EventSyncMaintenance {
   final events = <String, CalendarEvent>{};
+  final ledger = <EventDeletion>[];
+  @override
+  Future<List<EventDeletion>> deletionRecords({
+    bool pendingOnly = false,
+  }) async => ledger;
   Set<String> fail = {};
   bool failCategoryUpdate = false;
   @override
@@ -653,6 +660,58 @@ void main() {
       expect(sync.deleted, [imported.id]);
     },
   );
+  test('compacted deletion of an imported event is not re-imported', () async {
+    await importAll();
+    final id = remote().dailyId('smu');
+    final uploads = sync.uploaded.where((e) => e == id).length;
+    // Sync compaction removes the deleted row and keeps only its record.
+    repository.events.remove(id);
+    now = now.add(const Duration(days: 2));
+    await service.refreshIfDue();
+    expect(repository.events.containsKey(id), isFalse);
+    expect(sync.uploaded.where((e) => e == id), hasLength(uploads));
+    expect(service.result!.preserved, 1);
+    expect(service.subscriptions['smu']!.failed, isFalse);
+  });
+  test(
+    'deletion record synced from another device blocks first import',
+    () async {
+      final id = remote().dailyId('smu');
+      repository.ledger.add(
+        EventDeletion(
+          id: id,
+          deletedAt: DateTime.utc(2026, 9, 10),
+          pending: false,
+        ),
+      );
+      await importAll();
+      expect(repository.events, isEmpty);
+      expect(service.result!.preserved, 1);
+    },
+  );
+  test('account switch cancels in-flight fetch and stale preview', () async {
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'a@example.com'),
+    );
+    final preview = await service.preview(source, 2026);
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'b@example.com'),
+    );
+    await expectLater(
+      service.importSelection(preview, {'766720'}),
+      throwsStateError,
+    );
+    expect(repository.events, isEmpty);
+    final pending = Completer<List<AcademicEvent>>();
+    source.answer = () => pending.future;
+    final operation = service.preview(source, 2026);
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'c@example.com'),
+    );
+    pending.complete([remote()]);
+    await expectLater(operation, throwsStateError);
+    expect(repository.events, isEmpty);
+  });
   test('reset invalidates in-flight source fetch and stale preview', () async {
     final preview = await service.preview(source, 2026);
     await settings.academicStore.clear();

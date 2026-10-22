@@ -194,6 +194,33 @@ void main() {
   );
 
   testWidgets(
+    'saved subscriptions stay manageable when the school has no adapter',
+    (tester) async {
+      container.dispose();
+      container = ProviderContainer(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          academicCalendarServiceProvider.overrideWithValue(service),
+          academicSourceRegistrationsProvider.overrideWithValue(const []),
+        ],
+      );
+      service.retained = {
+        'retired': AcademicSubscription(universityId: 'retired', year: 2026),
+      };
+      await mount(tester);
+      expect(tester.takeException(), isNull);
+      expect(
+        find.byKey(const ValueKey('academic-source-missing')),
+        findsOneWidget,
+      );
+      expect(find.text('retired · 2026'), findsOneWidget);
+      expect(find.byIcon(Icons.refresh), findsNothing);
+      expect(find.byIcon(Icons.delete_outline), findsOneWidget);
+      expect(find.byKey(const ValueKey('academic-preview')), findsNothing);
+    },
+  );
+
+  testWidgets(
     'restored school change discards old preview and its captured import action',
     (tester) async {
       await mount(tester);

@@ -323,6 +323,23 @@ void main() {
     );
   }
 
+  test('school support tags are translated in every non-Korean locale', () {
+    for (final locale in AppLocalizations.supportedLocales) {
+      if (locale.languageCode == 'ko') continue;
+      final l10n = AppLocalizations(locale);
+      for (final tag in [
+        '학사일정 지원',
+        '학사일정 준비 중',
+        '시간표 연결',
+        '시간표 준비 중',
+        'LMS 지원',
+        'LMS 미지원',
+      ]) {
+        expect(l10n.text(tag), isNot(tag), reason: '$locale $tag');
+      }
+    }
+  });
+
   test('academic menu labels cover all four supported locales', () {
     final labels = [
       (const Locale('ko'), '학사 관리', '시간표 설정'),

@@ -120,15 +120,6 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
     });
     final profile = settings.academicProfile;
     final sourceId = ref.watch(academicSourceIdProvider);
-    if (sourceId == null) {
-      return Scaffold(
-        appBar: DailyNavigationBar(title: text(AcademicText.title)),
-        body: const AcademicFeatureGate(
-          calendar: true,
-          child: SizedBox.shrink(),
-        ),
-      );
-    }
     final service = ref.watch(academicCalendarServiceProvider);
     return ListenableBuilder(
       listenable: service,
@@ -137,9 +128,40 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
             .where((s) => s.id == sourceId)
             .firstOrNull;
         if (source == null) {
+          if (service.subscriptions.isEmpty) {
+            return Scaffold(
+              appBar: DailyNavigationBar(title: text(AcademicText.title)),
+              body: sourceId == null
+                  ? const AcademicFeatureGate(
+                      calendar: true,
+                      child: SizedBox.shrink(),
+                    )
+                  : Center(child: Text(text(AcademicText.unavailable))),
+            );
+          }
           return Scaffold(
+            backgroundColor: DailyUi.pageBackground(context),
             appBar: DailyNavigationBar(title: text(AcademicText.title)),
-            body: Center(child: Text(text(AcademicText.unavailable))),
+            body: DailyAdaptiveBody(
+              child: ListView(
+                children: [
+                  if (service.busy) const LinearProgressIndicator(),
+                  Padding(
+                    key: const ValueKey('academic-source-missing'),
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text(
+                      text(
+                        sourceId == null
+                            ? AcademicText.notSupported
+                            : AcademicText.unavailable,
+                      ),
+                    ),
+                  ),
+                  ..._subscriptionSection(service, settings),
+                  const SizedBox(height: 32),
+                ],
+              ),
+            ),
           );
         }
         final preview = _preview;
@@ -356,125 +378,8 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                             }),
                     ),
                 ],
-                if (service.subscriptions.isNotEmpty) ...[
-                  const Divider(height: 32),
-                  Text(
-                    text(AcademicText.connected),
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  for (final entry in service.subscriptions.entries) ...[
-                    _subscriptionHeader(
-                      _subscriptionName(service, settings, entry.key),
-                      entry.value,
-                    ),
-                    SwitchListTile.adaptive(
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(text(AcademicText.show)),
-                      value: !settings.hiddenCategoryIds.contains(
-                        AcademicCalendarService.categoryId(entry.key),
-                      ),
-                      onChanged: service.busy
-                          ? null
-                          : (show) => _perform(() async {
-                              final repository = ref.read(
-                                settingsRepositoryProvider,
-                              );
-                              final before = repository.load();
-                              final hidden = before.hiddenCategoryIds.toSet();
-                              final id = AcademicCalendarService.categoryId(
-                                entry.key,
-                              );
-                              if (show) {
-                                hidden.remove(id);
-                              } else {
-                                hidden.add(id);
-                              }
-                              await repository.save(
-                                before.copyWith(
-                                  hiddenCategoryIds: hidden.toList(),
-                                ),
-                                changedFrom: before,
-                              );
-                            }),
-                    ),
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
-                      children: [
-                        // Retained subscriptions whose adapter is not
-                        // registered yet keep only disconnect and removal.
-                        if (service.sources.any((s) => s.id == entry.key))
-                          TextButton.icon(
-                            onPressed: service.busy
-                                ? null
-                                : () => _perform(
-                                    () => service.refresh(entry.key),
-                                  ),
-                            icon: const Icon(Icons.refresh),
-                            label: Text(text(AcademicText.refresh)),
-                          ),
-                        TextButton.icon(
-                          onPressed: service.busy
-                              ? null
-                              : () => _perform(
-                                  () => service.setEnabled(
-                                    entry.key,
-                                    !entry.value.enabled,
-                                  ),
-                                ),
-                          icon: Icon(
-                            entry.value.enabled ? Icons.link_off : Icons.link,
-                          ),
-                          label: Text(
-                            text(
-                              entry.value.enabled
-                                  ? AcademicText.disconnect
-                                  : AcademicText.reconnect,
-                            ),
-                          ),
-                        ),
-                        TextButton.icon(
-                          onPressed: service.busy
-                              ? null
-                              : () async {
-                                  final confirmed = await showDialog<bool>(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: Text(text(AcademicText.remove)),
-                                      content: Text(
-                                        text(AcademicText.removeConfirm),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, false),
-                                          child: Text(
-                                            text(AcademicText.cancel),
-                                          ),
-                                        ),
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.pop(context, true),
-                                          child: Text(
-                                            text(AcademicText.remove),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                  if (confirmed == true && mounted) {
-                                    await _perform(
-                                      () => service.removeImported(entry.key),
-                                    );
-                                  }
-                                },
-                          icon: const Icon(Icons.delete_outline),
-                          label: Text(text(AcademicText.remove)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ],
+                if (service.subscriptions.isNotEmpty)
+                  ..._subscriptionSection(service, settings),
                 const SizedBox(height: 32),
               ],
             ),
@@ -522,6 +427,107 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
       },
     );
   }
+
+  /// Saved subscriptions stay manageable even when no adapter is registered.
+  List<Widget> _subscriptionSection(
+    AcademicCalendarService service,
+    AppSettings settings,
+  ) => [
+    const Divider(height: 32),
+    Text(
+      text(AcademicText.connected),
+      style: Theme.of(context).textTheme.titleMedium,
+    ),
+    for (final entry in service.subscriptions.entries) ...[
+      _subscriptionHeader(
+        _subscriptionName(service, settings, entry.key),
+        entry.value,
+      ),
+      SwitchListTile.adaptive(
+        contentPadding: EdgeInsets.zero,
+        title: Text(text(AcademicText.show)),
+        value: !settings.hiddenCategoryIds.contains(
+          AcademicCalendarService.categoryId(entry.key),
+        ),
+        onChanged: service.busy
+            ? null
+            : (show) => _perform(() async {
+                final repository = ref.read(settingsRepositoryProvider);
+                final before = repository.load();
+                final hidden = before.hiddenCategoryIds.toSet();
+                final id = AcademicCalendarService.categoryId(entry.key);
+                if (show) {
+                  hidden.remove(id);
+                } else {
+                  hidden.add(id);
+                }
+                await repository.save(
+                  before.copyWith(hiddenCategoryIds: hidden.toList()),
+                  changedFrom: before,
+                );
+              }),
+      ),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          // Retained subscriptions whose adapter is not
+          // registered yet keep only disconnect and removal.
+          if (service.sources.any((s) => s.id == entry.key))
+            TextButton.icon(
+              onPressed: service.busy
+                  ? null
+                  : () => _perform(() => service.refresh(entry.key)),
+              icon: const Icon(Icons.refresh),
+              label: Text(text(AcademicText.refresh)),
+            ),
+          TextButton.icon(
+            onPressed: service.busy
+                ? null
+                : () => _perform(
+                    () => service.setEnabled(entry.key, !entry.value.enabled),
+                  ),
+            icon: Icon(entry.value.enabled ? Icons.link_off : Icons.link),
+            label: Text(
+              text(
+                entry.value.enabled
+                    ? AcademicText.disconnect
+                    : AcademicText.reconnect,
+              ),
+            ),
+          ),
+          TextButton.icon(
+            onPressed: service.busy
+                ? null
+                : () async {
+                    final confirmed = await showDialog<bool>(
+                      context: context,
+                      builder: (context) => AlertDialog(
+                        title: Text(text(AcademicText.remove)),
+                        content: Text(text(AcademicText.removeConfirm)),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, false),
+                            child: Text(text(AcademicText.cancel)),
+                          ),
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, true),
+                            child: Text(text(AcademicText.remove)),
+                          ),
+                        ],
+                      ),
+                    );
+                    if (confirmed == true && mounted) {
+                      await _perform(() => service.removeImported(entry.key));
+                    }
+                  },
+            icon: const Icon(Icons.delete_outline),
+            label: Text(text(AcademicText.remove)),
+          ),
+        ],
+      ),
+    ],
+  ];
 
   /// Adapter name, else the category label saved when events were imported.
   String _subscriptionName(
