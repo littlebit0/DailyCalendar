@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'mokpo_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +26,15 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  // Dorim and Damyang campuses share one university-wide calendar.
+  AcademicSourceRegistration(
+    id: 'mokpo',
+    institutionId: 'academyinfo:0000011',
+    campusIds: {'academyinfo:0000011', 'academyinfo:0003312'},
+    create: MokpoAcademicSource.new,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
