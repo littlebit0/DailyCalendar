@@ -3,6 +3,10 @@
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
     "reason": "#92 아주대 원자료 분류를 공식 학과 목록·학사안내 기준 소속(공과대학·경영대학·연계전공·마이크로전공)으로 배정"
   },
+  "assets/timetable/organizations/catholic.json": {
+    "sha256": "e02d759638060cd5ac76d9fd0873fdf900ae6758cf1ae29878a960e474cbe48d",
+    "reason": "#550 가톨릭대 공식 대학 안내 기준 약학과를 약학대학, 음악과·성악과를 예체능계열, 교직과를 교직과정, 융합전공학부를 융합전공에 배정하고 AI전자정보융합대학·국제교류·입학팀·취업지원팀을 독립 개설 단위로 등록"
+  },
   "assets/timetable/organizations/dku.json": {
     "sha256": "aeea83387a3b13285a7b08a211d01d4ef2c564d6b154779118a379d36cefaca2",
     "reason": "#92 단국대 퇴계·율곡혁신칼리지 광역 모집단위와 토탈분석기기융합학 연계전공 배정"
