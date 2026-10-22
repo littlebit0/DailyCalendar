@@ -30,10 +30,24 @@ void main() {
               .convert(file.readAsBytesSync())
               .toString(),
       };
-      expect(actual.keys, everyElement(isIn(baseline.keys)));
+      // Data changes approved after the release are listed with their reason;
+      // every other retained file must still match the release exactly.
+      final approved =
+          jsonDecode(
+                File(
+                  'test/fixtures/timetable_asset_changes_after_4_0_0.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final expected = {
+        ...baseline,
+        for (final entry in approved.entries)
+          entry.key: (entry.value as Map<String, dynamic>)['sha256'],
+      };
+      expect(actual.keys, everyElement(isIn(expected.keys)));
       for (final entry in actual.entries) {
         if (pruned.contains(entry.key)) continue;
-        expect(entry.value, baseline[entry.key], reason: entry.key);
+        expect(entry.value, expected[entry.key], reason: entry.key);
       }
     },
   );

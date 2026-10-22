@@ -107,15 +107,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "관현악전공",
       "sourceLabel": "관현악전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 음악학과 성악전공·피아노전공·작곡전공·관현악전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 음악학과 (2026-10-22 확인)."
     },
     {
       "college": "학부대학",
@@ -184,15 +187,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "기계시스템설계전공",
       "sourceLabel": "기계시스템설계전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://me.pusan.ac.kr/new/sub01/sub02_01_07.php",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/pnu-me-intro-sub02_01_07.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 기계공학부는 … 대학원은 에너지 시스템전공, 지능형제조 시스템전공, 기계시스템설계전공, 제어자동화 시스템전공, 원자력 시스템전공 총 5개의 전공으로 구성 (2026-10-22 확인). 기계공학부 공식 사이트 소개 페이지에 기계공학부 소속 5개 전공으로 명시. 기계공학부는 공과대학 페이지(MN006, extra/pnu-college-MN006-engineering.html) 학과 목록 첫 항목. 단, 원문상 '대학원' 전공 구분이며 밀양캠퍼스 소속 근거는 없음."
     },
     {
       "college": "학부대학",
@@ -228,15 +234,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "도예전공",
       "sourceLabel": "도예전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 조형학과 도예전공·가구목조형전공·섬유금속전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 조형학과 (2026-10-22 확인)."
     },
     {
       "college": "사범대학",
@@ -272,15 +281,32 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "디자인앤테크놀로지전공",
       "sourceLabel": "디자인앤테크놀로지전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://design.pusan.ac.kr/design/5362/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/pnu-design-intro-5362.html",
+      "affiliationEvidence": "부산대학교 예술대학 디자인학과 공식 학과소개: 2017. ‘영상정보전공’을 ‘디자인앤테크놀로지전공’으로 명칭 변경 … 2026. ‘디자인앤테크놀로지전공’이 AI대학으로 소속 이전. 기존 재학생(2~4학년)은 디자인학과 소속 유지 (2026-10-22 확인). 2026년 AI대학 이전 과도기라 예술대학과 AI대학 양쪽에 같은 전공으로 두고, 두 곳 모두 1~4학년 개설 강좌 전체를 표시."
+    },
+    {
+      "college": "AI대학",
+      "department": "디자인앤테크놀로지전공",
+      "sourceLabel": "디자인앤테크놀로지전공",
+      "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://design.pusan.ac.kr/design/5362/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/pnu-design-intro-5362.html",
+      "affiliationEvidence": "부산대학교 예술대학 디자인학과 공식 학과소개: 2017. ‘영상정보전공’을 ‘디자인앤테크놀로지전공’으로 명칭 변경 … 2026. ‘디자인앤테크놀로지전공’이 AI대학으로 소속 이전. 기존 재학생(2~4학년)은 디자인학과 소속 유지 (2026-10-22 확인). 2027 수시모집요강에도 단과대 'AI대학'. 과도기라 AI대학과 예술대학 양쪽에 같은 전공으로 두고, 두 곳 모두 1~4학년 개설 강좌 전체를 표시."
     },
     {
       "college": "정보의생명공학대학",
@@ -453,15 +479,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "발레전공",
       "sourceLabel": "발레전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 무용학과 한국무용전공·발레전공·현대무용전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 무용학과 (2026-10-22 확인)."
     },
     {
       "college": "공과대학",
@@ -598,37 +627,46 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "서양화전공",
       "sourceLabel": "서양화전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 미술학과 조소전공·한국화전공·서양화전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 미술학과 (2026-10-22 확인)."
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "섬유금속전공",
       "sourceLabel": "섬유금속전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 조형학과 도예전공·가구목조형전공·섬유금속전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 조형학과 (2026-10-22 확인)."
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "성악전공",
       "sourceLabel": "성악전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 음악학과 성악전공·피아노전공·작곡전공·관현악전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 음악학과 (2026-10-22 확인)."
     },
     {
       "college": "자연과학대학",
@@ -675,15 +713,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "시각디자인전공",
       "sourceLabel": "시각디자인전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://design.pusan.ac.kr/design/5362/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/pnu-design-intro-5362.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 디자인학과는 시각디자인전공과 애니메이션전공으로 구성 … 부산대학교 예술대학 디자인학과 (2026-10-22 확인). 디자인학과 공식 사이트 학과소개 본문과 푸터에 예술대학 디자인학과 소속 명시. 예술대학 페이지(MN013) 학과 목록에도 디자인학과 있음."
     },
     {
       "college": "생명자원과학대학",
@@ -763,15 +804,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "애니메이션전공",
       "sourceLabel": "애니메이션전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 디자인학과 애니메이션전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 디자인학과 (2026-10-22 확인)."
     },
     {
       "college": "약학대학",
@@ -809,15 +853,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "에너지시스템전공",
       "sourceLabel": "에너지시스템전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://me.pusan.ac.kr/new/sub01/sub02_01_07.php",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/pnu-me-intro-sub02_01_07.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 기계공학부는 … 대학원은 에너지 시스템전공, 지능형제조 시스템전공, 기계시스템설계전공, 제어자동화 시스템전공, 원자력 시스템전공 총 5개의 전공으로 구성 (2026-10-22 확인). 기계공학부 공식 사이트 소개 페이지에 기계공학부 소속 5개 전공으로 명시. 기계공학부는 공과대학 페이지(MN006, extra/pnu-college-MN006-engineering.html) 학과 목록 첫 항목. 단, 원문상 '대학원' 전공 구분이며 밀양캠퍼스 소속 근거는 없음."
     },
     {
       "college": "사범대학",
@@ -875,15 +922,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "원자력시스템전공",
       "sourceLabel": "원자력시스템전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://me.pusan.ac.kr/new/sub01/sub02_01_07.php",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/pnu-me-intro-sub02_01_07.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 기계공학부는 … 대학원은 에너지 시스템전공, 지능형제조 시스템전공, 기계시스템설계전공, 제어자동화 시스템전공, 원자력 시스템전공 총 5개의 전공으로 구성 (2026-10-22 확인). 기계공학부 공식 사이트 소개 페이지에 기계공학부 소속 5개 전공으로 명시. 기계공학부는 공과대학 페이지(MN006, extra/pnu-college-MN006-engineering.html) 학과 목록 첫 항목. 단, 원문상 '대학원' 전공 구분이며 밀양캠퍼스 소속 근거는 없음."
     },
     {
       "college": "공과대학",
@@ -963,15 +1013,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "의과대학",
       "department": "의학과",
       "sourceLabel": "의학과",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN258",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN258-medicine.html",
+      "affiliationEvidence": "부산대학교 의과대학 공식 페이지 학과 목록: |의예과|의학과| (2026-10-22 확인)."
     },
     {
       "college": "정보의생명공학대학",
@@ -1018,15 +1071,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "작곡전공",
       "sourceLabel": "작곡전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 음악학과 성악전공·피아노전공·작곡전공·관현악전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 음악학과 (2026-10-22 확인)."
     },
     {
       "college": "공과대학",
@@ -1084,15 +1140,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "제어자동화시스템전공",
       "sourceLabel": "제어자동화시스템전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://me.pusan.ac.kr/new/sub01/sub02_01_07.php",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/pnu-me-intro-sub02_01_07.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 기계공학부는 … 대학원은 에너지 시스템전공, 지능형제조 시스템전공, 기계시스템설계전공, 제어자동화 시스템전공, 원자력 시스템전공 총 5개의 전공으로 구성 (2026-10-22 확인). 기계공학부 공식 사이트 소개 페이지에 기계공학부 소속 5개 전공으로 명시. 기계공학부는 공과대학 페이지(MN006, extra/pnu-college-MN006-engineering.html) 학과 목록 첫 항목. 단, 원문상 '대학원' 전공 구분이며 밀양캠퍼스 소속 근거는 없음."
     },
     {
       "college": "생명자원과학대학",
@@ -1106,26 +1165,32 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "조선·해양공학과",
       "sourceLabel": "조선·해양공학과",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN006-engineering.html",
+      "affiliationEvidence": "부산대학교 공과대학 공식 페이지 학과 목록에 조선·해양공학과, 2027 수시모집요강 공과대학 모집단위 '조선·해양공학과' (2026-10-22 확인)."
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "조소전공",
       "sourceLabel": "조소전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 미술학과 조소전공·한국화전공·서양화전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 미술학과 (2026-10-22 확인)."
     },
     {
       "college": "예술대학",
@@ -1216,15 +1281,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "정보의생명공학대학",
       "department": "첨단바이오공학전공",
       "sourceLabel": "첨단바이오공학전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://bce.pusan.ac.kr/bce/5027/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-bce-curriculum-majors-5027.html",
+      "affiliationEvidence": "부산대학교 의생명융합공학부 공식 교과과정 메뉴: 의생명공학전공|데이터사이언스전공|첨단바이오공학전공. 정보의생명공학대학 공식 페이지(MN265)가 '정보컴퓨터공학부와 … 의생명융합공학부로 구성' (2026-10-22 확인)."
     },
     {
       "college": "공과대학",
@@ -1342,26 +1410,32 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "피아노전공",
       "sourceLabel": "피아노전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 음악학과 성악전공·피아노전공·작곡전공·관현악전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 음악학과 (2026-10-22 확인)."
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "한국무용전공",
       "sourceLabel": "한국무용전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 무용학과 한국무용전공·발레전공·현대무용전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 무용학과 (2026-10-22 확인)."
     },
     {
       "college": "예술대학",
@@ -1375,15 +1449,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "한국화전공",
       "sourceLabel": "한국화전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 미술학과 조소전공·한국화전공·서양화전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 미술학과 (2026-10-22 확인)."
     },
     {
       "college": "인문대학",
@@ -1463,15 +1540,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "예술대학",
       "department": "현대무용전공",
       "sourceLabel": "현대무용전공",
       "sourceUrl": "https://onestop.pusan.ac.kr/page?menuCD=000000000000335",
-      "evidence": "Published source departments entry retained as department/query association. Official organization routes were inspected, but current college affiliation remains unconfirmed; no college-only selection. collegeKnown=false.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 2027학년도 수시모집요강 예술계열 모집단위 표: '예술대학 예술 부산 … 무용학과 한국무용전공·발레전공·현대무용전공'. 예술대학 공식 페이지(MN013) 학과 목록에도 무용학과 (2026-10-22 확인)."
     },
     {
       "college": "공과대학",
@@ -1529,6 +1609,402 @@
       "collegeKnown": true,
       "group": null,
       "affiliationStatus": "verified"
+    },
+    {
+      "college": "공과대학",
+      "department": "건축공학과 (+82|051-510-1426)",
+      "sourceLabel": "건축공학과 (+82|051-510-1426)",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN006-engineering.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 공과대학 학과 목록: …|항공우주공학과|건축공학과|건축학과|도시공학과|사회기반시스템공학과|… (2026-10-22 확인). 라벨의 전화번호는 원문 일부. 학과명 정확히 일치."
+    },
+    {
+      "college": "공과대학",
+      "department": "건축학과 (+82|051-510-1470)",
+      "sourceLabel": "건축학과 (+82|051-510-1470)",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN006-engineering.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 공과대학 학과 목록: …|항공우주공학과|건축공학과|건축학과|도시공학과|사회기반시스템공학과|… (2026-10-22 확인). 라벨의 전화번호는 원문 일부. 학과명 정확히 일치."
+    },
+    {
+      "college": "공과대학",
+      "department": "도시공학과 (+82|051-510-1546)",
+      "sourceLabel": "도시공학과 (+82|051-510-1546)",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN006-engineering.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 공과대학 학과 목록: …|항공우주공학과|건축공학과|건축학과|도시공학과|사회기반시스템공학과|… (2026-10-22 확인). 라벨의 전화번호는 원문 일부. 학과명 정확히 일치."
+    },
+    {
+      "college": "공과대학",
+      "department": "사회기반시스템공학과 (+82|051-510-1425)",
+      "sourceLabel": "사회기반시스템공학과 (+82|051-510-1425)",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN006",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN006-engineering.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 공과대학 학과 목록: …|항공우주공학과|건축공학과|건축학과|도시공학과|사회기반시스템공학과|… (2026-10-22 확인). 라벨의 전화번호는 원문 일부. 학과명 정확히 일치."
+    },
+    {
+      "college": null,
+      "department": "반도체융합전공",
+      "sourceLabel": "반도체융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |6|반도체융합전공|공학|반도체공학전공*|전자공학전공, 전기공학전공, 재료공학부, … (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": "의과대학",
+      "department": "의예과",
+      "sourceLabel": "의예과",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN258",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN258",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN258-medicine.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 의과대학 페이지 학과 목록: |의예과|의학과| (2026-10-22 확인). 2027 수시모집요강에도 \"의과대학 자연 양산 의예과\" (pnu-2027-susi-yogang.pdf)."
+    },
+    {
+      "college": "예술대학",
+      "department": "가구목조형전공 (+82|051-510-7420)",
+      "sourceLabel": "가구목조형전공 (+82|051-510-7420)",
+      "sourceUrl": "https://plarts.pusan.ac.kr/plarts/13847/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://plarts.pusan.ac.kr/plarts/13847/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-plarts-furniture-wood-major-13847.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 조형학과 전공소개: |가구목조형전공|도예전공|섬유금속전공| / 푸터 \"부산대학교 조형학과 TEL : 051. 510. 7420\" (2026-10-22 확인). 조형학과 소속 전공. 조형학과는 예술대학 페이지(MN013, pnu-college-MN013-arts.html) 학과 목록에 있음. 2023 정시요강에도 \"조형학과 가구목조형전공\"."
+    },
+    {
+      "college": "예술대학",
+      "department": "현악.성악전공",
+      "sourceLabel": "현악.성악전공",
+      "sourceUrl": "https://gukak.pusan.ac.kr/gukak/10677/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://gukak.pusan.ac.kr/gukak/10677/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-gukak-korean-music-majors-10677.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 예술대학 한국음악학과 … 현악전공ㆍKorea string music Major … 성악전공ㆍKorea vocal music Major (2026-10-22 확인). 예술대학 한국음악학과 전공. 2023 정시모집요강(pnu-2023-jungsi-yogang-via-horticulture.pdf p.4)에 \"예술대학 한국음악학과 현악성악전공/관악타악전공/이론작곡전공\". 음악학과(관현악·성악·작곡)와 다른 학과임에 유의."
+    },
+    {
+      "college": "예술대학",
+      "department": "관악.타악전공",
+      "sourceLabel": "관악.타악전공",
+      "sourceUrl": "https://gukak.pusan.ac.kr/gukak/10677/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://gukak.pusan.ac.kr/gukak/10677/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-gukak-korean-music-majors-10677.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 예술대학 한국음악학과 … 관악전공ㆍKorea pipe music Major … 타악전공ㆍKorea drum Major (2026-10-22 확인). 예술대학 한국음악학과 전공. 2023 정시모집요강(pnu-2023-jungsi-yogang-via-horticulture.pdf p.4)에 \"예술대학 한국음악학과 현악성악전공/관악타악전공/이론작곡전공\". 음악학과(관현악·성악·작곡)와 다른 학과임에 유의."
+    },
+    {
+      "college": "예술대학",
+      "department": "이론.작곡전공",
+      "sourceLabel": "이론.작곡전공",
+      "sourceUrl": "https://gukak.pusan.ac.kr/gukak/10677/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://gukak.pusan.ac.kr/gukak/10677/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-gukak-korean-music-majors-10677.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 예술대학 한국음악학과 … 이론전공ㆍTheory Major|작곡전공ㆍComposition Major (2026-10-22 확인). 예술대학 한국음악학과 전공. 2023 정시모집요강(pnu-2023-jungsi-yogang-via-horticulture.pdf p.4)에 \"예술대학 한국음악학과 현악성악전공/관악타악전공/이론작곡전공\". 음악학과(관현악·성악·작곡)와 다른 학과임에 유의."
+    },
+    {
+      "college": "학부대학",
+      "department": "글로벌자유전공학부 (+82|051-510-7282)",
+      "sourceLabel": "글로벌자유전공학부 (+82|051-510-7282)",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN298",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN298",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN298-undergraduate.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 학부대학 목록: |자유전공학부|첨단융합학부|…|글로벌자유전공학부| (2026-10-22 확인). 학과 사이트(global.pusan.ac.kr, pnu-global-free-major-index.html) 푸터 \"부산대학교 학부대학 행정실 … TEL : 051. 510. 7282.\" 로 전화번호도 일치."
+    },
+    {
+      "college": null,
+      "department": "EES융합전공",
+      "sourceLabel": "EES융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |3|EES융합전공|공학|미래에너지전공*|광메카트로닉스공학전공|재료공학부|유기소재시스템공학과| (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "이차전지융합전공",
+      "sourceLabel": "이차전지융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |7|이차전지융합전공|공학|미래에너지전공*|재료공학부|이차전지혁신융합대학사업단| (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "지식재산융합전공",
+      "sourceLabel": "지식재산융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |14|지식재산융합전공|공학|미래에너지전공*|광메카트로닉스공학전공,|재료공학부|IP중점대학사업단| (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "DX융합전공",
+      "sourceLabel": "DX융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |19|DX융합전공|인문사회|자유전공학부*|전남대, 홍익대, 광운대, 국립공주대 | (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "핀테크융합전공",
+      "sourceLabel": "핀테크융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |2|핀테크융합전공|인문사회|경영학과*|정보컴퓨터공학부| (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": "경제통상대학",
+      "department": "글로벌스터디즈 프로그램",
+      "sourceLabel": "글로벌스터디즈 프로그램",
+      "sourceUrl": "https://pnudgs.com/page/01_09.php",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://pnudgs.com/page/01_09.php",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-dgs-intro-korean-01_09.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 부산대학교 국제학부는 … 2011년도에 부산대학교 경제통상대학에 신설된 학부 … 국제학 복수전공 프로그램 (GSP) (2026-10-22 확인). GSP=Global Studies Program, 경제통상대학 국제학부의 영어전용 복수전공. 국제학부 사이트(pnudgs.com)는 pusan.ac.kr 도메인이 아니지만 공식 경제통상대학 페이지(MN009, pnu-college-MN009-economics-trade.html)의 국제학부 링크 대상. 2023 정시요강 p.51 \"Global Studies Program(GSP) … 경제통상대학 국제학부의 영어전용 국제학 복수전공 프로그램\"으로 교차 확인."
+    },
+    {
+      "college": "경제통상대학",
+      "department": "한국.동아시아학전공",
+      "sourceLabel": "한국.동아시아학전공",
+      "sourceUrl": "https://pnudgs.com/page/01_07.php",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "busan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://pnudgs.com/page/01_07.php",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-dgs-keasp-01_07.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 국제학부는 국제학 전공 (DGS), 국제학 복수전공 프로그램 (GSP), 한국학 및 동아시아학 (KEASP) 이라는 세 개의 독립된 프로그램으로 구성 (2026-10-22 확인). KEASP(Korean and East Asian Studies Program)=경제통상대학 국제학부의 복수전공. 한국어 인용문은 pnu-dgs-intro-korean-01_09.html. 2023 정시요강 p.48 \"경제통상대학 국제학부 … Korean And East Asian Studies Program(KEASP)\". 라벨 \"한국.동아시아학전공\"과 KEASP의 동일성은 명칭 대응으로 판단(공식 페이지에 정확히 \"한국.동아시아학전공\" 문자열은 없음)."
+    },
+    {
+      "college": "생명자원과학대학",
+      "department": "원예생명과학과(재직자)",
+      "sourceLabel": "원예생명과학과(재직자)",
+      "sourceUrl": "https://horticulture.pusan.ac.kr/bbs/horticulture/731/913504/download.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "miryang",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://horticulture.pusan.ac.kr/bbs/horticulture/731/913504/download.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2023-jungsi-yogang-via-horticulture.pdf",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 특성화고졸재직자전형(정원외) 생명자원과학대학 원예생명과학과 … 생명자원과학대학 소재지 : 밀양캠퍼스 … 수업 방법 : 평일 야간 및 주말 수업 등 (2026-10-22 확인). 2023학년도 정시모집요강(원예생명과학과 공식 게시판 첨부) p.5·p.23. 재직자 과정은 생명자원과학대학 원예생명과학과 모집단위. 원예생명과학과 자체도 생명자원과학대학 페이지(MN016)에 등재. 현재 신입 모집 여부는 미확인."
+    },
+    {
+      "college": null,
+      "department": "그린바이오융합전공",
+      "sourceLabel": "그린바이오융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "miryang",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |13|그린바이오융합전공|자연과학|동물생명자원과학과*|생명환경화학과, 바이오산업기계공학과, 식품공학과| (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": "의과대학",
+      "department": "의예과",
+      "sourceLabel": "의예과",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN258",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "shared",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN258",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN258-medicine.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 의과대학 페이지 학과 목록: |의예과|의학과| (2026-10-22 확인). 2027 수시모집요강에도 \"의과대학 자연 양산 의예과\" (pnu-2027-susi-yogang.pdf)."
+    },
+    {
+      "college": null,
+      "department": "이차전지융합전공",
+      "sourceLabel": "이차전지융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "shared",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |7|이차전지융합전공|공학|미래에너지전공*|재료공학부|이차전지혁신융합대학사업단| (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "DX융합전공",
+      "sourceLabel": "DX융합전공",
+      "sourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "shared",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://con.pusan.ac.kr/con/74187/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-con-convergence-majors-74187.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: |19|DX융합전공|인문사회|자유전공학부*|전남대, 홍익대, 광운대, 국립공주대 | (2026-10-22 확인). 융합교육센터 \"융합전공 현황\"(2026.9.1. 기준) 표에 등재. 융합전공이란 \"2개 이상의 학과(부) 또는 전공의 소속교원이 참여하여 공동으로 새로운 전공을 구성\". overlay에 없는 새 group 이름(다른 대학 overlay는 \"융합전공\" 사용).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": "치과대학",
+      "department": "치의예과",
+      "sourceLabel": "치의예과",
+      "sourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "yangsan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://go.pusan.ac.kr/down/mojib/RF(0)_260831172128.pdf",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-2027-susi-yogang.pdf",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 치과대학 자연 양산 치의예과 80 … / 약학대학 약학부, 의과대학 의예과, 치과대학 치의예과는 모집인원의 4배수 (2026-10-22 확인). 2027학년도 수시모집요강(입학처 공식). \"치과대학\"은 overlay에 없는 새 단과대학 이름. 현재 홈페이지 대학 목록(MN 네비)에는 치과대학 대신 치의학전문대학원(MN031)이 있고, 치전원 사이트 문구는 \"부산대학교 치과대학 · 치의학전문대학원\". overlay의 치의학과는 group \"학·석사통합과정\"으로 처리돼 있어 정책 판단 필요."
+    },
+    {
+      "college": "의과대학",
+      "department": "의예과",
+      "sourceLabel": "의예과",
+      "sourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN258",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "yangsan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.pusan.ac.kr/kor/CMS/Contents/Contents.do?mCode=MN258",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-college-MN258-medicine.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 의과대학 페이지 학과 목록: |의예과|의학과| (2026-10-22 확인). 2027 수시모집요강에도 \"의과대학 자연 양산 의예과\" (pnu-2027-susi-yogang.pdf)."
+    },
+    {
+      "college": "정보의생명공학대학",
+      "department": "의생명공학전공 (+82|051-510-8544)",
+      "sourceLabel": "의생명공학전공 (+82|051-510-8544)",
+      "sourceUrl": "https://bce.pusan.ac.kr/bce/5027/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "yangsan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://bce.pusan.ac.kr/bce/5027/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-bce-curriculum-majors-5027.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 의생명융합공학부 … |의생명공학전공|데이터사이언스전공|첨단바이오공학전공| … TEL : 051. 510. 8544 (2026-10-22 확인). 의생명융합공학부 소속 전공(전화번호 일치). 의생명융합공학부는 정보의생명공학대학(MN265, pnu-college-MN265-infobiomed.html) 소속. 2027 수시요강에 따르면 2027학년도부터 의생명융합공학부는 공과대학 바이오메디컬공학과로 개편됨(현행 소속 기준으로 기록)."
+    },
+    {
+      "college": "정보의생명공학대학",
+      "department": "데이터사이언스전공 (+82|051-510-8544)",
+      "sourceLabel": "데이터사이언스전공 (+82|051-510-8544)",
+      "sourceUrl": "https://bce.pusan.ac.kr/bce/5027/subview.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "yangsan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://bce.pusan.ac.kr/bce/5027/subview.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/pnu/pnu-bce-curriculum-majors-5027.html",
+      "affiliationEvidence": "부산대학교 공식 자료 근거: 의생명융합공학부 … |의생명공학전공|데이터사이언스전공|첨단바이오공학전공| … TEL : 051. 510. 8544 (2026-10-22 확인). 의생명융합공학부 소속 전공(전화번호 일치). 의생명융합공학부는 정보의생명공학대학(MN265) 소속. 2027 수시요강상 2027학년도부터 AI대학 데이터사이언스학부로 개편(현행 소속 기준으로 기록)."
     }
   ],
   "courseOwners": []

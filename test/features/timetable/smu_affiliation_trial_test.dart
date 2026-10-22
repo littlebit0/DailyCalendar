@@ -21,7 +21,7 @@ void main() {
           .cast<Map<String, dynamic>>()
           .where((unit) => unit['group'] == '마이크로전공')
           .toList();
-      expect(professorPrograms.length, 39);
+      expect(professorPrograms.length, 40);
       expect(
         professorPrograms.every((unit) => unit['college'] == null),
         isTrue,
@@ -87,7 +87,7 @@ void main() {
               )
               as Map<String, dynamic>;
       final units = (document['mappings'] as List).cast<Map<String, dynamic>>();
-      for (final (group, count) in [('마이크로전공', 39), ('연계전공', 9), ('융합전공', 7)]) {
+      for (final (group, count) in [('마이크로전공', 40), ('연계전공', 9), ('융합전공', 8)]) {
         final programs = units.where((u) => u['group'] == group).toList();
         expect(programs.length, count);
         expect(
@@ -120,6 +120,13 @@ void main() {
               ).readAsStringSync(),
             )
             as Map<String, dynamic>;
+    final approved =
+        jsonDecode(
+              fixtureFile(
+                'test/fixtures/timetable_asset_changes_after_4_0_0.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
     for (final entry in before.entries.where(
       (e) =>
           e.key.startsWith('assets/timetable/organizations/') &&
@@ -129,7 +136,8 @@ void main() {
     )) {
       expect(
         sha256.convert(fixtureFile(entry.key).readAsBytesSync()).toString(),
-        entry.value,
+        (approved[entry.key] as Map<String, dynamic>?)?['sha256'] ??
+            entry.value,
         reason: entry.key,
       );
     }

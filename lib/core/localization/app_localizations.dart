@@ -1208,6 +1208,7 @@ const Map<String, Map<String, String>> _translations = {
     '지역 선택': 'Select region',
     '학과 선택': 'Department',
     '학과·전공 선택': 'Select department or major',
+    '단과대·학과 선택': 'Select college or department',
     '해당 대학의 LMS 연결은 아직 지원하지 않습니다.':
         'LMS connection for this university is not supported yet.',
   },
@@ -2172,6 +2173,7 @@ const Map<String, Map<String, String>> _translations = {
     '지역 선택': '地域を選択',
     '학과 선택': '学科を選択',
     '학과·전공 선택': '学科・専攻を選択',
+    '단과대·학과 선택': '学部・学科を選択',
     '해당 대학의 LMS 연결은 아직 지원하지 않습니다.': 'この大学のLMS接続はまだ対応していません。',
   },
   'zh_Hant': {
@@ -3106,6 +3108,7 @@ const Map<String, Map<String, String>> _translations = {
     '지역 선택': '選擇地區',
     '학과 선택': '選擇系所',
     '학과·전공 선택': '選擇系所／主修',
+    '단과대·학과 선택': '選擇學院／系所',
     '해당 대학의 LMS 연결은 아직 지원하지 않습니다.': '尚未支援此大學的 LMS 連線。',
   },
 };

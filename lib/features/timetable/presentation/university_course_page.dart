@@ -311,17 +311,32 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
     _category = null;
   });
 
-  // Department lookup contains major courses for every supported school.
+  // Department lookup contains major courses for every supported school. A
+  // college's own choice holds every course it opens, either as a mapped
+  // college-hosted organization or under an unmapped raw label of its name.
   bool _matchesUnit(UniversityCourse course) =>
       (_organization == null ||
-          (course.matchesOrganization(_organization!) &&
-              (_organization!.isCollegeHosted ||
-                  course.isMajorForOrganization(_organization!)))) &&
+          (_organization!.isCollegeHosted
+              ? course.matchesOrganization(_organization!) ||
+                    _opensUnderCollegeLabel(course, _organization!.college!)
+              : course.matchesOrganization(_organization!) &&
+                    course.isMajorForOrganization(_organization!))) &&
       (_sourceDepartment == null ||
           (course.departments.contains(_sourceDepartment) &&
               course.isMajorForSourceDepartment(_sourceDepartment!)));
 
+  static bool _opensUnderCollegeLabel(
+    UniversityCourse course,
+    String college,
+  ) =>
+      course.departments.contains(college) &&
+      !course.offeringOrganizations.any((unit) => unit.sourceLabel == college);
+
   List<String> _classificationLabels(UniversityCourse course) {
+    if (_organization case final CourseOrganization unit
+        when unit.isCollegeHosted && !course.matchesOrganization(unit)) {
+      return course.classificationLabelsFor(unit.college);
+    }
     if (_sourceDepartment case final String department) {
       return course.majorClassificationLabelsForSourceDepartment(department);
     }
@@ -332,23 +347,52 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
     return course.classificationLabelsForOrganization(_organization);
   }
 
-  Widget _departmentChoices(List<CourseOrganization> units) => Align(
-    alignment: Alignment.centerLeft,
-    child: Wrap(
-      spacing: 8,
-      runSpacing: 6,
-      children: [
-        for (final unit in units)
-          ChoiceChip(
-            key: ValueKey('course-department-${unit.key}'),
-            label: Text(unit.department!),
-            selected: _organization?.key == unit.key,
-            onSelected: (selected) =>
-                _selectOrganization(selected ? unit : null),
-          ),
-      ],
-    ),
+  /// Shown without an expandable parent: no published parent, or a college
+  /// that runs only its own courses.
+  bool _isTopLevel(_OrganizationGroup group) =>
+      group.title == null || group.departments.isEmpty;
+
+  /// One college's own choice (named after the college) and its departments.
+  List<Widget> _organizationChips(_OrganizationGroup group) => [
+    if (group.directCollege ?? group.directSourceLabel
+        case final String college)
+      ChoiceChip(
+        key: ValueKey('course-college-direct-$college'),
+        label: Text(college),
+        selected:
+            _organization?.isCollegeHosted == true &&
+            _organization?.college == college,
+        onSelected: (selected) => _selectOrganization(
+          selected
+              ? CourseOrganization(
+                  college: college,
+                  department: null,
+                  sourceLabel: college,
+                )
+              : null,
+        ),
+      ),
+    for (final unit in group.departments)
+      ChoiceChip(
+        key: ValueKey('course-department-${unit.key}'),
+        label: Text(unit.department!),
+        selected: _organization?.key == unit.key,
+        onSelected: (selected) => _selectOrganization(selected ? unit : null),
+      ),
+  ];
+
+  Widget _sourceChip(String label) => ChoiceChip(
+    key: ValueKey('course-source-$label'),
+    label: Text(label),
+    selected: _sourceDepartment == label,
+    onSelected: (selected) => _selectSourceLabel(selected ? label : null),
   );
+
+  void _selectSourceLabel(String? label) => _changeFilter(() {
+    _organization = null;
+    _sourceDepartment = label;
+    _category = null;
+  });
 
   Widget _catalogView(List<UniversityDataset> catalog) {
     final theme = Theme.of(context);
@@ -367,8 +411,7 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
     final prepared = _prepared!;
     final datasets = prepared.datasets;
     final all = prepared.all;
-    final colleges = prepared.colleges;
-    final departmentGroups = prepared.departmentGroups;
+    final organizationGroups = prepared.organizationGroups;
     final sourceDepartments = prepared.sourceDepartments;
     final saved = widget.store.activeClasses;
     if (!listEquals(_conflictInputs, saved)) {
@@ -687,117 +730,81 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                             avatar: const Icon(Icons.close, size: 16),
                             onPressed: () => _selectOrganization(null),
                           ),
-                        if (colleges.isNotEmpty) ...[
+                        if (organizationGroups.isNotEmpty ||
+                            sourceDepartments.isNotEmpty) ...[
                           Text(
-                            context.tr('단과대 주관'),
+                            context.tr(
+                              organizationGroups.any((group) => group.hasDirect)
+                                  ? '단과대·학과 선택'
+                                  : '학과·전공 선택',
+                            ),
                             style: theme.textTheme.labelLarge,
                           ),
-                          const SizedBox(height: 8),
-                          DropdownButtonFormField<String>(
-                            key: ValueKey(
-                              'course-college-$_campus-${_organization?.isCollegeHosted == true ? _organization?.college : null}',
-                            ),
-                            initialValue: _organization?.isCollegeHosted == true
-                                ? _organization?.college
-                                : '',
-                            isExpanded: true,
-                            decoration: InputDecoration(
-                              labelText: context.tr('단과대 직접 주관 과목'),
-                              border: const OutlineInputBorder(),
-                            ),
-                            items: [
-                              DropdownMenuItem(
-                                value: '',
-                                child: Text(context.tr('선택 안 함')),
-                              ),
-                              for (final college in colleges)
-                                DropdownMenuItem(
-                                  value: college,
-                                  child: Text(college),
+                          // Units without a parent stand on their own: departments
+                          // with no published college, colleges that only run
+                          // their own courses, and source opening labels.
+                          if (organizationGroups.any(_isTopLevel) ||
+                              sourceDepartments.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Wrap(
+                                  spacing: 8,
+                                  runSpacing: 6,
+                                  children: [
+                                    for (final group
+                                        in organizationGroups.where(
+                                          _isTopLevel,
+                                        ))
+                                      ..._organizationChips(group),
+                                    for (final label in sourceDepartments)
+                                      _sourceChip(label),
+                                  ],
                                 ),
-                            ],
-                            onChanged: (value) => _selectOrganization(
-                              value == null || value.isEmpty
-                                  ? null
-                                  : CourseOrganization(
-                                      college: value,
-                                      department: null,
-                                      sourceLabel: value,
+                              ),
+                            ),
+                          for (final group in organizationGroups.where(
+                            (group) => !_isTopLevel(group),
+                          ))
+                            ExpansionTile(
+                              key: ValueKey(
+                                'course-college-departments-${group.title}',
+                              ),
+                              title: Text(group.title!),
+                              subtitle:
+                                  group.departments.any(
+                                    (unit) => unit.affiliationUnconfirmed,
+                                  )
+                                  ? Text(context.tr('소속 미확인 · 이름 기준 분류'))
+                                  : null,
+                              expansionAnimationStyle:
+                                  MediaQuery.disableAnimationsOf(context)
+                                  ? AnimationStyle.noAnimation
+                                  : const AnimationStyle(
+                                      duration: Duration(milliseconds: 180),
+                                      curve: Curves.easeOutCubic,
                                     ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                        ],
-                        if (departmentGroups.isNotEmpty) ...[
-                          Text(
-                            context.tr('학과·전공 선택'),
-                            style: theme.textTheme.labelLarge,
-                          ),
-                          for (final entry in departmentGroups.entries)
-                            if (entry.key == null)
-                              _departmentChoices(entry.value)
-                            else
-                              ExpansionTile(
-                                key: ValueKey(
-                                  'course-college-departments-${entry.key}',
-                                ),
-                                title: Text(entry.key!),
-                                subtitle:
-                                    entry.value.any(
-                                      (unit) => unit.affiliationUnconfirmed,
-                                    )
-                                    ? Text(context.tr('소속 미확인 · 이름 기준 분류'))
-                                    : null,
-                                expansionAnimationStyle:
-                                    MediaQuery.disableAnimationsOf(context)
-                                    ? AnimationStyle.noAnimation
-                                    : const AnimationStyle(
-                                        duration: Duration(milliseconds: 180),
-                                        curve: Curves.easeOutCubic,
-                                      ),
-                                initiallyExpanded:
-                                    _organization?.department != null &&
-                                    _organization?.displayGroup == entry.key,
-                                tilePadding: EdgeInsets.zero,
-                                childrenPadding: const EdgeInsets.only(
-                                  bottom: 12,
-                                ),
-                                children: [_departmentChoices(entry.value)],
+                              initiallyExpanded:
+                                  _organization != null &&
+                                  _organization?.displayGroup == group.title,
+                              tilePadding: EdgeInsets.zero,
+                              childrenPadding: const EdgeInsets.only(
+                                bottom: 12,
                               ),
-                        ] else if (sourceDepartments.isEmpty)
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Wrap(
+                                    spacing: 8,
+                                    runSpacing: 6,
+                                    children: _organizationChips(group),
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ] else
                           Text(context.tr('공개된 학과 주관 정보가 없습니다.')),
-                        if (sourceDepartments.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          DropdownButtonFormField<String>(
-                            key: ValueKey(
-                              'course-source-department-$_campus-$_sourceDepartment',
-                            ),
-                            initialValue: _sourceDepartment ?? '',
-                            isExpanded: true,
-                            decoration: InputDecoration(
-                              labelText: context.tr('원자료 분류'),
-                              border: const OutlineInputBorder(),
-                            ),
-                            items: [
-                              DropdownMenuItem(
-                                value: '',
-                                child: Text(context.tr('전체')),
-                              ),
-                              for (final label in sourceDepartments)
-                                DropdownMenuItem(
-                                  value: label,
-                                  child: Text(label),
-                                ),
-                            ],
-                            onChanged: (value) => _changeFilter(() {
-                              _organization = null;
-                              _sourceDepartment = value == null || value.isEmpty
-                                  ? null
-                                  : value;
-                              _category = null;
-                            }),
-                          ),
-                        ],
                         CheckboxListTile(
                           key: const ValueKey('course-hide-conflicts'),
                           value: _hideConflicts,
@@ -1418,10 +1425,25 @@ class _PreparedCourses {
             .toSet()
             .toList()
           ..sort();
-    departmentGroups = <String?, List<CourseOrganization>>{};
+    final departmentGroups = <String?, List<CourseOrganization>>{};
     for (final unit in organizations.where((unit) => unit.department != null)) {
       (departmentGroups[unit.displayGroup] ??= []).add(unit);
     }
+    // A college appears once: its direct-hosting choice and its departments
+    // share one parent instead of separate college and department lists.
+    organizationGroups = [
+      if (departmentGroups[null] case final ungrouped?)
+        _OrganizationGroup(null, null, ungrouped),
+      for (final title in {
+        ...colleges,
+        ...departmentGroups.keys.whereType<String>(),
+      }.toList()..sort())
+        _OrganizationGroup(
+          title,
+          colleges.contains(title) ? title : null,
+          departmentGroups[title] ?? const [],
+        ),
+    ];
     // Preserve source filters where no verified academic organization exists.
     // Cohort and administration labels remain literal, without guessed parents.
     sourceDepartments =
@@ -1439,13 +1461,67 @@ class _PreparedCourses {
             .toSet()
             .toList()
           ..sort();
+    // A raw opening label naming a college shown above is that college's own
+    // offering, whatever its classification. It joins the college's own choice
+    // instead of a separate source filter; other unrepresented labels stay
+    // literal.
+    final groupTitles = organizationGroups
+        .map((group) => group.title)
+        .whereType<String>()
+        .toSet();
+    final collegeLabels = {
+      for (final course in all)
+        for (final label in course.departments)
+          if (groupTitles.contains(label) &&
+              !course.offeringOrganizations.any(
+                (unit) => unit.sourceLabel == label,
+              ))
+            label,
+    };
+    sourceDepartments = sourceDepartments
+        .where((label) => !collegeLabels.contains(label))
+        .toList();
+    organizationGroups = [
+      for (final group in organizationGroups)
+        collegeLabels.contains(group.title)
+            ? _OrganizationGroup(
+                group.title,
+                group.directCollege,
+                group.departments,
+                directSourceLabel: group.title,
+              )
+            : group,
+    ];
     search = {
       for (final course in all) course: UniversityCourseSearchText(course),
     };
   }
   late final List<UniversityDataset> datasets;
   late final List<UniversityCourse> all;
-  late final List<String> colleges, sourceDepartments;
-  late final Map<String?, List<CourseOrganization>> departmentGroups;
+  late final List<String> colleges;
+  late List<String> sourceDepartments;
+  late List<_OrganizationGroup> organizationGroups;
   late final Map<UniversityCourse, UniversityCourseSearchText> search;
+}
+
+/// A college or official program family shown as one expandable parent.
+class _OrganizationGroup {
+  const _OrganizationGroup(
+    this.title,
+    this.directCollege,
+    this.departments, {
+    this.directSourceLabel,
+  });
+
+  /// Null for departments without any published parent.
+  final String? title;
+
+  /// Set when the college itself directly hosts courses.
+  final String? directCollege;
+  final List<CourseOrganization> departments;
+
+  /// Set when the college's own courses are published only under its name as
+  /// a raw opening label rather than as a college-hosted organization.
+  final String? directSourceLabel;
+  bool get hasDirect => directCollege != null || directSourceLabel != null;
 }

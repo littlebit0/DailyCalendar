@@ -23,7 +23,7 @@
       "campus": "*"
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "건축학과",
       "sourceLabel": "건축학과",
       "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
@@ -31,8 +31,11 @@
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false,
-      "collegeOnlyEligible": false
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/admission/list01.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/colleges.html",
+      "affiliationEvidence": "아주대학교 공식 대학 안내의 공과대학 학과 목록에 '건축학과(건축학/건축공학전공)'가 있음(2026-10-22 확인)."
     },
     {
       "college": "경영대학",
@@ -653,12 +656,13 @@
       "sourceFile": "work/all-university-completion-20261012/b-sources/ajou-bio-system.html",
       "isOfferingUnit": false,
       "campus": "*",
-      "group": "융합연계전공",
+      "group": "연계전공",
       "officialGroups": [
-        "융합연계전공"
+        "연계전공"
       ],
       "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "affiliationStatus": "verified",
+      "affiliationEvidence": "프로그램명이 '연계전공'이고 공식 학사안내 연계전공 제도와 같은 분류로 묶음. 공식 보도(2026-02-26)의 '융합연계전공' 표기는 evidence에 남김."
     },
     {
       "college": "첨단바이오융합대학",
@@ -809,12 +813,13 @@
       "sourceFile": "work/all-university-completion-20261012/b-sources/ajou-bio-system.html",
       "isOfferingUnit": false,
       "campus": "main",
-      "group": "융합연계전공",
+      "group": "연계전공",
       "officialGroups": [
-        "융합연계전공"
+        "연계전공"
       ],
       "collegeKnown": false,
-      "affiliationStatus": "verified"
+      "affiliationStatus": "verified",
+      "affiliationEvidence": "프로그램명이 '연계전공'이고 공식 학사안내 연계전공 제도와 같은 분류로 묶음. 공식 보도(2026-02-26)의 '융합연계전공' 표기는 evidence에 남김."
     },
     {
       "college": "첨단바이오융합대학",
@@ -845,6 +850,144 @@
       "sourceFile": "assets/timetable/ajou-main-2026-2.json",
       "isOfferingUnit": false,
       "campus": "main"
+    },
+    {
+      "college": "공과대학",
+      "department": "건축학과 / 건축공학전공(과)",
+      "sourceLabel": "건축학과 / 건축공학전공(과)",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/admission/list01.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/colleges.html",
+      "affiliationEvidence": "아주대학교 공식 대학 안내의 공과대학 학과 목록에 '건축학과(건축학/건축공학전공)'가 있음(2026-10-22 확인)."
+    },
+    {
+      "college": "공과대학",
+      "department": "건축학과 / 건축학전공(5년)(과)",
+      "sourceLabel": "건축학과 / 건축학전공(5년)(과)",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/admission/list01.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/colleges.html",
+      "affiliationEvidence": "아주대학교 공식 대학 안내의 공과대학 학과 목록에 '건축학과(건축학/건축공학전공)'가 있음(2026-10-22 확인)."
+    },
+    {
+      "college": "경영대학",
+      "department": "IT경영전공(과)",
+      "sourceLabel": "IT경영전공(과)",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/admission/list01.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/colleges.html",
+      "affiliationEvidence": "같은 공식 강좌 자료의 '국제경영학과 / IT경영전공(과)'와 같은 전공이며, 공식 대학 안내의 경영대학 학과 목록에 '국제경영학과'가 있음(2026-10-22 확인)."
+    },
+    {
+      "college": null,
+      "department": "미래반도체 연계전공(과)",
+      "sourceLabel": "미래반도체 연계전공(과)",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/bachelor/edu02.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/edu02.html",
+      "affiliationEvidence": "아주대학교 공식 학사안내(복수/부/연계/트랙/마이크로) 연계전공 표에 '미래반도체'이 있음(2026-10-22 확인).",
+      "group": "연계전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "데이터인문 연계전공 / 데이터인문 연계전공(과)",
+      "sourceLabel": "데이터인문 연계전공 / 데이터인문 연계전공(과)",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/bachelor/edu02.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/edu02.html",
+      "affiliationEvidence": "아주대학교 공식 학사안내(복수/부/연계/트랙/마이크로) 연계전공 표에 '데이터인문'이 있음(2026-10-22 확인).",
+      "group": "연계전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "인간·사회·규범 연계전공 / 인간·사회·규범 연계전공(과)",
+      "sourceLabel": "인간·사회·규범 연계전공 / 인간·사회·규범 연계전공(과)",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/bachelor/edu02.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/edu02.html",
+      "affiliationEvidence": "아주대학교 공식 학사안내(복수/부/연계/트랙/마이크로) 연계전공 표에 '인간·사회·규범'이 있음(2026-10-22 확인).",
+      "group": "연계전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "문화산업과 커뮤니케이션전공 / 문화산업과커뮤니케이션전공(과)",
+      "sourceLabel": "문화산업과 커뮤니케이션전공 / 문화산업과커뮤니케이션전공(과)",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/bachelor/edu02.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/edu02.html",
+      "affiliationEvidence": "아주대학교 공식 학사안내(복수/부/연계/트랙/마이크로) 연계전공 표에 '문화산업과 커뮤니케이션'이 있음(2026-10-22 확인).",
+      "group": "연계전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "마이크로전공학과 / 의과학",
+      "sourceLabel": "마이크로전공학과 / 의과학",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/bachelor/edu02.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/edu02.html",
+      "affiliationEvidence": "아주대학교 공식 학사안내 마이크로전공 표에 의과대학(의학과) 주관 '의과학'이 있음(2026-10-22 확인).",
+      "group": "마이크로전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "마이크로전공학과 / 의료인공지능",
+      "sourceLabel": "마이크로전공학과 / 의료인공지능",
+      "sourceUrl": "https://mhaksa.ajou.ac.kr:30443/public.html#!/e020101",
+      "evidence": "현재 공식 공개 강좌 자료의 학과/전공 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.ajou.ac.kr/kr/bachelor/edu02.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/ajou/edu02.html",
+      "affiliationEvidence": "아주대학교 공식 학사안내 마이크로전공 표에 의과대학(의학과) 주관 '의료인공지능'이 있음(2026-10-22 확인).",
+      "group": "마이크로전공",
+      "affiliationStatus": "officialProgramSystem"
     }
   ],
   "courseOwners": []

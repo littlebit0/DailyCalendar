@@ -360,12 +360,12 @@ void main() {
         tester,
         find.byKey(const ValueKey('course-filters-toggle')),
       );
+      // No separate source dropdown: the label is a choice in the same list.
+      expect(find.text('원자료 분류'), findsNothing);
       await _tapVisible(
         tester,
-        find.byKey(const ValueKey('course-source-department-seoul-null')),
+        find.byKey(const ValueKey('course-source-1학년 1분반')),
       );
-      await tester.tap(find.text('1학년 1분반').last);
-      await tester.pumpAndSettle();
       await _tapVisible(
         tester,
         find.byKey(const ValueKey('course-card-raw-unit')),
@@ -437,18 +437,19 @@ void main() {
           tester,
           find.byKey(const ValueKey('course-filters-toggle')),
         );
-        await _tapVisible(
-          tester,
-          find.byKey(const ValueKey('course-college-seoul-null')),
-        );
-        await tester.tap(find.text('테스트 단과대').last);
-        await tester.pumpAndSettle();
-        expect(find.byKey(const ValueKey('college-only')), findsOneWidget);
-        expect(find.byKey(const ValueKey('department-only')), findsNothing);
+        // One parent per college holds both its direct and department choices.
+        expect(find.text('단과대·학과 선택'), findsOneWidget);
+        expect(find.text('테스트 단과대'), findsOneWidget);
         await _tapVisible(
           tester,
           find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
         );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+        );
+        expect(find.byKey(const ValueKey('college-only')), findsOneWidget);
+        expect(find.byKey(const ValueKey('department-only')), findsNothing);
         await _tapVisible(
           tester,
           find.byKey(const ValueKey('course-department-테스트 단과대\u0000컴퓨터과학과')),
@@ -460,6 +461,178 @@ void main() {
       },
     );
   }
+  testWidgets(
+    'a college published only as a raw opening label joins its college group',
+    (tester) async {
+      final store = await _store();
+      // SMU-style source: the college's own course carries only its name as
+      // the opening label, while departments carry verified organizations.
+      final collegeOwn = _course(
+        'college-own',
+        '단과대 개설 과목',
+        departments: const ['테스트 단과대'],
+      )..['offeringOrganizations'] = <Map<String, Object?>>[];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'universityId': 'smu',
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': [collegeOwn, _course('department-only', '학과 주관')],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      expect(find.text('단과대·학과 선택'), findsOneWidget);
+      expect(find.text('원자료 분류'), findsNothing);
+      expect(find.text('테스트 단과대'), findsOneWidget);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+      );
+      expect(find.byKey(const ValueKey('college-own')), findsOneWidget);
+      expect(find.byKey(const ValueKey('department-only')), findsNothing);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-department-테스트 단과대\u0000컴퓨터과학과')),
+      );
+      expect(find.byKey(const ValueKey('college-own')), findsNothing);
+      expect(find.byKey(const ValueKey('department-only')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
+  testWidgets(
+    'college choice joins hosted and raw-label courses of any classification',
+    (tester) async {
+      final store = await _store();
+      final hosted = _course('hosted', '단과대 주관', classification: '교선')
+        ..['offeringOrganizations'] = [
+          {
+            'college': '테스트 단과대',
+            'department': null,
+            'sourceLabel': '테스트 단과대 교학과',
+          },
+        ];
+      // Unmapped raw label equal to the college name; not a major course.
+      final raw = _course(
+        'raw-elective',
+        '단과대 일반선택',
+        departments: const ['테스트 단과대'],
+        classification: '일선',
+      )..['offeringOrganizations'] = <Map<String, Object?>>[];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'universityId': 'smu',
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': [hosted, raw, _course('department-only', '학과 주관')],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+      );
+      expect(
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+        findsOneWidget,
+      );
+      expect(find.byKey(const ValueKey('course-source-테스트 단과대')), findsNothing);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+      );
+      expect(find.byKey(const ValueKey('hosted')), findsOneWidget);
+      expect(find.byKey(const ValueKey('raw-elective')), findsOneWidget);
+      expect(find.byKey(const ValueKey('department-only')), findsNothing);
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
+  testWidgets(
+    'a college whose raw-label courses are all non-major still gets its choice',
+    (tester) async {
+      final store = await _store();
+      final raw = _course(
+        'raw-basic',
+        '학문기초',
+        departments: const ['테스트 단과대'],
+        classification: '학기',
+      )..['offeringOrganizations'] = <Map<String, Object?>>[];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'universityId': 'smu',
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': [raw, _course('department-only', '학과 주관')],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+      );
+      expect(find.byKey(const ValueKey('raw-basic')), findsOneWidget);
+      expect(find.byKey(const ValueKey('department-only')), findsNothing);
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
   testWidgets(
     'standalone departments omit college-only selector and narrow search button stays readable',
     (tester) async {
