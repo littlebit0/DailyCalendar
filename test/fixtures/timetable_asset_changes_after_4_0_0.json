@@ -8,19 +8,19 @@
     "reason": "#92 단국대 퇴계·율곡혁신칼리지 광역 모집단위와 토탈분석기기융합학 연계전공 배정"
   },
   "assets/timetable/organizations/hongik.json": {
-    "sha256": "a0adc70479b8e59d26e189d39edb7e2c4fa205c19ceae121be7552d6f1453013",
+    "sha256": "34745ee3ed6272096ca5a91f981f4d2856fbe4d582fbab99b0f45486631a6330",
     "reason": "#92 홍익대 교학과 3곳을 해당 단과대 개설로, 미술대학 학과 2개, 게임학부 전공 2개, 교양과 2곳 등록"
   },
   "assets/timetable/organizations/inha.json": {
-    "sha256": "2d6b6f2f6da0d944b75112d4b86a1fb1e95c1ce3d250de193414b8e7d23676c3",
+    "sha256": "57b3a7386c837a0f5fbeb54f2e741804b5b7b89b1c8b4e9cb8e27e7d503fc4f7",
     "reason": "#92 인하대 학과 80개에 공식 단과대 소속 배정, 공과대학(FVE·SFC) 통합, 사범대·의예과·융합전공지원실 배정, 공식 시간표 독립 개설 분류 4개 등록"
   },
   "assets/timetable/organizations/pnu.json": {
-    "sha256": "37f33dfdd0fbb780a79a6584f0575bbdc5c38ea1d5dbc6ff3eadb8e8adb76747",
+    "sha256": "7e0d26e1c9b2799f26aa77f3a37846c9233b4666ddc205bb48f76d7bb589083b",
     "reason": "#92 부산대 공식 단과대·융합교육센터·모집요강 기준 원자료 27개 배정"
   },
   "assets/timetable/organizations/sejong.json": {
-    "sha256": "1c05a9cc81ab819737951a291ef96f98c22e8cf98772b88ad996f6f669350262",
+    "sha256": "e62923aff4be02e1b644166ecb054a567b8003f8f8ad67b41cc3edb8698ddf73",
     "reason": "#92 세종대 공식 연계·융합전공 안내 기준 융합전공·AI연계융합전공 분류, 학과 트리 기준 소속 2개와 대양휴머니티칼리지 등록"
   },
   "assets/timetable/organizations/smu.json": {

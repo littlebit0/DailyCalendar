@@ -437,15 +437,18 @@
       "affiliationSourceFile": "work/issue-92-college-filter/inha/공과대학.html"
     },
     {
-      "college": null,
-      "department": "법학과목 / 법학과목",
+      "college": "법학과목",
+      "department": null,
       "sourceLabel": "법학과목 / 법학과목",
       "sourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
       "evidence": "Public importer preserves official ddlDept department-query label exactly, including faculty/major association; general ddlKita categories excluded. Currentcollege overview request closed connection; college remains unknown.",
       "sourceFile": "tool/timetable/import_inha.py",
-      "isOfferingUnit": false,
+      "isOfferingUnit": true,
       "campus": "main",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "affiliationSourceFile": "assets/timetable/inha-main-2026-2.json",
+      "affiliationEvidence": "인하대학교 공식 수강편람 시간표 조회의 학과 라벨 '법학과목 / 법학과목'은 별도 개설 분류 '법학과목'과 같은 단위로, 학과 소속이 아닌 독립 개설 분류로 묶음 (2026-10-22 확인)."
     },
     {
       "college": "문과대학",

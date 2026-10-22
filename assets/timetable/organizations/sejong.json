@@ -331,7 +331,7 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "사회과학대학",
       "department": "법학부 법학전공",
       "sourceLabel": "법학부 법학전공",
       "sourceUrl": "https://www.sejong.ac.kr/kor/intro/notice3.do?mode=download&articleNo=891086&attachNo=236784",
@@ -339,7 +339,10 @@
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.sejong.ac.kr/kor/college/law.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/extra/sejong-college-law.html",
+      "affiliationEvidence": "세종대학교 공식 자료 근거: 종래 자유전공학부 <법과사회> 전공으로 있었던 법학과는 2017년 법학부로 출범 … 2024년 사회과학대학으로 편제된 이후 (2026-10-22 확인). 세종대 공식 학과소개: 법학부(2017 출범)가 2024년 사회과학대학으로 편제, 현재 명칭 '법학과'. '법학전공'이라는 문자열 자체와 2017~2023년 소속 단과대는 이 페이지에서 미확인."
     },
     {
       "college": "인공지능융합대학",

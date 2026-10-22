@@ -224,7 +224,7 @@
       "affiliationStatus": "verifiedUniversityDirect"
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "신소재·화공시스템공학부",
       "sourceLabel": "신소재·화공시스템공학부",
       "sourceUrl": "https://cn.hongik.ac.kr/app/timetable/",
@@ -232,8 +232,11 @@
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false,
-      "collegeOnlyEligible": false
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationSourceUrl": "https://www.hongik.ac.kr/kr/education/intro-university.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/hongik/hongik-intro-university.html",
+      "affiliationEvidence": "홍익대학교 공식 대학 안내 공과대학 학과 목록에 '신소재화공시스템공학부', 공식 시간표 학과 트리(서울캠퍼스)에 '공과대학|전공공통|전자·전기공학부|…|신소재·화공시스템공학부' (2026-10-22 확인)."
     },
     {
       "college": null,
@@ -270,7 +273,7 @@
       "affiliationStatus": "verifiedUniversityDirect"
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "전자·전기공학부",
       "sourceLabel": "전자·전기공학부",
       "sourceUrl": "https://cn.hongik.ac.kr/app/timetable/",
@@ -278,8 +281,11 @@
       "sourceFile": null,
       "isOfferingUnit": false,
       "campus": "*",
-      "collegeKnown": false,
-      "collegeOnlyEligible": false
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationSourceUrl": "https://www.hongik.ac.kr/kr/education/intro-university.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/hongik/hongik-intro-university.html",
+      "affiliationEvidence": "홍익대학교 공식 대학 안내 공과대학 학과 목록에 '전자전기공학부', 공식 시간표 학과 트리(서울캠퍼스)에 '공과대학|전공공통|전자·전기공학부|…|신소재·화공시스템공학부' (2026-10-22 확인)."
     },
     {
       "college": "공과대학",
