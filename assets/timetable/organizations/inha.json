@@ -1458,6 +1458,62 @@
       "affiliationSourceUrl": "https://www.inha.ac.kr/kr/989/subview.do",
       "affiliationEvidence": "공식 홈페이지 프런티어창의대학 안내에 '융합전공'과 '융합전공지원실'(60주년기념관 1317호)이 있음(2026-10-22 확인).",
       "affiliationSourceFile": "work/issue-92-college-filter/inha/프런티어창의대학.html"
+    },
+    {
+      "college": "인하공학교육혁신센터",
+      "department": null,
+      "sourceLabel": "인하공학교육혁신센터",
+      "sourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": true,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "affiliationSourceFile": "assets/timetable/inha-main-2026-2.json",
+      "affiliationEvidence": "인하대학교 공식 수강편람 시간표 조회가 '인하공학교육혁신센터'를 학과와 별도인 개설 분류로 직접 제공함(2026-10-06 자료). 해당 과목의 원래 학과 소속은 그대로 유지하며 다른 단과대 아래로 옮기지 않음."
+    },
+    {
+      "college": "원어강의",
+      "department": null,
+      "sourceLabel": "원어강의",
+      "sourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": true,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "affiliationSourceFile": "assets/timetable/inha-main-2026-2.json",
+      "affiliationEvidence": "인하대학교 공식 수강편람 시간표 조회가 '원어강의'를 학과와 별도인 개설 분류로 직접 제공함(2026-10-06 자료). 해당 과목의 원래 학과 소속은 그대로 유지하며 다른 단과대 아래로 옮기지 않음."
+    },
+    {
+      "college": "E-Learning",
+      "department": null,
+      "sourceLabel": "E-Learning",
+      "sourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": true,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "affiliationSourceFile": "assets/timetable/inha-main-2026-2.json",
+      "affiliationEvidence": "인하대학교 공식 수강편람 시간표 조회가 'E-Learning'를 학과와 별도인 개설 분류로 직접 제공함(2026-10-06 자료). 해당 과목의 원래 학과 소속은 그대로 유지하며 다른 단과대 아래로 옮기지 않음."
+    },
+    {
+      "college": "법학과목",
+      "department": null,
+      "sourceLabel": "법학과목",
+      "sourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": true,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.inha.ac.kr/sugang/SU_51001/Lec_Time_Search.aspx",
+      "affiliationSourceFile": "assets/timetable/inha-main-2026-2.json",
+      "affiliationEvidence": "인하대학교 공식 수강편람 시간표 조회가 '법학과목'를 학과와 별도인 개설 분류로 직접 제공함(2026-10-06 자료). 해당 과목의 원래 학과 소속은 그대로 유지하며 다른 단과대 아래로 옮기지 않음."
     }
   ],
   "courseOwners": []

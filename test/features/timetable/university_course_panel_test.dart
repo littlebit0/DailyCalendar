@@ -360,12 +360,12 @@ void main() {
         tester,
         find.byKey(const ValueKey('course-filters-toggle')),
       );
+      // No separate source dropdown: the label is a choice in the same list.
+      expect(find.text('원자료 분류'), findsNothing);
       await _tapVisible(
         tester,
-        find.byKey(const ValueKey('course-source-department-seoul-null')),
+        find.byKey(const ValueKey('course-source-1학년 1분반')),
       );
-      await tester.tap(find.text('1학년 1분반').last);
-      await tester.pumpAndSettle();
       await _tapVisible(
         tester,
         find.byKey(const ValueKey('course-card-raw-unit')),

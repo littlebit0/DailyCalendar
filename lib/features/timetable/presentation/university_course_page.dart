@@ -332,52 +332,58 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
     return course.classificationLabelsForOrganization(_organization);
   }
 
-  /// One college's own direct-hosting choice followed by its departments.
-  Widget _organizationChoices(_OrganizationGroup group) => Align(
-    alignment: Alignment.centerLeft,
-    child: Wrap(
-      spacing: 8,
-      runSpacing: 6,
-      children: [
-        if (group.directCollege case final String college)
-          ChoiceChip(
-            key: ValueKey('course-college-direct-$college'),
-            label: Text(college),
-            selected:
-                _organization?.isCollegeHosted == true &&
-                _organization?.college == college,
-            onSelected: (selected) => _selectOrganization(
-              selected
-                  ? CourseOrganization(
-                      college: college,
-                      department: null,
-                      sourceLabel: college,
-                    )
-                  : null,
-            ),
-          ),
-        if (group.directSourceLabel case final String label)
-          ChoiceChip(
-            key: ValueKey('course-college-direct-source-$label'),
-            label: Text(label),
-            selected: _sourceDepartment == label,
-            onSelected: (selected) => _changeFilter(() {
-              _organization = null;
-              _sourceDepartment = selected ? label : null;
-              _category = null;
-            }),
-          ),
-        for (final unit in group.departments)
-          ChoiceChip(
-            key: ValueKey('course-department-${unit.key}'),
-            label: Text(unit.department!),
-            selected: _organization?.key == unit.key,
-            onSelected: (selected) =>
-                _selectOrganization(selected ? unit : null),
-          ),
-      ],
-    ),
+  /// Shown without an expandable parent: no published parent, or a college
+  /// that runs only its own courses.
+  bool _isTopLevel(_OrganizationGroup group) =>
+      group.title == null || group.departments.isEmpty;
+
+  /// One college's own choice (named after the college) and its departments.
+  List<Widget> _organizationChips(_OrganizationGroup group) => [
+    if (group.directCollege case final String college)
+      ChoiceChip(
+        key: ValueKey('course-college-direct-$college'),
+        label: Text(college),
+        selected:
+            _organization?.isCollegeHosted == true &&
+            _organization?.college == college,
+        onSelected: (selected) => _selectOrganization(
+          selected
+              ? CourseOrganization(
+                  college: college,
+                  department: null,
+                  sourceLabel: college,
+                )
+              : null,
+        ),
+      ),
+    if (group.directSourceLabel case final String label)
+      ChoiceChip(
+        key: ValueKey('course-college-direct-source-$label'),
+        label: Text(label),
+        selected: _sourceDepartment == label,
+        onSelected: (selected) => _selectSourceLabel(selected ? label : null),
+      ),
+    for (final unit in group.departments)
+      ChoiceChip(
+        key: ValueKey('course-department-${unit.key}'),
+        label: Text(unit.department!),
+        selected: _organization?.key == unit.key,
+        onSelected: (selected) => _selectOrganization(selected ? unit : null),
+      ),
+  ];
+
+  Widget _sourceChip(String label) => ChoiceChip(
+    key: ValueKey('course-source-$label'),
+    label: Text(label),
+    selected: _sourceDepartment == label,
+    onSelected: (selected) => _selectSourceLabel(selected ? label : null),
   );
+
+  void _selectSourceLabel(String? label) => _changeFilter(() {
+    _organization = null;
+    _sourceDepartment = label;
+    _category = null;
+  });
 
   Widget _catalogView(List<UniversityDataset> catalog) {
     final theme = Theme.of(context);
@@ -715,7 +721,8 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                             avatar: const Icon(Icons.close, size: 16),
                             onPressed: () => _selectOrganization(null),
                           ),
-                        if (organizationGroups.isNotEmpty) ...[
+                        if (organizationGroups.isNotEmpty ||
+                            sourceDepartments.isNotEmpty) ...[
                           Text(
                             context.tr(
                               organizationGroups.any((group) => group.hasDirect)
@@ -724,75 +731,75 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                             ),
                             style: theme.textTheme.labelLarge,
                           ),
-                          for (final group in organizationGroups)
-                            if (group.title == null)
-                              _organizationChoices(group)
-                            else
-                              ExpansionTile(
-                                key: ValueKey(
-                                  'course-college-departments-${group.title}',
+                          // Units without a parent stand on their own: departments
+                          // with no published college, colleges that only run
+                          // their own courses, and source opening labels.
+                          if (organizationGroups.any(_isTopLevel) ||
+                              sourceDepartments.isNotEmpty)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Wrap(
+                                  spacing: 8,
+                                  runSpacing: 6,
+                                  children: [
+                                    for (final group
+                                        in organizationGroups.where(
+                                          _isTopLevel,
+                                        ))
+                                      ..._organizationChips(group),
+                                    for (final label in sourceDepartments)
+                                      _sourceChip(label),
+                                  ],
                                 ),
-                                title: Text(group.title!),
-                                subtitle:
-                                    group.departments.any(
-                                      (unit) => unit.affiliationUnconfirmed,
-                                    )
-                                    ? Text(context.tr('소속 미확인 · 이름 기준 분류'))
-                                    : null,
-                                expansionAnimationStyle:
-                                    MediaQuery.disableAnimationsOf(context)
-                                    ? AnimationStyle.noAnimation
-                                    : const AnimationStyle(
-                                        duration: Duration(milliseconds: 180),
-                                        curve: Curves.easeOutCubic,
-                                      ),
-                                initiallyExpanded:
-                                    (_organization != null &&
-                                        _organization?.displayGroup ==
-                                            group.title) ||
-                                    (_sourceDepartment != null &&
-                                        _sourceDepartment ==
-                                            group.directSourceLabel),
-                                tilePadding: EdgeInsets.zero,
-                                childrenPadding: const EdgeInsets.only(
-                                  bottom: 12,
-                                ),
-                                children: [_organizationChoices(group)],
                               ),
-                        ] else if (sourceDepartments.isEmpty)
+                            ),
+                          for (final group in organizationGroups.where(
+                            (group) => !_isTopLevel(group),
+                          ))
+                            ExpansionTile(
+                              key: ValueKey(
+                                'course-college-departments-${group.title}',
+                              ),
+                              title: Text(group.title!),
+                              subtitle:
+                                  group.departments.any(
+                                    (unit) => unit.affiliationUnconfirmed,
+                                  )
+                                  ? Text(context.tr('소속 미확인 · 이름 기준 분류'))
+                                  : null,
+                              expansionAnimationStyle:
+                                  MediaQuery.disableAnimationsOf(context)
+                                  ? AnimationStyle.noAnimation
+                                  : const AnimationStyle(
+                                      duration: Duration(milliseconds: 180),
+                                      curve: Curves.easeOutCubic,
+                                    ),
+                              initiallyExpanded:
+                                  (_organization != null &&
+                                      _organization?.displayGroup ==
+                                          group.title) ||
+                                  (_sourceDepartment != null &&
+                                      _sourceDepartment ==
+                                          group.directSourceLabel),
+                              tilePadding: EdgeInsets.zero,
+                              childrenPadding: const EdgeInsets.only(
+                                bottom: 12,
+                              ),
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Wrap(
+                                    spacing: 8,
+                                    runSpacing: 6,
+                                    children: _organizationChips(group),
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ] else
                           Text(context.tr('공개된 학과 주관 정보가 없습니다.')),
-                        if (sourceDepartments.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          DropdownButtonFormField<String>(
-                            key: ValueKey(
-                              'course-source-department-$_campus-$_sourceDepartment',
-                            ),
-                            initialValue: _sourceDepartment ?? '',
-                            isExpanded: true,
-                            decoration: InputDecoration(
-                              labelText: context.tr('원자료 분류'),
-                              border: const OutlineInputBorder(),
-                            ),
-                            items: [
-                              DropdownMenuItem(
-                                value: '',
-                                child: Text(context.tr('전체')),
-                              ),
-                              for (final label in sourceDepartments)
-                                DropdownMenuItem(
-                                  value: label,
-                                  child: Text(label),
-                                ),
-                            ],
-                            onChanged: (value) => _changeFilter(() {
-                              _organization = null;
-                              _sourceDepartment = value == null || value.isEmpty
-                                  ? null
-                                  : value;
-                              _category = null;
-                            }),
-                          ),
-                        ],
                         CheckboxListTile(
                           key: const ValueKey('course-hide-conflicts'),
                           value: _hideConflicts,

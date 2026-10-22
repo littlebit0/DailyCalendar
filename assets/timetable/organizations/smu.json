@@ -1826,6 +1826,52 @@
       "isOfferingUnit": false,
       "campus": "seoul",
       "collegeKnown": true
+    },
+    {
+      "college": null,
+      "department": "인적자원전문가/인적자원관리개발자과정마이크로전공",
+      "sourceLabel": "인적자원전문가/인적자원관리개발자과정마이크로전공",
+      "sourceUrl": "https://www.smu.ac.kr/board/haksa/microcurri.do?mode=download&articleNo=762088&attachNo=558620",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "seoul",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.smu.ac.kr/board/haksa/microcurri.do?mode=download&articleNo=762088&attachNo=558620",
+      "affiliationSourceFile": "work/issue-92-college-filter/smu/micro-762088.pdf",
+      "affiliationEvidence": "상명대학교 공식 마이크로전공 목록(PDF) 8번에 '인적자원전문가/인적자원관리개발자과정'이 있음(2026-10-22 확인).",
+      "group": "마이크로전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": null,
+      "department": "글로벌데이터경영융합전공",
+      "sourceLabel": "글로벌데이터경영융합전공",
+      "sourceUrl": "https://www.smu.ac.kr/kor/life/multiMajor2.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "cheonan",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://www.smu.ac.kr/kor/life/multiMajor2.do",
+      "affiliationSourceFile": "work/issue-92-college-filter/smu/multiMajor2.html",
+      "affiliationEvidence": "상명대학교 공식 다전공 안내의 '융합전공 종류(천안)' 표에 '글로벌데이터경영'(경영공학과 주관)이 있음(2026-10-22 확인).",
+      "group": "융합전공",
+      "affiliationStatus": "officialProgramSystem"
+    },
+    {
+      "college": "전체학과",
+      "department": null,
+      "sourceLabel": "전체학과",
+      "sourceUrl": "https://www.smu.ac.kr/kor/life/notice.do?articleNo=767028&attachNo=562397&mode=download",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": true,
+      "campus": "cheonan",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.smu.ac.kr/kor/life/notice.do?articleNo=767028&attachNo=562397&mode=download",
+      "affiliationSourceFile": "assets/timetable/smu-cheonan-2026-2.json",
+      "affiliationEvidence": "상명대학교 공식 2026-2 천안 수업시간표가 개설 학과를 '전체학과'로 직접 표시함. 특정 단과대 아래로 옮기지 않음."
     }
   ],
   "courseOwners": []

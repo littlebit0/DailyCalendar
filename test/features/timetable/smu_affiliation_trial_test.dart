@@ -21,7 +21,7 @@ void main() {
           .cast<Map<String, dynamic>>()
           .where((unit) => unit['group'] == '마이크로전공')
           .toList();
-      expect(professorPrograms.length, 39);
+      expect(professorPrograms.length, 40);
       expect(
         professorPrograms.every((unit) => unit['college'] == null),
         isTrue,
@@ -87,7 +87,7 @@ void main() {
               )
               as Map<String, dynamic>;
       final units = (document['mappings'] as List).cast<Map<String, dynamic>>();
-      for (final (group, count) in [('마이크로전공', 39), ('연계전공', 9), ('융합전공', 7)]) {
+      for (final (group, count) in [('마이크로전공', 40), ('연계전공', 9), ('융합전공', 8)]) {
         final programs = units.where((u) => u['group'] == group).toList();
         expect(programs.length, count);
         expect(
