@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/dju_academic_source.dart';
@@ -31,6 +32,11 @@ void main() {
       expect(requested, ['2025', '2026']);
       // 14 January-February rows of 2025 and 60 March-December rows of 2026.
       expect(events, hasLength(74));
+      // Earlier versions identified events by start date and title.
+      expect(
+        events.map((e) => e.sourceId).toSet(),
+        events.map((e) => '${e.start.toIso8601String()}:${e.title}').toSet(),
+      );
       expect(events.map((e) => e.sourceId).toSet(), hasLength(74));
       expect(
         events.every(
@@ -120,6 +126,30 @@ void main() {
       () => DjuAcademicSource.parse('<html></html>', 2026),
       throwsFormatException,
     );
+  });
+  test('DJU keeps rows with the same start and title but other ends', () async {
+    final changed = fixture(
+      2026,
+    ).replaceFirst('>04-28 ~ 05-06<', '>04-28 ~ 05-05<');
+    final source = DjuAcademicSource(
+      client: MockClient((r) async {
+        final year = Uri.splitQueryString(r.body)['year']!;
+        return http.Response.bytes(
+          utf8.encode(year == '2026' ? changed : fixture(2025)),
+          200,
+        );
+      }),
+    );
+    final events = await source.fetch(2026);
+    source.close();
+    expect(events, hasLength(75));
+    final grades = events.where(
+      (e) => e.title == '중간시험 성적입력 기간' && e.start == DateTime(2026, 4, 28),
+    );
+    expect(grades.map((e) => e.sourceId).toSet(), {
+      '2026-04-28T00:00:00.000:2026-05-05T00:00:00.000:중간시험 성적입력 기간',
+      '2026-04-28T00:00:00.000:2026-05-06T00:00:00.000:중간시험 성적입력 기간',
+    });
   });
   test('DJU failed response keeps the previous calendar', () async {
     final source = DjuAcademicSource(

@@ -46,7 +46,36 @@ class DjuAcademicSource implements AcademicSource {
       checkAcademicResponse(response);
       records.addAll(parse(utf8.decode(response.bodyBytes), selected));
     }
-    return academicCalendarEvents(records, year, website.toString());
+    // Same IDs as earlier versions: start date and title. Only rows sharing
+    // both but ending differently also carry their final day.
+    String key(AcademicCalendarRecord r) =>
+        '${r.start.toIso8601String()}:${r.title}';
+    final ends = <String, Set<DateTime>>{};
+    for (final r in records) {
+      (ends[key(r)] ??= {}).add(r.last);
+    }
+    final events = <String, AcademicEvent>{};
+    for (final r in records) {
+      final end = DateTime(r.last.year, r.last.month, r.last.day + 1);
+      if (!r.start.isBefore(DateTime(year + 1)) ||
+          !end.isAfter(DateTime(year))) {
+        continue;
+      }
+      final id = ends[key(r)]!.length > 1
+          ? '${r.start.toIso8601String()}:${r.last.toIso8601String()}:${r.title}'
+          : key(r);
+      events[id] = AcademicEvent(
+        sourceId: id,
+        title: r.title,
+        start: r.start,
+        end: end,
+        url: website.toString(),
+      );
+    }
+    if (events.isEmpty) {
+      throw const FormatException('No published DJU calendar');
+    }
+    return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
   /// Every distinct published row of one academic year. The page repeats all
