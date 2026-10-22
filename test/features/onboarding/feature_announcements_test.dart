@@ -11,14 +11,11 @@ void main() {
   });
   test('version and platform filter announcements', () {
     expect(store.pending('3.3.9', TargetPlatform.iOS), isEmpty);
-    expect(store.pending('3.4.0', TargetPlatform.iOS), hasLength(3));
-    expect(store.pending('3.4.0', TargetPlatform.android), hasLength(2));
+    expect(store.pending('3.4.0', TargetPlatform.iOS), hasLength(2));
+    expect(store.pending('3.4.0', TargetPlatform.android), hasLength(1));
   });
   test('acknowledgements survive recreation and hotfixes', () async {
-    await store.acknowledge([
-      'weather-forecast-v1',
-      'university-academic-calendar-v1',
-    ]);
+    await store.acknowledge(['weather-forecast-v1']);
     final restored = FeatureAnnouncementStore(
       await SharedPreferences.getInstance(),
     );
@@ -32,22 +29,12 @@ void main() {
     await store.acknowledge(featureAnnouncements.map((item) => item.id));
     expect(store.pending('4.0.0', TargetPlatform.iOS), isEmpty);
   });
-  test(
-    'existing users receive only the new feature at the same app version',
-    () async {
-      await store.acknowledge([
-        'lockscreen-calendar-v1',
-        'weather-forecast-v1',
-      ]);
-      for (final platform in TargetPlatform.values) {
-        expect(store.pending('3.4.0', platform).map((item) => item.id), [
-          'university-academic-calendar-v1',
-        ]);
-      }
-      await store.acknowledge(['university-academic-calendar-v1']);
-      expect(store.pending('3.4.0', TargetPlatform.iOS), isEmpty);
-    },
-  );
+  test('removed academic calendar announcement is never shown', () async {
+    await store.acknowledge(['lockscreen-calendar-v1', 'weather-forecast-v1']);
+    for (final platform in TargetPlatform.values) {
+      expect(store.pending('3.4.0', platform), isEmpty);
+    }
+  });
   test(
     'catalog has unique identities and covers every announcement feature',
     () {

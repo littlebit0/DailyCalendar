@@ -14,7 +14,6 @@ void main() {
         schoolKind: 'fourYear',
         campusId: 'academyinfo:0000053',
       );
-      expect(profile.academicSourceId, 'konkuk-glocal');
       expect(profile.timetableCampus, isNull);
       expect(profile.timetableSupported, false);
     }
@@ -23,7 +22,6 @@ void main() {
       universityName: '건국대학교 GLOCAL',
       schoolKind: 'fourYear',
     );
-    expect(legacy.academicSourceId, 'konkuk-glocal');
     expect(legacy.timetableSupported, false);
   });
   test(
@@ -75,14 +73,6 @@ void main() {
             );
             expect(profile.timetableUniversity, group.key);
             expect(
-              profile.academicSourceId,
-              group.key == 'dongguk'
-                  ? 'dongguk-seoul'
-                  : group.key == 'hanyang' && raw == '0000204'
-                  ? 'hanyang-erica'
-                  : group.key,
-            );
-            expect(
               profile.timetableSupported,
               UniversitySupportPolicy.timetableAvailable(
                 profile.timetableUniversity,
@@ -121,7 +111,6 @@ void main() {
               campusId: 'academyinfo:0000117',
             );
             expect(foreign.timetableSupported, false);
-            expect(foreign.academicSourceId, isNull);
           }
         }
       }

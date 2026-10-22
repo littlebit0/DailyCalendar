@@ -80,7 +80,7 @@ void main() {
           }
         }
       }
-      expect(directories.length, selected.isEmpty ? 96 : selected.length);
+      expect(directories.length, selected.isEmpty ? 10 : selected.length);
       if (selected.isNotEmpty) {
         expect(withPublishedUnits, containsAll(selected));
       }

@@ -3,8 +3,6 @@ import 'dart:io';
 
 import 'package:daily/app/daily_theme.dart';
 import 'package:daily/core/academic/academic_profile.dart';
-import 'package:daily/core/academic/academic_calendar_service.dart';
-import 'package:daily/core/academic/expansion_a_academic_sources.dart';
 import 'package:daily/core/academic/university_directory.dart';
 import 'package:daily/core/academic/university_regions.dart';
 import 'package:daily/core/auth/google_account.dart';
@@ -17,7 +15,6 @@ import 'package:daily/core/sync/google_drive_auth_service.dart';
 import 'package:daily/core/sync/google_drive_sync_service.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
-import 'package:daily/features/settings/presentation/academic_calendar_page.dart';
 import 'package:daily/features/settings/presentation/academic_management_page.dart';
 import 'package:daily/features/settings/presentation/academic_profile_page.dart';
 import 'package:daily/features/settings/presentation/lms_settings_page.dart';
@@ -78,7 +75,6 @@ void main() {
     WidgetTester tester, {
     Widget home = const SettingsPage(),
     String? university,
-    bool mismatchedCalendarSource = false,
   }) async {
     final settings = SettingsRepository(
       preferences: await SharedPreferences.getInstance(),
@@ -109,19 +105,6 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          if (mismatchedCalendarSource)
-            academicCalendarServiceProvider.overrideWith((ref) {
-              final service = AcademicCalendarService(
-                sources: [EuljiAcademicSource()],
-                store: settings.academicStore,
-                settings: settings,
-                repository: _Events(),
-                commands: _Commands(),
-                sync: drive,
-              );
-              ref.onDispose(service.dispose);
-              return service;
-            }),
           settingsRepositoryProvider.overrideWithValue(settings),
           googleDriveAuthServiceProvider.overrideWithValue(_Auth()),
           googleDriveSyncServiceProvider.overrideWithValue(drive),
@@ -156,20 +139,6 @@ void main() {
     await tester.pumpAndSettle();
     return settings;
   }
-
-  testWidgets('missing school source never substitutes another university', (
-    tester,
-  ) async {
-    await pump(
-      tester,
-      home: const AcademicCalendarPage(),
-      university: 'smu',
-      mismatchedCalendarSource: true,
-    );
-    expect(find.text('학사일정을 불러오거나 저장하지 못했습니다. 기존 일정은 유지됩니다.'), findsOneWidget);
-    expect(find.text('학사일정 확인'), findsNothing);
-    expect(tester.takeException(), isNull);
-  });
 
   Future<void> open(WidgetTester tester, String key) async {
     final tile = find.byKey(ValueKey(key));
@@ -238,11 +207,14 @@ void main() {
       for (final key in [
         'academic-profile-settings',
         'academic-lms-connection',
-        'academic-calendar-settings',
         'timetable-settings-navigation',
       ]) {
         expect(find.byKey(ValueKey(key)), findsOneWidget);
       }
+      expect(
+        find.byKey(const ValueKey('academic-calendar-settings')),
+        findsNothing,
+      );
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox.shrink());
     },
@@ -263,11 +235,10 @@ void main() {
       await open(tester, 'academic-lms-connection');
       expect(find.byType(LmsSettingsPage), findsOneWidget);
       expect(find.text('Google 계정 로그인이 필요합니다.'), findsOneWidget);
-      expect(find.byKey(const ValueKey('lms-local-login-configure')), findsNothing);
-      await back(tester);
-      await open(tester, 'academic-calendar-settings');
-      expect(find.byType(AcademicCalendarPage), findsOneWidget);
-      expect(find.text('학사 정보 설정'), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('lms-local-login-configure')),
+        findsNothing,
+      );
       await back(tester);
       await open(tester, 'timetable-settings-navigation');
       expect(find.byType(TimetableSettingsPage), findsOneWidget);

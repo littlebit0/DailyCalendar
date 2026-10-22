@@ -722,7 +722,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   Timer? _syncRestoreRetryTimer;
   var _syncRestoreRetryIndex = 0;
   bool _syncRestoreRetryable = true;
-  Future<void>? _academicRefreshOperation;
+  Future<void>? _lmsRefreshOperation;
   ValueNotifier<int>? _settingsRevisionNotifier;
   VoidCallback? _settingsRevisionListener;
   late final CoalescingRunner _siriChangeRunner = CoalescingRunner(() {
@@ -1046,7 +1046,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
       onContinue: () {
         _startupGateOpen = true;
         _scheduleSyncRestoreRetry();
-        if (_startupOperation == null) unawaited(_refreshAcademicCalendars());
+        if (_startupOperation == null) unawaited(_refreshLms());
       },
       child: const UpdateFeaturesGate(child: MonthCalendarPage()),
     );
@@ -1059,7 +1059,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     } finally {
       if (identical(_startupOperation, operation)) _startupOperation = null;
       if (mounted && _startupGateOpen) _scheduleSyncRestoreRetry();
-      if (mounted && _startupGateOpen) unawaited(_refreshAcademicCalendars());
+      if (mounted && _startupGateOpen) unawaited(_refreshLms());
     }
   }
 
@@ -1148,23 +1148,23 @@ class _AppHomeState extends ConsumerState<_AppHome>
       if (identical(_syncStartOperation, operation)) {
         _syncStartOperation = null;
       }
-      if (mounted) unawaited(_refreshAcademicCalendars());
+      if (mounted) unawaited(_refreshLms());
     }
   }
 
-  Future<void> _refreshAcademicCalendars() {
-    final running = _academicRefreshOperation;
+  Future<void> _refreshLms() {
+    final running = _lmsRefreshOperation;
     if (running != null) return running;
-    final operation = _refreshAcademicCalendarsImpl();
-    _academicRefreshOperation = operation;
+    final operation = _refreshLmsImpl();
+    _lmsRefreshOperation = operation;
     return operation.whenComplete(() {
-      if (identical(_academicRefreshOperation, operation)) {
-        _academicRefreshOperation = null;
+      if (identical(_lmsRefreshOperation, operation)) {
+        _lmsRefreshOperation = null;
       }
     });
   }
 
-  Future<void> _refreshAcademicCalendarsImpl() async {
+  Future<void> _refreshLmsImpl() async {
     if (!mounted) return;
     final lms = ref.read(lmsControllerProvider);
     final foreground =
@@ -1177,23 +1177,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
       try {
         await StartupTiming.measure(StartupStage.lms, () => lms.refresh());
       } on Object {
-        // LMS failure must not prevent independent academic refresh.
+        // LMS errors are reported in LMS settings, not as a startup failure.
       }
-    }
-    if (!mounted) return;
-    // Do not instantiate network/import services for users without a subscription.
-    try {
-      final store = ref.read(settingsRepositoryProvider).academicStore;
-      if (!store.load().values.any((subscription) => subscription.enabled)) {
-        return;
-      }
-      await StartupTiming.measure(
-        StartupStage.academic,
-        ref.read(academicCalendarServiceProvider).refreshIfDue,
-      );
-      if (mounted) _refreshSettingsState();
-    } on Object {
-      // Source errors are reported in academic settings, not as a startup failure.
     }
   }
 

@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   test(
-    'CI repairs preserve every release timetable and organization asset',
+    'retained timetable and organization assets equal the 4.0.0 release',
     () {
       final baseline =
           jsonDecode(
@@ -15,6 +15,11 @@ void main() {
                 ).readAsStringSync(),
               )
               as Map<String, dynamic>;
+      // The index files were pruned to the retained universities by design.
+      const pruned = {
+        'assets/timetable/catalog.json',
+        'assets/timetable/term-periods.json',
+      };
       final actual = {
         for (final file
             in Directory('assets/timetable')
@@ -26,7 +31,7 @@ void main() {
               .toString(),
       };
       // Data changes approved after the release are listed with their reason;
-      // every other file must still match the release exactly.
+      // every other retained file must still match the release exactly.
       final approved =
           jsonDecode(
                 File(
@@ -34,11 +39,16 @@ void main() {
                 ).readAsStringSync(),
               )
               as Map<String, dynamic>;
-      expect(actual, {
+      final expected = {
         ...baseline,
         for (final entry in approved.entries)
           entry.key: (entry.value as Map<String, dynamic>)['sha256'],
-      });
+      };
+      expect(actual.keys, everyElement(isIn(expected.keys)));
+      for (final entry in actual.entries) {
+        if (pruned.contains(entry.key)) continue;
+        expect(entry.value, expected[entry.key], reason: entry.key);
+      }
     },
   );
 }

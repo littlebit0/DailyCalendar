@@ -1,5 +1,19 @@
 # Daily Agent Memory — current handoff
 
+## University support reset — 1st tier start, 2026-10-22
+
+- User decision: academic calendar feature removed entirely (all sources, service, store,
+  settings page, onboarding announcement, LMS-adjacent refresh hook, tests and fixtures).
+  Imported academic events are ordinary calendar events and are preserved; the legacy
+  `academic.subscriptions.v1` preference is left untouched and is only cleared by reset.
+- Timetable course data kept only for ajou, cau, dku, ewha, hongik, inha, pnu, sejong,
+  smu, snu (catalog, organizations, term periods). All other university datasets and their
+  tests were deleted; saved user timetables and direct course entry remain.
+- Support tiers (1st 72 / 2nd 60 / 3rd 44 / 4th theological 25 / junior colleges later)
+  are recorded in README `대학 지원 계획`. 1st-tier calendar/timetable work starts from
+  this state; the 2026-10-12 suspension handoff numbers no longer describe the app.
+- Shared Flutter change: Mac/iPhone test apps need the same update; no native code changed.
+
 ## High-effort issues #98 / #173 / #174 / #176 / #177 / #188 / #111 — 2026-10-17
 
 - User asked to process the issues needing high reasoning effort; #113/#201/#205 were already implemented and committed in 06a79148 (third_party secure-storage overrides), so not reworked. NO commit/push, NO issue closure, NO app launch. Dot stays suspended; university expansion STOPPED.

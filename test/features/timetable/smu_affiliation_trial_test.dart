@@ -130,7 +130,9 @@ void main() {
     for (final entry in before.entries.where(
       (e) =>
           e.key.startsWith('assets/timetable/organizations/') &&
-          !e.key.endsWith('/smu.json'),
+          !e.key.endsWith('/smu.json') &&
+          // Organizations of universities without timetable data were removed.
+          fixtureFile(e.key).existsSync(),
     )) {
       expect(
         sha256.convert(fixtureFile(entry.key).readAsBytesSync()).toString(),

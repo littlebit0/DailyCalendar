@@ -81,7 +81,6 @@ void main() {
       );
       expect(profile.timetableUniversity, 'sejong');
       expect(profile.timetableCampus, 'main');
-      expect(profile.academicSourceId, 'sejong');
       final period = (await TimetablePeriodDefaults.load(
         bundle: _Files(),
       )).periodFor(2026, '2', university: 'sejong')!;

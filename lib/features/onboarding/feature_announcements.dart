@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-enum AnnouncementFeature { wallpaper, weather, academicCalendar }
+enum AnnouncementFeature { wallpaper, weather }
 
 class FeatureAnnouncement {
   const FeatureAnnouncement(
@@ -27,11 +27,6 @@ const featureAnnouncements = [
     'weather-forecast-v1',
     '3.4.0',
     AnnouncementFeature.weather,
-  ),
-  FeatureAnnouncement(
-    'university-academic-calendar-v1',
-    '3.4.0',
-    AnnouncementFeature.academicCalendar,
   ),
 ];
 

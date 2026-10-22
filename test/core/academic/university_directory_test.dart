@@ -22,11 +22,6 @@ void main() {
     directory = await UniversityDirectory.load(bundle: _DirectoryBundle());
   });
 
-  test('KMOU advertises the existing official academic calendar integration', () {
-    final school = directory.byId('academyinfo:0000033')!;
-    expect(school.supportsAcademicCalendar, isTrue);
-  });
-
   test('sourced national corpus is complete and uniquely identified', () {
     expect(directory.dataYear, 2026);
     expect(directory.checkedAt, '2026-09-26');

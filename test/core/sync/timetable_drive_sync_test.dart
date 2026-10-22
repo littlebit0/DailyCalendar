@@ -94,7 +94,10 @@ void main() {
         await source.service.syncPendingChangesNow();
         await target.service.restoreNow();
         expect(target.settings.load().academicProfile, other);
-        expect(target.settings.load().academicProfile!.supported, isFalse);
+        expect(
+          target.settings.load().academicProfile!.timetableSupported,
+          isFalse,
+        );
         expect(await target.events.allEventsForSync(), isEmpty);
       },
     );

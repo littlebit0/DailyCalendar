@@ -324,8 +324,8 @@ const Map<String, Map<String, String>> _translations = {
         "You can save this university. Academic calendar and timetable integration is not yet available.",
     "학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.":
         "Could not save your academic profile. Check your account connection and try again.",
-    "학사 정보를 설정하면 지원되는 대학의 학사일정과 시간표를 사용할 수 있습니다.":
-        "Set your academic profile to use supported academic calendars and timetables.",
+    "학사 정보를 설정하면 지원되는 대학의 시간표를 사용할 수 있습니다.":
+        "Set your academic profile to use timetables for supported universities.",
     "이 대학의 학사일정·시간표 연동은 준비 중입니다.":
         "Academic calendar and timetable integration for this university is not yet available.",
     '시간표 선택': 'Choose timetable',
@@ -413,7 +413,8 @@ const Map<String, Map<String, String>> _translations = {
     '수업 수정': 'Edit class',
     '수업 삭제': 'Delete class',
     '요일 변경': 'Change weekday',
-    '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?': 'Changing the weekday removes {count} cancellation or lecture-mode change(s) of this class, because they cannot apply to the new weekday. Continue?',
+    '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
+        'Changing the weekday removes {count} cancellation or lecture-mode change(s) of this class, because they cannot apply to the new weekday. Continue?',
     '삭제하고 저장': 'Delete and save',
     '수업 시간': 'Class time',
     '수업 시간 추가': 'Add meeting',
@@ -1370,8 +1371,7 @@ const Map<String, Map<String, String>> _translations = {
         "学籍情報は保存できます。この大学の学事日程・時間割連携は準備中です。",
     "학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.":
         "学籍情報を保存できませんでした。アカウントの連携を確認して再試行してください。",
-    "학사 정보를 설정하면 지원되는 대학의 학사일정과 시간표를 사용할 수 있습니다.":
-        "学籍情報を設定すると対応大学の学事日程と時間割を利用できます。",
+    "학사 정보를 설정하면 지원되는 대학의 시간표를 사용할 수 있습니다.": "学籍情報を設定すると対応大学の時間割を利用できます。",
     "이 대학의 학사일정·시간표 연동은 준비 중입니다.": "この大学の学事日程・時間割連携は準備中です。",
     '시간표 선택': '時間割を選択',
     '저장된 시간표가 없습니다.': '保存済みの時間割はありません。',
@@ -1450,7 +1450,8 @@ const Map<String, Map<String, String>> _translations = {
     '수업 수정': '授業を編集',
     '수업 삭제': '授業を削除',
     '요일 변경': '曜日の変更',
-    '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?': '曜日を変更すると、この授業の休講・授業形式の変更{count}件を新しい曜日に適用できないため削除されます。続行しますか？',
+    '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
+        '曜日を変更すると、この授業の休講・授業形式の変更{count}件を新しい曜日に適用できないため削除されます。続行しますか？',
     '삭제하고 저장': '削除して保存',
     '수업 시간': '授業時間',
     '수업 시간 추가': '授業時間を追加',
@@ -2183,8 +2184,7 @@ const Map<String, Map<String, String>> _translations = {
     "제한 시간 안에 학교 로그인 확인이 끝나지 않았습니다. 잠시 후 다시 시도해 주세요.": "學校登入驗證逾時。請稍後重試。",
     "인증 절차가 필요하여 거부되었습니다. 수동 로그인으로 추가 인증 또는 보안문자 입력을 완료해 주세요.":
         "因需要驗證程序而被拒絕。請以手動登入完成額外驗證或驗證碼。",
-    "아이디 또는 비밀번호가 틀렸습니다. 저장된 로그인 정보를 확인해 주세요.":
-        "帳號或密碼錯誤。請檢查已儲存的登入資訊。",
+    "아이디 또는 비밀번호가 틀렸습니다. 저장된 로그인 정보를 확인해 주세요.": "帳號或密碼錯誤。請檢查已儲存的登入資訊。",
     "학교에서 계정 잠금 또는 로그인 시도 제한을 안내했습니다. 학교 안내에 따라 해제한 뒤 다시 시도해 주세요.":
         "學校提示帳號鎖定或登入次數限制。請依學校說明解除後重試。",
     "학교에서 비밀번호 만료 또는 변경을 요구합니다. 학교 사이트에서 변경한 뒤 저장된 정보도 수정해 주세요.":
@@ -2325,7 +2325,7 @@ const Map<String, Map<String, String>> _translations = {
     "학사 정보는 저장할 수 있습니다. 이 대학의 학사일정·시간표 연동은 준비 중입니다.":
         "可以儲存學籍資訊。此校的校務行事曆與課表整合尚在準備中。",
     "학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.": "無法儲存學籍資訊。請確認帳戶連結後重試。",
-    "학사 정보를 설정하면 지원되는 대학의 학사일정과 시간표를 사용할 수 있습니다.": "設定學籍資訊，即可使用支援學校的校務行事曆與課表。",
+    "학사 정보를 설정하면 지원되는 대학의 시간표를 사용할 수 있습니다.": "設定學籍資訊，即可使用支援學校的課表。",
     "이 대학의 학사일정·시간표 연동은 준비 중입니다.": "此校的校務行事曆與課表整合尚在準備中。",
     '시간표 선택': '選擇課表',
     '저장된 시간표가 없습니다.': '尚無已儲存的課表。',
@@ -2403,7 +2403,8 @@ const Map<String, Map<String, String>> _translations = {
     '수업 수정': '編輯課程',
     '수업 삭제': '刪除課程',
     '요일 변경': '變更星期',
-    '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?': '變更星期後，此課程的停課／授課方式變更 {count} 筆無法套用到新的星期，將被刪除。要繼續嗎？',
+    '요일을 바꾸면 이 수업의 휴강·수업 방식 변경 {count}건을 새 요일에 적용할 수 없어 삭제됩니다. 계속할까요?':
+        '變更星期後，此課程的停課／授課方式變更 {count} 筆無法套用到新的星期，將被刪除。要繼續嗎？',
     '삭제하고 저장': '刪除並儲存',
     '수업 시간': '上課時間',
     '수업 시간 추가': '新增上課時段',
