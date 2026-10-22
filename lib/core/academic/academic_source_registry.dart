@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'cau_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +26,15 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  // The official undergraduate calendar is shared by Seoul and Davinci.
+  AcademicSourceRegistration(
+    id: 'cau',
+    institutionId: 'academyinfo:0000175',
+    campusIds: {'academyinfo:0000175', 'academyinfo:0000174'},
+    create: CauAcademicSource.new,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
