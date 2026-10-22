@@ -342,7 +342,7 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
         if (group.directCollege case final String college)
           ChoiceChip(
             key: ValueKey('course-college-direct-$college'),
-            label: Text(context.tr('단과대 직접 주관 과목')),
+            label: Text(college),
             selected:
                 _organization?.isCollegeHosted == true &&
                 _organization?.college == college,
@@ -355,6 +355,17 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                     )
                   : null,
             ),
+          ),
+        if (group.directSourceLabel case final String label)
+          ChoiceChip(
+            key: ValueKey('course-college-direct-source-$label'),
+            label: Text(label),
+            selected: _sourceDepartment == label,
+            onSelected: (selected) => _changeFilter(() {
+              _organization = null;
+              _sourceDepartment = selected ? label : null;
+              _category = null;
+            }),
           ),
         for (final unit in group.departments)
           ChoiceChip(
@@ -385,7 +396,6 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
     final prepared = _prepared!;
     final datasets = prepared.datasets;
     final all = prepared.all;
-    final colleges = prepared.colleges;
     final organizationGroups = prepared.organizationGroups;
     final sourceDepartments = prepared.sourceDepartments;
     final saved = widget.store.activeClasses;
@@ -708,7 +718,9 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                         if (organizationGroups.isNotEmpty) ...[
                           Text(
                             context.tr(
-                              colleges.isEmpty ? '학과·전공 선택' : '단과대·학과 선택',
+                              organizationGroups.any((group) => group.hasDirect)
+                                  ? '단과대·학과 선택'
+                                  : '학과·전공 선택',
                             ),
                             style: theme.textTheme.labelLarge,
                           ),
@@ -735,8 +747,12 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                                         curve: Curves.easeOutCubic,
                                       ),
                                 initiallyExpanded:
-                                    _organization != null &&
-                                    _organization?.displayGroup == group.title,
+                                    (_organization != null &&
+                                        _organization?.displayGroup ==
+                                            group.title) ||
+                                    (_sourceDepartment != null &&
+                                        _sourceDepartment ==
+                                            group.directSourceLabel),
                                 tilePadding: EdgeInsets.zero,
                                 childrenPadding: const EdgeInsets.only(
                                   bottom: 12,
@@ -1433,20 +1449,48 @@ class _PreparedCourses {
             .toSet()
             .toList()
           ..sort();
+    // A raw opening label naming a college shown above is that college's own
+    // offering. List it inside the college instead of as a separate source
+    // filter; other unrepresented labels stay literal.
+    final groupTitles = organizationGroups
+        .map((group) => group.title)
+        .whereType<String>()
+        .toSet();
+    final collegeLabels = sourceDepartments.where(groupTitles.contains).toSet();
+    sourceDepartments = sourceDepartments
+        .where((label) => !collegeLabels.contains(label))
+        .toList();
+    organizationGroups = [
+      for (final group in organizationGroups)
+        group.directCollege == null && collegeLabels.contains(group.title)
+            ? _OrganizationGroup(
+                group.title,
+                null,
+                group.departments,
+                directSourceLabel: group.title,
+              )
+            : group,
+    ];
     search = {
       for (final course in all) course: UniversityCourseSearchText(course),
     };
   }
   late final List<UniversityDataset> datasets;
   late final List<UniversityCourse> all;
-  late final List<String> colleges, sourceDepartments;
-  late final List<_OrganizationGroup> organizationGroups;
+  late final List<String> colleges;
+  late List<String> sourceDepartments;
+  late List<_OrganizationGroup> organizationGroups;
   late final Map<UniversityCourse, UniversityCourseSearchText> search;
 }
 
 /// A college or official program family shown as one expandable parent.
 class _OrganizationGroup {
-  const _OrganizationGroup(this.title, this.directCollege, this.departments);
+  const _OrganizationGroup(
+    this.title,
+    this.directCollege,
+    this.departments, {
+    this.directSourceLabel,
+  });
 
   /// Null for departments without any published parent.
   final String? title;
@@ -1454,4 +1498,9 @@ class _OrganizationGroup {
   /// Set when the college itself directly hosts courses.
   final String? directCollege;
   final List<CourseOrganization> departments;
+
+  /// Set when the college's own courses are published only under its name as
+  /// a raw opening label rather than as a college-hosted organization.
+  final String? directSourceLabel;
+  bool get hasDirect => directCollege != null || directSourceLabel != null;
 }

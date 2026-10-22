@@ -462,6 +462,65 @@ void main() {
     );
   }
   testWidgets(
+    'a college published only as a raw opening label joins its college group',
+    (tester) async {
+      final store = await _store();
+      // SMU-style source: the college's own course carries only its name as
+      // the opening label, while departments carry verified organizations.
+      final collegeOwn = _course(
+        'college-own',
+        '단과대 개설 과목',
+        departments: const ['테스트 단과대'],
+      )..['offeringOrganizations'] = <Map<String, Object?>>[];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'universityId': 'smu',
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': [collegeOwn, _course('department-only', '학과 주관')],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      expect(find.text('단과대·학과 선택'), findsOneWidget);
+      expect(find.text('원자료 분류'), findsNothing);
+      expect(find.text('테스트 단과대'), findsOneWidget);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-direct-source-테스트 단과대')),
+      );
+      expect(find.byKey(const ValueKey('college-own')), findsOneWidget);
+      expect(find.byKey(const ValueKey('department-only')), findsNothing);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-department-테스트 단과대\u0000컴퓨터과학과')),
+      );
+      expect(find.byKey(const ValueKey('college-own')), findsNothing);
+      expect(find.byKey(const ValueKey('department-only')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
+  testWidgets(
     'standalone departments omit college-only selector and narrow search button stays readable',
     (tester) async {
       tester.view.physicalSize = const Size(360, 800);

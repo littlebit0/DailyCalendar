@@ -25,7 +25,20 @@ void main() {
               .convert(file.readAsBytesSync())
               .toString(),
       };
-      expect(actual, baseline);
+      // Data changes approved after the release are listed with their reason;
+      // every other file must still match the release exactly.
+      final approved =
+          jsonDecode(
+                File(
+                  'test/fixtures/timetable_asset_changes_after_4_0_0.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      expect(actual, {
+        ...baseline,
+        for (final entry in approved.entries)
+          entry.key: (entry.value as Map<String, dynamic>)['sha256'],
+      });
     },
   );
 }

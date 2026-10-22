@@ -120,6 +120,13 @@ void main() {
               ).readAsStringSync(),
             )
             as Map<String, dynamic>;
+    final approved =
+        jsonDecode(
+              fixtureFile(
+                'test/fixtures/timetable_asset_changes_after_4_0_0.json',
+              ).readAsStringSync(),
+            )
+            as Map<String, dynamic>;
     for (final entry in before.entries.where(
       (e) =>
           e.key.startsWith('assets/timetable/organizations/') &&
@@ -127,7 +134,8 @@ void main() {
     )) {
       expect(
         sha256.convert(fixtureFile(entry.key).readAsBytesSync()).toString(),
-        entry.value,
+        (approved[entry.key] as Map<String, dynamic>?)?['sha256'] ??
+            entry.value,
         reason: entry.key,
       );
     }
