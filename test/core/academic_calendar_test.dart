@@ -1026,6 +1026,25 @@ void main() {
       expect(repository.events[september]!.startAt, DateTime(2026, 9, 2));
       await service.refresh('smu');
       expect(repository.events, hasLength(3));
+      final june = repository.events.values
+          .singleWhere((e) => e.startAt == DateTime(2026, 6, 2))
+          .id;
+      // The inserted occurrence is later corrected: same row, no duplicate.
+      source.events = [
+        at('t:0', 3),
+        AcademicEvent(
+          sourceId: 't:1',
+          title: '보강',
+          start: DateTime(2026, 6, 5),
+          end: DateTime(2026, 6, 6),
+          url: 'https://example.invalid',
+        ),
+        at('t:2', 9),
+      ];
+      await service.refresh('smu');
+      expect(repository.events, hasLength(3));
+      expect(repository.events[june]!.startAt, DateTime(2026, 6, 5));
+      expect(repository.events[september]!.startAt, DateTime(2026, 9, 2));
     },
   );
   test('a date correction still updates the same row', () async {

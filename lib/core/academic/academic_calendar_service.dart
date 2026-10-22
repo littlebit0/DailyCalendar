@@ -462,8 +462,9 @@ class AcademicCalendarService extends ChangeNotifier {
   /// Maps feed events to local event IDs. Occurrence-numbered source IDs
   /// shift when a same-title event is inserted earlier in the year, so an
   /// event identical to an imported baseline keeps that baseline's row first.
-  /// The rest use their own ID (so a date correction still updates its row),
-  /// or a start-dated ID when that row already represents another event.
+  /// The rest reuse the row last imported for the same source record (so a
+  /// date correction updates it), else their own ID, or a start-dated ID when
+  /// that row already represents another event.
   static Map<String, AcademicEvent> _localIds(
     String universityId,
     List<AcademicEvent> events,
@@ -487,6 +488,17 @@ class AcademicCalendarService extends ChangeNotifier {
     }
     for (final event in unmatched) {
       var id = event.dailyId(universityId);
+      // A date correction keeps the row last imported for this source record,
+      // including one that was given a start-dated ID after a shift.
+      final linked = baselines.entries
+          .where(
+            (entry) =>
+                !result.containsKey(entry.key) &&
+                entry.value.sourceId == event.sourceId,
+          )
+          .toList();
+      final own = linked.where((entry) => entry.key == id).firstOrNull;
+      if ((own ?? linked.firstOrNull) case final entry?) id = entry.key;
       for (var attempt = 0; result.containsKey(id); attempt++) {
         id = AcademicEvent(
           sourceId:
