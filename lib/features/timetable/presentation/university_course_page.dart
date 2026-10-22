@@ -311,17 +311,32 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
     _category = null;
   });
 
-  // Department lookup contains major courses for every supported school.
+  // Department lookup contains major courses for every supported school. A
+  // college's own choice holds every course it opens, either as a mapped
+  // college-hosted organization or under an unmapped raw label of its name.
   bool _matchesUnit(UniversityCourse course) =>
       (_organization == null ||
-          (course.matchesOrganization(_organization!) &&
-              (_organization!.isCollegeHosted ||
-                  course.isMajorForOrganization(_organization!)))) &&
+          (_organization!.isCollegeHosted
+              ? course.matchesOrganization(_organization!) ||
+                    _opensUnderCollegeLabel(course, _organization!.college!)
+              : course.matchesOrganization(_organization!) &&
+                    course.isMajorForOrganization(_organization!))) &&
       (_sourceDepartment == null ||
           (course.departments.contains(_sourceDepartment) &&
               course.isMajorForSourceDepartment(_sourceDepartment!)));
 
+  static bool _opensUnderCollegeLabel(
+    UniversityCourse course,
+    String college,
+  ) =>
+      course.departments.contains(college) &&
+      !course.offeringOrganizations.any((unit) => unit.sourceLabel == college);
+
   List<String> _classificationLabels(UniversityCourse course) {
+    if (_organization case final CourseOrganization unit
+        when unit.isCollegeHosted && !course.matchesOrganization(unit)) {
+      return course.classificationLabelsFor(unit.college);
+    }
     if (_sourceDepartment case final String department) {
       return course.majorClassificationLabelsForSourceDepartment(department);
     }
@@ -339,7 +354,8 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
 
   /// One college's own choice (named after the college) and its departments.
   List<Widget> _organizationChips(_OrganizationGroup group) => [
-    if (group.directCollege case final String college)
+    if (group.directCollege ?? group.directSourceLabel
+        case final String college)
       ChoiceChip(
         key: ValueKey('course-college-direct-$college'),
         label: Text(college),
@@ -355,13 +371,6 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                 )
               : null,
         ),
-      ),
-    if (group.directSourceLabel case final String label)
-      ChoiceChip(
-        key: ValueKey('course-college-direct-source-$label'),
-        label: Text(label),
-        selected: _sourceDepartment == label,
-        onSelected: (selected) => _selectSourceLabel(selected ? label : null),
       ),
     for (final unit in group.departments)
       ChoiceChip(
@@ -777,12 +786,8 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                                       curve: Curves.easeOutCubic,
                                     ),
                               initiallyExpanded:
-                                  (_organization != null &&
-                                      _organization?.displayGroup ==
-                                          group.title) ||
-                                  (_sourceDepartment != null &&
-                                      _sourceDepartment ==
-                                          group.directSourceLabel),
+                                  _organization != null &&
+                                  _organization?.displayGroup == group.title,
                               tilePadding: EdgeInsets.zero,
                               childrenPadding: const EdgeInsets.only(
                                 bottom: 12,
@@ -1457,22 +1462,31 @@ class _PreparedCourses {
             .toList()
           ..sort();
     // A raw opening label naming a college shown above is that college's own
-    // offering. List it inside the college instead of as a separate source
-    // filter; other unrepresented labels stay literal.
+    // offering, whatever its classification. It joins the college's own choice
+    // instead of a separate source filter; other unrepresented labels stay
+    // literal.
     final groupTitles = organizationGroups
         .map((group) => group.title)
         .whereType<String>()
         .toSet();
-    final collegeLabels = sourceDepartments.where(groupTitles.contains).toSet();
+    final collegeLabels = {
+      for (final course in all)
+        for (final label in course.departments)
+          if (groupTitles.contains(label) &&
+              !course.offeringOrganizations.any(
+                (unit) => unit.sourceLabel == label,
+              ))
+            label,
+    };
     sourceDepartments = sourceDepartments
         .where((label) => !collegeLabels.contains(label))
         .toList();
     organizationGroups = [
       for (final group in organizationGroups)
-        group.directCollege == null && collegeLabels.contains(group.title)
+        collegeLabels.contains(group.title)
             ? _OrganizationGroup(
                 group.title,
-                null,
+                group.directCollege,
                 group.departments,
                 directSourceLabel: group.title,
               )

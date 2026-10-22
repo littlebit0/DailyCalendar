@@ -506,7 +506,7 @@ void main() {
       );
       await _tapVisible(
         tester,
-        find.byKey(const ValueKey('course-college-direct-source-테스트 단과대')),
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
       );
       expect(find.byKey(const ValueKey('college-own')), findsOneWidget);
       expect(find.byKey(const ValueKey('department-only')), findsNothing);
@@ -516,6 +516,119 @@ void main() {
       );
       expect(find.byKey(const ValueKey('college-own')), findsNothing);
       expect(find.byKey(const ValueKey('department-only')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
+  testWidgets(
+    'college choice joins hosted and raw-label courses of any classification',
+    (tester) async {
+      final store = await _store();
+      final hosted = _course('hosted', '단과대 주관', classification: '교선')
+        ..['offeringOrganizations'] = [
+          {
+            'college': '테스트 단과대',
+            'department': null,
+            'sourceLabel': '테스트 단과대 교학과',
+          },
+        ];
+      // Unmapped raw label equal to the college name; not a major course.
+      final raw = _course(
+        'raw-elective',
+        '단과대 일반선택',
+        departments: const ['테스트 단과대'],
+        classification: '일선',
+      )..['offeringOrganizations'] = <Map<String, Object?>>[];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'universityId': 'smu',
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': [hosted, raw, _course('department-only', '학과 주관')],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+      );
+      expect(
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+        findsOneWidget,
+      );
+      expect(find.byKey(const ValueKey('course-source-테스트 단과대')), findsNothing);
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+      );
+      expect(find.byKey(const ValueKey('hosted')), findsOneWidget);
+      expect(find.byKey(const ValueKey('raw-elective')), findsOneWidget);
+      expect(find.byKey(const ValueKey('department-only')), findsNothing);
+      expect(tester.takeException(), isNull);
+      store.dispose();
+    },
+  );
+  testWidgets(
+    'a college whose raw-label courses are all non-major still gets its choice',
+    (tester) async {
+      final store = await _store();
+      final raw = _course(
+        'raw-basic',
+        '학문기초',
+        departments: const ['테스트 단과대'],
+        classification: '학기',
+      )..['offeringOrganizations'] = <Map<String, Object?>>[];
+      final dataset = UniversityDataset.fromJson({
+        'schemaVersion': 1,
+        'universityId': 'smu',
+        'campus': 'seoul',
+        'academicYear': 2026,
+        'semester': '2',
+        'publishedDate': '2026-10-12',
+        'sourceUrl': 'https://school.example.edu/courses',
+        'courses': [raw, _course('department-only', '학과 주관')],
+      });
+      await tester.pumpWidget(
+        _app(
+          UniversityCoursePanel(
+            store: store,
+            initialCampus: 'seoul',
+            loadCatalog: () async => [dataset],
+            onAdd: (_, _) async => true,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-filters-toggle')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
+      );
+      await _tapVisible(
+        tester,
+        find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+      );
+      expect(find.byKey(const ValueKey('raw-basic')), findsOneWidget);
+      expect(find.byKey(const ValueKey('department-only')), findsNothing);
       expect(tester.takeException(), isNull);
       store.dispose();
     },
