@@ -81,15 +81,23 @@ class AcademicCalendarService extends ChangeNotifier {
   ) async {
     // The colour applies to every imported row of this subscription.
     _requireManageable(universityId);
+    bool current() => _isCurrent(generation);
     final change = await _settings.updateCategory(
       categoryId(universityId),
       (current) => current.copyWith(colorValue: colorValue),
+      isCurrent: current,
     );
     if (change == null) throw StateError('Academic category is missing');
     final (previous: category, updated: updated) = change;
-    _check(generation);
     try {
-      await _commands.updateCategoryUsage(previous: category, updated: updated);
+      // An account switch after the setting saved cancels propagation, and
+      // the setting is rolled back with it.
+      _check(generation);
+      await _commands.updateCategoryUsage(
+        previous: category,
+        updated: updated,
+        isCurrent: current,
+      );
     } on Object {
       // Event rows stay on the old colour when propagation fails; restore only
       // this colour in the latest list so concurrent category edits survive.
@@ -267,19 +275,14 @@ class AcademicCalendarService extends ChangeNotifier {
     final source = sources.firstWhere((source) => source.id == universityId);
     final subscription = _subscriptions[universityId]!;
     _requireManageable(universityId);
+    final before = subscription.toJson();
     // An explicit refresh adopts an ownerless or signed-out subscription.
     subscription.owner = _ownerKey(_operationAccount);
-    await _refresh(source, subscription, generation);
-  });
-
-  Future<void> _refresh(
-    AcademicSource source,
-    AcademicSubscription subscription,
-    int generation,
-  ) async {
     subscription.lastAttempt = _now();
     if (subscription.followCurrentYear) subscription.year = _now().year;
-    await _store.save(_subscriptions, generation);
+    // Unsaved owner, attempt time or year must not throttle or redirect a
+    // later refresh in this session.
+    await _saveOrRestore(generation, universityId, before);
     try {
       final events = await source.fetch(subscription.year);
       _check(generation);
@@ -290,7 +293,7 @@ class AcademicCalendarService extends ChangeNotifier {
       await _store.save(_subscriptions, generation);
       rethrow;
     }
-  }
+  });
 
   /// Lifecycle-triggered, no timer/polling; failed attempts are throttled too.
   Future<void> refreshIfDue() async {
@@ -353,11 +356,10 @@ class AcademicCalendarService extends ChangeNotifier {
     final deviceId = await _settings.deviceId();
     _check(generation);
     final now = _now();
-    final external = {
+    final external = _localIds(source.id, [
       for (final event in events)
-        if (!subscription.excluded.contains(event.sourceId))
-          event.dailyId(source.id): event,
-    };
+        if (!subscription.excluded.contains(event.sourceId)) event,
+    ], subscription.baselines);
     final candidates = [
       for (final entry in external.entries)
         CalendarEvent(
@@ -457,6 +459,49 @@ class AcademicCalendarService extends ChangeNotifier {
     );
   }
 
+  /// Maps feed events to local event IDs. Occurrence-numbered source IDs
+  /// shift when a same-title event is inserted earlier in the year, so an
+  /// event identical to an imported baseline keeps that baseline's row first.
+  /// The rest use their own ID (so a date correction still updates its row),
+  /// or a start-dated ID when that row already represents another event.
+  static Map<String, AcademicEvent> _localIds(
+    String universityId,
+    List<AcademicEvent> events,
+    Map<String, AcademicEvent> baselines,
+  ) {
+    final result = <String, AcademicEvent>{};
+    final unmatched = <AcademicEvent>[];
+    for (final event in events) {
+      final baseline = baselines.entries
+          .where(
+            (entry) =>
+                !result.containsKey(entry.key) &&
+                _sameSource(entry.value, event),
+          )
+          .firstOrNull;
+      if (baseline == null) {
+        unmatched.add(event);
+      } else {
+        result[baseline.key] = event;
+      }
+    }
+    for (final event in unmatched) {
+      var id = event.dailyId(universityId);
+      for (var attempt = 0; result.containsKey(id); attempt++) {
+        id = AcademicEvent(
+          sourceId:
+              '${event.sourceId}@${event.start.toIso8601String()}#$attempt',
+          title: event.title,
+          start: event.start,
+          end: event.end,
+          url: event.url,
+        ).dailyId(universityId);
+      }
+      result[id] = event;
+    }
+    return result;
+  }
+
   static bool _sameSource(AcademicEvent a, AcademicEvent b) =>
       a.title == b.title && a.start == b.start && a.end == b.end;
 
@@ -474,6 +519,9 @@ class AcademicCalendarService extends ChangeNotifier {
         final subscription = _subscriptions[universityId]!;
         final before = subscription.toJson();
         subscription.enabled = enabled;
+        // Reconnecting an ownerless or signed-out subscription adopts it, so
+        // automatic refresh resumes for this account.
+        if (enabled) subscription.owner = _ownerKey(_operationAccount);
         // Memory follows storage so refresh never acts on an unsaved change.
         await _saveOrRestore(generation, universityId, before);
       });

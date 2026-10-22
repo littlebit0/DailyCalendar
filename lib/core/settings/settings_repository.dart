@@ -551,10 +551,15 @@ class SettingsRepository {
   /// replaced and new values, or null when [id] is missing.
   Future<({EventCategory previous, EventCategory updated})?> updateCategory(
     String id,
-    EventCategory Function(EventCategory current) update,
-  ) async {
+    EventCategory Function(EventCategory current) update, {
+    bool Function()? isCurrent,
+  }) async {
     ({EventCategory previous, EventCategory updated})? change;
     await _enqueueSettingsMutation(() async {
+      // Checked in the queue, after any account switch queued before it.
+      if (isCurrent != null && !isCurrent()) {
+        throw StateError('Category update cancelled');
+      }
       final latest = load();
       final current = latest.categories.where((c) => c.id == id).firstOrNull;
       if (current == null) return;
@@ -572,6 +577,20 @@ class SettingsRepository {
     });
     return change;
   }
+
+  /// Shows or hides one category in the latest hidden list inside the
+  /// settings queue, keeping concurrent changes to other categories.
+  Future<void> setCategoryHidden(String id, bool hidden) =>
+      _enqueueSettingsMutation(() async {
+        final latest = load();
+        final ids = latest.hiddenCategoryIds.toSet();
+        if (!(hidden ? ids.add(id) : ids.remove(id))) return;
+        await _saveSettings(
+          latest.copyWith(hiddenCategoryIds: ids.toList()),
+          markSyncPending: true,
+          changedFrom: latest,
+        );
+      });
 
   /// A stale editor must not write academic details into a different account.
   Future<void> saveAcademicProfile(

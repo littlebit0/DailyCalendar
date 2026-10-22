@@ -599,7 +599,7 @@ void main() {
       expect(service.subscriptions['smu']!.failed, isTrue);
       expect(service.subscriptions['smu']!.lastSuccess, last);
       source.answer = null;
-      source.events = [remote(id: 'new')];
+      source.events = [remote(id: 'new', title: '신규 일정')];
       await service.refresh('smu');
       expect(repository.events, hasLength(2));
     },
@@ -996,6 +996,124 @@ void main() {
     expect(notifications.cancelled, contains(id));
     expect(service.subscriptions['smu']!.pendingRemovals, isEmpty);
     expect(settings.academicStore.load()['smu']!.pendingRemovals, isEmpty);
+  });
+  test(
+    'a same-title event inserted earlier neither drops nor duplicates',
+    () async {
+      AcademicEvent at(String id, int month) => AcademicEvent(
+        sourceId: id,
+        title: '보강',
+        start: DateTime(2026, month, 2),
+        end: DateTime(2026, month, 3),
+        url: 'https://example.invalid',
+      );
+      // Occurrence-numbered IDs: t:0 March, t:1 September.
+      source.events = [at('t:0', 3), at('t:1', 9)];
+      await importAll();
+      final september = at('t:1', 9).dailyId('smu');
+      expect(repository.events, hasLength(2));
+      // A June occurrence shifts September to t:2.
+      source.events = [at('t:0', 3), at('t:1', 6), at('t:2', 9)];
+      await service.refresh('smu');
+      List<DateTime> starts() =>
+          repository.events.values.map((e) => e.startAt).toList()..sort();
+      expect(starts(), [
+        DateTime(2026, 3, 2),
+        DateTime(2026, 6, 2),
+        DateTime(2026, 9, 2),
+      ]);
+      // September keeps its original row and personal state.
+      expect(repository.events[september]!.startAt, DateTime(2026, 9, 2));
+      await service.refresh('smu');
+      expect(repository.events, hasLength(3));
+    },
+  );
+  test('a date correction still updates the same row', () async {
+    await importAll();
+    final id = remote().dailyId('smu');
+    source.events = [remote(day: 3, end: 9)];
+    await service.refresh('smu');
+    expect(repository.events, hasLength(1));
+    expect(repository.events[id]!.startAt, DateTime(2026, 9, 3));
+  });
+  test('refresh metadata rolls back when its first save fails', () async {
+    final store = FailingStore(await SharedPreferences.getInstance());
+    final failing = AcademicCalendarService(
+      sources: [source],
+      store: store,
+      settings: settings,
+      repository: repository,
+      commands: commands,
+      sync: sync,
+      now: () => now,
+    );
+    addTearDown(failing.dispose);
+    await failing.importSelection(await failing.preview(source, 2026), {
+      '766720',
+    });
+    // Saved by a version that did not record owners.
+    failing.subscriptions['smu']!.owner = null;
+    final attempt = failing.subscriptions['smu']!.lastAttempt;
+    now = now.add(const Duration(days: 2));
+    store.failSave = true;
+    await expectLater(failing.refresh('smu'), throwsStateError);
+    expect(failing.subscriptions['smu']!.owner, isNull);
+    expect(failing.subscriptions['smu']!.lastAttempt, attempt);
+  });
+  test('reconnecting a signed-out subscription adopts the account', () async {
+    await importAll();
+    await service.setEnabled('smu', false);
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'a@example.com'),
+    );
+    await service.setEnabled('smu', true);
+    expect(service.subscriptions['smu']!.owner, 'a@example.com');
+    final requests = source.requests;
+    now = now.add(const Duration(days: 2));
+    await service.refreshIfDue();
+    expect(source.requests, requests + 1);
+  });
+  test('color change is cancelled and rolled back on account switch', () async {
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'a@example.com'),
+    );
+    await importAll();
+    final category = AcademicCalendarService.categoryId('smu');
+    final color = settings
+        .load()
+        .categories
+        .singleWhere((c) => c.id == category)
+        .colorValue;
+    final operation = service.setCategoryColor('smu', 0xff123456);
+    // Queued before the colour change reaches the settings queue.
+    final switched = settings.saveGoogleAccount(
+      const GoogleAccount(email: 'b@example.com'),
+    );
+    await expectLater(operation, throwsStateError);
+    await switched;
+    expect(
+      settings
+          .load()
+          .categories
+          .singleWhere((c) => c.id == category)
+          .colorValue,
+      color,
+    );
+    expect(repository.events.values.single.colorValue, color);
+  });
+  test('showing or hiding keeps a concurrent hidden-category change', () async {
+    final before = settings.load();
+    final other = settings.save(
+      before.copyWith(hiddenCategoryIds: [...before.hiddenCategoryIds, 'x']),
+      changedFrom: before,
+    );
+    final hide = settings.setCategoryHidden('academic_smu', true);
+    await other;
+    await hide;
+    expect(
+      settings.load().hiddenCategoryIds,
+      containsAll(['x', 'academic_smu']),
+    );
   });
   test('reset invalidates in-flight source fetch and stale preview', () async {
     final preview = await service.preview(source, 2026);

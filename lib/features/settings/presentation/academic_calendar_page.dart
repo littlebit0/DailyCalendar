@@ -465,21 +465,15 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
           ),
           onChanged: service.busy
               ? null
-              : (show) => _perform(() async {
-                  final repository = ref.read(settingsRepositoryProvider);
-                  final before = repository.load();
-                  final hidden = before.hiddenCategoryIds.toSet();
-                  final id = AcademicCalendarService.categoryId(entry.key);
-                  if (show) {
-                    hidden.remove(id);
-                  } else {
-                    hidden.add(id);
-                  }
-                  await repository.save(
-                    before.copyWith(hiddenCategoryIds: hidden.toList()),
-                    changedFrom: before,
-                  );
-                }),
+              // Applied to the latest hidden list, not a snapshot read here.
+              : (show) => _perform(
+                  () => ref
+                      .read(settingsRepositoryProvider)
+                      .setCategoryHidden(
+                        AcademicCalendarService.categoryId(entry.key),
+                        !show,
+                      ),
+                ),
         ),
         Wrap(
           spacing: 8,

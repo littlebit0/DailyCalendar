@@ -870,9 +870,14 @@ class EventCommandService {
   Future<void> updateCategoryUsage({
     required EventCategory previous,
     required EventCategory updated,
+    bool Function()? isCurrent,
   }) {
     final operation = _categoryUpdateTail.then(
-      (_) => _updateCategoryUsage(previous: previous, updated: updated),
+      (_) => _updateCategoryUsage(
+        previous: previous,
+        updated: updated,
+        isCurrent: isCurrent,
+      ),
     );
     _categoryUpdateTail = operation.then<void>(
       (_) {},
@@ -884,7 +889,11 @@ class EventCommandService {
   Future<void> _updateCategoryUsage({
     required EventCategory previous,
     required EventCategory updated,
+    bool Function()? isCurrent,
   }) async {
+    if (isCurrent != null && !isCurrent()) {
+      throw StateError('Category update cancelled');
+    }
     final affected = await _repository.updateCategoryReferences(
       previous: previous,
       updated: updated,
@@ -897,6 +906,8 @@ class EventCommandService {
     // The rows are already saved as pending; a failed upload is retried by the
     // next sync and must not look like a failed category update.
     for (final event in affected) {
+      // Rows stay pending; a cancelled caller only stops queueing uploads.
+      if (isCurrent != null && !isCurrent()) break;
       try {
         await _syncService.queueEventUpsert(event);
       } on Object {
