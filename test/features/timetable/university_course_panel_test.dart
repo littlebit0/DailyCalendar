@@ -437,18 +437,19 @@ void main() {
           tester,
           find.byKey(const ValueKey('course-filters-toggle')),
         );
-        await _tapVisible(
-          tester,
-          find.byKey(const ValueKey('course-college-seoul-null')),
-        );
-        await tester.tap(find.text('테스트 단과대').last);
-        await tester.pumpAndSettle();
-        expect(find.byKey(const ValueKey('college-only')), findsOneWidget);
-        expect(find.byKey(const ValueKey('department-only')), findsNothing);
+        // One parent per college holds both its direct and department choices.
+        expect(find.text('단과대·학과 선택'), findsOneWidget);
+        expect(find.text('테스트 단과대'), findsOneWidget);
         await _tapVisible(
           tester,
           find.byKey(const ValueKey('course-college-departments-테스트 단과대')),
         );
+        await _tapVisible(
+          tester,
+          find.byKey(const ValueKey('course-college-direct-테스트 단과대')),
+        );
+        expect(find.byKey(const ValueKey('college-only')), findsOneWidget);
+        expect(find.byKey(const ValueKey('department-only')), findsNothing);
         await _tapVisible(
           tester,
           find.byKey(const ValueKey('course-department-테스트 단과대\u0000컴퓨터과학과')),

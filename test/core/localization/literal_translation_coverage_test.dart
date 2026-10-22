@@ -120,7 +120,7 @@ void main() {
     expect(ja.text('선택한 학사 정보'), contains(ja.text('학사 정보')));
     expect(zh.text('선택한 학사 정보'), contains(zh.text('학사 정보')));
     // Course-offering units, not people who "supervise" (主管).
-    for (final key in ['전체 주관', '단과대 주관', '단과대 직접 주관 과목', '공개된 학과 주관 정보가 없습니다.']) {
+    for (final key in ['전체 주관', '단과대 주관', '단과대·학과 선택', '단과대 직접 주관 과목', '공개된 학과 주관 정보가 없습니다.']) {
       expect(zh.text(key), isNot(contains('主管')), reason: key);
     }
   });
