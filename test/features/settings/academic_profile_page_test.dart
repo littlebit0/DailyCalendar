@@ -764,9 +764,10 @@ void main() {
         final smuTile = find.byKey(
           const ValueKey('university-institution:academyinfo:0000117'),
         );
+        // No calendar adapter is registered until its university PR lands.
         expect(
-          find.descendant(of: smuTile, matching: find.textContaining('학사일정')),
-          findsNothing,
+          find.descendant(of: smuTile, matching: find.text('학사일정 준비 중')),
+          findsOneWidget,
         );
         expect(
           find.descendant(of: smuTile, matching: find.text('시간표 연결')),

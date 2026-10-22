@@ -324,8 +324,8 @@ const Map<String, Map<String, String>> _translations = {
         "You can save this university. Academic calendar and timetable integration is not yet available.",
     "학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.":
         "Could not save your academic profile. Check your account connection and try again.",
-    "학사 정보를 설정하면 지원되는 대학의 시간표를 사용할 수 있습니다.":
-        "Set your academic profile to use timetables for supported universities.",
+    "학사 정보를 설정하면 지원되는 대학의 학사일정과 시간표를 사용할 수 있습니다.":
+        "Set your academic profile to use supported academic calendars and timetables.",
     "이 대학의 학사일정·시간표 연동은 준비 중입니다.":
         "Academic calendar and timetable integration for this university is not yet available.",
     '시간표 선택': 'Choose timetable',
@@ -1370,7 +1370,8 @@ const Map<String, Map<String, String>> _translations = {
         "学籍情報は保存できます。この大学の学事日程・時間割連携は準備中です。",
     "학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.":
         "学籍情報を保存できませんでした。アカウントの連携を確認して再試行してください。",
-    "학사 정보를 설정하면 지원되는 대학의 시간표를 사용할 수 있습니다.": "学籍情報を設定すると対応大学の時間割を利用できます。",
+    "학사 정보를 설정하면 지원되는 대학의 학사일정과 시간표를 사용할 수 있습니다.":
+        "学籍情報を設定すると対応大学の学事日程と時間割を利用できます。",
     "이 대학의 학사일정·시간표 연동은 준비 중입니다.": "この大学の学事日程・時間割連携は準備中です。",
     '시간표 선택': '時間割を選択',
     '저장된 시간표가 없습니다.': '保存済みの時間割はありません。',
@@ -2323,7 +2324,7 @@ const Map<String, Map<String, String>> _translations = {
     "학사 정보는 저장할 수 있습니다. 이 대학의 학사일정·시간표 연동은 준비 중입니다.":
         "可以儲存學籍資訊。此校的校務行事曆與課表整合尚在準備中。",
     "학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.": "無法儲存學籍資訊。請確認帳戶連結後重試。",
-    "학사 정보를 설정하면 지원되는 대학의 시간표를 사용할 수 있습니다.": "設定學籍資訊，即可使用支援學校的課表。",
+    "학사 정보를 설정하면 지원되는 대학의 학사일정과 시간표를 사용할 수 있습니다.": "設定學籍資訊，即可使用支援學校的校務行事曆與課表。",
     "이 대학의 학사일정·시간표 연동은 준비 중입니다.": "此校的校務行事曆與課表整合尚在準備中。",
     '시간표 선택': '選擇課表',
     '저장된 시간표가 없습니다.': '尚無已儲存的課表。',

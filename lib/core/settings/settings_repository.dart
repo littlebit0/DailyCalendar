@@ -17,6 +17,7 @@ import '../weather/weather_store.dart';
 import '../widgets/lock_screen_wallpaper_service.dart';
 import 'app_settings.dart';
 import '../../features/onboarding/feature_announcements.dart';
+import '../academic/academic_store.dart';
 import '../academic/academic_profile.dart';
 import '../../features/events/domain/frequent_places.dart';
 import '../sync/settings_sync_document.dart';
@@ -219,6 +220,7 @@ class SettingsRepository {
   late final announcements = FeatureAnnouncementStore(_preferences);
   late final frequentPlaces = FrequentPlaces(_preferences);
   late final weatherStore = WeatherStore(_preferences);
+  late final academicStore = AcademicStore(_preferences);
   late final timetableStore = TimetableStore(_preferences, now: _now);
   final FlutterSecureStorage _secureStorage;
   final DateTime Function() _now;
@@ -1370,14 +1372,14 @@ class SettingsRepository {
   }
 
   Future<void> resetAll() {
+    academicStore.invalidate();
     timetableStore.invalidate();
     _settingsMutationGeneration += 1;
     return _enqueueSettingsMutation(_resetAll);
   }
 
   Future<void> _resetAll() async {
-    // Subscriptions left by the removed academic calendar feature.
-    await _preferences.remove('academic.subscriptions.v1');
+    await academicStore.clear();
     await timetableStore.clearLocal();
     await LockScreenWallpaperService.reset();
     await weatherStore.clear();

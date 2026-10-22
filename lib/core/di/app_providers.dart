@@ -42,6 +42,8 @@ import '../sync/sync_service.dart';
 import '../widgets/calendar_widget_service.dart';
 import '../weather/weather_controller.dart';
 import '../weather/kma_weather_service.dart';
+import '../academic/academic_calendar_service.dart';
+import '../academic/academic_source_registry.dart';
 
 class CalendarRange {
   const CalendarRange(this.start, this.end);
@@ -241,6 +243,43 @@ final calendarImportServiceProvider = Provider<CalendarImportService>((ref) {
     eventCommandService: ref.watch(eventCommandServiceProvider),
     settingsRepository: ref.watch(settingsRepositoryProvider),
   );
+});
+
+final academicSourceRegistrationsProvider =
+    Provider<List<AcademicSourceRegistration>>(
+      (ref) => academicSourceRegistrations,
+    );
+
+/// The calendar adapter for the saved school, or null when unsupported.
+final academicSourceIdProvider = Provider<String?>((ref) {
+  final profile = ref.watch(
+    appSettingsProvider.select((settings) => settings.academicProfile),
+  );
+  if (profile == null) return null;
+  return academicSourceIdFor(
+    profile.universityId,
+    profile.campusId,
+    registrations: ref.watch(academicSourceRegistrationsProvider),
+  );
+});
+
+final academicCalendarServiceProvider = Provider<AcademicCalendarService>((
+  ref,
+) {
+  final settings = ref.watch(settingsRepositoryProvider);
+  final service = AcademicCalendarService(
+    sources: [
+      for (final registration in ref.watch(academicSourceRegistrationsProvider))
+        registration.create(),
+    ],
+    store: settings.academicStore,
+    settings: settings,
+    repository: ref.watch(eventRepositoryProvider),
+    commands: ref.watch(eventCommandServiceProvider),
+    sync: ref.watch(syncServiceProvider),
+  );
+  ref.onDispose(service.dispose);
+  return service;
 });
 
 final lmsControllerProvider = ChangeNotifierProvider<LmsController>((ref) {
