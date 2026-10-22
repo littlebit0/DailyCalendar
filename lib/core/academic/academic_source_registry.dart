@@ -1,4 +1,7 @@
 import 'academic_source.dart';
+import 'changwon_academic_source.dart';
+import 'geochang_academic_source.dart';
+import 'namhae_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +28,28 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  AcademicSourceRegistration(
+    id: 'changwon',
+    institutionId: 'academyinfo:0000028',
+    campusIds: {'academyinfo:0000028'},
+    create: ChangwonAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'changwon-geochang',
+    institutionId: 'academyinfo:0000028',
+    campusIds: {'academyinfo:0003297'},
+    create: GeochangAcademicSource.new,
+    primary: false,
+  ),
+  AcademicSourceRegistration(
+    id: 'changwon-namhae',
+    institutionId: 'academyinfo:0000028',
+    campusIds: {'academyinfo:0003298'},
+    create: NamhaeAcademicSource.new,
+    primary: false,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
