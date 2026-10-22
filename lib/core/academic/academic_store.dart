@@ -112,6 +112,9 @@ class AcademicStore extends ChangeNotifier {
 
   Future<void> clear() async {
     invalidate();
-    await _preferences.remove(key);
+    if (!await _preferences.remove(key)) {
+      // A reset must not look complete while subscriptions would reload.
+      throw StateError('Academic settings clear failed');
+    }
   }
 }

@@ -68,6 +68,9 @@ class _CalendarService extends ChangeNotifier
   AcademicResult? result;
   Map<String, AcademicSubscription> retained = {};
   @override
+  bool canManage(String universityId) =>
+      retained[universityId]?.owner != 'other@example.com';
+  @override
   Map<String, AcademicSubscription> get subscriptions => retained;
   @override
   Future<AcademicPreview> preview(AcademicSource source, int year) async {
@@ -192,6 +195,22 @@ void main() {
       expect(find.byIcon(Icons.delete_outline), findsNWidgets(2));
     },
   );
+
+  testWidgets('another account subscription is not listed for management', (
+    tester,
+  ) async {
+    service.retained = {
+      'smu': AcademicSubscription(
+        universityId: 'smu',
+        year: 2026,
+        owner: 'other@example.com',
+      ),
+    };
+    await mount(tester);
+    expect(tester.takeException(), isNull);
+    expect(find.text('상명대학교 · 2026'), findsNothing);
+    expect(find.byIcon(Icons.delete_outline), findsNothing);
+  });
 
   testWidgets(
     'saved subscriptions stay manageable when the school has no adapter',

@@ -79,25 +79,22 @@ class AcademicCalendarService extends ChangeNotifier {
   Future<void> setCategoryColor(String universityId, int colorValue) => _run((
     generation,
   ) async {
-    final before = _settings.load();
-    final category = before.categories
-        .where((c) => c.id == categoryId(universityId))
-        .firstOrNull;
-    if (category == null) throw StateError('Academic category is missing');
-    final updated = category.copyWith(colorValue: colorValue);
-    final after = before.copyWith(
-      categories: [
-        for (final c in before.categories) c.id == category.id ? updated : c,
-      ],
+    final change = await _settings.updateCategory(
+      categoryId(universityId),
+      (current) => current.copyWith(colorValue: colorValue),
     );
-    await _settings.save(after, changedFrom: before);
+    if (change == null) throw StateError('Academic category is missing');
+    final (previous: category, updated: updated) = change;
     _check(generation);
     try {
       await _commands.updateCategoryUsage(previous: category, updated: updated);
     } on Object {
-      // Event rows stay on the old colour when propagation fails; restore the
-      // setting too so both stay consistent, as the category editor does.
-      await _settings.save(before, changedFrom: after);
+      // Event rows stay on the old colour when propagation fails; restore only
+      // this colour in the latest list so concurrent category edits survive.
+      await _settings.updateCategory(
+        category.id,
+        (current) => current.copyWith(colorValue: category.colorValue),
+      );
       rethrow;
     }
     _check(generation);
@@ -128,6 +125,27 @@ class AcademicCalendarService extends ChangeNotifier {
 
   /// Google account active for the running operation.
   String? _operationAccount;
+
+  /// Owner recorded for imports made while no Google account was linked.
+  static const localOwner = '';
+
+  String _ownerKey(String? account) => account ?? localOwner;
+
+  /// Whether the current account may refresh, import into or remove this
+  /// subscription. Subscriptions without an owner (saved before owners were
+  /// recorded) or made while signed out are adopted by an explicit action.
+  bool canManage(String universityId) {
+    final owner = _subscriptions[universityId]?.owner;
+    return owner == null ||
+        owner == localOwner ||
+        owner == _ownerKey(_account());
+  }
+
+  void _requireManageable(String universityId) {
+    if (!canManage(universityId)) {
+      throw StateError('Academic subscription belongs to another account');
+    }
+  }
 
   String? _account() =>
       _settings.dailyAccount()?.googleAccount?.email.trim().toLowerCase();
@@ -187,13 +205,15 @@ class AcademicCalendarService extends ChangeNotifier {
       throw ArgumentError('No academic events selected');
     }
     final source = preview.source;
+    // Never take over another account's exclusions and imported events.
+    _requireManageable(source.id);
     final subscription = _subscriptions.putIfAbsent(
       source.id,
       () => AcademicSubscription(universityId: source.id, year: preview.year),
     );
     subscription
       ..enabled = true
-      ..owner = _operationAccount
+      ..owner = _ownerKey(_operationAccount)
       ..year = preview.year
       ..followCurrentYear = preview.year == _now().year
       ..lastAttempt = _now();
@@ -224,11 +244,9 @@ class AcademicCalendarService extends ChangeNotifier {
   Future<void> refresh(String universityId) => _run((generation) async {
     final source = sources.firstWhere((source) => source.id == universityId);
     final subscription = _subscriptions[universityId]!;
-    if (subscription.owner != null && subscription.owner != _operationAccount) {
-      throw StateError('Academic subscription belongs to another account');
-    }
-    // An explicit refresh adopts a subscription saved before owners existed.
-    subscription.owner = _operationAccount;
+    _requireManageable(universityId);
+    // An explicit refresh adopts an ownerless or signed-out subscription.
+    subscription.owner = _ownerKey(_operationAccount);
     await _refresh(source, subscription, generation);
   });
 
@@ -258,9 +276,11 @@ class AcademicCalendarService extends ChangeNotifier {
     for (final source in sources) {
       final subscription = _subscriptions[source.id];
       if (subscription == null || !subscription.enabled) continue;
-      // Automatic refresh never writes one account's school into another;
-      // ownerless legacy entries wait for an explicit refresh.
-      if (subscription.owner != _account()) continue;
+      // Automatic refresh runs only what this account (or, signed out, this
+      // device) imported; ownerless legacy entries wait for an explicit
+      // refresh, even while signed out.
+      final owner = subscription.owner;
+      if (owner == null || owner != _ownerKey(_account())) continue;
       final previous = subscription.lastAttempt;
       final now = _now();
       final yearChanged =
@@ -428,6 +448,7 @@ class AcademicCalendarService extends ChangeNotifier {
 
   Future<void> setEnabled(String universityId, bool enabled) =>
       _run((generation) async {
+        _requireManageable(universityId);
         final subscription = _subscriptions[universityId]!;
         final previous = subscription.enabled;
         subscription.enabled = enabled;
@@ -442,6 +463,8 @@ class AcademicCalendarService extends ChangeNotifier {
       });
 
   Future<void> removeImported(String universityId) => _run((generation) async {
+    // Another account's imported events stay intact and are not tombstoned.
+    _requireManageable(universityId);
     final subscription = _subscriptions[universityId]!;
     subscription.enabled = false;
     await _store.save(_subscriptions, generation);

@@ -767,18 +767,91 @@ void main() {
   );
   test('ownerless legacy subscription waits for an explicit refresh', () async {
     await importAll();
-    expect(service.subscriptions['smu']!.owner, isNull);
+    // Saved by a version that did not record owners.
+    service.subscriptions['smu']!.owner = null;
+    final requests = source.requests;
+    now = now.add(const Duration(days: 2));
+    await service.refreshIfDue();
+    expect(source.requests, requests);
     await settings.saveGoogleAccount(
       const GoogleAccount(email: 'a@example.com'),
     );
-    final requests = source.requests;
-    now = now.add(const Duration(days: 2));
     await service.refreshIfDue();
     expect(source.requests, requests);
     await service.refresh('smu');
     expect(service.subscriptions['smu']!.owner, 'a@example.com');
     expect(source.requests, requests + 1);
   });
+  test('signed-out import refreshes only while signed out', () async {
+    await importAll();
+    expect(
+      service.subscriptions['smu']!.owner,
+      AcademicCalendarService.localOwner,
+    );
+    final requests = source.requests;
+    now = now.add(const Duration(days: 2));
+    await service.refreshIfDue();
+    expect(source.requests, requests + 1);
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'a@example.com'),
+    );
+    now = now.add(const Duration(days: 2));
+    await service.refreshIfDue();
+    expect(source.requests, requests + 1);
+  });
+  test('another account cannot import over or remove a subscription', () async {
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'a@example.com'),
+    );
+    await importAll();
+    final id = remote().dailyId('smu');
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'b@example.com'),
+    );
+    expect(service.canManage('smu'), isFalse);
+    final preview = await service.preview(source, 2026);
+    await expectLater(
+      service.importSelection(preview, {'766720'}),
+      throwsStateError,
+    );
+    await expectLater(service.removeImported('smu'), throwsStateError);
+    await expectLater(service.setEnabled('smu', false), throwsStateError);
+    expect(repository.events[id]!.isDeleted, isFalse);
+    expect(service.subscriptions['smu']!.owner, 'a@example.com');
+    expect(service.subscriptions['smu']!.enabled, isTrue);
+  });
+  test(
+    'color rollback keeps a category edit made during propagation',
+    () async {
+      await importAll();
+      final academic = AcademicCalendarService.categoryId('smu');
+      final original = settings
+          .load()
+          .categories
+          .singleWhere((c) => c.id == academic)
+          .colorValue;
+      repository.failCategoryUpdate = true;
+      final operation = service.setCategoryColor('smu', 0xff123456);
+      final before = settings.load();
+      final edit = settings.save(
+        before.copyWith(
+          categories: [
+            ...before.categories,
+            EventCategory(id: 'custom', label: '개인', colorValue: 0xff000001),
+          ],
+        ),
+        changedFrom: before,
+      );
+      await expectLater(operation, throwsStateError);
+      await edit;
+      final categories = settings.load().categories;
+      expect(categories.map((c) => c.id), contains('custom'));
+      expect(
+        categories.singleWhere((c) => c.id == academic).colorValue,
+        original,
+      );
+    },
+  );
   test('new academic category joins the latest category list', () async {
     final before = settings.load();
     final custom = EventCategory(

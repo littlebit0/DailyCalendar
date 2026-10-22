@@ -128,7 +128,7 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
             .where((s) => s.id == sourceId)
             .firstOrNull;
         if (source == null) {
-          if (service.subscriptions.isEmpty) {
+          if (!service.subscriptions.keys.any(service.canManage)) {
             return Scaffold(
               appBar: DailyNavigationBar(title: text(AcademicText.title)),
               body: sourceId == null
@@ -378,7 +378,7 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                             }),
                     ),
                 ],
-                if (service.subscriptions.isNotEmpty)
+                if (service.subscriptions.keys.any(service.canManage))
                   ..._subscriptionSection(service, settings),
                 const SizedBox(height: 32),
               ],
@@ -438,95 +438,97 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
       text(AcademicText.connected),
       style: Theme.of(context).textTheme.titleMedium,
     ),
-    for (final entry in service.subscriptions.entries) ...[
-      _subscriptionHeader(
-        _subscriptionName(service, settings, entry.key),
-        entry.value,
-      ),
-      SwitchListTile.adaptive(
-        contentPadding: EdgeInsets.zero,
-        title: Text(text(AcademicText.show)),
-        value: !settings.hiddenCategoryIds.contains(
-          AcademicCalendarService.categoryId(entry.key),
+    // Another account's subscriptions stay stored but are not shown here.
+    for (final entry in service.subscriptions.entries)
+      if (service.canManage(entry.key)) ...[
+        _subscriptionHeader(
+          _subscriptionName(service, settings, entry.key),
+          entry.value,
         ),
-        onChanged: service.busy
-            ? null
-            : (show) => _perform(() async {
-                final repository = ref.read(settingsRepositoryProvider);
-                final before = repository.load();
-                final hidden = before.hiddenCategoryIds.toSet();
-                final id = AcademicCalendarService.categoryId(entry.key);
-                if (show) {
-                  hidden.remove(id);
-                } else {
-                  hidden.add(id);
-                }
-                await repository.save(
-                  before.copyWith(hiddenCategoryIds: hidden.toList()),
-                  changedFrom: before,
-                );
-              }),
-      ),
-      Wrap(
-        spacing: 8,
-        runSpacing: 8,
-        children: [
-          // Retained subscriptions whose adapter is not
-          // registered yet keep only disconnect and removal.
-          if (service.sources.any((s) => s.id == entry.key))
+        SwitchListTile.adaptive(
+          contentPadding: EdgeInsets.zero,
+          title: Text(text(AcademicText.show)),
+          value: !settings.hiddenCategoryIds.contains(
+            AcademicCalendarService.categoryId(entry.key),
+          ),
+          onChanged: service.busy
+              ? null
+              : (show) => _perform(() async {
+                  final repository = ref.read(settingsRepositoryProvider);
+                  final before = repository.load();
+                  final hidden = before.hiddenCategoryIds.toSet();
+                  final id = AcademicCalendarService.categoryId(entry.key);
+                  if (show) {
+                    hidden.remove(id);
+                  } else {
+                    hidden.add(id);
+                  }
+                  await repository.save(
+                    before.copyWith(hiddenCategoryIds: hidden.toList()),
+                    changedFrom: before,
+                  );
+                }),
+        ),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            // Retained subscriptions whose adapter is not
+            // registered yet keep only disconnect and removal.
+            if (service.sources.any((s) => s.id == entry.key))
+              TextButton.icon(
+                onPressed: service.busy
+                    ? null
+                    : () => _perform(() => service.refresh(entry.key)),
+                icon: const Icon(Icons.refresh),
+                label: Text(text(AcademicText.refresh)),
+              ),
             TextButton.icon(
               onPressed: service.busy
                   ? null
-                  : () => _perform(() => service.refresh(entry.key)),
-              icon: const Icon(Icons.refresh),
-              label: Text(text(AcademicText.refresh)),
-            ),
-          TextButton.icon(
-            onPressed: service.busy
-                ? null
-                : () => _perform(
-                    () => service.setEnabled(entry.key, !entry.value.enabled),
-                  ),
-            icon: Icon(entry.value.enabled ? Icons.link_off : Icons.link),
-            label: Text(
-              text(
-                entry.value.enabled
-                    ? AcademicText.disconnect
-                    : AcademicText.reconnect,
+                  : () => _perform(
+                      () => service.setEnabled(entry.key, !entry.value.enabled),
+                    ),
+              icon: Icon(entry.value.enabled ? Icons.link_off : Icons.link),
+              label: Text(
+                text(
+                  entry.value.enabled
+                      ? AcademicText.disconnect
+                      : AcademicText.reconnect,
+                ),
               ),
             ),
-          ),
-          TextButton.icon(
-            onPressed: service.busy
-                ? null
-                : () async {
-                    final confirmed = await showDialog<bool>(
-                      context: context,
-                      builder: (context) => AlertDialog(
-                        title: Text(text(AcademicText.remove)),
-                        content: Text(text(AcademicText.removeConfirm)),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, false),
-                            child: Text(text(AcademicText.cancel)),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, true),
-                            child: Text(text(AcademicText.remove)),
-                          ),
-                        ],
-                      ),
-                    );
-                    if (confirmed == true && mounted) {
-                      await _perform(() => service.removeImported(entry.key));
-                    }
-                  },
-            icon: const Icon(Icons.delete_outline),
-            label: Text(text(AcademicText.remove)),
-          ),
-        ],
-      ),
-    ],
+            TextButton.icon(
+              onPressed: service.busy
+                  ? null
+                  : () async {
+                      final confirmed = await showDialog<bool>(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: Text(text(AcademicText.remove)),
+                          content: Text(text(AcademicText.removeConfirm)),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, false),
+                              child: Text(text(AcademicText.cancel)),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.pop(context, true),
+                              child: Text(text(AcademicText.remove)),
+                            ),
+                          ],
+                        ),
+                      );
+                      if (confirmed == true && mounted) {
+                        await _perform(() => service.removeImported(entry.key));
+                      }
+                    },
+              icon: const Icon(Icons.delete_outline),
+              label: Text(text(AcademicText.remove)),
+            ),
+          ],
+        ),
+      ],
   ];
 
   /// Adapter name, else the category label saved when events were imported.
