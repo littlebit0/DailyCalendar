@@ -1047,6 +1047,49 @@ void main() {
       expect(repository.events[september]!.startAt, DateTime(2026, 9, 2));
     },
   );
+  test('an exclusion follows its event when occurrence IDs shift', () async {
+    AcademicEvent at(String id, int month, [int day = 2]) => AcademicEvent(
+      sourceId: id,
+      title: '보강',
+      start: DateTime(2026, month, day),
+      end: DateTime(2026, month, day + 1),
+      url: 'https://example.invalid',
+    );
+    source.events = [at('t:0', 3), at('t:1', 9)];
+    final preview = await service.preview(source, 2026);
+    // The user leaves September out.
+    await service.importSelection(preview, {'t:0'});
+    expect(repository.events, hasLength(1));
+    // June is inserted, so September becomes t:2.
+    source.events = [at('t:0', 3), at('t:1', 6), at('t:2', 9)];
+    await service.refresh('smu');
+    List<DateTime> starts() =>
+        repository.events.values.map((e) => e.startAt).toList()..sort();
+    expect(starts(), [DateTime(2026, 3, 2), DateTime(2026, 6, 2)]);
+    expect(service.excludedSourceIds('smu', source.events), {'t:2'});
+    // A later date correction of the excluded event keeps it excluded.
+    source.events = [at('t:0', 3), at('t:1', 6), at('t:2', 9, 4)];
+    await service.refresh('smu');
+    expect(starts(), [DateTime(2026, 3, 2), DateTime(2026, 6, 2)]);
+    // Re-importing from a new preview keeps the choice on September.
+    final next = await service.preview(source, 2026);
+    final selected = next.events
+        .map((e) => e.sourceId)
+        .toSet()
+        .difference(service.excludedSourceIds('smu', next.events));
+    await service.importSelection(next, selected);
+    expect(starts(), [DateTime(2026, 3, 2), DateTime(2026, 6, 2)]);
+  });
+  test('IDs-only exclusions saved before snapshots still apply', () async {
+    source.events = [remote(), remote(id: '2', title: '휴강')];
+    await importAll();
+    final subscription = service.subscriptions['smu']!;
+    subscription.excluded = {'3'};
+    subscription.excludedEvents = [];
+    source.events = [...source.events, remote(id: '3', title: '보강')];
+    await service.refresh('smu');
+    expect(repository.events, hasLength(2));
+  });
   test('a date correction still updates the same row', () async {
     await importAll();
     final id = remote().dailyId('smu');

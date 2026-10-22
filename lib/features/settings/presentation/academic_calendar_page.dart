@@ -291,15 +291,14 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                               ..clear()
                               ..addAll(
                                 preview.events
-                                    .where(
-                                      (e) =>
-                                          !(service
-                                                  .subscriptions[source.id]
-                                                  ?.excluded
-                                                  .contains(e.sourceId) ??
-                                              false),
-                                    )
-                                    .map((e) => e.sourceId),
+                                    .map((e) => e.sourceId)
+                                    .toSet()
+                                    .difference(
+                                      service.excludedSourceIds(
+                                        source.id,
+                                        preview.events,
+                                      ),
+                                    ),
                               );
                           });
                         }),

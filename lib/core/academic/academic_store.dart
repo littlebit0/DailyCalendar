@@ -10,6 +10,7 @@ class AcademicSubscription {
     this.enabled = true,
     this.followCurrentYear = false,
     Set<String>? excluded,
+    List<AcademicEvent>? excludedEvents,
     Map<String, AcademicEvent>? baselines,
     Set<String>? managedIds,
     Set<String>? pendingRemovals,
@@ -18,6 +19,7 @@ class AcademicSubscription {
     this.failed = false,
     this.owner,
   }) : excluded = excluded ?? {},
+       excludedEvents = excludedEvents ?? [],
        baselines = baselines ?? {},
        managedIds = managedIds ?? {},
        pendingRemovals = pendingRemovals ?? {};
@@ -26,7 +28,14 @@ class AcademicSubscription {
   int year;
   bool enabled;
   bool followCurrentYear;
+
+  /// Source IDs the user left out. Entries without a matching
+  /// [excludedEvents] snapshot come from versions that stored IDs only.
   Set<String> excluded;
+
+  /// What each excluded event was, so the exclusion follows the same event
+  /// when occurrence-numbered source IDs shift.
+  List<AcademicEvent> excludedEvents;
   final Map<String, AcademicEvent> baselines;
   final Set<String> managedIds;
 
@@ -47,6 +56,8 @@ class AcademicSubscription {
     'enabled': enabled,
     'followCurrentYear': followCurrentYear,
     'excluded': excluded.toList(),
+    if (excludedEvents.isNotEmpty)
+      'excludedEvents': [for (final event in excludedEvents) event.toJson()],
     'baselines': baselines.map((id, event) => MapEntry(id, event.toJson())),
     'managedIds': managedIds.toList(),
     if (pendingRemovals.isNotEmpty) 'pendingRemovals': pendingRemovals.toList(),
@@ -63,6 +74,10 @@ class AcademicSubscription {
         enabled: json['enabled'] == true,
         followCurrentYear: json['followCurrentYear'] == true,
         excluded: (json['excluded'] as List).cast<String>().toSet(),
+        excludedEvents: [
+          for (final raw in json['excludedEvents'] as List? ?? const [])
+            AcademicEvent.fromJson(raw as Map<String, dynamic>),
+        ],
         managedIds: (json['managedIds'] as List? ?? const [])
             .cast<String>()
             .toSet(),

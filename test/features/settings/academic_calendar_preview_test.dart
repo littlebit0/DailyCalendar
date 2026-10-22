@@ -73,6 +73,11 @@ class _CalendarService extends ChangeNotifier
   @override
   Map<String, AcademicSubscription> get subscriptions => retained;
   @override
+  Set<String> excludedSourceIds(
+    String universityId,
+    List<AcademicEvent> events,
+  ) => const {};
+  @override
   Future<AcademicPreview> preview(AcademicSource source, int year) async {
     busy = true;
     notifyListeners();

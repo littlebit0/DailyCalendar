@@ -247,13 +247,27 @@ class AcademicCalendarService extends ChangeNotifier {
       ..year = preview.year
       ..followCurrentYear = preview.year == _now().year
       ..lastAttempt = _now();
-    for (final event in preview.events) {
-      if (selected.contains(event.sourceId)) {
-        subscription.excluded.remove(event.sourceId);
-      } else {
-        subscription.excluded.add(event.sourceId);
-      }
-    }
+    // Exclusions matching this preview are replaced by the user's choice;
+    // ones for events absent from the feed are kept.
+    final resolved = _resolveExcluded(preview.events, subscription);
+    final feedIds = {for (final event in preview.events) event.sourceId};
+    final snapshotIds = {
+      for (final snapshot in subscription.excludedEvents) snapshot.sourceId,
+    };
+    final legacy = {
+      for (final id in subscription.excluded)
+        if (!snapshotIds.contains(id) && !feedIds.contains(id)) id,
+    };
+    subscription.excludedEvents = [
+      for (var j = 0; j < subscription.excludedEvents.length; j++)
+        if (!resolved.snapshots.containsKey(j)) subscription.excludedEvents[j],
+      for (final event in preview.events)
+        if (!selected.contains(event.sourceId)) event,
+    ];
+    subscription.excluded = {
+      ...legacy,
+      for (final snapshot in subscription.excludedEvents) snapshot.sourceId,
+    };
     await _saveOrRestore(generation, source.id, before);
     try {
       result = await _apply(
@@ -356,9 +370,31 @@ class AcademicCalendarService extends ChangeNotifier {
     final deviceId = await _settings.deviceId();
     _check(generation);
     final now = _now();
+    final resolved = _resolveExcluded(events, subscription);
+    final excluded = resolved.events;
+    // Matched exclusions follow the feed's current ID and dates; legacy
+    // ID-only exclusions gain a snapshot.
+    final snapshotIds = {
+      for (final snapshot in subscription.excludedEvents) snapshot.sourceId,
+    };
+    subscription.excludedEvents = [
+      for (var j = 0; j < subscription.excludedEvents.length; j++)
+        resolved.snapshots.containsKey(j)
+            ? events[resolved.snapshots[j]!]
+            : subscription.excludedEvents[j],
+      for (final i in excluded)
+        if (!resolved.snapshots.containsValue(i) &&
+            !snapshotIds.contains(events[i].sourceId))
+          events[i],
+    ];
+    subscription.excluded = {
+      for (final id in subscription.excluded)
+        if (!snapshotIds.contains(id)) id,
+      for (final snapshot in subscription.excludedEvents) snapshot.sourceId,
+    };
     final external = _localIds(source.id, [
-      for (final event in events)
-        if (!subscription.excluded.contains(event.sourceId)) event,
+      for (var i = 0; i < events.length; i++)
+        if (!excluded.contains(i)) events[i],
     ], subscription.baselines);
     final candidates = [
       for (final entry in external.entries)
@@ -512,6 +548,70 @@ class AcademicCalendarService extends ChangeNotifier {
       result[id] = event;
     }
     return result;
+  }
+
+  /// Feed events the user excluded, with the snapshot each matched
+  /// (snapshot index to feed index). An identical snapshot matches first, the
+  /// same source ID preferred, so a shifted occurrence ID never moves an
+  /// exclusion onto another event. A remaining event keeps an exclusion by
+  /// source ID (a date correction, or IDs saved before snapshots) unless it is
+  /// identical to an imported baseline.
+  static ({Set<int> events, Map<int, int> snapshots}) _resolveExcluded(
+    List<AcademicEvent> feed,
+    AcademicSubscription subscription,
+  ) {
+    final snapshots = subscription.excludedEvents;
+    final events = <int>{};
+    final matches = <int, int>{};
+    void match(bool Function(AcademicEvent snapshot, AcademicEvent e) test) {
+      for (var i = 0; i < feed.length; i++) {
+        if (events.contains(i)) continue;
+        for (var j = 0; j < snapshots.length; j++) {
+          if (!matches.containsKey(j) && test(snapshots[j], feed[i])) {
+            events.add(i);
+            matches[j] = i;
+            break;
+          }
+        }
+      }
+    }
+
+    match((s, e) => s.sourceId == e.sourceId && _sameSource(s, e));
+    match(_sameSource);
+    final snapshotIds = {for (final s in snapshots) s.sourceId};
+    for (var i = 0; i < feed.length; i++) {
+      if (events.contains(i)) continue;
+      final event = feed[i];
+      if (subscription.baselines.values.any((b) => _sameSource(b, event))) {
+        continue;
+      }
+      for (var j = 0; j < snapshots.length; j++) {
+        if (!matches.containsKey(j) &&
+            snapshots[j].sourceId == event.sourceId) {
+          events.add(i);
+          matches[j] = i;
+          break;
+        }
+      }
+      if (!events.contains(i) &&
+          subscription.excluded.contains(event.sourceId) &&
+          !snapshotIds.contains(event.sourceId)) {
+        events.add(i);
+      }
+    }
+    return (events: events, snapshots: matches);
+  }
+
+  /// Source IDs of [events] that the saved subscription excludes; used to
+  /// pre-select a preview.
+  Set<String> excludedSourceIds(
+    String universityId,
+    List<AcademicEvent> events,
+  ) {
+    final subscription = _subscriptions[universityId];
+    if (subscription == null) return const {};
+    final resolved = _resolveExcluded(events, subscription);
+    return {for (final i in resolved.events) events[i].sourceId};
   }
 
   static bool _sameSource(AcademicEvent a, AcademicEvent b) =>
