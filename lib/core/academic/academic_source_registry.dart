@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'catholic_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +26,18 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  AcademicSourceRegistration(
+    id: 'catholic',
+    institutionId: 'academyinfo:0000046',
+    campusIds: {
+      'academyinfo:0000046',
+      'academyinfo:0000048',
+      'academyinfo:0000049',
+    },
+    create: CatholicAcademicSource.new,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
