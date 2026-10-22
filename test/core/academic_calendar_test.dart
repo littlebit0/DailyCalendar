@@ -565,6 +565,44 @@ void main() {
     },
   );
   test(
+    'automatic checks run once per local date, not per 24 hours, and ignore future stamps',
+    () async {
+      now = DateTime(2026, 9, 16, 10);
+      await importAll();
+      final first = source.requests;
+      // The next date at an earlier hour is under 24 hours later (as across DST).
+      now = DateTime(2026, 9, 17, 9, 30);
+      await service.refreshIfDue();
+      expect(source.requests, first + 1);
+      await service.refreshIfDue();
+      expect(source.requests, first + 1);
+      // A clock correction leaves the last attempt in the future.
+      now = DateTime(2026, 9, 16, 8);
+      await service.refreshIfDue();
+      expect(source.requests, first + 2);
+    },
+  );
+  test(
+    'occurrence IDs do not depend on feed order for equal title and start',
+    () {
+      final a = (
+        title: '보강',
+        start: DateTime(2026, 9, 1),
+        last: DateTime(2026, 9, 2),
+      );
+      final b = (
+        title: '보강',
+        start: DateTime(2026, 9, 1),
+        last: DateTime(2026, 9, 4),
+      );
+      Map<String, DateTime> ids(List<AcademicCalendarRecord> records) => {
+        for (final event in academicCalendarEvents(records, 2026, 'u'))
+          event.sourceId: event.end,
+      };
+      expect(ids([a, b]), ids([b, a]));
+    },
+  );
+  test(
     'deselected schedules stay excluded and new source records are imported',
     () async {
       source.events = [remote(), remote(id: '2')];

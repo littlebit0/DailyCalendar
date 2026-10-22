@@ -71,9 +71,12 @@ List<AcademicEvent> academicCalendarEvents(
   int year,
   String url,
 ) {
+  // Fully ordered so occurrence IDs never depend on the feed's row order.
   records.sort((a, b) {
-    final order = a.start.compareTo(b.start);
-    return order != 0 ? order : a.title.compareTo(b.title);
+    final start = a.start.compareTo(b.start);
+    if (start != 0) return start;
+    final title = a.title.compareTo(b.title);
+    return title != 0 ? title : a.last.compareTo(b.last);
   });
   final identities = <String, int>{};
   final seen = <String>{};

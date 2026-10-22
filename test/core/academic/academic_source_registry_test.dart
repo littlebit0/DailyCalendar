@@ -23,7 +23,6 @@ String? _resolve(String universityId, [String? campusId]) =>
     academicSourceIdFor(universityId, campusId, registrations: _registrations);
 
 void main() {
-
   test('institution without campus uses only the primary adapter', () {
     expect(_resolve('institution:academyinfo:0000028'), 'school');
   });

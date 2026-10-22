@@ -8,6 +8,7 @@ import '../../../core/academic/academic_source.dart';
 import '../../../core/academic/academic_store.dart';
 import '../../../core/academic/academic_strings.dart';
 import '../../../core/di/app_providers.dart';
+import '../../../core/settings/app_settings.dart';
 import '../../../core/settings/settings_repository.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../events/domain/event_category.dart';
@@ -363,7 +364,7 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                   ),
                   for (final entry in service.subscriptions.entries) ...[
                     _subscriptionHeader(
-                      service.sources.firstWhere((s) => s.id == entry.key),
+                      _subscriptionName(service, settings, entry.key),
                       entry.value,
                     ),
                     SwitchListTile.adaptive(
@@ -400,14 +401,18 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                       spacing: 8,
                       runSpacing: 8,
                       children: [
-                        TextButton.icon(
-                          onPressed: service.busy
-                              ? null
-                              : () =>
-                                    _perform(() => service.refresh(entry.key)),
-                          icon: const Icon(Icons.refresh),
-                          label: Text(text(AcademicText.refresh)),
-                        ),
+                        // Retained subscriptions whose adapter is not
+                        // registered yet keep only disconnect and removal.
+                        if (service.sources.any((s) => s.id == entry.key))
+                          TextButton.icon(
+                            onPressed: service.busy
+                                ? null
+                                : () => _perform(
+                                    () => service.refresh(entry.key),
+                                  ),
+                            icon: const Icon(Icons.refresh),
+                            label: Text(text(AcademicText.refresh)),
+                          ),
                         TextButton.icon(
                           onPressed: service.busy
                               ? null
@@ -518,32 +523,45 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
     );
   }
 
-  Widget _subscriptionHeader(
-    AcademicSource source,
-    AcademicSubscription subscription,
-  ) => Padding(
-    padding: const EdgeInsets.only(top: 16),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          '${source.name} · ${subscription.year}',
-          style: Theme.of(context).textTheme.titleSmall,
+  /// Adapter name, else the category label saved when events were imported.
+  String _subscriptionName(
+    AcademicCalendarService service,
+    AppSettings settings,
+    String universityId,
+  ) =>
+      service.sources.where((s) => s.id == universityId).firstOrNull?.name ??
+      settings.categories
+          .where(
+            (c) => c.id == AcademicCalendarService.categoryId(universityId),
+          )
+          .firstOrNull
+          ?.label ??
+      universityId;
+
+  Widget _subscriptionHeader(String name, AcademicSubscription subscription) =>
+      Padding(
+        padding: const EdgeInsets.only(top: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              '$name · ${subscription.year}',
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            Text(
+              subscription.lastSuccess == null
+                  ? text(AcademicText.never)
+                  : text(AcademicText.lastUpdated, {
+                      'date': date(subscription.lastSuccess!),
+                    }),
+            ),
+            if (subscription.enabled) Text(text(AcademicText.automatic)),
+            if (subscription.failed)
+              Text(
+                text(AcademicText.unavailable),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
+              ),
+          ],
         ),
-        Text(
-          subscription.lastSuccess == null
-              ? text(AcademicText.never)
-              : text(AcademicText.lastUpdated, {
-                  'date': date(subscription.lastSuccess!),
-                }),
-        ),
-        if (subscription.enabled) Text(text(AcademicText.automatic)),
-        if (subscription.failed)
-          Text(
-            text(AcademicText.unavailable),
-            style: TextStyle(color: Theme.of(context).colorScheme.error),
-          ),
-      ],
-    ),
-  );
+      );
 }

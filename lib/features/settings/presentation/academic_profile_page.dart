@@ -780,8 +780,8 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
                                                 schoolKind: selectedInstitution
                                                     .kind
                                                     .name,
-                                              ).academicSourceId ==
-                                              null)
+                                              ).supported ==
+                                              false)
                                             Text(
                                               context.tr(
                                                 '학사 정보는 저장할 수 있습니다. 이 대학의 학사일정·시간표 연동은 준비 중입니다.',

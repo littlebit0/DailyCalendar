@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart' show DateUtils;
 import 'package:flutter/foundation.dart';
 import '../../features/events/application/event_command_service.dart';
 import '../../features/events/domain/calendar_event.dart';
@@ -223,11 +224,15 @@ class AcademicCalendarService extends ChangeNotifier {
       final subscription = _subscriptions[source.id];
       if (subscription == null || !subscription.enabled) continue;
       final previous = subscription.lastAttempt;
+      final now = _now();
       final yearChanged =
-          subscription.followCurrentYear && subscription.year != _now().year;
+          subscription.followCurrentYear && subscription.year != now.year;
+      // Once per local calendar day; a future timestamp (clock or zone
+      // correction) must not suppress refreshes.
       if (!yearChanged &&
           previous != null &&
-          _now().difference(previous) < const Duration(days: 1)) {
+          !previous.isAfter(now) &&
+          DateUtils.isSameDay(previous, now)) {
         continue;
       }
       try {
@@ -379,7 +384,12 @@ class AcademicCalendarService extends ChangeNotifier {
       _check(generation);
       final local = await _repository.findById(id);
       _check(generation);
-      if (local != null && !local.isDeleted) await _commands.delete(id);
+      if (local != null && !local.isDeleted) {
+        await _commands.delete(
+          id,
+          isCurrent: () => !_disposed && generation == _store.generation,
+        );
+      }
     }
   });
 

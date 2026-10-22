@@ -66,8 +66,9 @@ class _CalendarService extends ChangeNotifier
   bool unavailable = false;
   @override
   AcademicResult? result;
+  Map<String, AcademicSubscription> retained = {};
   @override
-  Map<String, AcademicSubscription> get subscriptions => {};
+  Map<String, AcademicSubscription> get subscriptions => retained;
   @override
   Future<AcademicPreview> preview(AcademicSource source, int year) async {
     busy = true;
@@ -174,6 +175,23 @@ void main() {
     });
     container.read(appSettingsProvider.notifier).state = settings.load();
   }
+
+  testWidgets(
+    'retained subscription without a registered adapter renders without refresh',
+    (tester) async {
+      service.retained = {
+        'smu': AcademicSubscription(universityId: 'smu', year: 2026),
+        'retired': AcademicSubscription(universityId: 'retired', year: 2026),
+      };
+      await mount(tester);
+      expect(tester.takeException(), isNull);
+      expect(find.text('상명대학교 · 2026'), findsOneWidget);
+      expect(find.text('retired · 2026'), findsOneWidget);
+      // Only the registered adapter can be refreshed.
+      expect(find.byIcon(Icons.refresh), findsOneWidget);
+      expect(find.byIcon(Icons.delete_outline), findsNWidgets(2));
+    },
+  );
 
   testWidgets(
     'restored school change discards old preview and its captured import action',

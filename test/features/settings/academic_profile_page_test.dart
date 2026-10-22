@@ -520,6 +520,22 @@ void main() {
   }
 
   testWidgets(
+    'timetable-supported school is not described as unsupported without a calendar adapter',
+    (tester) async {
+      final repo = await repository();
+      await tester.pumpWidget(app(repo, _Queue()));
+      await open(tester);
+      await search(tester, '중앙대학교');
+      final institution = directory
+          .searchInstitutions('중앙대학교')
+          .singleWhere((school) => school.name == '중앙대학교');
+      await tester.tap(find.byKey(ValueKey('university-${institution.id}')));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('이 대학의 학사일정·시간표 연동은 준비 중입니다.'), findsNothing);
+    },
+  );
+
+  testWidgets(
     'unsupported four-year university remains selectable without enabling SMU',
     (tester) async {
       final repo = await repository();
