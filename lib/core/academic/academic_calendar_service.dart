@@ -2,7 +2,6 @@ import 'package:flutter/material.dart' show DateUtils;
 import 'package:flutter/foundation.dart';
 import '../../features/events/application/event_command_service.dart';
 import '../../features/events/domain/calendar_event.dart';
-import '../../features/events/domain/event_deletion.dart';
 import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../settings/settings_repository.dart';
@@ -86,16 +85,21 @@ class AcademicCalendarService extends ChangeNotifier {
         .firstOrNull;
     if (category == null) throw StateError('Academic category is missing');
     final updated = category.copyWith(colorValue: colorValue);
-    await _settings.save(
-      before.copyWith(
-        categories: [
-          for (final c in before.categories) c.id == category.id ? updated : c,
-        ],
-      ),
-      changedFrom: before,
+    final after = before.copyWith(
+      categories: [
+        for (final c in before.categories) c.id == category.id ? updated : c,
+      ],
     );
+    await _settings.save(after, changedFrom: before);
     _check(generation);
-    await _commands.updateCategoryUsage(previous: category, updated: updated);
+    try {
+      await _commands.updateCategoryUsage(previous: category, updated: updated);
+    } on Object {
+      // Event rows stay on the old colour when propagation fails; restore the
+      // setting too so both stay consistent, as the category editor does.
+      await _settings.save(before, changedFrom: after);
+      rethrow;
+    }
     _check(generation);
     await _sync.queueSettingsBackup();
   });
@@ -189,6 +193,7 @@ class AcademicCalendarService extends ChangeNotifier {
     );
     subscription
       ..enabled = true
+      ..owner = _operationAccount
       ..year = preview.year
       ..followCurrentYear = preview.year == _now().year
       ..lastAttempt = _now();
@@ -219,6 +224,11 @@ class AcademicCalendarService extends ChangeNotifier {
   Future<void> refresh(String universityId) => _run((generation) async {
     final source = sources.firstWhere((source) => source.id == universityId);
     final subscription = _subscriptions[universityId]!;
+    if (subscription.owner != null && subscription.owner != _operationAccount) {
+      throw StateError('Academic subscription belongs to another account');
+    }
+    // An explicit refresh adopts a subscription saved before owners existed.
+    subscription.owner = _operationAccount;
     await _refresh(source, subscription, generation);
   });
 
@@ -248,6 +258,9 @@ class AcademicCalendarService extends ChangeNotifier {
     for (final source in sources) {
       final subscription = _subscriptions[source.id];
       if (subscription == null || !subscription.enabled) continue;
+      // Automatic refresh never writes one account's school into another;
+      // ownerless legacy entries wait for an explicit refresh.
+      if (subscription.owner != _account()) continue;
       final previous = subscription.lastAttempt;
       final now = _now();
       final yearChanged =
@@ -277,19 +290,19 @@ class AcademicCalendarService extends ChangeNotifier {
   }) async {
     _check(generation);
     if (events.isEmpty) throw const FormatException('No academic records');
-    final settings = _settings.load();
     final id = categoryId(source.id);
-    final category =
-        settings.categories.where((c) => c.id == id).firstOrNull ??
+    var category = _settings
+        .load()
+        .categories
+        .where((c) => c.id == id)
+        .firstOrNull;
+    if (category == null) {
+      category = await _settings.ensureCategory(
         EventCategory(
           id: id,
           label: source.name,
           colorValue: initialColor ?? EventCategory.basic.colorValue,
-        );
-    if (!settings.categories.any((c) => c.id == id)) {
-      await _settings.save(
-        settings.copyWith(categories: [...settings.categories, category]),
-        changedFrom: settings,
+        ),
       );
       _check(generation);
       await _sync.queueSettingsBackup();
@@ -324,23 +337,14 @@ class AcademicCalendarService extends ChangeNotifier {
     await _store.save(_subscriptions, generation);
     final unchanged = <String>{};
     var preserved = 0;
-    // Sync compaction drops deleted rows and keeps only a deletion record; a
-    // missing row that was imported before is a deletion too. Neither may be
-    // re-imported, or the user's deletion would return and re-upload.
-    final repository = _repository;
-    final deletedIds = repository is EventSyncMaintenance
-        ? {
-            for (final record
-                in await (repository as EventSyncMaintenance).deletionRecords())
-              record.id,
-          }
-        : const <String>{};
-    _check(generation);
+    // Sync compaction drops deleted rows and keeps only a deletion record.
+    // Neither such a record (checked inside each write transaction below) nor
+    // a vanished row imported before may be re-imported, or the user's
+    // deletion would return and re-upload.
     final importing = <CalendarEvent>[];
     for (final candidate in candidates) {
-      if (deletedIds.contains(candidate.id) ||
-          (subscription.baselines.containsKey(candidate.id) &&
-              await _repository.findById(candidate.id) == null)) {
+      if (subscription.baselines.containsKey(candidate.id) &&
+          await _repository.findById(candidate.id) == null) {
         preserved++;
         unchanged.add(candidate.id);
       } else {
@@ -348,9 +352,11 @@ class AcademicCalendarService extends ChangeNotifier {
       }
     }
     _check(generation);
+    final recordedDeletions = <String>{};
     final saved = await _commands.importBatch(
       importing,
       isCurrent: () => _isCurrent(generation),
+      skippedDeleted: recordedDeletions,
       resolveLatest: (local, incoming) {
         _check(generation);
         if (local == null) {
@@ -392,6 +398,8 @@ class AcademicCalendarService extends ChangeNotifier {
       },
     );
     _check(generation);
+    preserved += recordedDeletions.length;
+    unchanged.addAll(recordedDeletions);
     for (final id in {...saved, ...unchanged}) {
       subscription.baselines[id] = external[id]!;
     }
@@ -420,8 +428,17 @@ class AcademicCalendarService extends ChangeNotifier {
 
   Future<void> setEnabled(String universityId, bool enabled) =>
       _run((generation) async {
-        _subscriptions[universityId]!.enabled = enabled;
-        await _store.save(_subscriptions, generation);
+        final subscription = _subscriptions[universityId]!;
+        final previous = subscription.enabled;
+        subscription.enabled = enabled;
+        try {
+          await _store.save(_subscriptions, generation);
+        } on Object {
+          // Keep memory equal to storage so refresh never acts on an unsaved
+          // reconnection.
+          subscription.enabled = previous;
+          rethrow;
+        }
       });
 
   Future<void> removeImported(String universityId) => _run((generation) async {

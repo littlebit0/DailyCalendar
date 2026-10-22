@@ -15,6 +15,7 @@ class AcademicSubscription {
     this.lastAttempt,
     this.lastSuccess,
     this.failed = false,
+    this.owner,
   }) : excluded = excluded ?? {},
        baselines = baselines ?? {},
        managedIds = managedIds ?? {};
@@ -30,6 +31,10 @@ class AcademicSubscription {
   DateTime? lastSuccess;
   bool failed;
 
+  /// Normalized Google account that imported it; null before accounts were
+  /// recorded or when no account was linked.
+  String? owner;
+
   Map<String, dynamic> toJson() => {
     'universityId': universityId,
     'year': year,
@@ -41,6 +46,7 @@ class AcademicSubscription {
     'lastAttempt': lastAttempt?.toIso8601String(),
     'lastSuccess': lastSuccess?.toIso8601String(),
     'failed': failed,
+    if (owner != null) 'owner': owner,
   };
 
   factory AcademicSubscription.fromJson(Map<String, dynamic> json) =>
@@ -60,6 +66,7 @@ class AcademicSubscription {
         lastAttempt: DateTime.tryParse(json['lastAttempt'] as String? ?? ''),
         lastSuccess: DateTime.tryParse(json['lastSuccess'] as String? ?? ''),
         failed: json['failed'] == true,
+        owner: json['owner'] as String?,
       );
 }
 

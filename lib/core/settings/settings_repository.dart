@@ -527,6 +527,25 @@ class SettingsRepository {
     );
   }
 
+  /// Adds [category] to the latest list inside the settings queue unless its
+  /// id already exists, so a concurrent category edit is never overwritten by
+  /// an older snapshot. Completes with the stored category.
+  Future<EventCategory> ensureCategory(EventCategory category) async {
+    EventCategory? stored;
+    await _enqueueSettingsMutation(() async {
+      final latest = load();
+      stored = latest.categories.where((c) => c.id == category.id).firstOrNull;
+      if (stored != null) return;
+      await _saveSettings(
+        latest.copyWith(categories: [...latest.categories, category]),
+        markSyncPending: true,
+        changedFrom: latest,
+      );
+      stored = category;
+    });
+    return stored!;
+  }
+
   /// A stale editor must not write academic details into a different account.
   Future<void> saveAcademicProfile(
     AcademicProfile profile, {

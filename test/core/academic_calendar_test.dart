@@ -67,6 +67,25 @@ class Repository implements EventRepository, EventSyncMaintenance {
   final events = <String, CalendarEvent>{};
   final ledger = <EventDeletion>[];
   @override
+  Future<List<EventRestoreMutation>> mergeUndeletedEventsAtomically(
+    Iterable<CalendarEvent> events, {
+    required RestoredEventResolver resolve,
+    required Set<String> skipped,
+  }) {
+    final removed = {
+      for (final event in events)
+        if (!this.events.containsKey(event.id) &&
+            ledger.any((record) => record.id == event.id))
+          event.id,
+    };
+    skipped.addAll(removed);
+    return mergeRestoredEventsAtomically(
+      events.where((event) => !removed.contains(event.id)),
+      resolve: resolve,
+    );
+  }
+
+  @override
   Future<List<EventDeletion>> deletionRecords({
     bool pendingOnly = false,
   }) async => ledger;
@@ -298,6 +317,17 @@ void main() {
         throwsStateError,
       );
       expect(service.unavailable, isTrue);
+      // The setting rolls back with the unchanged event rows.
+      expect(
+        settings
+            .load()
+            .categories
+            .singleWhere(
+              (c) => c.id == AcademicCalendarService.categoryId('smu'),
+            )
+            .colorValue,
+        isNot(0xff123456),
+      );
       repository.failCategoryUpdate = false;
       await service.setCategoryColor('smu', 0xff123456);
       expect(service.unavailable, isFalse);
@@ -712,6 +742,93 @@ void main() {
     await expectLater(operation, throwsStateError);
     expect(repository.events, isEmpty);
   });
+  test(
+    'automatic refresh only runs subscriptions of the current account',
+    () async {
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'A@example.com'),
+      );
+      await importAll();
+      expect(service.subscriptions['smu']!.owner, 'a@example.com');
+      final requests = source.requests;
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'b@example.com'),
+      );
+      now = now.add(const Duration(days: 2));
+      await service.refreshIfDue();
+      expect(source.requests, requests);
+      await expectLater(service.refresh('smu'), throwsStateError);
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'a@example.com'),
+      );
+      await service.refreshIfDue();
+      expect(source.requests, requests + 1);
+    },
+  );
+  test('ownerless legacy subscription waits for an explicit refresh', () async {
+    await importAll();
+    expect(service.subscriptions['smu']!.owner, isNull);
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'a@example.com'),
+    );
+    final requests = source.requests;
+    now = now.add(const Duration(days: 2));
+    await service.refreshIfDue();
+    expect(source.requests, requests);
+    await service.refresh('smu');
+    expect(service.subscriptions['smu']!.owner, 'a@example.com');
+    expect(source.requests, requests + 1);
+  });
+  test('new academic category joins the latest category list', () async {
+    final before = settings.load();
+    final custom = EventCategory(
+      id: 'custom',
+      label: '개인',
+      colorValue: 0xff000001,
+    );
+    // A category edit queued before the import's category insert completes.
+    final edit = settings.save(
+      before.copyWith(categories: [...before.categories, custom]),
+      changedFrom: before,
+    );
+    await importAll();
+    await edit;
+    final ids = settings.load().categories.map((c) => c.id);
+    expect(ids, contains('custom'));
+    expect(ids, contains(AcademicCalendarService.categoryId('smu')));
+  });
+  test(
+    'SQLite import skips a compacted deletion inside the write transaction',
+    () async {
+      final db = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(db.close);
+      final repo = DriftEventRepository(db);
+      final id = remote().dailyId('smu');
+      await repo.mergeDeletionRecords([
+        EventDeletion(id: id, deletedAt: DateTime.utc(2026, 9, 10)),
+      ]);
+      final realService = AcademicCalendarService(
+        sources: [source],
+        store: settings.academicStore,
+        settings: settings,
+        repository: repo,
+        sync: sync,
+        commands: EventCommandService(
+          repository: repo,
+          settingsRepository: settings,
+          notificationService: Notifications(),
+          syncService: sync,
+        ),
+      );
+      addTearDown(realService.dispose);
+      final preview = await realService.preview(source, 2026);
+      await realService.importSelection(preview, {'766720'});
+      expect(await repo.findById(id), isNull);
+      expect(realService.result!.preserved, 1);
+      expect(realService.result!.failed, 0);
+      expect(sync.uploaded, isNot(contains(id)));
+    },
+  );
   test('reset invalidates in-flight source fetch and stale preview', () async {
     final preview = await service.preview(source, 2026);
     await settings.academicStore.clear();

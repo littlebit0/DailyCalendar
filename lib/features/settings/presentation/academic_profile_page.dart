@@ -780,6 +780,14 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
                                                 schoolKind: selectedInstitution
                                                     .kind
                                                     .name,
+                                                // Same campus as the save, so a
+                                                // main-campus adapter never hides
+                                                // an unsupported chosen campus.
+                                                campusId:
+                                                    selectedInstitution
+                                                        .campusSelectionRequired
+                                                    ? selectedCampus?.id
+                                                    : null,
                                               ).supported ==
                                               false)
                                             Text(
