@@ -1080,6 +1080,39 @@ void main() {
     await service.importSelection(next, selected);
     expect(starts(), [DateTime(2026, 3, 2), DateTime(2026, 6, 2)]);
   });
+  test(
+    'a later-excluded imported event keeps its row when IDs shift',
+    () async {
+      AcademicEvent at(String id, int month) => AcademicEvent(
+        sourceId: id,
+        title: '보강',
+        start: DateTime(2026, month, 2),
+        end: DateTime(2026, month, 3),
+        url: 'https://example.invalid',
+      );
+      source.events = [at('t:0', 3), at('t:1', 9)];
+      await importAll();
+      final september = at('t:1', 9).dailyId('smu');
+      repository.events[september] = repository.events[september]!.copyWith(
+        memo: '9월 메모',
+      );
+      // September is excluded after it was imported; its row stays.
+      await service.importSelection(await service.preview(source, 2026), {
+        't:0',
+      });
+      // June is inserted, so September becomes t:2.
+      source.events = [at('t:0', 3), at('t:1', 6), at('t:2', 9)];
+      await service.refresh('smu');
+      expect(repository.events[september]!.startAt, DateTime(2026, 9, 2));
+      expect(repository.events[september]!.memo, '9월 메모');
+      final june = repository.events.values.where(
+        (e) => e.startAt == DateTime(2026, 6, 2),
+      );
+      expect(june, hasLength(1));
+      expect(june.single.memo, isNot('9월 메모'));
+      expect(repository.events, hasLength(3));
+    },
+  );
   test('IDs-only exclusions saved before snapshots still apply', () async {
     source.events = [remote(), remote(id: '2', title: '휴강')];
     await importAll();

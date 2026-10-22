@@ -392,10 +392,18 @@ class AcademicCalendarService extends ChangeNotifier {
         if (!snapshotIds.contains(id)) id,
       for (final snapshot in subscription.excludedEvents) snapshot.sourceId,
     };
-    final external = _localIds(source.id, [
-      for (var i = 0; i < events.length; i++)
-        if (!excluded.contains(i)) events[i],
-    ], subscription.baselines);
+    // Local IDs are assigned over the whole feed first, so an excluded event
+    // still holds its imported row and no other event can take that row.
+    final excludedEvents = Set<AcademicEvent>.identity()
+      ..addAll([for (final i in excluded) events[i]]);
+    final external = {
+      for (final entry in _localIds(
+        source.id,
+        events,
+        subscription.baselines,
+      ).entries)
+        if (!excludedEvents.contains(entry.value)) entry.key: entry.value,
+    };
     final candidates = [
       for (final entry in external.entries)
         CalendarEvent(
