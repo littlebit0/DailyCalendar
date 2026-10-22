@@ -78,9 +78,9 @@ void main() {
       universityName: '단국대학교',
       schoolKind: 'fourYear',
     ),
-    'jnu': AcademicProfile(
-      universityId: 'institution:academyinfo:0000023',
-      universityName: '전남대학교',
+    'cau': AcademicProfile(
+      universityId: 'institution:academyinfo:0000175',
+      universityName: '중앙대학교',
       schoolKind: 'fourYear',
     ),
   };
@@ -100,19 +100,19 @@ void main() {
         end: DateTime(2027, 1, 14),
       ),
     },
-    'jnu': {
+    'cau': {
       '1': TimetablePeriod(
         start: DateTime(2026, 3, 3),
-        end: DateTime(2026, 6, 23),
+        end: DateTime(2026, 6, 22),
       ),
       '여름': TimetablePeriod(
-        start: DateTime(2026, 6, 29),
-        end: DateTime(2026, 7, 23),
+        start: DateTime(2026, 6, 24),
+        end: DateTime(2026, 7, 15),
       ),
       '2': _fall,
       '겨울': TimetablePeriod(
-        start: DateTime(2026, 12, 28),
-        end: DateTime(2027, 1, 22),
+        start: DateTime(2026, 12, 23),
+        end: DateTime(2027, 1, 15),
       ),
     },
   };
@@ -227,12 +227,12 @@ void main() {
       await container.read(timetablePeriodPreparationProvider.future);
       container.read(appSettingsProvider.notifier).state = settings
           .load()
-          .copyWith(academicProfile: supportedProfiles['jnu']);
+          .copyWith(academicProfile: supportedProfiles['cau']);
       await container.read(timetablePeriodPreparationProvider.future);
       expect(store.periodFor(2026, '여름'), legacyPeriod);
       expect(store.periodFor(2026, '1'), userPeriod);
       await store.save(_course('new-term', semester: '겨울'));
-      expect(store.periodFor(2026, '겨울'), officialPeriods['jnu']!['겨울']);
+      expect(store.periodFor(2026, '겨울'), officialPeriods['cau']!['겨울']);
     },
   );
 

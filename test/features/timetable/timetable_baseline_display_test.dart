@@ -29,41 +29,36 @@ Widget app(Widget child, {bool dark = false}) => MaterialApp(
 );
 
 void main() {
-  test(
-    'existing SMU DKU JNU weekly rows remain unchanged in both campuses',
-    () {
-      for (final file in [
-        'smu-seoul',
-        'smu-cheonan',
-        'dku-jukjeon',
-        'dku-cheonan',
-        'jnu-gwangju',
-        'jnu-yeosu',
-      ]) {
-        final dataset = UniversityDataset.fromJson(
-          jsonDecode(
-                File('assets/timetable/$file-2026-2.json').readAsStringSync(),
-              )
-              as Map<String, dynamic>,
-        );
-        for (final course in dataset.courses) {
-          final expected = <(int, int, int, String)>{};
-          final rows = <ClassMeeting>[];
-          for (final meeting in course.meetings) {
-            if (expected.add((
-              meeting.weekday,
-              meeting.startMinute,
-              meeting.endMinute,
-              meeting.classroom,
-            ))) {
-              rows.add(meeting);
-            }
+  test('existing SMU DKU weekly rows remain unchanged in both campuses', () {
+    for (final file in [
+      'smu-seoul',
+      'smu-cheonan',
+      'dku-jukjeon',
+      'dku-cheonan',
+    ]) {
+      final dataset = UniversityDataset.fromJson(
+        jsonDecode(
+              File('assets/timetable/$file-2026-2.json').readAsStringSync(),
+            )
+            as Map<String, dynamic>,
+      );
+      for (final course in dataset.courses) {
+        final expected = <(int, int, int, String)>{};
+        final rows = <ClassMeeting>[];
+        for (final meeting in course.meetings) {
+          if (expected.add((
+            meeting.weekday,
+            meeting.startMinute,
+            meeting.endMinute,
+            meeting.classroom,
+          ))) {
+            rows.add(meeting);
           }
-          expect(timetableDisplayMeetings(course.meetings), rows);
         }
+        expect(timetableDisplayMeetings(course.meetings), rows);
       }
-    },
-  );
+    }
+  });
 
   final meetings = [
     for (var week = 0; week < 15; week++)
@@ -193,12 +188,12 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text('수강 제한 비고'), findsOneWidget);
         final mode = find.byKey(const ValueKey('course-mode-dated'));
-      await tester.ensureVisible(mode);
-      await tester.tap(mode);
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('대면 강의').last);
-      await tester.pumpAndSettle();
-      final add = find.text('시간표에 추가');
+        await tester.ensureVisible(mode);
+        await tester.tap(mode);
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('대면 강의').last);
+        await tester.pumpAndSettle();
+        final add = find.text('시간표에 추가');
         await tester.ensureVisible(add);
         await tester.tap(add);
         await tester.pumpAndSettle();

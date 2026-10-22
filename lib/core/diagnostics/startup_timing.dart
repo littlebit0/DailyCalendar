@@ -10,7 +10,6 @@ enum StartupStage {
   accountRestore,
   drive,
   lms,
-  academic,
   firstCalendarFrame,
 }
 

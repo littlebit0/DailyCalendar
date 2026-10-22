@@ -18,7 +18,6 @@ void main() {
       );
       expect(profile.timetableUniversity, 'inje');
       expect(profile.timetableSupported, isFalse);
-      expect(profile.academicSourceId, 'inje');
       expect(
         AcademicProfile.fromJson(profile.toJson()).toJson(),
         profile.toJson(),

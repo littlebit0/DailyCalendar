@@ -520,47 +520,6 @@ void main() {
   }
 
   testWidgets(
-    'calendar-only school enables calendar without enabling SMU timetable',
-    (tester) async {
-      final repo = await repository();
-      final queue = _Queue();
-      await tester.pumpWidget(app(repo, queue));
-      await open(tester);
-      await search(tester, '서울교육대학교');
-      final institution = directory
-          .searchInstitutions('서울교육대학교')
-          .singleWhere((school) => school.name == '서울교육대학교');
-      await tester.tap(find.byKey(ValueKey('university-${institution.id}')));
-      await tester.pumpAndSettle();
-      await save(tester);
-      expect(repo.load().academicProfile!.academicSourceId, 'snue');
-      expect(repo.load().academicProfile!.timetableSupported, isFalse);
-      await tester.pumpWidget(const SizedBox.shrink());
-      await tester.pumpWidget(
-        app(
-          repo,
-          queue,
-          child: const Column(
-            children: [
-              AcademicFeatureGate(
-                calendar: true,
-                child: Text('calendar-feature'),
-              ),
-              Expanded(
-                child: AcademicFeatureGate(child: Text('timetable-feature')),
-              ),
-            ],
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      expect(find.text('calendar-feature'), findsOneWidget);
-      expect(find.text('timetable-feature'), findsNothing);
-      expect(tester.takeException(), isNull);
-    },
-  );
-
-  testWidgets(
     'unsupported four-year university remains selectable without enabling SMU',
     (tester) async {
       final repo = await repository();
@@ -578,7 +537,7 @@ void main() {
         findsOneWidget,
       );
       await save(tester);
-      expect(repo.load().academicProfile!.supported, isFalse);
+      expect(repo.load().academicProfile!.timetableSupported, isFalse);
       expect(repo.load().academicProfile!.schoolKind, 'fourYear');
       expect(queue.calls, 1);
       await tester.pumpWidget(const SizedBox.shrink());
@@ -806,8 +765,8 @@ void main() {
           const ValueKey('university-institution:academyinfo:0000117'),
         );
         expect(
-          find.descendant(of: smuTile, matching: find.text('학사일정 지원')),
-          findsOneWidget,
+          find.descendant(of: smuTile, matching: find.textContaining('학사일정')),
+          findsNothing,
         );
         expect(
           find.descendant(of: smuTile, matching: find.text('시간표 연결')),

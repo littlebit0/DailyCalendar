@@ -16,7 +16,6 @@ void main() {
         );
         expect(profile.timetableUniversity, 'daegu');
         expect(profile.timetableCampus, 'main');
-        expect(profile.academicSourceId, 'daegu');
         expect(
           AcademicProfile(
             universityId: id,
@@ -38,7 +37,6 @@ void main() {
         );
         expect(profile.timetableUniversity, 'cbnu');
         expect(profile.timetableCampus, 'main');
-        expect(profile.academicSourceId, 'cbnu');
         expect(
           AcademicProfile(
             universityId: id,
@@ -60,7 +58,6 @@ void main() {
         );
         expect(profile.timetableUniversity, 'koreatech');
         expect(profile.timetableCampus, 'unknown');
-        expect(profile.academicSourceId, 'koreatech');
         expect(
           AcademicProfile(
             universityId: id,
@@ -82,7 +79,6 @@ void main() {
         );
         expect(p.timetableUniversity, 'hanbat');
         expect(p.timetableCampus, 'daejeon');
-        expect(p.academicSourceId, 'hanbat');
         expect(
           AcademicProfile(
             universityId: id,
@@ -104,7 +100,6 @@ void main() {
         );
         expect(profile.timetableUniversity, 'pknu');
         expect(profile.timetableCampus, 'unknown');
-        expect(profile.academicSourceId, 'pknu');
         expect(
           AcademicProfile(
             universityId: id,
@@ -126,7 +121,6 @@ void main() {
         );
         expect(p.timetableUniversity, 'jeju');
         expect(p.timetableCampus, 'unknown');
-        expect(p.academicSourceId, 'jeju');
         expect(
           AcademicProfile(
             universityId: id,
@@ -148,7 +142,6 @@ void main() {
         );
         expect(p.timetableUniversity, 'inu');
         expect(p.timetableCampus, 'unknown');
-        expect(p.academicSourceId, 'inu');
         expect(
           AcademicProfile(
             universityId: id,
@@ -170,7 +163,6 @@ void main() {
         );
         expect(p.timetableUniversity, 'kumoh');
         expect(p.timetableCampus, 'yangho');
-        expect(p.academicSourceId, 'kumoh');
         expect(
           AcademicProfile(
             universityId: id,
@@ -193,7 +185,6 @@ void main() {
         );
         expect(p.timetableUniversity, 'scnu');
         expect(p.timetableCampus, 'unknown');
-        expect(p.academicSourceId, 'sunchon');
         expect(
           AcademicProfile(
             universityId: id,
@@ -216,7 +207,6 @@ void main() {
         );
         expect(p.timetableUniversity, 'ulsan');
         expect(p.timetableCampus, 'main');
-        expect(p.academicSourceId, 'ulsan');
         expect(
           AcademicProfile(
             universityId: id,

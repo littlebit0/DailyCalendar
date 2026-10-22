@@ -61,7 +61,6 @@ void main() {
     );
     expect(profile.timetableUniversity, 'inha');
     expect(profile.timetableCampus, 'main');
-    expect(profile.academicSourceId, 'inha');
     final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
     final period = defaults.periodFor(2026, '2', university: 'inha')!;
     expect(period.start, DateTime(2026, 8, 31));

@@ -59,12 +59,6 @@ void main() {
             schoolKind: 'fourYear',
             campusId: campus as String,
           );
-          expect(
-            profile.academicSourceId,
-            (row['academicCalendar']['sourceByCampus'] as Map?)?[campus] ??
-                row['academicCalendar']['sourceId'],
-            reason: '${row['name']} / $campus',
-          );
           final timetable = row['timetable'] as Map;
           if (timetable['status'] == 'temporarily_unsupported') {
             expect(profile.timetableSupported, isFalse);

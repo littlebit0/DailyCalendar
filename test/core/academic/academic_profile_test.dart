@@ -52,66 +52,20 @@ class _FailPreferences extends InMemorySharedPreferencesStore {
 }
 
 void main() {
-  test(
-    'SCH calendar source survives profile restore and rejects other campuses',
-    () {
-      for (final id in [
-        'institution:academyinfo:0000142',
-        'academyinfo:0000142',
-      ]) {
-        final profile = AcademicProfile(
-          universityId: id,
-          universityName: '순천향대학교',
-          schoolKind: 'fourYear',
-        );
-        expect(
-          AcademicProfile.fromJson(profile.toJson()).academicSourceId,
-          'sch',
-        );
-        expect(profile.timetableUniversity, 'sch');
-      }
-      expect(
-        const AcademicProfile(
-          universityId: 'institution:academyinfo:0000142',
-          universityName: '순천향대학교',
-          schoolKind: 'fourYear',
-          campusId: 'academyinfo:0000117',
-        ).academicSourceId,
-        isNull,
+  test('SCH timetable identity accepts institution and legacy ids', () {
+    for (final id in [
+      'institution:academyinfo:0000142',
+      'academyinfo:0000142',
+    ]) {
+      final profile = AcademicProfile(
+        universityId: id,
+        universityName: '순천향대학교',
+        schoolKind: 'fourYear',
       );
-    },
-  );
-  TestWidgetsFlutterBinding.ensureInitialized();
-
-  test('Changwon keeps one institution with independent campus dates', () {
-    const main = AcademicProfile(
-      universityId: 'institution:academyinfo:0000028',
-      universityName: '국립창원대학교',
-      schoolKind: 'fourYear',
-    );
-    const branch = AcademicProfile(
-      universityId: 'institution:academyinfo:0000028',
-      campusId: 'academyinfo:0003297',
-      universityName: '국립창원대학교',
-      schoolKind: 'fourYear',
-      campus: '거창캠퍼스',
-    );
-    const legacy = AcademicProfile(
-      universityId: 'academyinfo:0003297',
-      universityName: '국립창원대학교',
-      schoolKind: 'fourYear',
-    );
-    const namhae = AcademicProfile(
-      universityId: 'institution:academyinfo:0000028',
-      campusId: 'academyinfo:0003298',
-      universityName: '국립창원대학교',
-      schoolKind: 'fourYear',
-    );
-    expect(main.academicSourceId, 'changwon');
-    expect(branch.academicSourceId, 'changwon-geochang');
-    expect(legacy.academicSourceId, 'changwon-geochang');
-    expect(namhae.academicSourceId, 'changwon-namhae');
+      expect(profile.timetableUniversity, 'sch');
+    }
   });
+  TestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() {
     SharedPreferences.setMockInitialValues({});
@@ -155,7 +109,6 @@ void main() {
         });
         expect(profile.timetableUniversity, university);
         expect(profile.timetableCampus, campus);
-        expect(profile.academicSourceId, university);
         expect(AcademicProfile.fromJson(profile.toJson()), profile);
         expect(profile.campusId, isNull);
       }
@@ -173,7 +126,7 @@ void main() {
           universityName: 'School',
           schoolKind: 'fourYear',
           campusId: 'academyinfo:0000024',
-        ).supported,
+        ).timetableSupported,
         isFalse,
       );
     },
@@ -183,15 +136,14 @@ void main() {
     expect(AcademicProfile.fromJson(_seoul.toJson()), _seoul);
     expect(_seoul.timetableCampus, 'seoul');
     expect(_cheonan.timetableCampus, 'cheonan');
-    expect(_seoul.academicSourceId, 'smu');
     expect(_seoul.displayName, '상명대학교');
-    expect(_other.supported, isFalse);
+    expect(_other.timetableSupported, isFalse);
     expect(
       const AcademicProfile(
         universityId: 'untrusted',
         universityName: '상명대학교',
         schoolKind: 'fourYear',
-      ).supported,
+      ).timetableSupported,
       isFalse,
     );
     for (final invalid in [
@@ -214,16 +166,8 @@ void main() {
         universityName: '국립한국해양대학교',
         schoolKind: 'fourYear',
       );
-      expect(profile.academicSourceId, 'kmou');
       expect(profile.timetableUniversity, 'kmou');
       expect(profile.timetableCampus, 'unknown');
-      expect(
-        AcademicProfile.fromJson({
-          ...profile.toJson(),
-          'campusId': 'academyinfo:0000012',
-        }).academicSourceId,
-        isNull,
-      );
     }
   });
 
@@ -244,7 +188,7 @@ void main() {
         expect(AcademicProfile.fromJson(profile.toJson()), profile);
         expect(profile.selectedCampusId, id);
         expect(profile.timetableCampus, integration);
-        expect(profile.supported, isTrue);
+        expect(profile.timetableSupported, isTrue);
       }
       for (final legacy in [_seoul, _cheonan]) {
         final json = legacy.toJson();
@@ -261,7 +205,7 @@ void main() {
           universityName: '상명대학교',
           schoolKind: 'fourYear',
           campusId: 'academyinfo:0000117',
-        ).supported,
+        ).timetableSupported,
         isFalse,
       );
       for (final malformed in [

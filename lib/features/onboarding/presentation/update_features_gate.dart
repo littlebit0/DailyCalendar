@@ -7,7 +7,6 @@ import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
 import '../../../core/widgets/lock_screen_wallpaper_service.dart';
 import '../../settings/presentation/weather_settings_page.dart';
-import '../../settings/presentation/academic_calendar_page.dart';
 import '../feature_announcements.dart';
 
 class UpdateFeaturesGate extends ConsumerStatefulWidget {
@@ -66,10 +65,6 @@ class _UpdateFeaturesGateState extends ConsumerState<UpdateFeaturesGate> {
             await Navigator.of(context).push<void>(
               MaterialPageRoute(builder: (_) => const WeatherSettingsPage()),
             );
-          case AnnouncementFeature.academicCalendar:
-            await Navigator.of(context).push<void>(
-              MaterialPageRoute(builder: (_) => const AcademicCalendarPage()),
-            );
         }
       }
       if (!mounted) return;
@@ -105,11 +100,6 @@ class _UpdateFeaturesGateState extends ConsumerState<UpdateFeaturesGate> {
         '날씨 예보',
         '캘린더에서 선택한 지역의 날씨를 확인하세요. 기존 설정은 그대로 유지됩니다.',
         Icons.cloud_outlined,
-      ),
-      AnnouncementFeature.academicCalendar => (
-        '대학교 학사일정',
-        '대학교 공식 학사일정을 가져오고 변경사항을 갱신하세요. 현재 상명대학교를 지원합니다.',
-        Icons.school_outlined,
       ),
     };
     return PopScope(
