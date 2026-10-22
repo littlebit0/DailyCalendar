@@ -155,6 +155,8 @@ class Repository implements EventRepository, EventSyncMaintenance {
 }
 
 class Notifications implements NotificationService {
+  /// Fails the next reminder cancellation, after the row was tombstoned.
+  bool failNextCancel = false;
   @override
   Future<void> scheduleEventReminder(
     CalendarEvent event, {
@@ -164,7 +166,15 @@ class Notifications implements NotificationService {
   Future<void> cancelEventReminder(
     String eventId, {
     List<int> reminderMinutesBeforeList = const [],
-  }) async {}
+  }) async {
+    if (failNextCancel) {
+      failNextCancel = false;
+      throw StateError('reminder cancel failed');
+    }
+    cancelled.add(eventId);
+  }
+
+  final cancelled = <String>[];
   @override
   Future<void> scheduleMorningBriefing({
     required int hour,
@@ -172,6 +182,20 @@ class Notifications implements NotificationService {
   }) async {}
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+/// Store whose writes can be made to fail like a full or locked device.
+class FailingStore extends AcademicStore {
+  FailingStore(super.preferences);
+  bool failSave = false;
+  @override
+  Future<void> save(
+    Map<String, AcademicSubscription> subscriptions,
+    int expectedGeneration,
+  ) {
+    if (failSave) throw StateError('Academic settings write failed');
+    return super.save(subscriptions, expectedGeneration);
+  }
 }
 
 class Sync implements SyncService {
@@ -206,6 +230,7 @@ void main() {
   late AcademicCalendarService service;
   late DateTime now;
   late EventCommandService commands;
+  late Notifications notifications;
   setUp(() async {
     SharedPreferences.setMockInitialValues({
       'academicProfile.v1': jsonEncode(
@@ -224,10 +249,11 @@ void main() {
     repository = Repository();
     sync = Sync();
     now = DateTime(2026, 9, 16);
+    notifications = Notifications();
     commands = EventCommandService(
       repository: repository,
       settingsRepository: settings,
-      notificationService: Notifications(),
+      notificationService: notifications,
       syncService: sync,
     );
     service = AcademicCalendarService(
@@ -902,6 +928,75 @@ void main() {
       expect(sync.uploaded, isNot(contains(id)));
     },
   );
+  test('another account cannot recolor a subscription', () async {
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'a@example.com'),
+    );
+    await importAll();
+    final id = AcademicCalendarService.categoryId('smu');
+    final color = settings
+        .load()
+        .categories
+        .singleWhere((c) => c.id == id)
+        .colorValue;
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'b@example.com'),
+    );
+    await expectLater(
+      service.setCategoryColor('smu', 0xff123456),
+      throwsStateError,
+    );
+    expect(
+      settings.load().categories.singleWhere((c) => c.id == id).colorValue,
+      color,
+    );
+    expect(repository.events.values.single.colorValue, color);
+  });
+  test('failed subscription writes leave memory equal to storage', () async {
+    final store = FailingStore(await SharedPreferences.getInstance());
+    final failing = AcademicCalendarService(
+      sources: [source],
+      store: store,
+      settings: settings,
+      repository: repository,
+      commands: commands,
+      sync: sync,
+      now: () => now,
+    );
+    addTearDown(failing.dispose);
+    store.failSave = true;
+    final preview = await failing.preview(source, 2026);
+    await expectLater(
+      failing.importSelection(preview, {'766720'}),
+      throwsStateError,
+    );
+    expect(failing.subscriptions, isEmpty);
+    store.failSave = false;
+    await failing.importSelection(await failing.preview(source, 2026), {
+      '766720',
+    });
+    final id = remote().dailyId('smu');
+    store.failSave = true;
+    await expectLater(failing.setEnabled('smu', false), throwsStateError);
+    expect(failing.subscriptions['smu']!.enabled, isTrue);
+    await expectLater(failing.removeImported('smu'), throwsStateError);
+    expect(failing.subscriptions['smu']!.enabled, isTrue);
+    expect(failing.subscriptions['smu']!.pendingRemovals, isEmpty);
+    expect(repository.events[id]!.isDeleted, isFalse);
+  });
+  test('removal whose follow-up failed is completed on retry', () async {
+    await importAll();
+    final id = remote().dailyId('smu');
+    notifications.failNextCancel = true;
+    await expectLater(service.removeImported('smu'), throwsStateError);
+    expect(repository.events[id]!.isDeleted, isTrue);
+    expect(service.subscriptions['smu']!.pendingRemovals, {id});
+    expect(settings.academicStore.load()['smu']!.pendingRemovals, {id});
+    await service.removeImported('smu');
+    expect(notifications.cancelled, contains(id));
+    expect(service.subscriptions['smu']!.pendingRemovals, isEmpty);
+    expect(settings.academicStore.load()['smu']!.pendingRemovals, isEmpty);
+  });
   test('reset invalidates in-flight source fetch and stale preview', () async {
     final preview = await service.preview(source, 2026);
     await settings.academicStore.clear();

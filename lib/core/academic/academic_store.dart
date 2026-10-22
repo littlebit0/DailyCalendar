@@ -12,13 +12,15 @@ class AcademicSubscription {
     Set<String>? excluded,
     Map<String, AcademicEvent>? baselines,
     Set<String>? managedIds,
+    Set<String>? pendingRemovals,
     this.lastAttempt,
     this.lastSuccess,
     this.failed = false,
     this.owner,
   }) : excluded = excluded ?? {},
        baselines = baselines ?? {},
-       managedIds = managedIds ?? {};
+       managedIds = managedIds ?? {},
+       pendingRemovals = pendingRemovals ?? {};
 
   final String universityId;
   int year;
@@ -27,6 +29,10 @@ class AcademicSubscription {
   Set<String> excluded;
   final Map<String, AcademicEvent> baselines;
   final Set<String> managedIds;
+
+  /// Imported events whose removal started but did not finish, including its
+  /// reminder, alarm and sync follow-ups. Retried on the next removal.
+  final Set<String> pendingRemovals;
   DateTime? lastAttempt;
   DateTime? lastSuccess;
   bool failed;
@@ -43,6 +49,7 @@ class AcademicSubscription {
     'excluded': excluded.toList(),
     'baselines': baselines.map((id, event) => MapEntry(id, event.toJson())),
     'managedIds': managedIds.toList(),
+    if (pendingRemovals.isNotEmpty) 'pendingRemovals': pendingRemovals.toList(),
     'lastAttempt': lastAttempt?.toIso8601String(),
     'lastSuccess': lastSuccess?.toIso8601String(),
     'failed': failed,
@@ -57,6 +64,9 @@ class AcademicSubscription {
         followCurrentYear: json['followCurrentYear'] == true,
         excluded: (json['excluded'] as List).cast<String>().toSet(),
         managedIds: (json['managedIds'] as List? ?? const [])
+            .cast<String>()
+            .toSet(),
+        pendingRemovals: (json['pendingRemovals'] as List? ?? const [])
             .cast<String>()
             .toSet(),
         baselines: (json['baselines'] as Map<String, dynamic>).map(

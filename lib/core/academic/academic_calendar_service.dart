@@ -79,6 +79,8 @@ class AcademicCalendarService extends ChangeNotifier {
   Future<void> setCategoryColor(String universityId, int colorValue) => _run((
     generation,
   ) async {
+    // The colour applies to every imported row of this subscription.
+    _requireManageable(universityId);
     final change = await _settings.updateCategory(
       categoryId(universityId),
       (current) => current.copyWith(colorValue: colorValue),
@@ -139,6 +141,25 @@ class AcademicCalendarService extends ChangeNotifier {
     return owner == null ||
         owner == localOwner ||
         owner == _ownerKey(_account());
+  }
+
+  /// Saves subscriptions; on failure, puts [universityId] back to [before]
+  /// (absent when null) so memory never runs ahead of storage.
+  Future<void> _saveOrRestore(
+    int generation,
+    String universityId,
+    Map<String, dynamic>? before,
+  ) async {
+    try {
+      await _store.save(_subscriptions, generation);
+    } on Object {
+      if (before == null) {
+        _subscriptions.remove(universityId);
+      } else {
+        _subscriptions[universityId] = AcademicSubscription.fromJson(before);
+      }
+      rethrow;
+    }
   }
 
   void _requireManageable(String universityId) {
@@ -207,6 +228,7 @@ class AcademicCalendarService extends ChangeNotifier {
     final source = preview.source;
     // Never take over another account's exclusions and imported events.
     _requireManageable(source.id);
+    final before = _subscriptions[source.id]?.toJson();
     final subscription = _subscriptions.putIfAbsent(
       source.id,
       () => AcademicSubscription(universityId: source.id, year: preview.year),
@@ -224,7 +246,7 @@ class AcademicCalendarService extends ChangeNotifier {
         subscription.excluded.add(event.sourceId);
       }
     }
-    await _store.save(_subscriptions, generation);
+    await _saveOrRestore(generation, source.id, before);
     try {
       result = await _apply(
         source,
@@ -450,31 +472,44 @@ class AcademicCalendarService extends ChangeNotifier {
       _run((generation) async {
         _requireManageable(universityId);
         final subscription = _subscriptions[universityId]!;
-        final previous = subscription.enabled;
+        final before = subscription.toJson();
         subscription.enabled = enabled;
-        try {
-          await _store.save(_subscriptions, generation);
-        } on Object {
-          // Keep memory equal to storage so refresh never acts on an unsaved
-          // reconnection.
-          subscription.enabled = previous;
-          rethrow;
-        }
+        // Memory follows storage so refresh never acts on an unsaved change.
+        await _saveOrRestore(generation, universityId, before);
       });
 
   Future<void> removeImported(String universityId) => _run((generation) async {
     // Another account's imported events stay intact and are not tombstoned.
     _requireManageable(universityId);
     final subscription = _subscriptions[universityId]!;
-    subscription.enabled = false;
-    await _store.save(_subscriptions, generation);
+    final before = subscription.toJson();
     // Provenance IDs, not category/title matching: never remove personal events.
     for (final id in subscription.managedIds) {
       _check(generation);
       final local = await _repository.findById(id);
-      _check(generation);
       if (local != null && !local.isDeleted) {
+        subscription.pendingRemovals.add(id);
+      }
+    }
+    _check(generation);
+    subscription.enabled = false;
+    // Recorded first, so a row tombstoned before a failed reminder, alarm or
+    // sync follow-up is deleted again (follow-ups included) on retry.
+    await _saveOrRestore(generation, universityId, before);
+    try {
+      for (final id in subscription.pendingRemovals.toList()) {
+        _check(generation);
         await _commands.delete(id, isCurrent: () => _isCurrent(generation));
+        _check(generation);
+        subscription.pendingRemovals.remove(id);
+      }
+    } finally {
+      if (_isCurrent(generation)) {
+        try {
+          await _store.save(_subscriptions, generation);
+        } on Object {
+          // Unsaved progress only repeats completed deletions on retry.
+        }
       }
     }
   });
