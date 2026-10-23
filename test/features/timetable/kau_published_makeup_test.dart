@@ -27,17 +27,50 @@ void main() {
       course['metadata']['researchOnly'] = false;
     }
   }
+  // 2026-09-08 확정 폐강 교과목 공고(학사공지 11155) 표 이미지의 과목번호 50개.
+  const finalClosed = {
+    '0112', '0150', '0155', '0171', '0177', '0178', '0183', '0187', '0190', //
+    '0204', '0208', '0209', '0210', '0213', '0239', '0258', '0276', '0278', //
+    '0320', '0353', '0356', '0364', '0447', '0448', '0462', '0464', '0504', //
+    '0505', '0506', '0507', '0509', '0516', '0545', '0567', '0568', '0619', //
+    '0620', '0621', '0629', '0640', '0654', '0657', '0668', '0671', '0672', //
+    '0680', '0692', '0701', '0702', '0707', //
+  };
+  const unchecked =
+      '확정 폐강 공고의 교육 이미지는 정상공개 요청403으로 실제 확정 폐강 대조 미완료입니다.';
+  const checked = '2026-09-08 확정 폐강 교과목 공고(50강좌) 표와 대조해 폐강 목록에 없는 강좌입니다.';
+  for (final course in baseline['courses'] as List) {
+    final remarks = course['departmentRemarks'] as Map<String, dynamic>;
+    for (final key in remarks.keys.toList()) {
+      remarks[key] = (remarks[key] as String).replaceAll(unchecked, checked);
+    }
+    course['sourceEducation']['finalNativeClosureCheckComplete'] = true;
+  }
   final original = {
     for (final c in baseline['courses'] as List) c['sourceId']: c,
   };
 
   test(
-    'All original83 identities and old332meetings preserved, held61 and unaffected8 remain deep equal',
+    'Final closures removed, remaining40 identities and old meetings preserved, held18 remain deep equal',
     () {
-      expect(candidate['courses'], hasLength(83));
+      final baselineIds = original.keys
+          .map((id) => (id as String).split('/').last)
+          .toSet();
+      expect(baselineIds, hasLength(83));
+      expect(finalClosed, hasLength(50));
+      expect(baselineIds.intersection(finalClosed), hasLength(43));
+      for (final old in original.values) {
+        final closed = finalClosed.contains(
+          (old['sourceId'] as String).split('/').last,
+        );
+        expect(old['sourceEducation']['predictedClosureHeld'] == true, closed);
+      }
+      expect(candidate['courses'], hasLength(40));
       expect(
-        (candidate['courses'] as List).map((c) => c['sourceId']).toSet(),
-        hasLength(83),
+        (candidate['courses'] as List)
+            .map((c) => (c['sourceId'] as String).split('/').last)
+            .toSet(),
+        baselineIds.difference(finalClosed),
       );
       var modified = 0;
       for (final c in candidate['courses'] as List) {
@@ -64,7 +97,7 @@ void main() {
         (candidate['courses'] as List).where(
           (c) => (c['schedules'] as List).isEmpty,
         ),
-        hasLength(61),
+        hasLength(18),
       );
       expect(candidate['completionClaim'], false);
       expect(candidate['wholeSchoolCourseCoverageComplete'], false);
@@ -152,10 +185,10 @@ void main() {
   );
 
   test(
-    'Actual83model22scheduled350meetings preserve three user modes and complete Drive JSON',
+    'Actual40model22scheduled350meetings preserve three user modes and complete Drive JSON',
     () {
       final ds = UniversityDataset.fromJson(candidate);
-      expect(ds.courses, hasLength(83));
+      expect(ds.courses, hasLength(40));
       final usable = ds.courses.where((c) => c.hasSchedulableMeetings).toList();
       expect(usable, hasLength(22));
       expect(usable.fold<int>(0, (sum, c) => sum + c.meetings.length), 350);

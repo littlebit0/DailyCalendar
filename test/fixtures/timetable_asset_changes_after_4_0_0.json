@@ -30,5 +30,9 @@
   "assets/timetable/organizations/kau.json": {
     "sha256": "a2daf81485696698a0f0e9ec0dbcec63aab65ba94434c36ee6d3f56cf02d8d7f",
     "reason": "#658 한국항공대 원자료 분류 2개를 공식 폐강 교과목 공고 연락처 표 기준 공과대학(항공MRO전공)과 독립 개설 단위(항공드론 혁신융합대학 사업단)로 배정"
+  },
+  "assets/timetable/kau-main-2026-2.json": {
+    "sha256": "076ec24e34b47fbefecd9385abe0e39d24934831603eda579ffee2c453b829f4",
+    "reason": "#658 한국항공대 2026-2 확정 폐강 교과목 공고(2026-09-08, 50강좌) 표와 대조해 폐강 예상 목록에서만 나온 43강좌 제외, 남은 40강좌는 폐강 대조 완료로 비고 갱신. 남은 강좌의 시각·강의실·소속 값은 그대로"
   }
 }
