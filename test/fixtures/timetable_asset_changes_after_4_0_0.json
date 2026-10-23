@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/daegu-main-2026-2.json": {
+    "sha256": "377d86d09d882bed7e1f5174ed5d1137039bdc09f9ccb84f53bab04ad94010e8",
+    "reason": "#593 대구대 공식 수업시간표(종합) PDF에서 이전 추출이 빠뜨린 전공 강의시간표 행 150개(폐강 7개 제외 143강좌)를 추가. 기존 강좌는 그대로"
+  },
+  "assets/timetable/organizations/daegu.json": {
+    "sha256": "45b096e0eca20bce3de81c9076d3b2530ae39c0656ca1a034e7760bbffc358fe",
+    "reason": "#593 대구대 원자료 분류 151개를 공식 시간표 PDF 표 제목과 2026학년도 대학·대학원 단과대학 목록 기준 소속(단과대학·창의융복합전공·마이크로전공·연계융복합전공·독립 개설 단위)으로 배정, 법학·한국어통번역 강좌는 표 제목별 개설 단위로 지정"
   }
 }
