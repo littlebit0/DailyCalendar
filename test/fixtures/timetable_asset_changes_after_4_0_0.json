@@ -1,4 +1,16 @@
 {
+  "assets/timetable/kongju-cheonan-2026-2.json": {
+    "sha256": "75e1429ee1bb408a5dd7145f3c670df67064b11cb6cd01ba13af46ce153a68e9",
+    "reason": "#570 공주대 강의일람표(2026-2) 원문 교시가 명시된 보류 강좌 4개(담당교수만 다른 같은 교시 행 2, 마침표 교시 표기 2) 예약 생성"
+  },
+  "assets/timetable/kongju-singwan-2026-2.json": {
+    "sha256": "c35d10a267881f07b50c09108d2de1291f468bd2072511d0d229fadf6854b074",
+    "reason": "#570 공주대 강의일람표(2026-2) 원문 교시가 명시된 보류 강좌 11개(담당교수만 다른 같은 교시 행 9, 마침표 교시 표기 2) 예약 생성"
+  },
+  "assets/timetable/kongju-yesan-2026-2.json": {
+    "sha256": "142faf83c3d2330201add294eef7f703fd56ee9b3d6c3799a1299e56558bbb6e",
+    "reason": "#570 공주대 강의일람표(2026-2) 원문 교시가 명시된 보류 강좌 4개(담당교수만 다른 같은 교시 행 3, 마침표 교시 표기 1) 예약 생성"
+  },
   "assets/timetable/organizations/ajou.json": {
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
     "reason": "#92 아주대 원자료 분류를 공식 학과 목록·학사안내 기준 소속(공과대학·경영대학·연계전공·마이크로전공)으로 배정"
@@ -14,6 +26,10 @@
   "assets/timetable/organizations/inha.json": {
     "sha256": "f2b5f4f0476c49e81ff16660cc58eddbcbabeacf86badecde088db6814160e34",
     "reason": "#92 인하대 학과 80개에 공식 단과대 소속 배정, 공과대학(FVE·SFC) 통합, 사범대·의예과·융합전공지원실 배정, 공식 시간표 독립 개설 분류 4개 등록"
+  },
+  "assets/timetable/organizations/kongju.json": {
+    "sha256": "69d212af0bbb2027355b1605496f82bc09fce9e32998011c523cd1c9a94f0c2b",
+    "reason": "#570 공주대 공식 학부/대학원 안내 기준 소속 없는 학과·전공 10개(14매핑)와 매핑 없던 기술‧가정교육과(2매핑)를 단과대에, 인공지능학부를 본부소속 묶음에 배정하고, 일반대학(대학원 안내 오인, #220)·공과대학으로 잘못 둔 금형공학과·생산기계공학과·사회환경공학과를 공식 원문 기준 천안공과대학으로 정정"
   },
   "assets/timetable/organizations/pnu.json": {
     "sha256": "e987c81c8708c76160bd226b1f34db2b1a44f95855d19c1a73d5b9cf96f57c58",
