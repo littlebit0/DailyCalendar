@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/sku.json": {
+    "sha256": "015bccfc37d3becb3ae571ef42e26a61bf6bae27fc518fd47ca214ba3ad8531c",
+    "reason": "#606 서경대 원자료 분류 17개(미래융합학부1·2 전공·계열 라벨, 글로벌융합대학 외국인 유학생 전담 학과·학부 라벨)를 2026학년도 요람·학칙 별표 4 기준 미래융합대학·글로벌융합대학에 배정"
   }
 }
