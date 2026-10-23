@@ -139,7 +139,10 @@ def seoul_courses(raw):
 def glocal_courses(raw):
     if raw.get('complete') is not True:
         raise ValueError('Incomplete GLOCAL collection')
-    names = raw['unitNames']
+    # data.js omits these opening units. GLOCAL 학사공지 120132 첨부2
+    # (명칭변경 취합본(2020~2026)(260121).xlsx) names them per 학수번호:
+    # BKSA67909 '교양학부'(2025 sheet), BRIX55066/55067/61727 '교직과'(2020 sheet).
+    names = {'127936': '교양학부', '127267': '교직과', **raw['unitNames']}
     courses = []
     for number, entry in sorted(raw['offerings'].items()):
         row = entry['row']

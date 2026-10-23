@@ -106,6 +106,24 @@ void main() {
       for (final c in courses) {
         byStatus.update(c.scheduleStatus!, (v) => v + 1, ifAbsent: () => 1);
       }
+      // Only GLOCAL unit 006771 (학수번호 BZZA) has no published name.
+      final unnamed = courses.where((c) => c.departments.isEmpty).toList();
+      expect(unnamed, hasLength(10));
+      expect(
+        unnamed.every(
+          (c) =>
+              c.campus == 'glocal' && c.remarks.contains('학수번호 BZZA'),
+        ),
+        isTrue,
+      );
+      expect(
+        courses.where((c) => c.departments.contains('교양학부')),
+        hasLength(403),
+      );
+      expect(
+        courses.where((c) => c.departments.contains('교직과')),
+        hasLength(22),
+      );
       expect(byStatus, {
         'scheduled': 3647,
         'unscheduled': 137,

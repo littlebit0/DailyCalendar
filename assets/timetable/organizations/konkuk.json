@@ -1793,6 +1793,34 @@
       "affiliationSourceUrl": "https://www.kku.ac.kr/ajaxFile/FR_SVC/FileDown.do?BOARD_SEQ=18&SITE_NO=2&BBS_SEQ=120132&FILE_SEQ=5",
       "affiliationSourceFile": "work/issue-560-konkuk-timetable/konkuk/attach/nano_kproject.xlsx",
       "affiliationEvidence": "GLOCAL 학사공지 '2026학년도 2학기 강의시간표 조회, 수강신청(수강바구니) 안내' 첨부1(Nano-LAB,K-Project강의주제(260828).xlsx)의 개설대학 '디자인대학', 개설학과 '패션디자인학과'."
+    },
+    {
+      "college": "KU글로컬혁신대학",
+      "department": "교양학부",
+      "sourceLabel": "교양학부",
+      "sourceUrl": "https://www.kku.ac.kr/ajaxFile/FR_SVC/FileDown.do?BOARD_SEQ=18&SITE_NO=2&BBS_SEQ=120132&FILE_SEQ=6",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "glocal",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.kku.ac.kr/cms/FR_CON/index.do?MENU_ID=580",
+      "affiliationSourceFile": "work/issue-560-konkuk-timetable/konkuk/attach/kku_menu_580_org_chart.html",
+      "affiliationEvidence": "GLOCAL 조직도(기구표): 'KU글로컬혁신대학 교양학부 교양교육센터 KU자유전공학부 ...'. 개설단위 127936의 이름은 GLOCAL 학사공지 '2026학년도 2학기 강의시간표 조회, 수강신청(수강바구니) 안내' 첨부2(명칭변경 취합본(2020~2026)(260121).xlsx) 2025 시트의 대학/학과 '교양학부', 학수번호 BKSA67909 레저스포츠(골프)(2026-2 시간표 개설단위 127936)."
+    },
+    {
+      "college": "교직과",
+      "department": null,
+      "sourceLabel": "교직과",
+      "sourceUrl": "https://www.kku.ac.kr/ajaxFile/FR_SVC/FileDown.do?BOARD_SEQ=18&SITE_NO=2&BBS_SEQ=120132&FILE_SEQ=6",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": true,
+      "campus": "glocal",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.kku.ac.kr/ajaxFile/FR_SVC/FileDown.do?BOARD_SEQ=18&SITE_NO=2&BBS_SEQ=120132&FILE_SEQ=6",
+      "affiliationSourceFile": "work/issue-560-konkuk-timetable/konkuk/attach/rename_2020_2026_260121.xlsx",
+      "affiliationEvidence": "GLOCAL 학사공지 '2026학년도 2학기 강의시간표 조회, 수강신청(수강바구니) 안내' 첨부2(명칭변경 취합본(2020~2026)(260121).xlsx) 2020 시트의 학과(전공) '교직과', 학수번호 BRIX55066 교육봉사활동1·BRIX55067 교육봉사활동2·BRIX61727 생활지도및상담(2026-2 시간표 개설단위 127267). GLOCAL 조직도(MENU_ID=580)에 소속 단과대가 없어 독립 개설 단위로 둠."
     }
   ],
   "courseOwners": []
