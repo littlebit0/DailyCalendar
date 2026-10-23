@@ -5,7 +5,7 @@
   "campusName": "본교",
   "academicYear": 2026,
   "semester": "2",
-  "publishedDate": "2026-10-08",
+  "publishedDate": "2026-10-24",
   "sourceUrl": "https://info.hansung.ac.kr/jsp_21/student/kyomu/siganpyo_aui.jsp?viewMode=oc",
   "courses": [
     {
@@ -101036,8 +101036,8 @@
       "courseName": "뷰티교육설계",
       "professor": "황영아",
       "credits": 3.0,
-      "sourceSchedule": "온라인강좌 1시간 / 상상관203 월8~9M",
-      "sourceClassroom": "온라인강좌 1시간 / 상상관203 월8~9M",
+      "sourceSchedule": "온라인강좌 1시간 / 상상관305 월8~9M",
+      "sourceClassroom": "온라인강좌 1시간 / 상상관305 월8~9M",
       "scheduleStatus": "unrecognized",
       "schedules": [],
       "departments": [
@@ -109911,7 +109911,7 @@
       "courseCode": "M020042",
       "section": "7",
       "courseName": "적대적 공격 및 방어",
-      "professor": "강미선,석병진",
+      "professor": "석병진",
       "credits": 3.0,
       "sourceSchedule": "온라인강좌 1.5시간 / 미래관B111 수5M~6M",
       "sourceClassroom": "온라인강좌 1.5시간 / 미래관B111 수5M~6M",
@@ -157986,7 +157986,7 @@
         "일반교양": "일교"
       },
       "departmentRemarks": {
-        "일반교양": "대상 학년: 전학년\n수업 운영·시각 검증 중: 확인 전 자동 반복 추가 불가."
+        "일반교양": "대상 학년: 전학년\n계획서 수강대상: 전학년\n선수·사전이수 안내: 없음\n수업 운영·시각 검증 중: 확인 전 자동 반복 추가 불가."
       }
     },
     {
@@ -163497,34 +163497,6 @@
       }
     },
     {
-      "sourceId": "hansung/main/2026/2/GEN9008/Z",
-      "universityId": "hansung",
-      "campus": "main",
-      "academicYear": 2026,
-      "semester": "2",
-      "courseCode": "GEN9008",
-      "section": "Z",
-      "courseName": "글로벌 사회공헌Ⅴ(상상더학기)",
-      "professor": "임욱빈",
-      "credits": 3.0,
-      "sourceSchedule": "",
-      "sourceClassroom": "",
-      "scheduleStatus": "unscheduled",
-      "schedules": [],
-      "departments": [
-        "학점인정"
-      ],
-      "departmentCredits": {
-        "학점인정": 3.0
-      },
-      "departmentClassifications": {
-        "학점인정": "전선"
-      },
-      "departmentRemarks": {
-        "학점인정": "서비스러닝\n대상 학년: 전학년\n계획서 수강대상: 전학년\n선수·사전이수 안내: 없음"
-      }
-    },
-    {
       "sourceId": "hansung/main/2026/2/GEN9009/7",
       "universityId": "hansung",
       "campus": "main",
@@ -165242,6 +165214,34 @@
       },
       "departmentRemarks": {
         "단과대학구분없음": "PF과목\n대상 학년: 전학년\n계획서 수강대상: 전학년\n선수·사전이수 안내: `"
+      }
+    },
+    {
+      "sourceId": "hansung/main/2026/2/M111612/7",
+      "universityId": "hansung",
+      "campus": "main",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "M111612",
+      "section": "7",
+      "courseName": "산학협력교육2",
+      "professor": "강사",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "단과대학구분없음"
+      ],
+      "departmentCredits": {
+        "단과대학구분없음": 2.0
+      },
+      "departmentClassifications": {
+        "단과대학구분없음": "전선"
+      },
+      "departmentRemarks": {
+        "단과대학구분없음": "대상 학년: 전학년"
       }
     },
     {
