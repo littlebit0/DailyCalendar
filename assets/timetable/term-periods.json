@@ -350,6 +350,20 @@
           }
         }
       ]
+    },
+    {
+      "university": "cnu",
+      "sourceUrl": "https://plus.cnu.ac.kr/_prog/academic_calendar/?site_dvs_cd=kr&menu_dvs_cd=05020101",
+      "checkedAt": "2026-10-08",
+      "boundaryScope": "Published opening and day before winter vacation; actual course dates and periods take precedence; no inferred repeated teaching days.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-20"
+        }
+      ]
     }
   ]
 }
