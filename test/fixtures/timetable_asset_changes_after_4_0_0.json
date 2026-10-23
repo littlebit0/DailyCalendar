@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/dju-main-2026-2.json": {
+    "sha256": "8688a65e53fdd387ecde3f09251388ed145c2f36f330e0fbb912b7f9e4f769f9",
+    "reason": "#598 대전대 학사공지 「2026학년도 2학기 본 수강신청 안내」 첨부 강의시간표 공지(2026. 8. 18.) xlsx 3종(교양 609·전공 1,564·일반선택·교직 80행) 전체 원자료 추가, 교시별 시각 미공개로 시각은 보류"
+  },
+  "assets/timetable/organizations/dju.json": {
+    "sha256": "e934a25f63a8403f151adf104368f5421a5ae7d90ae3f6d710b4cc41ba10d582",
+    "reason": "#598 대전대 공식 강의시간표의 단과대학·학부·학과(전공) 열 그대로 개설 라벨 88개를 단과대에 배정"
   }
 }
