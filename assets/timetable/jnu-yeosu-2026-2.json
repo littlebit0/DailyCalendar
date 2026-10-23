@@ -5,16 +5,16 @@
   "campus": "yeosu",
   "academicYear": 2026,
   "semester": "2",
-  "publishedDate": "2026-09-26",
+  "publishedDate": "2026-10-23",
   "sourceUrl": "https://hakstd.jnu.ac.kr/web/Suup/TimeTable/Suup030_C.aspx",
   "timeModuleSourceUrl": "https://engedu.jnu.ac.kr/bbs/engedu/2411/1050036/artclView.do",
   "saturdayModuleSourceUrl": "https://physics.jnu.ac.kr/bbs/physics/2140/828207/download.do",
-  "retrievedAt": "2026-09-26",
+  "retrievedAt": "2026-10-23",
   "sourceRowCount": 3344,
   "sourceQueryCount": 575,
   "counts": {
-    "scheduled": 662,
-    "unrecognized": 34
+    "scheduled": 663,
+    "unrecognized": 33
   },
   "courses": [
     {
@@ -18193,32 +18193,22 @@
         "공학대학[여수] / 디지털헬스케어전공": ""
       },
       "sourceSchedule": "월8월9수8수9",
-      "sourceClassroom": "3공503\n3공503\n3공503",
+      "sourceClassroom": "3공503\n3공503\n3공503\n3공503",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 1,
           "startMinute": 960,
           "endMinute": 1070,
-          "classroom": ""
+          "classroom": "3공503"
         },
         {
           "weekday": 3,
           "startMinute": 960,
           "endMinute": 1070,
-          "classroom": ""
+          "classroom": "3공503"
         }
-      ],
-      "period": {
-        "startDate": "2026-09-01",
-        "endDate": "2026-12-21"
-      },
-      "bulkCurrentReservationReview": {
-        "actualAttendanceConfirmed": false,
-        "sourceAllLocationsPreserved": true,
-        "unknownRoomKeptBlank": true,
-        "dateGenerationKind": "sourceOwnSemesterBoundedWeeklyPlan"
-      }
+      ]
     },
     {
       "sourceId": "jnu-yeosu-2026-2-HME8006-1",
@@ -28186,9 +28176,5 @@
         }
       ]
     }
-  ],
-  "researchOnly": false,
-  "productionIntegrationEnabled": true,
-  "completionClaim": false,
-  "wholeOperatingVerified": false
+  ]
 }

@@ -5,12 +5,12 @@
   "campus": "gwangju",
   "academicYear": 2026,
   "semester": "2",
-  "publishedDate": "2026-09-26",
+  "publishedDate": "2026-10-23",
   "sourceUrl": "https://hakstd.jnu.ac.kr/web/Suup/TimeTable/Suup030_C.aspx",
   "timeModuleSourceUrl": "https://engedu.jnu.ac.kr/bbs/engedu/2411/1050036/artclView.do",
   "saturdayModuleSourceUrl": "https://physics.jnu.ac.kr/bbs/physics/2140/828207/download.do",
-  "retrievedAt": "2026-09-26",
-  "sourceRowCount": 16871,
+  "retrievedAt": "2026-10-23",
+  "sourceRowCount": 16885,
   "sourceQueryCount": 575,
   "counts": {
     "scheduled": 3072,
@@ -41311,7 +41311,7 @@
       "courseCode": "CLT0761",
       "courseName": "자기계발을위한코칭리더십",
       "section": "1",
-      "professor": "신민호",
+      "professor": "최기오",
       "credits": 3.0,
       "departmentCredits": {
         "의과대학 / 의학과(6년제)": 3.0,
@@ -42590,14 +42590,14 @@
         "교양·기타 / 균형교양 / 진로와창업": "교차(전체)"
       },
       "sourceSchedule": "금2금3",
-      "sourceClassroom": "자3-404\n자3-404",
+      "sourceClassroom": "미래2-121\n미래2-121",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 5,
           "startMinute": 600,
           "endMinute": 710,
-          "classroom": "자3-404"
+          "classroom": "미래2-121"
         }
       ]
     },
@@ -59025,19 +59025,31 @@
       "credits": 3.0,
       "departmentCredits": {
         "인문대학 / 철학과": 3.0,
-        "전체(공통) / 전체(공통)": 3.0
+        "전체(공통) / 전체(공통)": 3.0,
+        "교양·기타 / 일반교양 / 인문학": 3.0,
+        "교양·기타 / 균형교양 / 인간과사회": 3.0,
+        "교양·기타 / 기초교양 / 기초SW": 3.0
       },
       "departments": [
+        "교양·기타 / 균형교양 / 인간과사회",
+        "교양·기타 / 기초교양 / 기초SW",
+        "교양·기타 / 일반교양 / 인문학",
         "인문대학 / 철학과",
         "전체(공통) / 전체(공통)"
       ],
       "departmentClassifications": {
         "인문대학 / 철학과": "교선",
-        "전체(공통) / 전체(공통)": "교선"
+        "전체(공통) / 전체(공통)": "교선",
+        "교양·기타 / 일반교양 / 인문학": "교선",
+        "교양·기타 / 균형교양 / 인간과사회": "교선",
+        "교양·기타 / 기초교양 / 기초SW": "교선"
       },
       "departmentRemarks": {
         "인문대학 / 철학과": "교차(전체)",
-        "전체(공통) / 전체(공통)": "교차(전체)"
+        "전체(공통) / 전체(공통)": "교차(전체)",
+        "교양·기타 / 일반교양 / 인문학": "교차(전체)",
+        "교양·기타 / 균형교양 / 인간과사회": "교차(전체)",
+        "교양·기타 / 기초교양 / 기초SW": "교차(전체)"
       },
       "sourceSchedule": "화5목5",
       "sourceClassroom": "진리관303\n진리관303",
@@ -90925,14 +90937,14 @@
         "자연과학대학 / 지질환경전공": ""
       },
       "sourceSchedule": "금5금6금7금8",
-      "sourceClassroom": "자3-404\n자3-404\n자3-404\n자3-404",
+      "sourceClassroom": "미래2-121\n미래2-121\n미래2-121\n미래2-121",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 5,
           "startMinute": 780,
           "endMinute": 1010,
-          "classroom": "자3-404"
+          "classroom": "미래2-121"
         }
       ]
     },
@@ -111231,7 +111243,7 @@
       "courseCode": "MSC3136",
       "courseName": "관현악전공실기6",
       "section": "2",
-      "professor": "나윤주",
+      "professor": "서지수",
       "credits": 2.0,
       "departmentCredits": {
         "예술대학 / 관현악전공": 2.0
@@ -111338,7 +111350,7 @@
       "courseCode": "MSC3136",
       "courseName": "관현악전공실기6",
       "section": "5",
-      "professor": "나윤주",
+      "professor": "이수연",
       "credits": 2.0,
       "departmentCredits": {
         "예술대학 / 관현악전공": 2.0
@@ -111365,7 +111377,7 @@
       "courseCode": "MSC3136",
       "courseName": "관현악전공실기6",
       "section": "6",
-      "professor": "나윤주",
+      "professor": "이영현",
       "credits": 2.0,
       "departmentCredits": {
         "예술대학 / 관현악전공": 2.0
@@ -136900,9 +136912,5 @@
         }
       ]
     }
-  ],
-  "researchOnly": false,
-  "productionIntegrationEnabled": true,
-  "completionClaim": false,
-  "wholeOperatingVerified": false
+  ]
 }
