@@ -75,10 +75,18 @@ def latest_check(checks, review_id):
     return max(matches, key=lambda c: c['id']) if matches else None
 
 
+def verified_receipt(check):
+    try:
+        receipt = json.loads(check.get('output', {}).get('summary', '{}'))
+        return receipt.get('schema') == 2 and receipt.get('received') is True and receipt.get('state') == 'completed'
+    except (ValueError, TypeError):
+        return False
+
+
 def retry_allowed(check, review_id):
     if check is None:
         return True
-    if check.get('conclusion') == 'success':
+    if check.get('conclusion') == 'success' and verified_receipt(check):
         return False
     return os.environ.get('RETRY_REVIEW_ID') == str(review_id) and os.environ.get('ACKNOWLEDGE_UNCERTAIN') == 'true'
 
@@ -97,18 +105,29 @@ def scan():
     for pr in pages('pulls?state=open&sort=created&direction=asc'):
         # Forks require a separate trusted write/approval design; report rather than run secrets there.
         reviews = pages(f"pulls/{pr['number']}/reviews")
+        if not any(r.get('submitted_at') and r['submitted_at'] >= since for r in reviews):
+            continue
         comments = pages(f"pulls/{pr['number']}/comments")
         candidates = [r for r in reviews if eligible(r, comments, since)]
         if not candidates:
             continue
         if pr['head']['repo']['full_name'] != os.environ['GITHUB_REPOSITORY']:
             raise RuntimeError(f"외부 fork PR #{pr['number']}: 권한 검토 필요, 자동 실행하지 않음")
-        checks = pages(f"commits/{pr['head']['sha']}/check-runs?filter=all", 'check_runs')
+        checks = []
+        for commit in sorted({r['commit_id'] for r in candidates}):
+            checks.extend(pages(f"commits/{commit}/check-runs?filter=all", 'check_runs'))
+        unresolved = [r for r in candidates if latest_check(checks, r['id'])
+                      and not verified_receipt(latest_check(checks, r['id']))]
+        if any(not retry_allowed(latest_check(checks, r['id']), r['id']) for r in unresolved):
+            print(f"PR #{pr['number']}: 이전 커밋을 포함한 불명확한 실행이 있어 보류", file=sys.stderr)
+            continue
         for review in sorted(candidates, key=lambda r: r['id']):
             if review['commit_id'] != pr['head']['sha']:
                 continue  # 새 커밋에는 새 리뷰가 필요하다.
             previous = latest_check(checks, review['id'])
-            if previous and previous.get('conclusion') == 'success':
+            if os.environ.get('RETRY_REVIEW_ID') and os.environ['RETRY_REVIEW_ID'] != str(review['id']):
+                continue
+            if previous and previous.get('conclusion') == 'success' and verified_receipt(previous):
                 continue
             if not retry_allowed(previous, review['id']):
                 print(f"PR #{pr['number']} 리뷰 {review['id']}: 실행 결과 미확인/실패, 명시적 재시도 필요", file=sys.stderr)
@@ -148,6 +167,8 @@ def claim(pr_number, review_id):
                'reviewer': review['user']['login'], 'notification': f'PR #{pr_number}에 리뷰 댓글을 작성했습니다.'}
     # No external body/comment is interpolated into shell, workflow code or instructions.
     Path('relay-context.json').write_text(json.dumps(context, ensure_ascii=False, indent=2))
+    if os.environ.get('RELAY_CONTEXT_PATH'):
+        Path(os.environ['RELAY_CONTEXT_PATH']).write_text(json.dumps(context, ensure_ascii=False, indent=2))
     check = api('check-runs', 'POST', {'name': CHECK_PREFIX + str(review_id), 'head_sha': review['commit_id'],
         'status': 'in_progress', 'external_id': f"{os.environ['GITHUB_RUN_ID']}:{os.environ['GITHUB_RUN_ATTEMPT']}",
         'details_url': run_url(), 'output': {'title': 'Claude 전달 시작 전 예약',
@@ -161,42 +182,64 @@ def run_url():
     return f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
 
 
+def evaluate_execution(outcome, records, acknowledgment, context):
+    results = [r for r in records if isinstance(r, dict) and r.get('type') == 'result']
+    result = results[-1] if results else {}
+    denials = result.get('permission_denials_count')
+    if denials is None and isinstance(result.get('permission_denials'), list):
+        denials = len(result['permission_denials'])
+    identity = ('repository', 'pr_number', 'review_id', 'commit', 'notification')
+    received = isinstance(acknowledgment, dict) and all(
+        acknowledgment.get(key) == context[key] for key in identity)
+    received = received and acknowledgment.get('review_read') is True
+    success = (outcome == 'success' and result.get('subtype') == 'success'
+               and result.get('is_error') is False and denials == 0 and received
+               and acknowledgment.get('status') == 'completed')
+    return {'schema': 2, 'received': bool(received), 'permission_denials_count': denials,
+            'state': 'completed' if success else 'uncertain',
+            'session_id': result.get('session_id'), 'target': {key: context[key] for key in identity}}
+
+
 def finish(check_id):
     outcome = os.environ.get('CLAUDE_OUTCOME', 'unknown')
     execution = os.environ.get('CLAUDE_EXECUTION_FILE', '')
-    success = outcome == 'success' and execution and Path(execution).is_file()
-    if success:
-        lines = Path(execution).read_text().splitlines()
-        records = []
+    context = json.loads(Path(os.environ.get('RELAY_CONTEXT_PATH', 'relay-context.json')).read_text())
+    records = []
+    if execution and Path(execution).is_file():
         try:
-            parsed = json.loads('\n'.join(lines))
-            records = parsed if isinstance(parsed, list) else [parsed]
-        except json.JSONDecodeError:
-            records = [json.loads(line) for line in lines if line.strip()]
-        success = any(r.get('type') == 'result' and not r.get('is_error', False)
-                      and r.get('subtype') == 'success' for r in records)
-    ci = 'not_dispatched'
-    if success:
-        context = json.loads(Path('relay-context.json').read_text())
+            text = Path(execution).read_text()
+            try:
+                parsed = json.loads(text)
+                records = parsed if isinstance(parsed, list) else [parsed]
+            except json.JSONDecodeError:
+                records = [json.loads(line) for line in text.splitlines() if line.strip()]
+        except (OSError, ValueError):
+            records = []
+    try:
+        acknowledgment = json.loads(os.environ.get('CLAUDE_STRUCTURED_OUTPUT', '{}'))
+    except ValueError:
+        acknowledgment = {}
+    receipt = evaluate_execution(outcome, records, acknowledgment, context)
+    receipt.update({'run_url': run_url(), 'check_id': check_id, 'action_outcome': outcome,
+                    'ci': 'not_dispatched', 'exactly_once_guaranteed': False})
+    # Preserve received/execution evidence even when later CI or GitHub writes fail.
+    Path('relay-receipt.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2))
+    if receipt['state'] == 'completed':
         pr = api(f"pulls/{int(context['pr_number'])}")
         if pr['state'] == 'open' and pr['head']['sha'] != context['commit']:
-            if pr['head']['repo']['full_name'] != os.environ['GITHUB_REPOSITORY']:
-                raise RuntimeError('후속 CI 대상 저장소 불일치')
-            if pr['head']['ref'] == pr['base']['ref']:
-                raise RuntimeError('후속 CI 대상이 PR 작업 브랜치가 아님')
-            # GITHUB_TOKEN으로 푸시한 커밋은 일반 push CI를 시작하지 않으므로 명시적으로 요청한다.
+            if pr['head']['repo']['full_name'] != os.environ['GITHUB_REPOSITORY'] or pr['head']['ref'] == pr['base']['ref']:
+                raise RuntimeError('후속 CI 대상 저장소/브랜치 불일치')
             api('actions/workflows/platform-builds.yml/dispatches', 'POST', {'ref': pr['head']['ref']})
-            ci = 'dispatch_accepted_not_verified'
+            receipt['ci'] = 'dispatch_accepted_not_verified'
         else:
-            ci = 'no_open_head_change'
-    receipt = {'ci': ci, 'run_url': run_url(), 'check_id': check_id, 'action_outcome': outcome,
-               'state': 'completed' if success else 'uncertain', 'exactly_once_guaranteed': False}
+            receipt['ci'] = 'no_open_head_change'
     Path('relay-receipt.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2))
-    api(f'check-runs/{check_id}', 'PATCH', {'status': 'completed', 'conclusion': 'success' if success else 'failure',
-        'output': {'title': 'Claude 실행 확인' if success else 'Claude 실행 실패 또는 결과 미확인',
-        'summary': json.dumps(receipt, ensure_ascii=False)}})
-    if not success:
-        raise RuntimeError('Claude 성공 결과를 확인하지 못함. 로그를 확인한 후 명시적으로 재시도하세요.')
+    api(f'check-runs/{check_id}', 'PATCH', {'status': 'completed',
+        'conclusion': 'success' if receipt['state'] == 'completed' else 'failure',
+        'output': {'title': 'Claude 수신 및 후속 결과 대조' if receipt['state'] == 'completed' else 'Claude 권한/수신/결과 미확인',
+                   'summary': json.dumps(receipt, ensure_ascii=False)}})
+    if receipt['state'] != 'completed':
+        raise RuntimeError('Claude의 대상 리뷰 수신·후속 결과를 확인하지 못함. 영수증과 로그 확인 후 명시적으로 재시도하세요.')
 
 
 if __name__ == '__main__':

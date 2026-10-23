@@ -26,13 +26,14 @@ env:
 jobs:
   scan:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     outputs:
       matrix: ${{ steps.scan.outputs.matrix }}
       has_work: ${{ steps.scan.outputs.has_work }}
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ github.workflow_sha }}
           persist-credentials: false
       - id: scan
         name: 게시 사실과 전달 원장 확인
@@ -58,7 +59,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.repository.default_branch }}
+          ref: ${{ github.workflow_sha }}
           fetch-depth: 0
           persist-credentials: false
       - name: Actions 인증 사전 확인
@@ -77,6 +78,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ matrix.pr }}
           REVIEW_ID: ${{ matrix.review }}
+          RELAY_CONTEXT_PATH: ${{ runner.temp }}/relay-context.json
         run: python3 .github/scripts/claude_review_relay.py claim
       - id: claude
         if: steps.claim.outputs.execute == 'true'
@@ -94,8 +96,12 @@ jobs:
             대상 PR이 닫혔거나 head가 달라졌으면 변경하지 말고 그 사실을 보고한다.
             다른 PR·기본 브랜치를 변경하거나 자동 머지하지 않는다. 머지는 사용자만 수행한다.
             한국어로 결과와 미검증 범위를 설명한다. 시크릿을 출력하지 않는다.
+            먼저 relay-context.json과 해당 실제 GitHub 리뷰를 읽고, 최종 구조화 응답에 저장소·PR 번호·리뷰 ID·커밋·알림 문장을 그대로 확인한다.
+            리뷰 조회나 필요한 도구가 거부되면 review_read=false 또는 status=blocked로 보고한다. 완료로 가장하지 않는다.
           claude_args: >-
             --max-turns 40
+            --allowedTools "Read,Glob,Grep,Edit,Write,Bash(gh pr view *),Bash(gh pr diff *),Bash(gh pr comment *),Bash(gh api *),Bash(git *),Bash(python3 *),Bash(flutter *),Bash(dart *),Bash(./tool/flutter.sh *)"
+            --json-schema '{"type":"object","properties":{"repository":{"type":"string"},"pr_number":{"type":"integer"},"review_id":{"type":"integer"},"commit":{"type":"string"},"notification":{"type":"string"},"review_read":{"type":"boolean"},"status":{"type":"string","enum":["completed","blocked"]}},"required":["repository","pr_number","review_id","commit","notification","review_read","status"],"additionalProperties":false}' 
             --disallowedTools "Bash(gh pr merge*),Bash(gh api *merge*),Bash(git push *main*),Bash(git push *master*)"
       - name: 실행 결과 영수증 기록
         if: always() && steps.claim.outputs.check_id != ''
@@ -104,6 +110,8 @@ jobs:
           CHECK_ID: ${{ steps.claim.outputs.check_id }}
           CLAUDE_OUTCOME: ${{ steps.claude.outcome }}
           CLAUDE_EXECUTION_FILE: ${{ steps.claude.outputs.execution_file }}
+          CLAUDE_STRUCTURED_OUTPUT: ${{ steps.claude.outputs.structured_output }}
+          RELAY_CONTEXT_PATH: ${{ runner.temp }}/relay-context.json
         run: python3 "$RUNNER_TEMP/claude_review_relay.py" finish
       - name: 전달 문맥과 영수증 보존
         if: always() && steps.claim.outputs.check_id != ''

@@ -25,6 +25,10 @@ class RelayTests(unittest.TestCase):
             'GITHUB_RUN_ATTEMPT': '1', 'GITHUB_OUTPUT': str(Path(self.temp.name) / 'out'),
             'REVIEW_RELAY_SINCE': self.since, 'RETRY_REVIEW_ID': '', 'ACKNOWLEDGE_UNCERTAIN': ''})
         self.env.start()
+        self.context = {'repository': 'owner/repo', 'pr_number': 9, 'review_id': 41,
+                        'commit': 'a' * 40, 'notification': 'PR #9에 리뷰 댓글을 작성했습니다.'}
+        self.ack = {**self.context, 'review_read': True, 'status': 'completed'}
+        os.environ['CLAUDE_STRUCTURED_OUTPUT'] = json.dumps(self.ack)
 
     def tearDown(self):
         self.env.stop();os.chdir(self.old_cwd);self.temp.cleanup()
@@ -56,7 +60,7 @@ class RelayTests(unittest.TestCase):
 
     def test_duplicate_success_never_retried(self):
         with patch.dict(os.environ, {'RETRY_REVIEW_ID': '41', 'ACKNOWLEDGE_UNCERTAIN': 'true'}):
-            self.assertFalse(relay.retry_allowed({'conclusion': 'success'}, 41))
+            self.assertFalse(relay.retry_allowed({'conclusion': 'success', 'output': {'summary': json.dumps({'schema': 2, 'received': True, 'state': 'completed'})}}, 41))
 
     def test_unknown_requires_specific_acknowledgment(self):
         for check in [{'status': 'in_progress'}, {'conclusion': 'failure'}, {'conclusion': 'cancelled'}]:
@@ -101,8 +105,8 @@ class RelayTests(unittest.TestCase):
             self.pr = original
 
     def test_receipt_requires_action_and_claude_success(self):
-        Path('relay-context.json').write_text(json.dumps({'pr_number': 9, 'commit': 'a' * 40}))
-        Path('execution.json').write_text(json.dumps([{'type': 'result', 'subtype': 'success', 'is_error': False}]))
+        Path('relay-context.json').write_text(json.dumps(self.context))
+        Path('execution.json').write_text(json.dumps([{'type': 'result', 'subtype': 'success', 'is_error': False, 'permission_denials': []}]))
         with patch.dict(os.environ, {'CLAUDE_OUTCOME': 'success', 'CLAUDE_EXECUTION_FILE': 'execution.json'}), patch.object(relay, 'api', return_value=self.pr):
             relay.finish(81)
         self.assertEqual(json.loads(Path('relay-receipt.json').read_text())['state'], 'completed')
@@ -112,8 +116,9 @@ class RelayTests(unittest.TestCase):
         self.assertEqual(json.loads(Path('relay-receipt.json').read_text())['state'], 'uncertain')
 
     def test_changed_head_dispatches_ci_without_claiming_ci_success(self):
-        Path('execution.json').write_text(json.dumps({'type': 'result', 'subtype': 'success', 'is_error': False}))
-        Path('relay-context.json').write_text(json.dumps({'pr_number': 9, 'commit': 'b' * 40}))
+        Path('execution.json').write_text(json.dumps({'type': 'result', 'subtype': 'success', 'is_error': False, 'permission_denials': []}))
+        Path('relay-context.json').write_text(json.dumps(self.context))
+        self.pr['head']['sha'] = 'b' * 40
         self.pr['head']['ref'] = 'fix-branch'
         self.pr['base'] = {'ref': 'main'}
         with patch.dict(os.environ, {'CLAUDE_OUTCOME': 'success', 'CLAUDE_EXECUTION_FILE': 'execution.json'}), patch.object(relay, 'api', return_value=self.pr) as api:
@@ -145,6 +150,19 @@ class RelayTests(unittest.TestCase):
         with patch.object(relay, 'pages', side_effect=pages): relay.scan()
         matrix = Path(os.environ['GITHUB_OUTPUT']).read_text().splitlines()[0]
         self.assertEqual(json.loads(matrix.split('=', 1)[1])['include'], [{'pr': 9, 'review': 41}])
+
+    def test_receipt_rejects_denials_wrong_target_and_missing_ack(self):
+        clean = {'type': 'result', 'subtype': 'success', 'is_error': False, 'permission_denials': []}
+        for records, ack in [([{**clean, 'permission_denials': ['denied']}], self.ack),
+                             ([clean], {}), ([clean], {**self.ack, 'review_id': 42}),
+                             ([clean], {**self.ack, 'status': 'blocked'}), ([], self.ack)]:
+            self.assertEqual(relay.evaluate_execution('success', records, ack, self.context)['state'], 'uncertain')
+        self.assertEqual(relay.evaluate_execution('success', [clean], self.ack, self.context)['state'], 'completed')
+
+    def test_legacy_green_without_receipt_needs_explicit_retry(self):
+        self.assertFalse(relay.retry_allowed({'conclusion': 'success'}, 41))
+        with patch.dict(os.environ, {'RETRY_REVIEW_ID': '41', 'ACKNOWLEDGE_UNCERTAIN': 'true'}):
+            self.assertTrue(relay.retry_allowed({'conclusion': 'success'}, 41))
 
 
 if __name__ == '__main__': unittest.main()

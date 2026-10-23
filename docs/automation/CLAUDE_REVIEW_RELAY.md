@@ -42,3 +42,11 @@ python3 -m unittest discover -s .github/scripts -p 'test_claude_review_relay.py'
 ```
 
 공식 근거: [Claude GitHub Actions](https://code.claude.com/docs/en/github-actions), [Claude CLI](https://code.claude.com/docs/en/cli-reference), [고정 액션 정의](https://github.com/anthropics/claude-code-action/blob/ae68417a745a5df4b2124873632bd73a2255e6f6/action.yml).
+
+## 2026-10-23 후속 복구
+
+실제 `pull_request_review` 수집 실행 39936415961과 `workflow_run` 전달 실행 39936436175(시도 1)는 PR #670 / 리뷰 5626757465를 선택했다. 그러나 Claude 실행에는 도구 권한 거부 3건이 있었고, 기존 완료 판정은 이를 놓쳤다. 이 실행의 녹색 상태는 수신·수정 완료 증거가 아니다.
+
+새 실행기는 구조화 응답의 저장소·PR·리뷰·대상 커밋·알림 문장과 리뷰 조회 확인을 대조한다. 실행 성공, 권한 거부 0건, 구조화 완료 응답이 모두 있어야 완료 영수증(schema 2)을 만든다. 이전 형식의 성공 기록도 확인되지 않은 실행으로 취급하며, 해당 리뷰 ID와 결과 불명확 확인을 명시해야 재시도한다. 기본 브랜치 반영 전에는 해당 후보 브랜치의 workflow_dispatch로 별도 검증할 수 있으나 이것은 실제 리뷰 이벤트 연결 검증을 대체하지 않는다.
+
+전달 실행기는 workflow_sha로 고정한다. PR별 동시 실행을 직렬화하고, 예약 이후 실패·취소·중단은 자동 재전송하지 않는다. GitHub 기록과 외부 Claude 실행 사이의 원자적 트랜잭션은 없으므로 정확히 한 번 실행을 보장하지 않는다. 모델의 구조화 확인은 수신 근거이며 수정 내용의 정확성이나 전체 CI 통과를 보장하지 않는다. 도구 제한과 프롬프트의 자동 머지 금지는 별도 GitHub 브랜치 보호를 대체하지 않는다.
