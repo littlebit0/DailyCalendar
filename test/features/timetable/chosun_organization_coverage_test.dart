@@ -32,9 +32,35 @@ void main() {
           }
         }
       }
-      expect(courses, 135);
+      expect(courses, 3063);
       expect(raw, isEmpty);
       expect(orphans, isEmpty);
+    },
+  );
+
+  test(
+    'Chosun keeps the published clock and holds non-face-to-face rows',
+    () async {
+      final courses = [
+        for (final d in await UniversityCatalog.load(university: 'chosun'))
+          ...d.courses,
+      ];
+      expect(
+        courses.where((c) => c.scheduleStatus == 'scheduled'),
+        hasLength(2924),
+      );
+      expect(
+        courses.where((c) => c.scheduleStatus == 'unrecognized'),
+        hasLength(139),
+      );
+      final course = courses.singleWhere(
+        (c) => c.sourceId == 'chosun/unknown/2026/2/00030/01',
+      );
+      expect(course.sourceSchedule, '화 5A~7B(13:00~16:00)');
+      expect(course.meetings.single.weekday, 2);
+      expect(course.meetings.single.startMinute, 780);
+      expect(course.meetings.single.endMinute, 960);
+      expect(course.meetings.single.classroom, '대학 본관5148 강의실');
     },
   );
 }
