@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,4 +48,34 @@ void main() {
       expect(orphans, isEmpty);
     },
   );
+
+  test('Eulji period slots include the following break', () {
+    var checked = 0;
+    for (final campus in ['seongnam', 'uijeongbu']) {
+      final data =
+          jsonDecode(
+                File(
+                  'assets/timetable/eulji-$campus-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      for (final c in data['courses'] as List) {
+        final src = c['sourceSchedule'] as String;
+        for (final s in c['schedules'] as List) {
+          final start = s['startMinute'] as int;
+          final end = s['endMinute'] as int;
+          if (src.contains('야')) {
+            expect(start, 1080, reason: src);
+            // 야1~3 = 18:00~20:25(3교시 뒤 10분 휴식 포함), 야1~2 = 18:00~19:30.
+            expect(end, src.endsWith('3') ? 1225 : 1170, reason: src);
+          } else {
+            expect(start % 60, 0, reason: src);
+            expect(end % 60, 0, reason: src);
+          }
+          checked++;
+        }
+      }
+    }
+    expect(checked, 423);
+  });
 }
