@@ -21,13 +21,13 @@ def prepare():
 
 
 def finish():
-    context = json.loads(Path('relay-context.json').read_text())
+    context = json.loads(Path(os.environ.get('RELAY_CONTEXT_PATH', 'relay-context.json')).read_text())
     records = json.loads(Path(os.environ['CLAUDE_EXECUTION_FILE']).read_text())
     if not isinstance(records, list):
         records = [records]
     acknowledgment = json.loads(os.environ.get('CLAUDE_STRUCTURED_OUTPUT', '{}'))
     result = relay.evaluate_execution(os.environ.get('CLAUDE_OUTCOME'), records, acknowledgment, context)
-    result['mode'] = 'read_only_diagnostic_not_delivery'
+    result['mode'] = 'isolated_replay_not_delivery' if os.environ.get('DIAGNOSTIC_REPLAY') == 'true' else 'read_only_diagnostic_not_delivery'
     Path('relay-probe.json').write_text(json.dumps(result, ensure_ascii=False, indent=2))
     if result['state'] != 'completed':
         raise RuntimeError('읽기 전용 진단 미통과. 영수증의 권한 거부를 확인하세요.')
