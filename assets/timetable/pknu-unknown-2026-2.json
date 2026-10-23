@@ -25605,7 +25605,7 @@
       "courseCode": "112691",
       "courseName": "컴퓨팅사고-인문사회",
       "section": "107",
-      "professor": "정명균",
+      "professor": "이태훈",
       "credits": 2.0,
       "classification": "필수교양",
       "departments": [
@@ -25655,7 +25655,7 @@
         "PNT_THEO_PRAC": "2-1-2",
         "SBJT_KOR_NM": "컴퓨팅사고-인문사회",
         "SBJT_FG_NM": "필수교양",
-        "STAFF_NM": "정명균",
+        "STAFF_NM": "이태훈",
         "CLS_CLSS_YN": "N"
       },
       "publicPlanEducation": {
@@ -25684,7 +25684,7 @@
       "courseCode": "112691",
       "courseName": "컴퓨팅사고-인문사회",
       "section": "108",
-      "professor": "정명균",
+      "professor": "양준영",
       "credits": 2.0,
       "classification": "필수교양",
       "departments": [
@@ -25738,7 +25738,7 @@
         "PNT_THEO_PRAC": "2-1-2",
         "SBJT_KOR_NM": "컴퓨팅사고-인문사회",
         "SBJT_FG_NM": "필수교양",
-        "STAFF_NM": "정명균",
+        "STAFF_NM": "양준영",
         "CLS_CLSS_YN": "N"
       },
       "publicPlanEducation": {
