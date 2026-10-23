@@ -15,6 +15,10 @@
     "sha256": "f2b5f4f0476c49e81ff16660cc58eddbcbabeacf86badecde088db6814160e34",
     "reason": "#92 인하대 학과 80개에 공식 단과대 소속 배정, 공과대학(FVE·SFC) 통합, 사범대·의예과·융합전공지원실 배정, 공식 시간표 독립 개설 분류 4개 등록"
   },
+  "assets/timetable/organizations/kunsan.json": {
+    "sha256": "2c59ef35f2f1120901d25b3367795c587cbe382b86fe4ba2d19c9305a9244775",
+    "reason": "#574 국립군산대 원자료 분류 75개를 학사안내 마이크로디그리(MD) 제도 묶음 73개와 조직도의 독립 개설 단위(취업지원실·창업지원단) 2개로 배정"
+  },
   "assets/timetable/organizations/pnu.json": {
     "sha256": "e987c81c8708c76160bd226b1f34db2b1a44f95855d19c1a73d5b9cf96f57c58",
     "reason": "#92 부산대 공식 단과대·융합교육센터·모집요강 기준 원자료 27개 배정"

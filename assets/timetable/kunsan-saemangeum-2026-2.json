@@ -1,0 +1,6998 @@
+{
+  "schemaVersion": 2,
+  "productionReady": false,
+  "completionClaim": false,
+  "finalActiveScopeVerified": false,
+  "campusScopeVerified": false,
+  "courses": [
+    {
+      "sourceId": "kunsan/saemangeum/2026/2/104025/11",
+      "universityId": "kunsan",
+      "campus": "saemangeum",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "104025",
+      "section": "11",
+      "courseName": "현장실습(2)",
+      "sourceNames": [
+        "현장실습(2)"
+      ],
+      "credits": 3.0,
+      "professor": "정한구",
+      "departments": [
+        "조선공학전공"
+      ],
+      "classification": "전공선택",
+      "departmentCredits": {
+        "조선공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "조선공학전공": "전공선택"
+      },
+      "departmentRemarks": {},
+      "remarks": "집중·현장 수업의 실제 날짜·출석 시각 미확인\n학교가 2026년 7월 23일 공시한 정규 수업 계획입니다. 시간표는 학과 사정에 따라 변경될 수 있어 학교 안내에 따라 통합정보시스템에서 현재 수강반·폐강·분합반·수업시각을 재확인해야 합니다. 9월 4일·9월 9일 폐강 기준일 이후 최종 활성 강좌 전체는 확인되지 않았습니다. 시험·보강·개별 변경 사항은 학교 공지를 확인하세요. 실제 출석이나 개인 수업계획서 전수 확인을 의미하지 않습니다.",
+      "sourceSchedule": "토① ② [캠퍼스관-308]",
+      "sourceClassroom": "캠퍼스관-308",
+      "sourceTeachingMethods": [
+        "대면"
+      ],
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "sourceOccurrences": [
+        {
+          "file": 3,
+          "sheet": "전체",
+          "row": 550
+        }
+      ],
+      "sourceScheduleStatus": "unrecognized",
+      "sourceDepartmentRemarks": {},
+      "sourceRemarks": "집중·현장 수업의 실제 날짜·출석 시각 미확인",
+      "sourceEducation": {
+        "projection": "unresolvedSourcePreserved",
+        "actualAttendanceConfirmed": false,
+        "individualPrivatePlanRead": false,
+        "finalActiveScopeVerified": false,
+        "sourceCampusExplicit": null,
+        "datedPlanProof": null,
+        "clockProof": "current official enrollment clock numeric1–10 actual09:10 start; circled/11+ not inferred",
+        "sourcePublicationDate": "2026-07-23",
+        "currentPostedByteRecheck": "kunsan-published-plan-package-recheck-next-20261008.json"
+      }
+    },
+    {
+      "sourceId": "kunsan/saemangeum/2026/2/110172/01",
+      "universityId": "kunsan",
+      "campus": "saemangeum",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "110172",
+      "section": "01",
+      "courseName": "캡스톤설계(2)",
+      "sourceNames": [
+        "캡스톤설계(2)"
+      ],
+      "credits": 2.0,
+      "professor": "정한구",
+      "departments": [
+        "조선공학전공",
+        "친환경선박(MD)"
+      ],
+      "classification": "전공선택",
+      "departmentCredits": {
+        "조선공학전공": 2.0,
+        "친환경선박(MD)": 2.0
+      },
+      "departmentClassifications": {
+        "조선공학전공": "전공선택",
+        "친환경선박(MD)": "전공선택"
+      },
+      "departmentRemarks": {
+        "친환경선박(MD)": "비고: 합반\n학교가 2026년 7월 23일 공시한 정규 수업 계획입니다. 시간표는 학과 사정에 따라 변경될 수 있어 학교 안내에 따라 통합정보시스템에서 현재 수강반·폐강·분합반·수업시각을 재확인해야 합니다. 9월 4일·9월 9일 폐강 기준일 이후 최종 활성 강좌 전체는 확인되지 않았습니다. 시험·보강·개별 변경 사항은 학교 공지를 확인하세요. 실제 출석이나 개인 수업계획서 전수 확인을 의미하지 않습니다."
+      },
+      "remarks": "비고: 합반 / 원문 원문자 교시(① 등)의 실제 시각 미확인\n학교가 2026년 7월 23일 공시한 정규 수업 계획입니다. 시간표는 학과 사정에 따라 변경될 수 있어 학교 안내에 따라 통합정보시스템에서 현재 수강반·폐강·분합반·수업시각을 재확인해야 합니다. 9월 4일·9월 9일 폐강 기준일 이후 최종 활성 강좌 전체는 확인되지 않았습니다. 시험·보강·개별 변경 사항은 학교 공지를 확인하세요. 실제 출석이나 개인 수업계획서 전수 확인을 의미하지 않습니다.",
+      "sourceSchedule": "월② ③,금⑧ ⑨ [캠퍼스관-308]",
+      "sourceClassroom": "캠퍼스관-308",
+      "sourceTeachingMethods": [
+        "대면"
+      ],
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "sourceOccurrences": [
+        {
+          "file": 3,
+          "sheet": "전체",
+          "row": 552
+        },
+        {
+          "file": 4,
+          "sheet": "MD과정",
+          "row": 88
+        }
+      ],
+      "sourceScheduleStatus": "unrecognized",
+      "sourceDepartmentRemarks": {
+        "친환경선박(MD)": "비고: 합반"
+      },
+      "sourceRemarks": "비고: 합반 / 원문 원문자 교시(① 등)의 실제 시각 미확인",
+      "sourceEducation": {
+        "projection": "unresolvedSourcePreserved",
+        "actualAttendanceConfirmed": false,
+        "individualPrivatePlanRead": false,
+        "finalActiveScopeVerified": false,
+        "sourceCampusExplicit": null,
+        "datedPlanProof": null,
+        "clockProof": "current official enrollment clock numeric1–10 actual09:10 start; circled/11+ not inferred",
+        "sourcePublicationDate": "2026-07-23",
+        "currentPostedByteRecheck": "kunsan-published-plan-package-recheck-next-20261008.json"
+      }
+    },
+    {
+      "sourceId": "kunsan/saemangeum/2026/2/111254/01",
+      "universityId": "kunsan",
+      "campus": "saemangeum",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "111254",
+      "section": "01",
+      "courseName": "프로젝트LAB(2)",
+      "sourceNames": [
+        "프로젝트LAB(2)"
+      ],
+      "credits": 2.0,
+      "professor": "임남원",
+      "departments": [
+        "조선공학전공"
+      ],
+      "classification": "전공선택",
+      "departmentCredits": {
+        "조선공학전공": 2.0
+      },
+      "departmentClassifications": {
+        "조선공학전공": "전공선택"
+      },
+      "departmentRemarks": {},
+      "remarks": "원문 원문자 교시(① 등)의 실제 시각 미확인\n학교가 2026년 7월 23일 공시한 정규 수업 계획입니다. 시간표는 학과 사정에 따라 변경될 수 있어 학교 안내에 따라 통합정보시스템에서 현재 수강반·폐강·분합반·수업시각을 재확인해야 합니다. 9월 4일·9월 9일 폐강 기준일 이후 최종 활성 강좌 전체는 확인되지 않았습니다. 시험·보강·개별 변경 사항은 학교 공지를 확인하세요. 실제 출석이나 개인 수업계획서 전수 확인을 의미하지 않습니다.\n부분 시간표: 원문에 직접 쓰인 정수1~10교시의 정규 공시 예약만 반영했습니다. 금⑥ [캠퍼스관-308], 금⑦ [캠퍼스관-308]의 원문자 교시 실제 시각은 미확인으로 반영하지 않았습니다. 원문자를 정수교시로 바꾸거나 누락 수업을 휴강으로 확정하지 않았습니다. 이 과목 전체 수업이 모두 반영된 것은 아니므로 해당 부분은 학교의 실제 시간표를 확인하세요.\n학교의 이번 학기는8월31일~12월17일입니다. 반영된 정규 수업·지정 보강 예약 범위는12월10일까지이며, 중간·기말 시험 일정은 정규 교시로 별도 생성하지 않았습니다.12월10일을 이 과목의 실제 조기 종강으로 의미하지 않습니다.",
+      "sourceSchedule": "금5 ⑥ ⑦ [캠퍼스관-308]",
+      "sourceClassroom": "캠퍼스관-308",
+      "sourceTeachingMethods": [
+        "대면"
+      ],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-09-04",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-09-11",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-09-18",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-10-02",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-10-16",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-10-30",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-11-06",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-11-13",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-11-20",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-11-27",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-12-04",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-12-08",
+          "deliveryMode": "inPerson"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 790,
+          "endMinute": 840,
+          "classroom": "캠퍼스관-308",
+          "date": "2026-12-09",
+          "deliveryMode": "inPerson"
+        }
+      ],
+      "sourceOccurrences": [
+        {
+          "file": 3,
+          "sheet": "전체",
+          "row": 553
+        }
+      ],
+      "sourceScheduleStatus": "unrecognized",
+      "sourceDepartmentRemarks": {},
+      "sourceRemarks": "원문 원문자 교시(① 등)의 실제 시각 미확인",
+      "sourceEducation": {
+        "projection": "publishedRegularTimetablePartial",
+        "actualAttendanceConfirmed": false,
+        "individualPrivatePlanRead": false,
+        "finalActiveScopeVerified": false,
+        "sourceCampusExplicit": null,
+        "datedPlanProof": null,
+        "clockProof": "current official enrollment clock numeric1–10 actual09:10 start; circled/11+ not inferred",
+        "sourcePublicationDate": "2026-07-23",
+        "currentPostedByteRecheck": "kunsan-published-plan-package-recheck-next-20261008.json",
+        "unresolvedSourcePeriodScope": [
+          {
+            "sourceWeekday": 5,
+            "sourcePeriodLiteral": "⑥",
+            "sourceClassroom": "캠퍼스관-308"
+          },
+          {
+            "sourceWeekday": 5,
+            "sourcePeriodLiteral": "⑦",
+            "sourceClassroom": "캠퍼스관-308"
+          }
+        ],
+        "verifiedLiteralNumericBlocks": [
+          {
+            "weekday": 5,
+            "startMinute": 790,
+            "endMinute": 840,
+            "classroom": "캠퍼스관-308"
+          }
+        ],
+        "partialWholeClassConfirmed": false,
+        "officialSemesterPeriod": {
+          "startDate": "2026-08-31",
+          "endDate": "2026-12-17"
+        },
+        "generatedOrdinaryMakeupDateScopeEnd": "2026-12-10",
+        "courseEarlyEndConfirmed": false,
+        "semesterBoundaryProof": "kunsan-current-calendar-operating-review-20261008.json:개강08/31+종강12/17"
+      },
+      "period": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-17"
+      }
+    },
+    {
+      "sourceId": "kunsan/saemangeum/2026/2/111761/02",
+      "universityId": "kunsan",
+      "campus": "saemangeum",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "111761",
+      "section": "02",
+      "courseName": "R&D인턴십(2)",
+      "sourceNames": [
+        "R&D인턴십(2)"
+      ],
+      "credits": 15.0,
+      "professor": "정한구",
+      "departments": [
+        "조선공학전공"
+      ],
+      "classification": "전공선택",
+      "departmentCredits": {
+        "조선공학전공": 15.0
+      },
+      "departmentClassifications": {
+        "조선공학전공": "전공선택"
+      },
+      "departmentRemarks": {},
+      "remarks": "집중·현장 수업의 실제 날짜·출석 시각 미확인\n학교가 2026년 7월 23일 공시한 정규 수업 계획입니다. 시간표는 학과 사정에 따라 변경될 수 있어 학교 안내에 따라 통합정보시스템에서 현재 수강반·폐강·분합반·수업시각을 재확인해야 합니다. 9월 4일·9월 9일 폐강 기준일 이후 최종 활성 강좌 전체는 확인되지 않았습니다. 시험·보강·개별 변경 사항은 학교 공지를 확인하세요. 실제 출석이나 개인 수업계획서 전수 확인을 의미하지 않습니다.",
+      "sourceSchedule": "토③ [캠퍼스관-308]",
+      "sourceClassroom": "캠퍼스관-308",
+      "sourceTeachingMethods": [
+        "대면"
+      ],
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "sourceOccurrences": [
+        {
+          "file": 3,
+          "sheet": "전체",
+          "row": 555
+        }
+      ],
+      "sourceScheduleStatus": "unrecognized",
+      "sourceDepartmentRemarks": {},
+      "sourceRemarks": "집중·현장 수업의 실제 날짜·출석 시각 미확인",
+      "sourceEducation": {
+        "projection": "unresolvedSourcePreserved",
+        "actualAttendanceConfirmed": false,
+        "individualPrivatePlanRead": false,
+        "finalActiveScopeVerified": false,
+        "sourceCampusExplicit": null,
+        "datedPlanProof": null,
+        "clockProof": "current official enrollment clock numeric1–10 actual09:10 start; circled/11+ not inferred",
+        "sourcePublicationDate": "2026-07-23",
+        "currentPostedByteRecheck": "kunsan-published-plan-package-recheck-next-20261008.json"
+      }
+    }
+  ],
+  "counts": {
+    "scheduled": 1,
+    "unrecognized": 3,
+    "unscheduled": 0
+  },
+  "campusCounts": {
+    "saemangeum": 4
+  },
+  "individualBlocked": [
+    {
+      "courseCode": "112919",
+      "section": "23",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월11 12 13 [원격강의]"
+    },
+    {
+      "courseCode": "115911",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월① ②,수3 [황룡문화관-3306]"
+    },
+    {
+      "courseCode": "115914",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3,목① ② [황룡문화관-3306]"
+    },
+    {
+      "courseCode": "115912",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④,수1 [황룡문화관-3306]"
+    },
+    {
+      "courseCode": "115913",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ②,목3 [황룡문화관-3306]"
+    },
+    {
+      "courseCode": "115916",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수2,금① ② [황룡문화관-3306]"
+    },
+    {
+      "courseCode": "115917",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦,수7 [황룡문화관-3306]"
+    },
+    {
+      "courseCode": "115918",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨,수6 [황룡문화관-3306]"
+    },
+    {
+      "courseCode": "116100",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,목⑥ ⑦ [사회관-2230(PC실)]"
+    },
+    {
+      "courseCode": "116100",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [아카데미홀-204]"
+    },
+    {
+      "courseCode": "116100",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [인문관-1244(PC실)]"
+    },
+    {
+      "courseCode": "116100",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,수③ ④ [사회관-2230(PC실)]"
+    },
+    {
+      "courseCode": "103362",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목③ ④ [아카데미홀-204]"
+    },
+    {
+      "courseCode": "103362",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목③ ④ [해양1-701113(PC실)]"
+    },
+    {
+      "courseCode": "103362",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목③ ④ [인문관-1244(PC실)]"
+    },
+    {
+      "courseCode": "103362",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,목⑧ ⑨ [사회관-2230(PC실)]"
+    },
+    {
+      "courseCode": "103362",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,목⑧ ⑨ [해양1-701113(PC실)]"
+    },
+    {
+      "courseCode": "103362",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,목⑧ ⑨ [아카데미홀-204]"
+    },
+    {
+      "courseCode": "116099",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,목① ② [인문관-1244(PC실)]"
+    },
+    {
+      "courseCode": "116099",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,목① ② [아카데미홀-204]"
+    },
+    {
+      "courseCode": "116099",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,목① ② [아카데미홀-203]"
+    },
+    {
+      "courseCode": "116099",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,화⑥ ⑦ [아카데미홀-203]"
+    },
+    {
+      "courseCode": "116099",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [사회관-2230(PC실)]"
+    },
+    {
+      "courseCode": "116101",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,수③ ④ [아카데미홀-203]"
+    },
+    {
+      "courseCode": "116101",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,수③ ④ [아카데미홀-204]"
+    },
+    {
+      "courseCode": "103576",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,목① ② [사회관-2230(PC실)]"
+    },
+    {
+      "courseCode": "103576",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,목① ② [해양1-701113(PC실)]"
+    },
+    {
+      "courseCode": "103576",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,수③ ④ [해양1-701113(PC실)]"
+    },
+    {
+      "courseCode": "103576",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,수③ ④ [인문관-1244(PC실)]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [디지털정보관-302(PC실)]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [공학3-134131(PC실)]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [디지털정보관-224]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [공학3-13524(PC실)]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [해양1-701113(PC실)]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "07",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,수① ② [사회관-2230(PC실)]"
+    },
+    {
+      "courseCode": "103577",
+      "section": "08",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,수① ② [해양1-701113(PC실)]"
+    },
+    {
+      "courseCode": "103578",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목③ ④ [자연과학1-1418]"
+    },
+    {
+      "courseCode": "111392",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화8,목6 7 [원격강의]"
+    },
+    {
+      "courseCode": "111384",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화3,목1 2 [원격강의]"
+    },
+    {
+      "courseCode": "111929",
+      "section": "02",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "금10 11 12 [원격강의]"
+    },
+    {
+      "courseCode": "111366",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수4,금3 4 [원격강의]"
+    },
+    {
+      "courseCode": "116577",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수4,금3 4 [원격강의]"
+    },
+    {
+      "courseCode": "115701",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수4,금3 4 [원격강의]"
+    },
+    {
+      "courseCode": "111377",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화1 2,목3 [원격강의]"
+    },
+    {
+      "courseCode": "116094",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화1 2,목3 [원격강의]"
+    },
+    {
+      "courseCode": "117603",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화3,목1 2 [원격강의]"
+    },
+    {
+      "courseCode": "117260",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월6 7,수7 [원격강의]"
+    },
+    {
+      "courseCode": "117605",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월1 2,수3 [원격강의]"
+    },
+    {
+      "courseCode": "112928",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화3,목1 2 [원격강의]"
+    },
+    {
+      "courseCode": "112933",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수2,금1 2 [원격강의]"
+    },
+    {
+      "courseCode": "106937",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화8,목6 7 [원격강의]"
+    },
+    {
+      "courseCode": "117263",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화6 7,목8 [원격강의]"
+    },
+    {
+      "courseCode": "101729",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수2,금1 2 [원격강의]"
+    },
+    {
+      "courseCode": "116579",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수2 [인문관-1436],금1 2 [원격강의]"
+    },
+    {
+      "courseCode": "115622",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화11 12 13 [원격강의]"
+    },
+    {
+      "courseCode": "117626",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수2,금1 2 [원격강의]"
+    },
+    {
+      "courseCode": "117262",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목③ ④ [아카데미홀-203]"
+    },
+    {
+      "courseCode": "115621",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화6 7 [인문관-1121],금6 [원격강의]"
+    },
+    {
+      "courseCode": "101748",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [공학2-9309]"
+    },
+    {
+      "courseCode": "101748",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [공학2-9310]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목③ ④ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "07",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑧ ⑨ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "08",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "09",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113426",
+      "section": "10",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑥ ⑦ [자연과학2-2101]"
+    },
+    {
+      "courseCode": "113425",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④ [자연과학4-4308]"
+    },
+    {
+      "courseCode": "113425",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑥ ⑦ [공학2-9401]"
+    },
+    {
+      "courseCode": "113425",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ [자연과학4-4308]"
+    },
+    {
+      "courseCode": "113425",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수③ ④ [자연과학4-4308]"
+    },
+    {
+      "courseCode": "113425",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목③ ④ [자연과학4-4308]"
+    },
+    {
+      "courseCode": "112981",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9 [자연과학3-3401],수⑥ ⑦ [자연과학1-1418]"
+    },
+    {
+      "courseCode": "112981",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [자연과학1-1401],목⑧ ⑨ [자연과학1-1418]"
+    },
+    {
+      "courseCode": "112981",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9 [자연과학1-1401],목⑥ ⑦ [자연과학1-1418]"
+    },
+    {
+      "courseCode": "117418",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수1,금1 2 [원격강의]"
+    },
+    {
+      "courseCode": "117417",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "화8,목6 7 [원격강의]"
+    },
+    {
+      "courseCode": "112948",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수4,금3 4 [원격강의]"
+    },
+    {
+      "courseCode": "117246",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [골프장]"
+    },
+    {
+      "courseCode": "117249",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월① ② [골프장]"
+    },
+    {
+      "courseCode": "117249",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④ [골프장]"
+    },
+    {
+      "courseCode": "117249",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④ [골프장3층]"
+    },
+    {
+      "courseCode": "117627",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월1 2 [원격강의],수3 [사회관-2429]"
+    },
+    {
+      "courseCode": "116758",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ [체육관 암벽장(클라이밍)]"
+    },
+    {
+      "courseCode": "116758",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ [체육관 암벽장(클라이밍)]"
+    },
+    {
+      "courseCode": "116758",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [체육관 암벽장(클라이밍)]"
+    },
+    {
+      "courseCode": "117620",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ [체육관]"
+    },
+    {
+      "courseCode": "116567",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [체육관 피트니스실]"
+    },
+    {
+      "courseCode": "115629",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월① ② [사회관-2129]"
+    },
+    {
+      "courseCode": "115630",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화② ③ [사회관-2129]"
+    },
+    {
+      "courseCode": "115631",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [사회관-2129]"
+    },
+    {
+      "courseCode": "117625",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ [테니스장]"
+    },
+    {
+      "courseCode": "116759",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [집중강의(야외)]"
+    },
+    {
+      "courseCode": "101765",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [집중강의(야외)]"
+    },
+    {
+      "courseCode": "115625",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [체육관 웰니스홀]"
+    },
+    {
+      "courseCode": "115625",
+      "section": "02",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ ④ [체육관 웰니스홀]"
+    },
+    {
+      "courseCode": "116568",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨ [종합운동장(잔디)]"
+    },
+    {
+      "courseCode": "117623",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [체육관 무용실]"
+    },
+    {
+      "courseCode": "116570",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ [체육관 피트니스실]"
+    },
+    {
+      "courseCode": "116583",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑥ ⑦ [사회관-2129]"
+    },
+    {
+      "courseCode": "116571",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ [축구장]"
+    },
+    {
+      "courseCode": "117624",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목③ ④ [체육관]"
+    },
+    {
+      "courseCode": "117619",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [테니스장]"
+    },
+    {
+      "courseCode": "117622",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ [종합운동장(잔디)]"
+    },
+    {
+      "courseCode": "116572",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ [축구장]"
+    },
+    {
+      "courseCode": "116573",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨ [체육관 무용실]"
+    },
+    {
+      "courseCode": "109934",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [집중강의(야외)]"
+    },
+    {
+      "courseCode": "117309",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ [산학연-610]"
+    },
+    {
+      "courseCode": "118096",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ [산학연-610]"
+    },
+    {
+      "courseCode": "114703",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨,금① ② ③ ④ [문무관-301]"
+    },
+    {
+      "courseCode": "114705",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑧ ⑨,금① ② ③ ④ [문무관-307]"
+    },
+    {
+      "courseCode": "115186",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [집중강의(야외)]"
+    },
+    {
+      "courseCode": "115187",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [집중강의(야외)]"
+    },
+    {
+      "courseCode": "115188",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [집중강의(야외)]"
+    },
+    {
+      "courseCode": "115189",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [집중강의(야외)]"
+    },
+    {
+      "courseCode": "115190",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ [집중강의(야외)]"
+    },
+    {
+      "courseCode": "111101",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ [집중강의(해외)]"
+    },
+    {
+      "courseCode": "111102",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ [집중강의(해외)]"
+    },
+    {
+      "courseCode": "111103",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑧ [집중강의(해외)]"
+    },
+    {
+      "courseCode": "112773",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑥ ⑦ [디지털정보관-302(PC실)]"
+    },
+    {
+      "courseCode": "112773",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑥ ⑦ [공학3-134131(PC실)]"
+    },
+    {
+      "courseCode": "112773",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑥ ⑦ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "112773",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑥ ⑦ [디지털정보관-101]"
+    },
+    {
+      "courseCode": "112773",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑥ ⑦ [공학3-13524(PC실)]"
+    },
+    {
+      "courseCode": "116050",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [디지털정보관-302(PC실)]"
+    },
+    {
+      "courseCode": "116050",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [공학3-134131(PC실)]"
+    },
+    {
+      "courseCode": "116050",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [디지털정보관-224]"
+    },
+    {
+      "courseCode": "116050",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [디지털정보관-101]"
+    },
+    {
+      "courseCode": "116050",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [공학3-13524(PC실)]"
+    },
+    {
+      "courseCode": "100709",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2 [디지털정보관-328],수① ② [디지털정보관-325]"
+    },
+    {
+      "courseCode": "100709",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4 [디지털정보관-328],수③ ④ [디지털정보관-325]"
+    },
+    {
+      "courseCode": "100709",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [디지털정보관-328],수⑥ ⑦ [디지털정보관-325]"
+    },
+    {
+      "courseCode": "102234",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,수③ ④ [디지털정보관-327]"
+    },
+    {
+      "courseCode": "102234",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2,목③ ④ [디지털정보관-327]"
+    },
+    {
+      "courseCode": "102234",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,화③ ④ [디지털정보관-327]"
+    },
+    {
+      "courseCode": "103338",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,목① ② [디지털정보관-327]"
+    },
+    {
+      "courseCode": "103338",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [디지털정보관-328]"
+    },
+    {
+      "courseCode": "103338",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,화① ② [디지털정보관-326-2]"
+    },
+    {
+      "courseCode": "113768",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ [디지털정보관-326-1],목8 9 [디지털정보관-327]"
+    },
+    {
+      "courseCode": "113768",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [디지털정보관-326-1],목6 7 [디지털정보관-327]"
+    },
+    {
+      "courseCode": "113768",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,수① ② [디지털정보관-328]"
+    },
+    {
+      "courseCode": "115214",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,화⑧ ⑨ [디지털정보관-328]"
+    },
+    {
+      "courseCode": "115214",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,화⑥ ⑦ [디지털정보관-326-2]"
+    },
+    {
+      "courseCode": "116379",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화③ ④ [디지털정보관-325],수6 7 [디지털정보관-327]"
+    },
+    {
+      "courseCode": "116379",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② [디지털정보관-325],목1 2 [디지털정보관-328]"
+    },
+    {
+      "courseCode": "116379",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수3 4 [디지털정보관-328],목⑥ ⑦ [디지털정보관-329]"
+    },
+    {
+      "courseCode": "103337",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,목⑥ ⑦ [디지털정보관-325]"
+    },
+    {
+      "courseCode": "103337",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑧ ⑨ [디지털정보관-325]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "06",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [디지털정보관-327]"
+    },
+    {
+      "courseCode": "104728",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,수③ ④ [디지털정보관-326-1]"
+    },
+    {
+      "courseCode": "114157",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,목① ② [디지털정보관-325]"
+    },
+    {
+      "courseCode": "114157",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,목③ ④ [디지털정보관-325]"
+    },
+    {
+      "courseCode": "114710",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,수③ ④ [디지털정보관-302(PC실)]"
+    },
+    {
+      "courseCode": "114710",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,수① ② [디지털정보관-302(PC실)]"
+    },
+    {
+      "courseCode": "117233",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,목③ ④ [디지털정보관-224]"
+    },
+    {
+      "courseCode": "117233",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,목① ② [디지털정보관-224]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "04",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [디지털정보관-327]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 ⑥ ⑦ [디지털정보관-311]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월4 ⑧ ⑨ [디지털정보관-311]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "05",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [디지털정보관-327]"
+    },
+    {
+      "courseCode": "114098",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,목⑥ ⑦ [디지털정보관-326-1]"
+    },
+    {
+      "courseCode": "116993",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9 [디지털정보관-326-2],목③ ④ [디지털정보관-329]"
+    },
+    {
+      "courseCode": "117632",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,목① ② [디지털정보관-302(PC실)]"
+    },
+    {
+      "courseCode": "102234",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수⑥ ⑦ [공학3-13104]"
+    },
+    {
+      "courseCode": "103338",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목① ② [공학3-13420]"
+    },
+    {
+      "courseCode": "113768",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,수① ② [공학3-13420]"
+    },
+    {
+      "courseCode": "116375",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [공학3-13504],화2 3 [공학3-13420]"
+    },
+    {
+      "courseCode": "105761",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑧ ⑨ [공학3-13504]"
+    },
+    {
+      "courseCode": "114157",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화5 6,목① ② [공학3-13504]"
+    },
+    {
+      "courseCode": "114710",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화② ③ [공학3-134131(PC실)],목6 7 [공학3-13419]"
+    },
+    {
+      "courseCode": "116379",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2 ③ ④ [공학3-13504]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "08",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [공학3-13104]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월②,화②,목②,금① [공학3-13413]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화②,목② [공학3-13104],화③,수② [공학3-13413]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "09",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [공학3-13104]"
+    },
+    {
+      "courseCode": "112240",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [공학3-13419],목③ ④ [공학3-134131(PC실)]"
+    },
+    {
+      "courseCode": "102234",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,수② ③ [공학3-13325]"
+    },
+    {
+      "courseCode": "103338",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9 [아카데미홀-203],목⑥ ⑦ [공학3-13325]"
+    },
+    {
+      "courseCode": "116376",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,목⑧ ⑨ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "116385",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목① ② [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "10",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [공학3-13103]"
+    },
+    {
+      "courseCode": "113965",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑥ ⑦ [아카데미홀-204]"
+    },
+    {
+      "courseCode": "116057",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금6 7 ⑧ ⑨ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "116059",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금1 2 [공학3-13325],금③ ④ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "116996",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7 [공학3-13103],목③ ④ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "117639",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,수① ② [아카데미홀-203]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "11",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [공학3-13103]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "08",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화③ ④,수① ② [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "111761",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [공학3-13103]"
+    },
+    {
+      "courseCode": "116065",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [공학3-13103],수③ ④ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "117640",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2 [공학3-13103],수⑥ ⑦ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "117641",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2 [공학3-13325],월③ ④ [공학3-13326(PC실)]"
+    },
+    {
+      "courseCode": "102234",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수② ③,금2 3 [디지털정보관-102]"
+    },
+    {
+      "courseCode": "117650",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨,목6 7 [디지털정보관-102]"
+    },
+    {
+      "courseCode": "117651",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목③ ④ [디지털정보관-101]"
+    },
+    {
+      "courseCode": "117651",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,목① ② [디지털정보관-101]"
+    },
+    {
+      "courseCode": "117652",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,화⑥ ⑦ [디지털정보관-102]"
+    },
+    {
+      "courseCode": "117653",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,화⑧ ⑨ [디지털정보관-102]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "14",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "111902",
+      "section": "02",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "114710",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [디지털정보관-224],수6 7 [디지털정보관-124]"
+    },
+    {
+      "courseCode": "117230",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② [디지털정보관-224],목1 2 [디지털정보관-124]"
+    },
+    {
+      "courseCode": "117654",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,수③ ④ [디지털정보관-101]"
+    },
+    {
+      "courseCode": "117655",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화③ ④,목3 4 [디지털정보관-102]"
+    },
+    {
+      "courseCode": "117656",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 7,금⑤ ⑥ [디지털정보관-101]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "14",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "11",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④,수6 7 [디지털정보관-102]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "14",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [산업체-기관]"
+    },
+    {
+      "courseCode": "116082",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월6 7 [디지털정보관-124],목9 [원격강의]"
+    },
+    {
+      "courseCode": "110298",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금2 ③ ④ [공학3-13524(PC실)]"
+    },
+    {
+      "courseCode": "110601",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금6 7 ⑧ ⑨ [공학3-13524(PC실)]"
+    },
+    {
+      "courseCode": "112095",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,목③ ④ [공학3-13516]"
+    },
+    {
+      "courseCode": "110344",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금6 7 ⑧ ⑨ [공학3-13516]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "17",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [공학3-13522]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "14",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑤ ⑥ ⑦ ⑧ [공학3-13516]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "18",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [공학3-13522]"
+    },
+    {
+      "courseCode": "111608",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화③ ④ [공학3-13524(PC실)],수6 7 [공학3-13523]"
+    },
+    {
+      "courseCode": "112787",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,목③ ④ [공학3-13522]"
+    },
+    {
+      "courseCode": "101115",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화2 3 [자연과학4-4403-2],금① ② [자연과학1-1314]"
+    },
+    {
+      "courseCode": "100277",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [자연과학4-4404],금③ ④ [자연과학1-1314]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "03",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [자연과학4-4403-2]"
+    },
+    {
+      "courseCode": "111474",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수① ② ③ ④ [자연과학4-4403-2]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "02",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [자연과학4-4403-2]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "02",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [자연과학4-4403-2]"
+    },
+    {
+      "courseCode": "100581",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "목⑩ ⑪ ⑫ ⑬ [집중강의(해림호)]"
+    },
+    {
+      "courseCode": "113724",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "수⑩ ⑪ ⑫ ⑬ [집중강의(해림호)]"
+    },
+    {
+      "courseCode": "116322",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "화⑩ ⑪ ⑫ ⑬ [집중강의(해림호)]"
+    },
+    {
+      "courseCode": "116323",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 [해양1-701715],화⑥ ⑦ [해림호-1]"
+    },
+    {
+      "courseCode": "116324",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수3,금2 3 [원격강의]"
+    },
+    {
+      "courseCode": "116326",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월5 6,화⑤ ⑥ [해양1-701714]"
+    },
+    {
+      "courseCode": "114991",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수① ② [해양1-701703]"
+    },
+    {
+      "courseCode": "116330",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2 ③ ④ [해양1-701628]"
+    },
+    {
+      "courseCode": "102023",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑥ ⑦ [해양부속-64202]"
+    },
+    {
+      "courseCode": "100974",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,수③ ④ [해양1-701201]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "12",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "목① [해양1-701207]"
+    },
+    {
+      "courseCode": "112886",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월2 3,목② ③ [해양1-701201]"
+    },
+    {
+      "courseCode": "117663",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,목⑤ ⑥ [해양부속-64202]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "12",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "수① [해양1-701227]"
+    },
+    {
+      "courseCode": "102037",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,목⑥ ⑦ [해양1-701318]"
+    },
+    {
+      "courseCode": "102333",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화2 3,수② ③ [해양1-701318]"
+    },
+    {
+      "courseCode": "103734",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,화⑥ ⑦ [해양1-701317]"
+    },
+    {
+      "courseCode": "112871",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2,목③ ④ [해양1-701516]"
+    },
+    {
+      "courseCode": "115514",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨,목1 2 [해양1-701318]"
+    },
+    {
+      "courseCode": "117668",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦,화1 2 [해양1-701317]"
+    },
+    {
+      "courseCode": "101581",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2 [해양1-701419],목① ② [해양1-701418]"
+    },
+    {
+      "courseCode": "101260",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,수③ ④ [해양1-701418]"
+    },
+    {
+      "courseCode": "101613",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2 [해양1-701418],수① ② [해양1-701419]"
+    },
+    {
+      "courseCode": "115517",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,목⑧ ⑨ [해양1-701418]"
+    },
+    {
+      "courseCode": "116305",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,목⑥ ⑦ [해양1-701418]"
+    },
+    {
+      "courseCode": "116999",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,목③ ④ [해양1-701418]"
+    },
+    {
+      "courseCode": "101653",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9 [해양1-701419],수① ② [해양1-701418]"
+    },
+    {
+      "courseCode": "101654",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,화⑥ ⑦ [해양1-701419]"
+    },
+    {
+      "courseCode": "102019",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,금③ ④ [해양1-701419]"
+    },
+    {
+      "courseCode": "102028",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,목③ ④ [해양1-701419]"
+    },
+    {
+      "courseCode": "112084",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,화③ ④ [해양1-701418]"
+    },
+    {
+      "courseCode": "117674",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,목⑧ ⑨ [해양1-701419]"
+    },
+    {
+      "courseCode": "117675",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,수③ ④ [해양1-701419]"
+    },
+    {
+      "courseCode": "103653",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 2 ③ ④ [자연과학3-3102]"
+    },
+    {
+      "courseCode": "110738",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② ③ ④,금1 [자연과학2-2303]"
+    },
+    {
+      "courseCode": "110738",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8,수① ② ③ ④ [자연과학2-2303]"
+    },
+    {
+      "courseCode": "102162",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [자연과학3-3102]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "21",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [자연과학3-3102]"
+    },
+    {
+      "courseCode": "110658",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월2 3 [자연과학3-3102],화③ ④ [사회관-2205]"
+    },
+    {
+      "courseCode": "111156",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월5 6 [자연과학2-2303],수① ② [자연과학3-3102]"
+    },
+    {
+      "courseCode": "107640",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월4,목1 ② ③ [자연과학2-2303]"
+    },
+    {
+      "courseCode": "112753",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,수⑥ ⑦ [인문관-1120]"
+    },
+    {
+      "courseCode": "100509",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② ③ ④ [해양2-702211]"
+    },
+    {
+      "courseCode": "101507",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ ⑧ ⑨ [해양2-702113]"
+    },
+    {
+      "courseCode": "102213",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ ⑧ ⑨ [해양부속건물-703102]"
+    },
+    {
+      "courseCode": "102774",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금① ② ③ ④ [해양2-702209]"
+    },
+    {
+      "courseCode": "111721",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑥ ⑦ ⑧ ⑨ [해양2-702111]"
+    },
+    {
+      "courseCode": "114683",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월① ② ③ ④ [해양2-702112]"
+    },
+    {
+      "courseCode": "115947",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ ⑧ ⑨ [해양2-702209]"
+    },
+    {
+      "courseCode": "115948",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수① ② ③ ④ [해양생물연구교육관-405]"
+    },
+    {
+      "courseCode": "115949",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② ③ ④ [해양2-702113]"
+    },
+    {
+      "courseCode": "101434",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑥ ⑦,금2 3 [해양2-702110]"
+    },
+    {
+      "courseCode": "101844",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수② ③ [해양2-702110]"
+    },
+    {
+      "courseCode": "101849",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목① ② [해양2-702110]"
+    },
+    {
+      "courseCode": "102329",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦,목8 9 [해양2-702110]"
+    },
+    {
+      "courseCode": "101875",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수③ ④,금2 3 [해양2-702116]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "25",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "월① [해양2-702301]"
+    },
+    {
+      "courseCode": "111203",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦,목2 3 [해양2-702116]"
+    },
+    {
+      "courseCode": "111723",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑧ ⑨ [해양2-702116]"
+    },
+    {
+      "courseCode": "111725",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,수① ② [해양2-702116]"
+    },
+    {
+      "courseCode": "117682",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦,수6 7 [해양2-702116]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "26",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "월② [해양2-702301]"
+    },
+    {
+      "courseCode": "111696",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월3,수1 [원격강의],월4 [종합-131-220]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [종합-131-218]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [종합-131-218]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "08",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [종합-131-209]"
+    },
+    {
+      "courseCode": "110247",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "목1,금1 2 [원격강의]"
+    },
+    {
+      "courseCode": "111902",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [종합-131-209]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "07",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [종합-131-209]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "08",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [종합-131-209]"
+    },
+    {
+      "courseCode": "107053",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월2 3,수2 [실시간강의]"
+    },
+    {
+      "courseCode": "100088",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "목11 12 13 [사회관-2403]"
+    },
+    {
+      "courseCode": "100183",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "금11 12 13 [사회관-2403]"
+    },
+    {
+      "courseCode": "104201",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "화11 12 13 [사회관-2403]"
+    },
+    {
+      "courseCode": "112398",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "102240",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "수11 12 13 [사회관-2427]"
+    },
+    {
+      "courseCode": "112400",
+      "section": "02",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "115807",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "월11 12 13 [사회관-2428]"
+    },
+    {
+      "courseCode": "115808",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "화11 12 13 [사회관-2428]"
+    },
+    {
+      "courseCode": "110754",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "월11 12 13 [사회관-2427]"
+    },
+    {
+      "courseCode": "112020",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "화11 12 13 [사회관-2427]"
+    },
+    {
+      "courseCode": "112402",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "115812",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "수11 12 13 [사회관-2403]"
+    },
+    {
+      "courseCode": "115813",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "목11 12 13 [사회관-2427]"
+    },
+    {
+      "courseCode": "103477",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "월11 12 13 [사회관-2429]"
+    },
+    {
+      "courseCode": "109357",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "수11 12 13 [사회관-2428]"
+    },
+    {
+      "courseCode": "112404",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "113397",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "목11 12 13 [사회관-2429]"
+    },
+    {
+      "courseCode": "115814",
+      "section": "02",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "화11 12 13 [사회관-2429]"
+    },
+    {
+      "courseCode": "114587",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목5 6,금③ ④ [두드림-4203]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "22",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② ③ ⑤ [두드림-4204]"
+    },
+    {
+      "courseCode": "101741",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑧ ⑨ [예술관-5215]"
+    },
+    {
+      "courseCode": "109420",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑥ ⑦ [예술관-5215]"
+    },
+    {
+      "courseCode": "112649",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑤ ⑥ [예술관-5215]"
+    },
+    {
+      "courseCode": "116269",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑤ ⑥ [예술관-5111]"
+    },
+    {
+      "courseCode": "100879",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월④ ⑤ ⑥,화④ ⑤ ⑥ [예술관-5212]"
+    },
+    {
+      "courseCode": "101485",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② ③,수⑤ ⑥ ⑦ [예술관-5211]"
+    },
+    {
+      "courseCode": "103020",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수② ③ ④,금② ③ ④ [예술관-5112]"
+    },
+    {
+      "courseCode": "103555",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 ② ③ ④ ⑤ [예술관-5105]"
+    },
+    {
+      "courseCode": "108695",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ ⑧,금⑤ ⑥ ⑦ [예술관-5207]"
+    },
+    {
+      "courseCode": "109424",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 ⑦ ⑧ [예술관-5213]"
+    },
+    {
+      "courseCode": "110575",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② ③,금⑤ ⑥ ⑦ [예술관-5213]"
+    },
+    {
+      "courseCode": "112654",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화5 ⑥ ⑦ [예술관-5210]"
+    },
+    {
+      "courseCode": "115801",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금2 ③ ④ [예술관-5105]"
+    },
+    {
+      "courseCode": "116271",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑤ ⑥ ⑦ ⑧ ⑨ ⑩ [예술관-5105]"
+    },
+    {
+      "courseCode": "109426",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑦ ⑧ ⑨,금⑧ ⑨ ⑩ [예술관-5209]"
+    },
+    {
+      "courseCode": "110571",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금① ② ③ ⑤ ⑥ ⑦ [예술관-5214]"
+    },
+    {
+      "courseCode": "113248",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "수2 3 [예술관-5210]"
+    },
+    {
+      "courseCode": "116273",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월④ ⑤ ⑥ ⑦ ⑧ ⑨ [예술관-5110]"
+    },
+    {
+      "courseCode": "103685",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "103685",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10123]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10108]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10108]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토② [음악관-10108]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [음악관-10108]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [음악관-10108]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "07",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ [음악관-10112]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "08",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ [음악관-10216]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "09",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ [음악관-10116]"
+    },
+    {
+      "courseCode": "109430",
+      "section": "10",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [음악관-10116]"
+    },
+    {
+      "courseCode": "100341",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화② ③ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "102106",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "102966",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10107]"
+    },
+    {
+      "courseCode": "102966",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10107]"
+    },
+    {
+      "courseCode": "102966",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토② [음악관-10107]"
+    },
+    {
+      "courseCode": "102966",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑨ [음악관-10107]"
+    },
+    {
+      "courseCode": "102966",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [음악관-10107]"
+    },
+    {
+      "courseCode": "102966",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ [음악관-10107]"
+    },
+    {
+      "courseCode": "103687",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "103687",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ ⑧ [음악관-10123]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10210]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토② [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "07",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "08",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [음악관-10114]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "09",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "10",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "11",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑧ [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "12",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① ① [음악관-10223]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "13",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑨ [음악관-10109]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "14",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ ⑦ [음악관-10114]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "15",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10302]"
+    },
+    {
+      "courseCode": "109432",
+      "section": "16",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑨ [음악관-10114]"
+    },
+    {
+      "courseCode": "100343",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화② ③ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "102108",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [음악관-10223]"
+    },
+    {
+      "courseCode": "103689",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "103689",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ ④ [음악관-10110]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ [음악관-10110]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ [음악관-10110]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① ① [음악관-10211]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토② [음악관-10123]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10210]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "07",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ [음악관-10110]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "08",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑧ [음악관-10110]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "09",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑨ [음악관-10110]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "10",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10111]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "11",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① ① [음악관-10222]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "12",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② ④ ⑤ [음악관-10111]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "13",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑧ [음악관-10106]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "14",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ ④ [음악관-10215]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "16",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ [음악관-10111]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "17",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [음악관-10110]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "18",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ [음악관-10123]"
+    },
+    {
+      "courseCode": "110404",
+      "section": "20",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑧ [음악관-10216]"
+    },
+    {
+      "courseCode": "103691",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "103691",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑤ ⑥ [음악관-10128(콘서트홀)]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10112]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [음악관-10123]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토② [음악관-10112]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ ④ [음악관-10112]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "05",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10112]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "06",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ [음악관-10112]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "07",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑥ [음악관-10112]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "08",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [음악관-10113]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "09",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ ④ [음악관-10214]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "10",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑧ [음악관-10113]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "11",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [음악관-10114]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "12",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [음악관-10113]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "13",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ [음악관-10215]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "14",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ ⑥ [음악관-10113]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "15",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [음악관-10210]"
+    },
+    {
+      "courseCode": "107860",
+      "section": "16",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① [음악관-10119]"
+    },
+    {
+      "courseCode": "109620",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수① ② [음악관-10223],목⑦ ⑧ [음악관-10123]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "11",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [캠퍼스관-308]"
+    },
+    {
+      "courseCode": "109833",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,수② ③ [종합-131-114]"
+    },
+    {
+      "courseCode": "110172",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월② ③,금⑧ ⑨ [캠퍼스관-308]"
+    },
+    {
+      "courseCode": "111254",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금5 ⑥ ⑦ [캠퍼스관-308]"
+    },
+    {
+      "courseCode": "111761",
+      "section": "02",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [캠퍼스관-308]"
+    },
+    {
+      "courseCode": "112059",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금5 ⑥ ⑦ [종합-131-114]"
+    },
+    {
+      "courseCode": "117010",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [사회관-2121],수6 7 [사회관-2205]"
+    },
+    {
+      "courseCode": "107698",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [공학3-13225],화⑧ ⑨ [공학3-13226(PC실)]"
+    },
+    {
+      "courseCode": "115959",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [공학3-13324]"
+    },
+    {
+      "courseCode": "100606",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목4 [공학3-13324],목⑥ ⑦ ⑧ ⑨ [공학3-13226(PC실)]"
+    },
+    {
+      "courseCode": "106635",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4 [공학3-13324],목① ② [공학3-13226(PC실)]"
+    },
+    {
+      "courseCode": "100954",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑥ ⑦ [공학3-13226(PC실)],목6 7 [공학3-13102]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "05",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [공학3-13324]"
+    },
+    {
+      "courseCode": "117710",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월1 2,화4 [원격강의]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "01",
+      "reasons": [
+        "동일 실제 학수번호·분반의 원문 시간표 상충"
+      ],
+      "sourceSchedule": "월⑤,화⑤,수⑤,목③ ⑤,금⑧ [공학3-13226(PC실)]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "04",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [공학3-13324]"
+    },
+    {
+      "courseCode": "114980",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,화③ ④ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "114980",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2,목③ ④ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "100954",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목8 9 [공학3-13101],금② ③ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "100954",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4 [공학3-13120],금⑤ ⑥ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "112047",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2 ③ ④ [공학3-13125]"
+    },
+    {
+      "courseCode": "112047",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 2 ③ ④ [공학3-13125]"
+    },
+    {
+      "courseCode": "116339",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7 [공학3-13120],화⑧ ⑨ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "116339",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9 [공학3-13120],화⑥ ⑦ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "102798",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [공학3-13119],목⑥ ⑦ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "102876",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7 [공학3-13119],목⑧ ⑨ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "111214",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4 [공학3-13119],수⑥ ⑦ [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "112049",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,수① ② [공학3-13114(PC실)]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "06",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [공학3-13101]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,목⑧ ⑨ [공학3-13120]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "07",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [공학3-13101]"
+    },
+    {
+      "courseCode": "109813",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② ③ ④ [해양2-702101]"
+    },
+    {
+      "courseCode": "112069",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,화⑥ ⑦ [해양2-702101]"
+    },
+    {
+      "courseCode": "116023",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수2 3,목⑦ ⑧ [해양2-702101]"
+    },
+    {
+      "courseCode": "117071",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,수⑤ ⑥ [해양1-701113(PC실)]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "09",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "116027",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,수② ③ [해양2-702105]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "09",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "07",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② ③ ④,금① ② [해양2-702411]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "10",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "117075",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9 [해양2-702411],화① ② [사회관-2230(PC실)]"
+    },
+    {
+      "courseCode": "111266",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ ⑧,목⑥ ⑦ ⑧ [공학5-8114]"
+    },
+    {
+      "courseCode": "100306",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② ③ ④ [공학2-9401]"
+    },
+    {
+      "courseCode": "102117",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④,수2 [공학2-9508]"
+    },
+    {
+      "courseCode": "102779",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화③ ④,수1 [공학2-9508]"
+    },
+    {
+      "courseCode": "100325",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑧ ⑨ [공학2-9509]"
+    },
+    {
+      "courseCode": "104084",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ ⑧ ⑨ [공학2-9409]"
+    },
+    {
+      "courseCode": "107142",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수① ②,목3 [공학2-9509]"
+    },
+    {
+      "courseCode": "107778",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7,수⑥ ⑦ [공학2-9509]"
+    },
+    {
+      "courseCode": "112771",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월2 3,화① ② [공학2-9509]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "09",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월① ②,목③ ④,금① ② [공학2-9507]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "12",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [공학2-9507]"
+    },
+    {
+      "courseCode": "100682",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수4 5 ⑥ ⑦ [해양2-702413]"
+    },
+    {
+      "courseCode": "100682",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금4 5 ⑥ ⑦ [해양2-702413]"
+    },
+    {
+      "courseCode": "104148",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 2 [해양2-702107],금① ② [해양2-702507]"
+    },
+    {
+      "courseCode": "104148",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 2 [해양2-702507],금① ② [해양2-702107]"
+    },
+    {
+      "courseCode": "101390",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수5,금1 ② ③ [해양2-702412]"
+    },
+    {
+      "courseCode": "101737",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화5 6 ⑦,목⑤ [해양2-702413]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "15",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [해양2-702412]"
+    },
+    {
+      "courseCode": "104180",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월3 4,목⑥ ⑦ [아카데미홀-203]"
+    },
+    {
+      "courseCode": "115983",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑧ ⑨ [해양2-702412]"
+    },
+    {
+      "courseCode": "115983",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화⑧ ⑨ [해양2-702413]"
+    },
+    {
+      "courseCode": "116437",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,수③ ④ [해양2-702107]"
+    },
+    {
+      "courseCode": "101744",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화9,목7 ⑧ ⑨ [해양2-702507]"
+    },
+    {
+      "courseCode": "104147",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화2 3,수② ③ [해양2-702106]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "12",
+      "reasons": [
+        "동일 실제 학수번호·분반의 원문 시간표 상충"
+      ],
+      "sourceSchedule": "월⑨ ⑩ ⑪ [해양2-702410],금⑦ ⑧ ⑨ [해양2-702507]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "15",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [해양2-702410]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "16",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [해양2-702507]"
+    },
+    {
+      "courseCode": "110930",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 [공학2-9101],목⑧ ⑨ [해양2-702103]"
+    },
+    {
+      "courseCode": "110606",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월2 3 [공학2-9101],화⑧ ⑨ [해양2-702103]"
+    },
+    {
+      "courseCode": "100081",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2,수③ ④ [해양1-701117]"
+    },
+    {
+      "courseCode": "101389",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,목① ② [해양1-701117]"
+    },
+    {
+      "courseCode": "103226",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월8 9,화① ② [해양1-701117]"
+    },
+    {
+      "courseCode": "103414",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화3 4,수① ② [해양1-701117]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "19",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "113701",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목⑧ ⑨ [해양1-701117]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "15",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② [해양2-702104],목③ ④ [자연과학4-4504]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "16",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② ③ ④ [해양1-701616]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "20",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "109402",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,수③ ④ [해양1-701616]"
+    },
+    {
+      "courseCode": "113812",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화5 6 ⑧ ⑨ [해양1-701515]"
+    },
+    {
+      "courseCode": "112833",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월8 9 [원격강의],화7 [해양1-701515]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "19",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화③,목④ [해양1-701601]"
+    },
+    {
+      "courseCode": "111147",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수① ② [자연과학2-2101]"
+    },
+    {
+      "courseCode": "111160",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨ [자연과학4-4308]"
+    },
+    {
+      "courseCode": "114247",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목4 ⑤ 6 ⑦ [자연과학4-4204]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "20",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월① ② ③ ④ [자연과학4-4206]"
+    },
+    {
+      "courseCode": "100546",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화2 3 ④ ⑤ [자연과학1-1214]"
+    },
+    {
+      "courseCode": "112733",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목① ② ③ ④ [자연과학1-1219]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "23",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [자연과학4-4307]"
+    },
+    {
+      "courseCode": "107280",
+      "section": "21",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수④ ⑤ ⑥ ⑦ [자연과학1-1214]"
+    },
+    {
+      "courseCode": "114971",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금③ ④ ⑤ ⑥ [자연과학1-1219]"
+    },
+    {
+      "courseCode": "114972",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월1,금1 2 [원격강의]"
+    },
+    {
+      "courseCode": "101133",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수② ③ [자연과학3-3402]"
+    },
+    {
+      "courseCode": "100252",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7,수② ③ [자연과학3-3401]"
+    },
+    {
+      "courseCode": "104107",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월8 9,목5 [원격강의]"
+    },
+    {
+      "courseCode": "115502",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,목① ② [자연과학1-1418]"
+    },
+    {
+      "courseCode": "109620",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화2 3,수③ ④ [인문관-1337]"
+    },
+    {
+      "courseCode": "108836",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월1 [원격강의],수2 3 [인문관-1323]"
+    },
+    {
+      "courseCode": "110556",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수3 [인문관-1332],목8 9 [원격강의]"
+    },
+    {
+      "courseCode": "117738",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 9,수⑥ ⑦ [인문관-1104]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "10",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [인문관-1422]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "11",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [인문관-1234]"
+    },
+    {
+      "courseCode": "101924",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화④ ⑤,금6 7 [인문관-1421]"
+    },
+    {
+      "courseCode": "106728",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑤ ⑥,목4 5 [인문관-1421]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "20",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [인문관-1224]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "19",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [인문관-1224]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "21",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [인문관-1224]"
+    },
+    {
+      "courseCode": "100546",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 2 ③ ④ [산학연-607]"
+    },
+    {
+      "courseCode": "117766",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목5 6 ⑦ ⑧ [산학연-608]"
+    },
+    {
+      "courseCode": "117767",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [산학연-608]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "04",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [인문관-1419]"
+    },
+    {
+      "courseCode": "112645",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [인문관-1233]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "03",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [인문관-1419]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "03",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [인문관-1419]"
+    },
+    {
+      "courseCode": "109620",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑤ ⑥ ⑦ ⑧,수⑥ ⑦ [자연과학2-2401]"
+    },
+    {
+      "courseCode": "106698",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "월①,화①,수①,목① [사회관-2305],목② ③ [사회관-2327]"
+    },
+    {
+      "courseCode": "106698",
+      "section": "02",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "월①,화① ⑧ ⑨,수①,목① [사회관-2327]"
+    },
+    {
+      "courseCode": "109323",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 7 ⑧ ⑨ [인문관-1244(PC실)]"
+    },
+    {
+      "courseCode": "112984",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월6 7 [원격강의],수7 [사회관-2430]"
+    },
+    {
+      "courseCode": "111326",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [디지털정보관-505]"
+    },
+    {
+      "courseCode": "111326",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목④ ⑤ [디지털정보관-505]"
+    },
+    {
+      "courseCode": "111326",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목② ③ [디지털정보관-505]"
+    },
+    {
+      "courseCode": "110894",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월①,화①,수①,목①,금①,토① [디지털정보관-503]"
+    },
+    {
+      "courseCode": "110895",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② ③ ④ ⑤ ⑥ [디지털정보관-506]"
+    },
+    {
+      "courseCode": "110896",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑩,화⑩,목⑩,금⑩,토⑦ ⑧ [디지털정보관-119]"
+    },
+    {
+      "courseCode": "112742",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수6 7 [원격강의]"
+    },
+    {
+      "courseCode": "110903",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑩ ⑪,화⑩ ⑪,목⑩,금⑩ [디지털정보관-509]"
+    },
+    {
+      "courseCode": "110909",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑪,금⑪,토① ② ③ ④ [디지털정보관-502]"
+    },
+    {
+      "courseCode": "111348",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월①,화①,수①,목①,금①,토① [디지털정보관-507]"
+    },
+    {
+      "courseCode": "111849",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② [디지털정보관-508]"
+    },
+    {
+      "courseCode": "111849",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수① ② [디지털정보관-508]"
+    },
+    {
+      "courseCode": "111849",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금① ② [디지털정보관-508]"
+    },
+    {
+      "courseCode": "114658",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 7 ⑧ ⑨ [자연과학3-3302]"
+    },
+    {
+      "courseCode": "107974",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2 ③ ④ [자연과학3-3313]"
+    },
+    {
+      "courseCode": "107974",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7 ⑧ ⑨ [자연과학3-3313]"
+    },
+    {
+      "courseCode": "112043",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [자연과학3-3302]"
+    },
+    {
+      "courseCode": "112043",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2 ③ ④ [자연과학3-3302]"
+    },
+    {
+      "courseCode": "114659",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2 ③ ④ [자연과학2-2301]"
+    },
+    {
+      "courseCode": "114659",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 2 ③ ④ [자연과학2-2301]"
+    },
+    {
+      "courseCode": "117102",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,목⑥ ⑦ [자연과학3-3313]"
+    },
+    {
+      "courseCode": "117102",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화4 5,목⑧ ⑨ [자연과학3-3313]"
+    },
+    {
+      "courseCode": "107656",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2 ③ ④ [자연과학3-3302]"
+    },
+    {
+      "courseCode": "114290",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2 [자연과학3-3302],화③ ④ [자연과학3-3315]"
+    },
+    {
+      "courseCode": "117111",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [자연과학3-3317]"
+    },
+    {
+      "courseCode": "117112",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7 ⑧ ⑨ [자연과학3-3302]"
+    },
+    {
+      "courseCode": "117113",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목3 4 ⑤ ⑥ [예술관-5106]"
+    },
+    {
+      "courseCode": "110475",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② [스포츠-12101]"
+    },
+    {
+      "courseCode": "113715",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월1 2 [원격강의],수3 [종합-131-301]"
+    },
+    {
+      "courseCode": "102357",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [종합운동장(트랙)]"
+    },
+    {
+      "courseCode": "102357",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [종합운동장(잔디)]"
+    },
+    {
+      "courseCode": "103270",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금③ ④ [스포츠-12101]"
+    },
+    {
+      "courseCode": "103270",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금⑧ ⑨ [스포츠-12101]"
+    },
+    {
+      "courseCode": "103306",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨ [축구장]"
+    },
+    {
+      "courseCode": "100654",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨ [체육관]"
+    },
+    {
+      "courseCode": "101182",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑥ ⑦ [체육관]"
+    },
+    {
+      "courseCode": "101187",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨ [체육관]"
+    },
+    {
+      "courseCode": "112759",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑦ ⑧ [스포츠-12104]"
+    },
+    {
+      "courseCode": "101979",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수⑥ ⑦ [종합운동장(잔디)]"
+    },
+    {
+      "courseCode": "102069",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ [체육관-무용실]"
+    },
+    {
+      "courseCode": "103318",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ ⑥ [스포츠-12102]"
+    },
+    {
+      "courseCode": "103376",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑥ ⑦ [체육관]"
+    },
+    {
+      "courseCode": "103391",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목⑧ ⑨ [테니스장]"
+    },
+    {
+      "courseCode": "111715",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨ [스포츠-12104]"
+    },
+    {
+      "courseCode": "108390",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦ [골프장]"
+    },
+    {
+      "courseCode": "111311",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ ⑥ [스포츠-12104]"
+    },
+    {
+      "courseCode": "114665",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① ② [스포츠-12104]"
+    },
+    {
+      "courseCode": "112820",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금2 ③ ④ [예술관-5315]"
+    },
+    {
+      "courseCode": "113336",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 ② ③ [예술관-5401]"
+    },
+    {
+      "courseCode": "116274",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 ⑦ ⑧ [예술관-5315]"
+    },
+    {
+      "courseCode": "115994",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 ⑦ ⑧ [예술관-5315]"
+    },
+    {
+      "courseCode": "115996",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 ② ③ [예술관-5313]"
+    },
+    {
+      "courseCode": "115997",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월2 ③ ④ [예술관-5313]"
+    },
+    {
+      "courseCode": "116279",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수5 ⑥ ⑦ [예술관-5404]"
+    },
+    {
+      "courseCode": "116280",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화2 ③ ④ [예술관-5315]"
+    },
+    {
+      "courseCode": "116281",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목1 2 ③ ④ [예술관-5315]"
+    },
+    {
+      "courseCode": "116282",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 ⑦ ⑧ [예술관-5405]"
+    },
+    {
+      "courseCode": "116283",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 7 ⑧ ⑨ [예술관-5403]"
+    },
+    {
+      "courseCode": "104025",
+      "section": "27",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [예술관-5401]"
+    },
+    {
+      "courseCode": "107279",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑨ ⑩ [예술관-5401]"
+    },
+    {
+      "courseCode": "111128",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금1 2 ③ ④ [예술관-5313]"
+    },
+    {
+      "courseCode": "113340",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 ⑦ ⑧ [예술관-5313]"
+    },
+    {
+      "courseCode": "116002",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금6 ⑦ ⑧ [예술관-5313]"
+    },
+    {
+      "courseCode": "116003",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 ⑦ ⑧ [예술관-5315]"
+    },
+    {
+      "courseCode": "116287",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월2 ③ ④ [예술관-5402]"
+    },
+    {
+      "courseCode": "116288",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 ⑦ ⑧ [예술관-5313]"
+    },
+    {
+      "courseCode": "116289",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "금9 10 11 [예술관-5403]"
+    },
+    {
+      "courseCode": "117840",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목2 ③ ④ [예술관-5313]"
+    },
+    {
+      "courseCode": "117841",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화2 ③ ④ [예술관-5313]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "23",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토② [예술관-5401]"
+    },
+    {
+      "courseCode": "107753",
+      "section": "28",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [예술관-5401]"
+    },
+    {
+      "courseCode": "116293",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 ② ③ [예술관-5315]"
+    },
+    {
+      "courseCode": "116296",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 ⑦ ⑧ [예술관-5406]"
+    },
+    {
+      "courseCode": "116297",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목2 ③ ④ [예술관-5406]"
+    },
+    {
+      "courseCode": "117842",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금6 ⑦ ⑧ [예술관-5315]"
+    },
+    {
+      "courseCode": "111251",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목③ ④ [공학2-9101]"
+    },
+    {
+      "courseCode": "100513",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화② ③ [공학2-9101]"
+    },
+    {
+      "courseCode": "102117",
+      "section": "05",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월8 [공학2-9308],월9 수5 [원격강의]"
+    },
+    {
+      "courseCode": "109464",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧ ⑨,수2 3 [공학2-9206]"
+    },
+    {
+      "courseCode": "109464",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월① ②,수2 3 [공학2-9204]"
+    },
+    {
+      "courseCode": "109464",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦,화8 9 [공학2-9204]"
+    },
+    {
+      "courseCode": "102958",
+      "section": "05",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "화11 12 13 [공학2-9308]"
+    },
+    {
+      "courseCode": "111895",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "수11 12 13 [공학2-9308]"
+    },
+    {
+      "courseCode": "111898",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "목11 12 13 [공학2-9205]"
+    },
+    {
+      "courseCode": "112398",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토② [공학2-9101]"
+    },
+    {
+      "courseCode": "100541",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "목11 12 13 [공학2-9309]"
+    },
+    {
+      "courseCode": "100883",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "월11 12 13 [공학2-9309]"
+    },
+    {
+      "courseCode": "102117",
+      "section": "08",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "화11 12 13 [공학2-9309]"
+    },
+    {
+      "courseCode": "112400",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [공학2-9101]"
+    },
+    {
+      "courseCode": "111254",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금2 ③ ④ [공학2-9204]"
+    },
+    {
+      "courseCode": "111250",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화8 ⑨,수11 ⑫ [공학2-9101]"
+    },
+    {
+      "courseCode": "111254",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금2 ③ ④ [공학2-9205]"
+    },
+    {
+      "courseCode": "111250",
+      "section": "03",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화11 12,수⑪ ⑫ [공학2-9108]"
+    },
+    {
+      "courseCode": "101422",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "화11 12 13 [공학2-9310]"
+    },
+    {
+      "courseCode": "107117",
+      "section": "04",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "월11 12 13 [공학2-9108]"
+    },
+    {
+      "courseCode": "112404",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토⑤ [공학2-9101]"
+    },
+    {
+      "courseCode": "115116",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "목11 12 13 [공학2-9108]"
+    },
+    {
+      "courseCode": "111250",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화11 ⑫,수11 ⑫ [공학2-9105]"
+    },
+    {
+      "courseCode": "100631",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "목11 12 13 [공학2-9310]"
+    },
+    {
+      "courseCode": "102220",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "월11 12 13 [공학2-9310]"
+    },
+    {
+      "courseCode": "111921",
+      "section": "01",
+      "reasons": [
+        "공식 현재 교시 시각표는 1~10교시만 제시"
+      ],
+      "sourceSchedule": "수11 12 13 [공학2-9310]"
+    },
+    {
+      "courseCode": "112402",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토④ [공학2-9101]"
+    },
+    {
+      "courseCode": "100100",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화1 2 ③ ④ [공학5-8315]"
+    },
+    {
+      "courseCode": "100100",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [공학5-8315]"
+    },
+    {
+      "courseCode": "101452",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑧ ⑨,수3 [공학5-8207]"
+    },
+    {
+      "courseCode": "100119",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6,수① ② [공학5-8206]"
+    },
+    {
+      "courseCode": "100121",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑦ ⑧ ⑨,수⑤ ⑥ ⑦ [공학5-8318]"
+    },
+    {
+      "courseCode": "100121",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑦ ⑧ ⑨,수⑤ ⑥ ⑦ [공학5-8217]"
+    },
+    {
+      "courseCode": "113798",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목2 ③ ④ [공학5-8315]"
+    },
+    {
+      "courseCode": "113798",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목5 ⑥ ⑦ [공학5-8315]"
+    },
+    {
+      "courseCode": "116312",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ②,목1 [공학5-8206]"
+    },
+    {
+      "courseCode": "100123",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑦ ⑧ ⑨,수⑤ ⑥ ⑦ [공학5-8319]"
+    },
+    {
+      "courseCode": "107246",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑤ ⑥,목1 [공학5-8207]"
+    },
+    {
+      "courseCode": "112822",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2,목⑥ ⑦ [공학5-8207]"
+    },
+    {
+      "courseCode": "116711",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수5 ⑥ ⑦ [공학5-8207]"
+    },
+    {
+      "courseCode": "100125",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화⑥ ⑦ ⑧ ⑨,목⑥ ⑦ [공학5-8214]"
+    },
+    {
+      "courseCode": "111774",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② ③ ④,목③ ④ [공학5-8207],목① ② [공학5-8214]"
+    },
+    {
+      "courseCode": "111774",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화① ② ③ ④,목① ② ③ ④ [공학5-8317]"
+    },
+    {
+      "courseCode": "116318",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월⑥ ⑦,수2 [공학5-8317]"
+    },
+    {
+      "courseCode": "100011",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월1 2 ③ ④ [자연과학2-2201]"
+    },
+    {
+      "courseCode": "116439",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7 ⑧ ⑨ [자연과학2-2202]"
+    },
+    {
+      "courseCode": "107255",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [자연과학3-3215]"
+    },
+    {
+      "courseCode": "107267",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 7 ⑧ ⑨ [자연과학2-2202]"
+    },
+    {
+      "courseCode": "112847",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7 ⑧ ⑨ [자연과학3-3212]"
+    },
+    {
+      "courseCode": "114591",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월2 3 [실시간강의],화5 [자연과학3-3215]"
+    },
+    {
+      "courseCode": "114281",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수1 2 [실시간강의],목5 [자연과학2-2202]"
+    },
+    {
+      "courseCode": "114805",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [자연과학2-2202]"
+    },
+    {
+      "courseCode": "116441",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월6 7 ⑧ ⑨ [자연과학3-3215]"
+    },
+    {
+      "courseCode": "116442",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수3 [자연과학3-3215],목1 2 [원격강의]"
+    },
+    {
+      "courseCode": "104027",
+      "section": "24",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토① [집중강의(강의실 미정)]"
+    },
+    {
+      "courseCode": "113798",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금2 3 ④ ⑤ [자연과학2-2201]"
+    },
+    {
+      "courseCode": "113803",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 7 ⑧ ⑨ [자연과학2-2201]"
+    },
+    {
+      "courseCode": "116845",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토1 2 [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "116847",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토3 4 [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "115338",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑨ [집중강의(야외)]"
+    },
+    {
+      "courseCode": "115339",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑩ [집중강의(야외)]"
+    },
+    {
+      "courseCode": "115340",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "토⑪ [집중강의(야외)]"
+    },
+    {
+      "courseCode": "117899",
+      "section": "01",
+      "reasons": [
+        "집중·현장 수업의 실제 날짜·출석 시각 미확인"
+      ],
+      "sourceSchedule": "화⑧,목⑧,금⑧ [집중강의(산업체)]"
+    },
+    {
+      "courseCode": "115165",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④,화6 7 [자연과학1-1418]"
+    },
+    {
+      "courseCode": "111106",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월8 9 [사회관-2405],수6 [원격강의]"
+    },
+    {
+      "courseCode": "113690",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금5 6 ⑦ ⑧ [사회관-2405]"
+    },
+    {
+      "courseCode": "117420",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "화6 7 ⑧ ⑨ [자연과학1-1314]"
+    },
+    {
+      "courseCode": "116791",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "수4,금3 4 [원격강의]"
+    },
+    {
+      "courseCode": "117370",
+      "section": "15",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "토③ [음악관-10210]"
+    },
+    {
+      "courseCode": "117598",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "월③ ④ ⑥ ⑦,화③ ④ [사회관-2204]"
+    },
+    {
+      "courseCode": "116818",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "금5 6 ⑦ ⑧ [예술관-5105]"
+    },
+    {
+      "courseCode": "116819",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2 ③ ④ [예술관-5105]"
+    },
+    {
+      "courseCode": "117358",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "목6 7 ⑧ ⑨ [예술관-5105]"
+    },
+    {
+      "courseCode": "109620",
+      "section": "04",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,목⑦ ⑧ [예술관-5106]"
+    },
+    {
+      "courseCode": "117326",
+      "section": "01",
+      "reasons": [
+        "원격·혼합 운영의 실제 동시 출석 방식 미확인"
+      ],
+      "sourceSchedule": "월1 2 4 [원격강의]"
+    },
+    {
+      "courseCode": "117653",
+      "section": "02",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수1 2,목① ② [자연과학3-3313]"
+    },
+    {
+      "courseCode": "117846",
+      "section": "01",
+      "reasons": [
+        "원문 원문자 교시(① 등)의 실제 시각 미확인"
+      ],
+      "sourceSchedule": "수6 7,금① ② [자연과학3-3302]"
+    },
+    {
+      "courseCode": "116681",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116684",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116685",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116857",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116858",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117286",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117423",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117425",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117428",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118053",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118111",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116684",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116685",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116858",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116859",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116863",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117288",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117423",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117426",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117427",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117428",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118053",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118111",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118116",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118117",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116684",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116685",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116688",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116710",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116858",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116864",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116866",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117306",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117423",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117432",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118053",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118111",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116690",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116693",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116875",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117290",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117291",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117433",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117435",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117440",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117453",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118112",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118113",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118114",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118115",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118118",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118119",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118120",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118121",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118122",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118123",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116691",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116693",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116872",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116875",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117292",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117293",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117433",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117436",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117437",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117440",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118112",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118113",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118114",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118115",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118118",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118119",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118120",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118121",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118122",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118123",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116693",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116873",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116874",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116875",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117294",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117296",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117439",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117440",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118112",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118113",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118114",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118115",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118118",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118119",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118120",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118121",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118122",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118123",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118124",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116700",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116701",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116880",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116881",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116884",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117298",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117303",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117305",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117446",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117447",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118125",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118127",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118130",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118131",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118133",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116697",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116698",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116701",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116877",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116883",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116884",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117298",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117303",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117304",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118126",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118129",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116701",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116705",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116708",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116882",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116883",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116884",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "116885",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117284",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117300",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117303",
+      "section": "03",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117304",
+      "section": "02",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117451",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "117452",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118128",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    },
+    {
+      "courseCode": "118132",
+      "section": "01",
+      "reasons": [
+        "JST 공개 목록에 실제 시간표·담당교원 미게시"
+      ],
+      "sourceSchedule": ""
+    }
+  ],
+  "sourceBoundary": "Whole currently served package re-fetched identical; September4/9 closure changes not publicly corroborated. Circled practical or period11+ clocks remain blocked. Only explicit numeric1–10 ordinary in-person slots converted; whole ordinary term and four makeup substitutions from current guide.",
+  "appDatasetProjectionReady": false,
+  "clockCheckpointOnly": true,
+  "original797SourcePreserved": true,
+  "ordinaryTeachingDatesReviewed": true,
+  "universityId": "kunsan",
+  "campus": "saemangeum",
+  "campusName": "새만금캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-07-23",
+  "sourceUrl": "https://www.kunsan.ac.kr/board/view.kunsan?boardId=BBS_0000009&dataSid=1384672&menuCd=DOM_000000105001002000",
+  "researchOnly": false,
+  "productionActivationAllowed": false,
+  "currentFullOperatingAuditFinished": false,
+  "productionProjectionPermitted": "rootReviewKnown9And10PartialOnlyNotApplied",
+  "sourceOriginalCounts": {
+    "scheduled": 800,
+    "unrecognized": 820,
+    "untimed": 98
+  },
+  "productionRegistered": false,
+  "wholeOperatingReviewComplete": false,
+  "candidateRevision": "known9-10-pending-partial-root-review-v3-20261009",
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}
