@@ -1,0 +1,187 @@
+{
+  "schemaVersion": 1,
+  "university": "baekseok",
+  "mappings": [
+    {
+      "college": "간호학과",
+      "department": null,
+      "sourceLabel": "간호학과",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "경상학부",
+      "department": null,
+      "sourceLabel": "경상학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "경찰학부",
+      "department": null,
+      "sourceLabel": "경찰학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "관광학부",
+      "department": null,
+      "sourceLabel": "관광학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "국제학부",
+      "department": null,
+      "sourceLabel": "국제학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "기독교학부",
+      "department": null,
+      "sourceLabel": "기독교학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "디자인영상학부",
+      "department": null,
+      "sourceLabel": "디자인영상학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "문화예술학부",
+      "department": null,
+      "sourceLabel": "문화예술학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "보건학부",
+      "department": null,
+      "sourceLabel": "보건학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "사범학부",
+      "department": null,
+      "sourceLabel": "사범학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "사회복지학부",
+      "department": null,
+      "sourceLabel": "사회복지학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "스포츠과학부",
+      "department": null,
+      "sourceLabel": "스포츠과학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "어문학부",
+      "department": null,
+      "sourceLabel": "어문학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "외식산업학부",
+      "department": null,
+      "sourceLabel": "외식산업학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "자유전공학부",
+      "department": null,
+      "sourceLabel": "자유전공학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "첨단IT학부",
+      "department": null,
+      "sourceLabel": "첨단IT학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "컴퓨터공학부",
+      "department": null,
+      "sourceLabel": "컴퓨터공학부",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    },
+    {
+      "college": "혁신교육플랫폼대학",
+      "department": null,
+      "sourceLabel": "혁신교육플랫폼대학",
+      "sourceUrl": "https://www.bu.ac.kr/web/4419/subview.do",
+      "evidence": "공식 홈페이지 대학 안내 > 학부 전체보기 원문: \"학부 전체보기 기독교학부 어문학부 사회복지학부 경찰학부 경상학부 관광학부 사범학부 컴퓨터공학부 보건학부 간호학과 디자인영상학부 스포츠과학부 문화예술학부 혁신교육플랫폼대학 첨단IT학부 외식산업학부 자유전공학부 국제학부\". 상위 단과대 없이 학부(과)가 최상위 개설 단위로 나열되며, 2026-2학기 수업시간표 공지도 \"전공 시간표(해당학부 클릭)\" 아래 같은 단위로 나눔.",
+      "sourceFile": "work/issue-603-baekseok-timetable/src/faculties-4419.html",
+      "isOfferingUnit": true,
+      "campus": "*"
+    }
+  ],
+  "courseOwners": []
+}
