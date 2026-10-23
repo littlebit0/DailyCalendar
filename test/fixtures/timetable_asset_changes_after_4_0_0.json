@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/pcu-main-2026-2.json": {
+    "sha256": "048a178eea2ba0778846f6c0abb59236460b47fb15153166034ba2cb8dba55f5",
+    "reason": "#601 배재대 2026-2 공식 강의시간편람에서 빠졌던 420개 분반 추가, 공식 원문이 직접 적지 않은 시각 41건(기존 해석 확정 19건 포함)은 보류(unrecognized)"
+  },
+  "assets/timetable/organizations/pcu.json": {
+    "sha256": "0aff509f1e6c3309923052840068cb2e7343647e8b3844cbf123118781fb9c5f",
+    "reason": "#601 추가한 분반 중 기존 매핑 학과 표 아래 강좌 82건에 같은 학과 개설 단위 등록"
   }
 }
