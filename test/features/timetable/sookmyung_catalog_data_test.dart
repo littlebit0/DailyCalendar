@@ -191,6 +191,15 @@ void main() {
           .map((dynamic x) => '${x['values']['과목번호']}-${x['values']['분반']}')
           .toSet();
       expect(excludedKeys, hasLength(43));
+      // 2026-10-23 SAP 재조회에서 기존 조회에 없던 학부 강좌만 이 근거로 추가했다.
+      final recheck =
+          jsonDecode(
+                fixtureFile(
+                  'test/fixtures/sookmyung_sap_recheck_2026-10-23.json',
+                ).readAsStringSync(),
+              )
+              as Map;
+      final recheckRows = recheck['addedNativeRows'] as List;
       final courses = <UniversityCourse>[];
       var nativeCount = 0;
       var meetingCount = 0;
@@ -226,9 +235,13 @@ void main() {
           final records = row['metadata']['originalEducationalRecords'] as List;
           nativeCount += records.length;
           for (final dynamic original in records) {
+            final source = original['sourceFile'] ==
+                    'sookmyung_sap_recheck_2026-10-23.json'
+                ? recheckRows
+                : proof['nativeRows'] as List;
             expect(
               original,
-              (proof['nativeRows'] as List).singleWhere(
+              source.singleWhere(
                 (dynamic x) =>
                     x['query'] == original['query'] &&
                     x['sourceRowIndex0'] == original['sourceRowIndex0'],
@@ -1258,10 +1271,10 @@ void main() {
       );
       expect(peace.sourceSchedule, '화목10:30-11:45(명신관519)');
       expect(peace.professor, '최윤주');
-      expect(courses, hasLength(1485));
-      expect(nativeCount, 3427);
-      expect(heldCount, 204);
-      expect(meetingCount, 23676);
+      expect(courses, hasLength(1576));
+      expect(nativeCount, 3521);
+      expect(heldCount, 207);
+      expect(meetingCount, 25615);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
@@ -1280,7 +1293,7 @@ void main() {
         final after = TimetableSyncDocument.fromJson(
           jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
         ).materializeClasses();
-        expect(after, hasLength(1281));
+        expect(after, hasLength(1369));
         final originals = {for (final c in before) c.sourceId: c};
         for (final c in after) {
           final original = originals[c.sourceId]!;
@@ -1309,4 +1322,61 @@ void main() {
       }
     },
   );
+
+  test('2026-10-23 SAP 재조회 전체 범위와 학부 강좌 자산이 정확히 같다', () {
+    final recheck =
+        jsonDecode(
+              fixtureFile(
+                'test/fixtures/sookmyung_sap_recheck_2026-10-23.json',
+              ).readAsStringSync(),
+            )
+            as Map;
+    expect(recheck['year'], '2026');
+    expect(recheck['semester'], '2');
+    final queries = recheck['queries'] as List;
+    expect(queries, hasLength(197));
+    final official = <String>{
+      for (final q in queries)
+        for (final id in q['identities'] as List) id as String,
+    };
+    expect(official, hasLength(1619));
+    final graduate = {
+      for (final id in recheck['graduateExcludedIdentities'] as List)
+        id as String,
+    };
+    expect(graduate, hasLength(43));
+    final assets = <String>{};
+    for (final campus in ['first', 'second', 'unknown']) {
+      final raw =
+          jsonDecode(
+                File(
+                  'assets/timetable/sookmyung-$campus-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      for (final c in raw['courses'] as List) {
+        expect(assets.add('${c['courseCode']}|${c['section']}'), isTrue);
+      }
+    }
+    // 폐강으로 빠진 강좌 없이, 석사·박사 이수단계 강좌만 제외한 전체 범위다.
+    expect(assets, official.difference(graduate));
+    final added = {
+      for (final id in recheck['addedIdentities'] as List) id as String,
+    };
+    expect(added, hasLength(91));
+    final rows = recheck['addedNativeRows'] as List;
+    expect(rows, hasLength(94));
+    for (final dynamic r in rows) {
+      final v = r['values'] as Map;
+      expect(added, contains('${v['과목번호']}|${v['분반']}'));
+      final q = queries.singleWhere((dynamic q) => q['query'] == r['query']);
+      expect(
+        (q['identities'] as List)[r['sourceRowIndex0'] as int],
+        '${v['과목번호']}|${v['분반']}',
+      );
+      expect(r['nativeEducationalCells'], [
+        for (final h in r['nativeHeaders'] as List) v[h],
+      ]);
+    }
+  });
 }

@@ -729,6 +729,20 @@
       "affiliationSourceUrl": "https://unification.sookmyung.ac.kr/",
       "affiliationSourceFile": "work/issue-619-sookmyung-timetable/sookmyung/unification.html",
       "affiliationEvidence": "공식 사업단 홈페이지: \"숙명여자대학교 통일교육선도대학사업단은 자유, 시민, 균형, 공존의 보편적 가치를 함양한 통일여성리더를 양성\"; SM뉴스(articleNo=88372): \"법학연구소가 통일부 '2025년 통일교육 선도대학 지정·육성 사업'에 선정됐다\""
+    },
+    {
+      "college": "경력개발처",
+      "department": "학생경력설계팀",
+      "sourceLabel": "학생경력설계팀",
+      "sourceUrl": "https://www.sookmyung.ac.kr/kr/intro/university-organization.do",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "*",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.sookmyung.ac.kr/kr/intro/university-organization.do",
+      "affiliationSourceFile": "work/issue-619-sookmyung-timetable/sookmyung/university-organization.html",
+      "affiliationEvidence": "공식 대학기구(행정기구) 목록에서 \"경력개발처\" 아래에 \"인재개발팀\", \"학생경력설계팀\"과 부설기관 \"대학일자리플러스센터\", \"현장실습지원센터\"가 함께 나열됨"
     }
   ],
   "courseOwners": []

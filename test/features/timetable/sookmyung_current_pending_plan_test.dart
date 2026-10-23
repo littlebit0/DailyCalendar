@@ -102,16 +102,40 @@ void main() {
               as List;
       expect(proof, hasLength(4));
       final ids = {for (final p in proof) p['sourceId']};
+      // 2026-10-23 SAP 재조회로 추가한 강좌는 v20 기준선 비교에서 뺀다.
+      final recheckAdded = {
+        for (final id
+            in (jsonDecode(
+                      File(
+                        'test/fixtures/sookmyung_sap_recheck_2026-10-23.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map)['addedIdentities']
+                as List)
+          id as String,
+      };
       var added = 0;
+      var recheckCount = 0;
       for (final campus in ['first', 'second', 'unknown']) {
         final old = read('${root}sookmyung-$campus-baseline.json');
         final now = read(
           '${root}sookmyung-$campus-2026-2.native-pending-plan-v20.json',
         );
         final before = {for (final c in old['courses']) c['sourceId']: c};
-        expect(now['courses'].length, before.length);
+        expect(
+          {for (final c in now['courses']) c['sourceId']},
+          containsAll(before.keys),
+        );
         for (final c in now['courses']) {
           final b = before[c['sourceId']];
+          if (b == null) {
+            expect(
+              recheckAdded,
+              contains('${c['courseCode']}|${c['section']}'),
+            );
+            recheckCount++;
+            continue;
+          }
           if (!ids.contains(c['sourceId'])) {
             expect(c, b);
             continue;
@@ -185,10 +209,11 @@ void main() {
         }
       }
       expect(added, 4);
+      expect(recheckCount, recheckAdded.length);
     },
   );
   test(
-    'all1281 full three-mode Drive preserves source campus identities and explicit mode exceptions',
+    'all1369 full three-mode Drive preserves source campus identities and explicit mode exceptions',
     () {
       final all = [
         for (final campus in ['first', 'second', 'unknown'])
@@ -198,10 +223,10 @@ void main() {
             ),
           ).courses,
       ];
-      expect(all, hasLength(1485));
+      expect(all, hasLength(1576));
       final scheduled = all.where((c) => c.hasSchedulableMeetings).toList();
-      expect(scheduled, hasLength(1281));
-      expect(scheduled.expand((c) => c.meetings).length, 23676);
+      expect(scheduled, hasLength(1369));
+      expect(scheduled.expand((c) => c.meetings).length, 25615);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,

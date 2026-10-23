@@ -62724,6 +62724,1077 @@
           }
         ]
       }
+    },
+    {
+      "sourceId": "sookmyung/second/2026-2/thirteen-major-general-21105729-001",
+      "campus": "second",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "21105729",
+      "section": "001",
+      "courseName": "드라마백스테이지Ⅱ",
+      "professor": "한정환",
+      "classification": "전공선택",
+      "credits": 3.0,
+      "departments": [
+        "융합학부"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "월수15:00-16:15(프라임관203)",
+      "sourceClassroom": "프라임관203",
+      "remarks": "공개 정규 예약 계획의 부분 범위 2026-09-01–12-07이며 실제 출석 완료·학기 전체 운영 확인 주장이 아닙니다. 자체 개강9/1과 보강·기말12/8–21에 따라 일반예약 끝12/7을 파생했습니다(원문 최종수업일이 아님). 법정공휴일은 학교가 대면/실시간 비대면 운영을 허용하므로 실제 운영 미확정 날짜만 보수적으로 보류했습니다. 중간10/20–26도 개별 시험일/정상강의일 구분 미확정으로 예약 보류했으며 공식휴강 주장하지 않습니다. 개별 시험/보강은 생성하지 않습니다. 대면 표기는 원문이며 개별 방식·최신 변경·폐강은 미확인입니다. 수업방식 override 없이 사용자 선택을 유지합니다. 공식 과목번호·분반·요일·HH:mm·강의실·조회전공별 분류/이수단계/제한을 보존했습니다. 공통/마이크로디그리-콘텐츠융합: 교과구분 전공선택; 이수단계 전학년; 수강자격 원문 빈값; 수강유의사항 '콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정\n공통/마이크로디그리-전공선택: 교과구분 전공선택; 이수단계 전학년; 수강자격 원문 빈값; 수강유의사항 '콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-07"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-14"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-21"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-28"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-10-12"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-10-19"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-02"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-09"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-16"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-23"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-30"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-12-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 975,
+          "classroom": "프라임관203",
+          "date": "2026-12-02"
+        }
+      ],
+      "metadata": {
+        "originalEducationalRecords": [
+          {
+            "query": "공통/마이크로디그리-콘텐츠융합",
+            "sourceFile": "sookmyung_sap_recheck_2026-10-23.json",
+            "sourceRowIndex0": 1,
+            "nativeEducationalCells": [
+              "대면",
+              "드라마백스테이지Ⅱ",
+              "21105729",
+              "001",
+              "전공선택",
+              "월수15:00-16:15(프라임관203)",
+              "한정환",
+              "전학년",
+              "3/3.0/0.0",
+              "",
+              "",
+              "",
+              "",
+              "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "융합학부",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "nativeHeaders": [
+              "강의형태",
+              "과목명",
+              "과목번호",
+              "분반",
+              "교과구분",
+              "강의시간",
+              "담당교수",
+              "이수단계",
+              "학점/이론/실습",
+              "교수법",
+              "언어",
+              "진로/산학연계",
+              "수강자격",
+              "수강유의사항",
+              "주관학과",
+              "P/F",
+              "학점교류생수강불가",
+              "과목 난이도",
+              "특성화영역1",
+              "특성화영역2",
+              "특성화영역3"
+            ],
+            "values": {
+              "강의형태": "대면",
+              "과목명": "드라마백스테이지Ⅱ",
+              "과목번호": "21105729",
+              "분반": "001",
+              "교과구분": "전공선택",
+              "강의시간": "월수15:00-16:15(프라임관203)",
+              "담당교수": "한정환",
+              "이수단계": "전학년",
+              "학점/이론/실습": "3/3.0/0.0",
+              "교수법": "",
+              "언어": "",
+              "진로/산학연계": "",
+              "수강자격": "",
+              "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "주관학과": "융합학부",
+              "P/F": "",
+              "학점교류생수강불가": "",
+              "과목 난이도": "",
+              "특성화영역1": "",
+              "특성화영역2": "",
+              "특성화영역3": ""
+            }
+          },
+          {
+            "query": "공통/마이크로디그리-전공선택",
+            "sourceFile": "sookmyung_sap_recheck_2026-10-23.json",
+            "sourceRowIndex0": 1,
+            "nativeEducationalCells": [
+              "대면",
+              "드라마백스테이지Ⅱ",
+              "21105729",
+              "001",
+              "전공선택",
+              "월수15:00-16:15(프라임관203)",
+              "한정환",
+              "전학년",
+              "3/3.0/0.0",
+              "",
+              "",
+              "",
+              "",
+              "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "융합학부",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "nativeHeaders": [
+              "강의형태",
+              "과목명",
+              "과목번호",
+              "분반",
+              "교과구분",
+              "강의시간",
+              "담당교수",
+              "이수단계",
+              "학점/이론/실습",
+              "교수법",
+              "언어",
+              "진로/산학연계",
+              "수강자격",
+              "수강유의사항",
+              "주관학과",
+              "P/F",
+              "학점교류생수강불가",
+              "과목 난이도",
+              "특성화영역1",
+              "특성화영역2",
+              "특성화영역3"
+            ],
+            "values": {
+              "강의형태": "대면",
+              "과목명": "드라마백스테이지Ⅱ",
+              "과목번호": "21105729",
+              "분반": "001",
+              "교과구분": "전공선택",
+              "강의시간": "월수15:00-16:15(프라임관203)",
+              "담당교수": "한정환",
+              "이수단계": "전학년",
+              "학점/이론/실습": "3/3.0/0.0",
+              "교수법": "",
+              "언어": "",
+              "진로/산학연계": "",
+              "수강자격": "",
+              "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "주관학과": "융합학부",
+              "P/F": "",
+              "학점교류생수강불가": "",
+              "과목 난이도": "",
+              "특성화영역1": "",
+              "특성화영역2": "",
+              "특성화영역3": ""
+            }
+          }
+        ],
+        "queryClassifications": {
+          "공통/마이크로디그리-콘텐츠융합": "전공선택",
+          "공통/마이크로디그리-전공선택": "전공선택"
+        },
+        "queryGradeEligibility": {
+          "공통/마이크로디그리-콘텐츠융합": {
+            "이수단계": "전학년",
+            "수강자격": "",
+            "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정"
+          },
+          "공통/마이크로디그리-전공선택": {
+            "이수단계": "전학년",
+            "수강자격": "",
+            "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정"
+          }
+        },
+        "classificationConflictAcrossQuery": false,
+        "sourceFieldConflicts": [],
+        "holdReasons": [],
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "publishedDeliveryModes": [
+          "대면"
+        ],
+        "actualAttendanceConfirmed": false,
+        "latestWholeClosureConfirmed": false,
+        "publicationDateKnown": false,
+        "internalIdKind": "stable v4 namespace plus native code-section; sourceId is internal, v5 adds query variants without changing existing identity namespace",
+        "newIdentityLiteralCampusMapMatches": [
+          {
+            "sourceClassroom": "프라임관203",
+            "nativeMapBuilding": "프라임관",
+            "campus": "second"
+          }
+        ]
+      }
+    },
+    {
+      "sourceId": "sookmyung/second/2026-2/thirteen-major-general-21105707-001",
+      "campus": "second",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "21105707",
+      "section": "001",
+      "courseName": "예능콘텐츠기획",
+      "professor": "백정렬",
+      "classification": "전공선택",
+      "credits": 3.0,
+      "departments": [
+        "융합학부"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "화16:30-19:20(프라임관203)",
+      "sourceClassroom": "프라임관203",
+      "remarks": "공개 정규 예약 계획의 부분 범위 2026-09-01–12-07이며 실제 출석 완료·학기 전체 운영 확인 주장이 아닙니다. 자체 개강9/1과 보강·기말12/8–21에 따라 일반예약 끝12/7을 파생했습니다(원문 최종수업일이 아님). 법정공휴일은 학교가 대면/실시간 비대면 운영을 허용하므로 실제 운영 미확정 날짜만 보수적으로 보류했습니다. 중간10/20–26도 개별 시험일/정상강의일 구분 미확정으로 예약 보류했으며 공식휴강 주장하지 않습니다. 개별 시험/보강은 생성하지 않습니다. 대면 표기는 원문이며 개별 방식·최신 변경·폐강은 미확인입니다. 수업방식 override 없이 사용자 선택을 유지합니다. 공식 과목번호·분반·요일·HH:mm·강의실·조회전공별 분류/이수단계/제한을 보존했습니다. 공통/마이크로디그리-콘텐츠융합: 교과구분 전공선택; 이수단계 전학년; 수강자격 원문 빈값; 수강유의사항 '콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정\n공통/마이크로디그리-전공선택: 교과구분 전공선택; 이수단계 전학년; 수강자격 원문 빈값; 수강유의사항 '콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 990,
+          "endMinute": 1160,
+          "classroom": "프라임관203",
+          "date": "2026-12-01"
+        }
+      ],
+      "metadata": {
+        "originalEducationalRecords": [
+          {
+            "query": "공통/마이크로디그리-콘텐츠융합",
+            "sourceFile": "sookmyung_sap_recheck_2026-10-23.json",
+            "sourceRowIndex0": 2,
+            "nativeEducationalCells": [
+              "대면",
+              "예능콘텐츠기획",
+              "21105707",
+              "001",
+              "전공선택",
+              "화16:30-19:20(프라임관203)",
+              "백정렬",
+              "전학년",
+              "3/3.0/0.0",
+              "",
+              "",
+              "",
+              "",
+              "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "융합학부",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "nativeHeaders": [
+              "강의형태",
+              "과목명",
+              "과목번호",
+              "분반",
+              "교과구분",
+              "강의시간",
+              "담당교수",
+              "이수단계",
+              "학점/이론/실습",
+              "교수법",
+              "언어",
+              "진로/산학연계",
+              "수강자격",
+              "수강유의사항",
+              "주관학과",
+              "P/F",
+              "학점교류생수강불가",
+              "과목 난이도",
+              "특성화영역1",
+              "특성화영역2",
+              "특성화영역3"
+            ],
+            "values": {
+              "강의형태": "대면",
+              "과목명": "예능콘텐츠기획",
+              "과목번호": "21105707",
+              "분반": "001",
+              "교과구분": "전공선택",
+              "강의시간": "화16:30-19:20(프라임관203)",
+              "담당교수": "백정렬",
+              "이수단계": "전학년",
+              "학점/이론/실습": "3/3.0/0.0",
+              "교수법": "",
+              "언어": "",
+              "진로/산학연계": "",
+              "수강자격": "",
+              "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "주관학과": "융합학부",
+              "P/F": "",
+              "학점교류생수강불가": "",
+              "과목 난이도": "",
+              "특성화영역1": "",
+              "특성화영역2": "",
+              "특성화영역3": ""
+            }
+          },
+          {
+            "query": "공통/마이크로디그리-전공선택",
+            "sourceFile": "sookmyung_sap_recheck_2026-10-23.json",
+            "sourceRowIndex0": 4,
+            "nativeEducationalCells": [
+              "대면",
+              "예능콘텐츠기획",
+              "21105707",
+              "001",
+              "전공선택",
+              "화16:30-19:20(프라임관203)",
+              "백정렬",
+              "전학년",
+              "3/3.0/0.0",
+              "",
+              "",
+              "",
+              "",
+              "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "융합학부",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "nativeHeaders": [
+              "강의형태",
+              "과목명",
+              "과목번호",
+              "분반",
+              "교과구분",
+              "강의시간",
+              "담당교수",
+              "이수단계",
+              "학점/이론/실습",
+              "교수법",
+              "언어",
+              "진로/산학연계",
+              "수강자격",
+              "수강유의사항",
+              "주관학과",
+              "P/F",
+              "학점교류생수강불가",
+              "과목 난이도",
+              "특성화영역1",
+              "특성화영역2",
+              "특성화영역3"
+            ],
+            "values": {
+              "강의형태": "대면",
+              "과목명": "예능콘텐츠기획",
+              "과목번호": "21105707",
+              "분반": "001",
+              "교과구분": "전공선택",
+              "강의시간": "화16:30-19:20(프라임관203)",
+              "담당교수": "백정렬",
+              "이수단계": "전학년",
+              "학점/이론/실습": "3/3.0/0.0",
+              "교수법": "",
+              "언어": "",
+              "진로/산학연계": "",
+              "수강자격": "",
+              "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "주관학과": "융합학부",
+              "P/F": "",
+              "학점교류생수강불가": "",
+              "과목 난이도": "",
+              "특성화영역1": "",
+              "특성화영역2": "",
+              "특성화영역3": ""
+            }
+          }
+        ],
+        "queryClassifications": {
+          "공통/마이크로디그리-콘텐츠융합": "전공선택",
+          "공통/마이크로디그리-전공선택": "전공선택"
+        },
+        "queryGradeEligibility": {
+          "공통/마이크로디그리-콘텐츠융합": {
+            "이수단계": "전학년",
+            "수강자격": "",
+            "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정"
+          },
+          "공통/마이크로디그리-전공선택": {
+            "이수단계": "전학년",
+            "수강자격": "",
+            "수강유의사항": "'콘텐츠융합' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정"
+          }
+        },
+        "classificationConflictAcrossQuery": false,
+        "sourceFieldConflicts": [],
+        "holdReasons": [],
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "publishedDeliveryModes": [
+          "대면"
+        ],
+        "actualAttendanceConfirmed": false,
+        "latestWholeClosureConfirmed": false,
+        "publicationDateKnown": false,
+        "internalIdKind": "stable v4 namespace plus native code-section; sourceId is internal, v5 adds query variants without changing existing identity namespace",
+        "newIdentityLiteralCampusMapMatches": [
+          {
+            "sourceClassroom": "프라임관203",
+            "nativeMapBuilding": "프라임관",
+            "campus": "second"
+          }
+        ]
+      }
+    },
+    {
+      "sourceId": "sookmyung/second/2026-2/thirteen-major-general-21105709-001",
+      "campus": "second",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "21105709",
+      "section": "001",
+      "courseName": "초연결사회의개인정보",
+      "professor": "정혜영",
+      "classification": "전공선택",
+      "credits": 3.0,
+      "departments": [
+        "융합학부"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {},
+      "sourceSchedule": "화목13:30-14:45(프라임관104)",
+      "sourceClassroom": "프라임관104",
+      "remarks": "공개 정규 예약 계획의 부분 범위 2026-09-01–12-07이며 실제 출석 완료·학기 전체 운영 확인 주장이 아닙니다. 자체 개강9/1과 보강·기말12/8–21에 따라 일반예약 끝12/7을 파생했습니다(원문 최종수업일이 아님). 법정공휴일은 학교가 대면/실시간 비대면 운영을 허용하므로 실제 운영 미확정 날짜만 보수적으로 보류했습니다. 중간10/20–26도 개별 시험일/정상강의일 구분 미확정으로 예약 보류했으며 공식휴강 주장하지 않습니다. 개별 시험/보강은 생성하지 않습니다. 대면 표기는 원문이며 개별 방식·최신 변경·폐강은 미확인입니다. 수업방식 override 없이 사용자 선택을 유지합니다. 공식 과목번호·분반·요일·HH:mm·강의실·조회전공별 분류/이수단계/제한을 보존했습니다. 공통/마이크로디그리-AI와개인정보: 교과구분 전공선택; 이수단계 전학년; 수강자격 원문 빈값; 수강유의사항 'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정\n공통/마이크로디그리-전공선택: 교과구분 전공선택; 이수단계 전학년; 수강자격 원문 빈값; 수강유의사항 'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-12-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 885,
+          "classroom": "프라임관104",
+          "date": "2026-12-03"
+        }
+      ],
+      "metadata": {
+        "originalEducationalRecords": [
+          {
+            "query": "공통/마이크로디그리-AI와개인정보",
+            "sourceFile": "sookmyung_sap_recheck_2026-10-23.json",
+            "sourceRowIndex0": 0,
+            "nativeEducationalCells": [
+              "대면",
+              "초연결사회의개인정보",
+              "21105709",
+              "001",
+              "전공선택",
+              "화목13:30-14:45(프라임관104)",
+              "정혜영",
+              "전학년",
+              "3/3.0/0.0",
+              "",
+              "",
+              "",
+              "",
+              "'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "융합학부",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "nativeHeaders": [
+              "강의형태",
+              "과목명",
+              "과목번호",
+              "분반",
+              "교과구분",
+              "강의시간",
+              "담당교수",
+              "이수단계",
+              "학점/이론/실습",
+              "교수법",
+              "언어",
+              "진로/산학연계",
+              "수강자격",
+              "수강유의사항",
+              "주관학과",
+              "P/F",
+              "학점교류생수강불가",
+              "과목 난이도",
+              "특성화영역1",
+              "특성화영역2",
+              "특성화영역3"
+            ],
+            "values": {
+              "강의형태": "대면",
+              "과목명": "초연결사회의개인정보",
+              "과목번호": "21105709",
+              "분반": "001",
+              "교과구분": "전공선택",
+              "강의시간": "화목13:30-14:45(프라임관104)",
+              "담당교수": "정혜영",
+              "이수단계": "전학년",
+              "학점/이론/실습": "3/3.0/0.0",
+              "교수법": "",
+              "언어": "",
+              "진로/산학연계": "",
+              "수강자격": "",
+              "수강유의사항": "'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "주관학과": "융합학부",
+              "P/F": "",
+              "학점교류생수강불가": "",
+              "과목 난이도": "",
+              "특성화영역1": "",
+              "특성화영역2": "",
+              "특성화영역3": ""
+            }
+          },
+          {
+            "query": "공통/마이크로디그리-전공선택",
+            "sourceFile": "sookmyung_sap_recheck_2026-10-23.json",
+            "sourceRowIndex0": 6,
+            "nativeEducationalCells": [
+              "대면",
+              "초연결사회의개인정보",
+              "21105709",
+              "001",
+              "전공선택",
+              "화목13:30-14:45(프라임관104)",
+              "정혜영",
+              "전학년",
+              "3/3.0/0.0",
+              "",
+              "",
+              "",
+              "",
+              "'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "융합학부",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ],
+            "nativeHeaders": [
+              "강의형태",
+              "과목명",
+              "과목번호",
+              "분반",
+              "교과구분",
+              "강의시간",
+              "담당교수",
+              "이수단계",
+              "학점/이론/실습",
+              "교수법",
+              "언어",
+              "진로/산학연계",
+              "수강자격",
+              "수강유의사항",
+              "주관학과",
+              "P/F",
+              "학점교류생수강불가",
+              "과목 난이도",
+              "특성화영역1",
+              "특성화영역2",
+              "특성화영역3"
+            ],
+            "values": {
+              "강의형태": "대면",
+              "과목명": "초연결사회의개인정보",
+              "과목번호": "21105709",
+              "분반": "001",
+              "교과구분": "전공선택",
+              "강의시간": "화목13:30-14:45(프라임관104)",
+              "담당교수": "정혜영",
+              "이수단계": "전학년",
+              "학점/이론/실습": "3/3.0/0.0",
+              "교수법": "",
+              "언어": "",
+              "진로/산학연계": "",
+              "수강자격": "",
+              "수강유의사항": "'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정",
+              "주관학과": "융합학부",
+              "P/F": "",
+              "학점교류생수강불가": "",
+              "과목 난이도": "",
+              "특성화영역1": "",
+              "특성화영역2": "",
+              "특성화영역3": ""
+            }
+          }
+        ],
+        "queryClassifications": {
+          "공통/마이크로디그리-AI와개인정보": "전공선택",
+          "공통/마이크로디그리-전공선택": "전공선택"
+        },
+        "queryGradeEligibility": {
+          "공통/마이크로디그리-AI와개인정보": {
+            "이수단계": "전학년",
+            "수강자격": "",
+            "수강유의사항": "'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정"
+          },
+          "공통/마이크로디그리-전공선택": {
+            "이수단계": "전학년",
+            "수강자격": "",
+            "수강유의사항": "'AI와개인정보' 마이크로디그리 과정. 마이크로디그리 신청학생 우선 확정"
+          }
+        },
+        "classificationConflictAcrossQuery": false,
+        "sourceFieldConflicts": [],
+        "holdReasons": [],
+        "sourceCodePublished": true,
+        "sourceSectionPublished": true,
+        "publishedDeliveryModes": [
+          "대면"
+        ],
+        "actualAttendanceConfirmed": false,
+        "latestWholeClosureConfirmed": false,
+        "publicationDateKnown": false,
+        "internalIdKind": "stable v4 namespace plus native code-section; sourceId is internal, v5 adds query variants without changing existing identity namespace",
+        "newIdentityLiteralCampusMapMatches": [
+          {
+            "sourceClassroom": "프라임관104",
+            "nativeMapBuilding": "프라임관",
+            "campus": "second"
+          }
+        ]
+      }
     }
   ],
   "productionIntegrationEnabled": true,
