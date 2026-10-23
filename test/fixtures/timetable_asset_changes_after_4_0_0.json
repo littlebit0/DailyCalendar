@@ -26,5 +26,17 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/hanyang.json": {
+    "sha256": "79672c0da599e60d9b5481022a2a909fb89e92962f779e689782e24be25cfb3a",
+    "reason": "#661 한양대 원자료 분류 25개를 공식 학사안내·대학/학과 소개·ERICA 입학처 학과안내 기준 소속(간호대학·의과대학·디자인대학·LIONS칼리지·공학대학·융합전공)과 캠퍼스 독립 개설 단위(서울 대학·ERICA 대학)로 배정, ERICA 스마트컨스트럭션융합전공을 스마트융합공학부 홈페이지 전공 목록 기준 공학대학으로 배정"
+  },
+  "assets/timetable/hanyang-erica-2026-2.json": {
+    "sha256": "a7c2e0d08c9935b42e9cab9867e9271a5402ecfc195d2480235ef7bf841e811d",
+    "reason": "#661 2026-10-24 공개 수강편람 재조회에서 바뀐 ERICA 24136 배터리/신소재/화학공학입문 강의실(제1공학관 203 → 컨퍼런스홀 201·101) 반영"
+  },
+  "assets/timetable/hanyang-seoul-2026-2.json": {
+    "sha256": "5bd4d13b8e64d3d6673fe51083eed200fb20c16813c501e55018aae6cf7186bb",
+    "reason": "#661 2026-10-24 공개 수강편람 재조회에서 바뀐 서울 10351 수문학 강의실(재성토목관 201 → 103) 반영"
   }
 }
