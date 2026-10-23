@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/eulji.json": {
+    "sha256": "912c4323837bfe5fe44136de88eafe02fc8982051e6c8ad6fd6be5de4b2a006d",
+    "reason": "#631 을지대 학과 매핑 5개의 근거를 영어·요약 설명에서 공식 단과대 페이지(보건과학대학·바이오융합대학(23학번)·미래융합대학(24학번)) 원문 인용으로 교체. 소속·라벨은 그대로"
   }
 }
