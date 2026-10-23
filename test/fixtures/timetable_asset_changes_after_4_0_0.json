@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/kau.json": {
+    "sha256": "a2daf81485696698a0f0e9ec0dbcec63aab65ba94434c36ee6d3f56cf02d8d7f",
+    "reason": "#658 한국항공대 원자료 분류 2개를 공식 폐강 교과목 공고 연락처 표 기준 공과대학(항공MRO전공)과 독립 개설 단위(항공드론 혁신융합대학 사업단)로 배정"
   }
 }
