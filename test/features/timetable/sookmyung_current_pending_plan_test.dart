@@ -116,16 +116,16 @@ void main() {
       };
       var added = 0;
       var recheckCount = 0;
+      var cyberUnscheduled = 0;
       for (final campus in ['first', 'second', 'unknown']) {
         final old = read('${root}sookmyung-$campus-baseline.json');
         final now = read(
           '${root}sookmyung-$campus-2026-2.native-pending-plan-v20.json',
         );
         final before = {for (final c in old['courses']) c['sourceId']: c};
-        expect(
-          {for (final c in now['courses']) c['sourceId']},
-          containsAll(before.keys),
-        );
+        expect({
+          for (final c in now['courses']) c['sourceId'],
+        }, containsAll(before.keys));
         for (final c in now['courses']) {
           final b = before[c['sourceId']];
           if (b == null) {
@@ -137,6 +137,27 @@ void main() {
             continue;
           }
           if (!ids.contains(c['sourceId'])) {
+            // 2026-10-24 학칙(원격수업 운영 내규 제2조 제3항 제1호: 원격(사이버)수업은
+            // 100% 비실시간)에 따라 강의형태 '원격(사이버)'이고 강의시간이 빈 강좌는
+            // 시각 미확정에서 정해진 시각 없음으로 바꿨다. 바뀐 두 필드만 허용한다.
+            if (c['scheduleStatus'] == 'unscheduled') {
+              expect(b['scheduleStatus'], 'unrecognized');
+              expect(b['sourceSchedule'], '');
+              expect(
+                c['metadata']['originalEducationalRecords'][0]['values']['강의형태'],
+                '원격(사이버)',
+              );
+              expect(c['remarks'], startsWith(b['remarks'] as String));
+              expect(c['remarks'], contains('원격수업 운영 내규 제2조 제3항 제1호'));
+              expect(c['schedules'], isEmpty);
+              cyberUnscheduled++;
+              final restored =
+                  jsonDecode(jsonEncode(c)) as Map<String, dynamic>;
+              restored['scheduleStatus'] = b['scheduleStatus'];
+              restored['remarks'] = b['remarks'];
+              expect(restored, b);
+              continue;
+            }
             expect(c, b);
             continue;
           }
@@ -210,6 +231,7 @@ void main() {
       }
       expect(added, 4);
       expect(recheckCount, recheckAdded.length);
+      expect(cyberUnscheduled, 45);
     },
   );
   test(
