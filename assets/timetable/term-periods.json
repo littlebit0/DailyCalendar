@@ -350,6 +350,26 @@
           }
         }
       ]
+    },
+    {
+      "university": "mokpo",
+      "sourceUrl": "https://www.mokpo.ac.kr/www/148/subview.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18",
+          "sourceTitles": [
+            "2학기 개강9월1일",
+            "보강기간12월8~11일",
+            "2학기 기말고사12월14~18일",
+            "2학기 종강12월18일"
+          ],
+          "note": "Full academic bounds; ordinary course dates end Dec7 before explicit makeup/exam windows. Actual school closures excluded; unknown exam or clinical dates not invented."
+        }
+      ]
     }
   ]
 }
