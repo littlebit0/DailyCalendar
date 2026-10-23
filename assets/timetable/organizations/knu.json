@@ -2671,6 +2671,62 @@
       "isOfferingUnit": true,
       "campus": "unassigned",
       "collegeKnown": true
+    },
+    {
+      "college": "일반대학원",
+      "department": "건설환경에너지공학부 건축공학전공",
+      "sourceLabel": "건설환경에너지공학부 건축공학전공",
+      "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "daegu",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "affiliationSourceFile": "work/issue-555-knu-timetable/recheck-20261023/scopes",
+      "affiliationEvidence": "공식 수업시간/강의계획서 조회에서 개설대학 '대학원', 개설학과 '건설환경에너지공학부 건축공학전공'. 운영 규정 제2조: 연계과정은 일반대학원에 설치된 학과(부)를 대상으로 함"
+    },
+    {
+      "college": "일반대학원",
+      "department": "천문학과",
+      "sourceLabel": "천문학과",
+      "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "daegu",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "affiliationSourceFile": "work/issue-555-knu-timetable/recheck-20261023/scopes",
+      "affiliationEvidence": "공식 수업시간/강의계획서 조회에서 개설대학 '대학원', 개설학과 '천문학과'. 운영 규정 제2조: 연계과정은 일반대학원에 설치된 학과(부)를 대상으로 함"
+    },
+    {
+      "college": "일반대학원",
+      "department": "대기과학과",
+      "sourceLabel": "대기과학과",
+      "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "daegu",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "affiliationSourceFile": "work/issue-555-knu-timetable/recheck-20261023/scopes",
+      "affiliationEvidence": "공식 수업시간/강의계획서 조회에서 개설대학 '대학원', 개설학과 '대기과학과'. 운영 규정 제2조: 연계과정은 일반대학원에 설치된 학과(부)를 대상으로 함"
+    },
+    {
+      "college": "일반대학원",
+      "department": "인공지능학과",
+      "sourceLabel": "인공지능학과",
+      "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "daegu",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+      "affiliationSourceFile": "work/issue-555-knu-timetable/recheck-20261023/scopes",
+      "affiliationEvidence": "공식 수업시간/강의계획서 조회에서 개설대학 '대학원', 개설학과 '인공지능학과'. 운영 규정 제2조: 연계과정은 일반대학원에 설치된 학과(부)를 대상으로 함"
     }
   ],
   "courseOwners": [

@@ -50,8 +50,8 @@ void main() {
     },
   );
   test('KNU whole official scope parses with blocked exceptions preserved', () {
-    expect(courses, hasLength(3847));
-    expect(courses.map((c) => c.sourceId).toSet(), hasLength(3847));
+    expect(courses, hasLength(3855));
+    expect(courses.map((c) => c.sourceId).toSet(), hasLength(3855));
     expect(courses.where((c) => !c.hasSchedulableMeetings), hasLength(240));
     for (final course in courses) {
       if (!course.hasSchedulableMeetings) {

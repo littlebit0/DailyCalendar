@@ -28,7 +28,7 @@ void main() {
       expect(
         {for (final d in data) d.campus: d.courses.length},
         {
-          'daegu': 3117,
+          'daegu': 3125,
           'sangju': 497,
           'dongin': 26,
           'downtown': 2,
@@ -36,13 +36,28 @@ void main() {
         },
       );
       final courses = [for (final d in data) ...d.courses];
-      expect(courses, hasLength(3847));
-      expect(courses.map((c) => c.sourceId).toSet(), hasLength(3847));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3607));
+      expect(courses, hasLength(3855));
+      expect(courses.map((c) => c.sourceId).toSet(), hasLength(3855));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3615));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
         hasLength(240),
       );
+      // 학칙 제44조 제8항·연계과정 운영 규정 제7조: 연계과정 학부생이 이수하는 일반대학원 상호인정교과목.
+      for (final id in [
+        'ARCH0703-001',
+        'ARCH0711-001',
+        'ARCH0719-001',
+        'ASAT0732-001',
+        'ASDE0710-001',
+        'ASDE0729-001',
+        'ASDE0732-001',
+        'COMP0716-001',
+      ]) {
+        final c = courses.singleWhere((c) => c.codeAndSection == id);
+        expect(c.hasSchedulableMeetings, isTrue, reason: id);
+        expect(c.departmentRemarks.values.join(), contains('일반대학원 개설'));
+      }
       for (final id in [
         'TCHR0601-001',
         'TCHR0606-001',

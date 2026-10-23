@@ -137179,6 +137179,334 @@
       "departmentRemarks": {
         "진로취업과": "전학년선택\nSU평가강좌\n\n학년: *"
       }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/ARCH0703/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ARCH0703",
+      "section": "001",
+      "courseName": "성능위주설계특론",
+      "professor": "서현철",
+      "credits": 3.0,
+      "sourceSchedule": "월 15:00 ~ 16:30,월 16:30 ~ 18:00",
+      "sourceClassroom": "산격동 캠퍼스  공대2호관 / 302",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": "산격동 캠퍼스  공대2호관 / 302"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": "산격동 캠퍼스  공대2호관 / 302"
+        }
+      ],
+      "departments": [
+        "건설환경에너지공학부 건축공학전공"
+      ],
+      "departmentCredits": {
+        "건설환경에너지공학부 건축공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "건설환경에너지공학부 건축공학전공": "전공"
+      },
+      "departmentRemarks": {
+        "건설환경에너지공학부 건축공학전공": "상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/ARCH0711/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ARCH0711",
+      "section": "001",
+      "courseName": "메트릭스구조해석",
+      "professor": "김홍진",
+      "credits": 3.0,
+      "sourceSchedule": "화 13:30 ~ 15:00,화 15:00 ~ 16:30",
+      "sourceClassroom": "산격동 캠퍼스  공대2호관 / 302",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 900,
+          "classroom": "산격동 캠퍼스  공대2호관 / 302"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": "산격동 캠퍼스  공대2호관 / 302"
+        }
+      ],
+      "departments": [
+        "건설환경에너지공학부 건축공학전공"
+      ],
+      "departmentCredits": {
+        "건설환경에너지공학부 건축공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "건설환경에너지공학부 건축공학전공": "전공"
+      },
+      "departmentRemarks": {
+        "건설환경에너지공학부 건축공학전공": "상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/ARCH0719/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ARCH0719",
+      "section": "001",
+      "courseName": "구조해석특론",
+      "professor": "최열",
+      "credits": 3.0,
+      "sourceSchedule": "수 13:30 ~ 15:00,수 15:00 ~ 16:30",
+      "sourceClassroom": "산격동 캠퍼스  공대2호관 / 302",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 810,
+          "endMinute": 900,
+          "classroom": "산격동 캠퍼스  공대2호관 / 302"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": "산격동 캠퍼스  공대2호관 / 302"
+        }
+      ],
+      "departments": [
+        "건설환경에너지공학부 건축공학전공"
+      ],
+      "departmentCredits": {
+        "건설환경에너지공학부 건축공학전공": 3.0
+      },
+      "departmentClassifications": {
+        "건설환경에너지공학부 건축공학전공": "전공"
+      },
+      "departmentRemarks": {
+        "건설환경에너지공학부 건축공학전공": "(영어)\n상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/ASAT0732/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ASAT0732",
+      "section": "001",
+      "courseName": "공간물리학",
+      "professor": "이어진",
+      "credits": 3.0,
+      "sourceSchedule": "금 16:30 ~ 18:00,월 16:30 ~ 18:00",
+      "sourceClassroom": "산격동 캠퍼스  제2과학관 / 424",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": "산격동 캠퍼스  제2과학관 / 424"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 990,
+          "endMinute": 1080,
+          "classroom": "산격동 캠퍼스  제2과학관 / 424"
+        }
+      ],
+      "departments": [
+        "천문학과"
+      ],
+      "departmentCredits": {
+        "천문학과": 3.0
+      },
+      "departmentClassifications": {
+        "천문학과": "전공"
+      },
+      "departmentRemarks": {
+        "천문학과": "(한국어)\n상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/ASDE0710/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ASDE0710",
+      "section": "001",
+      "courseName": "고급 구름역학",
+      "professor": "이규원",
+      "credits": 3.0,
+      "sourceSchedule": "수 09:00 ~ 10:30,수 10:30 ~ 12:00",
+      "sourceClassroom": "산격동 캠퍼스  제2과학관 / 324",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "산격동 캠퍼스  제2과학관 / 324"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "산격동 캠퍼스  제2과학관 / 324"
+        }
+      ],
+      "departments": [
+        "대기과학과"
+      ],
+      "departmentCredits": {
+        "대기과학과": 3.0
+      },
+      "departmentClassifications": {
+        "대기과학과": "전공"
+      },
+      "departmentRemarks": {
+        "대기과학과": "(영어)\n상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/ASDE0729/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ASDE0729",
+      "section": "001",
+      "courseName": "고급항공기상학",
+      "professor": "허복행",
+      "credits": 3.0,
+      "sourceSchedule": "금 13:30 ~ 15:00,월 13:30 ~ 15:00",
+      "sourceClassroom": "산격동 캠퍼스  제2과학관 / 412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 810,
+          "endMinute": 900,
+          "classroom": "산격동 캠퍼스  제2과학관 / 412"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 810,
+          "endMinute": 900,
+          "classroom": "산격동 캠퍼스  제2과학관 / 412"
+        }
+      ],
+      "departments": [
+        "대기과학과"
+      ],
+      "departmentCredits": {
+        "대기과학과": 3.0
+      },
+      "departmentClassifications": {
+        "대기과학과": "전공"
+      },
+      "departmentRemarks": {
+        "대기과학과": "(한국어)\n상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/ASDE0732/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ASDE0732",
+      "section": "001",
+      "courseName": "기상기후 리스크 평가론",
+      "professor": "박두선",
+      "credits": 3.0,
+      "sourceSchedule": "목 13:30 ~ 15:00,화 13:30 ~ 15:00",
+      "sourceClassroom": "산격동 캠퍼스  제2과학관 / 412",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 810,
+          "endMinute": 900,
+          "classroom": "산격동 캠퍼스  제2과학관 / 412"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 810,
+          "endMinute": 900,
+          "classroom": "산격동 캠퍼스  제2과학관 / 412"
+        }
+      ],
+      "departments": [
+        "대기과학과"
+      ],
+      "departmentCredits": {
+        "대기과학과": 3.0
+      },
+      "departmentClassifications": {
+        "대기과학과": "전공"
+      },
+      "departmentRemarks": {
+        "대기과학과": "(한국어)\n상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
+    },
+    {
+      "sourceId": "knu/daegu/2026/2/COMP0716/001",
+      "universityId": "knu",
+      "campus": "daegu",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "COMP0716",
+      "section": "001",
+      "courseName": "계산지능",
+      "professor": "말리페디람모한",
+      "credits": 3.0,
+      "sourceSchedule": "목 09:00 ~ 10:30,목 10:30 ~ 12:00",
+      "sourceClassroom": "산격동 캠퍼스  IT대학3호관(공대11호관) / 104",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "산격동 캠퍼스  IT대학3호관(공대11호관) / 104"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "산격동 캠퍼스  IT대학3호관(공대11호관) / 104"
+        }
+      ],
+      "departments": [
+        "인공지능학과"
+      ],
+      "departmentCredits": {
+        "인공지능학과": 3.0
+      },
+      "departmentClassifications": {
+        "인공지능학과": "전공"
+      },
+      "departmentRemarks": {
+        "인공지능학과": "(영어)\n상호인정교과목\n일반대학원 개설 과목(학·석사연계과정 학부 재학생이 이수 가능: 경북대학교 학칙 제44조 제8항, 학·석사 및 학·석박사통합연계과정 운영 규정 제7조)"
+      }
     }
   ],
   "candidateRevision": "current-department-two-explicit-midterms-v1",
