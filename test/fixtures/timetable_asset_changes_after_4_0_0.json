@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/mokpo.json": {
+    "sha256": "381170059fff0ec5d8a265041bbdf9d78f768dc2e61dbc7810e307a516e88d5e",
+    "reason": "#575 국립목포대 소속 없는 옛 학과 39개를 공식 단과대학안내·2024 자체평가 교원 현황·자연과학대학 홈페이지·약학대학 교육과정 편람 기준으로 배정하고, 융합전공 2개를 융합전공 묶음에 넣고, 조선해양공학과(ITS대학 복수학위)의 잘못 나뉜 단과대를 공과대학으로 바로잡음"
   }
 }
