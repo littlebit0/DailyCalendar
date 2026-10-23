@@ -350,6 +350,20 @@
           }
         }
       ]
+    },
+    {
+      "university": "cbnu",
+      "sourceUrl": "https://www.cbnu.ac.kr/www/selectWebSchdulList.do?key=455&schdulSeNo=1&month=all",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-20"
+        }
+      ],
+      "periodBoundaryMeaning": "Day before published December21 winter vacation; not a printed last teaching date"
     }
   ]
 }
