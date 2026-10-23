@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/hanbat.json": {
+    "sha256": "22d31c1c1d41426f161f198490fe7aff084027d0e8ca0736efe8af9e6325159a",
+    "reason": "#586 한밭대 국제학부 빅데이터융합전공을 공식 학부소개·대학 메뉴 기준 노마드 칼리지 소속으로 배정"
   }
 }
