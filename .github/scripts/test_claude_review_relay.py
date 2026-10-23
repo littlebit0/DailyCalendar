@@ -184,5 +184,26 @@ class RelayTests(unittest.TestCase):
             self.assertFalse(relay.retry_allowed(check, 41))
         self.assertTrue(relay.verified_receipt(check))
 
+    def test_read_only_probe_requires_published_review(self):
+        import claude_relay_probe as probe
+        with patch.dict(os.environ, {'PROBE_PR': '9', 'PROBE_REVIEW': '41'}), patch.object(probe.relay, 'api', return_value=self.review) as call:
+            probe.prepare()
+            self.assertEqual(call.call_count, 1)
+            self.assertEqual(json.loads(Path('relay-context.json').read_text()), self.context)
+        with patch.dict(os.environ, {'PROBE_PR': '9', 'PROBE_REVIEW': '41'}), patch.object(probe.relay, 'api', return_value={**self.review, 'submitted_at': None}):
+            with self.assertRaises(ValueError): probe.prepare()
+
+    def test_probe_saves_denial_without_external_write(self):
+        import claude_relay_probe as probe
+        Path('relay-context.json').write_text(json.dumps(self.context))
+        Path('execution.json').write_text(json.dumps([{'type': 'result', 'subtype': 'success', 'is_error': False,
+            'permission_denials': [{'tool_name': 'Bash', 'tool_input': {'command': 'ls private-value'}}]}]))
+        with patch.dict(os.environ, {'CLAUDE_EXECUTION_FILE': 'execution.json', 'CLAUDE_OUTCOME': 'success'}), patch.object(probe.relay, 'api') as api:
+            with self.assertRaises(RuntimeError): probe.finish()
+            api.assert_not_called()
+        text = Path('relay-probe.json').read_text()
+        self.assertNotIn('private-value', text)
+        self.assertEqual(json.loads(text)['denied_tools'][0]['program'], 'ls')
+
 
 if __name__ == '__main__': unittest.main()
