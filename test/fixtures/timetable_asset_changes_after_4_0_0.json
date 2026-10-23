@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/korea.json": {
+    "sha256": "1d8ce7e68cd43aecbda23ea7fd1a9f6db42bd7507dfaa509d8df1b361547c833",
+    "reason": "#564 고려대 세종 소속 미확인 학과 32개를 공식 개설과목 조회 학과 트리 기준 단과대로 배정, 의예과(의과대학)·공과대학 직접 개설·현장실습지원센터·법학전문대학원·취·창업지원센터 개설 단위 등록"
   }
 }
