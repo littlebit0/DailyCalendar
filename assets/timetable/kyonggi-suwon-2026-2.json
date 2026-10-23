@@ -87585,7 +87585,7 @@
       "departmentClassifications": {},
       "departmentRemarks": {},
       "classification": "교양",
-      "remarks": "수강신청 과목번호 0529 · 분반 번호 미게시\n공개 표 편성 구분: [ 90.일반선택(전자공학부1학년) ]\n학교 교양 편성표의 세부 이수 구분: 수리",
+      "remarks": "수강신청 과목번호 0529 · 분반 번호 미게시\n공개 표 편성 구분: [ 90.일반선택(전자공학부1학년) ]\n학교 교양 편성표의 세부 이수 구분: 수리\n공식 8/18 시간표 변경 공지: 목6~8교시 → 금6~8교시. 변경 후 강의실은 미게시이며 목요일 방을 복사하지 않음.",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-14"
@@ -87595,102 +87595,95 @@
       "scheduleStatus": "scheduled",
       "schedules": [
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-09-03"
+          "classroom": "",
+          "date": "2026-09-04"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-09-10"
+          "classroom": "",
+          "date": "2026-09-11"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-09-17"
+          "classroom": "",
+          "date": "2026-09-18"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-10-01"
+          "classroom": "",
+          "date": "2026-10-02"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-10-08"
+          "classroom": "",
+          "date": "2026-10-16"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-10-15"
+          "classroom": "",
+          "date": "2026-10-23"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-10-22"
+          "classroom": "",
+          "date": "2026-10-30"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-10-29"
+          "classroom": "",
+          "date": "2026-11-06"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-11-05"
+          "classroom": "",
+          "date": "2026-11-13"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-11-12"
+          "classroom": "",
+          "date": "2026-11-20"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-11-19"
+          "classroom": "",
+          "date": "2026-11-27"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-11-26"
+          "classroom": "",
+          "date": "2026-12-04"
         },
         {
-          "weekday": 4,
+          "weekday": 5,
           "startMinute": 840,
           "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-12-03"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "6401전자공학부\n전공강의실",
-          "date": "2026-12-10"
+          "classroom": "",
+          "date": "2026-12-11"
         }
       ],
       "metadata": {
@@ -87731,7 +87724,7 @@
         "decision": "postedRegularClockCandidate",
         "actualAttendanceConfirmed": false,
         "unknownDepartmentNotFabricated": true,
-        "publicChangeNotice": null,
+        "publicChangeNotice": "https://www.kyonggi.ac.kr/www/selectBbsNttView.do?key=7520&bbsNo=1073&nttNo=625388",
         "nativeClassification": "수리",
         "broadCategoryEvidence": "2026-2_교양.pdf official published general education scope"
       }
@@ -225090,7 +225083,7 @@
       "courseCode": "EC771",
       "section": "",
       "courseName": "제품설계및개발(캡스톤디자인",
-      "professor": "",
+      "professor": "신원경",
       "credits": 3.0,
       "departments": [
         "산업경영정보공학과"
@@ -225102,10 +225095,10 @@
         "산업경영정보공학과": "산정"
       },
       "departmentRemarks": {
-        "산업경영정보공학과": "수강신청 과목번호 1300 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영정보공학과]\n강의실 미게시"
+        "산업경영정보공학과": "수강신청 과목번호 1300 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영정보공학과]\n강의실 미게시\n공식 8/10 학과 공지: 강의시간 월6~8교시 → 수6~8교시, 담당교수 신원경. 공지상 기존 강좌를 폐강 후 다시 개설하며, 다시 개설한 강좌의 수강신청 과목번호는 공개 원문에 없음."
       },
       "classification": "산정",
-      "remarks": "수강신청 과목번호 1300 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영정보공학과]\n강의실 미게시",
+      "remarks": "수강신청 과목번호 1300 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영정보공학과]\n강의실 미게시\n공식 8/10 학과 공지: 강의시간 월6~8교시 → 수6~8교시, 담당교수 신원경. 공지상 기존 강좌를 폐강 후 다시 개설하며, 다시 개설한 강좌의 수강신청 과목번호는 공개 원문에 없음.",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-14"
@@ -225115,102 +225108,109 @@
       "scheduleStatus": "scheduled",
       "schedules": [
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-09-07"
+          "date": "2026-09-02"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-09-14"
+          "date": "2026-09-09"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-09-21"
+          "date": "2026-09-16"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-09-28"
+          "date": "2026-09-23"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-10-12"
+          "date": "2026-09-30"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-10-19"
+          "date": "2026-10-07"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-10-26"
+          "date": "2026-10-14"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-11-02"
+          "date": "2026-10-21"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-11-09"
+          "date": "2026-10-28"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-11-16"
+          "date": "2026-11-04"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-11-23"
+          "date": "2026-11-11"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-11-30"
+          "date": "2026-11-18"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-12-07"
+          "date": "2026-11-25"
         },
         {
-          "weekday": 1,
+          "weekday": 3,
           "startMinute": 840,
           "endMinute": 1010,
           "classroom": "",
-          "date": "2026-12-14"
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 1010,
+          "classroom": "",
+          "date": "2026-12-09"
         }
       ],
       "metadata": {
@@ -225251,7 +225251,7 @@
         "decision": "postedRegularClockCandidate",
         "actualAttendanceConfirmed": false,
         "unknownDepartmentNotFabricated": false,
-        "publicChangeNotice": null,
+        "publicChangeNotice": "https://www.kyonggi.ac.kr/www/selectBbsNttView.do?key=7520&bbsNo=1073&nttNo=625266",
         "actualOpeningDepartmentFromPageHeader": "산업경영정보공학과",
         "departmentAffiliationEvidence": "Current official course-table page header; not an eligibility restriction"
       }
@@ -227372,7 +227372,7 @@
       "courseCode": "EC709",
       "section": "",
       "courseName": "생산계획",
-      "professor": "김현수",
+      "professor": "임용준",
       "credits": 3.0,
       "departments": [
         "산업경영공학과"
@@ -227384,10 +227384,10 @@
         "산업경영공학과": "전선"
       },
       "departmentRemarks": {
-        "산업경영공학과": "수강신청 과목번호 1313 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시"
+        "산업경영공학과": "수강신청 과목번호 1313 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시\n공식 8/10 학과 공지: 월요일반 담당교수 임용준(공개 표 김현수)."
       },
       "classification": "전선",
-      "remarks": "수강신청 과목번호 1313 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시",
+      "remarks": "수강신청 과목번호 1313 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시\n공식 8/10 학과 공지: 월요일반 담당교수 임용준(공개 표 김현수).",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-14"
@@ -227533,7 +227533,7 @@
         "decision": "postedRegularClockCandidate",
         "actualAttendanceConfirmed": false,
         "unknownDepartmentNotFabricated": false,
-        "publicChangeNotice": null,
+        "publicChangeNotice": "https://www.kyonggi.ac.kr/www/selectBbsNttView.do?key=7520&bbsNo=1073&nttNo=625266",
         "actualOpeningDepartmentFromPageHeader": "산업경영공학과",
         "departmentAffiliationEvidence": "Current official course-table page header; not an eligibility restriction"
       }
@@ -227547,7 +227547,7 @@
       "courseCode": "EC709",
       "section": "",
       "courseName": "생산계획",
-      "professor": "김현수",
+      "professor": "한수민",
       "credits": 3.0,
       "departments": [
         "산업경영공학과"
@@ -227559,10 +227559,10 @@
         "산업경영공학과": "전선"
       },
       "departmentRemarks": {
-        "산업경영공학과": "수강신청 과목번호 1314 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시"
+        "산업경영공학과": "수강신청 과목번호 1314 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시\n공식 8/10 학과 공지: 화요일반 담당교수 한수민(공개 표 김현수)."
       },
       "classification": "전선",
-      "remarks": "수강신청 과목번호 1314 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시",
+      "remarks": "수강신청 과목번호 1314 · 분반 번호 미게시\n공개 표 편성 구분: [산업경영공학과]\n강의실 미게시\n공식 8/10 학과 공지: 화요일반 담당교수 한수민(공개 표 김현수).",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-14"
@@ -227715,7 +227715,7 @@
         "decision": "postedRegularClockCandidate",
         "actualAttendanceConfirmed": false,
         "unknownDepartmentNotFabricated": false,
-        "publicChangeNotice": null,
+        "publicChangeNotice": "https://www.kyonggi.ac.kr/www/selectBbsNttView.do?key=7520&bbsNo=1073&nttNo=625266",
         "actualOpeningDepartmentFromPageHeader": "산업경영공학과",
         "departmentAffiliationEvidence": "Current official course-table page header; not an eligibility restriction"
       }
@@ -272197,110 +272197,18 @@
         "화학공학전공": "화공"
       },
       "departmentRemarks": {
-        "화학공학전공": "수강신청 과목번호 1546 · 분반 번호 미게시\n공개 표 편성 구분: [화학공학전공]\n강의실 미게시"
+        "화학공학전공": "수강신청 과목번호 1546 · 분반 번호 미게시\n공개 표 편성 구분: [화학공학전공]\n공식 2026-2 폐강 공지 확인. 시간표 추가 대상 제외."
       },
       "classification": "화공",
-      "remarks": "수강신청 과목번호 1546 · 분반 번호 미게시\n공개 표 편성 구분: [화학공학전공]\n강의실 미게시",
+      "remarks": "수강신청 과목번호 1546 · 분반 번호 미게시\n공개 표 편성 구분: [화학공학전공]\n공식 2026-2 폐강 공지 확인. 시간표 추가 대상 제외.",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-14"
       },
       "sourceSchedule": "금 / 주6 7 8",
       "sourceClassroom": "",
-      "scheduleStatus": "scheduled",
-      "schedules": [
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-09-04"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-09-11"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-09-18"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-10-02"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-10-16"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-10-23"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-10-30"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-11-06"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-11-13"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-11-20"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-11-27"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-12-04"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "",
-          "date": "2026-12-11"
-        }
-      ],
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
       "metadata": {
         "actualRegistrationNumber": "1546",
         "nativeSectionUnpublished": true,
@@ -272328,18 +272236,11 @@
             "classroom": ""
           }
         ],
-        "originalParsedMeetings": [
-          {
-            "weekday": 5,
-            "startMinute": 840,
-            "endMinute": 1010,
-            "classroom": ""
-          }
-        ],
-        "decision": "postedRegularClockCandidate",
+        "originalParsedMeetings": [],
+        "decision": "explicitPublishedCancellation",
         "actualAttendanceConfirmed": false,
         "unknownDepartmentNotFabricated": false,
-        "publicChangeNotice": null,
+        "publicChangeNotice": "https://www.kyonggi.ac.kr/www/selectBbsNttView.do?key=7520&bbsNo=1073&nttNo=625348",
         "actualOpeningDepartmentFromPageHeader": "화학공학전공",
         "departmentAffiliationEvidence": "Current official course-table page header; not an eligibility restriction"
       }

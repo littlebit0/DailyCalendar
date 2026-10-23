@@ -52,7 +52,7 @@ void main() {
               as Map<String, dynamic>;
       final model = UniversityDataset.fromJson(raw);
       expect(model.courses.length, 1640);
-      expect(model.courses.where((c) => c.hasSchedulableMeetings).length, 1594);
+      expect(model.courses.where((c) => c.hasSchedulableMeetings).length, 1593);
       const closed = {
         '2026-09-24',
         '2026-09-25',
@@ -135,7 +135,7 @@ void main() {
           isTrue,
         );
       }
-      expect(count, 23540);
+      expect(count, 23527);
       final doc = TimetableSyncDocument.records(
         courses: values,
         schemaVersion: 2,
@@ -143,7 +143,7 @@ void main() {
       final restoredDoc = TimetableSyncDocument.fromJson(
         jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>,
       );
-      expect(restoredDoc.courses.length, 1594);
+      expect(restoredDoc.courses.length, 1593);
       for (final e in restoredDoc.courses.entries) {
         expect(e.value.value, values[e.key]!.value);
       }
@@ -205,7 +205,34 @@ void main() {
         ),
         isTrue,
       );
-      for (final id in ['0058', '0159', '1545']) {
+      // 2026-2 공식 변경 공지: 바뀐 요일만 반영하고 공지에 없는 강의실은 비운다.
+      for (final (id, weekday, count) in [('0529', 5, 13), ('1300', 3, 15)]) {
+        final moved = model.courses.singleWhere(
+          (c) => c.sourceId.endsWith(id),
+        );
+        expect(moved.meetings.length, count);
+        expect(
+          moved.meetings.every(
+            (m) =>
+                m.weekday == weekday &&
+                m.originalStartMinute == 840 &&
+                m.originalEndMinute == 1010 &&
+                m.classroom.isEmpty,
+          ),
+          isTrue,
+        );
+      }
+      for (final (id, professor) in [
+        ('1300', '신원경'),
+        ('1313', '임용준'),
+        ('1314', '한수민'),
+      ]) {
+        expect(
+          model.courses.singleWhere((c) => c.sourceId.endsWith(id)).professor,
+          professor,
+        );
+      }
+      for (final id in ['0058', '0159', '1545', '1546']) {
         expect(
           model.courses
               .singleWhere((c) => c.sourceId.endsWith(id))
