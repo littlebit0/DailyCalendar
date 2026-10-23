@@ -85,6 +85,15 @@ void main() {
               meta['currentOfficialClassroomCorrection']['originalSourceClassroom'],
               a['suupRoomNms'],
             );
+          } else if (c.sourceId == 'hanyang/erica/2026-2/24136') {
+            // 2026-10-24 public catalog re-census changed only the rooms.
+            final fix = meta['currentOfficialClassroomCorrection'] as Map;
+            expect(fix['originalSourceClassroom'], a['suupRoomNms']);
+            expect(
+              c.sourceClassroom,
+              'ERICA 컨퍼런스홀 201 강의실,ERICA 컨퍼런스홀 101 강의실',
+            );
+            expect(fix['changedSourceClassroom'], c.sourceClassroom);
           } else {
             expect(c.sourceClassroom, a['suupRoomNms'] ?? '');
           }
@@ -126,10 +135,13 @@ void main() {
             r'([월화수목금토일])\((\d{2}):(\d{2})-(\d{2}):(\d{2})\)',
           );
           final matches = pattern.allMatches(a['suupTimes'] as String).toList();
-          final rooms = (a['suupRoomNms'] as String)
-              .split(',')
-              .map((s) => s.trim())
-              .toList();
+          final correction = meta['currentOfficialClassroomCorrection'] as Map?;
+          final rooms =
+              ((correction?['changedSourceClassroom'] ?? a['suupRoomNms'])
+                      as String)
+                  .split(',')
+                  .map((s) => s.trim())
+                  .toList();
           expect(rooms, hasLength(matches.length));
           expect(
             (a['suupTimes'] as String)

@@ -2034,6 +2034,20 @@
       "affiliationSourceUrl": "https://goerica.hanyang.ac.kr/admission/html/campus/major.asp",
       "affiliationSourceFile": "work/issue-661-hanyang-timetable/hanyang/src/goerica-major.html",
       "affiliationEvidence": "ERICA 입학처 「대학/학과 소개」 공학대학 목록: 「스마트융합공학부 └ 소재·부품융합전공 └ 로봇융합전공 └ 스마트ICT융합전공 └ 건축IT융합전공 └ 스마트건축구조시공융합전공」. 2027학년도 수시 모집요강 21쪽 「스마트융합공학부 150 소재·부품융합전공, 로봇융합전공, 스마트ICT융합전공, 건축IT융합전공, 스마트건축구조시공융합전공」. ERICA 대학/학과 소개(www.hanyang.ac.kr/e_college_department-info)는 스마트융합공학부를 공학대학에 둠. 이 라벨: 「스마트건축구조시공융합전공」."
+    },
+    {
+      "college": "공학대학",
+      "department": "스마트컨스트럭션융합전공",
+      "sourceLabel": "스마트컨스트럭션융합전공",
+      "sourceUrl": "https://sce.hanyang.ac.kr/core/xml/menu.xml.html",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "erica",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sce.hanyang.ac.kr/main/sub.html?pageCode=33",
+      "affiliationSourceFile": "work/issue-661-hanyang-timetable/alt-20261023/sce/sce-menu-20261024.txt",
+      "affiliationEvidence": "한양대학교 ERICA 스마트융합공학부 공식 홈페이지(sce.hanyang.ac.kr) 메뉴 「전공소개」 목록: 「소재·부품융합전공, 로봇융합전공, 스마트ICT융합전공, 건축IT융합전공, 스마트건축구조시공융합전공, 스마트컨스트럭션융합전공」, pageCode=33 경로 「전공소개 > 스마트컨스트럭션융합전공 > 전공소개」(2026-10-24 조회, robots.txt 차단 경로를 사용자 결정에 따라 직접 조회). ERICA 대학/학과 소개(www.hanyang.ac.kr/e_college_department-info)는 스마트융합공학부를 공학대학에 둠. 이 라벨: 「스마트컨스트럭션융합전공」."
     }
   ],
   "courseOwners": []

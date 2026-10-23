@@ -30,9 +30,9 @@ void main() {
           }
         }
       }
-      // No allowed official page lists these two ERICA majors, so their
-      // college is held for a user decision instead of guessed.
-      expect(raw, {'erica 스마트컨스트럭션융합전공', 'erica 지속가능건축융합전공'});
+      // No official page lists this ERICA major, so its college is held for
+      // a user decision instead of guessed.
+      expect(raw, {'erica 지속가능건축융합전공'});
       expect(orphans, isEmpty);
     },
   );
