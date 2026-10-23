@@ -27,9 +27,9 @@ void main() {
       )).single;
       final courses = data.courses;
       expect(data.campusName, '북악');
-      expect(courses, hasLength(2985));
-      expect(courses.map((c) => c.sourceId).toSet(), hasLength(2985));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2944));
+      expect(courses, hasLength(2934));
+      expect(courses.map((c) => c.sourceId).toSet(), hasLength(2934));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(2893));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(22),
@@ -52,30 +52,6 @@ void main() {
         expect(
           c.offeringOrganizations.any(
             (o) => o.college == '학과미배정' && o.department == null,
-          ),
-          isTrue,
-        );
-      }
-      // 학칙 제26조 제3항·학·석사 연계과정 운영요강 제10조에 따른 공식 'GraduateLinked'
-      // 강좌 51개(폐강 표시 1개 제외)는 대학원 단위 소속으로 들어간다.
-      final graduate = courses.where(
-        (c) => c.departmentRemarks.values.any(
-          (r) => r.contains('학칙 제26조 제3항, 학·석사 연계과정 운영요강 제10조'),
-        ),
-      );
-      expect(graduate, hasLength(51));
-      expect(courses.any((c) => c.codeAndSection == '662450b-01'), isFalse);
-      const graduateSchools = {
-        '일반대학원',
-        '테크노디자인전문대학원',
-        'AIㆍSW대학원',
-        '자동차모빌리티대학원',
-      };
-      for (final c in graduate) {
-        expect(c.hasSchedulableMeetings, isTrue);
-        expect(
-          c.offeringOrganizations.any(
-            (o) => graduateSchools.contains(o.college),
           ),
           isTrue,
         );
