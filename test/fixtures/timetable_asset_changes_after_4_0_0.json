@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/uos.json": {
+    "sha256": "59fad2265ec4df916eca3023427c888531a05c7671f69c9d00e9e02fac4b8991",
+    "reason": "#609 서울시립대 원자료 분류 8개 배정: 교통공학과(SMTE)는 산학협력단 계약학과 운영 현황 기준 도시과학대학, 국제교류과는 공식 교육과정 표 기준 국제처, 창업학·보험수리학·평생교육학·미디어콘텐츠학·도시문화콘텐츠학·법규범제도학은 융합전공학부 공식 '통섭전공' 목록 기준"
   }
 }
