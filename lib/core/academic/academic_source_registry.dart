@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'jnu_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +26,15 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  AcademicSourceRegistration(
+    id: 'jnu',
+    institutionId: 'academyinfo:0000023',
+    // Gwangju and Yeosu publish one shared undergraduate calendar.
+    campusIds: {'academyinfo:0000023', 'academyinfo:0000024'},
+    create: ChonnamAcademicSource.new,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
