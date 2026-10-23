@@ -5,6 +5,8 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'korea_public_recheck.dart';
+
 void main() {
   test(
     'KU144 exact researcher-note correction preserves school restrictions and actual notes through Drive',
@@ -40,7 +42,9 @@ void main() {
         final old = {for (final c in source['courses']) c['sourceId']: c};
         final model = UniversityDataset.fromJson(raw);
         for (final row in raw['courses']) {
-          final before = Map<String, dynamic>.from(old[row['sourceId']] as Map);
+          final before = applyKoreaRecheck(
+            Map<String, dynamic>.from(old[row['sourceId']] as Map),
+          );
           if (before['metadata']?.containsKey('researchOnly') == true) {
             before['metadata']['researchOnly'] = false;
           }

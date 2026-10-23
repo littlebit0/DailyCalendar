@@ -30,5 +30,9 @@
   "assets/timetable/organizations/korea.json": {
     "sha256": "1d8ce7e68cd43aecbda23ea7fd1a9f6db42bd7507dfaa509d8df1b361547c833",
     "reason": "#564 고려대 세종 소속 미확인 학과 32개를 공식 개설과목 조회 학과 트리 기준 단과대로 배정, 의예과(의과대학)·공과대학 직접 개설·현장실습지원센터·법학전문대학원·취·창업지원센터 개설 단위 등록"
+  },
+  "assets/timetable/korea-seoul-2026-2.json": {
+    "sha256": "328164d068e925c1599733ee354e2236b94888f81ecc59f62059cf40aebd8276",
+    "reason": "#564 2026-10-23 공개 개설과목 재조회(NetFunnel 대기열 정상 통과) 결과 교수 변경 4강좌(NRSG288-01·02, ARDE157-00, SEDU309-04)와 강좌명 변경 1강좌(GESO157-00) 반영"
   }
 }

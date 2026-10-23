@@ -6,6 +6,8 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 
+import 'korea_public_recheck.dart';
+
 const root =
     'work/university-research/catalog-r/ku/remarkful-own-clock-reviewed-v10-20261009/';
 Map<String, dynamic> read(String name) {
@@ -103,7 +105,10 @@ void main() {
         all.addAll(dataset.courses);
         for (var i = 0; i < rows.length; i++) {
           if (!ids.contains((rows[i] as Map)['sourceId'])) {
-            expect(rows[i], old[i]);
+            expect(
+              rows[i],
+              applyKoreaRecheck(old[i] as Map<String, dynamic>),
+            );
           }
         }
         for (final record in selected) {
