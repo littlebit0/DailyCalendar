@@ -136,7 +136,7 @@ class TimetableClass {
       academicYear >= 1900 &&
       academicYear <= 9999 &&
       semester.isNotEmpty &&
-      meetings.isNotEmpty &&
+      (meetings.isNotEmpty || isUntimedSourceCourse) &&
       meetings.every(
         (m) =>
             m.isValid &&
@@ -146,6 +146,12 @@ class TimetableClass {
       ) &&
       meetings.map((m) => m.id).toSet().length == meetings.length &&
       defaultMode != LectureMode.cancelled;
+
+  /// A school course whose source publishes no weekday or time. It has no
+  /// meetings, so it is listed apart from the weekly grid. Manual classes
+  /// always need a time.
+  bool get isUntimedSourceCourse =>
+      meetings.isEmpty && sourceType == 'universityDataset' && sourceId != null;
   String overrideKey(ClassMeeting meeting, DateTime date) =>
       '${meeting.id}/${timetableDateKey(date)}';
   LectureMode modeOn(ClassMeeting meeting, DateTime date) =>

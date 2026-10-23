@@ -107,6 +107,7 @@ class TimetableSyncDocument {
             (record) =>
                 record.value is Map &&
                 ((record.value as Map)['period'] != null ||
+                    ((record.value as Map)['meetings'] as List).isEmpty ||
                     ((record.value as Map)['meetings'] as List).any(
                       (meeting) => (meeting as Map)['date'] != null,
                     )),
@@ -156,12 +157,13 @@ class TimetableSyncDocument {
         document.courses.values.any(
           (record) =>
               record.value is Map &&
-              ((record.value as Map)['meetings'] as List).any(
-                (meeting) => (meeting as Map)['date'] != null,
-              ),
+              (((record.value as Map)['meetings'] as List).isEmpty ||
+                  ((record.value as Map)['meetings'] as List).any(
+                    (meeting) => (meeting as Map)['date'] != null,
+                  )),
         )) {
       throw const FormatException(
-        'Dated classes require timetable sync version 2',
+        'Dated or untimed classes require timetable sync version 2',
       );
     }
     return document;
