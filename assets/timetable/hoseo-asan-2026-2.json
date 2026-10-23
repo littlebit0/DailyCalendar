@@ -3685,9 +3685,122 @@
       },
       "sourceSchedule": "수7~9",
       "sourceClassroom": "아)강석214-e",
-      "remarks": "공개 정규예약 계획 2026-08-31–12-18, 자체 현재 개강·학기종료 범위입니다. 실제출석/수업량/개별수업·시험·보강·수시시험 날짜 및 교수승인 예외 미확인. 학교 시험규정은 정기 또는 수시 실시·1주전 공고이며 현재 공개 중간/기말 날짜를 만들지 않았습니다. 현행휴업일9/24–25·10/5·10/9·10/23제외,9/26·10/3국가공휴일도 보류합니다. 9/28개교기념일은 학사달력 행사표기이며 별도휴업근거없어 정규예약 유지, 실제수업여부 미확인입니다. 현재1–8교시 시작10–17시와 주간50분/휴식10분 직접규정만 사용; 9+교시·야간/원격·복수실대응·원문충돌은 보류. 실험/실습/PBL/프로젝트/진로 과목명만으로 별도집중운영을 단정하지 않습니다. 대면은원문metadata이며 날짜별 실제방식은미확인으로 override없이 사용자3방식선택 유지. 캠퍼스는 현재PDF직접인쇄82개만기존대로, 나머지unknown. 최신학교전체폐강·통합시스템최종변경 미확인. 원문비고:  예약보류: native clockoutside validated daytime1–8 or unparsed",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "remarks": "공개 정규예약 계획 2026-08-31–12-18, 자체 현재 개강·학기종료 범위입니다. 실제출석/수업량/개별수업·시험·보강·수시시험 날짜 및 교수승인 예외 미확인. 학교 시험규정은 정기 또는 수시 실시·1주전 공고이며 현재 공개 중간/기말 날짜를 만들지 않았습니다. 현행휴업일9/24–25·10/5·10/9·10/23제외,9/26·10/3국가공휴일도 보류합니다. 9/28개교기념일은 학사달력 행사표기이며 별도휴업근거없어 정규예약 유지, 실제수업여부 미확인입니다. 현재1–8교시 시작10–17시와 주간50분/휴식10분 직접규정만 사용; 9+교시·야간/원격·복수실대응·원문충돌은 보류. 실험/실습/PBL/프로젝트/진로 과목명만으로 별도집중운영을 단정하지 않습니다. 대면은원문metadata이며 날짜별 실제방식은미확인으로 override없이 사용자3방식선택 유지. 캠퍼스는 현재PDF직접인쇄82개만기존대로, 나머지unknown. 최신학교전체폐강·통합시스템최종변경 미확인. 0·9~14교시 시작 시각은 수업시간표 책자 p.152 `19. 시간표`(0교시 09:00~14교시 23:00 시작, 교시당 50분)에 따르며 연속 교시는 한 블록으로 합칩니다.",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        },
+        {
+          "date": "2026-12-16",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1130,
+          "classroom": "아)강석214-e"
+        }
+      ],
       "metadata": {
         "originalEducationalRecords": [
           {
@@ -3730,10 +3843,8 @@
         "actualAttendanceConfirmed": false,
         "individualDatesVerified": false,
         "researchOnly": false,
-        "heldReason": "native clockoutside validated daytime1–8 or unparsed",
-        "reservationHoldReasons": [
-          "native clockoutside validated daytime1–8 or unparsed"
-        ],
+        "heldReason": "",
+        "reservationHoldReasons": [],
         "ownFullTermExamDatesKnown": false,
         "selectedDateSubset": [
           "2026-08-31",
@@ -3749,8 +3860,16 @@
         },
         "regularReservationOnly": true,
         "individualOperatingDaysVerified": false,
-        "nativeClockRoomBlocks": [],
-        "titleOnlyOperatingHoldRemoved": false
+        "nativeClockRoomBlocks": [
+          {
+            "weekday": 3,
+            "startMinute": 960,
+            "endMinute": 1130,
+            "classroom": "아)강석214-e"
+          }
+        ],
+        "titleOnlyOperatingHoldRemoved": false,
+        "periodTimeBasis": "수업시간표 책자 2026-2 p.152 19. 시간표"
       }
     },
     {

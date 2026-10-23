@@ -37,11 +37,17 @@ void main() {
       }
       expect(raw, isEmpty);
       expect(orphans, isEmpty);
-      // Held for a user decision (remote/hybrid delivery, periods outside the
-      // published 1-8 clock, conflicting rows); search stays suspended.
+      // 0- and 9-14th periods use the booklet p.152 table (hourly starts, 50
+      // minutes); consecutive periods form one block (0교시~3교시 = 09:00-12:50).
+      final zeroToThree = courses.firstWhere((c) => c.sourceSchedule == '월0~3');
+      expect(zeroToThree.scheduleStatus, 'scheduled');
+      expect(zeroToThree.meetings.first.originalStartMinute, 540);
+      expect(zeroToThree.meetings.first.originalEndMinute, 770);
+      // Still held (remote/hybrid delivery, Saturday, evening-division,
+      // conflicting rows); search stays suspended.
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(887),
+        hasLength(756),
       );
     },
   );

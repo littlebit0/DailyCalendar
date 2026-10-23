@@ -26,5 +26,17 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/hoseo-asan-2026-2.json": {
+    "sha256": "cdabab4818eb02465fed5b397084a5755c4b72a154e3a290aa4c38b3a9208633",
+    "reason": "#662 호서대 0·9~14교시 수업 131강좌를 수업시간표 책자 2026-2 p.152 교시별 시각(0교시 09:00~14교시 23:00 시작, 50분)으로 확정"
+  },
+  "assets/timetable/hoseo-cheonan-2026-2.json": {
+    "sha256": "2a1f1105007a26aba33354e26588f75f0c6a20d3ec759d6a9fb192578e00929a",
+    "reason": "#662 호서대 0·9~14교시 수업 131강좌를 수업시간표 책자 2026-2 p.152 교시별 시각(0교시 09:00~14교시 23:00 시작, 50분)으로 확정"
+  },
+  "assets/timetable/hoseo-unknown-2026-2.json": {
+    "sha256": "f341e753fcff3721f5dd420ecfcb7689eae3cb1bc7200e6477c210d00bf8a996",
+    "reason": "#662 호서대 0·9~14교시 수업 131강좌를 수업시간표 책자 2026-2 p.152 교시별 시각(0교시 09:00~14교시 23:00 시작, 50분)으로 확정"
   }
 }
