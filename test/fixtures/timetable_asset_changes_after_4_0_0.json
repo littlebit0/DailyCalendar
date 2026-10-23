@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/skku.json": {
+    "sha256": "0ae6fc5ed7321afed12e852fe42142a6745ee1a51958298fd8715db55435de45",
+    "reason": "#615 성균관대 원자료 분류 중 데이터사이언스융합전공·인공지능융합전공·컬처앤테크놀로지융합전공을 공식 대학 안내·개설강좌 조회 학과 트리 기준 소프트웨어융합대학에 배정하고 융합전공 묶음 추가"
+  },
+  "assets/timetable/skku-naturalScience-2026-2.json": {
+    "sha256": "acac5f5724b09beaca2e054eda762d67a9a89726858a5152ee12bb2f94a6f7b9",
+    "reason": "#615 성균관대 2026-10-23 공식 개설강좌 조회 재집계에서 새로 확인된 학사 분반 SWE3043-46(소프트웨어연구학점2, 교시 미지정)을 추가"
   }
 }
