@@ -28,11 +28,23 @@ NOTICE = 'https://www.dju.ac.kr/dju/na/ntt/selectNttInfo.do?nttSn=553207&bbsId=1
 PERIOD = {'startDate': '2026-09-01', 'endDate': '2026-12-21'}
 HOLD = '시각 보류: 공식 교시별 시각표 미공개(요일·교시만 공개)'
 NS = {'m': 'http://schemas.openxmlformats.org/spreadsheetml/2006/main'}
+# (canonical name, sheet label, college column, keyword in the official filename)
 FILES = [
-    ('1-general.xlsx', '교양교과목', None),
-    ('2-major.xlsx', '전공교과목', 0),
-    ('3-elective-teaching.xlsx', '일반선택 및 교직교과목', 0),
+    ('1-general.xlsx', '교양교과목', None, '교양교과목'),
+    ('2-major.xlsx', '전공교과목', 0, '전공교과목'),
+    ('3-elective-teaching.xlsx', '일반선택 및 교직교과목', 0, '일반선택'),
 ]
+
+
+def resolve(src, name, keyword):
+    """Canonical name if present, else the single official Korean-named xlsx."""
+    src = Path(src)
+    if (src / name).is_file():
+        return src / name
+    found = sorted(p for p in src.glob('*.xlsx') if keyword in p.name and not p.name.startswith('~$'))
+    if len(found) != 1:
+        raise FileNotFoundError(f'{src}: expected exactly one xlsx for {keyword!r} or {name}, found {len(found)}')
+    return found[0]
 
 
 def rows(path):
@@ -76,8 +88,8 @@ def header(two):
 
 def build(src, root):
     courses, labels = [], {}
-    for name, sheet, college_col in FILES:
-        data = rows(Path(src) / name)
+    for name, sheet, college_col, keyword in FILES:
+        data = rows(resolve(src, name, keyword))
         head = header(data[:2])
         col = {h: i for i, h in enumerate(head)}
         for r in data[2:]:
