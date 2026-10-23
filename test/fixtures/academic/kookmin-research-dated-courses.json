@@ -1,0 +1,235 @@
+[
+  {
+    "sourceId": "kookmin/main/2026/2/0368203/01",
+    "universityId": "kookmin",
+    "campus": "main",
+    "academicYear": 2026,
+    "semester": "2",
+    "courseCode": "0368203",
+    "section": "01",
+    "courseName": "목요특강:문화,IT,기업가정신",
+    "professor": "김희선",
+    "credits": 1.0,
+    "sourceSchedule": "4요일 15:00~17:00",
+    "sourceClassroom": "본부관별관1층1호실",
+    "scheduleStatus": "scheduled",
+    "schedules": [
+      {
+        "date": "2026-09-03",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-09-10",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-09-17",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-10-01",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-10-08",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-10-15",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-10-29",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-05",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-12",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-19",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-26",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-12-03",
+        "weekday": 4,
+        "startMinute": 900,
+        "endMinute": 1020,
+        "classroom": "본부관별관1층1호실"
+      }
+    ],
+    "departments": [
+      "교양대학"
+    ],
+    "departmentCredits": {
+      "교양대학": 1.0
+    },
+    "departmentClassifications": {
+      "교양대학": "자유교양"
+    },
+    "departmentRemarks": {
+      "교양대학": "'융합특강', '기업가정신 특강'과 동시수강 불가\n공식 주차 범위와 강의계획서의 수업 없는 주를 대조한 날짜별 수업"
+    }
+  },
+  {
+    "sourceId": "kookmin/main/2026/2/1131900/01",
+    "universityId": "kookmin",
+    "campus": "main",
+    "academicYear": 2026,
+    "semester": "2",
+    "courseCode": "1131900",
+    "section": "01",
+    "courseName": "융합특강",
+    "professor": "김희선",
+    "credits": 1.0,
+    "sourceSchedule": "3요일 14:00~16:00",
+    "sourceClassroom": "본부관별관1층1호실",
+    "scheduleStatus": "scheduled",
+    "schedules": [
+      {
+        "date": "2026-09-02",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-09-09",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-09-16",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-09-23",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-09-30",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-10-07",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-10-14",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-10-28",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-04",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-11",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-18",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-11-25",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      },
+      {
+        "date": "2026-12-02",
+        "weekday": 3,
+        "startMinute": 840,
+        "endMinute": 960,
+        "classroom": "본부관별관1층1호실"
+      }
+    ],
+    "departments": [
+      "교양대학"
+    ],
+    "departmentCredits": {
+      "교양대학": 1.0
+    },
+    "departmentClassifications": {
+      "교양대학": "자유교양"
+    },
+    "departmentRemarks": {
+      "교양대학": "'목요특강' 및 '기업가정신특강'과 동시수강불가\n공식 주차 범위와 강의계획서의 수업 없는 주를 대조한 날짜별 수업"
+    }
+  }
+]

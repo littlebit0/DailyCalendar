@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/kookmin-main-2026-2.json": {
+    "sha256": "f1acb84f5d195989554d33edacc50ef9b1d138b1189e7f05baa23148535f086b",
+    "reason": "#587 국민대 2026-2 공식 개설강좌 조회(2026-10-23) 대조: 목록에서 빠진 전공실기 7분반 제외, 사제동행세미나(0363301-01) 강의실 변경 반영, 자료 기준일 갱신"
+  },
+  "assets/timetable/organizations/kookmin.json": {
+    "sha256": "b50caafc9788979e958811d19de5ae85c3c9ba43713e5499e0298e74906690a4",
+    "reason": "#587 국민대 공식 개설강좌 조회 대학 목록의 최상위 개설 단위 '학과미배정' 등록, 목록에서 빠진 7분반의 개설 단위 제거"
   }
 }
