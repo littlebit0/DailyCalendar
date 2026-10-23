@@ -3,32 +3,45 @@ import 'package:daily/core/academic/university_support_policy.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('Konkuk Seoul course evidence does not activate GLOCAL timetable', () {
+  test('Konkuk Seoul and GLOCAL select their own published timetables', () {
     for (final id in [
       'institution:academyinfo:0000052',
       'academyinfo:0000052',
     ]) {
-      final profile = AcademicProfile(
+      final glocal = AcademicProfile(
         universityId: id,
         universityName: '건국대학교',
         schoolKind: 'fourYear',
         campusId: 'academyinfo:0000053',
       );
-      expect(profile.timetableCampus, isNull);
-      expect(profile.timetableSupported, false);
+      expect(glocal.timetableCampus, 'glocal');
+      final seoul = AcademicProfile(
+        universityId: id,
+        universityName: '건국대학교',
+        schoolKind: 'fourYear',
+        campusId: 'academyinfo:0000052',
+      );
+      expect(seoul.timetableCampus, 'seoul');
+      for (final profile in [glocal, seoul]) {
+        expect(
+          profile.timetableSupported,
+          UniversitySupportPolicy.timetableAvailable('konkuk'),
+        );
+      }
     }
     const legacy = AcademicProfile(
       universityId: 'academyinfo:0000053',
       universityName: '건국대학교 GLOCAL',
       schoolKind: 'fourYear',
     );
-    expect(legacy.timetableSupported, false);
+    expect(legacy.timetableUniversity, 'konkuk');
+    expect(legacy.timetableCampus, 'glocal');
   });
   test(
     'Five current source providers keep own institution and campus guards',
     () {
       const groups = {
-        'konkuk': ['0000052'],
+        'konkuk': ['0000052', '0000053'],
         'unist': ['0000250'],
         'hoseo': ['0000211'],
         'chosun': ['0000172'],
@@ -82,7 +95,7 @@ void main() {
               'hanyang' => raw == '0000204' ? 'erica' : 'seoul',
               'sookmyung' => 'first',
               'mju' => raw == '0000111' ? 'natural' : 'humanities',
-              'konkuk' ||
+              'konkuk' => raw == '0000053' ? 'glocal' : 'seoul',
               'unist' ||
               'hoseo' ||
               'chosun' ||
