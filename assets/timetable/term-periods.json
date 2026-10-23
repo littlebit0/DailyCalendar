@@ -350,6 +350,26 @@
           }
         }
       ]
+    },
+    {
+      "university": "inje",
+      "sourceUrl": "https://www.inje.ac.kr/kor/setRoute/B_Page.asp?pCode=IF010010000&viewType=vy&setYear=2026",
+      "checkedAt": "2026-10-12",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceUrl": "https://www.inje.ac.kr/kor/setRoute/B_Page.asp?pCode=IF010010000&viewType=vy&setYear=2026",
+          "sourceEvidence": {
+            "start": "2026-09-01",
+            "end": "2026-12-21",
+            "sourceUrl": "https://www.inje.ac.kr/kor/setRoute/B_Page.asp?pCode=IF010010000&viewType=vy&setYear=2026",
+            "basis": "9/1 개강,12/15~21기말고사,12/22동계방학"
+          }
+        }
+      ]
     }
   ]
 }
