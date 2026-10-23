@@ -350,6 +350,19 @@
           }
         }
       ]
+    },
+    {
+      "university": "skku",
+      "sourceUrl": "https://www.skku.edu/skku/edu/bachelor/ca_de_schedule.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-18"
+        }
+      ]
     }
   ]
 }
