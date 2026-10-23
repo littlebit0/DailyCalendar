@@ -25,7 +25,7 @@ def api(path, method='GET', body=None):
                      'X-GitHub-Api-Version': '2022-11-28', 'Content-Type': 'application/json'})
         try:
             with urllib.request.urlopen(request, timeout=30) as response:
-                return json.load(response)
+                return {} if response.status == 204 else json.load(response)
         except urllib.error.HTTPError as exc:
             if method == 'GET' and exc.code in (429, 500, 502, 503, 504) and attempt < 2:
                 time.sleep(2 ** attempt)
@@ -175,7 +175,21 @@ def finish(check_id):
             records = [json.loads(line) for line in lines if line.strip()]
         success = any(r.get('type') == 'result' and not r.get('is_error', False)
                       and r.get('subtype') == 'success' for r in records)
-    receipt = {'run_url': run_url(), 'check_id': check_id, 'action_outcome': outcome,
+    ci = 'not_dispatched'
+    if success:
+        context = json.loads(Path('relay-context.json').read_text())
+        pr = api(f"pulls/{int(context['pr_number'])}")
+        if pr['state'] == 'open' and pr['head']['sha'] != context['commit']:
+            if pr['head']['repo']['full_name'] != os.environ['GITHUB_REPOSITORY']:
+                raise RuntimeError('후속 CI 대상 저장소 불일치')
+            if pr['head']['ref'] == pr['base']['ref']:
+                raise RuntimeError('후속 CI 대상이 PR 작업 브랜치가 아님')
+            # GITHUB_TOKEN으로 푸시한 커밋은 일반 push CI를 시작하지 않으므로 명시적으로 요청한다.
+            api('actions/workflows/platform-builds.yml/dispatches', 'POST', {'ref': pr['head']['ref']})
+            ci = 'dispatch_accepted_not_verified'
+        else:
+            ci = 'no_open_head_change'
+    receipt = {'ci': ci, 'run_url': run_url(), 'check_id': check_id, 'action_outcome': outcome,
                'state': 'completed' if success else 'uncertain', 'exactly_once_guaranteed': False}
     Path('relay-receipt.json').write_text(json.dumps(receipt, ensure_ascii=False, indent=2))
     api(f'check-runs/{check_id}', 'PATCH', {'status': 'completed', 'conclusion': 'success' if success else 'failure',

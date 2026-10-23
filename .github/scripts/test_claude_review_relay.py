@@ -101,14 +101,25 @@ class RelayTests(unittest.TestCase):
             self.pr = original
 
     def test_receipt_requires_action_and_claude_success(self):
+        Path('relay-context.json').write_text(json.dumps({'pr_number': 9, 'commit': 'a' * 40}))
         Path('execution.json').write_text(json.dumps([{'type': 'result', 'subtype': 'success', 'is_error': False}]))
-        with patch.dict(os.environ, {'CLAUDE_OUTCOME': 'success', 'CLAUDE_EXECUTION_FILE': 'execution.json'}), patch.object(relay, 'api'):
+        with patch.dict(os.environ, {'CLAUDE_OUTCOME': 'success', 'CLAUDE_EXECUTION_FILE': 'execution.json'}), patch.object(relay, 'api', return_value=self.pr):
             relay.finish(81)
         self.assertEqual(json.loads(Path('relay-receipt.json').read_text())['state'], 'completed')
         for outcome in ['failure', 'cancelled', 'skipped']:
             with patch.dict(os.environ, {'CLAUDE_OUTCOME': outcome}), patch.object(relay, 'api'):
                 with self.assertRaises(RuntimeError): relay.finish(81)
         self.assertEqual(json.loads(Path('relay-receipt.json').read_text())['state'], 'uncertain')
+
+    def test_changed_head_dispatches_ci_without_claiming_ci_success(self):
+        Path('execution.json').write_text(json.dumps({'type': 'result', 'subtype': 'success', 'is_error': False}))
+        Path('relay-context.json').write_text(json.dumps({'pr_number': 9, 'commit': 'b' * 40}))
+        self.pr['head']['ref'] = 'fix-branch'
+        self.pr['base'] = {'ref': 'main'}
+        with patch.dict(os.environ, {'CLAUDE_OUTCOME': 'success', 'CLAUDE_EXECUTION_FILE': 'execution.json'}), patch.object(relay, 'api', return_value=self.pr) as api:
+            relay.finish(81)
+        self.assertTrue(any(c.args[:2] == ('actions/workflows/platform-builds.yml/dispatches', 'POST') for c in api.call_args_list))
+        self.assertEqual(json.loads(Path('relay-receipt.json').read_text())['ci'], 'dispatch_accepted_not_verified')
 
     def test_auth_failure_not_retried_or_claimed_success(self):
         error = relay.urllib.error.HTTPError('url', 401, 'unauthorized', {}, None)

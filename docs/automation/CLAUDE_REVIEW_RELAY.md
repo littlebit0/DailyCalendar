@@ -10,6 +10,8 @@
 4. Actions 정책에서 워크플로 및 `anthropics/claude-code-action`, `actions/checkout`, `actions/upload-artifact` 실행을 허용해야 한다.
 5. 실제 지적사항이 있는 리뷰가 게시된 뒤 `Claude 리뷰 전달` 실행, `claude-review-relay/{리뷰 ID}` check run, `relay-receipt.json`을 확인한다. 파일 반영이나 시크릿 이름 존재만으로 전달 완료로 보지 않는다.
 
+Claude가 PR에 새 커밋을 푸시하면 기존 `platform-builds.yml`을 명시적으로 dispatch한다. `GITHUB_TOKEN`으로 푸시한 변경이 일반 push 이벤트 CI를 시작하지 않는 조건을 처리하기 위해 Actions 쓰기 권한을 사용한다. dispatch 접수와 CI 통과는 구분하며 영수증에도 통과로 쓰지 않는다.
+
 GitHub 인증에는 명시적인 `github_token` 입력을 사용한다. Claude GitHub App 설치 여부를 가정하지 않는다. 작업 토큰에는 내용·PR 수정과 check run 기록 권한이 있다. 기본 브랜치 보호 규칙도 유지해야 한다. Claude에게 자동 머지를 지시하는 코드나 단계는 없으며, 프롬프트 및 도구 제한에도 금지한다. 이는 악의적인 프롬프트에 대한 OS 수준 격리나 모든 우회 명령 차단 보장이 아니다.
 
 ## 어떤 리뷰를 전달하는가
