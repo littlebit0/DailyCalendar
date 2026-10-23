@@ -918,7 +918,7 @@ class _CourseDetailsState extends State<_CourseDetails>
   bool _addFailed = false;
 
   Future<void> _add(UniversityCourse course) async {
-    if (_adding || widget.added || !course.hasSchedulableMeetings) return;
+    if (_adding || widget.added || !course.canAddToTimetable) return;
     final mode = _selectedMode;
     if (mode == null) {
       setState(() => _modeRequired = true);
@@ -1006,13 +1006,21 @@ class _CourseDetailsState extends State<_CourseDetails>
             Text(context.tr('강의실'), style: theme.textTheme.labelSmall),
             Text(course.sourceClassroom, style: theme.textTheme.bodySmall),
           ],
-          if (!course.hasSchedulableMeetings) ...[
+          if (!course.canAddToTimetable) ...[
             const SizedBox(height: 10),
             Text(
               context.tr(
                 '시간표에 배치할 수 있는 시간 정보가 없습니다. 학교에서 시간을 확인한 뒤 직접 추가해 주세요.',
               ),
               key: ValueKey('course-schedule-unavailable-${course.sourceId}'),
+              style: theme.textTheme.bodySmall,
+            ),
+          ],
+          if (course.canAddToTimetable && !course.hasSchedulableMeetings) ...[
+            const SizedBox(height: 10),
+            Text(
+              context.tr('요일·시각이 없는 강좌입니다. 추가하면 시간표 아래 원격·시간 미정 강좌에 표시됩니다.'),
+              key: ValueKey('course-untimed-${course.sourceId}'),
               style: theme.textTheme.bodySmall,
             ),
           ],
@@ -1037,7 +1045,7 @@ class _CourseDetailsState extends State<_CourseDetails>
               ),
             ),
           ],
-          if (!widget.added && course.hasSchedulableMeetings) ...[
+          if (!widget.added && course.canAddToTimetable) ...[
             const SizedBox(height: 12),
             DropdownButtonFormField<LectureMode>(
               key: ValueKey('course-mode-${course.sourceId}'),
@@ -1088,8 +1096,7 @@ class _CourseDetailsState extends State<_CourseDetails>
             width: double.infinity,
             child: FilledButton.icon(
               key: ValueKey('course-add-${course.sourceId}'),
-              onPressed:
-                  _adding || widget.added || !course.hasSchedulableMeetings
+              onPressed: _adding || widget.added || !course.canAddToTimetable
                   ? null
                   : () => _add(course),
               icon: _adding
