@@ -350,6 +350,25 @@
           }
         }
       ]
+    },
+    {
+      "university": "hansung",
+      "sourceUrl": "https://www.hansung.ac.kr/hansung/6096/subview.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-19",
+          "sourceTitles": [
+            "개시일 및 개강일 8월31일",
+            "기말고사, 보강주 12월7~19일",
+            "종강 12월19일"
+          ],
+          "note": "Full academic bounds. Verified ordinary courses separately end Dec6 before the explicit combined final/makeup window. No unspecified exam or makeup clock is repeated."
+        }
+      ]
     }
   ]
 }
