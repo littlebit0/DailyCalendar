@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'eulji_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +26,19 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  AcademicSourceRegistration(
+    id: 'eulji',
+    institutionId: 'academyinfo:0000161',
+    // One published calendar for the Daejeon, Seongnam and Uijeongbu campuses.
+    campusIds: {
+      'academyinfo:0000161',
+      'academyinfo:0000162',
+      'academyinfo:0002911',
+    },
+    create: EuljiAcademicSource.new,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
