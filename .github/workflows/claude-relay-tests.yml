@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - '.github/scripts/claude_review_relay.py'
+      - '.github/scripts/claude_relay_probe.py'
       - '.github/scripts/test_claude_review_relay.py'
       - '.github/workflows/*review*.yml'
       - '.github/workflows/claude-relay-tests.yml'

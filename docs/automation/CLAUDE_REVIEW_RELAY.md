@@ -55,3 +55,16 @@ python3 -m unittest discover -s .github/scripts -p 'test_claude_review_relay.py'
 후속 실제 실행: 후보 커밋 `0a79eb4faf43b4af5c6ab083b24447a6e8720c4e`의 workflow_dispatch 39939320519(시도 1)는 PR #670 / 리뷰 5626757465의 정확한 대상 정보와 `PR #670에 리뷰 댓글을 작성했습니다.`를 Claude 구조화 응답에서 대조해 `received: true`를 기록했다. 그러나 권한 거부 3건으로 후속 상태는 uncertain, check 120367087762 및 작업 결과는 failure다. Claude 세션은 `02a310d3-c1cd-4f75-978c-c024287f3f17`이다. 대상 PR에는 후속 커밋 b3d4988e05906e88ba6c485ebeab329b6ceb7fcc와 답글 issuecomment-6362883393이 생겼다. 이것은 수정 내용의 정확성이나 전체 CI 통과를 확인한 결과가 아니다.
 
 수신 영수증이 있는 리뷰는 후속 작업이 실패했어도 재전달하지 않는다. 후속 작업 문제는 이미 받은 알림의 중복 전송으로 해결하지 않는다. 수신 자체가 확인되지 않은 실패·중단·기존 형식의 성공 기록만 명시적 재시도 대상으로 남는다. 후속 단계에서 권한 거부가 있으면 전체 실행을 완료로 기록하지 않는다. 다음 실행부터 시크릿이나 원문 인수 대신 거부 도구명·알려진 실행 프로그램명·인수 키·인수 해시만 영수증에 남긴다. 이번 실행은 이전 후보 코드여서 거부된 도구의 상세는 보존되지 않았으며 그 3건의 구체적 원인은 미확인이다.
+
+
+## 남은 수용 검증 — 2026-10-23
+
+실행 39941070919 / 시도 1 / workflow_dispatch / 후보 9d6d2533의 읽기 진단은 success였다. Claude 세션 ff732c62-8ce1-4f3c-8edc-44ca65745116, received=true, permission_denials_count=0, state=completed. PR #670의 실제 게시 리뷰 5626757465와 원래 커밋 841ff63deb4e31498bb13002bdb6607727d0fcfa를 사용했다.
+
+실행 39941381611 / 시도 1 / workflow_dispatch / 후보 98dfc3bb의 격리된 수정·검증 재현도 success였다. Claude 세션 bdcfd981-5fef-4494-820d-90266b981988, received=true, permission_denials_count=0, state=completed. GitHub 토큰은 contents:read, pull-requests:read이고 실제 PR에 커밋·푸시·댓글·머지를 요청하지 않는다. runner만 원래 리뷰 커밋으로 detached checkout한다. 진단 실행기와 원래 대상 문맥은 checkout 전에 RUNNER_TEMP에 보존한다. 재현은 새 리뷰 게시 이벤트나 실제 PR 수정 완료 검증을 대체하지 않는다.
+
+두 진단 모두 실제 기존 리뷰를 사용했으며 시험용 거짓 리뷰를 게시하지 않았다. 기존 39939320519 실행의 raw 실행 파일은 runner 임시 경로에만 남고 업로드되지 않았다. 현재 남은 artifact는 context/receipt뿐이며 기본 Action 로그는 도구 거부 횟수만 출력한다. 따라서 과거 3건의 개별 명령·인과관계는 복원할 수 없으며, 새 재현에서 거부가 없었다는 사실을 그 원인의 확정으로 표현하지 않는다.
+
+diagnostic_only=true는 scan/deliver를 생략하며 전달 원장을 생성하거나 수정하지 않는다. probe_pr/probe_review에는 실제 게시된 대상만 받는다. diagnostic_replay=false는 조회 진단, true는 runner 안에서만 원래 리뷰의 수정·검증 재현이다. 두 모드 모두 원격 쓰기 권한이 없다. 공개 로그를 전부 노출하는 show_full_output는 사용하지 않는다.
+
+21개 로컬 테스트와 후보 98dfc3bb의 Actions 전달 로직 검증 39941388269가 통과했다. 최신 기본 브랜치의 실제 리뷰 이벤트까지 검증하려면 사용자 검토·머지가 필요하다. 자동 머지는 하지 않는다.
