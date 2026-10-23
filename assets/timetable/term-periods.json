@@ -350,6 +350,24 @@
           }
         }
       ]
+    },
+    {
+      "university": "kookmin",
+      "sourceUrl": "https://www.kookmin.ac.kr/user/scGuid/scSchedule/index.do",
+      "checkedAt": "2026-10-07",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14",
+          "sourceTitles": [
+            "2학기개강",
+            "수업15주차기말시험"
+          ],
+          "note": "Dec15-Dec21 is conditional makeup/finals; not automatically repeated ordinary lectures."
+        }
+      ]
     }
   ]
 }
