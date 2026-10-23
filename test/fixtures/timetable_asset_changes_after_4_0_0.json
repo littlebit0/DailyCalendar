@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/jnu.json": {
+    "sha256": "4b99020de83151b7e7e1057a38242e7d0fbccd10277972da2289c89e50af75fe",
+    "reason": "#638 전남대 원자료 분류 2개 배정: 공식 시간표의 '전체(공통)'을 독립 개설 단위로 등록, 공식 통계연보 조직도 기준 '자율전공학부(4년)'을 대학 직할 자율전공학부로 배정"
   }
 }
