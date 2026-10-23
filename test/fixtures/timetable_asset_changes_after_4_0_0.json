@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/sch.json": {
+    "sha256": "ff6f58032bdedbe8f85446d7ab6ba96b3e4ca8ffcdc3b453262da781a1dd503c",
+    "reason": "#623 순천향대 소속 없던 전공 4개와 원자료 개설 라벨 2개를 공식 공개 수업시간표의 대학·학과 코드 목록(UP_DEPT_CD)과 강좌 행 OPEN_UNIV_CD 기준 국제대학·창의라이프대학·SCH미디어랩스에 배정"
   }
 }

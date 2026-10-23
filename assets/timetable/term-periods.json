@@ -350,6 +350,20 @@
           }
         }
       ]
+    },
+    {
+      "university": "sch",
+      "sourceUrl": "https://home.sch.ac.kr/sch/05/010000.jsp?board_no=20110224223754285127&defparam-year_month=2026-10",
+      "checkedAt": "2026-10-08",
+      "boundaryScope": "Opening through published makeup week; individual ordinary course dates stop before finals and exclude midterms. Unknown exams/makeups are not generated.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-18"
+        }
+      ]
     }
   ]
 }
