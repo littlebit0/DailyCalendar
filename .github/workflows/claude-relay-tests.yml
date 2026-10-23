@@ -1,0 +1,19 @@
+name: Claude 전달 로직 검증
+on:
+  pull_request:
+    paths:
+      - '.github/scripts/claude_review_relay.py'
+      - '.github/scripts/test_claude_review_relay.py'
+      - '.github/workflows/*review*.yml'
+      - '.github/workflows/claude-relay-tests.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s .github/scripts -p 'test_claude_review_relay.py' -v

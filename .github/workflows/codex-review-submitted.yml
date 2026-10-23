@@ -1,0 +1,11 @@
+name: Codex 리뷰 이벤트 수집
+on:
+  pull_request_review:
+    types: [submitted]
+permissions: {}
+jobs:
+  signal:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 게시 이벤트 수신
+        run: echo '리뷰 게시 이벤트 수신. 기본 브랜치의 전달 워크플로에서 GitHub 원문을 재확인합니다.'
