@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/ulsan-main-2026-2.json": {
+    "sha256": "52fc4d4541f3ae7fb7aede1bb254f5da1141bc25896ea4410cd935384440b7c1",
+    "reason": "#629 울산대 아너스 공지 23개 강좌를 공식 강의시간및수업계획서조회(uwins MCB07S 공개 화면) 2026-2 학부 전체 2046개 강좌로 교체"
+  },
+  "assets/timetable/organizations/ulsan.json": {
+    "sha256": "75a20f88f79d03432b6684fcb44e85e6aa5e4b8516672ddba7eb84046f6f544a",
+    "reason": "#629 울산대 공식 강의시간및수업계획서조회 대학·학부·소속 목록 기준 180개 소속과 대학(공통)·미래라이프융합시민대학 개설 단위 배정"
   }
 }
