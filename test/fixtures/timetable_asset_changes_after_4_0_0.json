@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/sogang-unknown-2026-2.json": {
+    "sha256": "5efef0cbd4290255498ba69e3843a80dd309d3c58b1b7b8c3f95de08d2f441b5",
+    "reason": "#604 서강대 2026-10-23 공식 개설교과목 조회 재대조(시험일자·교수·학과·강의실 변경 반영, 시험일자가 빠진 시험만 강좌 4개는 미확정으로 되돌림)와 공개 강의계획서가 대면 운영·수업 시각을 직접 적은 23강좌의 정규 주간 예약 추가"
   }
 }

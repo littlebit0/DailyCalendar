@@ -18,9 +18,9 @@ void main() {
       );
       expect(
         data.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1307),
+        hasLength(1309),
       );
-      expect(data.courses.expand((c) => c.meetings), hasLength(20598));
+      expect(data.courses.expand((c) => c.meetings), hasLength(21141));
       final c = data.courses.singleWhere(
         (c) => c.codeAndSection == 'GIS1007-01',
       );

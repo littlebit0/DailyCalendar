@@ -69,7 +69,7 @@ void main() {
     expect(dataset.courses.where((c) => c.credits == null), hasLength(105));
     expect(
       dataset.courses.where((c) => c.hasSchedulableMeetings),
-      hasLength(1307),
+      hasLength(1309),
     );
     for (final id in ['MGT4303-01', 'MGT4306-01']) {
       final course = dataset.courses.singleWhere((c) => c.codeAndSection == id);

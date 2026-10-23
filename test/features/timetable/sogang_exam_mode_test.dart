@@ -18,9 +18,9 @@ void main() {
       );
       expect(
         data.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1307),
+        hasLength(1309),
       );
-      expect(data.courses.expand((c) => c.meetings), hasLength(20598));
+      expect(data.courses.expand((c) => c.meetings), hasLength(21141));
       final c = data.courses.singleWhere(
         (c) => c.codeAndSection == 'AIE4011-01',
       );
@@ -39,7 +39,8 @@ void main() {
           expect(m.teachingDate!.weekday, m.weekday);
           expect(m.originalStartMinute, 810);
           expect(m.originalEndMinute, 885);
-          expect(m.classroom, 'AS510');
+          // 2026-10-23 공식 조회에서 10/22 시험 강의실이 K401로 바뀌었다.
+          expect(m.classroom, m.date == '2026-10-22' ? 'K401' : 'AS510');
           expect(
             restored.modeOn(m, m.teachingDate!),
             m.date == '2026-10-22' ? LectureMode.inPerson : mode,

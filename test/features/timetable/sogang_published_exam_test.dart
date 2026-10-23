@@ -20,9 +20,9 @@ void main() {
       expect(data.courses, hasLength(1541));
       expect(
         data.courses.where((c) => c.hasSchedulableMeetings),
-        hasLength(1307),
+        hasLength(1309),
       );
-      expect(data.courses.expand((c) => c.meetings), hasLength(20598));
+      expect(data.courses.expand((c) => c.meetings), hasLength(21141));
       for (final id in ['GME4007-01', 'GME3001-01', 'EDU3033-01']) {
         final course = data.courses.singleWhere((c) => c.codeAndSection == id);
         final saved = course.toTimetable(
@@ -46,7 +46,8 @@ void main() {
           (m) => m.date == (id == 'GME3001-01' ? '2026-10-21' : '2026-10-26'),
         );
         expect(exam.originalStartMinute, 810);
-        expect(exam.originalEndMinute, 885);
+        // EDU3033-01 시험은 2026-10-23 공식 조회에서 13:30~15:00으로 바뀌었다.
+        expect(exam.originalEndMinute, id == 'EDU3033-01' ? 900 : 885);
         expect(
           exam.classroom,
           id == 'GME3001-01'
