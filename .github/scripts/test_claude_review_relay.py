@@ -84,7 +84,7 @@ class RelayTests(unittest.TestCase):
 
     def test_claim_dynamic_number_safe_context_and_single_reservation(self):
         self.comment['body'] += '\n$(touch bad); ${{ secrets.X }}'
-        with patch.object(relay, 'api', side_effect=self.api) as api, patch.object(relay, 'pages', side_effect=[[self.comment], []]):
+        with patch.object(relay, 'api', side_effect=self.api) as api, patch.object(relay, 'pages', side_effect=[[self.comment], [], [self.review]]):
             relay.claim(9, 41)
         self.assertEqual(sum(c.args[0] == 'check-runs' for c in api.call_args_list), 1)
         context = json.loads(Path('relay-context.json').read_text())
@@ -99,7 +99,7 @@ class RelayTests(unittest.TestCase):
             if change == 'closed': self.pr['state'] = 'closed'
             if change == 'fork': self.pr['head']['repo']['full_name'] = 'outside/repo'
             check = {'id': 1, 'name': relay.CHECK_PREFIX + '41', 'app': {'slug': 'github-actions'}, 'conclusion': 'success'}
-            with patch.object(relay, 'api', side_effect=self.api) as api, patch.object(relay, 'pages', side_effect=[[self.comment], [check]]):
+            with patch.object(relay, 'api', side_effect=self.api) as api, patch.object(relay, 'pages', side_effect=[[self.comment], [check], [self.review]]):
                 relay.claim(9, 41)
             self.assertFalse(any(c.args[0] == 'check-runs' for c in api.call_args_list))
             self.pr = original
@@ -163,6 +163,14 @@ class RelayTests(unittest.TestCase):
         self.assertFalse(relay.retry_allowed({'conclusion': 'success'}, 41))
         with patch.dict(os.environ, {'RETRY_REVIEW_ID': '41', 'ACKNOWLEDGE_UNCERTAIN': 'true'}):
             self.assertTrue(relay.retry_allowed({'conclusion': 'success'}, 41))
+
+    def test_claim_rechecks_uncertain_previous_head_after_queue(self):
+        previous = {**self.review, 'id': 40, 'commit_id': 'b' * 40}
+        check = {'id': 1, 'name': relay.CHECK_PREFIX + '40', 'app': {'slug': 'github-actions'}, 'status': 'in_progress'}
+        with patch.object(relay, 'api', side_effect=self.api) as api, patch.object(relay, 'pages',
+                side_effect=[[self.comment], [], [previous, self.review], [check]]):
+            relay.claim(9, 41)
+        self.assertFalse(any(c.args[0] == 'check-runs' for c in api.call_args_list))
 
 
 if __name__ == '__main__': unittest.main()

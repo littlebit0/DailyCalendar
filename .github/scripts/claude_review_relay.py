@@ -159,6 +159,15 @@ def claim(pr_number, review_id):
         output('execute', False)
         return
     checks = pages(f"commits/{pr['head']['sha']}/check-runs?filter=all", 'check_runs')
+    # Recheck after entering the PR concurrency group; scan may predate another attempt.
+    previous_reviews = pages(f'pulls/{pr_number}/reviews')
+    for commit in sorted({r['commit_id'] for r in previous_reviews if r.get('commit_id')} - {pr['head']['sha']}):
+        checks.extend(pages(f'commits/{commit}/check-runs?filter=all', 'check_runs'))
+    for previous_id in {r['id'] for r in previous_reviews}:
+        previous = latest_check(checks, previous_id)
+        if previous and not verified_receipt(previous) and not retry_allowed(previous, previous_id):
+            output('execute', False)
+            return
     if not retry_allowed(latest_check(checks, review_id), review_id):
         output('execute', False)
         return
