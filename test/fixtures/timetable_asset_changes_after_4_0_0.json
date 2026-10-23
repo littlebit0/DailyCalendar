@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/jbnu.json": {
+    "sha256": "db57cfc1ee251ef9b62f21870331d7f150b168f2c838a9b8323d950afba91532",
+    "reason": "#640 전북대 '경제학' 개설 라벨(UECO 과목)을 공식 단과대학 학사조직표·2026-2 최종수강편람 기준 경상대학 경제학부(경제학)로 바로잡음(이전 농업생명과학대학 배정은 문자열 부분일치 오류)"
   }
 }
