@@ -977,6 +977,342 @@
       "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
       "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
       "affiliationEvidence": "국민대학교 공식 수강신청 개설강좌 조회의 공개 대학 목록(collegeList)에 '학과미배정'(deptCd 29998)이 교양대학·연계전공·학점교환생과 같은 최상위(upperDeptCd 20000) 개설 단위로 게시됨. 특정 단과대 아래로 옮기지 않음."
+    },
+    {
+      "college": "일반대학원",
+      "department": "금속공예학과",
+      "sourceLabel": "일반대학원 금속공예학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30041 '금속공예학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "음악학과",
+      "sourceLabel": "일반대학원 음악학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30046 '음악학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "미술학과",
+      "sourceLabel": "일반대학원 미술학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30047 '미술학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "체육학과",
+      "sourceLabel": "일반대학원 체육학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30042 '체육학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "커뮤니케이션디자인학과",
+      "sourceLabel": "일반대학원 커뮤니케이션디자인학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30514 '커뮤니케이션디자인학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "전자공학과",
+      "sourceLabel": "일반대학원 전자공학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30032 '전자공학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "국어국문학과",
+      "sourceLabel": "일반대학원 국어국문학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30003 '국어국문학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "공연영상학과",
+      "sourceLabel": "일반대학원 공연영상학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 31102 '공연영상학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "영상ㆍ콘텐츠디자인학과",
+      "sourceLabel": "일반대학원 영상ㆍ콘텐츠디자인학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36234 '영상ㆍ콘텐츠디자인학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "사이버보안학과",
+      "sourceLabel": "일반대학원 사이버보안학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36390 '사이버보안학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "패션학과",
+      "sourceLabel": "일반대학원 패션학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36255 '패션학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "영어영문학과",
+      "sourceLabel": "일반대학원 영어영문학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30004 '영어영문학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "법학과",
+      "sourceLabel": "일반대학원 법학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30012 '법학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "국제통상학과",
+      "sourceLabel": "일반대학원 국제통상학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30015 '국제통상학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "물리학과",
+      "sourceLabel": "일반대학원 물리학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30020 '물리학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "모빌리티디자인학과",
+      "sourceLabel": "일반대학원 모빌리티디자인학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36278 '모빌리티디자인학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "테크노디자인전문대학원",
+      "department": "융합디자인학과",
+      "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36378 '융합디자인학과'의 상위 단위(univCd 30073)가 '테크노디자인전문대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "산림자원학과",
+      "sourceLabel": "일반대학원 산림자원학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30025 '산림자원학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "임산생명공학과",
+      "sourceLabel": "일반대학원 임산생명공학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36204 '임산생명공학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "테크노디자인전문대학원",
+      "department": "공간ㆍ문화디자인학과",
+      "sourceLabel": "테크노디자인전문대학원 공간ㆍ문화디자인학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36320 '공간ㆍ문화디자인학과'의 상위 단위(univCd 30073)가 '테크노디자인전문대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "자동차모빌리티대학원",
+      "department": null,
+      "sourceLabel": "자동차모빌리티대학원",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": true,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36373 '자동차모빌리티대학원'의 상위 단위(univCd 36373)가 '자동차모빌리티대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "도예학과",
+      "sourceLabel": "일반대학원 도예학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 30040 '도예학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "일반대학원",
+      "department": "기후기술융합학과",
+      "sourceLabel": "일반대학원 기후기술융합학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36336 '기후기술융합학과'의 상위 단위(univCd 30001)가 '일반대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
+    },
+    {
+      "college": "AIㆍSW대학원",
+      "department": "AIㆍSW학과",
+      "sourceLabel": "AIㆍSW대학원 AIㆍSW학과",
+      "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+      "evidence": "Official public departmentList univCd identifies exact college ancestry; not query provenance.",
+      "sourceFile": "work/university-research/catalog-c/kookmin-commoncodes.json",
+      "isOfferingUnit": false,
+      "campus": "main",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://sugang.kookmin.ac.kr/api/subject/public/commoncodes/all",
+      "affiliationSourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+      "affiliationEvidence": "국민대학교 공식 수강신청 공개 대학·학과 목록(commoncodes)에서 deptCd 36435 'AIㆍSW학과'의 상위 단위(univCd 36433)가 'AIㆍSW대학원'. 공식 개설강좌 조회의 유형 'GraduateLinked'(학석사연계교과목) 강좌."
     }
   ],
   "courseOwners": [
@@ -41005,6 +41341,720 @@
           "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
           "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence; query college ignored.",
           "sourceFile": "work/university-research/catalog-c/kookmin-current-college-scope.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/628160a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "금속공예학과",
+          "sourceLabel": "일반대학원 금속공예학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/636010a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "음악학과",
+          "sourceLabel": "일반대학원 음악학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/640210a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "미술학과",
+          "sourceLabel": "일반대학원 미술학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/649040a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "체육학과",
+          "sourceLabel": "일반대학원 체육학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/653150a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "커뮤니케이션디자인학과",
+          "sourceLabel": "일반대학원 커뮤니케이션디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/656080b/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "전자공학과",
+          "sourceLabel": "일반대학원 전자공학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/662650b/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "국어국문학과",
+          "sourceLabel": "일반대학원 국어국문학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/663420a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "공연영상학과",
+          "sourceLabel": "일반대학원 공연영상학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/665190a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "음악학과",
+          "sourceLabel": "일반대학원 음악학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/667640b/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "미술학과",
+          "sourceLabel": "일반대학원 미술학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/673230a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "영상ㆍ콘텐츠디자인학과",
+          "sourceLabel": "일반대학원 영상ㆍ콘텐츠디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/675840a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "사이버보안학과",
+          "sourceLabel": "일반대학원 사이버보안학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/675920a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "사이버보안학과",
+          "sourceLabel": "일반대학원 사이버보안학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/678580b/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "국어국문학과",
+          "sourceLabel": "일반대학원 국어국문학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/678920a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "음악학과",
+          "sourceLabel": "일반대학원 음악학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/685600b/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "음악학과",
+          "sourceLabel": "일반대학원 음악학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/692860a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "패션학과",
+          "sourceLabel": "일반대학원 패션학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/6m2d41a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "영어영문학과",
+          "sourceLabel": "일반대학원 영어영문학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/6m9891a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "법학과",
+          "sourceLabel": "일반대학원 법학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/6m9c71a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "법학과",
+          "sourceLabel": "일반대학원 법학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/6m9h01a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "법학과",
+          "sourceLabel": "일반대학원 법학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/6mc151a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "국제통상학과",
+          "sourceLabel": "일반대학원 국제통상학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/6md121b/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "미술학과",
+          "sourceLabel": "일반대학원 미술학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/6ms011a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "물리학과",
+          "sourceLabel": "일반대학원 물리학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/701380a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "모빌리티디자인학과",
+          "sourceLabel": "일반대학원 모빌리티디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/704700a/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/704930a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "법학과",
+          "sourceLabel": "일반대학원 법학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/705040a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "산림자원학과",
+          "sourceLabel": "일반대학원 산림자원학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7151101/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "임산생명공학과",
+          "sourceLabel": "일반대학원 임산생명공학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/718160a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "전자공학과",
+          "sourceLabel": "일반대학원 전자공학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/718300a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "전자공학과",
+          "sourceLabel": "일반대학원 전자공학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7192201/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "공간ㆍ문화디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 공간ㆍ문화디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7244401/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7244501/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/725580b/01",
+      "units": [
+        {
+          "college": "자동차모빌리티대학원",
+          "department": null,
+          "sourceLabel": "자동차모빌리티대학원",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/725690a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "도예학과",
+          "sourceLabel": "일반대학원 도예학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/725700a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "도예학과",
+          "sourceLabel": "일반대학원 도예학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/726710a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "임산생명공학과",
+          "sourceLabel": "일반대학원 임산생명공학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/726850a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "산림자원학과",
+          "sourceLabel": "일반대학원 산림자원학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/726960a/01",
+      "units": [
+        {
+          "college": "일반대학원",
+          "department": "기후기술융합학과",
+          "sourceLabel": "일반대학원 기후기술융합학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7288901/01",
+      "units": [
+        {
+          "college": "AIㆍSW대학원",
+          "department": "AIㆍSW학과",
+          "sourceLabel": "AIㆍSW대학원 AIㆍSW학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7292401/01",
+      "units": [
+        {
+          "college": "AIㆍSW대학원",
+          "department": "AIㆍSW학과",
+          "sourceLabel": "AIㆍSW대학원 AIㆍSW학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7294201/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "공간ㆍ문화디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 공간ㆍ문화디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7294401/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "공간ㆍ문화디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 공간ㆍ문화디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7294601/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "공간ㆍ문화디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 공간ㆍ문화디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7294801/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "공간ㆍ문화디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 공간ㆍ문화디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7297101/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7297201/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7297301/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7297401/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kookmin/main/2026/2/7297701/01",
+      "units": [
+        {
+          "college": "테크노디자인전문대학원",
+          "department": "융합디자인학과",
+          "sourceLabel": "테크노디자인전문대학원 융합디자인학과",
+          "sourceUrl": "https://sugang.kookmin.ac.kr/front/enrollment/course-catalog",
+          "evidence": "Actual assignedDepartmentCode joined to official departmentList univCd; exact subjectId/classSequence.",
+          "sourceFile": "work/issue-587-kookmin-timetable/kookmin/data/commoncodes-20261023.json",
           "isOfferingUnit": true
         }
       ]
