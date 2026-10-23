@@ -15981,8 +15981,93 @@
       "credits": 3.0,
       "sourceSchedule": "월 1 2 3 (1312)",
       "sourceClassroom": "1312",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "1312"
+        }
+      ],
       "departments": [
         "그리스‧불가리아학과"
       ],
@@ -15993,11 +16078,19 @@
         "그리스‧불가리아학과": "전공필수"
       },
       "departmentRemarks": {
-        "그리스‧불가리아학과": "공식 이수구분: 전공 · 공개 운영 일정 확인 중: 자동 시간 생성 보류"
+        "그리스‧불가리아학과": "공식 이수구분: 전공\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다."
       },
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-07"
+      },
+      "sourcePartialCoverage": true,
+      "semanticOperatingReview": {
+        "sourcePartialCoverage": true,
+        "ordinaryNativeOrLiteralDateScope": true,
+        "actualAttendanceConfirmed": false,
+        "sourceSnapshot": "2026-10-23",
+        "packet": "hufs_alt_source_20261023"
       }
     },
     {
@@ -20859,7 +20952,7 @@
       "courseCode": "S011163",
       "section": "01",
       "courseName": "국제스포츠산업론",
-      "professor": "이예훈",
+      "professor": "Eoin Joseph Trolan",
       "credits": 3.0,
       "sourceSchedule": "화 1 2 3 (2301)",
       "sourceClassroom": "2301",
@@ -20980,9 +21073,9 @@
         "마이크로전공 · 스포츠비즈니스전략기획및운영": "전공필수"
       },
       "departmentRemarks": {
-        "글로벌스포츠산업학부": "이예훈 Trolan 팀티칭 진행 · 공식 이수구분: 전공 · 원어 강의: ENG",
-        "마이크로전공 · e스포츠이벤트및비즈니스운영": "이예훈 Trolan 팀티칭 진행 · 공식 이수구분: 전공 · 원어 강의: ENG",
-        "마이크로전공 · 스포츠비즈니스전략기획및운영": "이예훈 Trolan 팀티칭 진행 · 공식 이수구분: 전공 · 원어 강의: ENG"
+        "글로벌스포츠산업학부": "Trolan 수업진행(팀티칭 해제) · 공식 이수구분: 전공 · 원어 강의: ENG",
+        "마이크로전공 · e스포츠이벤트및비즈니스운영": "Trolan 수업진행(팀티칭 해제) · 공식 이수구분: 전공 · 원어 강의: ENG",
+        "마이크로전공 · 스포츠비즈니스전략기획및운영": "Trolan 수업진행(팀티칭 해제) · 공식 이수구분: 전공 · 원어 강의: ENG"
       },
       "period": {
         "startDate": "2026-09-01",
@@ -81524,8 +81617,86 @@
       "credits": 2.0,
       "sourceSchedule": "금 5 6 (1402)",
       "sourceClassroom": "1402",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-10-16",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "1402"
+        }
+      ],
       "departments": [
         "영어통번역학부"
       ],
@@ -81536,11 +81707,19 @@
         "영어통번역학부": "전공"
       },
       "departmentRemarks": {
-        "영어통번역학부": " · 공개 운영 일정 확인 중: 자동 시간 생성 보류"
+        "영어통번역학부": "\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다."
       },
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-07"
+      },
+      "sourcePartialCoverage": true,
+      "semanticOperatingReview": {
+        "sourcePartialCoverage": true,
+        "ordinaryNativeOrLiteralDateScope": true,
+        "actualAttendanceConfirmed": false,
+        "sourceSnapshot": "2026-10-23",
+        "packet": "hufs_alt_source_20261023"
       }
     },
     {
@@ -81681,8 +81860,86 @@
       "credits": 2.0,
       "sourceSchedule": "금 7 8 (1402)",
       "sourceClassroom": "1402",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-04",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-09-11",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-09-18",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-10-02",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-10-16",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-10-30",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-06",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-13",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-20",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-11-27",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        },
+        {
+          "date": "2026-12-04",
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "1402"
+        }
+      ],
       "departments": [
         "영어통번역학부"
       ],
@@ -81693,11 +81950,19 @@
         "영어통번역학부": "전공"
       },
       "departmentRemarks": {
-        "영어통번역학부": " · 공개 운영 일정 확인 중: 자동 시간 생성 보류"
+        "영어통번역학부": "\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다."
       },
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-07"
+      },
+      "sourcePartialCoverage": true,
+      "semanticOperatingReview": {
+        "sourcePartialCoverage": true,
+        "ordinaryNativeOrLiteralDateScope": true,
+        "actualAttendanceConfirmed": false,
+        "sourceSnapshot": "2026-10-23",
+        "packet": "hufs_alt_source_20261023"
       }
     },
     {
@@ -93261,8 +93526,93 @@
       "credits": 2.0,
       "sourceSchedule": "월 1 2 (1506-1)",
       "sourceClassroom": "1506-1",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "1506-1"
+        }
+      ],
       "departments": [
         "일본어통번역학과"
       ],
@@ -93273,11 +93623,19 @@
         "일본어통번역학과": "전공"
       },
       "departmentRemarks": {
-        "일본어통번역학과": " · 공개 운영 일정 확인 중: 자동 시간 생성 보류"
+        "일본어통번역학과": "\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다."
       },
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-07"
+      },
+      "sourcePartialCoverage": true,
+      "semanticOperatingReview": {
+        "sourcePartialCoverage": true,
+        "ordinaryNativeOrLiteralDateScope": true,
+        "actualAttendanceConfirmed": false,
+        "sourceSnapshot": "2026-10-23",
+        "packet": "hufs_alt_source_20261023"
       }
     },
     {
@@ -134951,99 +135309,99 @@
       "courseName": "한국어문법교육론",
       "professor": "이수정",
       "credits": 3.0,
-      "sourceSchedule": "목 1 2 3 (1403)",
-      "sourceClassroom": "1403",
+      "sourceSchedule": "목 1 2 3 (2413)",
+      "sourceClassroom": "2413",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-09-03"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-09-10"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-09-17"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-10-01"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-10-08"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-10-15"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-10-22"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-10-29"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-11-05"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-11-12"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-11-19"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-11-26"
         },
         {
           "weekday": 4,
           "startMinute": 540,
           "endMinute": 710,
-          "classroom": "1403",
+          "classroom": "2413",
           "date": "2026-12-03"
         }
       ],
@@ -135355,99 +135713,99 @@
       "courseName": "한국어교재론",
       "professor": "유현정",
       "credits": 3.0,
-      "sourceSchedule": "목 7 8 9 (1403)",
-      "sourceClassroom": "1403",
+      "sourceSchedule": "목 7 8 9 (2303-3)",
+      "sourceClassroom": "2303-3",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-09-03"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-09-10"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-09-17"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-10-01"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-10-08"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-10-15"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-10-22"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-10-29"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-11-05"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-11-12"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-11-19"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-11-26"
         },
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 1070,
-          "classroom": "1403",
+          "classroom": "2303-3",
           "date": "2026-12-03"
         }
       ],
@@ -135851,99 +136209,99 @@
       "courseName": "한국어교육실습",
       "professor": "이수정",
       "credits": 3.0,
-      "sourceSchedule": "목 4 5 6 (1403)",
-      "sourceClassroom": "1403",
+      "sourceSchedule": "목 4 5 6 (2302)",
+      "sourceClassroom": "2302",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-09-03"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-09-10"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-09-17"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-10-01"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-10-08"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-10-15"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-10-22"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-10-29"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-11-05"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-11-12"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-11-19"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-11-26"
         },
         {
           "weekday": 4,
           "startMinute": 720,
           "endMinute": 890,
-          "classroom": "1403",
+          "classroom": "2302",
           "date": "2026-12-03"
         }
       ],
@@ -166671,8 +167029,93 @@
       "credits": 2.0,
       "sourceSchedule": "목 5 6 (2408)",
       "sourceClassroom": "2408",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-10-01",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-11-05",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-11-19",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-11-26",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2408"
+        }
+      ],
       "departments": [
         "교양 · 전체",
         "교양 · 역사와철학"
@@ -166686,12 +167129,20 @@
         "교양 · 역사와철학": "교양"
       },
       "departmentRemarks": {
-        "교양 · 전체": "공식 이수구분: 역사와철학 · 공개 운영 일정 확인 중: 자동 시간 생성 보류 · 학교 교양 세부 영역: 역사와철학",
-        "교양 · 역사와철학": "공식 이수구분: 역사와철학 · 공개 운영 일정 확인 중: 자동 시간 생성 보류 · 학교 교양 세부 영역: 역사와철학"
+        "교양 · 전체": "공식 이수구분: 역사와철학 · 학교 교양 세부 영역: 역사와철학\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다.",
+        "교양 · 역사와철학": "공식 이수구분: 역사와철학 · 학교 교양 세부 영역: 역사와철학\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다."
       },
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-07"
+      },
+      "sourcePartialCoverage": true,
+      "semanticOperatingReview": {
+        "sourcePartialCoverage": true,
+        "ordinaryNativeOrLiteralDateScope": true,
+        "actualAttendanceConfirmed": false,
+        "sourceSnapshot": "2026-10-23",
+        "packet": "hufs_alt_source_20261023"
       }
     },
     {
@@ -185118,8 +185569,65 @@
       "credits": 2.0,
       "sourceSchedule": "월 1 2 (2416)",
       "sourceClassroom": "2416",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "2416"
+        }
+      ],
       "departments": [
         "교양 · 전체",
         "교양 · 취창업"
@@ -185133,12 +185641,20 @@
         "교양 · 취창업": "교양"
       },
       "departmentRemarks": {
-        "교양 · 전체": "3학년대상 · 공식 이수구분: 취창업 · 공개 운영 일정 확인 중: 자동 시간 생성 보류 · 학교 교양 세부 영역: 취창업",
-        "교양 · 취창업": "3학년대상 · 공식 이수구분: 취창업 · 공개 운영 일정 확인 중: 자동 시간 생성 보류 · 학교 교양 세부 영역: 취창업"
+        "교양 · 전체": "3학년대상 · 공식 이수구분: 취창업 · 학교 교양 세부 영역: 취창업\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다.",
+        "교양 · 취창업": "3학년대상 · 공식 이수구분: 취창업 · 학교 교양 세부 영역: 취창업\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다."
       },
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-07"
+      },
+      "sourcePartialCoverage": true,
+      "semanticOperatingReview": {
+        "sourcePartialCoverage": true,
+        "ordinaryNativeOrLiteralDateScope": true,
+        "actualAttendanceConfirmed": false,
+        "sourceSnapshot": "2026-10-23",
+        "packet": "hufs_alt_source_20261023"
       }
     },
     {
@@ -185412,8 +185928,65 @@
       "credits": 2.0,
       "sourceSchedule": "월 5 6 (2416)",
       "sourceClassroom": "2416",
-      "scheduleStatus": "unrecognized",
-      "schedules": [],
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "2416"
+        }
+      ],
       "departments": [
         "교양 · 전체",
         "교양 · 취창업"
@@ -185427,12 +186000,20 @@
         "교양 · 취창업": "교양"
       },
       "departmentRemarks": {
-        "교양 · 전체": "4학년대상 · 공식 이수구분: 취창업 · 공개 운영 일정 확인 중: 자동 시간 생성 보류 · 학교 교양 세부 영역: 취창업",
-        "교양 · 취창업": "4학년대상 · 공식 이수구분: 취창업 · 공개 운영 일정 확인 중: 자동 시간 생성 보류 · 학교 교양 세부 영역: 취창업"
+        "교양 · 전체": "4학년대상 · 공식 이수구분: 취창업 · 학교 교양 세부 영역: 취창업\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다.",
+        "교양 · 취창업": "4학년대상 · 공식 이수구분: 취창업 · 학교 교양 세부 영역: 취창업\n현재 2026-2 학교 자체 정규 교시·캠퍼스·개설 강좌 원문과 공개 운영 필드를 대조한 부분만 예약합니다. 학교 원문 날짜가 있으면 그 날짜를 우선하며, 휴일·평가·보강·원격·개별 배정·운영 미확정 부분은 별도 원문 큐에 보존합니다. 강의계획 미게시 자체만으로 공개 정규 개설 시각을 삭제하지 않으며, 실제 출석 및 대학 전체 최신 변경 확인 완료를 뜻하지 않습니다."
       },
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-07"
+      },
+      "sourcePartialCoverage": true,
+      "semanticOperatingReview": {
+        "sourcePartialCoverage": true,
+        "ordinaryNativeOrLiteralDateScope": true,
+        "actualAttendanceConfirmed": false,
+        "sourceSnapshot": "2026-10-23",
+        "packet": "hufs_alt_source_20261023"
       }
     },
     {
@@ -202191,15 +202772,15 @@
       "courseName": "확률과통계",
       "professor": "이정훈",
       "credits": 3.0,
-      "sourceSchedule": "월 6 (5207) 수 4 5 (5212)",
-      "sourceClassroom": "5207 / 5212",
+      "sourceSchedule": "월 6 수 4 5 (5207)",
+      "sourceClassroom": "5207",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-09-02"
         },
         {
@@ -202213,7 +202794,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-09-09"
         },
         {
@@ -202227,7 +202808,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-09-16"
         },
         {
@@ -202241,7 +202822,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-09-23"
         },
         {
@@ -202255,14 +202836,14 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-09-30"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-10-07"
         },
         {
@@ -202276,7 +202857,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-10-14"
         },
         {
@@ -202290,7 +202871,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-10-21"
         },
         {
@@ -202304,7 +202885,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-10-28"
         },
         {
@@ -202318,7 +202899,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-11-04"
         },
         {
@@ -202332,7 +202913,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-11-11"
         },
         {
@@ -202346,7 +202927,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-11-18"
         },
         {
@@ -202360,7 +202941,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-11-25"
         },
         {
@@ -202374,7 +202955,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 830,
-          "classroom": "5212",
+          "classroom": "5207",
           "date": "2026-12-02"
         },
         {

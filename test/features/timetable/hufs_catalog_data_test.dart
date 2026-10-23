@@ -30,10 +30,10 @@ void main() {
         {'seoul': 1823, 'global': 1549},
       );
       final courses = data.expand((d) => d.courses).toList();
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3133));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(3147));
       expect(
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
-        hasLength(235),
+        hasLength(221),
       );
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
