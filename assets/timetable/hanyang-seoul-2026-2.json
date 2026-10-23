@@ -80417,11 +80417,11 @@
         "건설환경공학과": "전공핵심"
       },
       "departmentRemarks": {
-        "건설환경공학과": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 자체 학부 2026-2 개강9월1일·종강12월21일 범위의 원문 주간 요일·실제시각·실만 예약 틀로 변환했습니다. 개별 출석·중간/기말시험·보강·휴강·운영 전환 날짜는 미확인입니다. 자체 달력에는 시험기간이 없으므로 임의 시험주·종료일을 생성하거나 추정하여 잘라내지 않았습니다. 12월22일은 보강가능일이며 실제 개별 보강일로 생성하지 않았습니다. 현재 공개 계획의 법정공휴일 제외/15주미만 보강 안내를 확인했지만 모든 강좌의 휴일운영이 확정된 것은 아닙니다. 추석9월24~26일·개천절10월3일·대체공휴일10월5일·한글날10월9일은 국가 월력요항 날짜에 따라 보수적으로 예약 보류하며 개별 실제 휴강은 미확인입니다. 실습/집중/혼합/원격 배정·clock-room 불일치·의학과 별도 운영기간이 미확인인 강좌는 날짜를 보류했습니다. 원문 토·일 정규 시각은 그 이유만으로 제외하지 않았습니다. 수업번호/학수번호/분반00과 학과별 이수구분·학점·학생 제한·원문 운영 flag를 모두 보존합니다. 실제 서울/ERICA 기관·강의실 scope를 유지하며 사용자 강의방식3종 선택을 원문 원격·혼합 정보로 덮어쓰지 않습니다. 현재 전체 변경·누적 폐강은 미확인입니다. 현재 공개 전체검색 NetFunnel과 공식 호스트403 경계에서 중단했으며 재조회·로그인·보안 우회하지 않았습니다. 원문 수업번호:10351 / 학수번호:CIE3007 / 강좌 분반:00 / 원문 강의시각:목(16:00-17:30),목(17:30-19:00) / 원문 강의실:서울 재성토목관 201강의실,서울 재성토목관 201강의실 / 수강 제한 원문:{\"suupYear\":\"2026\",\"suupTerm\":\"20\",\"suupNo\":\"10351\",\"isujehanSosokNm\":\"건설환경공학과\",\"isujehanJeongongGb\":\"02\",\"isujehanJeongongNm\":\"주전공+다중전공\",\"grade1\":\"제한\",\"grade2\":\"제한\",\"grade3\":\"허용\",\"grade4\":\"허용\",\"grade5\":\"허용\",\"bigo\":null,\"preTermApplyYn\":\"Y\",\"aftTermApplyYn\":\"Y\"} / 학과별 원문 교육조건: {\"suupYear\":\"2026\",\"suupNo\":\"10351\",\"suupTerm\":\"20\",\"bunbanNo\":\"00\",\"banSosokNm\":\"건설환경공학과\",\"banGrade\":\"3\",\"banNo\":\"1\",\"haksuNo\":\"CIE3007\",\"gwamokNm\":\"수문학\",\"gwamokEnm\":\"Hydrology\",\"isuGrade\":\"3\",\"isuTerm\":\"20\",\"isuTermNm\":\"2학기\",\"isuGbCd\":\"721\",\"isuGbNm\":\"전공핵심\",\"yungyukNm\":\"영역없음\",\"ilbanCommonNm\":\"일반\",\"hakjeom\":3,\"ironSigan\":3,\"silsSigan\":0,\"hakGangSil\":\"3-3-0\",\"hakwiGb\":\"1\",\"hakwiNm\":\"학사\",\"jojikGbNm\":\"서울 대학\",\"campusCd\":\"H\",\"campusNm\":\"서울\",\"slgSosokNm\":\"건설환경공학과\",\"gnjSosokNm\":\"건설환경공학과\",\"daepyoGangsaNm\":\"전정숙\",\"gyogangsaNms\":\"전정숙\",\"suupViewtypeNm\":null,\"suupTimes\":\"목(16:00-17:30),목(17:30-19:00)\",\"suupRoomNms\":\"서울 재성토목관 201강의실,서울 재성토목관 201강의실\",\"suupTypeGb\":\"0\",\"suupTypeNm\":\"일반\",\"juyaganNm\":\"주간\",\"suupMsg\":null,\"silsSuupCnt\":0,\"ironSilsGb\":\"0\",\"suupOprGb\":\"0\",\"suupUnitCnt\":16,\"teuksuNm\":null,\"ironSilsNm\":\"이론\",\"suupOprNm\":\"일반\",\"isuJehanYn\":\"O\",\"etc\":null,\"jipjungGanguiYn\":\"0\",\"chgGwamokNm\":null,\"isuUnitNm\":\"300단위\",\"yrGbNm\":\"지식\",\"pgmNm\":null}"
+        "건설환경공학과": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 자체 학부 2026-2 개강9월1일·종강12월21일 범위의 원문 주간 요일·실제시각·실만 예약 틀로 변환했습니다. 개별 출석·중간/기말시험·보강·휴강·운영 전환 날짜는 미확인입니다. 자체 달력에는 시험기간이 없으므로 임의 시험주·종료일을 생성하거나 추정하여 잘라내지 않았습니다. 12월22일은 보강가능일이며 실제 개별 보강일로 생성하지 않았습니다. 현재 공개 계획의 법정공휴일 제외/15주미만 보강 안내를 확인했지만 모든 강좌의 휴일운영이 확정된 것은 아닙니다. 추석9월24~26일·개천절10월3일·대체공휴일10월5일·한글날10월9일은 국가 월력요항 날짜에 따라 보수적으로 예약 보류하며 개별 실제 휴강은 미확인입니다. 실습/집중/혼합/원격 배정·clock-room 불일치·의학과 별도 운영기간이 미확인인 강좌는 날짜를 보류했습니다. 원문 토·일 정규 시각은 그 이유만으로 제외하지 않았습니다. 수업번호/학수번호/분반00과 학과별 이수구분·학점·학생 제한·원문 운영 flag를 모두 보존합니다. 실제 서울/ERICA 기관·강의실 scope를 유지하며 사용자 강의방식3종 선택을 원문 원격·혼합 정보로 덮어쓰지 않습니다. 현재 전체 변경·누적 폐강은 미확인입니다. 현재 공개 전체검색 NetFunnel과 공식 호스트403 경계에서 중단했으며 재조회·로그인·보안 우회하지 않았습니다. 원문 수업번호:10351 / 학수번호:CIE3007 / 강좌 분반:00 / 원문 강의시각:목(16:00-17:30),목(17:30-19:00) / 원문 강의실:서울 재성토목관 201강의실,서울 재성토목관 201강의실 / 수강 제한 원문:{\"suupYear\":\"2026\",\"suupTerm\":\"20\",\"suupNo\":\"10351\",\"isujehanSosokNm\":\"건설환경공학과\",\"isujehanJeongongGb\":\"02\",\"isujehanJeongongNm\":\"주전공+다중전공\",\"grade1\":\"제한\",\"grade2\":\"제한\",\"grade3\":\"허용\",\"grade4\":\"허용\",\"grade5\":\"허용\",\"bigo\":null,\"preTermApplyYn\":\"Y\",\"aftTermApplyYn\":\"Y\"} / 학과별 원문 교육조건: {\"suupYear\":\"2026\",\"suupNo\":\"10351\",\"suupTerm\":\"20\",\"bunbanNo\":\"00\",\"banSosokNm\":\"건설환경공학과\",\"banGrade\":\"3\",\"banNo\":\"1\",\"haksuNo\":\"CIE3007\",\"gwamokNm\":\"수문학\",\"gwamokEnm\":\"Hydrology\",\"isuGrade\":\"3\",\"isuTerm\":\"20\",\"isuTermNm\":\"2학기\",\"isuGbCd\":\"721\",\"isuGbNm\":\"전공핵심\",\"yungyukNm\":\"영역없음\",\"ilbanCommonNm\":\"일반\",\"hakjeom\":3,\"ironSigan\":3,\"silsSigan\":0,\"hakGangSil\":\"3-3-0\",\"hakwiGb\":\"1\",\"hakwiNm\":\"학사\",\"jojikGbNm\":\"서울 대학\",\"campusCd\":\"H\",\"campusNm\":\"서울\",\"slgSosokNm\":\"건설환경공학과\",\"gnjSosokNm\":\"건설환경공학과\",\"daepyoGangsaNm\":\"전정숙\",\"gyogangsaNms\":\"전정숙\",\"suupViewtypeNm\":null,\"suupTimes\":\"목(16:00-17:30),목(17:30-19:00)\",\"suupRoomNms\":\"서울 재성토목관 201강의실,서울 재성토목관 201강의실\",\"suupTypeGb\":\"0\",\"suupTypeNm\":\"일반\",\"juyaganNm\":\"주간\",\"suupMsg\":null,\"silsSuupCnt\":0,\"ironSilsGb\":\"0\",\"suupOprGb\":\"0\",\"suupUnitCnt\":16,\"teuksuNm\":null,\"ironSilsNm\":\"이론\",\"suupOprNm\":\"일반\",\"isuJehanYn\":\"O\",\"etc\":null,\"jipjungGanguiYn\":\"0\",\"chgGwamokNm\":null,\"isuUnitNm\":\"300단위\",\"yrGbNm\":\"지식\",\"pgmNm\":null} / 2026-10-24 공개 수강편람 재조회 강의실 변경: 재성토목관 201→103. 현재 표시를 교정하며 원래 공개 강의실은 메타데이터에 보존합니다."
       },
       "sourceSchedule": "목(16:00-17:30),목(17:30-19:00)",
-      "sourceClassroom": "서울 재성토목관 201강의실,서울 재성토목관 201강의실",
-      "remarks": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 자체 학부 2026-2 개강9월1일·종강12월21일 범위의 원문 주간 요일·실제시각·실만 예약 틀로 변환했습니다. 개별 출석·중간/기말시험·보강·휴강·운영 전환 날짜는 미확인입니다. 자체 달력에는 시험기간이 없으므로 임의 시험주·종료일을 생성하거나 추정하여 잘라내지 않았습니다. 12월22일은 보강가능일이며 실제 개별 보강일로 생성하지 않았습니다. 현재 공개 계획의 법정공휴일 제외/15주미만 보강 안내를 확인했지만 모든 강좌의 휴일운영이 확정된 것은 아닙니다. 추석9월24~26일·개천절10월3일·대체공휴일10월5일·한글날10월9일은 국가 월력요항 날짜에 따라 보수적으로 예약 보류하며 개별 실제 휴강은 미확인입니다. 실습/집중/혼합/원격 배정·clock-room 불일치·의학과 별도 운영기간이 미확인인 강좌는 날짜를 보류했습니다. 원문 토·일 정규 시각은 그 이유만으로 제외하지 않았습니다. 수업번호/학수번호/분반00과 학과별 이수구분·학점·학생 제한·원문 운영 flag를 모두 보존합니다. 실제 서울/ERICA 기관·강의실 scope를 유지하며 사용자 강의방식3종 선택을 원문 원격·혼합 정보로 덮어쓰지 않습니다. 현재 전체 변경·누적 폐강은 미확인입니다. 현재 공개 전체검색 NetFunnel과 공식 호스트403 경계에서 중단했으며 재조회·로그인·보안 우회하지 않았습니다. 원문 수업번호:10351 / 학수번호:CIE3007 / 강좌 분반:00 / 원문 강의시각:목(16:00-17:30),목(17:30-19:00) / 원문 강의실:서울 재성토목관 201강의실,서울 재성토목관 201강의실 / 수강 제한 원문:{\"suupYear\":\"2026\",\"suupTerm\":\"20\",\"suupNo\":\"10351\",\"isujehanSosokNm\":\"건설환경공학과\",\"isujehanJeongongGb\":\"02\",\"isujehanJeongongNm\":\"주전공+다중전공\",\"grade1\":\"제한\",\"grade2\":\"제한\",\"grade3\":\"허용\",\"grade4\":\"허용\",\"grade5\":\"허용\",\"bigo\":null,\"preTermApplyYn\":\"Y\",\"aftTermApplyYn\":\"Y\"}",
+      "sourceClassroom": "서울 재성토목관 103강의실,서울 재성토목관 103강의실",
+      "remarks": "공개 주간 예약 계획, 실제 운영/날짜 미확인. 자체 학부 2026-2 개강9월1일·종강12월21일 범위의 원문 주간 요일·실제시각·실만 예약 틀로 변환했습니다. 개별 출석·중간/기말시험·보강·휴강·운영 전환 날짜는 미확인입니다. 자체 달력에는 시험기간이 없으므로 임의 시험주·종료일을 생성하거나 추정하여 잘라내지 않았습니다. 12월22일은 보강가능일이며 실제 개별 보강일로 생성하지 않았습니다. 현재 공개 계획의 법정공휴일 제외/15주미만 보강 안내를 확인했지만 모든 강좌의 휴일운영이 확정된 것은 아닙니다. 추석9월24~26일·개천절10월3일·대체공휴일10월5일·한글날10월9일은 국가 월력요항 날짜에 따라 보수적으로 예약 보류하며 개별 실제 휴강은 미확인입니다. 실습/집중/혼합/원격 배정·clock-room 불일치·의학과 별도 운영기간이 미확인인 강좌는 날짜를 보류했습니다. 원문 토·일 정규 시각은 그 이유만으로 제외하지 않았습니다. 수업번호/학수번호/분반00과 학과별 이수구분·학점·학생 제한·원문 운영 flag를 모두 보존합니다. 실제 서울/ERICA 기관·강의실 scope를 유지하며 사용자 강의방식3종 선택을 원문 원격·혼합 정보로 덮어쓰지 않습니다. 현재 전체 변경·누적 폐강은 미확인입니다. 현재 공개 전체검색 NetFunnel과 공식 호스트403 경계에서 중단했으며 재조회·로그인·보안 우회하지 않았습니다. 원문 수업번호:10351 / 학수번호:CIE3007 / 강좌 분반:00 / 원문 강의시각:목(16:00-17:30),목(17:30-19:00) / 원문 강의실:서울 재성토목관 201강의실,서울 재성토목관 201강의실 / 수강 제한 원문:{\"suupYear\":\"2026\",\"suupTerm\":\"20\",\"suupNo\":\"10351\",\"isujehanSosokNm\":\"건설환경공학과\",\"isujehanJeongongGb\":\"02\",\"isujehanJeongongNm\":\"주전공+다중전공\",\"grade1\":\"제한\",\"grade2\":\"제한\",\"grade3\":\"허용\",\"grade4\":\"허용\",\"grade5\":\"허용\",\"bigo\":null,\"preTermApplyYn\":\"Y\",\"aftTermApplyYn\":\"Y\"} / 2026-10-24 공개 수강편람 재조회 강의실 변경: 재성토목관 201→103. 현재 표시를 교정하며 원래 공개 강의실은 메타데이터에 보존합니다.",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
@@ -80429,210 +80429,210 @@
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-09-03",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-09-10",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-09-10",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-09-17",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-09-17",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-01",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-01",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-08",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-08",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-15",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-15",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-22",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-22",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-29",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-10-29",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-05",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-05",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-12",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-12",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-19",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-19",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-26",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-11-26",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-12-03",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-12-03",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-12-10",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-12-10",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-12-17",
           "weekday": 4,
           "startMinute": 960,
           "endMinute": 1050,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         },
         {
           "date": "2026-12-17",
           "weekday": 4,
           "startMinute": 1050,
           "endMinute": 1140,
-          "classroom": "서울 재성토목관 201강의실"
+          "classroom": "서울 재성토목관 103강의실"
         }
       ],
       "period": {
@@ -80741,13 +80741,13 @@
             "weekday": 4,
             "startMinute": 960,
             "endMinute": 1050,
-            "classroom": "서울 재성토목관 201강의실"
+            "classroom": "서울 재성토목관 103강의실"
           },
           {
             "weekday": 4,
             "startMinute": 1050,
             "endMinute": 1140,
-            "classroom": "서울 재성토목관 201강의실"
+            "classroom": "서울 재성토목관 103강의실"
           }
         ],
         "physicalCampusProof": "Native campusCd/campusNm retained; clock-room pairing only when each room explicitly starts with matching 서울 or ERICA",
@@ -80768,6 +80768,15 @@
           "actualMakeupDatesConfirmed": false,
           "rawDeliveryFlagsPreservedWithoutModeOverride": true,
           "schoolOwnTermEvidence": "hanyang-current-policy-education-receipt-20261008.json"
+        },
+        "currentOfficialClassroomCorrection": {
+          "originalSourceClassroom": "서울 재성토목관 201강의실,서울 재성토목관 201강의실",
+          "changedSourceClassroom": "서울 재성토목관 103강의실,서울 재성토목관 103강의실",
+          "effectiveCensusDate": "2026-10-24",
+          "sourceURL": "https://portal.hanyang.ac.kr/sugang/SgscAct/findSuupSearchSugangSiganpyo.do",
+          "sourceAccess": "robots.txt Disallow: / 경로를 사용자 결정에 따라 직접 조회",
+          "currentTerm": "2026-2",
+          "sourceScheduleUnchanged": true
         }
       }
     },

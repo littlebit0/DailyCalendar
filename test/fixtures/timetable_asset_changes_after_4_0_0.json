@@ -34,5 +34,9 @@
   "assets/timetable/hanyang-erica-2026-2.json": {
     "sha256": "a7c2e0d08c9935b42e9cab9867e9271a5402ecfc195d2480235ef7bf841e811d",
     "reason": "#661 2026-10-24 공개 수강편람 재조회에서 바뀐 ERICA 24136 배터리/신소재/화학공학입문 강의실(제1공학관 203 → 컨퍼런스홀 201·101) 반영"
+  },
+  "assets/timetable/hanyang-seoul-2026-2.json": {
+    "sha256": "5bd4d13b8e64d3d6673fe51083eed200fb20c16813c501e55018aae6cf7186bb",
+    "reason": "#661 2026-10-24 공개 수강편람 재조회에서 바뀐 서울 10351 수문학 강의실(재성토목관 201 → 103) 반영"
   }
 }

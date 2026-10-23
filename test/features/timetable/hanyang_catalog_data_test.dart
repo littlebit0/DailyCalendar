@@ -40,6 +40,10 @@ void main() {
                   as List)
               .cast<String>()
               .toSet();
+      const recensusRooms = {
+        'hanyang/seoul/2026-2/10351': '서울 재성토목관 103강의실,서울 재성토목관 103강의실',
+        'hanyang/erica/2026-2/24136': 'ERICA 컨퍼런스홀 201 강의실,ERICA 컨퍼런스홀 101 강의실',
+      };
       for (final campus in ['seoul', 'erica']) {
         final raw = read('assets/timetable/hanyang-$campus-2026-2.json');
         final rawRows = {
@@ -85,14 +89,11 @@ void main() {
               meta['currentOfficialClassroomCorrection']['originalSourceClassroom'],
               a['suupRoomNms'],
             );
-          } else if (c.sourceId == 'hanyang/erica/2026-2/24136') {
+          } else if (recensusRooms.containsKey(c.sourceId)) {
             // 2026-10-24 public catalog re-census changed only the rooms.
             final fix = meta['currentOfficialClassroomCorrection'] as Map;
             expect(fix['originalSourceClassroom'], a['suupRoomNms']);
-            expect(
-              c.sourceClassroom,
-              'ERICA 컨퍼런스홀 201 강의실,ERICA 컨퍼런스홀 101 강의실',
-            );
+            expect(c.sourceClassroom, recensusRooms[c.sourceId]);
             expect(fix['changedSourceClassroom'], c.sourceClassroom);
           } else {
             expect(c.sourceClassroom, a['suupRoomNms'] ?? '');
