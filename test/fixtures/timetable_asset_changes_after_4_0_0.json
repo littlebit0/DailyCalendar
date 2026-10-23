@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/tuk.json": {
+    "sha256": "774774d05ae11559a5a9dab71139582ef31416f711dfa60bdbf1b2382319e727",
+    "reason": "#650 한국공학대 공식 시간표(융합전공) 개설 라벨 19개를 학사정보 융합전공 운영현황·미래대학 융합전공 소개 기준 '융합전공' 묶음으로 배정"
   }
 }
