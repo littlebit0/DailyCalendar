@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/seoultech.json": {
+    "sha256": "0eee20d93fdd2743bc8c0e9c79f6f188f960f5b62828ffc5cf42a45e49c9830d",
+    "reason": "#607 서울과기대 원자료 분류 2개(교양대학·창업교육센터)를 공식 공개 시간표 개설학과 목록의 최상위 단위 그대로 독립 개설 단위로 등록"
   }
 }
