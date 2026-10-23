@@ -33,6 +33,26 @@ void main() {
     for (final row in currentProof['newCourses'] as List)
       if (row['school'] == 'scnu') row['sourceId'] as String: row as Map,
   };
+  // 원문이 '요일 야간 N' 상대 교시로 6교시를 직접 적은 강좌만 교학규정 제52조 6교시를 쓴다.
+  final relativeNight = RegExp(r'^[월화수목금]야간\d(?:,\d)*$');
+  final night6 = <String>{
+    for (final h in audit['holds'] as List)
+      if ((h['reasons'] as List).join('|') ==
+              'published period clock absent: 16' &&
+          relativeNight.hasMatch(
+            (records['scnu-2026-2-${h['nativeSubjectCode']}-${h['nativeSection']}']['publicEducationRows'][0]['education']['강의시간']
+                    as String)
+                .replaceAll(RegExp(r'\s+'), ''),
+          ))
+        'scnu-2026-2-${h['nativeSubjectCode']}-${h['nativeSection']}',
+  };
+  final regulation =
+      jsonDecode(
+            File(
+              'test/fixtures/scnu_night_clock_regulation/kyohak-article52.json',
+            ).readAsStringSync(),
+          )
+          as Map<String, dynamic>;
   test('Native subject code, section, declared merged cells and closures', () {
     expect(courses, hasLength(1626));
     expect(
@@ -73,13 +93,19 @@ void main() {
       ),
       hasLength(133),
     );
+    expect(night6, hasLength(12));
     for (final c in courses.where(
       (c) =>
           held.contains('${c.code}/${c.section}') &&
           !resolvedRooms.containsKey(c.sourceId),
     )) {
-      expect(c.meetings, isEmpty);
+      if (night6.contains(c.sourceId)) {
+        expect(c.meetings, isNotEmpty, reason: c.sourceId);
+      } else {
+        expect(c.meetings, isEmpty, reason: c.sourceId);
+      }
     }
+    expect(courses.where((c) => c.meetings.isEmpty), hasLength(121));
   });
   test(
     'All dates independently match native weekdays, day/night clock cells and room',
@@ -113,6 +139,31 @@ void main() {
       }
       expect(clocks, hasLength(15));
       expect(clocks.containsKey(16), false);
+      final image = regulation['tableImage'] as Map;
+      expect(
+        sha256
+            .convert(
+              File(
+                'test/fixtures/scnu_night_clock_regulation/${image['file']}',
+              ).readAsBytesSync(),
+            )
+            .toString(),
+        image['sha256'],
+      );
+      final weekdayNight = [
+        for (final range
+            in (regulation['transcribedTable'] as Map)['평일'] as List)
+          RegExp(r'(\d{2}):(\d{2})')
+              .allMatches(range as String)
+              .map((m) => int.parse(m[1]!) * 60 + int.parse(m[2]!))
+              .toList(),
+      ];
+      expect(weekdayNight, hasLength(6));
+      // 교학규정 표 1~5교시가 수업시간표 야간1(11)~야간5(15)와 같아야 6교시를 이어 쓴다.
+      for (var i = 0; i < 5; i++) {
+        expect(weekdayNight[i], clocks[11 + i]);
+      }
+      clocks[16] = weekdayNight[5];
       final excluded = {
         ...(audit['excludedHolidays'] as List),
         ...(audit['excludedMidtermDates'] as List),
@@ -148,6 +199,10 @@ void main() {
               periods = periods.map((p) => p + 10).toList();
             }
             for (final p in periods) {
+              if (p == 16) {
+                expect(match[2], isNotNull, reason: c.sourceId);
+                expect(night6, contains(c.sourceId));
+              }
               final clock = clocks[p]!;
               var room = source['강의실'];
               final proof = resolvedRooms[c.sourceId];
@@ -180,8 +235,8 @@ void main() {
         }
         expect(actual, expected, reason: 'native ${c.code}/${c.section}');
       }
-      expect(count, 55906);
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1493));
+      expect(count, 56362);
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1505));
     },
   );
   for (final mode in [
@@ -219,8 +274,8 @@ void main() {
             'research',
           );
         }
-        expect(values, hasLength(1493));
-        expect(count, 55906);
+        expect(values, hasLength(1505));
+        expect(count, 56362);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -228,7 +283,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(1493));
+        expect(restored.materializeClasses(), hasLength(1505));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);

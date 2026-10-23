@@ -146329,9 +146329,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "수 야간 4,5,6",
       "sourceClassroom": "D30315",
       "sourceScheduleAliases": [
@@ -146340,12 +146340,286 @@
       "sourceClassroomAliases": [
         "D30315"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-12-02"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 3,
@@ -146359,6 +146633,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "D30315"
+        },
+        {
+          "weekday": 3,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "D30315"
         }
       ],
@@ -147419,9 +147700,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "목 야간 4,5,6",
       "sourceClassroom": "D30315",
       "sourceScheduleAliases": [
@@ -147430,12 +147711,265 @@
       "sourceClassroomAliases": [
         "D30315"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-12-03"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 4,
@@ -147449,6 +147983,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "D30315"
+        },
+        {
+          "weekday": 4,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "D30315"
         }
       ],
@@ -147595,9 +148136,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "목 야간 4,5,6",
       "sourceClassroom": "D30314",
       "sourceScheduleAliases": [
@@ -147606,12 +148147,265 @@
       "sourceClassroomAliases": [
         "D30314"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30314",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30314",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30314",
+          "date": "2026-12-03"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 4,
@@ -147625,6 +148419,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "D30314"
+        },
+        {
+          "weekday": 4,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "D30314"
         }
       ],
@@ -147771,9 +148572,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "융합산업학전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 융합산업학전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "화 야간 4,5,6",
       "sourceClassroom": "D30315",
       "sourceScheduleAliases": [
@@ -147782,12 +148583,286 @@
       "sourceClassroomAliases": [
         "D30315"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "D30315",
+          "date": "2026-12-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "D30315",
+          "date": "2026-12-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "D30315",
+          "date": "2026-12-01"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 2,
@@ -147801,6 +148876,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "D30315"
+        },
+        {
+          "weekday": 2,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "D30315"
         }
       ],
@@ -371065,9 +372147,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "화 야간4,5,6",
       "sourceClassroom": "A18101",
       "sourceScheduleAliases": [
@@ -371076,12 +372158,286 @@
       "sourceClassroomAliases": [
         "A18101"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-12-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-12-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-12-01"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 2,
@@ -371095,6 +372451,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "A18101"
+        },
+        {
+          "weekday": 2,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "A18101"
         }
       ],
@@ -372591,9 +373954,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "수 야간4,5,6",
       "sourceClassroom": "A18102",
       "sourceScheduleAliases": [
@@ -372602,12 +373965,286 @@
       "sourceClassroomAliases": [
         "A18102"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-12-02"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 3,
@@ -372621,6 +374258,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "A18102"
+        },
+        {
+          "weekday": 3,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "A18102"
         }
       ],
@@ -373203,9 +374847,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "목 야간4,5,6",
       "sourceClassroom": "A18102",
       "sourceScheduleAliases": [
@@ -373214,12 +374858,265 @@
       "sourceClassroomAliases": [
         "A18102"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18102",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18102",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18102",
+          "date": "2026-12-03"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 4,
@@ -373233,6 +375130,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "A18102"
+        },
+        {
+          "weekday": 4,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "A18102"
         }
       ],
@@ -374293,9 +376197,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "물류비즈니스전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 물류비즈니스전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "수 야간4,5,6",
       "sourceClassroom": "A18101",
       "sourceScheduleAliases": [
@@ -374304,12 +376208,286 @@
       "sourceClassroomAliases": [
         "A18101"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "A18101",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "A18101",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "A18101",
+          "date": "2026-12-02"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 3,
@@ -374323,6 +376501,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "A18101"
+        },
+        {
+          "weekday": 3,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "A18101"
         }
       ],
@@ -507032,9 +509217,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 2; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 2; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "수 야간 4,5,6",
       "sourceClassroom": "B20307",
       "sourceScheduleAliases": [
@@ -507043,12 +509228,286 @@
       "sourceClassroomAliases": [
         "B20307"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20307",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20307",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20307",
+          "date": "2026-12-02"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 3,
@@ -507062,6 +509521,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "B20307"
+        },
+        {
+          "weekday": 3,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "B20307"
         }
       ],
@@ -507208,9 +509674,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 4; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 4; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 4; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 4; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "목 야간 4,5,6",
       "sourceClassroom": "B20313",
       "sourceScheduleAliases": [
@@ -507219,12 +509685,265 @@
       "sourceClassroomAliases": [
         "B20313"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-09-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-09-10"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-09-17"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-10-01"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-10-08"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-10-15"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-10-29"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-11-05"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-11-12"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-11-19"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-11-26"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20313",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20313",
+          "date": "2026-12-03"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20313",
+          "date": "2026-12-03"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 4,
@@ -507238,6 +509957,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "B20313"
+        },
+        {
+          "weekday": 4,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "B20313"
         }
       ],
@@ -507384,9 +510110,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "수 야간 4,5,6",
       "sourceClassroom": "B20314",
       "sourceScheduleAliases": [
@@ -507395,12 +510121,286 @@
       "sourceClassroomAliases": [
         "B20314"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-09"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-16"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-23"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-30"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-10-07"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-10-14"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-10-28"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-04"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-11"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-18"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-25"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-12-02"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-12-02"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 3,
@@ -507414,6 +510414,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "B20314"
+        },
+        {
+          "weekday": 3,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "B20314"
         }
       ],
@@ -508474,9 +511481,9 @@
       },
       "departmentClassifications": {},
       "departmentRemarks": {
-        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16"
+        "사회서비스상담전공트랙": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다."
       },
-      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 일정 미생성: published period clock absent: 16",
+      "remarks": "2026-08-24 10:00 학교 공개 수업시간표의 정규 수업 계획입니다. 실제 출석·개별 휴강 확정이 아니며 실시간 시스템 변경 전체는 확인되지 않았습니다. 10/19~23 중간시험, 12/8~11 국·공휴일 보강, 12/14~18 기말시험은 강좌별 시각·강의실 미확인으로 일정에 포함하지 않았습니다. 개별 강좌 캠퍼스 미공개이며 대학 전체 자료 범위입니다. 원문 수강조건: 사회서비스상담전공트랙; 학년: 3; 인원제한: 20 야간 6교시(22:10~22:55)는 공개 수업시간표 교시표에 없어 국립순천대학교 교학규정 제52조 야간 수업시간표를 따랐습니다.",
       "sourceSchedule": "화 야간 4,5,6",
       "sourceClassroom": "B20314",
       "sourceScheduleAliases": [
@@ -508485,12 +511492,286 @@
       "sourceClassroomAliases": [
         "B20314"
       ],
-      "scheduleStatus": "unrecognized",
+      "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-18"
       },
-      "schedules": [],
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-08"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-15"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-22"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-09-29"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-10-27"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-03"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-10"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-17"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-11-24"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1230,
+          "endMinute": 1275,
+          "classroom": "B20314",
+          "date": "2026-12-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1280,
+          "endMinute": 1325,
+          "classroom": "B20314",
+          "date": "2026-12-01"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1330,
+          "endMinute": 1375,
+          "classroom": "B20314",
+          "date": "2026-12-01"
+        }
+      ],
       "nativePeriodBlocks": [
         {
           "weekday": 2,
@@ -508504,6 +511785,13 @@
           "nativePeriod": 15,
           "startMinute": 1280,
           "endMinute": 1325,
+          "classroom": "B20314"
+        },
+        {
+          "weekday": 2,
+          "nativePeriod": 16,
+          "startMinute": 1330,
+          "endMinute": 1375,
           "classroom": "B20314"
         }
       ],
