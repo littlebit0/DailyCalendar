@@ -16,6 +16,23 @@ class _Files extends CachingAssetBundle {
       ByteData.sublistView(File(key).readAsBytesSync());
 }
 
+// 별표1 주간 1~6교시 75분+쉬는 시간 15분(90분 슬롯), 야간 7~10교시 45분+5분(50분
+// 슬롯), 11교시는 별표1 표기 그대로 21:20~22:20.
+const _slotStarts = [
+  540,
+  630,
+  720,
+  810,
+  900,
+  990,
+  1080,
+  1130,
+  1180,
+  1230,
+  1280,
+];
+const _slotEnds = [630, 720, 810, 900, 990, 1080, 1130, 1180, 1230, 1280, 1340];
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
@@ -67,10 +84,21 @@ void main() {
               contains(m.classroom),
             );
           }
-          expect(
-            m.originalEndMinute - m.originalStartMinute,
-            isIn([75, 45, 95, 145, 195, 245, 110, 230]),
-          );
+          // 수업 운영에 관한 규정 [4-3-32] 별표1(수업시간)의 교시 시작 시각과,
+          // 사용자 결정에 따라 쉬는 시간을 포함한 교시 끝 시각(다음 교시 시작).
+          // 0교시 연강(08:00~11:50)은 별표1에 없어 기존 값을 유지한다.
+          if (m.originalStartMinute != 480) {
+            expect(
+              m.originalStartMinute,
+              isIn(_slotStarts),
+              reason: '${c.codeAndSection} ${m.date}',
+            );
+            expect(
+              m.originalEndMinute,
+              isIn(_slotEnds),
+              reason: '${c.codeAndSection} ${m.date}',
+            );
+          }
           expect(restored.modeOn(m, m.teachingDate!), LectureMode.inPerson);
         }
         expect(
