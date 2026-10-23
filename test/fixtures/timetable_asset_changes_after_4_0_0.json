@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/changwon-unknown-2026-2.json": {
+    "sha256": "bf1b7ef3bb227b0f629bd9b5f18190436a10e651ccf0dc5b5b13a7705b230fde",
+    "reason": "#581 창원대 15A·15B 교시만 시각이 없어 보류한 22강좌에 학사안내 수강신청 수업시간표(15A 22:30~22:55, 15B 22:55~23:20)를 적용해 정규 예약 생성; #581 chains 공개 개설강좌 목록·폐강 목록 2026-10-23 재조회(87개 선택지 2112행 동일, 폐강 69건 동일)로 바뀐 24강좌의 교수·강의실·시험일 보류를 원문대로 갱신"
+  },
+  "assets/timetable/organizations/changwon.json": {
+    "sha256": "83c17016e3ca6f7daddbd14926b14a6328d19b1bd23c69d5c077a9cc6d13e846",
+    "reason": "#581 창원대 원자료 분류 7개(야간 학과 4개, 글로벌비즈니스학부 트랙 2개, RISE사업단)를 공식 단과대학 목록·학부소개·학칙 개정 공고 기준으로 배정"
   }
 }
