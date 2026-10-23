@@ -7,7 +7,7 @@
   "semester": "2",
   "completionClaim": false,
   "publishedDate": "2026-10-07",
-  "sourceCollectedDate": "2026-10-07",
+  "sourceCollectedDate": "2026-10-23",
   "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
   "period": {
     "startDate": "2026-09-01",
@@ -2215,7 +2215,7 @@
       "courseCode": "MEDE0317",
       "section": "001",
       "courseName": "치료의 기본",
-      "professor": "권오경,박지연,강병주,권형준,김은지,김주동,김혜진,문준석,박기범,박준석,송승호,이승수,이지연,전현정,황덕비,유병혁,임경훈,조성훈,곽경화,김현지,박성식,박준모,변성혜,여진석,오진영,이수현,이정은,임동건,임정아,전영훈,정훈,홍성욱,김윤정,김종근,김창호,류현욱,안재윤,이동언,정해원,최재영,이준석,정호윤,최강영",
+      "professor": "권오경,박지연,강병주,권형준,김은지,김주동,김혜진,문준석,박기범,박준석,송승호,이승수,이지연,전현정,황덕비,유병혁,임경훈,조성훈,곽경화,박성식,박준모,변성혜,여진석,오진영,이수현,이정은,임동건,임정아,전영훈,정훈,홍성욱,김윤정,김종근,김창호,류현욱,안재윤,이동언,정해원,최재영,이준석,정호윤,최강영",
       "credits": 4.0,
       "sourceSchedule": "",
       "sourceClassroom": "",

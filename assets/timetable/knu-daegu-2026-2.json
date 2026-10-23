@@ -7,7 +7,7 @@
   "semester": "2",
   "completionClaim": false,
   "publishedDate": "2026-10-07",
-  "sourceCollectedDate": "2026-10-07",
+  "sourceCollectedDate": "2026-10-23",
   "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
   "period": {
     "startDate": "2026-09-01",
@@ -4644,7 +4644,7 @@
       "semester": "2",
       "courseCode": "CLTR0043",
       "section": "001",
-      "courseName": "서양의역사와문화",
+      "courseName": "서양의 역사와 문화",
       "professor": "김필영",
       "credits": 3.0,
       "sourceSchedule": "수 09:00 ~ 10:30,금 10:30 ~ 12:00",
@@ -6488,7 +6488,7 @@
       "semester": "2",
       "courseCode": "CLTR0043",
       "section": "003",
-      "courseName": "서양의역사와문화",
+      "courseName": "서양의 역사와 문화",
       "professor": "황보영조,강미경",
       "credits": 3.0,
       "sourceSchedule": "금 13:30 ~ 15:00,월 13:30 ~ 15:00",
@@ -7231,7 +7231,7 @@
       "courseCode": "CHIL0254",
       "section": "001",
       "courseName": "초급중국어회화",
-      "professor": "서주영",
+      "professor": "서주영,서주영",
       "credits": 3.0,
       "sourceSchedule": "수 15:00 ~ 16:30,월 16:30 ~ 18:00",
       "sourceClassroom": "산격동 캠퍼스  대학원동 / 202",
@@ -8434,7 +8434,7 @@
       "semester": "2",
       "courseCode": "CLTR0043",
       "section": "002",
-      "courseName": "서양의역사와문화",
+      "courseName": "서양의 역사와 문화",
       "professor": "최현미",
       "credits": 3.0,
       "sourceSchedule": "목 09:00 ~ 10:30,화 10:30 ~ 12:00",
@@ -10931,7 +10931,7 @@
       "courseCode": "CLTR0042",
       "section": "001",
       "courseName": "동양의역사와문화",
-      "professor": "박찬근",
+      "professor": "박찬근,박찬근",
       "credits": 3.0,
       "sourceSchedule": "화 09:00 ~ 10:30,목 10:30 ~ 12:00",
       "sourceClassroom": "산격동 캠퍼스  인문대학 / 211",
@@ -11271,7 +11271,7 @@
       "courseCode": "CLTR0042",
       "section": "002",
       "courseName": "동양의역사와문화",
-      "professor": "박찬근",
+      "professor": "박찬근,박찬근",
       "credits": 3.0,
       "sourceSchedule": "목 16:30 ~ 18:00,화 16:30 ~ 18:00",
       "sourceClassroom": "산격동 캠퍼스  인문한국진흥관 / 105",
@@ -53119,20 +53119,20 @@
       "professor": "왕재민",
       "credits": 3.0,
       "sourceSchedule": "수 15:00 ~ 16:30,월 15:00 ~ 16:30",
-      "sourceClassroom": "산격동 캠퍼스  공대3호관 / 510",
+      "sourceClassroom": "산격동 캠퍼스  미래창직관 / 101, 110",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 3,
           "startMinute": 900,
           "endMinute": 990,
-          "classroom": "산격동 캠퍼스  공대3호관 / 510"
+          "classroom": "산격동 캠퍼스  미래창직관 / 101, 110"
         },
         {
           "weekday": 1,
           "startMinute": 900,
           "endMinute": 990,
-          "classroom": "산격동 캠퍼스  공대3호관 / 510"
+          "classroom": "산격동 캠퍼스  미래창직관 / 101, 110"
         }
       ],
       "departments": [
@@ -75623,7 +75623,7 @@
       "courseCode": "KMUS0272",
       "section": "006",
       "courseName": "국악개인전공실기2",
-      "professor": "김진욱",
+      "professor": "김진욱,이승현",
       "credits": 1.0,
       "sourceSchedule": "월 19:00 ~ 20:00",
       "sourceClassroom": "산격동 캠퍼스  예술대학 / 421",
@@ -85029,14 +85029,14 @@
       "professor": "정혜윤",
       "credits": 1.0,
       "sourceSchedule": "월 13:00 ~ 14:00",
-      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 206",
+      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 301",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 1,
           "startMinute": 780,
           "endMinute": 840,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 301"
         }
       ],
       "departments": [
@@ -85064,14 +85064,14 @@
       "professor": "정혜윤",
       "credits": 1.0,
       "sourceSchedule": "화 15:00 ~ 16:00",
-      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 206",
+      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 203",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 2,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         }
       ],
       "departments": [
@@ -85099,14 +85099,14 @@
       "professor": "임혜진",
       "credits": 1.0,
       "sourceSchedule": "목 14:00 ~ 15:00",
-      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 206",
+      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 203",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 4,
           "startMinute": 840,
           "endMinute": 900,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         }
       ],
       "departments": [
@@ -85134,14 +85134,14 @@
       "professor": "임혜진",
       "credits": 1.0,
       "sourceSchedule": "목 15:00 ~ 16:00",
-      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 206",
+      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 203",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 4,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         }
       ],
       "departments": [
@@ -85330,7 +85330,7 @@
       "courseCode": "TCHR0601",
       "section": "006",
       "courseName": "교육과정",
-      "professor": "이지은",
+      "professor": "이지은,이소미",
       "credits": 2.0,
       "sourceSchedule": "목 16:00 ~ 17:00,목 17:00 ~ 18:00",
       "sourceClassroom": "산격동 캠퍼스  교육대학원 / 301",
@@ -85497,20 +85497,20 @@
       "professor": "박기용",
       "credits": 2.0,
       "sourceSchedule": "수 13:00 ~ 14:00,수 14:00 ~ 15:00",
-      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 206",
+      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 203",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 3,
           "startMinute": 780,
           "endMinute": 840,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         },
         {
           "weekday": 3,
           "startMinute": 840,
           "endMinute": 900,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         }
       ],
       "departments": [
@@ -85538,20 +85538,20 @@
       "professor": "박기용",
       "credits": 2.0,
       "sourceSchedule": "수 15:00 ~ 16:00,수 16:00 ~ 17:00",
-      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 206",
+      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 203",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 3,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         },
         {
           "weekday": 3,
           "startMinute": 960,
           "endMinute": 1020,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         }
       ],
       "departments": [
@@ -85620,20 +85620,20 @@
       "professor": "박명희",
       "credits": 2.0,
       "sourceSchedule": "화 11:00 ~ 12:00,화 12:00 ~ 13:00",
-      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 206",
+      "sourceClassroom": "산격동 캠퍼스  교육대학원 / 203",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 2,
           "startMinute": 660,
           "endMinute": 720,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         },
         {
           "weekday": 2,
           "startMinute": 720,
           "endMinute": 780,
-          "classroom": "산격동 캠퍼스  교육대학원 / 206"
+          "classroom": "산격동 캠퍼스  교육대학원 / 203"
         }
       ],
       "departments": [
@@ -122431,7 +122431,7 @@
       "semester": "2",
       "courseCode": "CLTR0043",
       "section": "004",
-      "courseName": "서양의역사와문화",
+      "courseName": "서양의 역사와 문화",
       "professor": "강미경",
       "credits": 3.0,
       "sourceSchedule": "금 16:30 ~ 18:00,수 16:30 ~ 18:00",
@@ -124208,7 +124208,7 @@
       "semester": "2",
       "courseCode": "CLTR0043",
       "section": "005",
-      "courseName": "서양의역사와문화",
+      "courseName": "서양의 역사와 문화",
       "professor": "김필영",
       "credits": 3.0,
       "sourceSchedule": "목 16:30 ~ 18:00,화 16:30 ~ 18:00",
@@ -131922,7 +131922,7 @@
       "courseCode": "IMED0215",
       "section": "001",
       "courseName": "열 및 응력 해석",
-      "professor": "김설하,김태욱",
+      "professor": "김설하",
       "credits": 3.0,
       "sourceSchedule": "토 09:00 ~ 10:30,토 10:30 ~ 12:00",
       "sourceClassroom": "산격동 캠퍼스  KNU글로벌프라자 / 302",
@@ -135276,7 +135276,7 @@
         "국제처": "교양"
       },
       "departmentRemarks": {
-        "국제처": "전학년선택\n(영어)\n\n학년: *"
+        "국제처": "전학년선택\n(영어)\n다언어 오픈강좌\n학년: *"
       }
     },
     {
@@ -135522,7 +135522,7 @@
         "국제처": "교양"
       },
       "departmentRemarks": {
-        "국제처": "전학년선택\n(한국어+영어)\n\n학년: *"
+        "국제처": "전학년선택\n(한국어+영어)\n다언어 오픈강좌\n학년: *"
       }
     },
     {
@@ -135563,7 +135563,7 @@
         "국제처": "교양"
       },
       "departmentRemarks": {
-        "국제처": "전학년선택\n(영어)\n\n학년: *"
+        "국제처": "전학년선택\n(영어)\n다언어 오픈강좌\n학년: *"
       }
     },
     {
