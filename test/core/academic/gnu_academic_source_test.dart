@@ -27,19 +27,9 @@ void main() {
       );
       final events = await source.fetch(2026);
       source.close();
-      // 학부 50행 + 학ㆍ석사 연계과정 모집 대학원 2행(13999, 56715).
-      expect(events.length, 52);
-      expect(events.map((e) => e.sourceId).toSet().length, 52);
+      expect(events.length, 50);
+      expect(events.map((e) => e.sourceId).toSet().length, 50);
       expect(events.any((e) => e.title.contains('대학원')), isFalse);
-      expect(
-        events.singleWhere((e) => e.sourceId == '13999').title,
-        '2026학년도 전기 학·석사학위 및 학·석·박사 통합학위 연계과정 모집',
-      );
-      expect(
-        events.singleWhere((e) => e.sourceId == '56715').start,
-        DateTime(2026, 7, 6),
-      );
-      expect(events.any((e) => e.sourceId == '14000'), isFalse);
       final winter = events.singleWhere((e) => e.sourceId == '13940');
       expect(winter.title, '동계계절학기');
       expect(winter.start, DateTime(2025, 12, 23));
@@ -63,16 +53,9 @@ void main() {
           .length;
       // Every published row is either an undergraduate or graduate entry.
       expect(undergraduate + graduate, links.length);
-      final linked = links
-          .where(
-            (a) =>
-                a.text.trim().startsWith('[대학원]') && a.text.contains('연계과정 모집'),
-          )
-          .length;
-      expect(linked, 2);
       expect(
         GnuAcademicSource.parse(fixture(year), year),
-        hasLength(undergraduate + linked),
+        hasLength(undergraduate),
       );
     }
   });

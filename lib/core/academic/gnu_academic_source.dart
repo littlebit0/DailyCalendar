@@ -86,15 +86,10 @@ class GnuAcademicSource implements AcademicSource {
       if (last.isBefore(start)) {
         throw const FormatException('Invalid GNU period');
       }
-      // 학칙 제35조제4항·학ㆍ석사학위 및 학ㆍ석ㆍ박사학위통합 연계과정 운영규정
-      // 제4조(모집)에 따른 연계과정 모집 행은 대학원 행이어도 포함하고, 그 밖의
-      // [대학원] 행(논문·학위수여 등 별도 대학원 과정)은 제외한다.
-      final graduateLinked =
-          title.startsWith('[대학원]') && title.contains('연계과정 모집');
-      if (title.startsWith('[대학원]') && !graduateLinked) {
+      if (title.startsWith('[대학원]')) {
         continue;
       }
-      if (!graduateLinked && !title.startsWith('[학부]')) {
+      if (!title.startsWith('[학부]')) {
         throw const FormatException('Unknown GNU programme');
       }
       final end = DateTime(last.year, last.month, last.day + 1);
@@ -103,9 +98,7 @@ class GnuAcademicSource implements AcademicSource {
       }
       final event = AcademicEvent(
         sourceId: match[1]!,
-        title: graduateLinked
-            ? title.substring(5).trim().replaceAll(RegExp(r'\s+'), ' ')
-            : title.substring(4).trim(),
+        title: title.substring(4).trim(),
         start: start,
         end: end,
         url:
