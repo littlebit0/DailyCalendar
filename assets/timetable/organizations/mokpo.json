@@ -1709,15 +1709,18 @@
       "collegeKnown": true
     },
     {
-      "college": null,
+      "college": "공과대학",
       "department": "조선해양공학과(조선해양생산트랙)",
       "sourceLabel": "조선해양공학과(조선해양생산트랙)",
       "sourceUrl": "https://www.mokpo.ac.kr/www/242/subview.do",
-      "evidence": "Original public timetable retains an explicit named academic department/faculty/major association in departments. Official organization sources inspected but exact college affiliation remains unconfirmed; preserve association only under collegeKnown=false. No year/general/admin/OCR heading inferred.",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
       "sourceFile": "assets/timetable/mokpo-unknown-2026-2.json",
       "isOfferingUnit": false,
       "campus": "unknown",
-      "collegeKnown": false
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.mokpo.ac.kr/bbs/www/148/138274/artclView.do",
+      "affiliationSourceFile": "work/issue-575-mokpo-timetable/alt-20261023/notice-138274.html",
+      "affiliationEvidence": "공식 공지 '목포대학교 학칙 일부개정학칙안 공고(2022-03호)'(교무과, 2022-01-24 등록, 2026-10-23 확인) 원문: \"공과대학 조선해양공학과의 트랙 운영에 관한 사항을 반영\", \"조선해양공학과의 조선해양설계트랙, 조선해양생산트랙을 친환경선박 설계트랙, 스마트 생산트랙, lng트랙, 3개 트랙으로 변경하여 2022학년도 입학생부터 적용\". 공식 통합검색(search.mokpo.ac.kr)의 공과대학 '대학소개 > 현황' 색인에도 \"조선해양공학과 (조선해양생산트랙)\" 행이 있음."
     },
     {
       "college": "공과대학",
