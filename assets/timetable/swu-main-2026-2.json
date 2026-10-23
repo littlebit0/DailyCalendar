@@ -5,7 +5,7 @@
   "campusName": "본교",
   "academicYear": 2026,
   "semester": "2",
-  "publishedDate": "2026-10-08",
+  "publishedDate": "2026-10-23",
   "sourceUrl": "https://swis.swu.ac.kr/json/ccs/extCcsSOpenSubSearch.xrf",
   "courses": [
     {
@@ -21334,8 +21334,8 @@
         "사학과": "ALL\n학교 공개 시간표·지정보강 계획입니다. 실제 출석 및 개별 휴강·보강 확정이 아니며 기말고사와 자율보강은 강좌별 확인이 필요합니다.\n이수학년: 1학년\n부전공: 부선\n복수전공: 복선"
       },
       "remarks": "ALL\n학교 공개 시간표·지정보강 계획입니다. 실제 출석 및 개별 휴강·보강 확정이 아니며 기말고사와 자율보강은 강좌별 확인이 필요합니다.\n이수학년: 1학년\n부전공: 부선\n복수전공: 복선",
-      "sourceSchedule": "화2/수3 / 인문사회관-401\r\n인문사회관-401",
-      "sourceClassroom": "인문사회관-401\r\n인문사회관-401",
+      "sourceSchedule": "화2/수3 / 인문사회관-404\r\n인문사회관-402",
+      "sourceClassroom": "인문사회관-404\r\n인문사회관-402",
       "scheduleStatus": "scheduled",
       "period": {
         "startDate": "2026-09-01",
@@ -21346,196 +21346,196 @@
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-09-01"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-09-02"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-09-08"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-09-09"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-09-15"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-09-16"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-09-22"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-09-23"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-09-29"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-09-30"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-10-06"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-10-07"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-10-13"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-10-14"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-10-20"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-10-21"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-10-27"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-10-28"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-11-03"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-11-04"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-11-10"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-11-11"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-11-17"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-11-18"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-11-24"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-11-25"
         },
         {
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-404",
           "date": "2026-12-01"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401",
+          "classroom": "인문사회관-402",
           "date": "2026-12-02"
         }
       ],
@@ -21544,13 +21544,13 @@
           "weekday": 2,
           "startMinute": 630,
           "endMinute": 705,
-          "classroom": "인문사회관-401"
+          "classroom": "인문사회관-404"
         },
         {
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 795,
-          "classroom": "인문사회관-401"
+          "classroom": "인문사회관-402"
         }
       ],
       "publicEducationBySelection": [
@@ -21571,13 +21571,13 @@
             "SB_LVL": "1학년",
             "PNT": "3",
             "CMP_DIV_DBL_NM": "복선",
-            "CLASS": "화2/수3 / 인문사회관-401\r\n인문사회관-401",
+            "CLASS": "화2/수3 / 인문사회관-404\r\n인문사회관-402",
             "PRE_CURI_NM": "",
             "DCL_RCD_NM": "",
             "PROF_NM": "양희영",
             "DIVCLS_CD": "01",
             "SB_CD_NM": "서양근대사",
-            "LECT_ROOM_CD": "인사401",
+            "LECT_ROOM_CD": "인사402",
             "COCO_4_NM": "",
             "REF_KEY": "CCS_OPEN_SUB 00000000000000334961",
             "DCL_NM_FOR_ENG": "",

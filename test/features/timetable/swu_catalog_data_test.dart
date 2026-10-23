@@ -52,6 +52,19 @@ void main() {
           )
           as Map<String, dynamic>;
   final courses = UniversityDataset.fromJson(raw).courses;
+  test('2026-10-23 official recheck classroom change is applied per slot', () {
+    expect(raw['publishedDate'], '2026-10-23');
+    final c = courses.singleWhere(
+      (x) => x.sourceId == 'swu-2026-2-00000000000000334961',
+    );
+    expect(c.sourceSchedule, '화2/수3 / 인문사회관-404\r\n인문사회관-402');
+    for (final m in c.meetings) {
+      expect(
+        m.classroom,
+        m.originalStartMinute == 630 ? '인문사회관-404' : '인문사회관-402',
+      );
+    }
+  });
   test(
     '172 actual selectors 2705 rows 1511 native offerings and educational-only immutable metadata',
     () {
