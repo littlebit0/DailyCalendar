@@ -350,6 +350,20 @@
           }
         }
       ]
+    },
+    {
+      "university": "kau",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://kau.ac.kr/kaulife/schedule.php",
+      "periodBoundaryMeaning": "Printed last second semester makeup day; ordinary weekly reservations endDec7. Midterm exceptions unverified.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
     }
   ]
 }
