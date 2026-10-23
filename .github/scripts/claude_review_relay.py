@@ -4,6 +4,8 @@ import json
 import os
 from pathlib import Path
 import re
+import hashlib
+import shlex
 import sys
 import time
 import urllib.error
@@ -78,7 +80,8 @@ def latest_check(checks, review_id):
 def verified_receipt(check):
     try:
         receipt = json.loads(check.get('output', {}).get('summary', '{}'))
-        return receipt.get('schema') == 2 and receipt.get('received') is True and receipt.get('state') == 'completed'
+        # Delivery acknowledgment prevents duplicate work even if follow-up tools failed.
+        return receipt.get('schema') == 2 and receipt.get('received') is True
     except (ValueError, TypeError):
         return False
 
@@ -86,7 +89,7 @@ def verified_receipt(check):
 def retry_allowed(check, review_id):
     if check is None:
         return True
-    if check.get('conclusion') == 'success' and verified_receipt(check):
+    if verified_receipt(check):
         return False
     return os.environ.get('RETRY_REVIEW_ID') == str(review_id) and os.environ.get('ACKNOWLEDGE_UNCERTAIN') == 'true'
 
@@ -127,7 +130,7 @@ def scan():
             previous = latest_check(checks, review['id'])
             if os.environ.get('RETRY_REVIEW_ID') and os.environ['RETRY_REVIEW_ID'] != str(review['id']):
                 continue
-            if previous and previous.get('conclusion') == 'success' and verified_receipt(previous):
+            if previous and verified_receipt(previous):
                 continue
             if not retry_allowed(previous, review['id']):
                 print(f"PR #{pr['number']} 리뷰 {review['id']}: 실행 결과 미확인/실패, 명시적 재시도 필요", file=sys.stderr)
@@ -191,6 +194,27 @@ def run_url():
     return f"https://github.com/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}/attempts/{os.environ['GITHUB_RUN_ATTEMPT']}"
 
 
+def denial_summary(result):
+    summaries = []
+    for item in result.get('permission_denials', []):
+        if not isinstance(item, dict):
+            continue
+        inputs = item.get('tool_input', {})
+        program = None
+        if isinstance(inputs, dict) and isinstance(inputs.get('command'), str):
+            try:
+                words = shlex.split(inputs['command'])
+                candidate = Path(words[0]).name if words else None
+                if candidate in {'git', 'gh', 'python3', 'bash', 'sh', 'cd', 'ls', 'pwd', 'cat', 'sed', 'rg', 'find', 'flutter', 'dart'}:
+                    program = candidate
+            except ValueError:
+                pass
+        summaries.append({'tool': item.get('tool_name'), 'program': program,
+                          'input_keys': sorted(inputs) if isinstance(inputs, dict) else [],
+                          'input_sha256': hashlib.sha256(json.dumps(inputs, sort_keys=True).encode()).hexdigest()})
+    return summaries
+
+
 def evaluate_execution(outcome, records, acknowledgment, context):
     results = [r for r in records if isinstance(r, dict) and r.get('type') == 'result']
     result = results[-1] if results else {}
@@ -205,6 +229,8 @@ def evaluate_execution(outcome, records, acknowledgment, context):
                and result.get('is_error') is False and denials == 0 and received
                and acknowledgment.get('status') == 'completed')
     return {'schema': 2, 'received': bool(received), 'permission_denials_count': denials,
+            'denied_tools': denial_summary(result),
+            'acknowledgment_status': acknowledgment.get('status') if isinstance(acknowledgment, dict) else None,
             'state': 'completed' if success else 'uncertain',
             'session_id': result.get('session_id'), 'target': {key: context[key] for key in identity}}
 

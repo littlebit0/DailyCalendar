@@ -172,5 +172,17 @@ class RelayTests(unittest.TestCase):
             relay.claim(9, 41)
         self.assertFalse(any(c.args[0] == 'check-runs' for c in api.call_args_list))
 
+    def test_denial_diagnostics_do_not_expose_arguments(self):
+        result = {'permission_denials': [{'tool_name': 'Bash', 'tool_input': {'command': 'gh api secret-value'}}]}
+        summary = relay.denial_summary(result)
+        self.assertEqual(summary[0]['program'], 'gh')
+        self.assertNotIn('secret-value', json.dumps(summary))
+
+    def test_received_with_followup_failure_is_not_redelivered(self):
+        check = {'conclusion': 'failure', 'output': {'summary': json.dumps({'schema': 2, 'received': True, 'state': 'uncertain'})}}
+        with patch.dict(os.environ, {'RETRY_REVIEW_ID': '41', 'ACKNOWLEDGE_UNCERTAIN': 'true'}):
+            self.assertFalse(relay.retry_allowed(check, 41))
+        self.assertTrue(relay.verified_receipt(check))
+
 
 if __name__ == '__main__': unittest.main()
