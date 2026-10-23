@@ -195,13 +195,15 @@ class WeeklyTimetableGrid extends StatelessWidget {
                       ),
                     ),
                 for (var dayIndex = 0; dayIndex < days.length; dayIndex++)
-                  for (final placement in _placeOccurrences(
-                    visible
-                        .where(
-                          (item) =>
-                              DateUtils.isSameDay(item.date, days[dayIndex]),
-                        )
-                        .toList(),
+                  for (final placement in _placeBlocks(
+                    _mergeContinuousOccurrences(
+                      visible
+                          .where(
+                            (item) =>
+                                DateUtils.isSameDay(item.date, days[dayIndex]),
+                          )
+                          .toList(),
+                    ),
                   ))
                     Positioned(
                       left:
@@ -210,33 +212,33 @@ class WeeklyTimetableGrid extends StatelessWidget {
                           placement.lane * dayWidth / placement.laneCount +
                           1.5,
                       top:
-                          (placement.occurrence.meeting.startMinute -
-                                  startMinute) /
+                          (placement.block.startMinute - startMinute) /
                               60 *
                               hourHeight +
                           1,
                       width: math.max(0, dayWidth / placement.laneCount - 3),
                       height: math.max(
                         2,
-                        (placement.occurrence.meeting.endMinute -
-                                    placement.occurrence.meeting.startMinute) /
+                        (placement.block.endMinute -
+                                    placement.block.startMinute) /
                                 60 *
                                 hourHeight -
                             2,
                       ),
                       child: _ClassBlock(
                         key: ValueKey(
-                          'timetable-occurrence-${placement.occurrence.id}',
+                          'timetable-occurrence-${placement.block.occurrence.id}',
                         ),
-                        occurrence: placement.occurrence,
+                        occurrence: placement.block.occurrence,
                         timeLabel:
-                            '${_timeLabel(context, placement.occurrence.meeting.startMinute)}–${_timeLabel(context, placement.occurrence.meeting.endMinute)}',
+                            '${_timeLabel(context, placement.block.startMinute)}–${_timeLabel(context, placement.block.endMinute)}',
                         weekday: dayLabels[dayIndex],
                         isPreview: previewCourseIds.contains(
-                          placement.occurrence.course.id,
+                          placement.block.occurrence.course.id,
                         ),
                         compact: compact,
-                        onTap: () => onOccurrenceTap(placement.occurrence),
+                        onTap: () =>
+                            onOccurrenceTap(placement.block.occurrence),
                       ),
                     ),
               ],
@@ -529,21 +531,86 @@ class _ClassBlock extends StatelessWidget {
   }
 }
 
-class _Placement {
-  _Placement(this.occurrence, this.lane);
+/// Consecutive meetings of one course drawn as a single grid block. The
+/// occurrence is the first meeting, so taps and keys still address stored data.
+class _TimetableBlock {
+  const _TimetableBlock(
+    this.occurrence,
+    this.startMinute,
+    this.endMinute,
+    this.sourceEndMinute,
+  );
   final ClassOccurrence occurrence;
+  final int startMinute;
+  final int endMinute;
+
+  /// Latest end as published, before the half-hour grid snapping, so the gap
+  /// test sees the real recess rather than the snapped boundaries.
+  final int sourceEndMinute;
+}
+
+/// A longer gap is a real break between sessions, not a bell-schedule recess.
+const _maxMergeGapMinutes = 60;
+
+/// Joins meetings of one day that the school data split at recesses: same
+/// course, classroom and lecture mode with less than an hour between them.
+/// Overlapping meetings merge too, keeping the later end.
+List<_TimetableBlock> _mergeContinuousOccurrences(
+  List<ClassOccurrence> occurrences,
+) {
+  final sorted = [...occurrences]
+    ..sort((a, b) {
+      final time = a.meeting.startMinute.compareTo(b.meeting.startMinute);
+      if (time != 0) return time;
+      final end = a.meeting.endMinute.compareTo(b.meeting.endMinute);
+      return end != 0 ? end : a.id.compareTo(b.id);
+    });
+  final result = <_TimetableBlock>[];
+  final open = <String, int>{};
+  for (final item in sorted) {
+    final key =
+        '${item.course.id}\u0000${item.meeting.classroom}\u0000${item.mode.name}';
+    final index = open[key];
+    final previous = index == null ? null : result[index];
+    if (previous != null &&
+        item.meeting.originalStartMinute - previous.sourceEndMinute <
+            _maxMergeGapMinutes) {
+      result[index!] = _TimetableBlock(
+        previous.occurrence,
+        previous.startMinute,
+        math.max(previous.endMinute, item.meeting.endMinute),
+        math.max(previous.sourceEndMinute, item.meeting.originalEndMinute),
+      );
+    } else {
+      open[key] = result.length;
+      result.add(
+        _TimetableBlock(
+          item,
+          item.meeting.startMinute,
+          item.meeting.endMinute,
+          item.meeting.originalEndMinute,
+        ),
+      );
+    }
+  }
+  return result;
+}
+
+class _Placement {
+  _Placement(this.block, this.lane);
+  final _TimetableBlock block;
   final int lane;
   int laneCount = 1;
 }
 
 /// Allocate lanes within connected overlap groups, so adjacent classes retain
 /// the full column width while every simultaneous class remains tappable.
-List<_Placement> _placeOccurrences(List<ClassOccurrence> occurrences) {
-  occurrences.sort((a, b) {
-    final time = a.meeting.startMinute.compareTo(b.meeting.startMinute);
+List<_Placement> _placeBlocks(List<_TimetableBlock> blocks) {
+  blocks.sort((a, b) {
+    final time = a.startMinute.compareTo(b.startMinute);
     if (time != 0) return time;
-    final end = a.meeting.endMinute.compareTo(b.meeting.endMinute);
-    return end != 0 ? end : a.id.compareTo(b.id);
+    final end = a.endMinute.compareTo(b.endMinute);
+    return end != 0 ? end : a.occurrence.id.compareTo(b.occurrence.id);
   });
   final result = <_Placement>[];
   final group = <_Placement>[];
@@ -557,21 +624,19 @@ List<_Placement> _placeOccurrences(List<ClassOccurrence> occurrences) {
     laneEnds.clear();
   }
 
-  for (final occurrence in occurrences) {
-    if (occurrence.meeting.startMinute >= groupEnd) finishGroup();
-    var lane = laneEnds.indexWhere(
-      (end) => end <= occurrence.meeting.startMinute,
-    );
+  for (final block in blocks) {
+    if (block.startMinute >= groupEnd) finishGroup();
+    var lane = laneEnds.indexWhere((end) => end <= block.startMinute);
     if (lane == -1) {
       lane = laneEnds.length;
-      laneEnds.add(occurrence.meeting.endMinute);
+      laneEnds.add(block.endMinute);
     } else {
-      laneEnds[lane] = occurrence.meeting.endMinute;
+      laneEnds[lane] = block.endMinute;
     }
-    final placement = _Placement(occurrence, lane);
+    final placement = _Placement(block, lane);
     result.add(placement);
     group.add(placement);
-    groupEnd = math.max(groupEnd, occurrence.meeting.endMinute);
+    groupEnd = math.max(groupEnd, block.endMinute);
   }
   finishGroup();
   return result;
