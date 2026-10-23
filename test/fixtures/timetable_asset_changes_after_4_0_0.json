@@ -31,10 +31,6 @@
     "sha256": "bdd3b833d0062b3cee2c2f0c5f97c085ccd1da3db5ff3eb6f7bb3b1cff0a5d13",
     "reason": "#606 서경대 학사내규 제6조 교시표(21~26교시 75분)와 원문 시간·학점을 대조해 수업시간이 맞지 않는 영어회화 EGM025-01을 시각 보류로 전환"
   },
-  "assets/timetable/sku-unknown-2026-2.json": {
-    "sha256": "dfb6657d7e60755c85ec04dfe957038aee81b403ac12f3a46f700df908eea4a4",
-    "reason": "#606 서경대 학칙 제43조의3·학·석사연계과정 운영 규정 제9조 근거로 연계과정 교과목 지리정보체계2(UR1037) 비고에 연계과정 특성 한 줄 추가"
-  },
   "assets/timetable/organizations/sku.json": {
     "sha256": "015bccfc37d3becb3ae571ef42e26a61bf6bae27fc518fd47ca214ba3ad8531c",
     "reason": "#606 서경대 원자료 분류 17개(미래융합학부1·2 전공·계열 라벨, 글로벌융합대학 외국인 유학생 전담 학과·학부 라벨)를 2026학년도 요람·학칙 별표 4 기준 미래융합대학·글로벌융합대학에 배정"

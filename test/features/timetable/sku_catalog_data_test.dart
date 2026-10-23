@@ -185,11 +185,6 @@ void main() {
       // 학칙 학사내규 제6조: 21~26교시는 75분 수업이다. 3시간·3학점인데 화 22(75분)
       // 하나뿐인 영어회화(EGM025-01)는 수업시간이 맞지 않아 보류한다.
       expect(scheduled.where((c) => c.code == 'EGM025'), isEmpty);
-      // 학·석사연계과정 운영 규정 제9조: 연계 교과목은 비고에 연계과정임을 남긴다.
-      expect(
-        scheduled.singleWhere((c) => c.code == 'UR1037').sourceRemarks,
-        contains('학·석사연계과정 교과목'),
-      );
       expect(rows, 1698);
       expect(seen, hasLength(1698));
       expect(closedRows, 104);
