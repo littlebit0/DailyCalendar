@@ -8,7 +8,7 @@
   "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
   "publishedDate": "2026-08-19",
   "sourceSha256": "15f1abd20333fa475892eac51104050b05bc24c6cd7eb2f052846b47b81fdbc1",
-  "sourceRowCount": 33,
+  "sourceRowCount": 34,
   "courses": [
     {
       "sourceId": "eulji/uijeongbu/2026/2/6063d6488a591e51baddc4fe",
@@ -1383,15 +1383,51 @@
         "startDate": "2026-09-01",
         "endDate": "2026-12-21"
       }
-    }
-  ],
-  "heldRows": [
+    },
     {
+      "sourceId": "eulji/uijeongbu/2026/2/4bfc6008c72cc0f8a92235a5",
+      "universityId": "eulji",
       "campus": "uijeongbu",
-      "raw": "  N영역         동계스포츠Ⅰ          001  GRADE   2    목    야1~3     일610",
-      "reason": "night clock not published"
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅰ          001",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "N영역         동계스포츠Ⅰ          001  GRADE   2    목    야1~3     일610",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
     }
   ],
+  "heldRows": [],
   "periodEvidence": {
     "start": "2026-09-01",
     "end": "2026-12-21",
@@ -1402,5 +1438,11 @@
   "additionalSourceUrls": [
     "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
     "https://www.eulji.ac.kr/?menuno=3160&bbsno=1085&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view"
-  ]
+  ],
+  "nightClockEvidence": {
+    "sourceUrl": "https://eulji.ac.kr/aac/index.html?menuno=2711",
+    "quote": "야간 1교시 18:00~18:45, 2교시 18:45~19:30, 3교시 19:30~20:15 (야간수업은 매 교시 45분 수업 단위로 수업을 진행하고 3교시 종료 후 10분 휴식)",
+    "retrieved": "2026-10-24",
+    "scope": "야1~3만 사용; 야4~6은 공식 표에서 4교시 20:25~21:10, 5교시 21:00~21:55로 겹쳐 사용하지 않음"
+  }
 }

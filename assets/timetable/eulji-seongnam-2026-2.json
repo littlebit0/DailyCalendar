@@ -8,7 +8,7 @@
   "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
   "publishedDate": "2026-08-19",
   "sourceSha256": "15f1abd20333fa475892eac51104050b05bc24c6cd7eb2f052846b47b81fdbc1",
-  "sourceRowCount": 379,
+  "sourceRowCount": 389,
   "courses": [
     {
       "sourceId": "eulji/seongnam/2026/2/ac6b1c9d15c015834f216470",
@@ -21671,73 +21671,443 @@
         "startDate": "2026-09-01",
         "endDate": "2026-12-21"
       }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/ae75b77d9f28f54787251dfe",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌영어2             001",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 1080,
+          "endMinute": 1170,
+          "classroom": "예비"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 U영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "글로벌영어2             001    P/NP    2    토     야1~2        예비",
+      "sourceSchedule": "토 야1~2",
+      "sourceClassroom": "예비",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/dc5edb245fbab337970d2884",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌영어3             001",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 1080,
+          "endMinute": 1170,
+          "classroom": "예비"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 U영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "글로벌영어3             001    P/NP    2    토     야1~2        예비",
+      "sourceSchedule": "토 야1~2",
+      "sourceClassroom": "예비",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/ade08dac70c493aaf2adcf75",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅰ             001",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "본306"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "동계스포츠Ⅰ             001   GRADE    2    목     야1~3        본306",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "본306",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/36ceaeba1f1b122999f648a0",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅰ             002",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "동계스포츠Ⅰ             002   GRADE    2    목     야1~3        본307",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/6144703741598384221bba05",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅰ             003",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "본401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "동계스포츠Ⅰ             003   GRADE    2    목     야1~3        본401",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "본401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/622f2676d8cbf9f2665dda60",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅰ             004",
+      "section": "004",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "동계스포츠Ⅰ             004   GRADE    2    목     야1~3        본402",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/afdcddca63618210417b58ed",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅱ             001",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "을202"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "동계스포츠Ⅱ             001   GRADE    2    목     야1~3        을202",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "을202",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/258e9ee5dcca7135446103ea",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅱ             002",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "을203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "N영역           동계스포츠Ⅱ             002   GRADE    2    목     야1~3        을203",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "을203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/11fb3768adbd12847713a6aa",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅱ             003",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "박319"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "동계스포츠Ⅱ             003   GRADE    2    목     야1~3        박319",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "박319",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/2184186b5543320ceee81c8c",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅱ             004",
+      "section": "004",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1215,
+          "classroom": "범B151"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "동계스포츠Ⅱ             004   GRADE    2    목     야1~3       범B151",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "범B151",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
     }
   ],
   "heldRows": [
     {
       "campus": "seongnam",
       "raw": "               온라인토익Ⅱ             001   GRADE   2    토     야1~2       예비       별첨  수강안내문   확인",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                글로벌영어2             001    P/NP    2    토     야1~2        예비",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                글로벌영어3             001    P/NP    2    토     야1~2        예비",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                동계스포츠Ⅰ             001   GRADE    2    목     야1~3        본306",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                동계스포츠Ⅰ             002   GRADE    2    목     야1~3        본307",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                동계스포츠Ⅰ             003   GRADE    2    목     야1~3        본401",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                동계스포츠Ⅰ             004   GRADE    2    목     야1~3        본402",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                동계스포츠Ⅱ             001   GRADE    2    목     야1~3        을202",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "  N영역           동계스포츠Ⅱ             002   GRADE    2    목     야1~3        을203",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                동계스포츠Ⅱ             003   GRADE    2    목     야1~3        박319",
-      "reason": "night clock not published"
-    },
-    {
-      "campus": "seongnam",
-      "raw": "                동계스포츠Ⅱ             004   GRADE    2    목     야1~3       범B151",
-      "reason": "night clock not published"
+      "reason": "야간 시각은 확정했으나 온라인 수업 또는 공지 변경(야간4~5·야간1~3)이 있어 보류"
     },
     {
       "campus": "seongnam",
       "raw": "           한국어발표와토론(온라인)           001   GRADE    2    토     야1~2        예비",
-      "reason": "night clock not published"
+      "reason": "야간 시각은 확정했으나 온라인 수업 또는 공지 변경(야간4~5·야간1~3)이 있어 보류"
     },
     {
       "campus": "seongnam",
       "raw": "            한국사회의이해(온라인)           001   GRADE    3    토     야1~2        예비",
-      "reason": "night clock not published"
+      "reason": "야간 시각은 확정했으나 온라인 수업 또는 공지 변경(야간4~5·야간1~3)이 있어 보류"
     }
   ],
   "periodEvidence": {
@@ -21756,5 +22126,11 @@
     "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
     "https://www.eulji.ac.kr/?menuno=3160&bbsno=1085&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view"
   ],
-  "coverage": "Existing60 public exchange offerings plus200 source-located undergraduate department timetable instances. Graduate2 excluded,48 ambiguous/clinical source instances held; whole university coverage not established. Published combined regular teaching/makeup semester bounds retained; no makeup occurrence dates invented."
+  "coverage": "Existing60 public exchange offerings plus200 source-located undergraduate department timetable instances. Graduate2 excluded,48 ambiguous/clinical source instances held; whole university coverage not established. Published combined regular teaching/makeup semester bounds retained; no makeup occurrence dates invented.",
+  "nightClockEvidence": {
+    "sourceUrl": "https://eulji.ac.kr/aac/index.html?menuno=2711",
+    "quote": "야간 1교시 18:00~18:45, 2교시 18:45~19:30, 3교시 19:30~20:15 (야간수업은 매 교시 45분 수업 단위로 수업을 진행하고 3교시 종료 후 10분 휴식)",
+    "retrieved": "2026-10-24",
+    "scope": "야1~3만 사용; 야4~6은 공식 표에서 4교시 20:25~21:10, 5교시 21:00~21:55로 겹쳐 사용하지 않음"
+  }
 }

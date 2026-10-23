@@ -11,7 +11,7 @@ void main() {
       final datasets = catalog.where((d) => d.universityId == 'eulji').toList();
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
-        {'seongnam': 379, 'uijeongbu': 33},
+        {'seongnam': 389, 'uijeongbu': 34},
       );
 
       final raw = <String>{};
