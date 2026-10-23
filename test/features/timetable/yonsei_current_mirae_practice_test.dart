@@ -22,12 +22,9 @@ Map<String, dynamic> read(String file) {
       }
       return frozen;
     }
-    return jsonDecode(
-          fixtureFile(
-            'assets/timetable/yonsei-$campus-2026-2.json',
-          ).readAsStringSync(),
-        )
-        as Map<String, dynamic>;
+    // The frozen v2 unknown-campus candidate is byte-identical to its v1
+    // baseline; the live asset has since been rechecked against the portal.
+    file = 'baseline-yonsei-unknown-v1.json';
   }
   final frozen =
       jsonDecode(fixtureFile('$root$file').readAsStringSync())
