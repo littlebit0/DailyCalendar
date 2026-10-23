@@ -5,7 +5,7 @@
   "campusName": "캠퍼스 미확인",
   "academicYear": 2026,
   "semester": "2",
-  "publishedDate": "2026-10-08",
+  "publishedDate": "2026-10-23",
   "publishedDateMeaning": "Current anonymous public retrieval date",
   "sourceUrl": "https://chains.changwon.ac.kr/cnu/haksa/open_subject/open_index_manager.php",
   "researchOnly": false,
@@ -2030,7 +2030,7 @@
         "회계학과": "전선"
       },
       "departmentRemarks": {
-        "회계학과": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+        "회계학과": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-26"
       },
       "sourceSchedule": "월4A(B21218),월4B,월5A,수5B(B21218),수6A,수6B,",
       "sourceClassroom": "B21218",
@@ -2077,13 +2077,6 @@
           "endMinute": 810,
           "classroom": "B21218",
           "date": "2026-10-19"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 720,
-          "endMinute": 810,
-          "classroom": "B21218",
-          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -2246,9 +2239,9 @@
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
-            "examLocation": "B21124",
+            "examMode": "대면",
+            "examDateTime": "2026.10.26(월) 12:00",
+            "examLocation": "B21218",
             "examNotes": "",
             "code": "ACA0015",
             "section": "00",
@@ -2269,15 +2262,15 @@
           "강의진행방식": "일반강의",
           "수업운영방식": "대면",
           "비대면솔루션": "미사용",
-          "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
-          "시험강의실": "B21124",
-          "시험일시": "~"
+          "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+          "시험강의실": "B21218",
+          "시험일시": "2026.10.26(월) 12:00 ~ 2026.10.26(월) 13:15"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/ACA0015-00.json",
-          "sha256": "2497519e25b561cc762ff1bc48de4ebdb9f553e5859a97ea6b9a80a550910d61",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/ACA0015-00.json",
+          "sha256": "7fad1085747dd44c5ae38748e27a746c7542bb4a300f4ed7ac31209aa436c22b",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -2307,12 +2300,14 @@
               ]
             }
           ],
-          "individualPublishedExamDateHold": [],
+          "individualPublishedExamDateHold": [
+            "2026-10-26"
+          ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+      "remarks": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-26"
     },
     {
       "sourceId": "changwon/unknown/2026/2/ACA0016-00",
@@ -2336,7 +2331,7 @@
         "회계학과": "전선"
       },
       "departmentRemarks": {
-        "회계학과": "수강 가능 학년·학과: 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+        "회계학과": "수강 가능 학년·학과: 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-21"
       },
       "sourceSchedule": "월5B(B21218),월6A,월6B,수4A(B21218),수4B,수5A,",
       "sourceClassroom": "B21218",
@@ -2487,13 +2482,6 @@
           "startMinute": 720,
           "endMinute": 810,
           "classroom": "B21218",
-          "date": "2026-10-21"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
-          "endMinute": 810,
-          "classroom": "B21218",
           "date": "2026-10-28"
         },
         {
@@ -2552,9 +2540,9 @@
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
-            "examLocation": "B21124",
+            "examMode": "대면",
+            "examDateTime": "2026.10.21(수) 12:00",
+            "examLocation": "B21218",
             "examNotes": "",
             "code": "ACA0016",
             "section": "00",
@@ -2575,15 +2563,15 @@
           "강의진행방식": "일반강의",
           "수업운영방식": "대면",
           "비대면솔루션": "미사용",
-          "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
-          "시험강의실": "B21124",
-          "시험일시": "~"
+          "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+          "시험강의실": "B21218",
+          "시험일시": "2026.10.21(수) 12:00 ~ 2026.10.21(수) 13:15"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/ACA0016-00.json",
-          "sha256": "c21be832b4a6cd5ba61f023528b791c73fe08133b7789890c1411e50131fa2f0",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/ACA0016-00.json",
+          "sha256": "5ddeaf542ee602b58c5b249c9669f1f4d0d688c4973bc576d944c06ae6d72993",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -2613,12 +2601,14 @@
               ]
             }
           ],
-          "individualPublishedExamDateHold": [],
+          "individualPublishedExamDateHold": [
+            "2026-10-21"
+          ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+      "remarks": "수강 가능 학년·학과: 3 4 학과확인\n개설 소속: 회계학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-21"
     },
     {
       "sourceId": "changwon/unknown/2026/2/ACA0025-00",
@@ -47971,7 +47961,7 @@
         "인공지능화학공학과": "전공기초"
       },
       "departmentRemarks": {
-        "인공지능화학공학과": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 인공지능화학공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-30"
+        "인공지능화학공학과": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 인공지능화학공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-30"
       },
       "sourceSchedule": "금5A(53313),금5B,금6A,금6B,",
       "sourceClassroom": "53313",
@@ -48071,14 +48061,14 @@
             "eligibleYearDepartment": "1 학과확인",
             "openingDepartment": "인공지능화학공학과",
             "exchangePermission": "N",
-            "competencies": "",
+            "competencies": "실용적융복합",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
-            "examLocation": "",
-            "examNotes": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.30(금) 13:00",
+            "examLocation": "53313",
+            "examNotes": "평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.",
             "code": "CCA1001",
             "section": "00",
             "query": {
@@ -48103,10 +48093,10 @@
           "시험일시": "2026.10.30(금) 13:00 ~ 2026.10.30(금) 15:00"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/CCA1001-00.json",
-          "sha256": "a6dd0f514104313d95fc4aae59a399ae06612f17bca88f7208ad2b0e434f1d67",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/CCA1001-00.json",
+          "sha256": "e1dbdf4a36d781963815193ead34ff922563dae9ac770a4bf8618c2e2b2d8817",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -48133,7 +48123,7 @@
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 인공지능화학공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-30"
+      "remarks": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 인공지능화학공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-30"
     },
     {
       "sourceId": "changwon/unknown/2026/2/CCA1008-00",
@@ -102073,7 +102063,7 @@
       "courseCode": "EDA0011",
       "section": "00",
       "courseName": "유아음악교육(어드벤처디자인)",
-      "professor": "윤지영",
+      "professor": "윤지영,강재은",
       "credits": 3.0,
       "departmentCredits": {
         "유아교육과": 3.0
@@ -102286,7 +102276,7 @@
             "title": "유아음악교육(어드벤처디자인)",
             "credits": "3",
             "theoryPractice": "2(2)",
-            "professor": "윤지영",
+            "professor": "윤지영,강재은",
             "schedule": "월2B(11209),월3A,월3B,월4A,화2A(11209),화2B,화3A,화3B,",
             "eligibleYearDepartment": "1 2 3 4 학과확인",
             "openingDepartment": "유아교육과",
@@ -102323,10 +102313,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/EDA0011-00.json",
-          "sha256": "1759d63c8c6eaebe7c360597f8a1fd16cdbc7a8712dacab5f9ac8873038f7bc9",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/EDA0011-00.json",
+          "sha256": "c8a02321a81de3a527fef7341991ea4e8168f31304675f414bebfcd5d203e1d2",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -103293,7 +103283,7 @@
       "courseCode": "EDA0089",
       "section": "00",
       "courseName": "유아동작교육(어드벤처디자인)",
-      "professor": "윤지영",
+      "professor": "윤지영,강재은",
       "credits": 3.0,
       "departmentCredits": {
         "유아교육과": 3.0
@@ -103422,7 +103412,7 @@
             "title": "유아동작교육(어드벤처디자인)",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "윤지영",
+            "professor": "윤지영,강재은",
             "schedule": "수1A(11204),수1B,수2A,수2B,수3A,수3B,",
             "eligibleYearDepartment": "1 2 3 4 학과확인",
             "openingDepartment": "유아교육과",
@@ -103459,10 +103449,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/EDA0089-00.json",
-          "sha256": "863cb02f2f018aa919db6f04fe105678f2ecb313c12dde41b1b054af6bc5a2cc",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/EDA0089-00.json",
+          "sha256": "2e61828d63745f417c9b49b1e5d4df44b057235d038e2f17604d4f9c0ffb3a59",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -111261,7 +111251,7 @@
         "에너지기계공학과": "전공기초"
       },
       "departmentRemarks": {
-        "에너지기계공학과": "수강 가능 학년·학과: 학과확인\n개설 소속: 에너지기계공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-12-10"
+        "에너지기계공학과": "수강 가능 학년·학과: 학과확인\n개설 소속: 에너지기계공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-12-10"
       },
       "sourceSchedule": "목8B(53313),목9A,목9B,목10A,",
       "sourceClassroom": "53313",
@@ -111470,10 +111460,10 @@
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
+            "examMode": "대면",
+            "examDateTime": "2026.12.10(목) 16:30",
             "examLocation": "53313",
-            "examNotes": "",
+            "examNotes": "평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.",
             "code": "EHA0001",
             "section": "00",
             "query": {
@@ -111498,10 +111488,10 @@
           "시험일시": "2026.12.10(목) 16:30 ~ 2026.12.10(목) 18:30"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/EHA0001-00.json",
-          "sha256": "96fe3258471ab1e30f649aeac7ced59dde695d1f597aa53cbddf170f44786470",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/EHA0001-00.json",
+          "sha256": "80d0a525394f110a6fbf84344d96ca77ec2e57545a540be88ba705dd990b6310",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -111536,7 +111526,7 @@
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 학과확인\n개설 소속: 에너지기계공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-12-10"
+      "remarks": "수강 가능 학년·학과: 학과확인\n개설 소속: 에너지기계공학과\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-12-10"
     },
     {
       "sourceId": "changwon/unknown/2026/2/EHA0002-00",
@@ -121665,92 +121655,92 @@
       "departmentRemarks": {
         "영어영문학과": "수강 가능 학년·학과: 1 2 3 4 학과확인\n개설 소속: 영어영문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
       },
-      "sourceSchedule": "금1A(11412),금1B,금2A,금2B,금3A,금3B,",
-      "sourceClassroom": "11412",
+      "sourceSchedule": "금1A(11406),금1B,금2A,금2B,금3A,금3B,",
+      "sourceClassroom": "11406",
       "scheduleStatus": "scheduled",
       "schedules": [
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-09-04"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-09-11"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-09-18"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-10-02"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-10-16"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-10-23"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-10-30"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-11-06"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-11-13"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-11-20"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-11-27"
         },
         {
           "weekday": 5,
           "startMinute": 540,
           "endMinute": 720,
-          "classroom": "11412",
+          "classroom": "11406",
           "date": "2026-12-04"
         }
       ],
@@ -121766,7 +121756,7 @@
             "credits": "3",
             "theoryPractice": "3(0)",
             "professor": "이성화",
-            "schedule": "금1A(11412),금1B,금2A,금2B,금3A,금3B,",
+            "schedule": "금1A(11406),금1B,금2A,금2B,금3A,금3B,",
             "eligibleYearDepartment": "1 2 3 4 학과확인",
             "openingDepartment": "영어영문학과",
             "exchangePermission": "Y",
@@ -121793,7 +121783,7 @@
           "학수번호": "ENA0135",
           "분반": "00",
           "교과목명": "영어와문화",
-          "강의시간(장소)": "금1A(11412),금1B,금2A,금2B,금3A,금3B,",
+          "강의시간(장소)": "금1A(11406),금1B,금2A,금2B,금3A,금3B,",
           "강의진행방식": "일반강의",
           "수업운영방식": "대면",
           "비대면솔루션": "미사용",
@@ -121802,10 +121792,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/ENA0135-00.json",
-          "sha256": "39949c9e2e95f0016cc1808fbb8416a9e03e57705ac143cea9587b3c4518f50e",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/ENA0135-00.json",
+          "sha256": "39c325f38a64ab5d2fa00cc516d2b7ba7764c8c06d4977067996e2e01f4c132c",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -121816,7 +121806,7 @@
               "weekday": 5,
               "startMinute": 540,
               "endMinute": 720,
-              "classroom": "11412",
+              "classroom": "11406",
               "nativePeriods": [
                 "1A",
                 "1B",
@@ -155944,7 +155934,7 @@
       "courseCode": "GEA2005",
       "section": "00",
       "courseName": "서양문화사",
-      "professor": "신동규",
+      "professor": "신동규,김유정",
       "credits": 3.0,
       "departmentCredits": {
         "사학과": 3.0
@@ -156157,7 +156147,7 @@
             "title": "서양문화사",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "신동규",
+            "professor": "신동규,김유정",
             "schedule": "화7A(11109),화7B,화8A,목8B(11109),목9A,목9B,",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "사학과",
@@ -156183,7 +156173,7 @@
             "title": "서양문화사",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "신동규",
+            "professor": "신동규,김유정",
             "schedule": "화7A(11109),화7B,화8A,목8B(11109),목9A,목9B,",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "사학과",
@@ -156220,10 +156210,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA2005-00.json",
-          "sha256": "083db643f06f2e6b514f71c584b28471c468ed732c2d4abee578791e231f71fc",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA2005-00.json",
+          "sha256": "6496757451b6fb6217f27f3b5c8ba26b89041a2df2df604ea99a0a6e0abac81a",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -162497,7 +162487,7 @@
         "독어독문학과": "균교"
       },
       "departmentRemarks": {
-        "독어독문학과": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 독어독문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+        "독어독문학과": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 독어독문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-28"
       },
       "sourceSchedule": "월5B(11109),월6A,월6B,수4A(11109),수4B,수5A,",
       "sourceClassroom": "11109",
@@ -162655,13 +162645,6 @@
           "startMinute": 720,
           "endMinute": 810,
           "classroom": "11109",
-          "date": "2026-10-28"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
-          "endMinute": 810,
-          "classroom": "11109",
           "date": "2026-11-04"
         },
         {
@@ -162709,13 +162692,13 @@
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "독어독문학과",
             "exchangePermission": "Y",
-            "competencies": "",
+            "competencies": "글로벌",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
-            "examLocation": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.28(수) 12:00",
+            "examLocation": "11109",
             "examNotes": "",
             "code": "GEA5045",
             "section": "00",
@@ -162735,13 +162718,13 @@
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "독어독문학과",
             "exchangePermission": "Y",
-            "competencies": "",
+            "competencies": "글로벌",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
-            "examLocation": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.28(수) 12:00",
+            "examLocation": "11109",
             "examNotes": "",
             "code": "GEA5045",
             "section": "00",
@@ -162762,15 +162745,15 @@
           "강의진행방식": "일반강의",
           "수업운영방식": "대면",
           "비대면솔루션": "미사용",
-          "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
-          "시험강의실": "",
-          "시험일시": "~"
+          "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+          "시험강의실": "11109",
+          "시험일시": "2026.10.28(수) 12:00 ~ 2026.10.28(수) 13:15"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA5045-00.json",
-          "sha256": "1094918d67cefc65d082337df21ae93ae9a3428ba76c72ca6d54a17c598b81df",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA5045-00.json",
+          "sha256": "1d64a8aa6679b14fa88cdca215403a8f8e826a394b952bc4b6e8ecf0a5fcf9b7",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -162800,12 +162783,14 @@
               ]
             }
           ],
-          "individualPublishedExamDateHold": [],
+          "individualPublishedExamDateHold": [
+            "2026-10-28"
+          ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 독어독문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+      "remarks": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 독어독문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-28"
     },
     {
       "sourceId": "changwon/unknown/2026/2/GEA5046-00",
@@ -173857,7 +173842,7 @@
       "courseCode": "GEA7546",
       "section": "00",
       "courseName": "스타트업챌린지",
-      "professor": "권오설",
+      "professor": "정문기",
       "credits": 3.0,
       "departmentCredits": {
         "교양": 3.0
@@ -173870,7 +173855,7 @@
         "교양": "확교"
       },
       "departmentRemarks": {
-        "교양": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 원격수업\n수업운영: 동영상\n시험 안내: - 시험 일자: 2026. 10. 23.(금) ▶ 1차시: 16:00~17:00 ▶ 2차시: 17:00~18:00 ▶ 3차시: 18:00~19:00 - 시험 장소: 85호관 CWNU이룸홀 ※ 시험은 소속 단과대학(대학원)의 계열에 따라 차시를 구분 하여 진행할 예정​이며, 다른 시험 일정과 중복되는 등 부득이 한 사유가 있는 경우에 한하여 지정된 차시 외 다른 차시에 응 시할 수 있도록 운영할 예정입니다. ※ 계열별 시험 차시 및 응시 방법 등 세부 사항은 추후 별도 공 지사항을 통해 안내할 예정이오니, 반드시 확인하여 주시기 바 랍니다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 예약보류: native special delivery/intensive/practice type: 원격수업; native remote/mixed operation, individual weekly session mapping unknown; individual explicit intensive/field/remote operation evidence; exact ordinary versus exception dates not mapped from week numbers; native weekly clock tokens unavailable\n공식 현재2026-2 계획서의 시험 약속만 추가: 2026.10.23(금) 16:00 ~ 2026.10.23(금) 19:00, 장소 CWNU이룸홀, 시험방식 대면. 해당시험기간1회이며 미확정 정규·집중·영상수업을 확대하지 않습니다. 시험원문종료시각을 직접 사용했고 교시/학점으로 추정하지 않았습니다. 실제응시·최신변경 완료주장은 아닙니다."
+        "교양": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 원격수업\n수업운영: 동영상\n시험 안내: - 시험 일자: 2026. 10. 23.(금) ▶ 1차시: 16:00~17:00 ▶ 2차시: 17:00~18:00 ▶ 3차시: 18:00~19:00 - 시험 장소: 85호관 CWNU이룸홀 ※ 시험은 소속 단과대학(대학원)의 계열에 따라 차시를 구분 하여 진행할 예정​이며, 다른 시험 일정과 중복되는 등 부득이 한 사유가 있는 경우에 한하여 지정된 차시 외 다른 차시에 응 시할 수 있도록 운영할 예정입니다. ※ 계열별 시험 차시 및 응시 방법 등 세부 사항은 추후 별도 공 지사항을 통해 안내할 예정이오니, 반드시 확인하여 주시기 바 랍니다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 예약보류: native special delivery/intensive/practice type: 원격수업; native remote/mixed operation, individual weekly session mapping unknown; individual explicit intensive/field/remote operation evidence; exact ordinary versus exception dates not mapped from week numbers; native weekly clock tokens unavailable"
       },
       "sourceSchedule": "",
       "sourceClassroom": "",
@@ -173896,7 +173881,7 @@
             "title": "스타트업챌린지",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "권오설",
+            "professor": "정문기",
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -173922,7 +173907,7 @@
             "title": "스타트업챌린지",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "권오설",
+            "professor": "정문기",
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -173948,7 +173933,7 @@
             "title": "스타트업챌린지",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "권오설",
+            "professor": "정문기",
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -173985,10 +173970,10 @@
           "시험일시": "2026.10.23(금) 16:00 ~ 2026.10.23(금) 19:00"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA7546-00.json",
-          "sha256": "6ff2764e034b046b79a322fb236991939328527a222ad4f2a9779ff32e854cf4",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA7546-00.json",
+          "sha256": "0365c1ba0e6a6488b39e9f5243095d0c4ddb385795d6e3c6fdb36653a6165e74",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [
           {
@@ -174123,7 +174108,7 @@
             "title": "스타트업챌린지",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "권오설",
+            "professor": "정문기",
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -174149,7 +174134,7 @@
             "title": "스타트업챌린지",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "권오설",
+            "professor": "정문기",
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -174175,7 +174160,7 @@
             "title": "스타트업챌린지",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "권오설",
+            "professor": "정문기",
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -174795,7 +174780,7 @@
         "국제무역학과(야)": "균교"
       },
       "departmentRemarks": {
-        "국제무역학과(야)": "수강 가능 학년·학과: 1 2 3 학과확인\n개설 소속: 국제무역학과(야)\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+        "국제무역학과(야)": "수강 가능 학년·학과: 1 2 3 학과확인\n개설 소속: 국제무역학과(야)\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 서술형 지필고사\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-28"
       },
       "sourceSchedule": "수10A(B21220),수10B,수11A,수11B,수12A,수12B,",
       "sourceClassroom": "B21220",
@@ -174862,13 +174847,6 @@
           "startMinute": 1100,
           "endMinute": 1250,
           "classroom": "B21220",
-          "date": "2026-10-28"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1100,
-          "endMinute": 1250,
-          "classroom": "B21220",
           "date": "2026-11-04"
         },
         {
@@ -174920,10 +174898,10 @@
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.28(수) 18:20",
             "examLocation": "B21220",
-            "examNotes": "",
+            "examNotes": "서술형 지필고사",
             "code": "GEA7558",
             "section": "61",
             "query": {
@@ -174946,10 +174924,10 @@
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.28(수) 18:20",
             "examLocation": "B21220",
-            "examNotes": "",
+            "examNotes": "서술형 지필고사",
             "code": "GEA7558",
             "section": "61",
             "query": {
@@ -174969,15 +174947,15 @@
           "강의진행방식": "일반강의",
           "수업운영방식": "대면",
           "비대면솔루션": "미사용",
-          "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+          "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
           "시험강의실": "B21220",
-          "시험일시": "~"
+          "시험일시": "2026.10.28(수) 18:20 ~ 2026.10.28(수) 19:20"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA7558-61.json",
-          "sha256": "21d595c88d5aae18b717f6283ba88fd226f7c0670b5a7e4cea9533c19d4e6bd0",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA7558-61.json",
+          "sha256": "eff6372831c06f1bec90fabc4b6f3aa96e93f9050281c1e11ccefcd0565436b2",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -174999,12 +174977,14 @@
               ]
             }
           ],
-          "individualPublishedExamDateHold": [],
+          "individualPublishedExamDateHold": [
+            "2026-10-28"
+          ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 1 2 3 학과확인\n개설 소속: 국제무역학과(야)\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+      "remarks": "수강 가능 학년·학과: 1 2 3 학과확인\n개설 소속: 국제무역학과(야)\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 서술형 지필고사\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-28"
     },
     {
       "sourceId": "changwon/unknown/2026/2/GEA7565-00",
@@ -217339,7 +217319,7 @@
         "교양": "확교"
       },
       "departmentRemarks": {
-        "교양": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 교양\n학점/이론·실습: 0(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 예약보류: native weekly clock tokens unavailable"
+        "교양": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 교양\n학점/이론·실습: 0(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 예약보류: native weekly clock tokens unavailable"
       },
       "sourceSchedule": "",
       "sourceClassroom": "",
@@ -217360,7 +217340,7 @@
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
-            "exchangePermission": "Y",
+            "exchangePermission": "N",
             "competencies": "",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
@@ -217386,7 +217366,7 @@
             "schedule": "",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
-            "exchangePermission": "Y",
+            "exchangePermission": "N",
             "competencies": "",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
@@ -217419,10 +217399,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA8800-00.json",
-          "sha256": "00f05e35c4111ce604da9cb8fa333de6717ce4bcad2ca89ca2acce66a084d04a",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA8800-00.json",
+          "sha256": "7e2bbca54f65550f6be9d300b4cf8d5100a22e0757b570043e8db83a24aeeb33",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -217436,7 +217416,7 @@
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 교양\n학점/이론·실습: 0(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 예약보류: native weekly clock tokens unavailable"
+      "remarks": "수강 가능 학년·학과: 1 2 3 4 전학과\n개설 소속: 교양\n학점/이론·실습: 0(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 예약보류: native weekly clock tokens unavailable"
     },
     {
       "sourceId": "changwon/unknown/2026/2/GEA8801-00",
@@ -218337,7 +218317,7 @@
       "courseCode": "GEA8810",
       "section": "00",
       "courseName": "인공지능시대의파이썬프로그래밍",
-      "professor": "정명균",
+      "professor": "박현숙,정명균",
       "credits": 3.0,
       "departmentCredits": {
         "교양": 3.0
@@ -218452,7 +218432,7 @@
             "title": "인공지능시대의파이썬프로그래밍",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "정명균",
+            "professor": "박현숙,정명균",
             "schedule": "금4A(BAC203),금4B,금5A,금5B,금6A,금6B,",
             "eligibleYearDepartment": "1 학과확인",
             "openingDepartment": "교양",
@@ -218478,7 +218458,7 @@
             "title": "인공지능시대의파이썬프로그래밍",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "정명균",
+            "professor": "박현숙,정명균",
             "schedule": "금4A(BAC203),금4B,금5A,금5B,금6A,금6B,",
             "eligibleYearDepartment": "1 학과확인",
             "openingDepartment": "교양",
@@ -218515,10 +218495,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA8810-00.json",
-          "sha256": "3cbfe839e1d54c647101cf73775486c90b4b2bdd2880d4b005b2a2ef2322fd9c",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA8810-00.json",
+          "sha256": "eb6f22ab0c85d3a38ab080bda7aad589a9c3c6a3691b114a3384222223a74921",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -218556,7 +218536,7 @@
       "courseCode": "GEA8810",
       "section": "01",
       "courseName": "인공지능시대의파이썬프로그래밍",
-      "professor": "정명균",
+      "professor": "남수태,정명균",
       "credits": 3.0,
       "departmentCredits": {
         "교양": 3.0
@@ -218671,7 +218651,7 @@
             "title": "인공지능시대의파이썬프로그래밍",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "정명균",
+            "professor": "남수태,정명균",
             "schedule": "금7A(BAC203),금7B,금8A,금8B,금9A,금9B,",
             "eligibleYearDepartment": "1 4 학과확인",
             "openingDepartment": "교양",
@@ -218697,7 +218677,7 @@
             "title": "인공지능시대의파이썬프로그래밍",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "정명균",
+            "professor": "남수태,정명균",
             "schedule": "금7A(BAC203),금7B,금8A,금8B,금9A,금9B,",
             "eligibleYearDepartment": "1 4 학과확인",
             "openingDepartment": "교양",
@@ -218734,10 +218714,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA8810-01.json",
-          "sha256": "db50f764532cbb40b4d61645f826fbdeeb054c7a06237af59710c112a8d49f36",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA8810-01.json",
+          "sha256": "650683536d7494ef396dc62df722832d821a26fcf8b99d431b05fe191503307a",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -223637,7 +223617,7 @@
         "교양": "기초교양"
       },
       "departmentRemarks": {
-        "교양": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-20"
+        "교양": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-22"
       },
       "sourceSchedule": "화2B(11108),화3A,화3B,목1A(11108),목1B,목2A,",
       "sourceClassroom": "11108",
@@ -223691,6 +223671,13 @@
           "endMinute": 720,
           "classroom": "11108",
           "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "11108",
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -223768,13 +223755,6 @@
           "endMinute": 630,
           "classroom": "11108",
           "date": "2026-10-15"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 540,
-          "endMinute": 630,
-          "classroom": "11108",
-          "date": "2026-10-22"
         },
         {
           "weekday": 4,
@@ -223840,7 +223820,7 @@
             "deliveryMode": "대면",
             "remoteSolution": "줌",
             "examMode": "대면",
-            "examDateTime": "2026.10.20(화) 09:00",
+            "examDateTime": "2026.10.22(목) 09:00",
             "examLocation": "11108",
             "examNotes": "중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다",
             "code": "GEA8814",
@@ -223866,7 +223846,7 @@
             "deliveryMode": "대면",
             "remoteSolution": "줌",
             "examMode": "대면",
-            "examDateTime": "2026.10.20(화) 09:00",
+            "examDateTime": "2026.10.22(목) 09:00",
             "examLocation": "11108",
             "examNotes": "중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다",
             "code": "GEA8814",
@@ -223890,13 +223870,13 @@
           "비대면솔루션": "줌",
           "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
           "시험강의실": "11108",
-          "시험일시": "2026.10.20(화) 09:00 ~ 2026.10.20(화) 11:50"
+          "시험일시": "2026.10.22(목) 09:00 ~ 2026.10.22(목) 09:40"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA8814-02.json",
-          "sha256": "c9ece7054968a215d1bec4d9444b52c38a9321249e4aa70283a528784936f14b",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA8814-02.json",
+          "sha256": "5e94af4f3249e332e99360b68c35afa5e56c2749984cc1c376b1258c6e05e9c4",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -223927,13 +223907,13 @@
             }
           ],
           "individualPublishedExamDateHold": [
-            "2026-10-20"
+            "2026-10-22"
           ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-20"
+      "remarks": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-22"
     },
     {
       "sourceId": "changwon/unknown/2026/2/GEA8814-03",
@@ -223957,7 +223937,7 @@
         "교양": "기초교양"
       },
       "departmentRemarks": {
-        "교양": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-13, 2026-10-20"
+        "교양": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-22"
       },
       "sourceSchedule": "화1A(11108),화1B,화2A,목2B(11108),목3A,목3B,",
       "sourceClassroom": "11108",
@@ -224004,6 +223984,20 @@
           "endMinute": 630,
           "classroom": "11108",
           "date": "2026-10-06"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "11108",
+          "date": "2026-10-13"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "11108",
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -224087,13 +224081,6 @@
           "startMinute": 630,
           "endMinute": 720,
           "classroom": "11108",
-          "date": "2026-10-22"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 630,
-          "endMinute": 720,
-          "classroom": "11108",
           "date": "2026-10-29"
         },
         {
@@ -224153,7 +224140,7 @@
             "deliveryMode": "대면",
             "remoteSolution": "줌",
             "examMode": "대면",
-            "examDateTime": "2026.10.20(화) 09:00",
+            "examDateTime": "2026.10.22(목) 10:30",
             "examLocation": "11108",
             "examNotes": "중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다",
             "code": "GEA8814",
@@ -224179,7 +224166,7 @@
             "deliveryMode": "대면",
             "remoteSolution": "줌",
             "examMode": "대면",
-            "examDateTime": "2026.10.20(화) 09:00",
+            "examDateTime": "2026.10.22(목) 10:30",
             "examLocation": "11108",
             "examNotes": "중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다",
             "code": "GEA8814",
@@ -224203,13 +224190,13 @@
           "비대면솔루션": "줌",
           "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
           "시험강의실": "11108",
-          "시험일시": "2026.10.20(화) 09:00 ~ 2026.10.13(화) 11:50"
+          "시험일시": "2026.10.22(목) 10:30 ~ 2026.10.22(목) 11:10"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA8814-03.json",
-          "sha256": "3cdb9a72cd2d77d6e2fa1126a7b1c88be841502af5b5867e7a037432d4d9653f",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA8814-03.json",
+          "sha256": "a20c23c57d8f12fe8f22823987042d2448043a15a459368a21f72fc14c78dc72",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -224240,14 +224227,13 @@
             }
           ],
           "individualPublishedExamDateHold": [
-            "2026-10-13",
-            "2026-10-20"
+            "2026-10-22"
           ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-13, 2026-10-20"
+      "remarks": "수강 가능 학년·학과: 2 3 4 학과확인\n개설 소속: 교양\n학점/이론·실습: 3(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 중간고사, 기말고사 시행 1주-2주 전에 다시 안내합니다\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-22"
     },
     {
       "sourceId": "changwon/unknown/2026/2/GEA8816-00",
@@ -231516,7 +231502,7 @@
       "courseCode": "GEA8837",
       "section": "01",
       "courseName": "노동의과거와현재이해",
-      "professor": "신동규",
+      "professor": "신동규,허유성",
       "credits": 3.0,
       "departmentCredits": {
         "교양": 3.0
@@ -231736,7 +231722,7 @@
             "title": "노동의과거와현재이해",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "신동규",
+            "professor": "신동규,허유성",
             "schedule": "월8B(11109),월9A,월9B,수7A(11109),수7B,수8A,",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -231762,7 +231748,7 @@
             "title": "노동의과거와현재이해",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "신동규",
+            "professor": "신동규,허유성",
             "schedule": "월8B(11109),월9A,월9B,수7A(11109),수7B,수8A,",
             "eligibleYearDepartment": "1 2 3 4 전학과",
             "openingDepartment": "교양",
@@ -231799,10 +231785,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/GEA8837-01.json",
-          "sha256": "238d94369f597e5f2175b028a7535582e6ad74d611580c32275be7b46337babe",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/GEA8837-01.json",
+          "sha256": "f8cf5af9da2ef48aee607de254eb810df6785905c62ecb7c073da8ef2c92b6f2",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -255456,7 +255442,7 @@
         "국제무역학과": "전선"
       },
       "departmentRemarks": {
-        "국제무역학과": "수강 가능 학년·학과: 3 학과확인\n개설 소속: 국제무역학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+        "국제무역학과": "수강 가능 학년·학과: 3 학과확인\n개설 소속: 국제무역학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 서술형 지필고사\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-26"
       },
       "sourceSchedule": "월5B(B21111),월6A,월6B,수4A(B21111),수4B,수5A,",
       "sourceClassroom": "B21111",
@@ -255503,13 +255489,6 @@
           "endMinute": 900,
           "classroom": "B21111",
           "date": "2026-10-19"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 810,
-          "endMinute": 900,
-          "classroom": "B21111",
-          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -255672,10 +255651,10 @@
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.26(월) 13:30",
             "examLocation": "B21111",
-            "examNotes": "",
+            "examNotes": "서술형 지필고사",
             "code": "ITA0168",
             "section": "00",
             "query": {
@@ -255695,15 +255674,15 @@
           "강의진행방식": "일반강의",
           "수업운영방식": "대면",
           "비대면솔루션": "미사용",
-          "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+          "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
           "시험강의실": "B21111",
-          "시험일시": "~"
+          "시험일시": "2026.10.26(월) 13:30 ~ 2026.10.26(월) 14:30"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/ITA0168-00.json",
-          "sha256": "400e747f5f7b1b358189615e42734e690a8076373fbfe85ccc644b12155b6a17",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/ITA0168-00.json",
+          "sha256": "c247065e7173892ec2c721ab2acc402684d122537c22c402b7ab80137dd20178",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -255733,12 +255712,14 @@
               ]
             }
           ],
-          "individualPublishedExamDateHold": [],
+          "individualPublishedExamDateHold": [
+            "2026-10-26"
+          ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 3 학과확인\n개설 소속: 국제무역학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+      "remarks": "수강 가능 학년·학과: 3 학과확인\n개설 소속: 국제무역학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 서술형 지필고사\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-26"
     },
     {
       "sourceId": "changwon/unknown/2026/2/ITA0168-60",
@@ -262495,8 +262476,8 @@
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
             "examMode": "대면",
-            "examDateTime": "2026.10.13(화) 13:30",
-            "examLocation": "11205",
+            "examDateTime": "2026.10.22(목) 12:00",
+            "examLocation": "11206",
             "examNotes": "",
             "code": "JPA0001",
             "section": "00",
@@ -262522,10 +262503,10 @@
           "시험일시": "2026.10.22(목) 12:00 ~ 2026.10.22(목) 13:15"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/JPA0001-00.json",
-          "sha256": "1f8252f9d57248916c263ba7d294eead978c60b0e4a78b0281f619fb876a4789",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/JPA0001-00.json",
+          "sha256": "e6055926a7d088824c4268a5187b9b83fe85d121449faf76f8e139663e3ce423",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -265399,7 +265380,7 @@
         "일어일문학과": "전필"
       },
       "departmentRemarks": {
-        "일어일문학과": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 일어일문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+        "일어일문학과": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 일어일문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-26"
       },
       "sourceSchedule": "월8B(11407),월9A,월9B,수7A(11407),수7B,수8A,",
       "sourceClassroom": "11407",
@@ -265446,13 +265427,6 @@
           "endMinute": 1080,
           "classroom": "11407",
           "date": "2026-10-19"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 990,
-          "endMinute": 1080,
-          "classroom": "11407",
-          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -265611,13 +265585,13 @@
             "eligibleYearDepartment": "1 학과확인",
             "openingDepartment": "일어일문학과",
             "exchangePermission": "Y",
-            "competencies": "",
+            "competencies": "의사소통",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
-            "examLocation": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.26(월) 16:30",
+            "examLocation": "11205",
             "examNotes": "",
             "code": "JPA0094",
             "section": "00",
@@ -265638,15 +265612,15 @@
           "강의진행방식": "일반강의",
           "수업운영방식": "대면",
           "비대면솔루션": "미사용",
-          "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
-          "시험강의실": "",
-          "시험일시": "~"
+          "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+          "시험강의실": "11205",
+          "시험일시": "2026.10.26(월) 16:30 ~ 2026.10.26(월) 17:45"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/JPA0094-00.json",
-          "sha256": "b0e2fd91b0e66ba621f560d03019dab876b1cf8ff10c79fb83db3a785cc2d3d4",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/JPA0094-00.json",
+          "sha256": "01b5494a52a6cd3d7977ab26a3308b7748e65c2c5b766296be382fa282f2d7e1",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -265676,12 +265650,14 @@
               ]
             }
           ],
-          "individualPublishedExamDateHold": [],
+          "individualPublishedExamDateHold": [
+            "2026-10-26"
+          ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 일어일문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다."
+      "remarks": "수강 가능 학년·학과: 1 학과확인\n개설 소속: 일어일문학과\n학점/이론·실습: 3(0)\n학점교류: Y\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-26"
     },
     {
       "sourceId": "changwon/unknown/2026/2/JPA0097-00",
@@ -281905,7 +281881,7 @@
             "eligibleYearDepartment": "3 4 학과확인",
             "openingDepartment": "미디어커뮤니케이션학과",
             "exchangePermission": "N",
-            "competencies": "창의적사고",
+            "competencies": "글로벌",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
@@ -281937,10 +281913,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/MCA0083-00.json",
-          "sha256": "36e94932de4764d6c33f2ae7c51467c2a3df1a793c348476a7bea0295756d6ef",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/MCA0083-00.json",
+          "sha256": "67a78b8eb416c7b81ab50be7ab4bd6485c9e0656f66ec497c9ae638d4ca4c758",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -284323,7 +284299,7 @@
             "eligibleYearDepartment": "2 3 4 학과확인",
             "openingDepartment": "미디어커뮤니케이션학과",
             "exchangePermission": "N",
-            "competencies": "실용적융복합",
+            "competencies": "글로벌",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
@@ -284355,10 +284331,10 @@
           "시험일시": "2026.10.22(목) 12:00 ~ 2026.10.22(목) 13:00"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/MCA0122-00.json",
-          "sha256": "d70283fff8c90248cf7617a7ad1fa308d0d4b3c7e384ad545a44ddc2092eeca6",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/MCA0122-00.json",
+          "sha256": "a9d71766f05725425d57f3c6f29e10824fe137cbc4e6cae4fca855f1401b4ad7",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -287266,7 +287242,7 @@
       "courseCode": "MHA0009",
       "section": "00",
       "courseName": "서양사서설",
-      "professor": "신동규",
+      "professor": "신동규,김유정",
       "credits": 3.0,
       "departmentCredits": {
         "사학과": 3.0
@@ -287479,7 +287455,7 @@
             "title": "서양사서설",
             "credits": "3",
             "theoryPractice": "3(0)",
-            "professor": "신동규",
+            "professor": "신동규,김유정",
             "schedule": "화8B(11416),화9A,화9B,목7A(11416),목7B,목8A,",
             "eligibleYearDepartment": "1 2 학과확인",
             "openingDepartment": "사학과",
@@ -287516,10 +287492,10 @@
           "시험일시": "~"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/MHA0009-00.json",
-          "sha256": "77054c299ddec02e55e53af7a06c8e42c84ad2bfd8d4f8bb796945824bf237fe",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/MHA0009-00.json",
+          "sha256": "d9b8119b720dbac766217bee13fea01d7ce1766b0db04e43aa27ccc80305dbd3",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -391331,7 +391307,7 @@
         "기계공학부 스마트제조융합전공": "전선"
       },
       "departmentRemarks": {
-        "기계공학부 스마트제조융합전공": "수강 가능 학년·학과: 학과확인\n개설 소속: 기계공학부 스마트제조융합전공\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-20"
+        "기계공학부 스마트제조융합전공": "수강 가능 학년·학과: 학과확인\n개설 소속: 기계공학부 스마트제조융합전공\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-20, 2026-10-27"
       },
       "sourceSchedule": "화8B(82104),화9A,화9B,화10A,",
       "sourceClassroom": "82104",
@@ -391391,13 +391367,6 @@
           "startMinute": 990,
           "endMinute": 1080,
           "classroom": "82104",
-          "date": "2026-10-27"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 990,
-          "endMinute": 1080,
-          "classroom": "82104",
           "date": "2026-11-03"
         },
         {
@@ -391475,13 +391444,6 @@
           "startMinute": 1100,
           "endMinute": 1125,
           "classroom": "82104",
-          "date": "2026-10-27"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1100,
-          "endMinute": 1125,
-          "classroom": "82104",
           "date": "2026-11-03"
         },
         {
@@ -391522,14 +391484,14 @@
             "eligibleYearDepartment": "학과확인",
             "openingDepartment": "기계공학부 스마트제조융합전공",
             "exchangePermission": "N",
-            "competencies": "",
+            "competencies": "실용적융복합",
             "lectureType": "일반강의",
             "deliveryMode": "대면",
             "remoteSolution": "미사용",
-            "examMode": "",
-            "examDateTime": "",
-            "examLocation": "",
-            "examNotes": "",
+            "examMode": "대면",
+            "examDateTime": "2026.10.27(화) 16:30",
+            "examLocation": "82104",
+            "examNotes": "평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.",
             "code": "SMA0018",
             "section": "00",
             "query": {
@@ -391551,13 +391513,13 @@
           "비대면솔루션": "미사용",
           "시험방식": "대면 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
           "시험강의실": "82104",
-          "시험일시": "2026.10.20(화) 16:30 ~ 2026.10.20(화) 18:30"
+          "시험일시": "2026.10.27(화) 16:30 ~ 2026.10.20(화) 18:30"
         },
         "currentPublicPlanReceipt": {
-          "sourceFile": "public-plans-20261008/SMA0018-00.json",
-          "sha256": "75014abd263eecbe29a95b617282efc3a84d39f02d6b814b2076bbf1c7414972",
+          "sourceFile": "work/issue-581-changwon-timetable/changwon/chains-20261023/plans/SMA0018-00.json",
+          "sha256": "0878bd0bdc644f330c30eea223d90f867d1f19022d96a80922c73dd50e334ebb",
           "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
-          "checkedAt": "2026-10-08"
+          "checkedAt": "2026-10-23"
         },
         "weeklyOperationEvidence": [],
         "regularReservationReview": {
@@ -391586,13 +391548,14 @@
             }
           ],
           "individualPublishedExamDateHold": [
-            "2026-10-20"
+            "2026-10-20",
+            "2026-10-27"
           ],
           "actualAttendanceConfirmed": false,
           "noWeekToAttendanceInference": true
         }
       },
-      "remarks": "수강 가능 학년·학과: 학과확인\n개설 소속: 기계공학부 스마트제조융합전공\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-20"
+      "remarks": "수강 가능 학년·학과: 학과확인\n개설 소속: 기계공학부 스마트제조융합전공\n학점/이론·실습: 2(0)\n학점교류: N\n강의진행: 일반강의\n수업운영: 대면\n시험 안내: 평가방법 : 상대평가 / 재수강 학생의 성적이 A+에 해당할 경우 자동으로 A0로 조정됩니 다.\n공개 정규 시간표 예약의 부분범위9/1–12/7이며 실제 출석·개별강의/시험 구분·최신변경 완료 확인이 아닙니다. 자체9/1개강과12/8보강주에 따라12/7을 파생했으며 printed최종수업일이 아닙니다. 현재학부안내의1A–9B30분/10A–14B25분 원문clock만 사용했고15AB는추정하지 않았습니다. 원문대면 표기는 보존하되 사용자 수업방식3모드 선택을 유지합니다. 법정휴일과11/24임시휴강예정·11/19 1AB예정은 미확정운영 보수적예약보류입니다. 명시된 개인시험날짜는 수업예약에서 제외하고 시험약속을 발명하지 않습니다. 자체중간시험주가별도게시되지않아 임의학교시험주나 주차별날짜를 만들지 않았습니다. 실제class/exam운영과Campus는미확인입니다. 개별시험 원문날짜 보류: 2026-10-20, 2026-10-27"
     },
     {
       "sourceId": "changwon/unknown/2026/2/SMA0020-00",

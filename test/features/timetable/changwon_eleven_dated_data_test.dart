@@ -25,8 +25,24 @@ void main() {
                 ).readAsStringSync(),
               )
               as List;
+      // 2026-10-23 재조회에서 값이 바뀐 행만 덮어쓴다(행 추가·삭제 없음).
+      final changed =
+          (jsonDecode(
+                    fixtureFile(
+                      'test/fixtures/changwon_public_rows_changes_20261023.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map)['rows']
+              as List;
+      String rowKey(dynamic r) =>
+          '${r['query']['big']}/${r['query']['detail']}/${r['code']}-${r['section']}';
+      final updates = {for (final r in changed) rowKey(r): r};
+      expect(
+        source.where((r) => updates.containsKey(rowKey(r))),
+        hasLength(changed.length),
+      );
       final original = <String, List<dynamic>>{};
-      for (final r in source) {
+      for (final r in [for (final r in source) updates[rowKey(r)] ?? r]) {
         original.putIfAbsent('${r['code']}-${r['section']}', () => []).add(r);
       }
       expect(dataset.courses, hasLength(1754));
@@ -42,7 +58,7 @@ void main() {
           .where((c) => c.hasSchedulableMeetings)
           .toList();
       expect(published, hasLength(1432));
-      expect(published.expand((c) => c.meetings), hasLength(28985));
+      expect(published.expand((c) => c.meetings), hasLength(28978));
       final baseline =
           jsonDecode(
                 fixtureFile(

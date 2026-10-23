@@ -62,8 +62,24 @@ void main() {
                 ).readAsStringSync(),
               )
               as List;
+      // 2026-10-23 재조회에서 값이 바뀐 행만 덮어쓴다(행 추가·삭제 없음).
+      final changed =
+          (jsonDecode(
+                    fixtureFile(
+                      'test/fixtures/changwon_public_rows_changes_20261023.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map)['rows']
+              as List;
+      String rowKey(dynamic r) =>
+          '${r['query']['big']}/${r['query']['detail']}/${r['code']}-${r['section']}';
+      final updates = {for (final r in changed) rowKey(r): r};
+      expect(
+        source.where((r) => updates.containsKey(rowKey(r))),
+        hasLength(changed.length),
+      );
       final original = <String, List<dynamic>>{};
-      for (final r in source) {
+      for (final r in [for (final r in source) updates[rowKey(r)] ?? r]) {
         original.putIfAbsent('${r['code']}-${r['section']}', () => []).add(r);
       }
       expect(dataset.courses, hasLength(1754));
@@ -90,7 +106,7 @@ void main() {
         dataset.courses.where((c) => c.hasSchedulableMeetings),
         hasLength(1432),
       );
-      expect(dataset.courses.expand((c) => c.meetings), hasLength(28985));
+      expect(dataset.courses.expand((c) => c.meetings), hasLength(28978));
       // 15A·15B use the official 학사안내 period table (22:30~23:20).
       final night = dataset.courses.singleWhere((c) => c.code == 'AHA0132');
       expect(night.meetings, hasLength(12));
