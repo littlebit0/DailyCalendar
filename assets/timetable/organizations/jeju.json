@@ -2316,6 +2316,22 @@
       "isOfferingUnit": false,
       "campus": "unknown",
       "collegeKnown": true
+    },
+    {
+      "college": null,
+      "department": "제주대학교 연계전공 순환농업",
+      "sourceLabel": "제주대학교 연계전공 순환농업",
+      "sourceUrl": "https://jejunu.ac.kr/ara/noticesurvey/outEvent.htm?category=321&act=view&seq=278363",
+      "evidence": "현재 공식 시간표 자료의 개설·학과 라벨을 그대로 보존.",
+      "sourceFile": null,
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": false,
+      "affiliationSourceUrl": "https://faculty.jejunu.ac.kr/faculty/committee/committee2.htm?act=download&no=1&page=1&seq=255242",
+      "affiliationSourceFile": "work/all-university-completion-20261012/b-sources/jeju-2025-program-rules.pdf",
+      "affiliationEvidence": "공식 2025 제5차 교무회의 자료 학위종별 표 \"친환경농학사 / 순환농업전공(연계)\" 명시; 2024 연계·융합전공 개설 현황 \"순환농업 / 주관: 식물자원환경전공\"(work/all-university-completion-20261012/b-sources/jeju-2024.txt). 2026-2 공식 수업시간표 개설학과 원문도 \"제주대학교 연계전공 순환농업\".",
+      "group": "연계전공",
+      "affiliationStatus": "officialProgramSystem"
     }
   ],
   "courseOwners": []

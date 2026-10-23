@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/jeju.json": {
+    "sha256": "a2ace8a7104e6d10d63fd4573f548ba584fc736d87496051a1af7dcdd00d063b",
+    "reason": "#641 제주대 원자료 분류 '제주대학교 연계전공 순환농업'을 공식 2025 교무회의 학위종별 표 '순환농업전공(연계)' 기준 연계전공 묶음에 배정"
   }
 }

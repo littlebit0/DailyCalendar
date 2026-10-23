@@ -398,6 +398,9 @@ class UniversityCourse {
 
   bool _isMajorClassification(String raw) {
     final school = sourceId.split(RegExp(r'[/\-]')).first;
+    // Jeju's 2026-2 course guide lists the 글로벌자율전공 classification as
+    // 교양교과목 (081111~081191), so its "전공" suffix is not a major.
+    if (school == 'jeju' && raw.trim() == '글로벌자율전공') return false;
     // Official curriculum legends: UIC MR/ME/MB are majors, CC is common;
     // Baekseok groups below are its published major curriculum stages.
     final nativeMajor = switch ((school, raw.trim())) {
