@@ -7,6 +7,10 @@
     "sha256": "aeea83387a3b13285a7b08a211d01d4ef2c564d6b154779118a379d36cefaca2",
     "reason": "#92 단국대 퇴계·율곡혁신칼리지 광역 모집단위와 토탈분석기기융합학 연계전공 배정"
   },
+  "assets/timetable/organizations/gknu.json": {
+    "sha256": "4aecd4f8eab8f080856cdd6a759e4d6961496ed701dc9e0235919b2d724d8685",
+    "reason": "#572 국립경국대 성인학습자학부 전공 3개의 근거 주소를 현재 공식 학과소개(menu_idx=680)와 원문으로 갱신(옛 menu_idx=32에는 해당 블록이 없음), 소속은 그대로"
+  },
   "assets/timetable/organizations/hongik.json": {
     "sha256": "34745ee3ed6272096ca5a91f981f4d2856fbe4d582fbab99b0f45486631a6330",
     "reason": "#92 홍익대 교학과 3곳을 해당 단과대 개설로, 미술대학 학과 2개, 게임학부 전공 2개, 교양과 2곳 등록"

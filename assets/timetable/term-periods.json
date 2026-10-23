@@ -350,6 +350,20 @@
           }
         }
       ]
+    },
+    {
+      "university": "gknu",
+      "sourceUrl": "https://www.gknu.ac.kr/main/module/schedule/index.do?menu_idx=300&category1=101",
+      "checkedAt": "2026-10-08",
+      "periodBoundaryMeaning": "Day before published winter vacation December21; not a printed last teaching date",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-20"
+        }
+      ]
     }
   ]
 }
