@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/koreatech.json": {
+    "sha256": "6e78ba6d9c1ec77a36d0ecae397b4badda6dfd279f7e1f6d93f28d8fb8a84ed5",
+    "reason": "#652 한국기술교육대 단과대학 없는 공식 학부(과) 13개를 최상위 개설 단위로, 첨단분야혁신융합대학사업단 개설 '첨단 반도체 융합'을 공식 융합전공 묶음으로 배정"
   }
 }
