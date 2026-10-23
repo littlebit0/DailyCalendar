@@ -66,11 +66,11 @@ void main() {
     }
   });
   test(
-    '172 actual selectors 2705 rows 1511 native offerings and educational-only immutable metadata',
+    '172 actual selectors 2705 rows 1503 native offerings (1511 minus 8 graduate linked courses) and educational-only immutable metadata',
     () {
       expect(audit['queryCount'], 172);
       expect(audit['queryRows'], 2705);
-      expect(courses, hasLength(1511));
+      expect(courses, hasLength(1503));
       expect(
         sha256
             .convert(fixtureFile('$directory/$file').readAsBytesSync())
@@ -148,7 +148,7 @@ void main() {
       )) {
         expect(c.meetings, isEmpty);
       }
-      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1281));
+      expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1273));
     },
   );
 
@@ -305,13 +305,28 @@ void main() {
       }
     },
   );
+  test('석사학위연계 graduate courses taken after admission are not listed', () {
+    // 학칙 제34조의2·시행세칙 제27조의12: 입학 후 대학원장 승인으로 듣는 대학원 과목.
+    const removed = {
+      'CH04006',
+      'CH04014',
+      'CD03084',
+      'CD14312',
+      'BH00073',
+      'BH00074',
+      'BH00076',
+      'DT00044',
+    };
+    expect(courses.where((c) => removed.contains(c.code)), isEmpty);
+    expect(courses.where((c) => c.remarks.contains('석사학위연계')), isEmpty);
+  });
   for (final mode in [
     LectureMode.inPerson,
     LectureMode.liveOnline,
     LectureMode.video,
   ]) {
     test(
-      '1281 published plans 20406 dates actual full sync roundtrip $mode',
+      '1273 published plans 20294 dates actual full sync roundtrip $mode',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -336,8 +351,8 @@ void main() {
             'research',
           );
         }
-        expect(count, 20406);
-        expect(values, hasLength(1281));
+        expect(count, 20294);
+        expect(values, hasLength(1273));
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
@@ -345,7 +360,7 @@ void main() {
         final json =
             jsonDecode(jsonEncode(doc.toJson())) as Map<String, dynamic>;
         final restored = TimetableSyncDocument.fromJson(json);
-        expect(restored.materializeClasses(), hasLength(1281));
+        expect(restored.materializeClasses(), hasLength(1273));
         for (final c in restored.materializeClasses()) {
           expect(c.isValid, true);
           expect(c.toJson(), values[timetableCourseSyncKey(c)]!.value);
