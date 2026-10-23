@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/yu.json": {
+    "sha256": "f0085a6f158f9024df1fef2e138208ccccc6695e8394077615a88d54c9bbe632",
+    "reason": "#630 영남대 학과 매핑 31개의 근거 문구를 공식 홈페이지 학과 안내 메뉴·천마학부대학 교양학부 페이지 원문 인용으로 교체, 소속은 그대로"
   }
 }
