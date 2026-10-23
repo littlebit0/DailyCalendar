@@ -195,4 +195,38 @@ void main() {
       }
     },
   );
+
+  test('원문 교시·시각 쌍이 수업운영에 관한 규정 제3조 제1항 교시표와 일치', () {
+    // 근거: 수업운영에 관한 규정 제3조 제1항(강의시간 50분, 교시별 시간표),
+    // https://rule.tukorea.ac.kr/lmxsrv/law/lawFullView.do?SEQ=116 (2026-10-24 조회).
+    // 학칙·학칙시행세칙에는 교시·쉬는 시간 조문이 없다.
+    const periods = {
+      1: ['09:30', '10:20'],
+      2: ['10:30', '11:20'],
+      3: ['11:30', '12:20'],
+      4: ['12:30', '13:20'],
+      5: ['13:30', '14:20'],
+      6: ['14:30', '15:20'],
+      7: ['15:30', '16:20'],
+      8: ['16:30', '17:20'],
+      9: ['17:25', '18:15'],
+      10: ['18:15', '19:05'],
+      11: ['19:05', '19:55'],
+      12: ['20:00', '20:50'],
+      13: ['20:50', '21:40'],
+      14: ['21:40', '22:30'],
+    };
+    final block = RegExp(r'\[(\d+)(?:~(\d+))?\]\s*(\d\d:\d\d)~(\d\d:\d\d)');
+    var checked = 0;
+    for (final c in raw) {
+      for (final m in block.allMatches(c['sourceSchedule'] as String)) {
+        final first = int.parse(m[1]!);
+        final last = int.parse(m[2] ?? m[1]!);
+        expect(periods[first]![0], m[3], reason: '${c['sourceId']}');
+        expect(periods[last]![1], m[4], reason: '${c['sourceId']}');
+        checked++;
+      }
+    }
+    expect(checked, 1739);
+  });
 }
