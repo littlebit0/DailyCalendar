@@ -8,7 +8,7 @@
   "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
   "publishedDate": "2026-08-19",
   "sourceSha256": "15f1abd20333fa475892eac51104050b05bc24c6cd7eb2f052846b47b81fdbc1",
-  "sourceRowCount": 260,
+  "sourceRowCount": 379,
   "courses": [
     {
       "sourceId": "eulji/seongnam/2026/2/ac6b1c9d15c015834f216470",
@@ -571,86 +571,6 @@
       }
     },
     {
-      "sourceId": "eulji/seongnam/2026/2/ea635f71f827720782873fe8",
-      "universityId": "eulji",
-      "campus": "seongnam",
-      "campusName": "성남캠퍼스",
-      "academicYear": 2026,
-      "semester": "2",
-      "courseCode": "",
-      "courseName": "실용영어청취및말하기",
-      "section": "001",
-      "professor": "",
-      "credits": 2,
-      "schedules": [
-        {
-          "weekday": 4,
-          "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "을202"
-        }
-      ],
-      "departments": [
-        "교양"
-      ],
-      "departmentCredits": {
-        "교양": 2
-      },
-      "departmentClassifications": {
-        "교양": "교양 H영역"
-      },
-      "departmentRemarks": {
-        "교양": ""
-      },
-      "nativeRow": "실용영어청취및말하기            001   GRADE   2    목     주1~2       을202",
-      "sourceSchedule": "목 주1~2",
-      "sourceClassroom": "을202",
-      "period": {
-        "startDate": "2026-09-01",
-        "endDate": "2026-12-21"
-      }
-    },
-    {
-      "sourceId": "eulji/seongnam/2026/2/4bf4ba63ef1f0fc899d901ff",
-      "universityId": "eulji",
-      "campus": "seongnam",
-      "campusName": "성남캠퍼스",
-      "academicYear": 2026,
-      "semester": "2",
-      "courseCode": "",
-      "courseName": "실용영어청취및쓰기",
-      "section": "001",
-      "professor": "",
-      "credits": 2,
-      "schedules": [
-        {
-          "weekday": 4,
-          "startMinute": 660,
-          "endMinute": 770,
-          "classroom": "을202"
-        }
-      ],
-      "departments": [
-        "교양"
-      ],
-      "departmentCredits": {
-        "교양": 2
-      },
-      "departmentClassifications": {
-        "교양": "교양 H영역"
-      },
-      "departmentRemarks": {
-        "교양": ""
-      },
-      "nativeRow": "실용영어청취및쓰기            001   GRADE   2    목     주3~4       을202",
-      "sourceSchedule": "목 주3~4",
-      "sourceClassroom": "을202",
-      "period": {
-        "startDate": "2026-09-01",
-        "endDate": "2026-12-21"
-      }
-    },
-    {
       "sourceId": "eulji/seongnam/2026/2/439791a50df121738398aee5",
       "universityId": "eulji",
       "campus": "seongnam",
@@ -765,46 +685,6 @@
       "nativeRow": "글로벌지리정보             001   GRADE   3    수     주2~4       을501",
       "sourceSchedule": "수 주2~4",
       "sourceClassroom": "을501",
-      "period": {
-        "startDate": "2026-09-01",
-        "endDate": "2026-12-21"
-      }
-    },
-    {
-      "sourceId": "eulji/seongnam/2026/2/471ea4fab7c3960b6c3520fa",
-      "universityId": "eulji",
-      "campus": "seongnam",
-      "campusName": "성남캠퍼스",
-      "academicYear": 2026,
-      "semester": "2",
-      "courseCode": "",
-      "courseName": "문화중국어",
-      "section": "001",
-      "professor": "",
-      "credits": 2,
-      "schedules": [
-        {
-          "weekday": 4,
-          "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "본401"
-        }
-      ],
-      "departments": [
-        "교양"
-      ],
-      "departmentCredits": {
-        "교양": 2
-      },
-      "departmentClassifications": {
-        "교양": "교양 U영역"
-      },
-      "departmentRemarks": {
-        "교양": ""
-      },
-      "nativeRow": "문화중국어             001   GRADE   2    목     주5~6       본401",
-      "sourceSchedule": "목 주5~6",
-      "sourceClassroom": "본401",
       "period": {
         "startDate": "2026-09-01",
         "endDate": "2026-12-21"
@@ -16667,6 +16547,5130 @@
         },
         "existing60MetadataCorrection": "No carrier-host-based error established; attachment title and contents are Eulji publication, not Anyang course timings."
       }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/d260ab1325e47e02e74e800e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "첨단학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 001 GRADE 2 월 주5~6 본307 첨단학부 1학년",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/9d0f8623b40a0c9c4196799a",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "첨단학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 002 GRADE 2 월 주7~8 본307 첨단학부 1학년",
+      "sourceSchedule": "월 주7~8",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/e652f38aed7e5aa449da0246",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "박614"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 003 GRADE 2 월 주5~6 박614 자연계열학부 1학년",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "박614",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/d65502df23acac1bc67c209b",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "004",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "박614"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 004 GRADE 2 월 주7~8 박614 자연계열학부 1학년",
+      "sourceSchedule": "월 주7~8",
+      "sourceClassroom": "박614",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/eb905329632506e9cade1eb6",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "005",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 005 GRADE 2 월 주5~6 본402 자연계열학부 1학년",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/2f5dec7488235c8145f276fd",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "006",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 006 GRADE 2 월 주7~8 본402 자연계열학부 1학년",
+      "sourceSchedule": "월 주7~8",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/6266c85d6c967edb1edded19",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "007",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 007 GRADE 2 화 주5~6 본402 자연계열학부 1학년",
+      "sourceSchedule": "화 주5~6",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/7313061f182dc5d8e44518af",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "008",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 008 GRADE 2 화 주7~8 본402 자연계열학부 1학년",
+      "sourceSchedule": "화 주7~8",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/1904176ec99fb0da3f172ad5",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "009",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 009 GRADE 2 수 주5~6 본307 인문사회계열학부 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/3775b09c4e76135f1003e03e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "010",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 010 GRADE 2 수 주7~8 본307 인문사회계열학부 1학년",
+      "sourceSchedule": "수 주7~8",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/f5e6fe14b049ff9eed1903bc",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "011",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 011 GRADE 2 수 주5~6 본402 인문사회계열학부 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/757ae64c612c8e1f21288ad1",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "012",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 012 GRADE 2 수 주7~8 본402 인문사회계열학부 1학년",
+      "sourceSchedule": "수 주7~8",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/b5f277a5c918e0dc4177f41e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "박614"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 001 GRADE 2 화 주5~6 박614 자연계열학부 1학년",
+      "sourceSchedule": "화 주5~6",
+      "sourceClassroom": "박614",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/2b3f7b56dd41db4f730554ae",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "박614"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 002 GRADE 2 화 주7~8 박614 자연계열학부 1학년",
+      "sourceSchedule": "화 주7~8",
+      "sourceClassroom": "박614",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/694d581b30cc53ab2bd8094a",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "박621"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "첨단학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 003 GRADE 2 수 주2~3 박621 첨단학부 1학년",
+      "sourceSchedule": "수 주2~3",
+      "sourceClassroom": "박621",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/c4b6af631696fa800c142787",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "004",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "본306"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "첨단학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 004 GRADE 2 수 주2~3 본306 첨단학부 1학년",
+      "sourceSchedule": "수 주2~3",
+      "sourceClassroom": "본306",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/bfda27b2e2def1a7b00c360c",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "005",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "박319"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 005 GRADE 2 수 주5~6 박319 자연계열학부 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "박319",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/9eb0ed3096eb94f0ac39cc62",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "006",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "박319"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 006 GRADE 2 수 주7~8 박319 자연계열학부 1학년",
+      "sourceSchedule": "수 주7~8",
+      "sourceClassroom": "박319",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/0b9bf27818044c845a47c62f",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "007",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "박621"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 007 GRADE 2 수 주5~6 박621 자연계열학부 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "박621",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/581efe3012a6e3ab8ef8f099",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "008",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "박621"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 008 GRADE 2 수 주7~8 박621 자연계열학부 1학년",
+      "sourceSchedule": "수 주7~8",
+      "sourceClassroom": "박621",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/15bec8210b2204ac296d18cf",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "009",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "박319"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 009 GRADE 2 목 주2~3 박319 인문사회계열학부 1학년",
+      "sourceSchedule": "목 주2~3",
+      "sourceClassroom": "박319",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/14f374a758cce3552cc0444e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "010",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 720,
+          "endMinute": 830,
+          "classroom": "박319"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 010 GRADE 2 목 주4~5 박319 인문사회계열학부 1학년",
+      "sourceSchedule": "목 주4~5",
+      "sourceClassroom": "박319",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/574056c7199077109509f148",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "011",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "박621"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 011 GRADE 2 목 주2~3 박621 인문사회계열학부 1학년",
+      "sourceSchedule": "목 주2~3",
+      "sourceClassroom": "박621",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/a5461ff1ed23fb1cdb2ae44a",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "012",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 720,
+          "endMinute": 830,
+          "classroom": "박621"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "인문사회계열학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 012 GRADE 2 목 주4~5 박621 인문사회계열학부 1학년",
+      "sourceSchedule": "목 주4~5",
+      "sourceClassroom": "박621",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/9fca6041bd7fb925b55004fa",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을503"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 001 GRADE 2 월 주2~3 을503 임상병리학과 1학년",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "을503",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/5171c9da22f1cdf2881f2175",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을504"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 002 GRADE 2 월 주2~3 을504 임상병리학과 1학년",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "을504",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/a3f048aa802df30e816528ac",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을512"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 003 GRADE 2 월 주2~3 을512 임상병리학과 1학년",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "을512",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/17d969c7ac8ec2e7faaee928",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "004",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을503"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "의료경영학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 004 GRADE 2 화 주2~3 을503 의료경영학과 1학년",
+      "sourceSchedule": "화 주2~3",
+      "sourceClassroom": "을503",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/f369ba8d00a95145bfaab7d7",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "005",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을504"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "의료경영학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 005 GRADE 2 화 주2~3 을504 의료경영학과 1학년",
+      "sourceSchedule": "화 주2~3",
+      "sourceClassroom": "을504",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/590503f300c4e23afd49372a",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "006",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을512"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "치위생학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 006 GRADE 2 화 주2~3 을512 치위생학과 1학년",
+      "sourceSchedule": "화 주2~3",
+      "sourceClassroom": "을512",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/f1aefb3a60f4204fece6bdfb",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "007",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을503"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "응급구조학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 007 GRADE 2 화 주5~6 을503 응급구조학과 1학년",
+      "sourceSchedule": "화 주5~6",
+      "sourceClassroom": "을503",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/6b715594470fcac539000792",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "008",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을504"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "응급구조학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 008 GRADE 2 화 주5~6 을504 응급구조학과 1학년",
+      "sourceSchedule": "화 주5~6",
+      "sourceClassroom": "을504",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/93ae99f37bbbe1bed19899c7",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "009",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을512"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "치위생학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 009 GRADE 2 화 주5~6 을512 치위생학과 1학년",
+      "sourceSchedule": "화 주5~6",
+      "sourceClassroom": "을512",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/bc881365f827a1ae6208b295",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "010",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "을503"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "물리치료학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 010 GRADE 2 화 주7~8 을503 물리치료학과 1학년",
+      "sourceSchedule": "화 주7~8",
+      "sourceClassroom": "을503",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/f23bda04ee43b2cdd7fa7a76",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "011",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "을504"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "물리치료학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 011 GRADE 2 화 주7~8 을504 물리치료학과 1학년",
+      "sourceSchedule": "화 주7~8",
+      "sourceClassroom": "을504",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/f607951fc4b516fdbdddf399",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "012",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "을512"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "물리치료학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 012 GRADE 2 화 주7~8 을512 물리치료학과 1학년",
+      "sourceSchedule": "화 주7~8",
+      "sourceClassroom": "을512",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/b54a2ec022d2b9d553ffa797",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "013",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을513"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 013 GRADE 2 수 주2~3 을513 간호학과 1학년",
+      "sourceSchedule": "수 주2~3",
+      "sourceClassroom": "을513",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/5095b984879c6799fe95f731",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "014",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을504"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "방사선학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 014 GRADE 2 수 주2~3 을504 방사선학과 1학년",
+      "sourceSchedule": "수 주2~3",
+      "sourceClassroom": "을504",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/de16937a209c1d63c937b0da",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "015",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을501"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "안경광학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 015 GRADE 2 수 주5~6 을501 안경광학과 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "을501",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/55ace58c98e47877218617fc",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "016",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을504"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "안경광학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 016 GRADE 2 수 주5~6 을504 안경광학과 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "을504",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/1eefad6c6354eec5320261d9",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "017",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을512"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 017 GRADE 2 수 주5~6 을512 간호학과 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "을512",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/d158437b8c99db316baec176",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "018",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을512"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 018 GRADE 2 목 주2~3 을512 간호학과 1학년",
+      "sourceSchedule": "목 주2~3",
+      "sourceClassroom": "을512",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/a44a72168e581b2442a5cfc4",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "019",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을504"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "방사선학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 019 GRADE 2 목 주5~6 을504 방사선학과 1학년",
+      "sourceSchedule": "목 주5~6",
+      "sourceClassroom": "을504",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/a72907aefdf46f0d0b29cd0b",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "020",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을512"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "방사선학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 020 GRADE 2 목 주5~6 을512 방사선학과 1학년",
+      "sourceSchedule": "목 주5~6",
+      "sourceClassroom": "을512",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/bdb36a48165e75e55962248e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "을408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "물리치료학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 001 GRADE 2 화 주1~2 을408 물리치료학과 1학년",
+      "sourceSchedule": "화 주1~2",
+      "sourceClassroom": "을408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/0a8979abd0124841e4b1e517",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 770,
+          "classroom": "을408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "물리치료학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 002 GRADE 2 화 주3~4 을408 물리치료학과 1학년",
+      "sourceSchedule": "화 주3~4",
+      "sourceClassroom": "을408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/c9ec8116b4b5c5f83984137a",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 003 GRADE 2 화 주5~6 을408 간호학과 1학년",
+      "sourceSchedule": "화 주5~6",
+      "sourceClassroom": "을408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/fc38a9860535127951d56109",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "004",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "을408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 004 GRADE 2 화 주7~8 을408 간호학과 1학년",
+      "sourceSchedule": "화 주7~8",
+      "sourceClassroom": "을408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/7ae0b90aa6713b8010ab7c27",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "005",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "을406"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "안경광학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 005 GRADE 2 수 주1~2 을406 안경광학과 1학년",
+      "sourceSchedule": "수 주1~2",
+      "sourceClassroom": "을406",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/e15d3eb920cd63f0d9069061",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "006",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 770,
+          "classroom": "을406"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "의료경영학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 006 GRADE 2 수 주3~4 을406 의료경영학과 1학년",
+      "sourceSchedule": "수 주3~4",
+      "sourceClassroom": "을406",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/41ebe0e645c223d883d93183",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "007",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "을401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 007 GRADE 2 목 주1~2 을401 임상병리학과 1학년",
+      "sourceSchedule": "목 주1~2",
+      "sourceClassroom": "을401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/5b3077cde1fbe53955dc6334",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "008",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 770,
+          "classroom": "을401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 008 GRADE 2 목 주3~4 을401 임상병리학과 1학년",
+      "sourceSchedule": "목 주3~4",
+      "sourceClassroom": "을401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/0285bcb1302d90a5eba2feb6",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "009",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "치위생학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 009 GRADE 2 목 주5~6 을401 치위생학과 1학년",
+      "sourceSchedule": "목 주5~6",
+      "sourceClassroom": "을401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/f95d5758ab1b0d48cde7ea25",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "010",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "을401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "응급구조학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 010 GRADE 2 목 주7~8 을401 응급구조학과 1학년",
+      "sourceSchedule": "목 주7~8",
+      "sourceClassroom": "을401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/3eddf186fef225dea185833f",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "011",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "을401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "방사선학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 011 GRADE 2 금 주1~2 을401 방사선학과 1학년",
+      "sourceSchedule": "금 주1~2",
+      "sourceClassroom": "을401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/3c04a9052bc4c8ed59dba735",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "012",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 770,
+          "classroom": "을401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "방사선학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 012 GRADE 2 금 주3~4 을401 방사선학과 1학년",
+      "sourceSchedule": "금 주3~4",
+      "sourceClassroom": "을401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/26ebe8592fc3b93b44d81cd1",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "언어의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "박614"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 언어의이해 001 GRADE 2 수 주5~6 박614",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "박614",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/dd56a4ed90924833a3e5d9dc",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한시의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "범B151"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 한시의이해 001 GRADE 2 월 주5~6 범B151",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "범B151",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/91e3e37f45b4044f027310a8",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "신화의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 신화의이해 001 GRADE 2 월 주5~6 을203",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "을203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/49c94861418a967856cc94fa",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동서고전문학",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "범B151"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 동서고전문학 001 GRADE 2 월 주2~3 범B151",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "범B151",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/944529b328797f1c9c486ad3",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "중국문학의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을202"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 중국문학의이해 001 GRADE 2 금 주2~3 을202",
+      "sourceSchedule": "금 주2~3",
+      "sourceClassroom": "을202",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/ec7e58993dcfd511fddf4096",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "중국문학의이해",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을202"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 중국문학의이해 002 GRADE 2 금 주5~6 을202",
+      "sourceSchedule": "금 주5~6",
+      "sourceClassroom": "을202",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/16090fa59f2fa7dc4fba0f37",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "영미문학의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을501"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 영미문학의이해 001 GRADE 2 금 주2~3 을501",
+      "sourceSchedule": "금 주2~3",
+      "sourceClassroom": "을501",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/97d22d59f94485bc1f0affc6",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "영미문학의이해",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을501"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 영미문학의이해 002 GRADE 2 금 주5~6 을501",
+      "sourceSchedule": "금 주5~6",
+      "sourceClassroom": "을501",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/d2dfb212f0e42c793d0ac9f2",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작가와문학세계",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "범310"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 작가와문학세계 001 GRADE 2 월 주2~3 범310",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "범310",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/6df964aade617574680ce4a6",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작가와문학세계",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "박208"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 작가와문학세계 002 GRADE 2 월 주6~7 박208",
+      "sourceSchedule": "월 주6~7",
+      "sourceClassroom": "박208",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/40616efbddae01b609063f20",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "디지털인문학의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "을203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 디지털인문학의이해 001 GRADE 2 월 주7~8 을203",
+      "sourceSchedule": "월 주7~8",
+      "sourceClassroom": "을203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/75217713ad0a40662a49b033",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한국현대문학과사상",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 한국현대문학과사상 001 GRADE 2 금 주2~3 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "금 주2~3",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/56ee1e745098f86d0669b7eb",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "SF와인문학",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 SF와인문학 001 GRADE 3 수 주2~4 본307",
+      "sourceSchedule": "수 주2~4",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/23b58afab189b8feecc14391",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한국사",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 710,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 한국사 001 GRADE 3 금 주1~3 본402",
+      "sourceSchedule": "금 주1~3",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/66e57f41488099cb59db96e0",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한국사",
+      "section": "002",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "본401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 한국사 002 GRADE 3 화 주2~4 본401",
+      "sourceSchedule": "화 주2~4",
+      "sourceClassroom": "본401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/6b68798657270eb588e24ae5",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동양사",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "을203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 동양사 001 GRADE 3 월 주2~4 을203",
+      "sourceSchedule": "월 주2~4",
+      "sourceClassroom": "을203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/687ac37ed8c5c10499630dcf",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양사",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1070,
+          "classroom": "본401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 서양사 001 GRADE 3 수 주7~9 본401",
+      "sourceSchedule": "수 주7~9",
+      "sourceClassroom": "본401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/e4b42d81223d8915ecd1b763",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양사",
+      "section": "002",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1010,
+          "classroom": "을513"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 서양사 002 GRADE 3 화 주6~8 을513",
+      "sourceSchedule": "화 주6~8",
+      "sourceClassroom": "을513",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/e052f0a92e21a112dcc07212",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동양정신의산책",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "박614"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 동양정신의산책 001 GRADE 3 금 주2~4 박614",
+      "sourceSchedule": "금 주2~4",
+      "sourceClassroom": "박614",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/466a21919c9932819ec43961",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양철학의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "을202"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 서양철학의이해 001 GRADE 3 수 주2~4 을202",
+      "sourceSchedule": "수 주2~4",
+      "sourceClassroom": "을202",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/24d5c19fcec09f2126159b54",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "논리와비판적사고",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "본401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 논리와비판적사고 001 GRADE 2 월 주2~3 본401",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "본401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/905efd4d6b4a93ff793247c1",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "논리와비판적사고",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 830,
+          "classroom": "본401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 논리와비판적사고 002 GRADE 2 월 주4~5 본401",
+      "sourceSchedule": "월 주4~5",
+      "sourceClassroom": "본401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/acdb15dd3a6b11a06a301933",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "걸어서역사속으로",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 1010,
+          "classroom": "본306"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 걸어서역사속으로 001 GRADE 3 수 주6~8 본306",
+      "sourceSchedule": "수 주6~8",
+      "sourceClassroom": "본306",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/b2dede2a576ece3a4d2167a4",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "몸에대한철학적이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 몸에대한철학적이해 001 GRADE 2 화 주6~7 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "화 주6~7",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/7adb85669828631159362bd8",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "디지털사회와포스트휴먼윤리",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "예비"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": "온라인 교과목"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 디지털사회와포스트휴먼윤리 001 GRADE 2 월 주6~7 예비 온라인 교과목",
+      "sourceSchedule": "월 주6~7",
+      "sourceClassroom": "예비",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/f98486f3a4d19783c1bebfbb",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "심리학",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 심리학 001 GRADE 3 화 주2~4 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "화 주2~4",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/602ae2b4493d162aa4493424",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "정치학",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "을502"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 정치학 001 GRADE 3 월 주2~4 을502",
+      "sourceSchedule": "월 주2~4",
+      "sourceClassroom": "을502",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/fb52a8977c973ff6063609dd",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "부모학",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 부모학 001 GRADE 2 목 주6~7 본307",
+      "sourceSchedule": "목 주6~7",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/8fc25ccaf3a02db45beff97f",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "법과생활",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 720,
+          "endMinute": 830,
+          "classroom": "을502"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 법과생활 001 GRADE 2 화 주4~5 을502",
+      "sourceSchedule": "화 주4~5",
+      "sourceClassroom": "을502",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/fdf10638e9fcf0acdaf3e55e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "도시의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "을203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 도시의이해 001 GRADE 3 화 주2~4 을203",
+      "sourceSchedule": "화 주2~4",
+      "sourceClassroom": "을203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/875ab2ea26e066b8bf9b74b3",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "경영학개론",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "박614"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 경영학개론 001 GRADE 3 수 주2~4 박614",
+      "sourceSchedule": "수 주2~4",
+      "sourceClassroom": "박614",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/5afa27c90497846f09c27791",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "경제학개론",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1010,
+          "classroom": "박319"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 경제학개론 001 GRADE 3 목 주6~8 박319",
+      "sourceSchedule": "목 주6~8",
+      "sourceClassroom": "박319",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/46a04133290e49151df70b81",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "지역학개론",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1010,
+          "classroom": "을501"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 지역학개론 001 GRADE 3 목 주6~8 을501",
+      "sourceSchedule": "목 주6~8",
+      "sourceClassroom": "을501",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/77cf46fd19666d334295fc5f",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "사회학개론",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "을502"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 사회학개론 001 GRADE 3 월 주5~7 을502",
+      "sourceSchedule": "월 주5~7",
+      "sourceClassroom": "을502",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/6e3ec067e368afe570ee721b",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "젠더와미래사회",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 젠더와미래사회 001 GRADE 2 목 주2~3 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "목 주2~3",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/df533e7d4cfbfb4d860c4033",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인간행동의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 인간행동의이해 001 GRADE 2 화 주8~9 본307",
+      "sourceSchedule": "화 주8~9",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/02cd5b06f9de18a30c37dba6",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "데이터분석의기초",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "을405"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": "마이크로 디그리 과정"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 데이터분석의기초 001 GRADE 3 수 주2~4 을405 마이크로 디그리 과정",
+      "sourceSchedule": "수 주2~4",
+      "sourceClassroom": "을405",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/51949b438d62ed1d64a43291",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "데이터분석의기초",
+      "section": "002",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 1010,
+          "classroom": "을408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": "마이크로 디그리 과정"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 데이터분석의기초 002 GRADE 3 수 주6~8 을408 마이크로 디그리 과정",
+      "sourceSchedule": "수 주6~8",
+      "sourceClassroom": "을408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/2ac81f5ea7614a2073e85f09",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "세계시민교육과인권",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "을203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 세계시민교육과인권 001 GRADE 3 목 주5~7 을203",
+      "sourceSchedule": "목 주5~7",
+      "sourceClassroom": "을203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/1a1d7118d1f6e5b4955fbe95",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "우주의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 우주의이해 001 GRADE 2 화 주1~2 본402",
+      "sourceSchedule": "화 주1~2",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/cd0f140916433a3ffbcd8771",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "식품의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "비전홀"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "식품관련 학과 제외"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 식품의이해 001 GRADE 2 월 주5~6 비전홀 식품관련 학과 제외",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "비전홀",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/a339dc8a43990bcd2ce77a55",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "환경과인간",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 770,
+          "classroom": "범B155"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 환경과인간 001 GRADE 2 목 주3~4 범B155",
+      "sourceSchedule": "목 주3~4",
+      "sourceClassroom": "범B155",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/b8ef7c2a2c759dbd66cfaf31",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "환경과인간",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "본306"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 환경과인간 002 GRADE 2 화 주2~3 본306",
+      "sourceSchedule": "화 주2~3",
+      "sourceClassroom": "본306",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/3767e612d711dacb6700969c",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "과학과창의",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "뉴밀502"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "방사선학과 2학년 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 과학과창의 001 GRADE 2 금 주6~7 뉴밀502 방사선학과 2학년 대상",
+      "sourceSchedule": "금 주6~7",
+      "sourceClassroom": "뉴밀502",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/69ccfe31808950acbd360adf",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "창의와융합",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "뉴밀대강당"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "인문, 자연, 첨단학부 1학년 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 창의와융합 001 GRADE 2 월 주5~6 뉴밀대강당 인문, 자연, 첨단학부 1학년 대상",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "뉴밀대강당",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/573cf2fd06f0af539adc5a2a",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "자연과학의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 770,
+          "classroom": "본402"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 자연과학의이해 001 GRADE 2 화 주3~4 본402",
+      "sourceSchedule": "화 주3~4",
+      "sourceClassroom": "본402",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/0cd0f356aa72ac8bf9f3683c",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명과학의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "을501"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "Edu-Us 온라인 교과목"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 생명과학의이해 001 GRADE 2 월 주1~2 을501 Edu-Us 온라인 교과목",
+      "sourceSchedule": "월 주1~2",
+      "sourceClassroom": "을501",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/98858893d9436828b8eb82b3",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "과학기술과나눔",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 과학기술과나눔 001 GRADE 2 월 주2~3 본307",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/2fb6438a5c1146ce03177407",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "국토와자연의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "을501"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 국토와자연의이해 001 GRADE 3 목 주2~4 을501",
+      "sourceSchedule": "목 주2~4",
+      "sourceClassroom": "을501",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/6d5639309456eef50b005d19",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "창의적사고와코딩",
+      "section": "002",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "을401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "마이크로 디그리 과정"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 창의적사고와코딩 002 GRADE 3 월 주2~4 을401 마이크로 디그리 과정",
+      "sourceSchedule": "월 주2~4",
+      "sourceClassroom": "을401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/19ba754ebc9d6eafd69b5a7e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생성형AI의이해와활용",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 950,
+          "classroom": "을408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 생성형AI의이해와활용 001 GRADE 3 금 주5~7 을408",
+      "sourceSchedule": "금 주5~7",
+      "sourceClassroom": "을408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/386b45f2d7d9a2ecb0466100",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한국문화탐구",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 한국문화탐구 001 GRADE 2 월 주5~6 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/58e3db045a420b4084bf42f0",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "다문화의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "본307"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 다문화의이해 001 GRADE 2 화 주6~7 본307",
+      "sourceSchedule": "화 주6~7",
+      "sourceClassroom": "본307",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/0bb4c3c26b1f4c984a65fc3e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "대중문화의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 대중문화의이해 001 GRADE 3 월 주2~4 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "월 주2~4",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/d7f9f96cd4b750a59b052b42",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양미술의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "을203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 서양미술의이해 001 GRADE 2 금 주5~6 을203",
+      "sourceSchedule": "금 주5~6",
+      "sourceClassroom": "을203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/b9f59d5804ec887fe9489248",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "세계의문화와유산",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 세계의문화와유산 001 GRADE 2 월 주8~9 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "월 주8~9",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/b279f658e6f079fee62c1536",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "음악의이해와표현",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1070,
+          "classroom": "본306"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "성남아트센터 연계 교과목"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 음악의이해와표현 001 GRADE 3 화 주7~9 본306 성남아트센터 연계 교과목",
+      "sourceSchedule": "화 주7~9",
+      "sourceClassroom": "본306",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/257ea4702d974f76e0697300",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "공연예술과콘텐츠",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1070,
+          "classroom": "본401"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "성남아트센터 연계 교과목"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 공연예술과콘텐츠 001 GRADE 2 화 주8~9 본401 성남아트센터 연계 교과목",
+      "sourceSchedule": "화 주8~9",
+      "sourceClassroom": "본401",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/d364134276433c601ee9bd6a",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "미래사회와상상력",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "을202"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 미래사회와상상력 001 GRADE 2 화 주2~3 을202",
+      "sourceSchedule": "화 주2~3",
+      "sourceClassroom": "을202",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/efdb26b0a5eb3b9c310d995e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "미래사회와상상력",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 720,
+          "endMinute": 830,
+          "classroom": "을202"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 미래사회와상상력 002 GRADE 2 화 주4~5 을202",
+      "sourceSchedule": "화 주4~5",
+      "sourceClassroom": "을202",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/9bdc63b18c1aa9cad8b9b9f1",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "지역문화와축제",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 770,
+          "classroom": "본408"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 지역문화와축제 001 GRADE 3 수 주2~4 본408 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "수 주2~4",
+      "sourceClassroom": "본408",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/d41096f4f1f1e67e2ce4f09d",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "수학",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 710,
+          "classroom": "박525"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 6영역 기초과학"
+      },
+      "departmentRemarks": {
+        "교양": "첨단학부 1학년 대상 빅데이터인공지능전공 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "6영역 기초과학 수학 001 GRADE 2 월 주2~3 박525 첨단학부 1학년 대상 빅데이터인공지능전공 대상",
+      "sourceSchedule": "월 주2~3",
+      "sourceClassroom": "박525",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/e7beeaf41803ed0599a4d08e",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "화학",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 1010,
+          "classroom": "박208"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 6영역 기초과학"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년 대상 화장품과학전공 대상 미용화장품과학과 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "6영역 기초과학 화학 001 GRADE 2 화 주7~8 박208 자연계열학부 1학년 대상 화장품과학전공 대상 미용화장품과학과 대상",
+      "sourceSchedule": "화 주7~8",
+      "sourceClassroom": "박208",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/099611c74d0c4002d7bf81d8",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "화학",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 650,
+          "classroom": "박208"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 6영역 기초과학"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년 대상 식품생명공학과 대상 식품산업외식학과 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "6영역 기초과학 화학 002 GRADE 2 월 주1~2 박208 자연계열학부 1학년 대상 식품생명공학과 대상 식품산업외식학과 대상",
+      "sourceSchedule": "월 주1~2",
+      "sourceClassroom": "박208",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/72ab7eb14ee43911aba6edc3",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생물학",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 950,
+          "classroom": "박619"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 6영역 기초과학"
+      },
+      "departmentRemarks": {
+        "교양": "장례산업전공 2학년 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "6영역 기초과학 생물학 001 GRADE 2 화 주6~7 박619 장례산업전공 2학년 대상",
+      "sourceSchedule": "화 주6~7",
+      "sourceClassroom": "박619",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/seongnam/2026/2/7ac32f6297b06d15e0bff15c",
+      "universityId": "eulji",
+      "campus": "seongnam",
+      "campusName": "성남캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생물학",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 890,
+          "classroom": "뉴밀506"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 6영역 기초과학"
+      },
+      "departmentRemarks": {
+        "교양": "자연계열학부 1학년 대상 화장품과학전공 대상 미용화장품과학과 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "6영역 기초과학 생물학 002 GRADE 2 목 주5~6 뉴밀506 자연계열학부 1학년 대상 화장품과학전공 대상 미용화장품과학과 대상",
+      "sourceSchedule": "목 주5~6",
+      "sourceClassroom": "뉴밀506",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
     }
   ],
   "heldRows": [
@@ -16748,7 +21752,9 @@
     "https://major.eulji.ac.kr/mortuary/index.html?menuno=2952&bbsno=134&boardno=584&ztag=rO0ABXQALzxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTg0IiBza2luPSJmcmVlIj48L2NhbGw%2B&siteno=230&act=view",
     "https://major.eulji.ac.kr/laboratory/index.html?menuno=2956&bbsno=156&boardno=1464&ztag=rO0ABXQAMjxjYWxsIHR5cGU9ImJvYXJkIiBubz0iMTQ2NCIgc2tpbj0ibm90aWNlIj48L2NhbGw%2B&siteno=213&act=view",
     "https://major.eulji.ac.kr/medicaleng/index.html?menuno=2952&bbsno=440&boardno=574&ztag=rO0ABXQALzxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTc0IiBza2luPSJmcmVlIj48L2NhbGw%2B&siteno=236&act=view",
-    "https://major.eulji.ac.kr/radiologic/index.html?menuno=2956&bbsno=125&boardno=1465&ztag=rO0ABXQAMjxjYWxsIHR5cGU9ImJvYXJkIiBubz0iMTQ2NSIgc2tpbj0ibm90aWNlIj48L2NhbGw%2B&siteno=218&act=view"
+    "https://major.eulji.ac.kr/radiologic/index.html?menuno=2956&bbsno=125&boardno=1465&ztag=rO0ABXQAMjxjYWxsIHR5cGU9ImJvYXJkIiBubz0iMTQ2NSIgc2tpbj0ibm90aWNlIj48L2NhbGw%2B&siteno=218&act=view",
+    "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+    "https://www.eulji.ac.kr/?menuno=3160&bbsno=1085&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view"
   ],
   "coverage": "Existing60 public exchange offerings plus200 source-located undergraduate department timetable instances. Graduate2 excluded,48 ambiguous/clinical source instances held; whole university coverage not established. Published combined regular teaching/makeup semester bounds retained; no makeup occurrence dates invented."
 }
