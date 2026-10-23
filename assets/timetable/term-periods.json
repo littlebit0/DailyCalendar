@@ -350,6 +350,20 @@
           }
         }
       ]
+    },
+    {
+      "university": "sogang",
+      "sourceUrl": "https://www.sogang.ac.kr/ko/academic-support/calendar",
+      "checkedAt": "2026-10-08",
+      "boundaryScope": "Published Sep1 opening and day before Dec22 winter vacation. Individual confirmed course dates/innerperiod control; exams and unscheduled appointments not inferred.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
     }
   ]
 }
