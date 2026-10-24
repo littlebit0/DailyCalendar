@@ -1,0 +1,18 @@
+{
+  "regulation": "국립순천대학교 교학규정",
+  "version": "[시행 2026. 10. 12.] [순천대학교학교규정 제1267호, 2026. 10. 12., 일부개정]",
+  "officialPage": "https://www.scnu.ac.kr/rule/cm/cntnts/cntntsView.do?mi=7622",
+  "bodySource": "https://www.law.go.kr/LSW/schlPubRulInfoR.do (schlPubRulSeq=2200000160775)",
+  "retrievedAt": "2026-10-23",
+  "article": "제52조(야간 수업 운영) ① 야간 수업시간의 단위는 45분 기준으로 한다. ② 1일 수업운영은 다음과 같이 6교시까지를 원칙으로 한다. <개정 2013. 2. 15.>",
+  "tableImage": {
+    "file": "kyohak-article52-night-table.gif",
+    "source": "https://www.law.go.kr/LSW/flDownload.do?flSeq=170417605",
+    "sha256": "09f008760e75e10dee8d3ab87e47e1ff3f7c05d9dde73f0c11cbb4443d12a59e"
+  },
+  "lifelongSchoolApplicability": "국립순천대학교 평생교육스쿨 학사 운영 규정 제2조② 이 규정에서 정하지 않은 사항은 이 대학교의 학칙과 교학규정 등 제 규정에 따른다. 제18조 평일 야간수업의 시간 단위는 45분으로 1일 최대 6시간까지 한다. (schlPubRulSeq=2200000160809, 시행 2026. 10. 12.)",
+  "transcribedTable": {
+    "평일": ["18:00~18:45", "18:50~19:35", "19:40~20:25", "20:30~21:15", "21:20~22:05", "22:10~22:55"],
+    "토요일": ["13:00~13:45", "13:50~14:35", "14:40~15:25", "15:30~16:15", "16:20~17:05", "17:10~17:55"]
+  }
+}
