@@ -75,7 +75,34 @@ void main() {
 
     final approved = courses.where((c) => c.hasSchedulableMeetings).toList();
     expect(approved, hasLength(23));
-    // The honors 학년별 시간표 prints 1~9교시 as 09:00~17:50 for these courses.
+    // The honors 학년별 시간표 prints 1~9교시 as 09:00~17:50 (50분 수업 + 10분
+    // 쉬는 시간 = 60분 슬롯). Each period owns its break, so every meeting
+    // starts and ends on the 60-minute grid from 09:00, and a same-room run of
+    // consecutive periods on one day is a single block.
+    for (final course in approved) {
+      for (final m in course.meetings) {
+        expect((m.originalStartMinute - 540) % 60, 0, reason: course.sourceId);
+        expect((m.originalEndMinute - 540) % 60, 0, reason: course.sourceId);
+        expect(
+          m.originalEndMinute - m.originalStartMinute,
+          greaterThanOrEqualTo(60),
+        );
+      }
+      final byDay = <int, List<dynamic>>{};
+      for (final m in course.meetings) {
+        byDay.putIfAbsent(m.weekday, () => []).add(m);
+      }
+      for (final day in byDay.values) {
+        day.sort(
+          (a, b) => a.originalStartMinute.compareTo(b.originalStartMinute),
+        );
+        for (var i = 1; i < day.length; i++) {
+          final gap = day[i].originalStartMinute - day[i - 1].originalEndMinute;
+          final sameRoom = day[i].classroom == day[i - 1].classroom;
+          expect(sameRoom && gap < 60, isFalse, reason: course.sourceId);
+        }
+      }
+    }
     expect(approved.map((c) => c.code).toSet(), {
       'A01460', 'A01472', 'A01473', 'A01477', 'A01478', 'A01529', 'A01532', //
       'A01533', 'A01534', 'A01535', 'A01536', 'A01537', 'A01538', 'A01539',
@@ -96,8 +123,8 @@ void main() {
           )
           .toList(),
       [
-        [1, 660, 710, '5-201'],
-        [2, 900, 1010, '5-201'],
+        [1, 660, 720, '5-201'],
+        [2, 900, 1020, '5-201'],
       ],
     );
     final track = approved.singleWhere((c) => c.codeAndSection == 'A01536-01');
