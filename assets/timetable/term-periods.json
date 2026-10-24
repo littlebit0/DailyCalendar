@@ -350,6 +350,25 @@
           }
         }
       ]
+    },
+    {
+      "university": "kangwon",
+      "sourceUrl": "https://www.kangwon.ac.kr/ko/conts/713/directory.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14",
+          "sourceTitles": [
+            "2학기 개강",
+            "강의보충기간 12월 15~21일",
+            "기말시험 종료일 및 종강 12월 21일"
+          ],
+          "note": "Regular recurrence stops before the published Dec15-Dec21 makeup window. Dec21 remains the academic end; individual verified makeup dates require separate meetings."
+        }
+      ]
     }
   ]
 }

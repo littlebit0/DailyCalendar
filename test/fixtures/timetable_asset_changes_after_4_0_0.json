@@ -15,6 +15,10 @@
     "sha256": "f2b5f4f0476c49e81ff16660cc58eddbcbabeacf86badecde088db6814160e34",
     "reason": "#92 인하대 학과 80개에 공식 단과대 소속 배정, 공과대학(FVE·SFC) 통합, 사범대·의예과·융합전공지원실 배정, 공식 시간표 독립 개설 분류 4개 등록"
   },
+  "assets/timetable/organizations/kangwon.json": {
+    "sha256": "8799c9aebde2f5c41bbc8e32b60df6efde7854fd6e548661a36155fd5d4f1710",
+    "reason": "#549 강원대 원자료 분류 2개(강릉 치의예과→치과대학, 원주 유아교육과→보건복지대학)와 소속 없는 춘천 불어불문학과(→인문대학)를 공식 단과대 소개 페이지 기준으로 배정"
+  },
   "assets/timetable/organizations/pnu.json": {
     "sha256": "e987c81c8708c76160bd226b1f34db2b1a44f95855d19c1a73d5b9cf96f57c58",
     "reason": "#92 부산대 공식 단과대·융합교육센터·모집요강 기준 원자료 27개 배정"
@@ -26,5 +30,25 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/kangwon-chuncheon-2026-2.json": {
+    "sha256": "ac3846b546100225127224bf997172734bee404a2e2db6cbb5f403811ee78c50",
+    "reason": "#549 강원대 교시 슬롯을 쉬는 시간 포함으로 다시 만듦(숫자 교시 50분+10분=60분 슬롯, A교시 75분+15분=90분 슬롯). 학교 원문이 시계 시각을 적은 기관 봉사 강좌(14207025)는 유지"
+  },
+  "assets/timetable/kangwon-dogye-2026-2.json": {
+    "sha256": "8e71639cc5742f2f0fc2b6e7f8a30f32f04c07aafb007ee3d274029131b0c9c5",
+    "reason": "#549 강원대 교시 슬롯을 쉬는 시간 포함으로 다시 만듦(숫자 교시 50분+10분=60분 슬롯, A교시 75분+15분=90분 슬롯). 학교 원문이 시계 시각을 적은 기관 봉사 강좌(14207025)는 유지"
+  },
+  "assets/timetable/kangwon-gangneung-2026-2.json": {
+    "sha256": "b96a15cb82e33e78519497d24a88d2c0fd151fcc4d7b5451be9dcf6f73d8d216",
+    "reason": "#549 강원대 교시 슬롯을 쉬는 시간 포함으로 다시 만듦(숫자 교시 50분+10분=60분 슬롯, A교시 75분+15분=90분 슬롯). 학교 원문이 시계 시각을 적은 기관 봉사 강좌(14207025)는 유지"
+  },
+  "assets/timetable/kangwon-samcheok-2026-2.json": {
+    "sha256": "4bb6cdb3e0503a8823de404d53573aa0027cab86e1e09914086e7eeff89b3183",
+    "reason": "#549 강원대 교시 슬롯을 쉬는 시간 포함으로 다시 만듦(숫자 교시 50분+10분=60분 슬롯, A교시 75분+15분=90분 슬롯). 학교 원문이 시계 시각을 적은 기관 봉사 강좌(14207025)는 유지"
+  },
+  "assets/timetable/kangwon-wonju-2026-2.json": {
+    "sha256": "5f7c703b48f86b6b3103a30cbcff1ec6d0dae9fc8a043dab9a076d2e211746e8",
+    "reason": "#549 강원대 교시 슬롯을 쉬는 시간 포함으로 다시 만듦(숫자 교시 50분+10분=60분 슬롯, A교시 75분+15분=90분 슬롯). 학교 원문이 시계 시각을 적은 기관 봉사 강좌(14207025)는 유지"
   }
 }
