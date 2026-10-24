@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "university": "gknu",
+  "mappings": [
+    {
+      "college": null,
+      "department": "성인학습자학부 뷰티학전공",
+      "sourceLabel": "뷰티학전공",
+      "sourceUrl": "https://www.gknu.ac.kr/main/html.do?menu_idx=680",
+      "evidence": "공식 학과소개(현재)의 성인학습자학부 블록: 성인학습자학부 … 홈페이지 바로가기 사회복지학전공 스포츠레저학전공 뷰티학전공",
+      "sourceFile": "work/issue-572-gknu-timetable/gknu/gknu-college-intro-current-menu680.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "성인학습자학부",
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "성인학습자학부 사회복지학전공",
+      "sourceLabel": "사회복지학전공",
+      "sourceUrl": "https://www.gknu.ac.kr/main/html.do?menu_idx=680",
+      "evidence": "공식 학과소개(현재)의 성인학습자학부 블록: 성인학습자학부 … 홈페이지 바로가기 사회복지학전공 스포츠레저학전공 뷰티학전공",
+      "sourceFile": "work/issue-572-gknu-timetable/gknu/gknu-college-intro-current-menu680.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "성인학습자학부",
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    },
+    {
+      "college": null,
+      "department": "성인학습자학부 스포츠레저학전공",
+      "sourceLabel": "스포츠레저학전공",
+      "sourceUrl": "https://www.gknu.ac.kr/main/html.do?menu_idx=680",
+      "evidence": "공식 학과소개(현재)의 성인학습자학부 블록: 성인학습자학부 … 홈페이지 바로가기 사회복지학전공 스포츠레저학전공 뷰티학전공",
+      "sourceFile": "work/issue-572-gknu-timetable/gknu/gknu-college-intro-current-menu680.html",
+      "isOfferingUnit": false,
+      "campus": "*",
+      "group": "성인학습자학부",
+      "collegeKnown": false,
+      "affiliationStatus": "verifiedUniversityDirect"
+    }
+  ],
+  "courseOwners": []
+}
