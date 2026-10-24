@@ -37,12 +37,48 @@ void main() {
       }
       expect(raw, isEmpty);
       expect(orphans, isEmpty);
-      // 0- and 9-14th periods use the booklet p.152 table (hourly starts, 50
-      // minutes); consecutive periods form one block (0교시~3교시 = 09:00-12:50).
+      // Booklet p.152 table (09:00 + 60 min x period). A period slot is class
+      // 50 min + break 10 min = 60 min (시행규칙 제44조); consecutive periods
+      // form one block (0교시~3교시 = 09:00-13:00).
       final zeroToThree = courses.firstWhere((c) => c.sourceSchedule == '월0~3');
       expect(zeroToThree.scheduleStatus, 'scheduled');
       expect(zeroToThree.meetings.first.originalStartMinute, 540);
-      expect(zeroToThree.meetings.first.originalEndMinute, 770);
+      expect(zeroToThree.meetings.first.originalEndMinute, 780);
+      var checked = 0;
+      for (final c in courses.where((c) => c.scheduleStatus == 'scheduled')) {
+        final byDay = <int, List<List<int>>>{};
+        for (final m in RegExp(
+          r'([월화수목금])(\d+)(?:~(\d+))?',
+        ).allMatches(c.sourceSchedule)) {
+          final a = int.parse(m[2]!);
+          byDay.putIfAbsent('월화수목금'.indexOf(m[1]!) + 1, () => []).add([
+            a,
+            int.parse(m[3] ?? m[2]!),
+          ]);
+        }
+        final expected = <String>{};
+        byDay.forEach((day, segs) {
+          segs.sort((x, y) => x[0].compareTo(y[0]));
+          final merged = <List<int>>[];
+          for (final s in segs) {
+            if (merged.isNotEmpty && s[0] <= merged.last[1] + 1) {
+              if (s[1] > merged.last[1]) merged.last[1] = s[1];
+            } else {
+              merged.add([...s]);
+            }
+          }
+          for (final s in merged) {
+            expected.add('$day/${540 + 60 * s[0]}/${600 + 60 * s[1]}');
+          }
+        });
+        final actual = {
+          for (final m in c.meetings)
+            '${DateTime.parse(m.date!).weekday}/${m.originalStartMinute}/${m.originalEndMinute}',
+        };
+        expect(actual, expected, reason: c.sourceId);
+        checked++;
+      }
+      expect(checked, 1743);
       // Still held (remote/hybrid delivery, Saturday, evening-division,
       // conflicting rows); search stays suspended.
       expect(
@@ -50,5 +86,6 @@ void main() {
         hasLength(756),
       );
     },
+    timeout: const Timeout(Duration(minutes: 3)),
   );
 }
