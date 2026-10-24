@@ -89,6 +89,14 @@ void main() {
         ),
         throwsFormatException,
       );
+      // Without nextSyncToken the response is not the last page.
+      expect(
+        () => SkuAcademicSource.parse(
+          jsonEncode({...data}..remove('nextSyncToken')),
+          2026,
+        ),
+        throwsFormatException,
+      );
       expect(
         () => SkuAcademicSource.parse(
           jsonEncode({...data, 'summary': '대학원'}),
@@ -113,6 +121,22 @@ void main() {
       );
     },
   );
+  test('SKU accepts a complete calendar with an event-free month', () {
+    final data = jsonDecode(fixture(2026)) as Map<String, dynamic>;
+    final items = (data['items'] as List)
+        .where((e) => !(e['start']['date'] as String).startsWith('2026-11'))
+        .toList();
+    expect(items.length, lessThan((data['items'] as List).length));
+    final events = SkuAcademicSource.parse(
+      jsonEncode({...data, 'items': items}),
+      2026,
+    );
+    expect(events, hasLength(items.length));
+    expect(
+      events.any((e) => e.start.year == 2026 && e.start.month == 11),
+      isFalse,
+    );
+  });
   test('SKU reports an unavailable calendar as an error', () async {
     final source = SkuAcademicSource(
       client: MockClient((_) async => http.Response('', 503)),

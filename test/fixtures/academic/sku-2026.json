@@ -4,6 +4,7 @@
   "description": "서경대학교 학사일정",
   "updated": "2026-10-13T01:08:03.715Z",
   "timeZone": "Asia/Seoul",
+  "nextSyncToken": "CN_ZupLntZcDEAAYASDd0uzdAyjd0uzdAw==",
   "items": [
     {
       "kind": "calendar#event",

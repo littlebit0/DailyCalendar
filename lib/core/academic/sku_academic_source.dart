@@ -47,7 +47,10 @@ class SkuAcademicSource implements AcademicSource {
         data['kind'] != 'calendar#events' ||
         data['summary'] != '포탈 학부/학사' ||
         data['timeZone'] != 'Asia/Seoul' ||
+        // Google Calendar returns nextSyncToken only on the last page.
         data['nextPageToken'] != null ||
+        data['nextSyncToken'] is! String ||
+        (data['nextSyncToken'] as String).isEmpty ||
         data['items'] is! List ||
         (data['items'] as List).isEmpty) {
       throw const FormatException('Incomplete SKU undergraduate calendar');
@@ -68,7 +71,6 @@ class SkuAcademicSource implements AcademicSource {
 
     final events = <AcademicEvent>[];
     final ids = <String>{};
-    final months = <int>{};
     for (final row in data['items'] as List) {
       if (row is! Map ||
           row['id'] is! String ||
@@ -92,7 +94,6 @@ class SkuAcademicSource implements AcademicSource {
           !end.isAfter(DateTime(year))) {
         throw const FormatException('Unexpected SKU event period');
       }
-      if (start.year == year) months.add(start.month);
       events.add(
         AcademicEvent(
           sourceId: row['id'],
@@ -103,7 +104,7 @@ class SkuAcademicSource implements AcademicSource {
         ),
       );
     }
-    if (months.length != 12 || events.isEmpty) {
+    if (events.isEmpty) {
       throw const FormatException('Incomplete SKU annual schedule');
     }
     return events..sort((a, b) => a.start.compareTo(b.start));
