@@ -19,10 +19,20 @@ class KunsanAcademicSource implements AcademicSource {
     'sso': 'ok',
   });
 
+  // The official 2025 table publishes 10/30 ~ 10/02 for one row, so only
+  // academic years from 2026 are imported (user decision, 2026-10-24).
+  static const firstAcademicYear = 2026;
+
   @override
   Future<List<AcademicEvent>> fetch(int year) async {
+    if (year < firstAcademicYear) {
+      throw const FormatException('Unsupported kunsan academic year');
+    }
     final events = <String, AcademicEvent>{};
-    for (final selectedYear in [year - 1, year]) {
+    for (final selectedYear in [
+      if (year - 1 >= firstAcademicYear) year - 1,
+      year,
+    ]) {
       await Future<void>.delayed(const Duration(milliseconds: 250));
       final response = await _client
           .get(
