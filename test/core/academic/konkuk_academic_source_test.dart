@@ -167,6 +167,75 @@ void main() {
     },
   );
 
+  test(
+    'GLOCAL creates no seasonal session from a notice without dates',
+    () async {
+      // The archived 2024 winter notice is titled "2024 동계 계절 학기 시행 계획"
+      // and publishes its schedule only as attachments (empty body).
+      expect(
+        KonkukAcademicSource.parseSupplement(
+          fixture('konkuk-glocal-winter-notices.json'),
+          2024,
+          winter: true,
+          host: 'formativeart.kku.ac.kr',
+          menu: '160',
+          site: '38',
+          board: '3',
+        ),
+        isEmpty,
+      );
+      // A body with dates in an unknown layout still fails rather than being
+      // silently dropped.
+      final changed = jsonDecode(fixture('konkuk-glocal-winter-notices.json'));
+      for (final r in changed['data']['list'] as List) {
+        if (r['BBS_SEQ'] == 34368) r['CONTENTS'] = '<p>12.23.~1.14. 운영</p>';
+      }
+      expect(
+        () => KonkukAcademicSource.parseSupplement(
+          jsonEncode(changed),
+          2024,
+          winter: true,
+          host: 'formativeart.kku.ac.kr',
+          menu: '160',
+          site: '38',
+          board: '3',
+        ),
+        throwsFormatException,
+      );
+      // 2025: the previous winter notice has no dates and no dated 2025 summer
+      // notice is on the current board, so the annual rows are returned alone.
+      final source = KonkukAcademicSource.glocal(
+        client: MockClient((r) async {
+          final body = Uri.splitQueryString(r.body);
+          if (r.url.path == '/ajax/FR_SCH_SVC/ScheduleListData.do') {
+            return ok(fixture('konkuk-glocal-${body['SCH_YEAR']}.json'));
+          }
+          if (r.url.host == 'formativeart.kku.ac.kr') {
+            return ok(fixture('konkuk-glocal-winter-notices.json'));
+          }
+          return ok(
+            fixture(
+              body['SEARCH'] == '동계'
+                  ? 'konkuk-glocal-current-winter-notices.json'
+                  : 'konkuk-glocal-summer-notices.json',
+            ),
+          );
+        }),
+      );
+      final events = await source.fetch(2025);
+      source.close();
+      final annual = KonkukAcademicSource.parseGlocal(
+        fixture('konkuk-glocal-2025.json'),
+        2025,
+      );
+      expect(
+        events.map((e) => e.sourceId).toSet(),
+        annual.map((e) => e.sourceId).toSet(),
+      );
+      expect(events.where((e) => e.title.endsWith('계절학기')), isEmpty);
+    },
+  );
+
   test('every published Konkuk row is imported for each year', () {
     for (final year in [2025, 2026]) {
       final seoul = fixture('konkuk-$year.html');

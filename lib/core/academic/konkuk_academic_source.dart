@@ -83,21 +83,19 @@ class KonkukAcademicSource implements AcademicSource {
             },
           );
       final winter = await search(keyword: '동계');
-      bool hasWinter(String body, int selected) {
+      bool has(String body, int selected, {bool winter = true}) {
         final data = jsonDecode(body);
         if (data is! Map ||
             data['data'] is! Map ||
             data['data']['list'] is! List) {
-          throw const FormatException('Invalid GLOCAL winter notice list');
+          throw const FormatException('Invalid GLOCAL notice list');
         }
         return (data['data']['list'] as List).whereType<Map>().any(
-          (r) => _clean(
-            r['SUBJECT']?.toString() ?? '',
-          ).contains('$selected학년도 동계 계절학기 안내'),
+          (r) => _isNotice(r['SUBJECT']?.toString() ?? '', selected, winter),
         );
       }
 
-      final archived = !hasWinter(winter, year - 1);
+      final archived = !has(winter, year - 1);
       final previous = archived
           ? await search(archive: true, keyword: '동계')
           : winter;
@@ -114,7 +112,7 @@ class KonkukAcademicSource implements AcademicSource {
       );
       // A future course period is added as soon as its official notice appears;
       // an empty current-winter result is not a licence to invent the dates.
-      if (hasWinter(winter, year)) {
+      if (has(winter, year)) {
         add(
           parseSupplement(
             winter,
@@ -127,17 +125,23 @@ class KonkukAcademicSource implements AcademicSource {
           ),
         );
       }
-      add(
-        parseSupplement(
-          await search(keyword: '하계방학'),
-          year,
-          winter: false,
-          host: 'www.kku.ac.kr',
-          menu: '1740',
-          site: '2',
-          board: '18',
-        ),
-      );
+      // The same holds for summer: the 2025 summer notice exists only on the
+      // archive board, as "2025학년도 하계 계절학기 시행계획 안내(수정)" with no
+      // dates in its body, so a year without a dated notice gets no session.
+      final summer = await search(keyword: '하계방학');
+      if (has(summer, year, winter: false)) {
+        add(
+          parseSupplement(
+            summer,
+            year,
+            winter: false,
+            host: 'www.kku.ac.kr',
+            menu: '1740',
+            site: '2',
+            board: '18',
+          ),
+        );
+      }
     }
 
     if (events.isEmpty) {
@@ -156,6 +160,15 @@ class KonkukAcademicSource implements AcademicSource {
 
   static String _clean(String value) =>
       value.replaceAll(RegExp(r'\s+'), ' ').trim();
+
+  // The archive titles the 2024 winter notice "2024 동계 계절 학기 시행 계획".
+  static bool _isNotice(String title, int year, bool winter) {
+    final compact = title.replaceAll(RegExp(r'\s+'), '');
+    return winter
+        ? RegExp('$year(?:학년도)?동계계절학기(?:안내|시행계획)').hasMatch(compact)
+        : compact.contains('$year학년도') && compact.contains('하계방학주요학사일정');
+  }
+
   static AcademicEvent _event(
     String title,
     DateTime start,
@@ -278,25 +291,30 @@ class KonkukAcademicSource implements AcademicSource {
       throw const FormatException('Invalid GLOCAL notice search');
     }
     final notices =
-        (data['data']['list'] as List).whereType<Map>().where((r) {
-          final title = _clean(r['SUBJECT']?.toString() ?? '');
-          return title.contains('$year학년도') &&
-              (winter
-                  ? title.contains('동계 계절학기 안내')
-                  : title.contains('하계방학 주요 학사일정'));
-        }).toList()..sort(
-          (a, b) => (b['BBS_SEQ'] as int).compareTo(a['BBS_SEQ'] as int),
-        );
+        (data['data']['list'] as List)
+            .whereType<Map>()
+            .where(
+              (r) => _isNotice(r['SUBJECT']?.toString() ?? '', year, winter),
+            )
+            .toList()
+          ..sort(
+            (a, b) => (b['BBS_SEQ'] as int).compareTo(a['BBS_SEQ'] as int),
+          );
     if (notices.isEmpty) {
       throw const FormatException('Missing published GLOCAL seasonal notice');
     }
     final row = notices.first;
     if (row['SITE_NO'].toString() != site ||
         row['BOARD_SEQ'].toString() != board ||
-        row['CONTENTS'] is! String) {
+        row['CONTENTS'] is! String?) {
       throw const FormatException('Wrong GLOCAL notice scope');
     }
-    final doc = html.parse(row['CONTENTS'] as String);
+    final doc = html.parse(row['CONTENTS'] as String? ?? '');
+    // A notice published without any date in its body (the 2024 winter notice
+    // has only attachments) creates no event; dates are never guessed.
+    if (!RegExp(r'\d{1,2}\.\s*\d{1,2}\.').hasMatch(doc.body?.text ?? '')) {
+      return const [];
+    }
     String raw;
     if (winter) {
       raw = _clean(
