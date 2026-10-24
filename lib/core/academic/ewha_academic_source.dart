@@ -22,9 +22,9 @@ class EwhaAcademicSource implements AcademicSource {
 
   @override
   Future<List<AcademicEvent>> fetch(int year) async {
-    final events = <String, AcademicEvent>{};
-    // Each page is an academic year (Feb to next Feb), so January of [year]
-    // is published only on the previous year's page.
+    final pages = <Map<DateTime, List<AcademicEvent>>>[];
+    // Each page is an academic year ending with next year's Jan/Feb, so
+    // January of [year] may be published only on the previous year's page.
     for (final selected in [year - 1, year]) {
       if (selected == year) {
         await Future<void>.delayed(const Duration(milliseconds: 250));
@@ -33,11 +33,17 @@ class EwhaAcademicSource implements AcademicSource {
           .get(page(selected))
           .timeout(const Duration(seconds: 25));
       checkAcademicResponse(response);
-      for (final event in parse(utf8.decode(response.bodyBytes), selected)) {
-        if (event.start.isBefore(DateTime(year + 1)) &&
-            event.end.isAfter(DateTime(year))) {
-          events[event.sourceId] = event;
-        }
+      pages.add(parseMonths(utf8.decode(response.bodyBytes), selected));
+    }
+    // Both pages list the overlapping January/February months. A month the
+    // [year] page publishes is authoritative, so its corrections and removals
+    // win; the previous page only fills months the [year] page does not list.
+    final months = {...pages.first, ...pages.last};
+    final events = <String, AcademicEvent>{};
+    for (final event in months.values.expand((rows) => rows)) {
+      if (event.start.isBefore(DateTime(year + 1)) &&
+          event.end.isAfter(DateTime(year))) {
+        events[event.sourceId] = event;
       }
     }
     if (events.isEmpty) {
@@ -48,6 +54,16 @@ class EwhaAcademicSource implements AcademicSource {
 
   /// Every row of one academic-year page, including next year's Jan/Feb.
   static List<AcademicEvent> parse(String body, int year) {
+    final events = {
+      for (final event in parseMonths(body, year).values.expand((e) => e))
+        event.sourceId: event,
+    };
+    return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
+  }
+
+  /// The page's rows grouped by the month heading they are published under;
+  /// only months with at least one row are present.
+  static Map<DateTime, List<AcademicEvent>> parseMonths(String body, int year) {
     final doc = html.parse(body);
     // Month titles carry no year, so the page's own year banner is the only proof
     // that the response is the requested year; never relabel another year's page.
@@ -60,6 +76,7 @@ class EwhaAcademicSource implements AcademicSource {
     }
     final url = page(year).toString();
     final events = <String, AcademicEvent>{};
+    final months = <DateTime, List<AcademicEvent>>{};
     for (final p in doc.querySelectorAll('p')) {
       final heading = RegExp(
         r'^(?:(\d{4})년\s*)?(\d{1,2})월$',
@@ -92,12 +109,13 @@ class EwhaAcademicSource implements AcademicSource {
           throw const FormatException('Conflicting published academic event');
         }
         events[event.sourceId] = event;
+        (months[DateTime(y, m)] ??= []).add(event);
       }
     }
     if (events.isEmpty) {
       throw const FormatException('No published academic calendar');
     }
-    return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
+    return months;
   }
 
   static DateTime _date(int year, int month, int day) {

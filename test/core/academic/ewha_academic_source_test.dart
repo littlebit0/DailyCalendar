@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/ewha_academic_source.dart';
@@ -91,6 +92,48 @@ void main() {
               e.end == DateTime(2025, 1, 31),
         ),
         isTrue,
+      );
+    },
+  );
+
+  test(
+    'EWHA months on the requested year page replace the previous page',
+    () async {
+      // The 2025 page still lists February 2026 as first announced; the 2026
+      // page moves 졸업예배 and drops 학위수여식 for the same month.
+      final current = fixture(2026);
+      final february = current.indexOf(RegExp(r'<p>\s*2월\s*</p>'));
+      expect(february, greaterThan(0));
+      final corrected = current
+          .replaceFirst('<p>22(일)', '<p>21(토)', february)
+          .replaceFirst('<li>2025학년도 전기 학위수여식</li>', '', february);
+      expect(corrected, isNot(current));
+      final ewha = EwhaAcademicSource(
+        client: MockClient((r) async {
+          final year = r.url.queryParameters['year']!;
+          return http.Response.bytes(
+            utf8.encode(year == '2026' ? corrected : fixture(int.parse(year))),
+            200,
+            headers: {'content-type': 'text/html;charset=utf-8'},
+          );
+        }),
+      );
+      final events = await ewha.fetch(2026);
+      ewha.close();
+      expect(
+        events
+            .where((e) => e.title == '졸업예배' && e.start.month == 2)
+            .map((e) => e.start),
+        [DateTime(2026, 2, 21)],
+      );
+      expect(events.where((e) => e.title == '2025학년도 전기 학위수여식'), isEmpty);
+      expect(
+        EwhaAcademicSource.parse(fixture(2025), 2025).where(
+          (e) =>
+              e.title == '2025학년도 전기 학위수여식' ||
+              (e.title == '졸업예배' && e.start == DateTime(2026, 2, 22)),
+        ),
+        hasLength(2),
       );
     },
   );
