@@ -203,7 +203,7 @@ def main():
     courses, reasons = prepare(rows, proofs, neutral)
     dataset = {'schemaVersion': 2, 'universityId': 'hansung', 'campus': 'main',
         'campusName': '본교', 'academicYear': 2026, 'semester': '2',
-        'publishedDate': '2026-10-08',
+        'publishedDate': '2026-10-24',
         'sourceUrl': 'https://info.hansung.ac.kr/jsp_21/student/kyomu/siganpyo_aui.jsp?viewMode=oc',
         'courses': courses}
     args.output.write_text(json.dumps(dataset, ensure_ascii=False, indent=2)+'\n')
