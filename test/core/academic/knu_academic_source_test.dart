@@ -52,6 +52,39 @@ void main() {
     ).where((e) => e.title == '일반휴학원 접수종료').map((e) => e.start);
     expect(leave, [DateTime(2025, 4, 24), DateTime(2025, 10, 29)]);
   });
+  test('cleaned KNU titles keep the source IDs of the previous adapter', () {
+    // Source IDs produced by the d299036a adapter for the same fixtures, which
+    // kept doubled spaces and a trailing "(10.29)" in the title. Rows imported
+    // with those IDs must keep their local row, exclusions and personal data.
+    const legacy = {
+      2025: {
+        '2025:복학원  접수시작:0': '복학원 접수시작',
+        '2025:육아·질병·창업휴학원  접수종료:0': '육아·질병·창업휴학원 접수종료',
+        '2025:복학원  접수시작:1': '복학원 접수시작',
+        '2025:일반휴학원 접수종료(10.29):0': '일반휴학원 접수종료',
+      },
+      2026: {
+        '2026:2025학년도  전기학위수여식:0': '2025학년도 전기학위수여식',
+        '2026:육아․질병․창업휴학원  접수종료:0': '육아․질병․창업휴학원 접수종료',
+        '2026:복학원  접수시작:0': '복학원 접수시작',
+        '2026:2026학년도 2학기  재학생 등록:0': '2026학년도 2학기 재학생 등록',
+      },
+    };
+    for (final year in [2025, 2026]) {
+      final events = KnuAcademicSource.parse(fixture(year), year);
+      final byId = {for (final e in events) e.sourceId: e.title};
+      expect({for (final id in legacy[year]!.keys) id: byId[id]}, legacy[year]);
+      // Every other row's title was not changed by the cleanup, so its ID is
+      // the previous "year:title:occurrence" form.
+      for (final e in events) {
+        if (legacy[year]!.containsKey(e.sourceId)) continue;
+        expect(
+          e.sourceId,
+          matches(RegExp('^$year:${RegExp.escape(e.title)}:\\d+\$')),
+        );
+      }
+    }
+  });
   test('KNU profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000005',

@@ -26,6 +26,10 @@ class KnuAcademicSource implements AcademicSource {
     return parse(utf8.decode(response.bodyBytes), year);
   }
 
+  static final _range = RegExp(
+    r'(?:(\d{4})\.)?(\d{1,2})\.(\d{1,2})\.?\s*~\s*(?:(\d{4})\.)?(\d{1,2})\.(\d{1,2})\.?',
+  );
+
   static List<AcademicEvent> parse(String body, int year) {
     final calendar = html.parse(body).querySelector('#calendar');
     if (calendar == null) {
@@ -55,10 +59,10 @@ class KnuAcademicSource implements AcademicSource {
         if (day == null || int.parse(day[1]!) != month) {
           throw const FormatException('Invalid KNU day');
         }
-        final text = row.text
+        final raw = row.text
             .substring(row.text.indexOf(dayText) + dayText.length)
-            .replaceAll(RegExp(r'\s+'), ' ')
             .trim();
+        final text = raw.replaceAll(RegExp(r'\s+'), ' ');
         if (text.startsWith('[대학원]')) {
           continue;
         }
@@ -68,14 +72,11 @@ class KnuAcademicSource implements AcademicSource {
         final start = _date(year, month, int.parse(day[2]!));
         // The visible date column is only the first day. The official title
         // publishes the complete period, which must not become a one-day event.
-        final ranges = RegExp(
-          r'(?:(\d{4})\.)?(\d{1,2})\.(\d{1,2})\.?\s*~\s*(?:(\d{4})\.)?(\d{1,2})\.(\d{1,2})\.?',
-        ).allMatches(text).toList();
+        final ranges = _range.allMatches(text).toList();
         if (ranges.length > 1 || (text.contains('~') && ranges.isEmpty)) {
           throw const FormatException('Ambiguous KNU date range');
         }
         var last = start;
-        var title = text;
         if (ranges.isNotEmpty) {
           final range = ranges.single;
           final first = _date(
@@ -93,16 +94,13 @@ class KnuAcademicSource implements AcademicSource {
           if (first != start || last.isBefore(start)) {
             throw const FormatException('Conflicting KNU date range');
           }
-          title = text
-              .replaceRange(range.start, range.end, '')
-              .replaceAll(RegExp(r'\(\s*\)'), '')
-              .trim();
-        } else {
-          title = text
-              .replaceFirst(RegExp(r'\s*\(\d{1,2}\.\d{1,2}\.?\)\s*$'), '')
-              .trim();
         }
-        final identity = '$year:$title';
+        final title = _title(text, RegExp(r'\s*\(\d{1,2}\.\d{1,2}\.?\)\s*$'));
+        // The ID keeps the title exactly as the previous adapter (d299036a)
+        // derived it, without whitespace or "(10.29)" cleanup, so rows imported
+        // before keep their baseline, exclusions and personal data.
+        final identity =
+            '$year:${_title(raw, RegExp(r'\s*\(\d{1,2}\.\d{1,2}\.\)\s*$'))}';
         final occurrence = occurrences.update(
           identity,
           (n) => n + 1,
@@ -124,6 +122,16 @@ class KnuAcademicSource implements AcademicSource {
       throw const FormatException('Incomplete KNU annual calendar');
     }
     return events..sort((a, b) => a.start.compareTo(b.start));
+  }
+
+  static String _title(String text, RegExp singleDate) {
+    final range = _range.firstMatch(text);
+    return range == null
+        ? text.replaceFirst(singleDate, '').trim()
+        : text
+              .replaceRange(range.start, range.end, '')
+              .replaceAll(RegExp(r'\(\s*\)'), '')
+              .trim();
   }
 
   static DateTime _date(int year, int month, int day) {
