@@ -32,13 +32,12 @@ class KangwonAcademicSource implements AcademicSource {
         if (boards.isNotEmpty || month > 1) {
           await Future<void>.delayed(const Duration(milliseconds: 250));
         }
+        // robots.txt disallows /neibis-api/; the allowed list page embeds
+        // the same monthly posts.
         final response = await _client
             .get(
-              Uri.https(
-                'www.kangwon.ac.kr',
-                '/neibis-api/v1/core/bbs/plan/calendar',
-                {
-                  'bbsId': bbsId,
+              Uri.parse(_pages[bbsId]!).replace(
+                queryParameters: {
                   'searchYear': '$year',
                   'searchMonth': '$month',
                 },
@@ -88,11 +87,28 @@ class KangwonAcademicSource implements AcademicSource {
     if (page == null || month < 1 || month > 12) {
       throw const FormatException('Invalid Kangwon request month');
     }
-    final decoded = jsonDecode(body);
-    if (decoded is! Map ||
-        decoded['icon'] != 'success' ||
-        decoded['data'] is! List) {
+    // The list page must be this board's requested month.
+    final shown = RegExp(
+      r"var toDetailParam = '[^']*searchYear=(\d+)&(?:amp;)*searchMonth=(\d+)&",
+    ).firstMatch(body);
+    if (!body.contains("var bbsId = '$bbsId';") ||
+        !body.contains('var scheduleData = [];') ||
+        shown == null ||
+        shown.group(1) != '$year' ||
+        shown.group(2) != '$month') {
       throw const FormatException('Invalid Kangwon calendar');
+    }
+    // Each post is one `scheduleData.push({...})`; a title the page escapes
+    // other than with HTML entities (quote, backslash) fails the count check.
+    final rows = RegExp(
+      r'scheduleData\.push\(\{\s*pstSn: (\d+),\s*'
+      r'ttl: "([^"\\\n]*)"\.replace\([^\n]*\),\s*cd1Vl: (\d+),\s*'
+      r'etc1Cn: "([^"]*)",\s*etc2Cn: "[^"]*",\s*'
+      r'etc3Cn: "([^"]*)",\s*etc4Cn: "[^"]*",\s*etc5Cn: "[^"]*",\s*'
+      r'dataSttsCd: "([^"]*)"\s*\}\);',
+    ).allMatches(body).toList();
+    if (rows.length != 'scheduleData.push('.allMatches(body).length) {
+      throw const FormatException('Invalid Kangwon event');
     }
     DateTime date(Object? value) {
       if (value is! String ||
@@ -110,14 +126,18 @@ class KangwonAcademicSource implements AcademicSource {
     }
 
     final events = <AcademicEvent>[];
-    for (final row in decoded['data'] as List) {
-      if (row is! Map ||
-          row['pstSn'] is! int ||
-          row['bbsId'] != bbsId ||
-          row['dataSttsCd'] != 'A' ||
+    for (final match in rows) {
+      final row = {
+        'pstSn': int.parse(match[1]!),
+        'ttl': academicHtmlText(match[2]!),
+        'cd1Vl': int.parse(match[3]!),
+        'etc1Cn': match[4],
+        'etc3Cn': match[5],
+        'dataSttsCd': match[6],
+      };
+      if (row['dataSttsCd'] != 'A' ||
           !const [0, 1, 2, 3, 4, 5].contains(row['cd1Vl']) ||
-          row['ttl'] is! String ||
-          (row['ttl'] as String).trim().isEmpty) {
+          (row['ttl'] as String).isEmpty) {
         throw const FormatException('Invalid Kangwon event');
       }
       final start = date(row['etc1Cn']);

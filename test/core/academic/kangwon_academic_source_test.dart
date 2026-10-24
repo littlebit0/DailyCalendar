@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:daily/core/academic/academic_profile.dart';
@@ -7,34 +6,47 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
-// Official monthly responses fetched 2026-10-24 (KST) from
-// https://www.kangwon.ac.kr/neibis-api/v1/core/bbs/plan/calendar:
-// `kangwon-*` is `chuncheon_calender`, `kangwon-gwnu-*` is `gwnucalender`.
+// Official list pages fetched 2026-10-25 (KST) from
+// https://www.kangwon.ac.kr/ko/bbs/714/list.do (`chuncheon_calender`,
+// `kangwon-*`) and /ko/bbs/873/list.do (`gwnucalender`, `kangwon-gwnu-*`)
+// with `?searchYear=&searchMonth=`. robots.txt disallows /neibis-api/ but
+// allows /ko/. Monthly fixtures are verbatim excerpts of each page, from the
+// `var toDetailParam` line to the `var bbsId` line; `*-2026-03-page.html`
+// keep two whole pages.
 String fixture(String bbsId, int year, int month) => File(
   'test/fixtures/academic/kangwon-${bbsId == 'gwnucalender' ? 'gwnu-' : ''}'
-  '$year-${month.toString().padLeft(2, '0')}.json',
+  '$year-${month.toString().padLeft(2, '0')}.html',
 ).readAsStringSync();
+
+const paths = {
+  '/ko/bbs/714/list.do': 'chuncheon_calender',
+  '/ko/bbs/873/list.do': 'gwnucalender',
+};
 
 KangwonAcademicSource source(
   List<String> requests, {
   String Function(String bbsId, int year, int month) body = fixture,
 }) => KangwonAcademicSource(
   client: MockClient((request) async {
-    expect(request.url.path, '/neibis-api/v1/core/bbs/plan/calendar');
-    final bbsId = request.url.queryParameters['bbsId']!;
+    expect(request.url.host, 'www.kangwon.ac.kr');
+    final bbsId = paths[request.url.path]!;
     final year = int.parse(request.url.queryParameters['searchYear']!);
     final month = int.parse(request.url.queryParameters['searchMonth']!);
     requests.add('$bbsId $year-$month');
     return http.Response(
       body(bbsId, year, month),
       200,
-      headers: {'content-type': 'application/json; charset=utf-8'},
+      headers: {'content-type': 'text/html;charset=UTF-8'},
     );
   }),
 );
 
 const boards = ['chuncheon_calender', 'gwnucalender'];
 final thesis = RegExp('학위(청구)?논문');
+// Independent of the parser: every post the page embeds, with its raw title.
+final posted = RegExp(
+  r'scheduleData\.push\(\{\s*pstSn: (\d+),\s*ttl: "([^"]*)"',
+);
 
 void main() {
   test('Kangwon imports both campus boards with post IDs', () async {
@@ -102,10 +114,14 @@ void main() {
       final parsed = <String>{};
       for (var month = 1; month <= 12; month++) {
         final body = fixture(bbsId, 2026, month);
-        for (final row in jsonDecode(body)['data'] as List) {
-          posts.add(row['pstSn'] as int);
-          if (thesis.hasMatch(row['ttl'] as String)) {
-            excluded.add(row['pstSn'] as int);
+        expect(
+          posted.allMatches(body).length,
+          'scheduleData.push('.allMatches(body).length,
+        );
+        for (final row in posted.allMatches(body)) {
+          posts.add(int.parse(row[1]!));
+          if (thesis.hasMatch(row[2]!)) {
+            excluded.add(int.parse(row[1]!));
           }
         }
         parsed.addAll(
@@ -157,9 +173,54 @@ void main() {
     },
   );
 
+  test('Kangwon parses whole list pages like their excerpts', () {
+    for (final bbsId in boards) {
+      final page = File(
+        'test/fixtures/academic/'
+        'kangwon-${bbsId == 'gwnucalender' ? 'gwnu-' : ''}2026-03-page.html',
+      ).readAsStringSync();
+      final parsed = KangwonAcademicSource.parse(page, 2026, 3, bbsId: bbsId);
+      expect(parsed, isNotEmpty, reason: bbsId);
+      expect(
+        parsed.map((e) => e.toJson()),
+        KangwonAcademicSource.parse(
+          fixture(bbsId, 2026, 3),
+          2026,
+          3,
+          bbsId: bbsId,
+        ).map((e) => e.toJson()),
+        reason: bbsId,
+      );
+    }
+    // The page entity-escapes titles (thesis rows show `&lt;전공시험&gt;`).
+    expect(
+      KangwonAcademicSource.parse(
+        fixture(
+          'chuncheon_calender',
+          2026,
+          3,
+        ).replaceFirst('ttl: "1학기 개강"', 'ttl: "1학기 개강 &lt;공통&gt; &amp; 수업"'),
+        2026,
+        3,
+      ).where((e) => e.sourceId == '24').single.title,
+      '1학기 개강 <공통> & 수업',
+    );
+  });
+
   test('Kangwon reports an unpublished year instead of an empty calendar', () {
-    final empty = fixture('chuncheon_calender', 2025, 1);
-    final kangwon = source([], body: (_, _, _) => empty);
+    // The empty January 2025 page, shown for the requested board and month.
+    final kangwon = source(
+      [],
+      body: (bbsId, year, month) => fixture('chuncheon_calender', 2025, 1)
+          .replaceFirst(
+            "var bbsId = 'chuncheon_calender';",
+            "var bbsId = '$bbsId';",
+          )
+          .replaceFirst(
+            'searchYear=2025&amp;amp;searchMonth=1&amp;amp;',
+            'searchYear=$year&amp;amp;searchMonth=$month&amp;amp;',
+          ),
+    );
     addTearDown(kangwon.close);
     expect(kangwon.fetch(2027), throwsFormatException);
   });
@@ -169,7 +230,7 @@ void main() {
       final kangwon = source(
         [],
         body: (bbsId, year, month) => bbsId == failing && month == 6
-            ? '{"icon":"error"}'
+            ? '<html>점검 중</html>'
             : fixture(bbsId, year, month),
       );
       addTearDown(kangwon.close);
@@ -221,7 +282,24 @@ void main() {
       throwsFormatException,
     );
     expect(
-      () => KangwonAcademicSource.parse('{"icon":"error"}', 2026, 3),
+      () => KangwonAcademicSource.parse('<html>점검 중</html>', 2026, 3),
+      throwsFormatException,
+    );
+    // A post the parser cannot read fully fails instead of being skipped.
+    expect(
+      () => KangwonAcademicSource.parse(
+        body.replaceFirst('ttl: "1학기 개강"', r'ttl: "1학기 \"개강"'),
+        2026,
+        3,
+      ),
+      throwsFormatException,
+    );
+    expect(
+      () => KangwonAcademicSource.parse(
+        body.replaceFirst('dataSttsCd: "A"', 'dataSttsCd: "D"'),
+        2026,
+        3,
+      ),
       throwsFormatException,
     );
     // A response from the other board is rejected.
