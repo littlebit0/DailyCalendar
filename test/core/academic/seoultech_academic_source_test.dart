@@ -15,6 +15,9 @@ bool financeRow(String title) =>
     RegExp(r'^\d{4}회계연도').hasMatch(title) &&
     RegExp(r'재정위원회|예산|대학회계').hasMatch(title);
 
+// Graduate-school-only rows, marked `(대학원)` on the page.
+bool graduateRow(String title) => title.contains('(대학원)');
+
 void main() {
   test('Seoultech fetch keeps the 2026 year across both semesters', () async {
     final requested = <String>[];
@@ -61,11 +64,12 @@ void main() {
   });
 
   test('every published Seoultech academic row is imported', () {
-    for (final (year, semester) in [
-      (2025, 1),
-      (2025, 2),
-      (2026, 1),
-      (2026, 2),
+    // Published rows = imported + finance office records + graduate-only rows.
+    for (final (year, semester, rows, finance, graduate) in [
+      (2025, 1, 31, 2, 6),
+      (2025, 2, 44, 4, 3),
+      (2026, 1, 28, 2, 0),
+      (2026, 2, 44, 4, 0),
     ]) {
       final titles = html
           .parse(fixture(year, semester))
@@ -85,10 +89,24 @@ void main() {
       );
       expect(
         events.map((e) => e.title),
-        titles.where((t) => !financeRow(t)),
+        titles.where((t) => !financeRow(t) && !graduateRow(t)),
         reason: '$year-$semester',
       );
+      expect(titles, hasLength(rows));
+      expect(titles.where(financeRow), hasLength(finance));
+      expect(titles.where(graduateRow), hasLength(graduate));
+      expect(events, hasLength(rows - finance - graduate));
     }
+  });
+
+  test('Seoultech leaves out rows marked for the graduate school', () {
+    final titles = SeoultechAcademicSource.parse(
+      fixture(2025, 1),
+      2025,
+      1,
+    ).map((e) => e.title);
+    expect(titles.any((t) => t.contains('대학원')), isFalse);
+    expect(fixture(2025, 1), contains('2025학년도 후기 대학원 신입생.편입생 원서접수(대학원) 예정'));
   });
 
   test('Seoultech excludes finance office records and never repairs dates', () {

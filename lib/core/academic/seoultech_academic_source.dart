@@ -112,6 +112,8 @@ class SeoultechAcademicSource implements AcademicSource {
           last.isBefore(start)) {
         throw const FormatException('Unexpected Seoultech period');
       }
+      // The page marks graduate-school-only rows with `(대학원)`.
+      if (title.contains('(대학원)')) continue;
       final key = '$academicYear:$semester:$title';
       final occurrence = occurrences.update(
         key,
