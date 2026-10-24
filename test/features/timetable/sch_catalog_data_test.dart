@@ -36,7 +36,7 @@ void main() {
         courses.where((c) => c.scheduleStatus == 'unrecognized'),
         hasLength(236),
       );
-      expect(courses.expand((c) => c.meetings), hasLength(64564));
+      expect(courses.expand((c) => c.meetings), hasLength(35380));
       for (final c in courses) {
         if (!c.hasSchedulableMeetings) {
           expect(c.meetings, isEmpty);
@@ -72,6 +72,35 @@ void main() {
           isEmpty,
         );
       }
+      // 2023 요람 65쪽 수업시간: 교시 슬롯(50분 교시 60분, 75분 블록 90분)에
+      // 쉬는 시간을 포함하고, 같은 날 같은 강의실의 이어지는 교시는 한 구간이다.
+      for (final c in courses) {
+        final rooms = <String, int>{};
+        for (final m in c.meetings) {
+          final length = m.originalEndMinute - m.originalStartMinute;
+          expect(length, isNot(50), reason: c.sourceId);
+          expect(length, isNot(75), reason: c.sourceId);
+          final key = '${m.date}/${m.classroom}';
+          final previousEnd = rooms[key];
+          if (previousEnd != null) {
+            expect(
+              m.originalStartMinute - previousEnd,
+              greaterThanOrEqualTo(60),
+              reason: '${c.sourceId} $key',
+            );
+          }
+          rooms[key] = m.originalEndMinute;
+        }
+      }
+      final merged = courses.singleWhere((c) => c.code == '10008');
+      expect(
+        merged.meetings
+            .where((m) => m.date == '2026-09-02')
+            .map((m) => [m.originalStartMinute, m.originalEndMinute]),
+        [
+          [600, 720],
+        ],
+      );
       final ai = courses.singleWhere((c) => c.code == '12797');
       expect(ai.meetings.map((m) => m.originalStartMinute).toSet(), {1020});
       expect(ai.meetings.map((m) => m.originalEndMinute).toSet(), {1080});
@@ -83,7 +112,7 @@ void main() {
         expect(course.meetings.map((m) => m.originalStartMinute).toSet(), {
           1020,
         });
-        expect(course.meetings.map((m) => m.originalEndMinute).toSet(), {1070});
+        expect(course.meetings.map((m) => m.originalEndMinute).toSet(), {1080});
         expect(course.remarks, contains('개별 배정 미확인'));
         final video = course.toTimetable(
           id: course.sourceId,

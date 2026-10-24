@@ -9,6 +9,44 @@ const folder =
     'work/university-research/catalog-i/sch-ordinary-reservation-v2-20261008';
 Map<String, dynamic> read(String path) =>
     jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
+// 2023 요람 65쪽 「수업시간」: 교시 슬롯 = 수업 + 쉬는 시간(50분 교시 -> 60분,
+// 75분 블록 -> 90분). 같은 날 같은 강의실에서 간격이 60분 미만이면 한 구간으로
+// 합친다. 이미 슬롯 단위(60·180분 등)로 저장된 구간의 길이는 바꾸지 않는다.
+List<Map<String, dynamic>> slotMerge(List items, Object Function(Map) key) {
+  final groups = <Object, List<Map<String, dynamic>>>{};
+  for (final item in items) {
+    groups
+        .putIfAbsent(key(item as Map), () => [])
+        .add(Map<String, dynamic>.from(item));
+  }
+  final out = <Map<String, dynamic>>[];
+  for (final group in groups.values) {
+    group.sort((a, b) => (a['startMinute'] as int).compareTo(b['startMinute']));
+    Map<String, dynamic>? current;
+    for (final s in group) {
+      final length = (s['endMinute'] as int) - (s['startMinute'] as int);
+      final end =
+          (s['startMinute'] as int) +
+          (length == 50
+              ? 60
+              : length == 75
+              ? 90
+              : length);
+      if (current != null &&
+          (s['startMinute'] as int) - (current['endMinute'] as int) < 60) {
+        if (end > (current['endMinute'] as int)) current['endMinute'] = end;
+      } else {
+        current = {...s, 'endMinute': end};
+        out.add(current);
+      }
+    }
+  }
+  return out;
+}
+
+Object scheduleKey(Map s) => '${s['date']}/${s['weekday']}/${s['classroom']}';
+Object blockKey(Map s) => '${s['weekday']}/${s['classroom']}';
+
 void main() {
   test(
     'SCH current regular and block clocks, exact native preservation, own dates, three modes and full Drive',
@@ -33,7 +71,22 @@ void main() {
         final after = candidate['courses'][i] as Map;
         expect(after['sourceId'], before['sourceId']);
         if (!additions.contains(after['sourceId'])) {
-          expect(after, before);
+          final slotted = Map<String, dynamic>.from(before);
+          slotted['schedules'] =
+              (slotMerge(before['schedules'] as List, scheduleKey)
+                ..sort((a, b) {
+                  final byDate = (a['date'] as String).compareTo(b['date']);
+                  return byDate != 0
+                      ? byDate
+                      : (a['startMinute'] as int).compareTo(b['startMinute']);
+                }));
+          if (before['nativeReservationBlocks'] != null) {
+            slotted['nativeReservationBlocks'] = slotMerge(
+              before['nativeReservationBlocks'] as List,
+              blockKey,
+            );
+          }
+          expect(after, slotted);
           if ((before['schedules'] as List).isNotEmpty) {
             preservedMeetings += (before['schedules'] as List).length;
           }
@@ -83,7 +136,7 @@ void main() {
               ]);
             }
           }
-          final expected = <String>[];
+          final expected = <Map<String, dynamic>>[];
           for (
             var date = DateTime(2026, 8, 31);
             !date.isAfter(DateTime(2026, 12, 6));
@@ -105,9 +158,13 @@ void main() {
             }
             for (final block in blocks) {
               if (block[0] == date.weekday) {
-                expected.add(
-                  '$day/${block[0]}/${block[1]}/${block[2]}/${block[3]}',
-                );
+                expected.add({
+                  'date': day,
+                  'weekday': block[0],
+                  'startMinute': block[1],
+                  'endMinute': block[2],
+                  'classroom': block[3],
+                });
               }
             }
           }
@@ -117,7 +174,21 @@ void main() {
                     '${m.date}/${m.weekday}/${m.originalStartMinute}/${m.originalEndMinute}/${m.classroom}',
               )
               .toList();
-          expect(actual, expected, reason: before['sourceId'] as String);
+          expect(
+            actual,
+            (slotMerge(expected, scheduleKey)..sort((a, b) {
+                  final byDate = (a['date'] as String).compareTo(b['date']);
+                  return byDate != 0
+                      ? byDate
+                      : (a['startMinute'] as int).compareTo(b['startMinute']);
+                }))
+                .map(
+                  (e) =>
+                      '${e['date']}/${e['weekday']}/${e['startMinute']}/${e['endMinute']}/${e['classroom']}',
+                )
+                .toList(),
+            reason: before['sourceId'] as String,
+          );
           for (final m in courses[i].meetings) {
             final date = m.teachingDate!;
             final text = date.toIso8601String().substring(0, 10);
@@ -145,7 +216,7 @@ void main() {
         }
       }
       expect(preservedMeetings, 263);
-      // Independent direct current table Regular2=10:00–10:50,3=11:00–11:50; no guessed60-minute contact.
+      // 2·3교시(10:00–10:50, 11:00–11:50)는 슬롯(60분)으로 이어져 10:00~12:00 한 구간.
       final education = courses.singleWhere((c) => c.code == '10008');
       expect(
         education.meetings
@@ -155,8 +226,7 @@ void main() {
             )
             .toList(),
         [
-          [600, 650, '7313'],
-          [660, 710, '7313'],
+          [600, 720, '7313'],
         ],
       );
       // Current sheet matching native75-minute pair, two distinct weekdays.
@@ -169,7 +239,7 @@ void main() {
             )
             .toList(),
         [
-          [990, 1065, 'U1214'],
+          [990, 1080, 'U1214'],
         ],
       );
       expect(
@@ -180,7 +250,7 @@ void main() {
             )
             .toList(),
         [
-          [720, 795, 'U1214'],
+          [720, 810, 'U1214'],
         ],
       );
       final night = courses.singleWhere((c) => c.code == '12505');
@@ -192,9 +262,7 @@ void main() {
             )
             .toList(),
         [
-          [1080, 1130, '6403'],
-          [1140, 1190, '6403'],
-          [1200, 1250, '6403'],
+          [1080, 1260, '6403'],
         ],
       );
       for (final code in [
@@ -211,7 +279,7 @@ void main() {
         expect(courses.singleWhere((c) => c.code == code).meetings, isEmpty);
       }
       expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(2127));
-      expect(courses.fold<int>(0, (n, c) => n + c.meetings.length), 64564);
+      expect(courses.fold<int>(0, (n, c) => n + c.meetings.length), 35380);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,
