@@ -203,9 +203,10 @@ void main() {
         ),
         throwsFormatException,
       );
-      // 2025: the previous winter notice has no dates and the 2025 summer
-      // notice, found on the archive board, has none either ("\u00a0" body), so
-      // the annual rows are returned alone.
+      // 2025: the previous (2024) winter notice and the 2025 summer notice on
+      // the archive board have no dates ("\u00a0" body), so they add nothing.
+      // The 2025 winter notice is no longer on the current board but its dated
+      // archive copy (BBS_SEQ 36586) still adds the 2025 winter session.
       final source = KonkukAcademicSource.glocal(
         client: MockClient((r) async {
           final body = Uri.splitQueryString(r.body);
@@ -236,11 +237,21 @@ void main() {
         fixture('konkuk-glocal-2025.json'),
         2025,
       );
+      final sessions = events.where((e) => e.title.endsWith('계절학기')).toList();
+      expect(sessions.map((e) => (e.title, e.start, e.end)), [
+        ('동계 계절학기', DateTime(2025, 12, 22), DateTime(2026, 1, 15)),
+      ]);
       expect(
-        events.map((e) => e.sourceId).toSet(),
+        Uri.parse(sessions.single.url).queryParameters['BBS_SEQ'],
+        '36586',
+      );
+      expect(
+        events
+            .where((e) => !sessions.contains(e))
+            .map((e) => e.sourceId)
+            .toSet(),
         annual.map((e) => e.sourceId).toSet(),
       );
-      expect(events.where((e) => e.title.endsWith('계절학기')), isEmpty);
     },
   );
 

@@ -95,59 +95,43 @@ class KonkukAcademicSource implements AcademicSource {
         );
       }
 
-      final archived = !has(winter, year - 1);
-      final previous = archived
-          ? await search(archive: true, keyword: '동계')
-          : winter;
-      add(
-        parseSupplement(
-          previous,
-          year - 1,
-          winter: true,
-          host: archived ? 'formativeart.kku.ac.kr' : 'www.kku.ac.kr',
-          menu: archived ? '160' : '1740',
-          site: archived ? '38' : '2',
-          board: archived ? '3' : '18',
-        ),
-      );
-      // A future course period is added as soon as its official notice appears;
-      // an empty current-winter result is not a licence to invent the dates.
-      if (has(winter, year)) {
+      // Notices move from the current board to the archive board (2025 notices
+      // such as BBS_SEQ 36586 are only there), so a notice missing from the
+      // current board is looked up in the archive before being skipped.
+      final archive = <String, String>{};
+      Future<void> supplement(
+        String current,
+        int selected, {
+        required bool winter,
+        bool required = false,
+      }) async {
+        final archived = !has(current, selected, winter: winter);
+        final keyword = winter ? '동계' : '하계';
+        final notices = archived
+            ? archive[keyword] ??= await search(archive: true, keyword: keyword)
+            : current;
+        // shortcut: a later session with no recognised notice on either board
+        // is taken as not yet published (notices appear in April-June and
+        // October); the boards give no signal that tells this apart from a
+        // renamed notice. Dates are never invented for it.
+        if (!required && !has(notices, selected, winter: winter)) return;
         add(
           parseSupplement(
-            winter,
-            year,
-            winter: true,
-            host: 'www.kku.ac.kr',
-            menu: '1740',
-            site: '2',
-            board: '18',
+            notices,
+            selected,
+            winter: winter,
+            host: archived ? 'formativeart.kku.ac.kr' : 'www.kku.ac.kr',
+            menu: archived ? '160' : '1740',
+            site: archived ? '38' : '2',
+            board: archived ? '3' : '18',
           ),
         );
       }
-      // Summer notices move to the archive board like winter ones (the 2025
-      // notice "2025학년도 하계 계절학기 시행계획 안내(수정)" is only there).
-      // shortcut: a year with no recognised notice on either board is taken as
-      // not yet published (summer notices appear in April-June); the boards give
-      // no signal that tells this apart from a renamed notice.
-      final summer = await search(keyword: '하계방학');
-      final summerArchived = !has(summer, year, winter: false);
-      final summerNotices = summerArchived
-          ? await search(archive: true, keyword: '하계')
-          : summer;
-      if (has(summerNotices, year, winter: false)) {
-        add(
-          parseSupplement(
-            summerNotices,
-            year,
-            winter: false,
-            host: summerArchived ? 'formativeart.kku.ac.kr' : 'www.kku.ac.kr',
-            menu: summerArchived ? '160' : '1740',
-            site: summerArchived ? '38' : '2',
-            board: summerArchived ? '3' : '18',
-          ),
-        );
-      }
+
+      // The previous winter session reaches into this year and must be found.
+      await supplement(winter, year - 1, winter: true, required: true);
+      await supplement(winter, year, winter: true);
+      await supplement(await search(keyword: '하계방학'), year, winter: false);
     }
 
     if (events.isEmpty) {
