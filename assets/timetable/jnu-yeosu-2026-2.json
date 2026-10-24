@@ -46,7 +46,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공428"
         }
       ]
@@ -80,7 +80,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수813"
         }
       ]
@@ -114,7 +114,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수816"
         }
       ]
@@ -148,7 +148,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수813"
         }
       ]
@@ -182,7 +182,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수816"
         }
       ]
@@ -216,7 +216,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수813"
         }
       ]
@@ -250,7 +250,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수813"
         }
       ]
@@ -284,7 +284,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수816"
         }
       ]
@@ -318,7 +318,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수813"
         }
       ]
@@ -352,7 +352,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수816"
         }
       ]
@@ -386,7 +386,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수813"
         }
       ]
@@ -420,7 +420,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수816"
         }
       ]
@@ -454,7 +454,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수813"
         }
       ]
@@ -488,7 +488,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수816"
         }
       ]
@@ -522,7 +522,7 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수813"
         }
       ]
@@ -556,7 +556,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수704"
         }
       ]
@@ -590,13 +590,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공312"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공312"
         }
       ]
@@ -630,13 +630,13 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수108"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수208"
         }
       ]
@@ -670,13 +670,13 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수218"
         },
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "산학714"
         }
       ]
@@ -710,13 +710,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수219"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수623"
         }
       ]
@@ -750,13 +750,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수218"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수217"
         }
       ]
@@ -790,13 +790,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수219"
         },
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수622"
         }
       ]
@@ -830,13 +830,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수218"
         },
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "산학714"
         }
       ]
@@ -870,7 +870,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수108"
         }
       ]
@@ -904,13 +904,13 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수219"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수623"
         }
       ]
@@ -944,13 +944,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수108"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수622"
         }
       ]
@@ -984,13 +984,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수108"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수618"
         }
       ]
@@ -1024,7 +1024,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수219"
         }
       ]
@@ -1058,13 +1058,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수108"
         },
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수208"
         }
       ]
@@ -1098,7 +1098,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수108"
         }
       ]
@@ -1132,13 +1132,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공211"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공211"
         }
       ]
@@ -1172,13 +1172,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공124"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공124"
         }
       ]
@@ -1212,7 +1212,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공427"
         }
       ]
@@ -1246,7 +1246,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공418"
         }
       ]
@@ -1280,13 +1280,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공328"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공328"
         }
       ]
@@ -1320,13 +1320,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공329"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공329"
         }
       ]
@@ -1360,7 +1360,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공418"
         }
       ]
@@ -1394,7 +1394,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공427"
         }
       ]
@@ -1428,7 +1428,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공308"
         }
       ]
@@ -1462,13 +1462,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공301"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "3공301"
         }
       ]
@@ -1502,7 +1502,7 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "3공302"
         }
       ]
@@ -1536,7 +1536,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공308"
         }
       ]
@@ -1570,7 +1570,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공201"
         }
       ]
@@ -1604,7 +1604,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공427"
         }
       ]
@@ -1638,13 +1638,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공303"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "3공303"
         }
       ]
@@ -1678,7 +1678,7 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "3공304"
         }
       ]
@@ -1712,13 +1712,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "3공305"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공305"
         }
       ]
@@ -1752,13 +1752,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "3공306"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공306"
         }
       ]
@@ -1792,7 +1792,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공427"
         }
       ]
@@ -1826,13 +1826,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "3공317"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "3공317"
         }
       ]
@@ -1866,13 +1866,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "3공318"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "3공318"
         }
       ]
@@ -1906,7 +1906,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공418"
         }
       ]
@@ -1940,7 +1940,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공308"
         }
       ]
@@ -1974,7 +1974,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공418"
         }
       ]
@@ -2008,7 +2008,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공418"
         }
       ]
@@ -2042,7 +2042,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공418"
         }
       ]
@@ -2076,7 +2076,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공427"
         }
       ]
@@ -2110,7 +2110,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공427"
         }
       ]
@@ -2144,7 +2144,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공418"
         }
       ]
@@ -2178,7 +2178,7 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공427"
         }
       ]
@@ -2212,7 +2212,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공308"
         }
       ]
@@ -2246,7 +2246,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공515"
         }
       ]
@@ -2280,13 +2280,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "1공513"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "1공513"
         }
       ]
@@ -2320,7 +2320,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공528"
         }
       ]
@@ -2354,7 +2354,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공528"
         }
       ]
@@ -2388,7 +2388,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공528"
         }
       ]
@@ -2422,7 +2422,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "1공528"
         }
       ]
@@ -2456,13 +2456,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공528"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공528"
         }
       ]
@@ -2496,7 +2496,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수813"
         }
       ]
@@ -2530,7 +2530,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공513"
         }
       ]
@@ -2572,7 +2572,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공B01"
         }
       ]
@@ -2614,13 +2614,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공B01"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공B01"
         }
       ]
@@ -2662,13 +2662,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공B01"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공B01"
         }
       ]
@@ -2714,13 +2714,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공504"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공504"
         }
       ]
@@ -2758,13 +2758,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공504"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공504"
         }
       ]
@@ -2806,13 +2806,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공525"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공525"
         }
       ]
@@ -2854,13 +2854,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공505"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공505"
         }
       ]
@@ -2898,13 +2898,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공505"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공505"
         }
       ]
@@ -2938,13 +2938,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인615"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인615"
         }
       ]
@@ -2978,13 +2978,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인218"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인218"
         }
       ]
@@ -3018,13 +3018,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인614"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인614"
         }
       ]
@@ -3058,13 +3058,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이606"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "이606"
         }
       ]
@@ -3098,13 +3098,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인603"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인603"
         }
       ]
@@ -3138,13 +3138,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인603"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인603"
         }
       ]
@@ -3178,13 +3178,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이701"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이701"
         }
       ]
@@ -3218,7 +3218,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이701"
         }
       ]
@@ -3252,13 +3252,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인614"
         },
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인614"
         }
       ]
@@ -3292,13 +3292,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인615"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인615"
         }
       ]
@@ -3332,13 +3332,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인603"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인603"
         }
       ]
@@ -3372,13 +3372,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인614"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인614"
         }
       ]
@@ -3412,13 +3412,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인603"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인603"
         }
       ]
@@ -3452,7 +3452,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "이604"
         }
       ]
@@ -3486,13 +3486,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인614"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인614"
         }
       ]
@@ -3526,13 +3526,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이701"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이701"
         }
       ]
@@ -3566,13 +3566,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "인603"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "인603"
         }
       ]
@@ -3606,13 +3606,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인801"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인801"
         }
       ]
@@ -3646,13 +3646,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "인801"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "인801"
         }
       ]
@@ -3686,7 +3686,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공110"
         }
       ]
@@ -3720,13 +3720,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "1공126"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "1공126"
         }
       ]
@@ -3760,13 +3760,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공513"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공513"
         }
       ]
@@ -3800,13 +3800,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공505"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공505"
         }
       ]
@@ -3840,13 +3840,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이공105"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "이공105"
         }
       ]
@@ -3880,13 +3880,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공111"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공111"
         }
       ]
@@ -3920,13 +3920,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공126"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공126"
         }
       ]
@@ -3960,7 +3960,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공110"
         }
       ]
@@ -3994,13 +3994,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공126"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공126"
         }
       ]
@@ -4034,13 +4034,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공126"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공126"
         }
       ]
@@ -4074,13 +4074,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이공105"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이공105"
         }
       ]
@@ -4114,7 +4114,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공515"
         }
       ]
@@ -4148,13 +4148,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공111"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공111"
         }
       ]
@@ -4188,13 +4188,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공401"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공401"
         }
       ]
@@ -4228,13 +4228,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "1공111"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "1공111"
         }
       ]
@@ -4268,7 +4268,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공515"
         }
       ]
@@ -4302,13 +4302,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수108"
         },
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수618"
         }
       ]
@@ -4342,13 +4342,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인425"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인425"
         }
       ]
@@ -4382,13 +4382,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인424"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인424"
         }
       ]
@@ -4422,13 +4422,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인425"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인425"
         }
       ]
@@ -4462,13 +4462,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인425"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인425"
         }
       ]
@@ -4502,13 +4502,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인424"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인424"
         }
       ]
@@ -4542,13 +4542,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "인422"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "인422"
         }
       ]
@@ -4582,13 +4582,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "3공525"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "3공525"
         }
       ]
@@ -4622,7 +4622,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "2공406"
         }
       ]
@@ -4656,7 +4656,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이703"
         }
       ]
@@ -4690,13 +4690,13 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이703"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이703"
         }
       ]
@@ -4730,7 +4730,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이702"
         }
       ]
@@ -4764,13 +4764,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이701"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이701"
         }
       ]
@@ -4804,13 +4804,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인424"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인424"
         }
       ]
@@ -4860,13 +4860,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교308"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교308"
         }
       ]
@@ -4916,13 +4916,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인425"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인425"
         }
       ]
@@ -4972,13 +4972,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교511"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교511"
         }
       ]
@@ -5028,13 +5028,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교409"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교409"
         }
       ]
@@ -5092,13 +5092,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인424"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인424"
         }
       ]
@@ -5152,7 +5152,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "교509"
         }
       ]
@@ -5202,13 +5202,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교409"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교409"
         }
       ]
@@ -5258,13 +5258,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교409"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교409"
         }
       ]
@@ -5314,13 +5314,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교308"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "교308"
         }
       ]
@@ -5370,13 +5370,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교408"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "교408"
         }
       ]
@@ -5426,13 +5426,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교307"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교307"
         }
       ]
@@ -5486,7 +5486,7 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교509"
         }
       ]
@@ -5532,7 +5532,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "교509"
         }
       ]
@@ -5586,7 +5586,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "교408"
         }
       ]
@@ -5632,13 +5632,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교408"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교408"
         }
       ]
@@ -5684,13 +5684,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교510"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교510"
         }
       ]
@@ -5732,13 +5732,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교509"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교509"
         }
       ]
@@ -5796,13 +5796,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교509"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교509"
         }
       ]
@@ -5848,13 +5848,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교409"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교409"
         }
       ]
@@ -5900,13 +5900,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교408"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교408"
         }
       ]
@@ -5952,13 +5952,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교407"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교407"
         }
       ]
@@ -6004,7 +6004,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "교408"
         }
       ]
@@ -6058,13 +6058,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교310"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교310"
         }
       ]
@@ -6118,13 +6118,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교509"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교509"
         }
       ]
@@ -6170,7 +6170,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공110"
         }
       ]
@@ -6216,7 +6216,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공110"
         }
       ]
@@ -6262,7 +6262,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공502"
         }
       ]
@@ -6308,7 +6308,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이508"
         }
       ]
@@ -6354,13 +6354,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이508"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이508"
         }
       ]
@@ -6406,13 +6406,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이508"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이508"
         }
       ]
@@ -6458,7 +6458,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교312"
         }
       ]
@@ -6504,7 +6504,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수109"
         }
       ]
@@ -6558,7 +6558,7 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교409"
         }
       ]
@@ -6612,7 +6612,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교507"
         }
       ]
@@ -6662,7 +6662,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "교507"
         }
       ]
@@ -6712,7 +6712,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교407"
         }
       ]
@@ -6762,13 +6762,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교309"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "교309"
         }
       ]
@@ -6822,13 +6822,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교409"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교409"
         }
       ]
@@ -6878,7 +6878,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교310"
         }
       ]
@@ -6932,13 +6932,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교507"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교507"
         }
       ]
@@ -6992,7 +6992,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "교309"
         }
       ]
@@ -7042,13 +7042,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교309"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교309"
         }
       ]
@@ -7098,13 +7098,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교309"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교309"
         }
       ]
@@ -7154,7 +7154,7 @@
         {
           "weekday": 6,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이러닝"
         }
       ]
@@ -7204,7 +7204,7 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교407"
         }
       ]
@@ -7258,13 +7258,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교507"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교507"
         }
       ]
@@ -7318,13 +7318,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교508"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교508"
         }
       ]
@@ -7378,13 +7378,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교508"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교508"
         }
       ]
@@ -7438,13 +7438,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교408"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교408"
         }
       ]
@@ -7498,7 +7498,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수109"
         }
       ]
@@ -7548,13 +7548,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "인109"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "인109"
         }
       ]
@@ -7604,13 +7604,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인109"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인109"
         }
       ]
@@ -7660,13 +7660,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인109"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인109"
         }
       ]
@@ -7716,13 +7716,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인109"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인109"
         }
       ]
@@ -7772,13 +7772,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인109"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인109"
         }
       ]
@@ -7828,13 +7828,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인102"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인102"
         }
       ]
@@ -7884,13 +7884,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인102"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인102"
         }
       ]
@@ -7940,13 +7940,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인102"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인102"
         }
       ]
@@ -7996,13 +7996,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인102"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인102"
         }
       ]
@@ -8060,7 +8060,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교411"
         }
       ]
@@ -8118,7 +8118,7 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "교411"
         }
       ]
@@ -8172,7 +8172,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이609"
         }
       ]
@@ -8222,13 +8222,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교307"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교307"
         }
       ]
@@ -8321,13 +8321,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교507"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교507"
         }
       ]
@@ -8381,7 +8381,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수109"
         }
       ]
@@ -8431,13 +8431,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교507"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교507"
         }
       ]
@@ -8538,13 +8538,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교307"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교307"
         }
       ]
@@ -8586,7 +8586,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "수109"
         }
       ]
@@ -8636,13 +8636,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인801"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인801"
         }
       ]
@@ -8688,13 +8688,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인603"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인603"
         }
       ]
@@ -8736,7 +8736,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "수516"
         }
       ]
@@ -8778,7 +8778,7 @@
         {
           "weekday": 1,
           "startMinute": 1080,
-          "endMinute": 1190,
+          "endMinute": 1200,
           "classroom": "이102"
         }
       ]
@@ -8820,7 +8820,7 @@
         {
           "weekday": 1,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "이506"
         }
       ]
@@ -8862,7 +8862,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교507"
         }
       ]
@@ -8982,13 +8982,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교309"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교309"
         }
       ]
@@ -9038,13 +9038,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교310"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교310"
         }
       ]
@@ -9094,13 +9094,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교310"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교310"
         }
       ]
@@ -9150,7 +9150,7 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교312"
         }
       ]
@@ -9200,13 +9200,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교408"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교408"
         }
       ]
@@ -9252,7 +9252,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "교407"
         }
       ]
@@ -9302,13 +9302,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "교310"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "교310"
         }
       ]
@@ -9358,13 +9358,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교308"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교308"
         }
       ]
@@ -9414,13 +9414,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "인517"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "인517"
         }
       ]
@@ -9470,13 +9470,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교509"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교509"
         }
       ]
@@ -9522,13 +9522,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교508"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교508"
         }
       ]
@@ -9574,7 +9574,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교407"
         }
       ]
@@ -9620,13 +9620,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교409"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교409"
         }
       ]
@@ -9672,13 +9672,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교309"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교309"
         }
       ]
@@ -9724,7 +9724,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "교507"
         }
       ]
@@ -9770,13 +9770,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교307"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "교307"
         }
       ]
@@ -9822,13 +9822,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교408"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교408"
         }
       ]
@@ -9870,7 +9870,7 @@
         {
           "weekday": 5,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "산학융합512"
         }
       ]
@@ -9912,13 +9912,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교508"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교508"
         }
       ]
@@ -9964,13 +9964,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교510"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교510"
         }
       ]
@@ -10051,13 +10051,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교508"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교508"
         }
       ]
@@ -10103,13 +10103,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인516"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인516"
         }
       ]
@@ -10155,7 +10155,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "체201"
         }
       ]
@@ -10201,13 +10201,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교308"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교308"
         }
       ]
@@ -10249,13 +10249,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교308"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교308"
         }
       ]
@@ -10297,7 +10297,7 @@
         {
           "weekday": 3,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "산학융합512"
         }
       ]
@@ -10347,13 +10347,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교310"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교310"
         }
       ]
@@ -10399,13 +10399,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교508"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교508"
         }
       ]
@@ -10447,13 +10447,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교307"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교307"
         }
       ]
@@ -10495,13 +10495,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교312"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교312"
         }
       ]
@@ -10543,13 +10543,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교307"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "교307"
         }
       ]
@@ -10595,13 +10595,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인403"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인403"
         }
       ]
@@ -10647,13 +10647,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교408"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교408"
         }
       ]
@@ -10699,7 +10699,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이108"
         }
       ]
@@ -10745,13 +10745,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교310"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교310"
         }
       ]
@@ -10797,7 +10797,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인816"
         }
       ]
@@ -10839,13 +10839,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교407"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "교407"
         }
       ]
@@ -10891,13 +10891,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교310"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교310"
         }
       ]
@@ -10943,7 +10943,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교510"
         }
       ]
@@ -10993,7 +10993,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "교510"
         }
       ]
@@ -11043,7 +11043,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "교107"
         }
       ]
@@ -11097,7 +11097,7 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이202"
         }
       ]
@@ -11151,7 +11151,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이703"
         }
       ]
@@ -11197,7 +11197,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교510"
         }
       ]
@@ -11243,13 +11243,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교508"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "교508"
         }
       ]
@@ -11295,7 +11295,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교509"
         }
       ]
@@ -11349,13 +11349,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교411"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "교411"
         }
       ]
@@ -11405,7 +11405,7 @@
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "이102"
         }
       ]
@@ -11459,7 +11459,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이703"
         }
       ]
@@ -11501,13 +11501,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "교309"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교309"
         }
       ]
@@ -11553,7 +11553,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "교510"
         }
       ]
@@ -11603,13 +11603,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교409"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "교409"
         }
       ]
@@ -11659,13 +11659,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "교508"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "교508"
         }
       ]
@@ -11711,13 +11711,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교407"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "교407"
         }
       ]
@@ -11763,13 +11763,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교308"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "교308"
         }
       ]
@@ -11811,7 +11811,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공108"
         }
       ]
@@ -11853,7 +11853,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "2공206"
         }
       ]
@@ -11895,7 +11895,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "2공406"
         }
       ]
@@ -11937,7 +11937,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "2공523"
         }
       ]
@@ -11979,7 +11979,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공B01"
         }
       ]
@@ -12021,7 +12021,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "수109"
         }
       ]
@@ -12063,7 +12063,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "수105"
         }
       ]
@@ -12109,13 +12109,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "교307"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "교307"
         }
       ]
@@ -12161,7 +12161,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인110"
         }
       ]
@@ -12207,7 +12207,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인101"
         }
       ]
@@ -12253,7 +12253,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인110"
         }
       ]
@@ -12299,7 +12299,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인101"
         }
       ]
@@ -12345,7 +12345,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인110"
         }
       ]
@@ -12391,7 +12391,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인101"
         }
       ]
@@ -12437,7 +12437,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인110"
         }
       ]
@@ -12483,7 +12483,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인101"
         }
       ]
@@ -12529,7 +12529,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인110"
         }
       ]
@@ -12575,7 +12575,7 @@
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "인110"
         }
       ]
@@ -12621,7 +12621,7 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "인110"
         }
       ]
@@ -12667,7 +12667,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인110"
         }
       ]
@@ -12701,7 +12701,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공409"
         }
       ]
@@ -12735,7 +12735,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공406"
         }
       ]
@@ -12769,7 +12769,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공426"
         }
       ]
@@ -12803,7 +12803,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공426"
         }
       ]
@@ -12837,7 +12837,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공425"
         }
       ]
@@ -12871,7 +12871,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공409"
         }
       ]
@@ -12905,7 +12905,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "2공425"
         }
       ]
@@ -12939,7 +12939,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "2공425"
         }
       ]
@@ -12973,7 +12973,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공426"
         }
       ]
@@ -13007,7 +13007,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공426"
         }
       ]
@@ -13041,7 +13041,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "2공426"
         }
       ]
@@ -13075,7 +13075,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공406"
         }
       ]
@@ -13109,13 +13109,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인820"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인820"
         }
       ]
@@ -13149,13 +13149,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인820"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인820"
         }
       ]
@@ -13189,7 +13189,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인818"
         }
       ]
@@ -13223,7 +13223,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인816"
         }
       ]
@@ -13257,13 +13257,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인816"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인816"
         }
       ]
@@ -13297,7 +13297,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이102"
         }
       ]
@@ -13331,13 +13331,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인820"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인820"
         }
       ]
@@ -13371,13 +13371,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인820"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인820"
         }
       ]
@@ -13411,7 +13411,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인816"
         }
       ]
@@ -13445,13 +13445,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인818"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인818"
         }
       ]
@@ -13485,13 +13485,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인818"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인818"
         }
       ]
@@ -13525,7 +13525,7 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인816"
         }
       ]
@@ -13559,13 +13559,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인616"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인616"
         }
       ]
@@ -13599,13 +13599,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인204"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인204"
         }
       ]
@@ -13639,7 +13639,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이605"
         }
       ]
@@ -13673,7 +13673,7 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이605"
         }
       ]
@@ -13734,7 +13734,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이501"
         }
       ]
@@ -13768,13 +13768,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공525"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공525"
         }
       ]
@@ -13808,13 +13808,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "2공312"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "2공312"
         }
       ]
@@ -13848,13 +13848,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공510"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공510"
         }
       ]
@@ -13888,13 +13888,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공311"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공311"
         }
       ]
@@ -13928,13 +13928,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "2공512"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "2공512"
         }
       ]
@@ -13968,7 +13968,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "2공513"
         }
       ]
@@ -14002,7 +14002,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "2공311"
         }
       ]
@@ -14036,7 +14036,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "3공227"
         }
       ]
@@ -14070,7 +14070,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "2공325"
         }
       ]
@@ -14104,7 +14104,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공325"
         }
       ]
@@ -14138,13 +14138,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공311"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공311"
         }
       ]
@@ -14178,13 +14178,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공312"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공312"
         }
       ]
@@ -14218,7 +14218,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "2공309"
         }
       ]
@@ -14252,7 +14252,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이703"
         }
       ]
@@ -14286,13 +14286,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공302"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공302"
         }
       ]
@@ -14326,7 +14326,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "2공312"
         }
       ]
@@ -14360,7 +14360,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "2공513"
         }
       ]
@@ -14394,7 +14394,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이702"
         }
       ]
@@ -14428,7 +14428,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이러닝"
         }
       ]
@@ -14462,7 +14462,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이703"
         }
       ]
@@ -14496,13 +14496,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인801"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인801"
         }
       ]
@@ -14536,13 +14536,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공510"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공510"
         }
       ]
@@ -14576,13 +14576,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "2공512"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "2공512"
         }
       ]
@@ -14616,13 +14616,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "2공511"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "2공511"
         }
       ]
@@ -14656,13 +14656,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공512"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공512"
         }
       ]
@@ -14696,13 +14696,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "2공513"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "2공513"
         }
       ]
@@ -14736,13 +14736,13 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공511"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공511"
         }
       ]
@@ -14776,13 +14776,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공523"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공523"
         }
       ]
@@ -14816,13 +14816,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공512"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공512"
         }
       ]
@@ -14856,13 +14856,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공512"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공512"
         }
       ]
@@ -14896,13 +14896,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공511"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공511"
         }
       ]
@@ -14936,13 +14936,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "2공511"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "2공511"
         }
       ]
@@ -14976,7 +14976,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공202"
         }
       ]
@@ -15010,13 +15010,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이202"
         },
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이202"
         }
       ]
@@ -15050,13 +15050,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인716"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인716"
         }
       ]
@@ -15090,13 +15090,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인715"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인715"
         }
       ]
@@ -15130,13 +15130,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인716"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인716"
         }
       ]
@@ -15170,13 +15170,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인703"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인703"
         }
       ]
@@ -15210,13 +15210,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인716"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인716"
         }
       ]
@@ -15250,13 +15250,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인716"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인716"
         }
       ]
@@ -15290,13 +15290,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인715"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인715"
         }
       ]
@@ -15330,13 +15330,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인716"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인716"
         }
       ]
@@ -15370,13 +15370,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인703"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인703"
         }
       ]
@@ -15410,13 +15410,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인715"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인715"
         }
       ]
@@ -15450,7 +15450,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인716"
         }
       ]
@@ -15484,13 +15484,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인703"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인703"
         }
       ]
@@ -15532,13 +15532,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공504"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공504"
         }
       ]
@@ -15572,13 +15572,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "수516"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "수516"
         }
       ]
@@ -15612,13 +15612,13 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "1공513"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공211"
         }
       ]
@@ -15652,13 +15652,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공111"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공111"
         }
       ]
@@ -15692,13 +15692,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공220"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공220"
         }
       ]
@@ -15732,13 +15732,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공226"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이공110"
         }
       ]
@@ -15772,13 +15772,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공226"
         },
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이공110"
         }
       ]
@@ -15812,7 +15812,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공227"
         }
       ]
@@ -15846,7 +15846,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "2공426"
         }
       ]
@@ -15880,7 +15880,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "1공428"
         }
       ]
@@ -15914,7 +15914,7 @@
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공428"
         }
       ]
@@ -15948,13 +15948,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공311"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공311"
         }
       ]
@@ -15988,19 +15988,19 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "3공226"
         },
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공203"
         },
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이공112"
         }
       ]
@@ -16034,7 +16034,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "3공226"
         }
       ]
@@ -16068,19 +16068,19 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공226"
         },
         {
           "weekday": 5,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이공111"
         },
         {
           "weekday": 5,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공226"
         }
       ]
@@ -16114,13 +16114,13 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "3공226"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "3공216"
         }
       ]
@@ -16154,7 +16154,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공412"
         }
       ]
@@ -16188,13 +16188,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "3공226"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "3공216"
         }
       ]
@@ -16228,7 +16228,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공412"
         }
       ]
@@ -16262,7 +16262,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공412"
         }
       ]
@@ -16296,13 +16296,13 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "2공302"
         },
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "2공302"
         }
       ]
@@ -16336,7 +16336,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공419"
         }
       ]
@@ -16370,7 +16370,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공412"
         }
       ]
@@ -16404,7 +16404,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공428"
         }
       ]
@@ -16438,7 +16438,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공202"
         }
       ]
@@ -16472,7 +16472,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공412"
         }
       ]
@@ -16506,7 +16506,7 @@
         {
           "weekday": 6,
           "startMinute": 480,
-          "endMinute": 530,
+          "endMinute": 540,
           "classroom": "현장실습"
         }
       ]
@@ -16540,13 +16540,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "3공227"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "3공227"
         }
       ]
@@ -16580,7 +16580,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공412"
         }
       ]
@@ -16614,13 +16614,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공227"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "3공227"
         }
       ]
@@ -16654,13 +16654,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공327"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공327"
         }
       ]
@@ -16721,13 +16721,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공327"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "1공327"
         }
       ]
@@ -16761,7 +16761,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공312"
         }
       ]
@@ -16795,13 +16795,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공302"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공327"
         }
       ]
@@ -16835,13 +16835,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "이408"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이403"
         }
       ]
@@ -16875,13 +16875,13 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "1공312"
         },
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "1공302"
         }
       ]
@@ -16915,13 +16915,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공327"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공302"
         }
       ]
@@ -16955,7 +16955,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공220"
         }
       ]
@@ -16989,13 +16989,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공312"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공302"
         }
       ]
@@ -17029,19 +17029,19 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "1공312"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공302"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공312"
         }
       ]
@@ -17075,7 +17075,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공327"
         }
       ]
@@ -17109,13 +17109,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공312"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공312"
         }
       ]
@@ -17149,7 +17149,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인403"
         }
       ]
@@ -17183,7 +17183,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인403"
         }
       ]
@@ -17217,19 +17217,19 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이409"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "이409"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이407"
         }
       ]
@@ -17263,13 +17263,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공111"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공111"
         }
       ]
@@ -17303,13 +17303,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이408"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이408"
         }
       ]
@@ -17343,19 +17343,19 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이408"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이416"
         },
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "이408"
         }
       ]
@@ -17389,13 +17389,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이421"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이421"
         }
       ]
@@ -17429,13 +17429,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "이421"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이427"
         }
       ]
@@ -17469,13 +17469,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이408"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "이408"
         }
       ]
@@ -17509,19 +17509,19 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "이408"
         },
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이408"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이403"
         }
       ]
@@ -17555,19 +17555,19 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이409"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이409"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이407"
         }
       ]
@@ -17601,13 +17601,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이421"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이421"
         }
       ]
@@ -17641,13 +17641,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이421"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이427"
         }
       ]
@@ -17681,13 +17681,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공505"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공505"
         }
       ]
@@ -17721,19 +17721,19 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이421"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "이421"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이401"
         }
       ]
@@ -17775,13 +17775,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공504"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공504"
         }
       ]
@@ -17815,13 +17815,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공401"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공401"
         }
       ]
@@ -17859,13 +17859,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공505"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공505"
         }
       ]
@@ -17903,13 +17903,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공401"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공401"
         }
       ]
@@ -17947,13 +17947,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이공210"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이공210"
         }
       ]
@@ -17991,13 +17991,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공401"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공401"
         }
       ]
@@ -18035,13 +18035,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공401"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공401"
         }
       ]
@@ -18075,13 +18075,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이공210"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이공210"
         }
       ]
@@ -18115,13 +18115,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공503"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공503"
         }
       ]
@@ -18155,13 +18155,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "이공211"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "이공211"
         }
       ]
@@ -18199,13 +18199,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공503"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공503"
         }
       ]
@@ -18243,13 +18243,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이공211"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이공211"
         }
       ]
@@ -18287,13 +18287,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공525"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공525"
         }
       ]
@@ -18331,13 +18331,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공525"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공525"
         }
       ]
@@ -18375,13 +18375,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공503"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공503"
         }
       ]
@@ -18415,7 +18415,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "인201"
         }
       ]
@@ -18449,7 +18449,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인201"
         }
       ]
@@ -18483,7 +18483,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인201"
         }
       ]
@@ -18517,7 +18517,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "인201"
         }
       ]
@@ -18551,7 +18551,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인201"
         }
       ]
@@ -18585,7 +18585,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "인201"
         }
       ]
@@ -18619,7 +18619,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인201"
         }
       ]
@@ -18653,7 +18653,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이504"
         }
       ]
@@ -18687,7 +18687,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이506"
         }
       ]
@@ -18721,7 +18721,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이506"
         }
       ]
@@ -18755,7 +18755,7 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "산학융합512"
         }
       ]
@@ -18789,7 +18789,7 @@
         {
           "weekday": 1,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "산학융합511"
         }
       ]
@@ -18850,7 +18850,7 @@
         {
           "weekday": 3,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "산학융합511"
         }
       ]
@@ -18884,13 +18884,13 @@
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "산학융합510"
         },
         {
           "weekday": 5,
           "startMinute": 1080,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "산학융합510"
         }
       ]
@@ -18951,7 +18951,7 @@
         {
           "weekday": 3,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "산학융합508"
         }
       ]
@@ -19039,7 +19039,7 @@
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "산학융합508"
         }
       ]
@@ -19100,7 +19100,7 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "산학융합510"
         }
       ]
@@ -19134,7 +19134,7 @@
         {
           "weekday": 5,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "산학융합508"
         }
       ]
@@ -19168,7 +19168,7 @@
         {
           "weekday": 1,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "산학융합508"
         }
       ]
@@ -19202,13 +19202,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인517"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인517"
         }
       ]
@@ -19242,13 +19242,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인517"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인517"
         }
       ]
@@ -19282,13 +19282,13 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인517"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인517"
         }
       ]
@@ -19322,13 +19322,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인517"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인517"
         }
       ]
@@ -19362,13 +19362,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인517"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인517"
         }
       ]
@@ -19402,13 +19402,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인516"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인516"
         }
       ]
@@ -19442,13 +19442,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인516"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인516"
         }
       ]
@@ -19482,13 +19482,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인516"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인516"
         }
       ]
@@ -19522,13 +19522,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인516"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인516"
         }
       ]
@@ -19562,7 +19562,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이506"
         }
       ]
@@ -19596,13 +19596,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이506"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이506"
         }
       ]
@@ -19636,13 +19636,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이508"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이508"
         }
       ]
@@ -19676,13 +19676,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인204"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인204"
         }
       ]
@@ -19716,13 +19716,13 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인204"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인204"
         }
       ]
@@ -19756,13 +19756,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인219"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인219"
         }
       ]
@@ -19796,13 +19796,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인218"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인218"
         }
       ]
@@ -19836,13 +19836,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인218"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인218"
         }
       ]
@@ -19876,7 +19876,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인218"
         }
       ]
@@ -19910,13 +19910,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인217"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인217"
         }
       ]
@@ -19950,13 +19950,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인219"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인219"
         }
       ]
@@ -19990,13 +19990,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공124"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공124"
         }
       ]
@@ -20030,13 +20030,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공211"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공211"
         }
       ]
@@ -20070,13 +20070,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공211"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "2공211"
         }
       ]
@@ -20110,13 +20110,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수516"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수516"
         }
       ]
@@ -20150,13 +20150,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공124"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공124"
         }
       ]
@@ -20190,13 +20190,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공210"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공210"
         }
       ]
@@ -20230,7 +20230,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공428"
         }
       ]
@@ -20264,13 +20264,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "2공210"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "2공210"
         }
       ]
@@ -20304,7 +20304,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공419"
         }
       ]
@@ -20338,7 +20338,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공227"
         }
       ]
@@ -20372,7 +20372,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이703"
         }
       ]
@@ -20406,13 +20406,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공206"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공206"
         }
       ]
@@ -20446,13 +20446,13 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "2공211"
         },
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "2공211"
         }
       ]
@@ -20486,13 +20486,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공224"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공224"
         }
       ]
@@ -20526,7 +20526,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수105"
         }
       ]
@@ -20560,7 +20560,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수319"
         }
       ]
@@ -20594,7 +20594,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수109"
         }
       ]
@@ -20628,13 +20628,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인803"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인803"
         }
       ]
@@ -20668,13 +20668,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인803"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인803"
         }
       ]
@@ -20708,13 +20708,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인803"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인803"
         }
       ]
@@ -20748,13 +20748,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인615"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인615"
         }
       ]
@@ -20788,7 +20788,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "인803"
         }
       ]
@@ -20822,13 +20822,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인803"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인803"
         }
       ]
@@ -20862,13 +20862,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인603"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인603"
         }
       ]
@@ -20902,13 +20902,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인603"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "인603"
         }
       ]
@@ -20942,13 +20942,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인615"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인615"
         }
       ]
@@ -20982,13 +20982,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인803"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인803"
         }
       ]
@@ -21022,19 +21022,19 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인402"
         },
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "인402"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인402"
         }
       ]
@@ -21068,19 +21068,19 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인402"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인402"
         },
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1155,
+          "endMinute": 1170,
           "classroom": "인402"
         }
       ]
@@ -21176,7 +21176,7 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이619"
         }
       ]
@@ -21210,7 +21210,7 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이605"
         }
       ]
@@ -21244,7 +21244,7 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이604"
         }
       ]
@@ -21332,7 +21332,7 @@
         {
           "weekday": 3,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "이506"
         }
       ]
@@ -21366,7 +21366,7 @@
         {
           "weekday": 6,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이506"
         }
       ]
@@ -21400,7 +21400,7 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "이506"
         }
       ]
@@ -21461,7 +21461,7 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이506"
         }
       ]
@@ -21549,7 +21549,7 @@
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "이506"
         }
       ]
@@ -21583,7 +21583,7 @@
         {
           "weekday": 5,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "이506"
         }
       ]
@@ -21625,13 +21625,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이321"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이321"
         }
       ]
@@ -21673,13 +21673,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이321"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이321"
         }
       ]
@@ -21713,13 +21713,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이202"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이202"
         }
       ]
@@ -21753,7 +21753,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이204"
         }
       ]
@@ -21787,13 +21787,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이202"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이202"
         }
       ]
@@ -21827,13 +21827,13 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이301"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "이301"
         }
       ]
@@ -21867,13 +21867,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이321"
         },
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이321"
         }
       ]
@@ -21907,13 +21907,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "이321"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이321"
         }
       ]
@@ -21947,13 +21947,13 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이202"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이202"
         }
       ]
@@ -21995,13 +21995,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이702"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이702"
         }
       ]
@@ -22043,13 +22043,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이702"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이702"
         }
       ]
@@ -22083,13 +22083,13 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이204"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이204"
         }
       ]
@@ -22123,13 +22123,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이301"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "이301"
         }
       ]
@@ -22163,13 +22163,13 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이301"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이301"
         }
       ]
@@ -22203,13 +22203,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이301"
         },
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이301"
         }
       ]
@@ -22243,13 +22243,13 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이202"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이202"
         }
       ]
@@ -22283,13 +22283,13 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이301"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이301"
         }
       ]
@@ -22323,13 +22323,13 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이321"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이321"
         }
       ]
@@ -22363,13 +22363,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공108"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공108"
         }
       ]
@@ -22403,13 +22403,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "산학융합609"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "산학융합609"
         }
       ]
@@ -22443,13 +22443,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "2공108"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "2공108"
         }
       ]
@@ -22483,13 +22483,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "산학융합609"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "산학융합609"
         }
       ]
@@ -22523,13 +22523,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "산학융합609"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "산학융합609"
         }
       ]
@@ -22563,7 +22563,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "3공124"
         }
       ]
@@ -22597,13 +22597,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공227"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공227"
         }
       ]
@@ -22637,13 +22637,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공108"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "3공108"
         }
       ]
@@ -22677,13 +22677,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "2공224"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "2공224"
         }
       ]
@@ -22717,7 +22717,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공428"
         }
       ]
@@ -22751,7 +22751,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공124"
         }
       ]
@@ -22785,13 +22785,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "2공211"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "2공211"
         }
       ]
@@ -22825,13 +22825,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공108"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공108"
         }
       ]
@@ -22865,13 +22865,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공108"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공108"
         }
       ]
@@ -22905,13 +22905,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "이501"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이501"
         }
       ]
@@ -22945,13 +22945,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공125"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공125"
         }
       ]
@@ -22993,13 +22993,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "3공505"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "3공505"
         }
       ]
@@ -23033,7 +23033,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공426"
         }
       ]
@@ -23067,13 +23067,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공108"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공108"
         }
       ]
@@ -23107,13 +23107,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "2공211"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공211"
         }
       ]
@@ -23147,13 +23147,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공210"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "2공210"
         }
       ]
@@ -23187,7 +23187,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공428"
         }
       ]
@@ -23221,13 +23221,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공125"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "3공125"
         }
       ]
@@ -23261,7 +23261,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "2공302"
         }
       ]
@@ -23295,7 +23295,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "산학융합609"
         }
       ]
@@ -23329,7 +23329,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "산학융합609"
         }
       ]
@@ -23363,13 +23363,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "산학융합608"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "산학융합608"
         }
       ]
@@ -23403,13 +23403,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "산학융합608"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "산학융합608"
         }
       ]
@@ -23443,13 +23443,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "산학융합609"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "산학융합609"
         }
       ]
@@ -23483,13 +23483,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공108"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공108"
         }
       ]
@@ -23523,13 +23523,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "산학융합609"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "산학융합609"
         }
       ]
@@ -23563,13 +23563,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "2공117"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공117"
         }
       ]
@@ -23603,7 +23603,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "2공117"
         }
       ]
@@ -23637,13 +23637,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수113"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수113"
         }
       ]
@@ -23677,13 +23677,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수112"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수112"
         }
       ]
@@ -23717,7 +23717,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수112"
         }
       ]
@@ -23751,13 +23751,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "수113"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "수113"
         }
       ]
@@ -23791,13 +23791,13 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "수219"
         },
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "수219"
         }
       ]
@@ -23831,13 +23831,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수113"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "수219"
         }
       ]
@@ -23871,13 +23871,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수105"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수105"
         }
       ]
@@ -23911,13 +23911,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "수219"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "수219"
         }
       ]
@@ -23951,13 +23951,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수113"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수113"
         }
       ]
@@ -23991,13 +23991,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수113"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수113"
         }
       ]
@@ -24031,13 +24031,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수112"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수112"
         }
       ]
@@ -24071,13 +24071,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수113"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수113"
         }
       ]
@@ -24111,7 +24111,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수218"
         }
       ]
@@ -24145,13 +24145,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "수219"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수219"
         }
       ]
@@ -24185,7 +24185,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "수222"
         }
       ]
@@ -24219,7 +24219,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수516"
         }
       ]
@@ -24253,7 +24253,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "수516"
         }
       ]
@@ -24287,7 +24287,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수516"
         }
       ]
@@ -24321,7 +24321,7 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "수516"
         }
       ]
@@ -24355,7 +24355,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수516"
         }
       ]
@@ -24389,7 +24389,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "수105"
         }
       ]
@@ -24423,7 +24423,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수218"
         }
       ]
@@ -24457,13 +24457,13 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "수105"
         },
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "수105"
         }
       ]
@@ -24497,13 +24497,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수105"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수105"
         }
       ]
@@ -24537,7 +24537,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공226"
         }
       ]
@@ -24571,7 +24571,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이504"
         }
       ]
@@ -24605,7 +24605,7 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수319"
         }
       ]
@@ -24639,7 +24639,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "수301"
         }
       ]
@@ -24673,7 +24673,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "수319"
         }
       ]
@@ -24707,7 +24707,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수301"
         }
       ]
@@ -24741,13 +24741,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이504"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이504"
         }
       ]
@@ -24781,7 +24781,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수301"
         }
       ]
@@ -24815,7 +24815,7 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수301"
         }
       ]
@@ -24849,7 +24849,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이504"
         }
       ]
@@ -24883,7 +24883,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "이506"
         }
       ]
@@ -24917,7 +24917,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수301"
         }
       ]
@@ -24951,7 +24951,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이506"
         }
       ]
@@ -24985,13 +24985,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수319"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "수319"
         }
       ]
@@ -25025,7 +25025,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수112"
         }
       ]
@@ -25059,7 +25059,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "수319"
         }
       ]
@@ -25120,7 +25120,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수319"
         }
       ]
@@ -25154,7 +25154,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수301"
         }
       ]
@@ -25188,7 +25188,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "수319"
         }
       ]
@@ -25222,7 +25222,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "수301"
         }
       ]
@@ -25256,7 +25256,7 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "새동백호-제1강의실"
         }
       ]
@@ -25290,7 +25290,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "수301"
         }
       ]
@@ -25324,13 +25324,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이504"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이504"
         }
       ]
@@ -25364,7 +25364,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이504"
         }
       ]
@@ -25398,7 +25398,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이504"
         }
       ]
@@ -25432,7 +25432,7 @@
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이504"
         }
       ]
@@ -25470,7 +25470,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교312"
         }
       ]
@@ -25508,7 +25508,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "교312"
         }
       ]
@@ -25546,7 +25546,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "교312"
         }
       ]
@@ -25584,7 +25584,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교312"
         }
       ]
@@ -25618,7 +25618,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "산학융합413"
         }
       ]
@@ -25652,7 +25652,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공513"
         }
       ]
@@ -25686,7 +25686,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공513"
         }
       ]
@@ -25720,13 +25720,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공513"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공513"
         }
       ]
@@ -25760,7 +25760,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공211"
         }
       ]
@@ -25794,7 +25794,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "산학융합510"
         }
       ]
@@ -25828,13 +25828,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공515"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "1공515"
         }
       ]
@@ -25868,7 +25868,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "산학융합413"
         }
       ]
@@ -25902,7 +25902,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공515"
         }
       ]
@@ -25936,7 +25936,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "산학융합413"
         }
       ]
@@ -25970,7 +25970,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "1공515"
         }
       ]
@@ -26004,7 +26004,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "산학융합511"
         }
       ]
@@ -26038,7 +26038,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "산학융합511"
         }
       ]
@@ -26072,7 +26072,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공515"
         }
       ]
@@ -26106,13 +26106,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "2공512"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "2공512"
         }
       ]
@@ -26150,13 +26150,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교209"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "교209"
         }
       ]
@@ -26194,13 +26194,13 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "교209"
         },
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "교209"
         }
       ]
@@ -26238,13 +26238,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "교206"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "교206"
         }
       ]
@@ -26282,13 +26282,13 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "교206"
         },
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1245,
+          "endMinute": 1260,
           "classroom": "교206"
         }
       ]
@@ -26326,13 +26326,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공210"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "2공210"
         }
       ]
@@ -26370,13 +26370,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이604"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이604"
         }
       ]
@@ -26414,7 +26414,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공108"
         }
       ]
@@ -26487,7 +26487,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "이609"
         }
       ]
@@ -26599,7 +26599,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이606"
         }
       ]
@@ -26672,13 +26672,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이605"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이605"
         }
       ]
@@ -26712,13 +26712,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이605"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "이605"
         }
       ]
@@ -26783,7 +26783,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "이604"
         }
       ]
@@ -26817,13 +26817,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "이605"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "이605"
         }
       ]
@@ -26923,7 +26923,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이508"
         }
       ]
@@ -27011,7 +27011,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "이617"
         }
       ]
@@ -27045,7 +27045,7 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "이604"
         }
       ]
@@ -27079,7 +27079,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이108"
         }
       ]
@@ -27113,13 +27113,13 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이102"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이102"
         }
       ]
@@ -27153,7 +27153,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이102"
         }
       ]
@@ -27187,7 +27187,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이408"
         }
       ]
@@ -27221,7 +27221,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이108"
         }
       ]
@@ -27255,7 +27255,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이102"
         }
       ]
@@ -27289,7 +27289,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "이102"
         }
       ]
@@ -27323,7 +27323,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이108"
         }
       ]
@@ -27357,13 +27357,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "이211"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "이211"
         }
       ]
@@ -27397,7 +27397,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이108"
         }
       ]
@@ -27431,7 +27431,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "이102"
         }
       ]
@@ -27465,7 +27465,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이211"
         }
       ]
@@ -27499,7 +27499,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "수218"
         }
       ]
@@ -27533,7 +27533,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "이609"
         }
       ]
@@ -27567,13 +27567,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공325"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "2공325"
         }
       ]
@@ -27607,7 +27607,7 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "2공325"
         }
       ]
@@ -27641,7 +27641,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "이501"
         }
       ]
@@ -27795,13 +27795,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이701"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "이701"
         }
       ]
@@ -27835,13 +27835,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인204"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "인204"
         }
       ]
@@ -27875,13 +27875,13 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인218"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인218"
         }
       ]
@@ -27919,13 +27919,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인102"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "인102"
         }
       ]
@@ -27963,13 +27963,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인102"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "인102"
         }
       ]
@@ -28007,13 +28007,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "인102"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "인102"
         }
       ]
@@ -28051,13 +28051,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인401"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "인401"
         }
       ]
@@ -28095,7 +28095,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "취업강의실2"
         }
       ]
@@ -28133,7 +28133,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "취업강의실2"
         }
       ]
@@ -28171,7 +28171,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "취업강의실2"
         }
       ]

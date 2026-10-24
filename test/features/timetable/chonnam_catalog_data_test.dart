@@ -86,6 +86,42 @@ void main() {
           expect(meeting.endMinute % 30, 0);
           expect(meeting.isValid, isTrue);
         }
+        // 교시 슬롯 = 수업 + 쉬는 시간(월수금·토 50+10=60분, 화목 75+15=90분).
+        // 같은 요일의 교시는 쉬는 시간까지 이어 붙어 한 구간이 된다.
+        final periods = <String>{
+          for (final m in RegExp(
+            r'([월화수목금토])(\d+)',
+          ).allMatches(course.sourceSchedule))
+            '${m[1]}${m[2]}',
+        };
+        for (final meeting in course.meetings) {
+          final tue =
+              meeting.weekday == DateTime.tuesday ||
+              meeting.weekday == DateTime.thursday;
+          final slot = tue ? 90 : 60;
+          final base = tue ? 450 : 480;
+          expect(
+            (meeting.originalStartMinute - base) % slot,
+            0,
+            reason: course.sourceId,
+          );
+          expect(
+            (meeting.originalEndMinute - meeting.originalStartMinute) % slot,
+            0,
+            reason: course.sourceId,
+          );
+        }
+        expect(
+          course.meetings.fold<int>(
+            0,
+            (sum, m) => sum + m.originalEndMinute - m.originalStartMinute,
+          ),
+          periods.fold<int>(
+            0,
+            (sum, p) => sum + ('화목'.contains(p[0]) ? 90 : 60),
+          ),
+          reason: course.sourceId,
+        );
         final added = course.toTimetable(
           id: 'course-$index',
           mode: LectureMode.inPerson,
@@ -130,7 +166,7 @@ void main() {
       expect(saturday.hasSchedulableMeetings, isTrue);
       expect(saturday.meetings.single.weekday, DateTime.saturday);
       expect(saturday.meetings.single.originalStartMinute, 480);
-      expect(saturday.meetings.single.originalEndMinute, 710);
+      expect(saturday.meetings.single.originalEndMinute, 720);
       expect(saturday.meetings.single.endMinute, 720);
     },
   );
