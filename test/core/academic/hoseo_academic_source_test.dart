@@ -20,7 +20,7 @@ void main() {
     'latest annual dates, discrete February dates and cross-month periods',
     () {
       final events = HoseoAcademicSource.parseAnnual(body, 2026);
-      expect(events, hasLength(56));
+      expect(events, hasLength(55));
       expect(
         events.singleWhere((e) => e.title == '2026학년도 2학기 개강').start,
         DateTime(2026, 8, 31),
@@ -108,13 +108,13 @@ void main() {
       );
       try {
         final events = await source.fetch(2026);
-        expect(events, hasLength(47));
+        expect(events, hasLength(46));
         expect(
           events.singleWhere((e) => e.title.startsWith('제42회 학위수여식')).start,
           DateTime(2026, 2, 24),
         );
         expect(events.where((e) => e.start.year < 2026), hasLength(1));
-        expect(events.map((e) => e.sourceId).toSet(), hasLength(47));
+        expect(events.map((e) => e.sourceId).toSet(), hasLength(46));
       } finally {
         source.close();
       }
@@ -136,7 +136,7 @@ void main() {
         2026,
         uri.toString(),
       );
-      expect(events, hasLength(62));
+      expect(events, hasLength(61));
       expect(
         events.singleWhere((e) => e.title == '수시면접일').start,
         DateTime(2026, 10, 23),
@@ -223,7 +223,7 @@ void main() {
       );
       try {
         final events = await source.fetch(2026);
-        expect(events, hasLength(53));
+        expect(events, hasLength(52));
         expect(
           events.singleWhere((e) => e.title == '수시면접일').start,
           DateTime(2026, 10, 23),
@@ -246,15 +246,27 @@ void main() {
   test('every published Hoseo annual row is imported', () {
     final rows = html.parse(body).querySelectorAll('#academic_scd01 .list-box');
     expect(rows, hasLength(55));
-    expect(
-      HoseoAcademicSource.parseAnnual(body, 2026),
-      hasLength(
-        rows.fold<int>(
-          0,
-          (n, r) => n + periods(r.querySelector('.list-date')!.text),
-        ),
+    // Graduate-school-only rows (user decision) are left out: 1 row here.
+    final graduateOnly = rows.where(
+      (r) => HoseoAcademicSource.isGraduateOnly(
+        r.querySelector('.list-content')!.text.trim(),
       ),
     );
+    expect(graduateOnly, hasLength(1));
+    final events = HoseoAcademicSource.parseAnnual(body, 2026);
+    expect(
+      events,
+      hasLength(
+        rows.fold<int>(
+              0,
+              (n, r) => n + periods(r.querySelector('.list-date')!.text),
+            ) -
+            graduateOnly.length,
+      ),
+    );
+    expect(events.any((e) => e.title.contains('(대학원)')), isFalse);
+    expect(events.any((e) => e.title == '후기 학위수여일(학부)'), isTrue);
+    expect(events.any((e) => e.title == '제42회 학위수여식(학부/대학원)'), isTrue);
   });
   test('every published Hoseo revised row and holiday is imported', () {
     final rows = RegExp(
@@ -266,12 +278,21 @@ void main() {
     ).allMatches(revisedText);
     expect(rows, hasLength(52));
     expect(holidays, hasLength(9));
+    // Graduate-school-only rows (user decision) are left out: 1 row here.
+    final graduateOnly = rows.where(
+      (r) => HoseoAcademicSource.isGraduateOnly(r[1]!),
+    );
+    expect(graduateOnly, hasLength(1));
+    final events = HoseoAcademicSource.parseRevision(revisedText, 2026, '');
     expect(
-      HoseoAcademicSource.parseRevision(revisedText, 2026, ''),
+      events,
       hasLength(
-        rows.fold<int>(0, (n, r) => n + periods(r[1]!)) + holidays.length,
+        rows.fold<int>(0, (n, r) => n + periods(r[1]!)) -
+            graduateOnly.length +
+            holidays.length,
       ),
     );
+    expect(events.any((e) => e.title.contains('(대학원)')), isFalse);
   });
   test('every published Hoseo 2025 guide row is imported', () {
     final rows = RegExp(
@@ -324,6 +345,12 @@ void main() {
       }
     },
   );
+  test('graduate-only marker is excluded but shared rows stay', () {
+    expect(HoseoAcademicSource.isGraduateOnly('후기 학위수여식(대학원)'), isTrue);
+    expect(HoseoAcademicSource.isGraduateOnly('제42회 학위수여식(학부/대학원)'), isFalse);
+    expect(HoseoAcademicSource.isGraduateOnly('후기 학위수여일(학부)'), isFalse);
+    expect(HoseoAcademicSource.isGraduateOnly('대학원 입학식'), isFalse);
+  });
   test('Hoseo profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000211',
