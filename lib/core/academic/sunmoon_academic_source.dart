@@ -75,9 +75,16 @@ class SunmoonAcademicSource implements AcademicSource {
         '$academicYear') {
       throw const FormatException('Unexpected Sunmoon academic year');
     }
+    // The responsive `#schedule_month` mirror repeats every month with
+    // literal null labels; only `#schedule_year` is the official calendar, so
+    // parsing and month completeness are checked there alone.
+    final official = doc.querySelector('#schedule_year');
+    if (official == null) {
+      throw const FormatException('Missing Sunmoon year calendar');
+    }
     final months = <int>{};
     final events = <String, AcademicEvent>{};
-    for (final table in doc.querySelectorAll('table')) {
+    for (final table in official.querySelectorAll('table')) {
       final caption = table.querySelector('caption')?.text ?? '';
       if (!caption.contains('내용')) {
         continue;
@@ -116,8 +123,7 @@ class SunmoonAcademicSource implements AcademicSource {
         for (final item in cells[1].querySelectorAll('li')) {
           final label = item.text.replaceAll(RegExp(r'\s+'), ' ').trim();
           if (label.isEmpty) throw const FormatException('Empty Sunmoon title');
-          // The responsive calendar renders a broken duplicate table with
-          // literal null labels; the second official table has actual titles.
+          // Empty calendar slots render a literal null label.
           if (label == 'null') {
             continue;
           }

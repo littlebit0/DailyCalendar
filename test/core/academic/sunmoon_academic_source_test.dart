@@ -58,17 +58,17 @@ void main() {
   );
 
   test('every published Sunmoon row is imported for each academic year', () {
-    // The page repeats each month as a responsive table with "null" labels,
-    // then as the official table; the last twelve tables are the official ones.
+    // The page repeats each month as a responsive `#schedule_month` table with
+    // "null" labels, then as the official `#schedule_year` table.
     for (final (year, published) in [(2025, 68), (2026, 79)]) {
       final tables = html
           .parse(fixture(year))
-          .querySelectorAll('table')
+          .querySelectorAll('#schedule_year table')
           .where((t) => t.querySelector('caption')!.text.contains('내용'))
           .toList();
-      expect(tables, hasLength(24));
+      expect(tables, hasLength(12));
       final rows = [
-        for (final table in tables.skip(12))
+        for (final table in tables)
           for (final row in table.querySelectorAll('tbody tr'))
             (
               row.querySelector('td')!.text.trim().substring(0, 5),
@@ -128,7 +128,8 @@ void main() {
     );
     expect(
       () => SunmoonAcademicSource.parse(
-        fixture(2026).replaceFirst('03-27', '02-30'),
+        // The first occurrence is the ignored mirror; the official row too.
+        fixture(2026).replaceAll('03-27', '02-30'),
         2026,
       ),
       throwsFormatException,
@@ -136,6 +137,31 @@ void main() {
     expect(
       () => SunmoonAcademicSource.parse(
         fixture(2026).replaceAll('2026년 3월 학사일정을', '2026년 학사일정을'),
+        2026,
+      ),
+      throwsFormatException,
+    );
+  });
+
+  test('Sunmoon month missing from the official calendar is an error', () {
+    // The `#schedule_month` mirror still lists April, but it must not stand in
+    // for the official `#schedule_year` table.
+    final page = fixture(2026);
+    final split = page.indexOf('<div id="schedule_year">');
+    expect(split, greaterThan(0));
+    final withoutApril =
+        page.substring(0, split) +
+        page
+            .substring(split)
+            .replaceFirst('2026년 4월 학사일정을 일자와 내용으로', '2026년 4월 학사일정 목록');
+    expect(withoutApril, isNot(page));
+    expect(
+      () => SunmoonAcademicSource.parse(withoutApril, 2026),
+      throwsFormatException,
+    );
+    expect(
+      () => SunmoonAcademicSource.parse(
+        page.replaceFirst('id="schedule_year"', 'id="schedule_other"'),
         2026,
       ),
       throwsFormatException,
