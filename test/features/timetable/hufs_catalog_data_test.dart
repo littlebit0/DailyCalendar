@@ -146,6 +146,46 @@ void main() {
   );
 
   test(
+    'HUFS period meetings use 60-minute slots including the break',
+    () async {
+      // 근거: 서울 수강편람 134쪽, english_help.html (교시 시작 60분 간격, 수업 50분 + 쉬는 시간 10분)
+      final data = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'hufs',
+      );
+      var checked = 0;
+      for (final course in data.expand((d) => d.courses)) {
+        final byDate = <String, List<(int, int, String)>>{};
+        for (final m in course.meetings) {
+          // V434073: 학교 원문이 17:10 시작을 직접 적은 강좌라 교시 슬롯 규칙에서 제외
+          if (course.sourceId.endsWith('/V434073/01')) continue;
+          expect(m.originalStartMinute % 60, 0, reason: course.sourceId);
+          expect(m.originalEndMinute % 60, 0, reason: course.sourceId);
+          checked++;
+          byDate.putIfAbsent('${m.date}', () => []).add((
+            m.originalStartMinute,
+            m.originalEndMinute,
+            m.classroom,
+          ));
+        }
+        for (final list in byDate.values) {
+          list.sort((a, b) => a.$1.compareTo(b.$1));
+          for (var i = 1; i < list.length; i++) {
+            final gap = list[i].$1 - list[i - 1].$2;
+            // 같은 강의실이고 간격 60분 미만이면 합쳐져 있어야 한다
+            expect(
+              gap >= 60 || list[i].$3 != list[i - 1].$3,
+              isTrue,
+              reason: course.sourceId,
+            );
+          }
+        }
+      }
+      expect(checked, 43820);
+    },
+  );
+
+  test(
     'HUFS unified profile enables both timetable campuses and exact semester bounds',
     () async {
       for (final id in [
