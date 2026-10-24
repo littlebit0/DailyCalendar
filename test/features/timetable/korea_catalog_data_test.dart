@@ -191,4 +191,62 @@ void main() {
       }
     },
   );
+
+  // 쉬는 시간 포함 슬롯(#564): 서울 1~6교시 75분+15분(90분), 7~10교시 50분+10분(60분),
+  // 세종 50분+10분(60분). 근거 문서 미확인이라 현재 자료의 연속 교시 시작 간격을 쓴다.
+  test('KU 교시 구간은 쉬는 시간을 포함한 슬롯이고 연속 교시는 합쳐져 있다', () {
+    const slots = {
+      'seoul': (
+        [540, 630, 720, 810, 900, 990, 1080, 1140, 1200, 1260],
+        [615, 705, 795, 885, 975, 1065, 1130, 1190, 1250, 1310],
+        62148,
+      ),
+      'sejong': (
+        [540, 600, 660, 720, 780, 840, 900, 960, 1020, 1080, 1140, 1200, 1260],
+        [590, 650, 710, 770, 830, 890, 950, 1010, 1070, 1130, 1190, 1250, 1310],
+        28024,
+      ),
+    };
+    for (final entry in slots.entries) {
+      final (starts, periodEnds, total) = entry.value;
+      final data =
+          jsonDecode(
+                fixtureFile(
+                  'assets/timetable/korea-${entry.key}-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      var count = 0;
+      for (final course in data['courses'] as List) {
+        final groups = <String, List<Map>>{};
+        for (final s in course['schedules'] as List) {
+          count++;
+          final start = s['startMinute'] as int;
+          final end = s['endMinute'] as int;
+          if (start == 480) continue; // 서울 교직 0교시는 보류(그대로 둠)
+          expect(
+            starts.contains(start) && periodEnds.contains(end),
+            isFalse,
+            reason: '${course['sourceId']} ${s['date']} 쉬는 시간이 빠진 교시 구간',
+          );
+          groups.putIfAbsent('${s['date']}|${s['classroom']}', () => []).add(s);
+        }
+        for (final list in groups.values) {
+          list.sort(
+            (a, b) =>
+                (a['startMinute'] as int).compareTo(b['startMinute'] as int),
+          );
+          for (var i = 1; i < list.length; i++) {
+            expect(
+              (list[i]['startMinute'] as int) -
+                  (list[i - 1]['endMinute'] as int),
+              greaterThanOrEqualTo(60),
+              reason: '${course['sourceId']} ${list[i]['date']} 합치지 않은 연속 구간',
+            );
+          }
+        }
+      }
+      expect(count, total, reason: entry.key);
+    }
+  });
 }

@@ -22,7 +22,9 @@ Map<String, dynamic> read(String name) {
       c['metadata']['researchOnly'] = false;
     }
     if (c.containsKey('previousResearchRemarks')) {
-      c['remarks'] = c.remove('previousResearchRemarks');
+      c['remarks'] = koreaFixRemark(
+        c.remove('previousResearchRemarks') as String,
+      );
     }
   }
   return data;
@@ -105,10 +107,7 @@ void main() {
         all.addAll(dataset.courses);
         for (var i = 0; i < rows.length; i++) {
           if (!ids.contains((rows[i] as Map)['sourceId'])) {
-            expect(
-              rows[i],
-              applyKoreaRecheck(old[i] as Map<String, dynamic>),
-            );
+            expect(rows[i], applyKoreaRecheck(old[i] as Map<String, dynamic>));
           }
         }
         for (final record in selected) {
@@ -159,7 +158,7 @@ void main() {
           if ((source['COUR_CD'] as String) == 'BUSS166') {
             expect(remarkRoom, isEmpty);
           }
-          final literal = <String>{};
+          final periodMeetings = <Map<String, dynamic>>[];
           for (final line in (source['TIME_ROOM'] as String).split('\n')) {
             final m = RegExp(
               r'^([월화수목금토일])\(([\d,~\-]+)\)\s*$',
@@ -173,13 +172,24 @@ void main() {
                     ? seoulClock[p]!
                     : (480 + p * 60, 530 + p * 60);
                 for (final ds in ownDates(weekday)) {
-                  literal.add(
-                    '$ds|$weekday|${clock.$1}|${clock.$2}|$remarkRoom',
-                  );
+                  periodMeetings.add({
+                    'date': ds,
+                    'weekday': weekday,
+                    'startMinute': clock.$1,
+                    'endMinute': clock.$2,
+                    'classroom': remarkRoom,
+                  });
                 }
               }
             }
           }
+          // 쉬는 시간 포함 슬롯으로 늘리고 연속 교시를 합친 기대값.
+          final literal = koreaSlotSchedules(campus, periodMeetings)
+              .map(
+                (m) =>
+                    '${m['date']}|${m['weekday']}|${m['startMinute']}|${m['endMinute']}|${m['classroom']}',
+              )
+              .toSet();
           final actual = c.meetings
               .map(
                 (m) =>
@@ -199,10 +209,10 @@ void main() {
           newMeetings += c.meetings.length;
         }
       }
-      expect(newMeetings, 1582);
+      expect(newMeetings, 1241);
       expect(all, hasLength(5339));
       expect(all.where((c) => c.hasSchedulableMeetings), hasLength(4173));
-      expect(all.fold<int>(0, (n, c) => n + c.meetings.length), 126456);
+      expect(all.fold<int>(0, (n, c) => n + c.meetings.length), 90172);
       for (final mode in [
         LectureMode.inPerson,
         LectureMode.liveOnline,

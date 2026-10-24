@@ -55,9 +55,14 @@ void main() {
           }
           checked++;
           expect(row['previousResearchRemarks'], record['originalRemarks']);
-          expect(row['remarks'], record['correctedRemarks']);
+          expect(
+            row['remarks'],
+            koreaFixRemark(record['correctedRemarks'] as String),
+          );
           final restored = Map<String, dynamic>.from(row as Map);
-          restored['remarks'] = restored.remove('previousResearchRemarks');
+          restored['remarks'] = koreaFixRemark(
+            restored.remove('previousResearchRemarks') as String,
+          );
           expect(restored, before, reason: row['sourceId']);
           final c = model.courses.singleWhere(
             (c) => c.sourceId == row['sourceId'],
