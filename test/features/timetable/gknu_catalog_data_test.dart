@@ -94,7 +94,17 @@ void main() {
               isTrue,
             );
             expect(m.originalStartMinute, greaterThanOrEqualTo(540));
-            expect(m.originalEndMinute, lessThanOrEqualTo(1070));
+            expect(m.originalEndMinute, lessThanOrEqualTo(1080));
+            // 공식 교시표(menu_idx=134): 교시 시작 간격 60분(50분 수업+10분 쉬는 시간).
+            // 연속 교시는 한 구간이고 구간 끝은 마지막 교시 시작+60분이다.
+            final periods = RegExp(r'^[월화수목금]([\d,]+)\[')
+                .firstMatch(r['sourceSchedule'] as String)!
+                .group(1)!
+                .split(',')
+                .map(int.parse)
+                .toList();
+            expect(m.originalStartMinute, 480 + 60 * periods.first);
+            expect(m.originalEndMinute, 480 + 60 * periods.last + 60);
             expect(
               (r['schedules'] as List).every(
                 (dynamic s) => !(s as Map).containsKey('deliveryMode'),

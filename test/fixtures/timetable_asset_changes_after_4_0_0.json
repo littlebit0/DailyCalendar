@@ -1,4 +1,12 @@
 {
+  "assets/timetable/gknu-unknown-2026-2.json": {
+    "sha256": "112d5dd008fabcdace1b059e3bdb475addb21d4cf63e87d0b5c13811c884db42",
+    "reason": "#572 국립경국대 교시 슬롯을 공식 수업시간표(menu_idx=134)의 교시 시작 간격 60분(50분 수업+10분 쉬는 시간)으로 쉬는 시간 포함해 다시 계산(연속 교시는 이미 한 구간)"
+  },
+  "assets/timetable/gknu-yecheon-2026-2.json": {
+    "sha256": "883374d3b07f1bad0481cf937146dc7b279528e5637bc06408a6afe9e3239114",
+    "reason": "#572 국립경국대 교시 슬롯을 공식 수업시간표(menu_idx=134)의 교시 시작 간격 60분(50분 수업+10분 쉬는 시간)으로 쉬는 시간 포함해 다시 계산(연속 교시는 이미 한 구간)"
+  },
   "assets/timetable/organizations/ajou.json": {
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
     "reason": "#92 아주대 원자료 분류를 공식 학과 목록·학사안내 기준 소속(공과대학·경영대학·연계전공·마이크로전공)으로 배정"
