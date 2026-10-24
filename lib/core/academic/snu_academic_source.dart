@@ -44,6 +44,8 @@ class SnuAcademicSource implements AcademicSource {
     return events..sort((a, b) => a.start.compareTo(b.start));
   }
 
+  static final _graduateOnly = RegExp(r'^(?!.*(?:학부|대학/)).*대학원');
+
   static List<AcademicEvent> parse(String body, int academicYear) {
     final section = html.parse(body).querySelector('section.calendar');
     if (section == null ||
@@ -79,6 +81,10 @@ class SnuAcademicSource implements AcademicSource {
             range.length > 2) {
           throw const FormatException('Incomplete SNU academic event');
         }
+        // 사용자 결정(2026-10-24): 대학원 전용 행은 넣지 않는다. 원문이 제목에
+        // "대학원 후기모집 신입생 등록"처럼 대상을 대학원으로만 적은 행을 제외하고,
+        // 학부와 함께 적은 행은 유지한다.
+        if (_graduateOnly.hasMatch(title)) continue;
         final start = _date(range.first, year, monthNumber);
         final last = range.length == 1
             ? start

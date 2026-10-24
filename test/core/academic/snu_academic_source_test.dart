@@ -11,7 +11,7 @@ void main() {
   final body = File('test/fixtures/academic/snu-2026.html').readAsStringSync();
   test('official SNU calendar preserves cross-month and next-year ranges', () {
     final events = SnuAcademicSource.parse(body, 2026);
-    expect(events.length, 58);
+    expect(events.length, 56);
     final march = events.singleWhere((e) => e.title == '제2학기 복수전공, 연합전공 신청');
     expect(march.start, DateTime(2026, 3, 30));
     expect(march.end, DateTime(2026, 4, 4));
@@ -65,8 +65,12 @@ void main() {
       expect(events.every((e) => e.start.isBefore(DateTime(2027))), isTrue);
     },
   );
-  test('every published SNU row is imported for each academic year', () {
-    for (final year in [2025, 2026]) {
+  test('every published SNU row is imported except graduate-only rows', () {
+    // 2 graduate-school admission registration rows per academic year.
+    for (final (year, published, graduateOnly) in [
+      (2025, 60, 2),
+      (2026, 58, 2),
+    ]) {
       final page = File(
         'test/fixtures/academic/snu-$year.html',
       ).readAsStringSync();
@@ -74,12 +78,28 @@ void main() {
           .parse(page)
           .querySelectorAll('section.calendar .work-wrap .work')
           .length;
-      expect(rows, year == 2025 ? 60 : 58);
+      expect(rows, published);
       final events = SnuAcademicSource.parse(page, year);
-      expect(events, hasLength(rows));
-      expect(events.map((e) => e.sourceId).toSet(), hasLength(rows));
+      expect(events, hasLength(rows - graduateOnly));
+      expect(
+        events.map((e) => e.sourceId).toSet(),
+        hasLength(rows - graduateOnly),
+      );
+      expect(events.where((e) => e.title.contains('대학원')), isEmpty);
     }
   });
+  test(
+    'SNU keeps rows addressed to undergraduates together with graduates',
+    () {
+      final both = body.replaceFirst('2026학년도 대학원 후기모집 신입생 등록', '학부·대학원 공통 안내');
+      expect(SnuAcademicSource.parse(both, 2026), hasLength(57));
+      final undergraduate = body.replaceFirst(
+        '2026학년도 대학원 후기모집 신입생 등록',
+        '대학/대학원 공통 안내',
+      );
+      expect(SnuAcademicSource.parse(undergraduate, 2026), hasLength(57));
+    },
+  );
   test('SNU profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000019',
