@@ -35,6 +35,8 @@ class CatholicAcademicSource implements AcademicSource {
     return parse(utf8.decode(response.bodyBytes), year);
   }
 
+  static final graduateOnly = RegExp(r'[(\[]\s*대학원\s*[)\]]');
+
   static List<AcademicEvent> parse(String body, int year) {
     final decoded = jsonDecode(body);
     if (decoded is! Map || decoded['data'] is! List) {
@@ -57,6 +59,8 @@ class CatholicAcademicSource implements AcademicSource {
       if (campuses.any((c) => !const ['성심', '성의', '성신'].contains(c))) {
         throw const FormatException('Unknown CUK campus');
       }
+      // Graduate-school-only rows carry a "(대학원)" marker in the feed.
+      if (graduateOnly.hasMatch(raw['content'] as String)) continue;
       final start = _koreanDate(raw['beginDt']);
       final last = _koreanDate(raw['endDt']);
       if (last.isBefore(start)) {

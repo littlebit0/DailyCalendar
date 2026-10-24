@@ -33,7 +33,8 @@ void main() {
         'end': '2027-01-01',
       },
     ]);
-    expect(events, hasLength(64));
+    // 원문 64행 중 대학원 전용 가을 학위수여식 1행 제외.
+    expect(events, hasLength(63));
     final winter = events.singleWhere((e) => e.sourceId == '1784');
     expect(winter.title, '계절학기 수업 (성심교정)');
     expect(winter.start, DateTime(2025, 12, 22));
@@ -52,11 +53,47 @@ void main() {
   });
   test('every published CUK row is imported for each year', () {
     for (final year in [2025, 2026]) {
-      final rows = (jsonDecode(fixture(year))['data'] as List).length;
+      final data = jsonDecode(fixture(year))['data'] as List;
+      final rows = data.length;
+      final graduateOnly = data
+          .where(
+            (r) => CatholicAcademicSource.graduateOnly.hasMatch(r['content']),
+          )
+          .length;
       final events = CatholicAcademicSource.parse(fixture(year), year);
-      expect(events, hasLength(rows));
-      expect(events.map((e) => e.sourceId).toSet(), hasLength(rows));
+      expect(rows, year == 2025 ? 60 : 64);
+      expect(graduateOnly, 1);
+      expect(events, hasLength(rows - graduateOnly));
+      expect(
+        events.map((e) => e.sourceId).toSet(),
+        hasLength(rows - graduateOnly),
+      );
     }
+  });
+  test('CUK leaves out graduate-school-only rows but keeps shared ones', () {
+    final events = CatholicAcademicSource.parse(fixture(2026), 2026);
+    expect(events.any((e) => e.title.contains('대학원')), isFalse);
+    expect(events.where((e) => e.title.startsWith('가을 학위수여식')), hasLength(1));
+    final rows = jsonEncode({
+      'data': [
+        for (final (i, content) in [
+          '가을 학위수여식 (대학원)',
+          '[대학원] 입학식',
+          '학위수여식',
+        ].indexed)
+          {
+            'cSeq': i + 1,
+            'siteId': 'ko',
+            'content': content,
+            'campus': '성심',
+            'beginDt': 1788130800000,
+            'endDt': 1788130800000,
+          },
+      ],
+    });
+    expect(CatholicAcademicSource.parse(rows, 2026).map((e) => e.sourceId), [
+      '3',
+    ]);
   });
   test('CUK profile resolves to its registered calendar', () {
     for (final id in [
