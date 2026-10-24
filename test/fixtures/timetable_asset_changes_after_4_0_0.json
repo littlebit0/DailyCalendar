@@ -26,5 +26,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/organizations/suwon.json": {
+    "sha256": "a41061880737901e5a7baa2215aceb62887264996a734c075c08368a7d972209",
+    "reason": "#620 수원대 원자료 분류 2개(경영공학대학>>경영공학대학, 자유전공학부>>자유전공학부)를 공식 누리집 대학 목록 기준 단과대 직접 개설·독립 개설 단위로 배정, 인문사회융합대학 직접 개설 라벨도 같은 기준 적용"
+  },
+  "assets/timetable/suwon-unknown-2026-2.json": {
+    "sha256": "87cf25ce6d65bde66aa1584f7a7077bc2b5f11865832f7b88fe2a522ebcd0ab8",
+    "reason": "#620 원문 요일·교시·강의실이 모두 비어 있는 442개 강좌의 scheduleStatus를 unrecognized에서 unscheduled로 정정(강좌 원본 값 변경 없음), 교시 기반 모든 구간을 쉬는 시간 10분을 포함한 60분 슬롯으로 정정(1교시 09:30, 50분+10분; 9교시 이후는 근거 없어 자산에 없음)"
   }
 }
