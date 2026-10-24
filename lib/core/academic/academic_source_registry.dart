@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'mju_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +26,15 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  // The homepage publishes one calendar for the Seoul and Yongin campuses.
+  AcademicSourceRegistration(
+    id: 'mju',
+    institutionId: 'academyinfo:0000109',
+    campusIds: {'academyinfo:0000109', 'academyinfo:0000111'},
+    create: MjuAcademicSource.new,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
