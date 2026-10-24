@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/services.dart';
 import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
@@ -6,7 +7,69 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/university_course.dart';
 
+class _Files extends CachingAssetBundle {
+  @override
+  Future<ByteData> load(String key) async =>
+      ByteData.sublistView(File(key).readAsBytesSync());
+}
+
+// 수강편람 교시표: 50분제 50분+쉬는 시간 10분(60분 슬롯), 75분제 75분+15분(90분
+// 슬롯), 야간 45분+5분(50분 슬롯). 연속 교시는 한 구간으로 합쳐 저장한다.
+const _slotStarts = {
+  540, 600, 660, 720, 780, 840, 900, 960, 1020, // 50분제
+  630, 810, 990, // 75분제 2B·5B·8B 시작(1A·4A·7A는 50분제와 같은 시작)
+  1110, 1160, 1210, 1260, 1310, // 야간
+};
+const _slotEnds = {
+  600, 660, 720, 780, 840, 900, 960, 1020, 1080, // 50분제 끝
+  630, 810, 990, // 75분제 1A·4A·7A 끝 = 2B·5B·8B 시작
+  1160, 1210, 1260, 1310, 1360, // 야간 끝
+};
+
 void main() {
+  test(
+    'Jeju asset slots include breaks and merge consecutive periods',
+    () async {
+      final all = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'jeju',
+      );
+      var segments = 0;
+      for (final data in all) {
+        for (final c in data.courses) {
+          final byKey = <String, List<List<int>>>{};
+          for (final m in c.meetings) {
+            segments++;
+            expect(
+              _slotStarts,
+              contains(m.originalStartMinute),
+              reason: c.sourceId,
+            );
+            expect(
+              _slotEnds,
+              contains(m.originalEndMinute),
+              reason: c.sourceId,
+            );
+            byKey.putIfAbsent('${m.date}|${m.classroom}', () => []).add([
+              m.originalStartMinute,
+              m.originalEndMinute,
+            ]);
+          }
+          for (final list in byKey.values) {
+            list.sort((a, b) => a[0].compareTo(b[0]));
+            for (var i = 1; i < list.length; i++) {
+              expect(
+                list[i][0] - list[i - 1][1],
+                greaterThanOrEqualTo(60),
+                reason: '${c.sourceId} 연속 교시는 합쳐야 함',
+              );
+            }
+          }
+        }
+      }
+      expect(segments, 37651);
+    },
+  );
   test(
     'Jeju native reservations preserve clocks, unknown mode and full Drive document',
     () {
