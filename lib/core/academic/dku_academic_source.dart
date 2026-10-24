@@ -23,20 +23,31 @@ class DankookAcademicSource implements AcademicSource {
     // device's current timezone. Its query includes overlapping events.
     final start = DateTime.utc(year).subtract(const Duration(hours: 9));
     final end = DateTime.utc(year + 1).subtract(const Duration(hours: 9));
-    final response = await _client
-        .get(
-          Uri.https(
-            'www.dankook.ac.kr',
-            '/o/dku_calendar-rest/calendar/events/0/'
-                '${start.millisecondsSinceEpoch}/${end.millisecondsSinceEpoch - 1}',
-          ),
-        )
-        .timeout(const Duration(seconds: 20));
-    checkAcademicResponse(response);
-    return parse(utf8.decode(response.bodyBytes), year);
+    // The official page requests its site group (20118) and the portal
+    // group (0) and shows both lists together; identical rows are merged.
+    final records = <AcademicCalendarRecord>[];
+    for (final group in ['20118', '0']) {
+      final response = await _client
+          .get(
+            Uri.https(
+              'www.dankook.ac.kr',
+              '/o/dku_calendar-rest/calendar/events/$group/'
+                  '${start.millisecondsSinceEpoch}/${end.millisecondsSinceEpoch - 1}',
+            ),
+          )
+          .timeout(const Duration(seconds: 20));
+      checkAcademicResponse(response);
+      records.addAll(_records(utf8.decode(response.bodyBytes)));
+    }
+    return academicCalendarEvents(records, year, _url);
   }
 
-  static List<AcademicEvent> parse(String body, int year) {
+  static const _url = 'https://www.dankook.ac.kr/web/kor/-2014-';
+
+  static List<AcademicEvent> parse(String body, int year) =>
+      academicCalendarEvents(_records(body), year, _url);
+
+  static List<AcademicCalendarRecord> _records(String body) {
     final decoded = jsonDecode(body);
     if (decoded is! Map ||
         decoded['status'] != true ||
@@ -56,11 +67,7 @@ class DankookAcademicSource implements AcademicSource {
       final last = _koreanTimestampDate(raw['endTime']);
       records.add((title: title, start: start, last: last));
     }
-    return academicCalendarEvents(
-      records,
-      year,
-      'https://www.dankook.ac.kr/web/kor/-2014-',
-    );
+    return records;
   }
 
   static DateTime _koreanTimestampDate(Object? value) {
