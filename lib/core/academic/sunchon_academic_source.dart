@@ -61,6 +61,18 @@ class SunchonAcademicSource implements AcademicSource {
     final unique = <String, AcademicEvent>{};
     for (final row in decoded) {
       if (row is! Map) throw const FormatException('Invalid Sunchon row');
+      // The list holds every year: skip rows whose year span cannot touch the
+      // requested year before strict validation, so old typos stay isolated.
+      int? yearOf(Object? value) => value is String
+          ? int.tryParse(RegExp(r'^(\d{4})/').firstMatch(value)?[1] ?? '')
+          : null;
+      final fromYear = yearOf(row['bgnde']);
+      final toYear = yearOf(row['endde']);
+      if (fromYear != null &&
+          toYear != null &&
+          (fromYear > year || toYear < year)) {
+        continue;
+      }
       final start = date(row['bgnde']);
       final last = date(row['endde']);
       final end = DateTime(last.year, last.month, last.day + 1);

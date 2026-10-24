@@ -100,6 +100,26 @@ void main() {
       throwsFormatException,
     );
   });
+  test('a malformed row in another year does not take this year offline', () {
+    final rows = jsonDecode(fixture()) as List;
+    final old = rows.firstWhere((r) => r['bgnde'] == '2018/08/03') as Map;
+    old['bgnde'] = '2018/02/30';
+    old['endde'] = '2018/13/01';
+    final body = jsonEncode(rows);
+    expect(SunchonAcademicSource.parse(body, 2026), hasLength(70));
+    expect(SunchonAcademicSource.parse(body, 2025), hasLength(55));
+    expect(
+      () => SunchonAcademicSource.parse(body, 2018),
+      throwsFormatException,
+    );
+    final current = rows.firstWhere((r) => r['schdulSeq'] == 2424) as Map;
+    current['endde'] = '2026/02/30';
+    expect(() => SunchonAcademicSource.parse(body, 2026), returnsNormally);
+    expect(
+      () => SunchonAcademicSource.parse(jsonEncode(rows), 2026),
+      throwsFormatException,
+    );
+  });
   test('Sunchon reports an unavailable or empty calendar', () async {
     for (final response in [
       http.Response('error', 500),
