@@ -228,4 +228,75 @@ void main() {
       }
     },
   );
+
+  test(
+    'Yonsei period meetings use 60-minute slots and consecutive periods are merged',
+    () {
+      // 수강편람 시각표: 0교시 08:00부터 50분 수업+10분 휴식, 10교시까지 60분 간격.
+      // 쉬는 시간을 포함한 슬롯(교시 시작~다음 교시 시작)으로 저장하고 연속 교시는 합친다.
+      var checked = 0;
+      for (final campus in ['sinchon', 'international', 'mirae']) {
+        final raw =
+            jsonDecode(
+                  File(
+                    'assets/timetable/yonsei-$campus-2026-2.json',
+                  ).readAsStringSync(),
+                )
+                as Map<String, dynamic>;
+        for (final c in raw['courses'] as List) {
+          final byBlock = <String, List<Map>>{};
+          for (final m in (c['schedules'] as List).cast<Map>()) {
+            final start = m['startMinute'] as int;
+            final end = m['endMinute'] as int;
+            final reason = '${c['sourceId']} ${m['date']}';
+            if (m['explicitSourceHH'] != null) {
+              // 원문이 시계 시각을 직접 적은 75분제 구간은 그대로 둔다.
+              expect(end - start, 75, reason: reason);
+              continue;
+            }
+            checked++;
+            expect(start % 60, 0, reason: reason);
+            expect(start, inInclusiveRange(480, 1080), reason: reason);
+            expect((end - start) % 60, 0, reason: reason);
+            expect(end, lessThanOrEqualTo(1140), reason: reason);
+            final periods =
+                (m['sourcePeriods'] ?? [m['sourcePeriod']]) as List<dynamic>;
+            if (periods.first != null) {
+              expect(periods, [
+                for (var i = 0; i < (end - start) ~/ 60; i++)
+                  (start - 480) ~/ 60 + i,
+              ], reason: reason);
+            }
+            final key = {
+              for (final e in m.entries)
+                if (!{
+                  'startMinute',
+                  'endMinute',
+                  'sourcePeriod',
+                  'sourcePeriods',
+                }.contains(e.key))
+                  e.key: e.value,
+            }.toString();
+            byBlock.putIfAbsent(key, () => []).add(m);
+          }
+          // 같은 날짜·강의실·모드의 구간 사이에는 60분 이상 간격이 있어야 한다.
+          for (final list in byBlock.values) {
+            list.sort(
+              (a, b) =>
+                  (a['startMinute'] as int).compareTo(b['startMinute'] as int),
+            );
+            for (var i = 1; i < list.length; i++) {
+              expect(
+                (list[i]['startMinute'] as int) -
+                    (list[i - 1]['endMinute'] as int),
+                greaterThanOrEqualTo(60),
+                reason: '${c['sourceId']} ${list[i]['date']}',
+              );
+            }
+          }
+        }
+      }
+      expect(checked, 57669);
+    },
+  );
 }
