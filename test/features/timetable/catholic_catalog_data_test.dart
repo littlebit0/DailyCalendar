@@ -106,12 +106,26 @@ void main() {
             expect(restored.modeOn(meeting, meeting.teachingDate!), mode);
             expect(meeting.teachingDate!.weekday, meeting.weekday);
             expect(meeting.originalStartMinute % 60, 0);
-            expect(meeting.originalEndMinute % 60, 50);
+            // 50분 수업+10분 쉬는 시간 = 60분 슬롯(교시표 간격, 근거 문서 미확인)
+            expect(meeting.originalEndMinute % 60, 0);
             if (meeting.date == '2026-09-09') {
               expect(
-                meeting.originalEndMinute <= 590 ||
+                meeting.originalEndMinute <= 600 ||
                     meeting.originalStartMinute >= 720,
                 isTrue,
+              );
+            }
+          }
+          // 같은 날 같은 강의실의 연속 교시(간격 60분 미만)는 한 구간이어야 한다.
+          for (final a in restored.meetings) {
+            for (final b in restored.meetings) {
+              if (identical(a, b) || a.date != b.date) continue;
+              if (a.classroom != b.classroom) continue;
+              expect(
+                b.originalStartMinute - a.originalEndMinute < 60 &&
+                    b.originalStartMinute >= a.originalStartMinute,
+                isFalse,
+                reason: '${course.codeAndSection} ${a.date}',
               );
             }
           }
