@@ -65,7 +65,7 @@ void main() {
       expect(partial.sourceSchedule, contains('①'));
       expect(
         partial.meetings.every(
-          (m) => m.originalStartMinute == 670 && m.originalEndMinute == 720,
+          (m) => m.originalStartMinute == 670 && m.originalEndMinute == 730,
         ),
         isTrue,
       );
@@ -83,6 +83,16 @@ void main() {
           if (!c.hasSchedulableMeetings) continue;
           final saved = c.toTimetable(id: c.sourceId, mode: mode);
           expect(saved.isValid, isTrue);
+          // 교시표 1~10교시: 09:10 시작, 50분 수업+10분 쉬는 시간 = 60분 슬롯.
+          for (final m in c.meetings) {
+            expect(m.originalStartMinute % 60, 10, reason: c.codeAndSection);
+            expect(m.originalStartMinute, inInclusiveRange(550, 1090));
+            expect(
+              (m.originalEndMinute - m.originalStartMinute) % 60,
+              0,
+              reason: c.codeAndSection,
+            );
+          }
           expect(saved.period!.start, DateTime(2026, 8, 31));
           expect(saved.period!.end, DateTime(2026, 12, 17));
           expect(saved.note, contains('학기'));

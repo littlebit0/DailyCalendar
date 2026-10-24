@@ -163,7 +163,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-09-04",
           "deliveryMode": "inPerson"
@@ -171,7 +171,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-09-11",
           "deliveryMode": "inPerson"
@@ -179,7 +179,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-09-18",
           "deliveryMode": "inPerson"
@@ -187,7 +187,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-10-02",
           "deliveryMode": "inPerson"
@@ -195,7 +195,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-10-16",
           "deliveryMode": "inPerson"
@@ -203,7 +203,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-10-30",
           "deliveryMode": "inPerson"
@@ -211,7 +211,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-11-06",
           "deliveryMode": "inPerson"
@@ -219,7 +219,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-11-13",
           "deliveryMode": "inPerson"
@@ -227,7 +227,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-11-20",
           "deliveryMode": "inPerson"
@@ -235,7 +235,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-11-27",
           "deliveryMode": "inPerson"
@@ -243,7 +243,7 @@
         {
           "weekday": 5,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-12-04",
           "deliveryMode": "inPerson"
@@ -251,7 +251,7 @@
         {
           "weekday": 2,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-12-08",
           "deliveryMode": "inPerson"
@@ -259,7 +259,7 @@
         {
           "weekday": 3,
           "startMinute": 790,
-          "endMinute": 840,
+          "endMinute": 850,
           "classroom": "캠퍼스관-308",
           "date": "2026-12-09",
           "deliveryMode": "inPerson"

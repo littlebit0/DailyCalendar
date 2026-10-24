@@ -41,7 +41,15 @@ void main() {
     const key = 'kunsan/unknown/2026/2/116289/01';
     for (final original in originals) {
       if (original['sourceId'] != key) {
-        expect(byId[original['sourceId']], original);
+        // 쉬는 시간 포함 슬롯(#574): 보관 원본보다 모든 구간 끝이 10분 늦다.
+        final row =
+            jsonDecode(jsonEncode(byId[original['sourceId']]))
+                as Map<String, dynamic>;
+        for (final m
+            in (row['schedules'] as List).cast<Map<String, dynamic>>()) {
+          m['endMinute'] = (m['endMinute'] as int) - 10;
+        }
+        expect(row, original);
       }
     }
     final before = originals.singleWhere((c) => c['sourceId'] == key);
@@ -86,7 +94,7 @@ void main() {
     expect(meetings.map((m) => m['date']).toList(), dates);
     for (final m in meetings) {
       expect(m['startMinute'], 1030);
-      expect(m['endMinute'], 1140);
+      expect(m['endMinute'], 1150);
       expect(m['classroom'], '예술관-5403');
       expect(m['weekday'], DateTime.parse(m['date'] as String).weekday);
       expect(m['deliveryMode'], 'inPerson');
