@@ -112,11 +112,49 @@ void main() {
       };
       expect(published, isNotEmpty);
       expect(events.map((e) => e.sourceId).toSet(), published);
+      // Every other month is the real published feed, so only the broken
+      // month can fail the year.
       for (final broken in ['{}', '<html></html>', '[{"sj": 1}]']) {
         final failing = source(
-          (year, month) => year == 2026 && month == 5 ? broken : '[]',
+          (year, month) =>
+              year == 2026 && month == 5 ? broken : fixture(year, month),
         );
-        await expectLater(failing.fetch(2026), throwsFormatException);
+        await expectLater(
+          failing.fetch(2026),
+          throwsA(
+            isA<FormatException>().having(
+              (e) => e.message,
+              'message',
+              isNot(
+                anyOf(
+                  'No published TUK calendar',
+                  'Incomplete TUK calendar year',
+                ),
+              ),
+            ),
+          ),
+          reason: broken,
+        );
+        failing.close();
+      }
+      // An empty month before the last published month is a partial failure,
+      // not progressive publication.
+      for (final gap in [1, 6]) {
+        final failing = source(
+          (year, month) =>
+              year == 2026 && month == gap ? '[]' : fixture(year, month),
+        );
+        await expectLater(
+          failing.fetch(2026),
+          throwsA(
+            isA<FormatException>().having(
+              (e) => e.message,
+              'message',
+              'Incomplete TUK calendar year',
+            ),
+          ),
+          reason: '$gap',
+        );
         failing.close();
       }
     },
