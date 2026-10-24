@@ -82,6 +82,12 @@ class PknuAcademicSource implements AcademicSource {
     return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
+  /// Graduate-school rows (thesis, language and comprehensive exams) are not
+  /// imported. Rows naming graduate students only in parentheses, such as
+  /// "현금등록 (대학원 … 포함)" or "수강취소 (… 대학원생 제외)", are shared.
+  static bool isGraduateOnly(String title) =>
+      title.replaceAll(RegExp(r'\([^)]*\)'), '').contains('대학원');
+
   static List<AcademicEvent> parse(
     String body,
     int year,
@@ -123,6 +129,7 @@ class PknuAcademicSource implements AcademicSource {
           (row['schNm'] as String).trim().isEmpty) {
         throw const FormatException('Invalid PKNU event');
       }
+      if (isGraduateOnly(row['schNm'] as String)) continue;
       final start = date(row['strDt']);
       var last = date(row['endDt']);
       var url = 'https://www.pknu.ac.kr/main/31';

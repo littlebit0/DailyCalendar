@@ -49,7 +49,8 @@ void main() {
         'stat',
         for (var m = 2; m <= 12; m++) '2026-${m.toString().padLeft(2, '0')}',
       ]);
-      expect(events, hasLength(66));
+      expect(events, hasLength(56));
+      expect(events.any((e) => e.title.contains('학위청구')), isFalse);
       final winter = events.singleWhere((e) => e.sourceId == '2091');
       expect(winter.title, '동계 계절수업');
       expect(winter.start, DateTime(2026, 12, 21));
@@ -61,19 +62,47 @@ void main() {
       expect(previous.url, 'https://www.pknu.ac.kr/main/31');
     },
   );
-  test('every published PKNU row is imported for each year', () async {
-    for (final year in [2025, 2026]) {
-      final rows = <String>{
-        for (var m = 1; m <= 12; m++)
-          for (final row in jsonDecode(month(year, m))['list'] as List)
-            '${row['schSeq']}',
-      };
-      final pknu = source([]);
-      final events = await pknu.fetch(year);
-      pknu.close();
-      expect(events, hasLength(rows.length));
-      expect(events.map((e) => e.sourceId).toSet(), rows);
+  test(
+    'every published PKNU row is imported except graduate-only rows',
+    () async {
+      for (final (year, graduate) in [(2025, 10), (2026, 10)]) {
+        final rows = <String, String>{
+          for (var m = 1; m <= 12; m++)
+            for (final row in jsonDecode(month(year, m))['list'] as List)
+              '${row['schSeq']}': row['schNm'] as String,
+        };
+        final excluded = {
+          for (final e in rows.entries)
+            if (PknuAcademicSource.isGraduateOnly(e.value)) e.key,
+        };
+        // Thesis and language/comprehensive exam rows each semester.
+        expect(excluded, hasLength(graduate));
+        expect(
+          rows.entries
+              .where((e) => excluded.contains(e.key))
+              .every((e) => RegExp(r'대학원 (학위청구|외국어)').hasMatch(e.value)),
+          isTrue,
+        );
+        final pknu = source([]);
+        final events = await pknu.fetch(year);
+        pknu.close();
+        expect(events, hasLength(rows.length - graduate));
+        expect(
+          events.map((e) => e.sourceId).toSet(),
+          rows.keys.toSet().difference(excluded),
+        );
+      }
+    },
+  );
+  test('PKNU keeps rows shared with graduate students', () {
+    for (final title in [
+      '제2학기 현금등록 (대학원, 전문대학원 및 특수대학원 포함)',
+      '제1학기 수강취소 (일반대학원생, 경영대학원생, 교육대학원생 제외)',
+      '2026년 2월 학위수여식',
+    ]) {
+      expect(PknuAcademicSource.isGraduateOnly(title), isFalse);
     }
+    expect(PknuAcademicSource.isGraduateOnly('제1학기 대학원 외국어 및 종합시험 실시'), isTrue);
   });
   test('PKNU profile resolves to its registered calendar', () {
     for (final id in [
