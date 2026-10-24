@@ -42,6 +42,29 @@ void main() {
       expect(digital.meetings.single.startMinute, 900);
       expect(digital.meetings.single.endMinute, 960);
       expect(digital.meetings.single.classroom, '20-118,19');
+      // 교시 슬롯 = 수업 50분 + 쉬는 시간 10분(09:00부터 60분 간격, 12교시까지).
+      for (final c in courses) {
+        for (final m in c.meetings) {
+          expect(
+            m.startMinute,
+            inInclusiveRange(540, 1200),
+            reason: c.sourceId,
+          );
+          expect((m.startMinute - 540) % 60, 0, reason: c.sourceId);
+          expect((m.endMinute - 540) % 60, 0, reason: c.sourceId);
+        }
+        for (final m in c.meetings) {
+          for (final n in c.meetings) {
+            if (identical(m, n) || m.weekday != n.weekday) continue;
+            if (m.classroom != n.classroom) continue;
+            expect(
+              n.startMinute - m.endMinute,
+              isNot(inInclusiveRange(0, 59)),
+              reason: '${c.sourceId} 연속 구간은 합쳐야 함',
+            );
+          }
+        }
+      }
       for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
         final saved = c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson);
         final restored = TimetableClass.fromJson(saved.toJson());
