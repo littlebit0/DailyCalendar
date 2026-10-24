@@ -4,7 +4,7 @@
 Source is the official CA2 course notice, not private WISE/enrollment login.
 The attachment does not publish professors or times for every course; preserve
 empty fields rather than inventing them. Public day slots 1..10 are hourly from
-09:00. UOS notices independently show slot11 at19:00 and slot12 at20:00.
+09:00 (50-minute class + 10-minute break = 60-minute slot, saved break-inclusive). UOS notices independently show slot11 at19:00 and slot12 at20:00.
 Observed slots13..15 remain unverified; their whole courses are retained with
 no meetings until an official mapping is confirmed. Do not use the separate
 45-minute night numbering.
@@ -37,11 +37,11 @@ def meetings(text):
         for slot in sorted(slots):
             start = 540 + (slot - 1)*60
             prior = result[-1] if result else None
-            if prior and prior['weekday'] == weekday and prior['classroom'] == match[3] and prior['endMinute'] + 10 == start:
-                prior['endMinute'] = start + 50
+            if prior and prior['weekday'] == weekday and prior['classroom'] == match[3] and prior['endMinute'] == start:
+                prior['endMinute'] = start + 60
             else:
                 result.append({'weekday': weekday, 'startMinute': start,
-                    'endMinute': start + 50, 'classroom': match[3]})
+                    'endMinute': start + 60, 'classroom': match[3]})
     if any(a['weekday'] == b['weekday'] and a['startMinute'] < b['endMinute']
            and b['startMinute'] < a['endMinute']
            for index, a in enumerate(result) for b in result[index + 1:]):
