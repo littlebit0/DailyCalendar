@@ -56,11 +56,28 @@ void main() {
   });
 
   test('every published CAU row is imported for each year', () {
-    for (final year in [2025, 2026]) {
+    // (year, published rows, unique events, verbatim duplicate rows)
+    for (final (year, published, unique, duplicates) in [
+      (2025, 78, 77, 1),
+      (2026, 82, 82, 0),
+    ]) {
       final rows = (jsonDecode(fixture(year))['data'] as List).cast<Map>();
+      expect(rows, hasLength(published));
+      final keys = {
+        for (final row in rows)
+          [
+            (row['SUBJECT'] as String).trim(),
+            for (final f in ['START_Y', 'START_M', 'START_D'])
+              int.parse(row[f] as String),
+            for (final f in ['END_Y', 'END_M', 'END_D'])
+              int.parse(row[f] as String),
+          ].join('|'),
+      };
+      expect(keys, hasLength(unique));
+      expect(rows.length - keys.length, duplicates);
       final events = CauAcademicSource.parse(fixture(year), year);
-      expect(events, hasLength(rows.length));
-      expect(events.map((e) => e.sourceId).toSet(), hasLength(rows.length));
+      expect(events, hasLength(unique));
+      expect(events.map((e) => e.sourceId).toSet(), hasLength(unique));
       // The official list hides rows starting after the selected year.
       for (final row in rows) {
         expect(
@@ -95,6 +112,17 @@ void main() {
       expect(() => CauAcademicSource.parse(body, 2025), throwsFormatException);
     },
   );
+
+  test('CAU verbatim duplicate row is one event with one identity', () {
+    final events = CauAcademicSource.parse(fixture(2025), 2025);
+    final applications = events
+        .where((e) => e.title == '2026년 1학기 전공개방모집 희망전공 신청')
+        .toList();
+    expect(applications, hasLength(1));
+    expect(applications.single.start, DateTime(2025, 12, 1));
+    expect(applications.single.end, DateTime(2025, 12, 6));
+    expect(applications.single.sourceId, '2025:2026년 1학기 전공개방모집 희망전공 신청:0');
+  });
 
   test('CAU row order does not change same-title identities', () {
     final body = fixture();

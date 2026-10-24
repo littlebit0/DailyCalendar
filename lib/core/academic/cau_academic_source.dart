@@ -84,6 +84,10 @@ class CauAcademicSource implements AcademicSource {
     if (events.isEmpty) {
       throw const FormatException('No published CAU calendar');
     }
+    // The official list can repeat a row verbatim (2025 전공개방모집 희망전공
+    // 신청); one title/start/end record is one event, numbered once.
+    final seen = <String>{};
+    events.retainWhere((e) => seen.add('${e.title}|${e.start}|${e.end}'));
     // Same-title rows are numbered by date, not by their position in the
     // response, so reordering an identical row set keeps each row's identity.
     events.sort((a, b) {
