@@ -350,6 +350,19 @@
           }
         }
       ]
+    },
+    {
+      "university": "jeju",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://jejunu.ac.kr/ara/noticesurvey/outEvent.htm?act=download&category=321&seq=278363&no=4",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
     }
   ]
 }
