@@ -350,6 +350,19 @@
           }
         }
       ]
+    },
+    {
+      "university": "gnu",
+      "sourceUrl": "https://www.gnu.ac.kr/main/ps/schdul/selectSchdulMainList.do?mi=1084",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
     }
   ]
 }
