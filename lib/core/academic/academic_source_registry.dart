@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'dju_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -25,7 +26,14 @@ class AcademicSourceRegistration {
 }
 
 /// One entry per supported university calendar, in Korean name order.
-const academicSourceRegistrations = <AcademicSourceRegistration>[];
+const academicSourceRegistrations = <AcademicSourceRegistration>[
+  AcademicSourceRegistration(
+    id: 'dju',
+    institutionId: 'academyinfo:0000095',
+    campusIds: {'academyinfo:0000095'},
+    create: DjuAcademicSource.new,
+  ),
+];
 
 /// The adapter for a saved school, or null when its calendar is unsupported.
 String? academicSourceIdFor(
