@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../support/gnu_break_slots.dart';
 import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -84,6 +85,7 @@ void main() {
         final prior = read(
           '$baseline/gnu-$campus-2026-2.ordinary-university-guide-v5.json',
         );
+        applyGnuBreakSlots(prior);
         final current = read(
           '$directory/gnu-$campus-2026-2.blank-room-and-live-v6.json',
         );
@@ -191,7 +193,7 @@ void main() {
             blocks.add({
               'weekday': weekday,
               'startMinute': clock[run.first]![0],
-              'endMinute': clock[run.last]![1],
+              'endMinute': clock[run.last]![1] + 10,
               'classroom': match.group(3) ?? '',
             });
           }

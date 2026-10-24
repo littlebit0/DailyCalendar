@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../support/gnu_break_slots.dart';
 import '../../support/source_fixture.dart';
 
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
@@ -67,6 +68,8 @@ void main() {
         final earlier = readJson(
           '$frozenV5/gnu-$campus-2026-2.ordinary-university-guide-v5.json',
         );
+        applyGnuBreakSlots(old);
+        applyGnuBreakSlots(earlier);
         final oldRows = {
           for (final r in old['courses'] as List) (r as Map)['sourceId']: r,
         };

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import '../../support/gnu_break_slots.dart';
 import '../../support/source_fixture.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:daily/core/academic/academic_profile.dart';
@@ -77,6 +78,18 @@ void main() {
         expect(raw['completionClaim'], isFalse);
         final sourceRows = (raw['courses'] as List)
             .cast<Map<String, dynamic>>();
+        // 쉬는 시간 포함 슬롯: 교시표 구간은 정각에 시작해 정각(또는 야간 21:30)에 끝나고,
+        // 같은 날 같은 강의실의 간격 60분 미만 구간은 한 구간으로 합쳐져 있어야 한다.
+        expectNoMergeableGnuSegments(sourceRows);
+        for (final row in sourceRows) {
+          for (final m in row['schedules'] as List) {
+            expect(
+              m['endMinute'] % 60 == 0 || m['endMinute'] == 1290,
+              isTrue,
+              reason: '${row['sourceId']} ${m['date']}',
+            );
+          }
+        }
         for (var i = 0; i < dataset.courses.length; i++) {
           final c = dataset.courses[i];
           final r = sourceRows[i];
@@ -122,7 +135,7 @@ void main() {
                     as Map<String, dynamic>;
             if (c.sourceSchedule.startsWith('금')) {
               expect(m.originalStartMinute, 1140);
-              expect(m.originalEndMinute, 1285);
+              expect(m.originalEndMinute, 1290);
             } else {
               final schedule = row['schedule'] as String;
               final expected = schedule.startsWith('토0,1,2')
