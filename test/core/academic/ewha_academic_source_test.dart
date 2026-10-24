@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/ewha_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -134,6 +135,51 @@ void main() {
               (e.title == '졸업예배' && e.start == DateTime(2026, 2, 22)),
         ),
         hasLength(2),
+      );
+    },
+  );
+
+  test(
+    'EWHA month emptied on the requested year page is not refilled',
+    () async {
+      // The 2026 page keeps its January heading but removes every row; the
+      // 2025 page's 2026년 1월 rows must not come back.
+      final current = fixture(2026);
+      final january = current.indexOf(RegExp(r'<p>\s*1월\s*</p>'));
+      final february = current.indexOf(RegExp(r'<p>\s*2월\s*</p>'));
+      expect(january, greaterThan(0));
+      expect(february, greaterThan(january));
+      final emptied =
+          current.substring(0, january) +
+          current
+              .substring(january, february)
+              .replaceAll(RegExp(r'<li>[^<]*</li>'), '') +
+          current.substring(february);
+      expect(
+        EwhaAcademicSource.parseMonths(emptied, 2026)[DateTime(2026, 1)],
+        isEmpty,
+      );
+      bool newYear(AcademicEvent e) =>
+          e.title == '신정 (공휴일)' && e.start == DateTime(2026, 1, 1);
+      expect(EwhaAcademicSource.parse(fixture(2025), 2025).any(newYear), true);
+      final ewha = EwhaAcademicSource(
+        client: MockClient((r) async {
+          final year = r.url.queryParameters['year']!;
+          return http.Response.bytes(
+            utf8.encode(year == '2026' ? emptied : fixture(int.parse(year))),
+            200,
+            headers: {'content-type': 'text/html;charset=utf-8'},
+          );
+        }),
+      );
+      final events = await ewha.fetch(2026);
+      ewha.close();
+      expect(events.any(newYear), isFalse);
+      expect(
+        events.where(
+          (e) => e.title == '겨울 계절학기 종료' && e.start == DateTime(2026, 1, 16),
+        ),
+        isEmpty,
       );
     },
   );

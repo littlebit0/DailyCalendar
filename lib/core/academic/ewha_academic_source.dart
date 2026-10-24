@@ -62,7 +62,7 @@ class EwhaAcademicSource implements AcademicSource {
   }
 
   /// The page's rows grouped by the month heading they are published under;
-  /// only months with at least one row are present.
+  /// a heading whose rows were all removed is present with no rows.
   static Map<DateTime, List<AcademicEvent>> parseMonths(String body, int year) {
     final doc = html.parse(body);
     // Month titles carry no year, so the page's own year banner is the only proof
@@ -86,6 +86,8 @@ class EwhaAcademicSource implements AcademicSource {
       final m = int.parse(heading[2]!);
       final container = p.parent;
       if (container == null) continue;
+      // A month this page lists stays authoritative even when it is emptied.
+      final rows = months[DateTime(y, m)] ??= [];
       for (final li in container.querySelectorAll('li')) {
         final record = li.parent?.parent;
         final dates = record?.querySelector('p')?.text ?? '';
@@ -109,7 +111,7 @@ class EwhaAcademicSource implements AcademicSource {
           throw const FormatException('Conflicting published academic event');
         }
         events[event.sourceId] = event;
-        (months[DateTime(y, m)] ??= []).add(event);
+        rows.add(event);
       }
     }
     if (events.isEmpty) {
