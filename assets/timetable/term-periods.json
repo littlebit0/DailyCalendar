@@ -350,6 +350,25 @@
           }
         }
       ]
+    },
+    {
+      "university": "sunmoon",
+      "sourceUrl": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+      "checkedAt": "2026-10-12",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14",
+          "sourceUrl": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+          "sourceEvidence": {
+            "url": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+            "file": "[선문대] 2026-2학기 미래자동차융합전공 학점교류 안내.hwp",
+            "literal": "2. 수업기간: 2026. 9. 1.(화) ~ 2026. 12. 14.(월)"
+          }
+        }
+      ]
     }
   ]
 }
