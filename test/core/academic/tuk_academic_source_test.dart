@@ -77,6 +77,50 @@ void main() {
     expect(events, hasLength(rows));
     expect(events.map((e) => e.sourceId).toSet(), hasLength(rows));
   });
+  test(
+    'TUK imports a partly published year and rejects broken months',
+    () async {
+      // The official 2027 feed currently lists January-March only; here 2026
+      // after March is empty in the same way.
+      TukAcademicSource source(String Function(int year, int month) body) =>
+          TukAcademicSource(
+            client: MockClient((r) async {
+              final q = Uri.splitQueryString(r.body);
+              return http.Response(
+                body(int.parse(q['year']!), int.parse(q['month']!)),
+                200,
+                headers: {'content-type': 'application/json;charset=utf-8'},
+              );
+            }),
+          );
+      final partial = source(
+        (year, month) =>
+            year == 2026 && month > 3 ? '[]' : fixture(year, month),
+      );
+      final events = await partial.fetch(2026);
+      partial.close();
+      final published = {
+        for (final month in [1, 2, 3])
+          for (final e in TukAcademicSource.parse(
+            fixture(2026, month),
+            2026,
+            month,
+          ))
+            e.sourceId,
+        for (final e in TukAcademicSource.parse(fixture(2025, 12), 2025, 12))
+          if (e.end.isAfter(DateTime(2026))) e.sourceId,
+      };
+      expect(published, isNotEmpty);
+      expect(events.map((e) => e.sourceId).toSet(), published);
+      for (final broken in ['{}', '<html></html>', '[{"sj": 1}]']) {
+        final failing = source(
+          (year, month) => year == 2026 && month == 5 ? broken : '[]',
+        );
+        await expectLater(failing.fetch(2026), throwsFormatException);
+        failing.close();
+      }
+    },
+  );
   test('TUK profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000247',

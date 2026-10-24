@@ -40,10 +40,9 @@ class TukAcademicSource implements AcademicSource {
       if (response.statusCode != 200 || response.bodyBytes.length > 8000000) {
         throw const FormatException('TUK calendar unavailable');
       }
+      // Years are published progressively (e.g. only January-March), so an
+      // empty month is valid; a malformed month response still throws.
       final rows = parse(utf8.decode(response.bodyBytes), selected, month);
-      if (selected == year && rows.isEmpty) {
-        throw const FormatException('Incomplete TUK calendar year');
-      }
       for (final event in rows) {
         if (event.start.isBefore(DateTime(year + 1)) &&
             event.end.isAfter(DateTime(year))) {
