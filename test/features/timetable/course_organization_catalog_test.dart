@@ -80,7 +80,17 @@ void main() {
           }
         }
       }
-      expect(directories.length, selected.isEmpty ? 10 : selected.length);
+      // One organization directory per university in the catalog.
+      final schools = {
+        for (final path in paths)
+          (jsonDecode(File(path).readAsStringSync())
+                  as Map<String, dynamic>)['universityId'] ??
+              'smu',
+      };
+      expect(
+        directories.length,
+        selected.isEmpty ? schools.length : selected.length,
+      );
       if (selected.isNotEmpty) {
         expect(withPublishedUnits, containsAll(selected));
       }
