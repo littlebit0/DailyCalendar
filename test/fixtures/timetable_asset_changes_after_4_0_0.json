@@ -30,5 +30,9 @@
   "assets/timetable/organizations/seoultech.json": {
     "sha256": "0eee20d93fdd2743bc8c0e9c79f6f188f960f5b62828ffc5cf42a45e49c9830d",
     "reason": "#607 서울과기대 원자료 분류 2개(교양대학·창업교육센터)를 공식 공개 시간표 개설학과 목록의 최상위 단위 그대로 독립 개설 단위로 등록"
+  },
+  "assets/timetable/seoultech-main-2026-2.json": {
+    "sha256": "bd3efb0bf6109d40b62d804ddbdc81f0bc5f75bcf23ab26f47530141a278c662",
+    "reason": "#607 서울과기대 교시 슬롯을 학사관리 규정 별표 1 기준으로 쉬는 시간(10분)을 포함한 60분으로 저장하고, 시계 시각 원문·반교시·75분 수업은 바꾸지 않음"
   }
 }
