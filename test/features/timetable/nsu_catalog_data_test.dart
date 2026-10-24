@@ -216,4 +216,56 @@ void main() {
       }
     });
   }
+
+  // 수강신청 편람 교시표: 1~9교시 09:00~ 50분+쉬는 시간 10분(60분 슬롯),
+  // 10~14교시 18:00~ 45분+5분(50분 슬롯). 쉬는 시간을 포함한 슬롯으로 저장하고
+  // 같은 날 같은 강의실의 연속 교시는 한 구간으로 합친다.
+  test(
+    'packaged asset uses break-inclusive slots with merged consecutive periods',
+    () {
+      final asset =
+          jsonDecode(
+                File(
+                  'assets/timetable/nsu-unknown-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      final starts = [
+        for (var i = 0; i < 9; i++) 540 + 60 * i,
+        for (var i = 0; i < 5; i++) 1080 + 50 * i,
+      ];
+      final ends = [...starts.skip(1), 1330];
+      var segments = 0;
+      var minutes = 0;
+      for (final c in asset['courses'] as List) {
+        final byKey = <String, List<Map<String, dynamic>>>{};
+        for (final s in c['schedules'] as List) {
+          segments++;
+          minutes += (s['endMinute'] as int) - (s['startMinute'] as int);
+          final si = starts.indexOf(s['startMinute'] as int);
+          expect(si, isNonNegative, reason: '${c['sourceId']} ${s['date']}');
+          // 구간 끝은 어떤 슬롯의 끝(다음 교시 시작)이어야 한다.
+          expect(ends, contains(s['endMinute']), reason: '${c['sourceId']}');
+          byKey
+              .putIfAbsent('${s['date']}|${s['classroom']}', () => [])
+              .add(Map<String, dynamic>.from(s));
+        }
+        for (final list in byKey.values) {
+          list.sort(
+            (a, b) => (a['startMinute'] as int) - (b['startMinute'] as int),
+          );
+          for (var i = 1; i < list.length; i++) {
+            expect(
+              (list[i]['startMinute'] as int) -
+                  (list[i - 1]['endMinute'] as int),
+              greaterThanOrEqualTo(60),
+              reason: '${c['sourceId']} ${list[i]['date']}',
+            );
+          }
+        }
+      }
+      expect(segments, 1596);
+      expect(minutes, 3933 * 60);
+    },
+  );
 }
