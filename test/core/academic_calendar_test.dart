@@ -1131,6 +1131,120 @@ void main() {
     expect(repository.events, hasLength(1));
     expect(repository.events[id]!.startAt, DateTime(2026, 9, 3));
   });
+  group('a school correction under a date or title source ID', () {
+    // Source IDs built from the published start date and title, as many
+    // adapters do; a correction therefore changes the source ID.
+    AcademicEvent dated(String title, int month, int day) => AcademicEvent(
+      sourceId: '${DateTime(2026, month, day).toIso8601String()}:$title',
+      title: title,
+      start: DateTime(2026, month, day),
+      end: DateTime(2026, month, day + 1),
+      url: 'https://example.invalid',
+    );
+    List<DateTime> starts() =>
+        repository.events.values.map((e) => e.startAt).toList()..sort();
+
+    test('a date correction updates the imported row', () async {
+      source.events = [dated('개강', 3, 2), dated('보강', 6, 2)];
+      await importAll();
+      final row = dated('개강', 3, 2).dailyId('smu');
+      repository.events[row] = repository.events[row]!.copyWith(
+        memo: '개강 메모',
+        completed: true,
+      );
+      source.events = [dated('개강', 3, 3), dated('보강', 6, 2)];
+      await service.refresh('smu');
+      expect(starts(), [DateTime(2026, 3, 3), DateTime(2026, 6, 2)]);
+      expect(repository.events[row]!.startAt, DateTime(2026, 3, 3));
+      expect(repository.events[row]!.memo, '개강 메모');
+      expect(repository.events[row]!.completed, isTrue);
+      expect(service.result!.added, 0);
+      // Later refreshes follow the corrected record on the same row.
+      source.events = [dated('개강', 3, 4), dated('보강', 6, 2)];
+      await service.refresh('smu');
+      expect(starts(), [DateTime(2026, 3, 4), DateTime(2026, 6, 2)]);
+    });
+
+    test('a title correction updates the imported row', () async {
+      source.events = [dated('2026-2학기 개강일', 8, 31)];
+      await importAll();
+      final row = repository.events.keys.single;
+      source.events = [dated('2026-2학기 개강(개시)일', 8, 31)];
+      await service.refresh('smu');
+      expect(repository.events.keys, [row]);
+      expect(repository.events[row]!.title, '2026-2학기 개강(개시)일');
+      // An unrelated event on the same dates is a new event, not a rename.
+      source.events = [dated('추석 연휴', 8, 31)];
+      await service.refresh('smu');
+      expect(repository.events, hasLength(2));
+      expect(repository.events[row]!.title, '2026-2학기 개강(개시)일');
+    });
+
+    test('an excluded event stays excluded after its correction', () async {
+      source.events = [dated('개강', 3, 2), dated('보강', 6, 2)];
+      await service.importSelection(await service.preview(source, 2026), {
+        dated('개강', 3, 2).sourceId,
+      });
+      source.events = [dated('개강', 3, 2), dated('보강', 6, 5)];
+      await service.refresh('smu');
+      expect(starts(), [DateTime(2026, 3, 2)]);
+      expect(service.excludedSourceIds('smu', source.events), {
+        dated('보강', 6, 5).sourceId,
+      });
+    });
+
+    test('ambiguous corrections link nothing', () async {
+      source.events = [dated('보강', 3, 2), dated('보강', 9, 2)];
+      await importAll();
+      final march = dated('보강', 3, 2).dailyId('smu');
+      final september = dated('보강', 9, 2).dailyId('smu');
+      repository.events[september] = repository.events[september]!.copyWith(
+        memo: '9월 메모',
+      );
+      // Both same-title records change: either could be either.
+      source.events = [dated('보강', 3, 4), dated('보강', 9, 4)];
+      await service.refresh('smu');
+      expect(repository.events[march]!.startAt, DateTime(2026, 3, 2));
+      expect(repository.events[september]!.startAt, DateTime(2026, 9, 2));
+      expect(repository.events[september]!.memo, '9월 메모');
+      expect(repository.events, hasLength(4));
+    });
+
+    test('a vanished exclusion keeps a corrected event off an imported row '
+        'and out of the exclusion', () async {
+      source.events = [dated('보강', 3, 2), dated('보강', 9, 2)];
+      await service.importSelection(await service.preview(source, 2026), {
+        dated('보강', 3, 2).sourceId,
+      });
+      final march = dated('보강', 3, 2).dailyId('smu');
+      // One record remains, but it may be either the imported or the
+      // excluded one.
+      source.events = [dated('보강', 6, 2)];
+      await service.refresh('smu');
+      expect(repository.events[march]!.startAt, DateTime(2026, 3, 2));
+      expect(starts(), [DateTime(2026, 3, 2), DateTime(2026, 6, 2)]);
+      expect(service.excludedSourceIds('smu', source.events), isEmpty);
+    });
+
+    test('a corrected event keeps a user edit and a deletion', () async {
+      source.events = [dated('개강', 3, 2), dated('보강', 6, 2)];
+      await importAll();
+      final edited = dated('개강', 3, 2).dailyId('smu');
+      final deleted = dated('보강', 6, 2).dailyId('smu');
+      repository.events[edited] = repository.events[edited]!.copyWith(
+        title: '내가 고친 개강',
+      );
+      repository.events.remove(deleted);
+      repository.ledger.add(
+        EventDeletion(id: deleted, deletedAt: DateTime(2026, 9, 10)),
+      );
+      source.events = [dated('개강', 3, 3), dated('보강', 6, 5)];
+      await service.refresh('smu');
+      expect(repository.events.keys, [edited]);
+      expect(repository.events[edited]!.title, '내가 고친 개강');
+      expect(repository.events[edited]!.startAt, DateTime(2026, 3, 2));
+    });
+  });
   test('refresh metadata rolls back when its first save fails', () async {
     final store = FailingStore(await SharedPreferences.getInstance());
     final failing = AcademicCalendarService(
