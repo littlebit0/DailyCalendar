@@ -15,9 +15,9 @@ class KhuAcademicSource implements AcademicSource {
   Uri get website => Uri.parse(
     'https://haksa.khu.ac.kr/nhaksa/user/contents/view.do?menuNo=21200042',
   );
-  static final _previousIndex = Uri.parse(
-    'https://nhm.khu.ac.kr/cls/user/contents/view.do?menuNo=11600128',
-  );
+  // The official 2025 annual page misprints 2026.1.2 as 2025.1.2, so only
+  // academic years from 2026 are imported (user decision, 2026-10-24).
+  static const firstAcademicYear = 2026;
 
   Future<String> _get(Uri url) async {
     final response = await _client
@@ -50,38 +50,30 @@ class KhuAcademicSource implements AcademicSource {
 
   @override
   Future<List<AcademicEvent>> fetch(int year) async {
-    final annualIndex = await _get(website);
-    final annualUrl = _link(annualIndex, website, '$year학년도 학사일정');
-    await Future<void>.delayed(const Duration(milliseconds: 250));
-    final annual = annualUrl == website ? annualIndex : await _get(annualUrl);
+    if (year < firstAcademicYear) {
+      throw const FormatException('Unsupported KHU academic year');
+    }
+    final index = await _get(website);
     final events = <String, AcademicEvent>{};
-    void add(Iterable<AcademicEvent> rows) {
-      for (final event in rows) {
+    // January and February belong to the previous academic year's official
+    // annual page; the calendar year itself starts in this year's page.
+    for (final academicYear in [
+      year,
+      if (year - 1 >= firstAcademicYear) year - 1,
+    ]) {
+      final url = _link(index, website, '$academicYear학년도 학사일정');
+      String body = index;
+      if (url != website) {
+        await Future<void>.delayed(const Duration(milliseconds: 250));
+        body = await _get(url);
+      }
+      for (final event in parseAnnual(body, academicYear, url)) {
         if (event.start.isBefore(DateTime(year + 1)) &&
             event.end.isAfter(DateTime(year))) {
           events[event.sourceId] = event;
         }
       }
     }
-
-    add(parseAnnual(annual, year, annualUrl));
-    await Future<void>.delayed(const Duration(milliseconds: 250));
-    final previousIndex = await _get(_previousIndex);
-    final previousYearUrl = _link(
-      previousIndex,
-      _previousIndex,
-      '${year - 1}학년도',
-    );
-    await Future<void>.delayed(const Duration(milliseconds: 250));
-    final previousYear = await _get(previousYearUrl);
-    final previousUrl = _link(
-      previousYear,
-      previousYearUrl,
-      '${year - 1}학년도 2학기',
-    );
-    await Future<void>.delayed(const Duration(milliseconds: 250));
-    final previous = await _get(previousUrl);
-    add(parseSecondSemester(previous, year - 1, previousUrl));
     if (events.isEmpty) {
       throw const FormatException('No published KHU calendar');
     }
@@ -197,73 +189,6 @@ class KhuAcademicSource implements AcademicSource {
     }
     if (months.length != expected.length) {
       throw const FormatException('Incomplete KHU academic year');
-    }
-    return events;
-  }
-
-  static List<AcademicEvent> parseSecondSemester(
-    String body,
-    int year,
-    Uri url,
-  ) {
-    final document = html.parse(body);
-    if (document.querySelectorAll('.month').isNotEmpty) {
-      // Newer second-semester pages use the same four-column month layout.
-      return parseAnnual(
-        body,
-        year,
-        url,
-        expectedMonths: {9, 10, 11, 12, 1, 2},
-      );
-    }
-    if (!clean(document.body?.text ?? '').contains('$year학년도 2학기 학사일정')) {
-      throw const FormatException('Wrong KHU previous semester');
-    }
-    final events = <AcademicEvent>[];
-    final months = <int>{};
-    var selectedYear = year;
-    var month = 0;
-    for (final row in document.querySelectorAll(
-      'table.tbl_standard_type1 tr',
-    )) {
-      final headers = row.children.where((e) => e.localName == 'th').toList();
-      final title = row.children
-          .where((e) => e.localName == 'td' && e.classes.contains('text_left'))
-          .toList();
-      if (title.isEmpty) continue;
-      if (title.length != 1 || headers.isEmpty || headers.length > 2) {
-        throw const FormatException('Invalid KHU semester row');
-      }
-      if (headers.length == 2) {
-        final label = clean(headers.first.text);
-        final heading = RegExp(
-          r'^(?:(\d{4})년\s*)?(\d{1,2})월$',
-        ).firstMatch(label);
-        if (heading == null) {
-          throw const FormatException('Invalid KHU semester month');
-        }
-        if (heading[1] != null) selectedYear = int.parse(heading[1]!);
-        month = int.parse(heading[2]!);
-        if (!months.add(month) ||
-            selectedYear != (month < 3 ? year + 1 : year)) {
-          throw const FormatException('Unexpected KHU semester month');
-        }
-      }
-      final event = _event(
-        clean(headers.last.text),
-        title.single.text,
-        selectedYear,
-        url,
-      );
-      if (event.start.month != month) {
-        throw const FormatException('Wrong KHU semester event');
-      }
-      events.add(event);
-    }
-    if (months.length != 6 ||
-        !months.containsAll({9, 10, 11, 12, 1, 2}) ||
-        events.isEmpty) {
-      throw const FormatException('Incomplete KHU previous semester');
     }
     return events;
   }
