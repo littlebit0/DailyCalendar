@@ -155,18 +155,20 @@ void main() {
   test(
     'all dated plans match original weekday clock classroom and official holiday replacements',
     () {
+      // 수강신청 안내 PDF 144쪽 교시표: 1~6교시 75분 수업+15분 쉬는 시간=90분 슬롯,
+      // 7~11교시 50분 수업+10분 쉬는 시간=60분 슬롯(다음 교시 시작까지).
       const publishedClock = {
-        1: [540, 615],
-        2: [630, 705],
-        3: [720, 795],
-        4: [810, 885],
-        5: [900, 975],
-        6: [990, 1065],
-        7: [1080, 1130],
-        8: [1140, 1190],
-        9: [1200, 1250],
-        10: [1260, 1310],
-        11: [1320, 1370],
+        1: [540, 630],
+        2: [630, 720],
+        3: [720, 810],
+        4: [810, 900],
+        5: [900, 990],
+        6: [990, 1080],
+        7: [1080, 1140],
+        8: [1140, 1200],
+        9: [1200, 1260],
+        10: [1260, 1320],
+        11: [1320, 1380],
       };
       const holidayDates = {
         '2026-09-24',
@@ -241,6 +243,24 @@ void main() {
           expect(
             publishedClock.values.any((x) => x[1] == m.originalEndMinute),
             true,
+          );
+          // 교시 시작 + 연속 교시를 합친 끝(마지막 교시 슬롯 끝)이어야 하고,
+          // 같은 날 같은 강의실의 구간은 60분 미만으로 붙어 있지 않다.
+          expect(
+            publishedClock.values.any((x) => x[0] == m.originalStartMinute),
+            true,
+          );
+          expect(
+            c.meetings.any(
+              (o) =>
+                  !identical(o, m) &&
+                  o.date == m.date &&
+                  o.classroom == m.classroom &&
+                  o.originalStartMinute >= m.originalEndMinute &&
+                  o.originalStartMinute - m.originalEndMinute < 60,
+            ),
+            false,
+            reason: '${c.codeAndSection} ${m.date}',
           );
           if (c.code != 'UA03011') {
             expect(holidayDates.contains(m.date), false);
