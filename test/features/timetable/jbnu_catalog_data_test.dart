@@ -60,7 +60,14 @@ void main() {
               ).readAsStringSync(),
             )
             as Map<String, dynamic>;
-    expect(raw['courses'], original['courses']);
+    // 교시 슬롯(쉬는 시간 포함)·연속 교시 합치기로 schedules만 다시 만들었다.
+    List<Object?> withoutSchedules(List rows) => [
+      for (final row in rows) {...(row as Map)..remove('schedules')},
+    ];
+    expect(
+      withoutSchedules(raw['courses']),
+      withoutSchedules(original['courses']),
+    );
   });
   test(
     'Current public native 3571 metadata, exact campus prefixes and zero fabricated clocks',
@@ -165,6 +172,7 @@ void main() {
           ];
         }
         final expected = <String>{};
+        final slots = <String, List<List<int>>>{};
         for (final cell in r['publicDatedCells']) {
           cells++;
           final day = DateTime.parse(cell['date']);
@@ -180,11 +188,28 @@ void main() {
               jsonEncode(color) == jsonEncode([255, 128, 128]) ||
               RegExp('시험|평가|퀴즈').hasMatch(cell['sourceText']);
           if (!held && !assessment) {
-            expected.add(
-              '${cell['date']}/${day.weekday}/${cl[0]}/${cl[1]}/${proof['classroomAssignment'][grade.toString()]}',
-            );
+            // 슬롯 = 교시 시작부터 다음 교시 시작 직전(수업 50분 + 쉬는 시간 10분).
+            (slots['${cell['date']}/${day.weekday}/${proof['classroomAssignment'][grade.toString()]}'] ??=
+                    [])
+                .add([cl[0], cl[0] + 60]);
           }
         }
+        // 같은 날·같은 강의실에서 앞 슬롯 끝과 다음 시작 간격이 60분 미만이면 합친다.
+        slots.forEach((key, list) {
+          list.sort((a, b) => a[0].compareTo(b[0]));
+          final merged = <List<int>>[];
+          for (final slot in list) {
+            if (merged.isNotEmpty && slot[0] - merged.last[1] < 60) {
+              merged.last[1] = slot[1];
+            } else {
+              merged.add([...slot]);
+            }
+          }
+          final parts = key.split('/');
+          for (final m in merged) {
+            expected.add('${parts[0]}/${parts[1]}/${m[0]}/${m[1]}/${parts[2]}');
+          }
+        });
         final actual = <String>{};
         for (final m in c.meetings) {
           count++;
@@ -208,7 +233,7 @@ void main() {
           expect(c.sourceClassroom, '');
         }
       }
-      expect(count, 1098);
+      expect(count, 366);
       expect(cells, 1929);
       expect(audit['assessmentOrAmbiguousCellsExcluded'], 147);
     },
@@ -219,7 +244,7 @@ void main() {
     LectureMode.video,
   ]) {
     test(
-      'Actual model 18 document plans, 1098 original clocks full Drive ${mode.name}',
+      'Actual model 18 document plans, 366 merged slots full Drive ${mode.name}',
       () {
         final values = <String, TimetableSyncValue>{};
         var count = 0;
@@ -241,7 +266,7 @@ void main() {
           );
         }
         expect(values, hasLength(18));
-        expect(count, 1098);
+        expect(count, 366);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
