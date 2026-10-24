@@ -350,6 +350,19 @@
           }
         }
       ]
+    },
+    {
+      "university": "kunsan",
+      "sourceUrl": "https://www.kunsan.ac.kr/index.kunsan?menuCd=DOM_000000103001001000&sYear=2026&sso=ok",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-17"
+        }
+      ]
     }
   ]
 }

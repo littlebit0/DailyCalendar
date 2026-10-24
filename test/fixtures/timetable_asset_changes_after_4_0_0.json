@@ -15,6 +15,10 @@
     "sha256": "f2b5f4f0476c49e81ff16660cc58eddbcbabeacf86badecde088db6814160e34",
     "reason": "#92 인하대 학과 80개에 공식 단과대 소속 배정, 공과대학(FVE·SFC) 통합, 사범대·의예과·융합전공지원실 배정, 공식 시간표 독립 개설 분류 4개 등록"
   },
+  "assets/timetable/organizations/kunsan.json": {
+    "sha256": "2c59ef35f2f1120901d25b3367795c587cbe382b86fe4ba2d19c9305a9244775",
+    "reason": "#574 국립군산대 원자료 분류 75개를 학사안내 마이크로디그리(MD) 제도 묶음 73개와 조직도의 독립 개설 단위(취업지원실·창업지원단) 2개로 배정"
+  },
   "assets/timetable/organizations/pnu.json": {
     "sha256": "e987c81c8708c76160bd226b1f34db2b1a44f95855d19c1a73d5b9cf96f57c58",
     "reason": "#92 부산대 공식 단과대·융합교육센터·모집요강 기준 원자료 27개 배정"
@@ -26,5 +30,13 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/kunsan-unknown-2026-2.json": {
+    "sha256": "72812a9bd6c7bc43f552f54b0e291a7e7c93425ceab8095c58ba080e26a51a84",
+    "reason": "#574 국립군산대 교시 슬롯을 수강신청 안내 교시표(1~10교시, 50분 수업+10분 쉬는 시간, 09:10 시작) 기준으로 쉬는 시간을 포함해 60분 슬롯으로 다시 만듦. 연속 교시는 원자료에서 이미 한 구간이라 합칠 대상 없음"
+  },
+  "assets/timetable/kunsan-saemangeum-2026-2.json": {
+    "sha256": "e33cc62004475d3938df280cb9af14a627b7824e9ab9c527de85b51cb979b722",
+    "reason": "#574 국립군산대 교시 슬롯을 수강신청 안내 교시표(1~10교시, 50분 수업+10분 쉬는 시간, 09:10 시작) 기준으로 쉬는 시간을 포함해 60분 슬롯으로 다시 만듦. 연속 교시는 원자료에서 이미 한 구간이라 합칠 대상 없음"
   }
 }
