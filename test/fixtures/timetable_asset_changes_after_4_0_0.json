@@ -26,5 +26,17 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/sungshin-sujeong-2026-2.json": {
+    "sha256": "cce4d98d4ce1048566c5bdb7a0eb112690789e2036063ba1dee9cda3edacf182",
+    "reason": "#621 성신여대 개설강좌조회 2026-2 학부 전체(과목구분·대상과정 두 갈래 조회 일치) 돈암수정캠퍼스 원자료, 2026-2 수강신청 안내 p5 요일별 수업일 기준 날짜 수업. 쉬는 시간 포함 60분 슬롯(교육과정 편성 및 운영 시행세칙 제11조 교시표)과 연속 구간 합치기 반영"
+  },
+  "assets/timetable/sungshin-unjung-2026-2.json": {
+    "sha256": "76958d9212a36d46297d94a615626664102212d3c79b6eb918843f244dc111ce",
+    "reason": "#621 성신여대 개설강좌조회 2026-2 학부 전체(과목구분·대상과정 두 갈래 조회 일치) 미아운정그린캠퍼스 원자료, 2026-2 수강신청 안내 p5 요일별 수업일 기준 날짜 수업. 쉬는 시간 포함 60분 슬롯(교육과정 편성 및 운영 시행세칙 제11조 교시표)과 연속 구간 합치기 반영"
+  },
+  "assets/timetable/organizations/sungshin.json": {
+    "sha256": "31833ce6baf7216eb4ea23e61e8cefddc6ec3fc917d9ecefafcfc0e50fec9cf2",
+    "reason": "#621 성신여대 단과대 공식 사이트 학부/학과 메뉴와 학부 전공소개 근거로 개설 라벨 73개 전부 배정, AI융합학부 계열은 공과대학·IT융합대학 양쪽, 본부 개설 단위 6개 독립 등록"
   }
 }
