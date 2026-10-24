@@ -82,10 +82,13 @@ class KauAcademicSource implements AcademicSource {
             fallbackMonth: start.month,
           );
         }
-        if (last.isBefore(start) ||
-            start.year < pageYear ||
-            start.year > pageYear + 1 ||
-            (start.year == pageYear + 1 && start.month > 2)) {
+        // Both ends must lie in the page window (January of the page year to
+        // next February), so a typo such as `2026. 1. 2 ~ 2028. 1. 8` fails.
+        bool outside(DateTime d) =>
+            d.year < pageYear ||
+            d.year > pageYear + 1 ||
+            (d.year == pageYear + 1 && d.month > 2);
+        if (last.isBefore(start) || outside(start) || outside(last)) {
           throw const FormatException('Unexpected KAU calendar period');
         }
         final end = DateTime(last.year, last.month, last.day + 1);

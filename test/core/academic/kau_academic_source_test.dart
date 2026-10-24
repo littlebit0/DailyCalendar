@@ -109,6 +109,28 @@ void main() {
       throwsFormatException,
     );
   });
+  test('KAU rejects range ends outside the published window', () {
+    const published = '2026. 1. 2(금) ~ 1. 8(목)';
+    final body = fixture();
+    expect(body, contains(published));
+    expect(
+      KauAcademicSource.parse(
+        body.replaceFirst(published, '2026. 1. 2(금) ~ 2027. 2. 26(금)'),
+        2026,
+      ),
+      isNotEmpty,
+    );
+    for (final last in ['2028. 1. 8(토)', '2027. 3. 2(화)']) {
+      expect(
+        () => KauAcademicSource.parse(
+          body.replaceFirst(published, '2026. 1. 2(금) ~ $last'),
+          2026,
+        ),
+        throwsFormatException,
+        reason: last,
+      );
+    }
+  });
   test('KAU failed response is an error', () async {
     final kau = KauAcademicSource(
       client: MockClient((_) async => http.Response('', 503)),
