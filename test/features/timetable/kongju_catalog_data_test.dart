@@ -222,11 +222,12 @@ void main() {
                 date.isAfter(DateTime(2026, 10, 26)),
             isTrue,
           );
-          // Official table 212: period p is (8+p):00 to (8+p):50.
+          // 강의일람표 table 212: 교시 p는 (8+p):00 시작, 50분 수업 + 10분
+          // 쉬는 시간 = 60분 슬롯. 연속 교시는 한 구간으로 합친다.
           expect((s['startMinute'] as int) % 60, 0);
-          expect((s['endMinute'] as int) % 60, 50);
+          expect((s['endMinute'] as int) % 60, 0);
           expect(s['startMinute'], greaterThanOrEqualTo(540));
-          expect(s['endMinute'], lessThanOrEqualTo(1070));
+          expect(s['endMinute'], lessThanOrEqualTo(1080));
         }
       }
       Set<String> slots(String code) => {
@@ -234,15 +235,47 @@ void main() {
           '${s['weekday']} ${s['startMinute']}-${s['endMinute']} ${s['classroom']}',
       };
       // 수7.8.9 [(인문214)]
-      expect(slots('200224401'), {'3 900-1070 (인문214)'});
+      expect(slots('200224401'), {'3 900-1080 (인문214)'});
       // 화6,7 / 화8.9 with one room per published line.
-      expect(slots('200365301'), {'2 840-950 (10공715)', '2 960-1070 (10공805)'});
-      // 월7 월8 월9: professors differ only; weekday, periods and room agree.
-      expect(slots('000131302'), {
-        '1 900-950 9공605',
-        '1 960-1010 9공605',
-        '1 1020-1070 9공605',
-      });
+      expect(slots('200365301'), {'2 840-960 (10공715)', '2 960-1080 (10공805)'});
+      // 월7 월8 월9: 요일·교시·강의실이 같아 한 구간으로 합쳐진다.
+      expect(slots('000131302'), {'1 900-1080 9공605'});
     },
   );
+
+  test('Kongju 교시 계산 구간은 쉬는 시간 포함 60분 슬롯이고 연속 구간이 남지 않는다', () {
+    for (final campus in ['cheonan', 'singwan', 'yesan', 'unknown']) {
+      final raw =
+          jsonDecode(
+                fixtureFile(
+                  'assets/timetable/kongju-$campus-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      for (final c in (raw['courses'] as List).cast<Map<String, dynamic>>()) {
+        final schedules = (c['schedules'] as List).cast<Map>();
+        // 원문이 시계 시각(HH:mm)을 직접 적은 강좌는 그 시각을 그대로 둔다.
+        if (RegExp(r'\d\d:\d\d').hasMatch(c['sourceSchedule'] as String)) {
+          continue;
+        }
+        Map? previous;
+        for (final s in schedules) {
+          final reason = '${c['sourceId']} ${s['date']}';
+          expect((s['startMinute'] as int) % 60, 0, reason: reason);
+          expect((s['endMinute'] as int) % 60, 0, reason: reason);
+          expect(s['endMinute'], lessThanOrEqualTo(1080), reason: reason);
+          if (previous != null &&
+              previous['date'] == s['date'] &&
+              previous['classroom'] == s['classroom']) {
+            expect(
+              (s['startMinute'] as int) - (previous['endMinute'] as int),
+              greaterThanOrEqualTo(60),
+              reason: reason,
+            );
+          }
+          previous = s;
+        }
+      }
+    }
+  });
 }
