@@ -680,44 +680,41 @@ class AcademicCalendarService extends ChangeNotifier {
   /// Pairs feed events that match no earlier record ([orphans]) with records
   /// that vanished from the feed ([previous]) when the school most likely
   /// corrected one into the other: the same title starting in the same year
-  /// (a date correction), else the same dates and the same title once spaces
+  /// (a date correction), or the same dates and the same title once spaces
   /// and bracketed notes are ignored (a title correction such as "개강일" to
   /// "개강(개시)일"; an unrelated event on the same dates is no correction).
-  /// A pair is made only when it is the sole candidate on both sides;
-  /// otherwise nothing is linked, so personal state never moves to a
-  /// different event.
+  /// A pair is made only when, counting both kinds together, it is the sole
+  /// candidate on both sides; otherwise nothing is linked, so personal state
+  /// never moves to a different event.
   static Map<int, int> _corrections(
     List<AcademicEvent> orphans,
     List<AcademicEvent> previous,
   ) {
-    final pairs = <int, int>{};
-    void pair(Object Function(AcademicEvent event) key) {
-      final used = pairs.values.toSet();
-      final found = <Object, List<int>>{};
-      final records = <Object, List<int>>{};
-      for (var i = 0; i < orphans.length; i++) {
-        if (!pairs.containsKey(i)) (found[key(orphans[i])] ??= []).add(i);
-      }
-      for (var j = 0; j < previous.length; j++) {
-        if (!used.contains(j)) (records[key(previous[j])] ??= []).add(j);
-      }
-      for (final MapEntry(key: k, value: events) in found.entries) {
-        final candidates = records[k];
-        if (events.length == 1 && candidates?.length == 1) {
-          pairs[events.single] = candidates!.single;
-        }
+    String core(String title) =>
+        title.replaceAll(RegExp(r'\([^)]*\)|\[[^\]]*\]|\s'), '');
+    bool corrected(AcademicEvent a, AcademicEvent b) =>
+        (a.title == b.title && a.start.year == b.start.year) ||
+        (a.start == b.start &&
+            a.end == b.end &&
+            core(a.title) == core(b.title));
+    final candidates = [
+      for (final orphan in orphans)
+        [
+          for (var j = 0; j < previous.length; j++)
+            if (corrected(orphan, previous[j])) j,
+        ],
+    ];
+    final claims = <int, int>{};
+    for (final found in candidates) {
+      for (final j in found) {
+        claims.update(j, (count) => count + 1, ifAbsent: () => 1);
       }
     }
-
-    pair((event) => (event.title, event.start.year));
-    pair(
-      (event) => (
-        event.start,
-        event.end,
-        event.title.replaceAll(RegExp(r'\([^)]*\)|\[[^\]]*\]|\s'), ''),
-      ),
-    );
-    return pairs;
+    return {
+      for (var i = 0; i < orphans.length; i++)
+        if (candidates[i].length == 1 && claims[candidates[i].single] == 1)
+          i: candidates[i].single,
+    };
   }
 
   /// Source IDs of [events] that the saved subscription excludes; used to

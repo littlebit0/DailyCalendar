@@ -1226,6 +1226,27 @@ void main() {
       expect(service.excludedSourceIds('smu', source.events), isEmpty);
     });
 
+    test(
+      'an event fitting a date and a title correction links neither',
+      () async {
+        source.events = [dated('개강일', 3, 2), dated('개강(개시)일', 3, 3)];
+        await service.importSelection(await service.preview(source, 2026), {
+          dated('개강일', 3, 2).sourceId,
+        });
+        final march = dated('개강일', 3, 2).dailyId('smu');
+        repository.events[march] = repository.events[march]!.copyWith(
+          memo: '개강 메모',
+        );
+        // The imported event moved to March 3, or the excluded one was
+        // renamed: either reading fits, so neither row or exclusion moves.
+        source.events = [dated('개강일', 3, 3)];
+        await service.refresh('smu');
+        expect(repository.events[march]!.startAt, DateTime(2026, 3, 2));
+        expect(repository.events[march]!.memo, '개강 메모');
+        expect(service.excludedSourceIds('smu', source.events), isEmpty);
+      },
+    );
+
     test('a corrected event keeps a user edit and a deletion', () async {
       source.events = [dated('개강', 3, 2), dated('보강', 6, 2)];
       await importAll();
