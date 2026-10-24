@@ -151,6 +151,33 @@ void main() {
       '2026-04-28T00:00:00.000:2026-05-06T00:00:00.000:중간시험 성적입력 기간',
     });
   });
+  test('DJU requests the whole February of leap years', () async {
+    final ends = <String, String>{};
+    final source = DjuAcademicSource(
+      client: MockClient((r) async {
+        final form = Uri.splitQueryString(r.body);
+        ends[form['year']!] = form['endDay']!;
+        return http.Response('', 503);
+      }),
+    );
+    await expectLater(source.fetch(2028), throwsFormatException);
+    source.close();
+    expect(ends, {'2027': '20280229'});
+    final common = <String, String>{};
+    final other = DjuAcademicSource(
+      client: MockClient((r) async {
+        final form = Uri.splitQueryString(r.body);
+        common[form['year']!] = form['endDay']!;
+        return http.Response.bytes(
+          utf8.encode(fixture(int.parse(form['year']!))),
+          200,
+        );
+      }),
+    );
+    await other.fetch(2026);
+    other.close();
+    expect(common, {'2025': '20260228', '2026': '20270228'});
+  });
   test('DJU failed response keeps the previous calendar', () async {
     final source = DjuAcademicSource(
       client: MockClient((_) async => http.Response('', 503)),

@@ -35,7 +35,8 @@ class DjuAcademicSource implements AcademicSource {
               'year': '$selected',
               'srchYear': '$selected',
               'firstDay': '${selected}0301',
-              'endDay': '${selected + 1}0228',
+              // Last day of February, 29 in leap years.
+              'endDay': '${selected + 1}02${DateTime(selected + 1, 3, 0).day}',
               'section': '3',
             },
             headers: {
