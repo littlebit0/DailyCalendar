@@ -143,13 +143,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "정보화본부 멀티미디어실(203호)"
         }
       ],
@@ -184,7 +184,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(101호)"
         }
       ],
@@ -219,7 +219,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(205호)"
         }
       ],
@@ -254,7 +254,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(205호)"
         }
       ],
@@ -289,7 +289,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(204호)"
         }
       ],
@@ -324,7 +324,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(210호)"
         }
       ],
@@ -359,7 +359,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(209호)"
         }
       ],
@@ -394,7 +394,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(204호)"
         }
       ],
@@ -429,7 +429,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(201호)"
         }
       ],
@@ -464,7 +464,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(210호)"
         }
       ],
@@ -499,7 +499,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(210호)"
         }
       ],
@@ -534,7 +534,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(203호)"
         }
       ],
@@ -569,7 +569,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -604,7 +604,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -639,7 +639,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(205호)"
         }
       ],
@@ -674,7 +674,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(209호)"
         }
       ],
@@ -709,7 +709,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(206호)"
         }
       ],
@@ -744,7 +744,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -779,7 +779,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -814,7 +814,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(205호)"
         }
       ],
@@ -849,7 +849,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -884,7 +884,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(205호)"
         }
       ],
@@ -919,7 +919,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(214호)"
         }
       ],
@@ -954,7 +954,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(214호)"
         }
       ],
@@ -989,7 +989,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(214호)"
         }
       ],
@@ -1024,7 +1024,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(202호)"
         }
       ],
@@ -1059,7 +1059,7 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(202호)"
         }
       ],
@@ -1094,7 +1094,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(205호)"
         }
       ],
@@ -1129,7 +1129,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(215호)"
         }
       ],
@@ -1164,7 +1164,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(215호)"
         }
       ],
@@ -1199,7 +1199,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(215호)"
         }
       ],
@@ -1234,7 +1234,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -1269,7 +1269,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(215호)"
         }
       ],
@@ -1304,7 +1304,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -1339,7 +1339,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -1374,7 +1374,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(214호)"
         }
       ],
@@ -1409,7 +1409,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(214호)"
         }
       ],
@@ -1444,7 +1444,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(206호)"
         }
       ],
@@ -1479,7 +1479,7 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(206호)"
         }
       ],
@@ -1514,7 +1514,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -1549,7 +1549,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -1584,7 +1584,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(210호)"
         }
       ],
@@ -1619,7 +1619,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(209호)"
         }
       ],
@@ -1654,7 +1654,7 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(209호)"
         }
       ],
@@ -1689,7 +1689,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 멀티미디어실(203호)"
         }
       ],
@@ -1724,7 +1724,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 PC2실(307호)"
         }
       ],
@@ -1759,7 +1759,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 전기설비설계실(305호)"
         }
       ],
@@ -1794,7 +1794,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 머신러닝실험실(504호)"
         }
       ],
@@ -1829,7 +1829,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 머신러닝실험실(504호)"
         }
       ],
@@ -1864,7 +1864,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공학관 응용역학및재료실험실(202호)"
         }
       ],
@@ -1899,7 +1899,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공학관 CAD실험실(307호)"
         }
       ],
@@ -1934,7 +1934,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "4공학관 CAD/CAM실(206호)"
         }
       ],
@@ -2137,7 +2137,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(202호)"
         }
       ],
@@ -2172,7 +2172,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(204호)"
         }
       ],
@@ -2207,7 +2207,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(202호)"
         }
       ],
@@ -2242,13 +2242,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "그린에너지연구관 공동강의실(302호)"
         }
       ],
@@ -2283,13 +2283,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "그린에너지연구관 공동강의실(302호)"
         }
       ],
@@ -2324,13 +2324,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "공동실험실습관 물리학강의실Ⅱ(106호)"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "공동실험실습관 물리학실험실ll(305호)"
         }
       ],
@@ -2477,7 +2477,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(203호)"
         }
       ],
@@ -2512,7 +2512,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(203호)"
         }
       ],
@@ -2547,7 +2547,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(209호)"
         }
       ],
@@ -2582,7 +2582,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(117호)"
         }
       ],
@@ -2617,7 +2617,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(213호)"
         }
       ],
@@ -2652,7 +2652,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(117호)"
         }
       ],
@@ -2687,7 +2687,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -2722,7 +2722,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(116호)"
         }
       ],
@@ -2841,7 +2841,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(203호)"
         }
       ],
@@ -2876,7 +2876,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(116호)"
         }
       ],
@@ -2911,7 +2911,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(201호)"
         }
       ],
@@ -2946,13 +2946,13 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(201호)"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "강의동 강의실(201호)"
         }
       ],
@@ -2987,7 +2987,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -3022,7 +3022,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(315호)"
         }
       ],
@@ -3057,7 +3057,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -3092,7 +3092,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(101호)"
         }
       ],
@@ -3127,7 +3127,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(213호)"
         }
       ],
@@ -3162,7 +3162,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(214호)"
         }
       ],
@@ -3197,7 +3197,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -3232,7 +3232,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(117호)"
         }
       ],
@@ -3267,7 +3267,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(101호)"
         }
       ],
@@ -3302,7 +3302,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(211호)"
         }
       ],
@@ -3337,7 +3337,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(117호)"
         }
       ],
@@ -3372,7 +3372,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(213호)"
         }
       ],
@@ -3407,7 +3407,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(315호)"
         }
       ],
@@ -3442,7 +3442,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(214호)"
         }
       ],
@@ -3477,7 +3477,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(211호)"
         }
       ],
@@ -3512,7 +3512,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(211호)"
         }
       ],
@@ -3575,7 +3575,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(116호)"
         }
       ],
@@ -3610,7 +3610,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(101호)"
         }
       ],
@@ -3645,7 +3645,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "정보화본부 멀티미디어실(203호)"
         }
       ],
@@ -3680,7 +3680,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(211호)"
         }
       ],
@@ -3715,7 +3715,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(201호)"
         }
       ],
@@ -3750,7 +3750,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 캡스톤디자인실(301호)"
         }
       ],
@@ -3785,7 +3785,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(201호)"
         }
       ],
@@ -3820,7 +3820,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 PC2실(307호)"
         }
       ],
@@ -3855,7 +3855,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 PC2실(307호)"
         }
       ],
@@ -3890,7 +3890,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "정보화본부 PC2실(307호)"
         }
       ],
@@ -3925,7 +3925,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(118호)"
         }
       ],
@@ -3960,7 +3960,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(116호)"
         }
       ],
@@ -3995,7 +3995,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(101호)"
         }
       ],
@@ -4030,7 +4030,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(213호)"
         }
       ],
@@ -4065,7 +4065,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "정보화본부 PC2실(307호)"
         }
       ],
@@ -4100,7 +4100,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(116호)"
         }
       ],
@@ -4135,7 +4135,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(211호)"
         }
       ],
@@ -4170,7 +4170,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(211호)"
         }
       ],
@@ -4205,7 +4205,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(113호)"
         }
       ],
@@ -4240,7 +4240,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(204호)"
         }
       ],
@@ -4303,7 +4303,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 시청각실(102호)"
         }
       ],
@@ -4338,7 +4338,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(117호)"
         }
       ],
@@ -4373,7 +4373,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(315호)"
         }
       ],
@@ -4408,7 +4408,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(213호)"
         }
       ],
@@ -4443,7 +4443,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 시청각실(102호)"
         }
       ],
@@ -4478,7 +4478,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(113호)"
         }
       ],
@@ -4513,7 +4513,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(113호)"
         }
       ],
@@ -4576,7 +4576,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(113호)"
         }
       ],
@@ -4611,7 +4611,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(204호)"
         }
       ],
@@ -4646,7 +4646,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(204호)"
         }
       ],
@@ -4681,7 +4681,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(113호)"
         }
       ],
@@ -4772,7 +4772,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 PC1실(306호)"
         }
       ],
@@ -4807,7 +4807,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 시청각실(102호)"
         }
       ],
@@ -4842,7 +4842,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(113호)"
         }
       ],
@@ -4877,7 +4877,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(113호)"
         }
       ],
@@ -4940,7 +4940,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "강의동 강의실(212호)"
         }
       ],
@@ -5003,7 +5003,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(211호)"
         }
       ],
@@ -5038,7 +5038,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(204호)"
         }
       ],
@@ -5073,7 +5073,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "그린에너지연구관 국제회의장(303호)"
         }
       ],
@@ -5136,7 +5136,7 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "그린에너지연구관 국제회의장(303호)"
         }
       ],
@@ -5171,7 +5171,7 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "그린에너지연구관 협동강의실1(306호)"
         }
       ],
@@ -5206,7 +5206,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "정보화본부 멀티미디어실(203호)"
         }
       ],
@@ -5353,7 +5353,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 스마트강의실(323호)"
         }
       ],
@@ -5388,7 +5388,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(316호)"
         }
       ],
@@ -5451,7 +5451,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 스마트강의실(323호)"
         }
       ],
@@ -5570,7 +5570,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -5633,7 +5633,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -5696,7 +5696,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 공동강의실(301호)"
         }
       ],
@@ -5731,13 +5731,13 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "제2학생회관 학군단강의실(101호)"
         }
       ],
@@ -5772,13 +5772,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "제2학생회관 학군단강의실(102호)"
         }
       ],
@@ -5813,7 +5813,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "4공학관 지구환경시스템공학과 강의실(201호)"
         }
       ],
@@ -5848,13 +5848,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 CAD/CAM실(206호)"
         }
       ],
@@ -5889,13 +5889,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "4공학관 강의실(234호)"
         }
       ],
@@ -5930,13 +5930,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "4공학관 강의실(234호)"
         }
       ],
@@ -5971,13 +5971,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "그린에너지연구관 협동강의실2(307호)"
         }
       ],
@@ -6012,13 +6012,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공학관 전공강의실(322호)"
         }
       ],
@@ -6053,13 +6053,13 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "3공학관 전공강의실(322호)"
         }
       ],
@@ -6094,13 +6094,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "그린에너지연구관 공동강의실(302호)"
         }
       ],
@@ -6135,13 +6135,13 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "그린에너지연구관 공동강의실(302호)"
         }
       ],
@@ -6176,13 +6176,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "4공학관 강의실(234호)"
         }
       ],
@@ -6217,7 +6217,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 강의실(234호)"
         }
       ],
@@ -6252,13 +6252,13 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "4공학관 강의실(234호)"
         }
       ],
@@ -6293,13 +6293,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "4공학관 지구환경시스템공학과 강의실(201호)"
         },
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 지구환경시스템공학과 강의실(201호)"
         }
       ],
@@ -6334,7 +6334,7 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "4공학관 강의실(237호)"
         }
       ],
@@ -6369,13 +6369,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "4공학관 강의실(203호)"
         }
       ],
@@ -6410,7 +6410,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 유기화학실험실(124호)"
         }
       ],
@@ -6445,13 +6445,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "4공학관 강의실(406호)"
         }
       ],
@@ -6486,13 +6486,13 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "4공학관 강의실(338호)"
         }
       ],
@@ -6527,7 +6527,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "4공학관 강의실(236호)"
         }
       ],
@@ -6562,7 +6562,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 강의실(236호)"
         }
       ],
@@ -6597,7 +6597,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "4공학관 강의실(236호)"
         }
       ],
@@ -6632,13 +6632,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "4공학관 강의실(236호)"
         }
       ],
@@ -6673,13 +6673,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "4공학관 강의실(338호)"
         }
       ],
@@ -6714,13 +6714,13 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "4공학관 강의실(338호)"
         }
       ],
@@ -6755,7 +6755,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "4공학관 지구환경시스템공학과 강의실(336호)"
         }
       ],
@@ -6790,7 +6790,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "4공학관 강의실(236호)"
         }
       ],
@@ -6825,7 +6825,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 강의실(237호)"
         }
       ],
@@ -6860,7 +6860,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 전공강의실(322호)"
         }
       ],
@@ -6895,13 +6895,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "4공학관 지구환경시스템공학과 강의실(336호)"
         }
       ],
@@ -6936,13 +6936,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "4공학관 지구환경시스템공학과 강의실(336호)"
         }
       ],
@@ -6977,7 +6977,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "4공학관 지구환경시스템공학과 강의실(201호)"
         }
       ],
@@ -7012,7 +7012,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "4공학관 지구환경시스템공학과 강의실(336호)"
         }
       ],
@@ -7047,13 +7047,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "4공학관 강의실(406호)"
         }
       ],
@@ -7088,13 +7088,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "4공학관 강의실(406호)"
         }
       ],
@@ -7129,13 +7129,13 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 강의실(338호)"
         }
       ],
@@ -7170,13 +7170,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "3공학관 전공강의실(322호)"
         }
       ],
@@ -7211,13 +7211,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 협동강의실2(307호)"
         }
       ],
@@ -7252,7 +7252,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "4공학관 강의실(203호)"
         }
       ],
@@ -7287,13 +7287,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "4공학관 강의실(236호)"
         }
       ],
@@ -7328,13 +7328,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "3공학관 전공강의실(322호)"
         }
       ],
@@ -7369,7 +7369,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 강의실(406호)"
         }
       ],
@@ -7404,13 +7404,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "4공학관 지구환경시스템공학과 강의실(336호)"
         },
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "4공학관 지구환경시스템공학과 강의실(336호)"
         }
       ],
@@ -7445,13 +7445,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "그린에너지연구관 협동강의실2(307호)"
         }
       ],
@@ -7486,13 +7486,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "4공학관 강의실(338호)"
         }
       ],
@@ -7527,7 +7527,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "4공학관 지구환경시스템공학과 강의실(201호)"
         }
       ],
@@ -7562,7 +7562,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "4공학관 강의실(203호)"
         }
       ],
@@ -7597,7 +7597,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -7632,7 +7632,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 공장자동화실험실(207호)"
         }
       ],
@@ -7667,7 +7667,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공학관 공장자동화실험실(207호)"
         }
       ],
@@ -7702,7 +7702,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공학관 강의실(206호)"
         }
       ],
@@ -7737,7 +7737,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 강의실(203-2호)"
         }
       ],
@@ -7772,7 +7772,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 공장자동화실험실(207호)"
         }
       ],
@@ -7807,7 +7807,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 강의실(206호)"
         }
       ],
@@ -7842,7 +7842,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 공장자동화실험실(207호)"
         }
       ],
@@ -7877,7 +7877,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공학관 공장자동화실험실(207호)"
         }
       ],
@@ -7912,7 +7912,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 공장자동화실험실(207호)"
         }
       ],
@@ -7947,7 +7947,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 공학대학공동강의실(204호)"
         }
       ],
@@ -7982,7 +7982,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 유체공학실험실(201호)"
         }
       ],
@@ -8017,7 +8017,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 CAD실험실(307호)"
         }
       ],
@@ -8052,7 +8052,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -8087,7 +8087,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -8122,7 +8122,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 공학대학공동강의실(204호)"
         }
       ],
@@ -8157,7 +8157,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 강의실(206호)"
         }
       ],
@@ -8192,7 +8192,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공학관 강의실(206호)"
         }
       ],
@@ -8227,7 +8227,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 강의실(203-2호)"
         }
       ],
@@ -8262,7 +8262,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공학관 강의실(206호)"
         }
       ],
@@ -8297,7 +8297,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공학관 CAD실험실(307호)"
         }
       ],
@@ -8332,7 +8332,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공학관 CAD실험실(307호)"
         }
       ],
@@ -8367,7 +8367,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 응용역학및재료실험실(202호)"
         }
       ],
@@ -8402,7 +8402,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 응용역학및재료실험실(202호)"
         }
       ],
@@ -8437,7 +8437,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공학관 강의실(206호)"
         }
       ],
@@ -8472,7 +8472,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공학관 공장자동화실험실(207호)"
         }
       ],
@@ -8507,7 +8507,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -8542,7 +8542,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -8577,7 +8577,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 공학대학공동강의실(204호)"
         }
       ],
@@ -8612,7 +8612,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -8647,7 +8647,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공학관 공학대학공동강의실(204호)"
         }
       ],
@@ -8682,7 +8682,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 CAD실험실(307호)"
         }
       ],
@@ -8717,7 +8717,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "1공학관 CAD실험실(307호)"
         }
       ],
@@ -8752,7 +8752,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 응용역학및재료실험실(202호)"
         }
       ],
@@ -8787,7 +8787,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -8822,7 +8822,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "1공학관 강의실(306호)"
         }
       ],
@@ -8857,13 +8857,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오2-1(414호)"
         }
       ],
@@ -8898,13 +8898,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오2-2(416호)"
         }
       ],
@@ -8939,13 +8939,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오2-3(416-1호)"
         }
       ],
@@ -8980,7 +8980,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공학관 설계 및 CAD실(302호)"
         }
       ],
@@ -9015,7 +9015,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 융합스튜디오(305호)"
         }
       ],
@@ -9050,7 +9050,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공학관 스튜디오(II)(307호)"
         }
       ],
@@ -9085,7 +9085,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 스튜디오(I)(304호)"
         }
       ],
@@ -9120,7 +9120,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공학관 스튜디오(I)(304호)"
         }
       ],
@@ -9155,7 +9155,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9190,13 +9190,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오3-1"
         }
       ],
@@ -9231,13 +9231,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오3-2"
         }
       ],
@@ -9272,13 +9272,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오3-3"
         }
       ],
@@ -9313,7 +9313,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9348,7 +9348,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9383,7 +9383,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9418,7 +9418,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9453,7 +9453,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9488,7 +9488,7 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9523,13 +9523,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오4-1"
         }
       ],
@@ -9564,13 +9564,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오4-2"
         }
       ],
@@ -9605,7 +9605,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공학관 융합스튜디오(305호)"
         }
       ],
@@ -9640,7 +9640,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 전공강의실(323호)"
         }
       ],
@@ -9675,7 +9675,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 융합스튜디오(305호)"
         }
       ],
@@ -9710,13 +9710,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 전공강의실(323호)"
         }
       ],
@@ -9751,13 +9751,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오5-1"
         }
       ],
@@ -9792,7 +9792,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 전공강의실(323호)"
         }
       ],
@@ -9827,7 +9827,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공학관 건축설비공학실험실(306호)"
         }
       ],
@@ -9862,7 +9862,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 스튜디오(II)(307호)"
         }
       ],
@@ -9897,7 +9897,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "3공학관 스튜디오(II)(307호)"
         }
       ],
@@ -9932,13 +9932,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 공학프로젝트실(103-1호)"
         }
       ],
@@ -9973,13 +9973,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 준비실(103-2호)"
         }
       ],
@@ -10014,13 +10014,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 학생세미나실"
         }
       ],
@@ -10055,13 +10055,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "3공학관 건축설계스튜디오1-1"
         }
       ],
@@ -10096,13 +10096,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공학관 융합스튜디오(305호)"
         }
       ],
@@ -10137,13 +10137,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공학관 토목강의실(203호)"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "3공학관 토목강의실(207호)"
         }
       ],
@@ -10178,13 +10178,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공학관 토목강의실(203호)"
         }
       ],
@@ -10219,7 +10219,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 전공강의실(323호)"
         }
       ],
@@ -10254,13 +10254,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "3공학관 토목강의실(207호)"
         }
       ],
@@ -10295,7 +10295,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 토목강의실(203호)"
         }
       ],
@@ -10330,7 +10330,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공학관 토목강의실(203호)"
         }
       ],
@@ -10365,7 +10365,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 공동강의실(301호)"
         }
       ],
@@ -10400,7 +10400,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 토목강의실(207호)"
         }
       ],
@@ -10435,13 +10435,13 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "3공학관 토목강의실(207호)"
         }
       ],
@@ -10476,13 +10476,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "3공학관 토목강의실(207호)"
         }
       ],
@@ -10517,7 +10517,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 토목강의실(207호)"
         }
       ],
@@ -10552,7 +10552,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 공동강의실(301호)"
         }
       ],
@@ -10587,7 +10587,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공학관 토목강의실(203호)"
         }
       ],
@@ -10622,7 +10622,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공학관 토목강의실(203호)"
         }
       ],
@@ -10657,7 +10657,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "3공학관 토목강의실(203호)"
         }
       ],
@@ -10692,7 +10692,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "3공학관 토목강의실(203호)"
         }
       ],
@@ -10727,7 +10727,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 전기설비설계실(305호)"
         }
       ],
@@ -10762,13 +10762,13 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 자동제어실험실(206호)"
         }
       ],
@@ -10803,13 +10803,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "5공학관 전기기기실험실(306호)"
         },
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 전기기기실험실(306호)"
         }
       ],
@@ -10844,13 +10844,13 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": ""
         },
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "5공학관 응용전기실험실(207호)"
         }
       ],
@@ -10885,13 +10885,13 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 전기기기실험실(306호)"
         },
         {
           "weekday": 4,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 전기기기실험실(306호)"
         }
       ],
@@ -10926,13 +10926,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 전기기기실험실(306호)"
         },
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 전기기기실험실(306호)"
         }
       ],
@@ -10967,7 +10967,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 전기기초실험실(205호)"
         }
       ],
@@ -11002,7 +11002,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 전기설비설계실(305호)"
         }
       ],
@@ -11037,13 +11037,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "5공학관 자동제어실험실(206호)"
         }
       ],
@@ -11078,13 +11078,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 응용전기실험실(207호)"
         }
       ],
@@ -11119,13 +11119,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "5공학관 응용전기실험실(207호)"
         }
       ],
@@ -11160,7 +11160,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 전기기기실험실(306호)"
         }
       ],
@@ -11195,7 +11195,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 자동제어실험실(206호)"
         }
       ],
@@ -11230,7 +11230,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 전기설비설계실(305호)"
         }
       ],
@@ -11265,13 +11265,13 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "5공학관 전기기기실험실(306호)"
         },
         {
           "weekday": 5,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 전기기기실험실(306호)"
         }
       ],
@@ -11306,7 +11306,7 @@
         {
           "weekday": 2,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 자동제어실험실(206호)"
         }
       ],
@@ -11341,13 +11341,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 응용전기실험실(207호)"
         }
       ],
@@ -11382,7 +11382,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 자동제어실험실(206호)"
         }
       ],
@@ -11417,13 +11417,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "5공학관 전기기기실험실(306호)"
         },
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 전기기기실험실(306호)"
         }
       ],
@@ -11458,7 +11458,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 자동제어실험실(206호)"
         }
       ],
@@ -11493,13 +11493,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 전기기초실험실(205호)"
         },
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 전기설비설계실(305호)"
         }
       ],
@@ -11534,13 +11534,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "5공학관 머신러닝실습실(502호)"
         }
       ],
@@ -11575,13 +11575,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 머신러닝실습실(502호)"
         }
       ],
@@ -11616,13 +11616,13 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 머신러닝실습실(502호)"
         }
       ],
@@ -11657,7 +11657,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 디지털통신실험실(302호)"
         }
       ],
@@ -11692,7 +11692,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 디지털통신실험실(302호)"
         }
       ],
@@ -11727,7 +11727,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 디지털통신실험실(302호)"
         }
       ],
@@ -11762,13 +11762,13 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "5공학관 머신러닝실습실(502호)"
         }
       ],
@@ -11803,13 +11803,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 머신러닝실습실(502호)"
         }
       ],
@@ -11844,7 +11844,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 강의실(602호)"
         }
       ],
@@ -11879,7 +11879,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 강의실(602호)"
         }
       ],
@@ -11914,7 +11914,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 디지털회로실험실(202호)"
         }
       ],
@@ -11949,7 +11949,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 강의실(602호)"
         }
       ],
@@ -11984,7 +11984,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 강의실(602호)"
         }
       ],
@@ -12019,7 +12019,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 디지털회로실험실(202호)"
         }
       ],
@@ -12054,7 +12054,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 디지털 인터페이스실(406호)"
         }
       ],
@@ -12089,7 +12089,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 디지털 인터페이스실(406호)"
         }
       ],
@@ -12124,7 +12124,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 컴퓨터응용실험실(102호)"
         }
       ],
@@ -12159,7 +12159,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 컴퓨터응용실험실(102호)"
         }
       ],
@@ -12194,7 +12194,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 AI융합실습실(401호)"
         }
       ],
@@ -12229,7 +12229,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 AI융합실습실(401호)"
         }
       ],
@@ -12264,7 +12264,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 AI융합실습실(401호)"
         }
       ],
@@ -12299,7 +12299,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 캡스톤디자인실(301호)"
         }
       ],
@@ -12334,7 +12334,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 정보통신응용실험실(318호)"
         }
       ],
@@ -12369,7 +12369,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 컴퓨터실습실(517호)"
         }
       ],
@@ -12404,7 +12404,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 컴퓨터실습실(517호)"
         }
       ],
@@ -12439,7 +12439,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 머신러닝실습실(505호)"
         }
       ],
@@ -12474,7 +12474,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 머신러닝실습실(505호)"
         }
       ],
@@ -12509,7 +12509,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 컴퓨터멀티미디어실(405호)"
         }
       ],
@@ -12544,7 +12544,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 전자회로실험실(403호)"
         }
       ],
@@ -12579,7 +12579,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 디지털 인터페이스실(406호)"
         }
       ],
@@ -12614,7 +12614,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 전자회로실험실(403호)"
         }
       ],
@@ -12649,7 +12649,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 전력전자실험실(101호)"
         }
       ],
@@ -12684,7 +12684,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 컴퓨터멀티미디어실(405호)"
         }
       ],
@@ -12719,7 +12719,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 자동제어실험실(201호)"
         }
       ],
@@ -12754,7 +12754,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 컴퓨터멀티미디어실(405호)"
         }
       ],
@@ -12789,7 +12789,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 컴퓨터응용실험실(102호)"
         }
       ],
@@ -12824,7 +12824,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 자동제어실험실(201호)"
         }
       ],
@@ -12859,7 +12859,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 컴퓨터실습실(418호)"
         }
       ],
@@ -12894,7 +12894,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 머신러닝실습실(505호)"
         }
       ],
@@ -12929,7 +12929,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 정보통신응용실험실(318호)"
         }
       ],
@@ -12964,7 +12964,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 정보통신응용실험실(318호)"
         }
       ],
@@ -12999,7 +12999,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 디지털회로실험실(202호)"
         }
       ],
@@ -13034,7 +13034,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 머신러닝실험실(503호)"
         }
       ],
@@ -13069,7 +13069,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 머신러닝실험실(503호)"
         }
       ],
@@ -13104,7 +13104,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 머신러닝실험실(503호)"
         }
       ],
@@ -13139,7 +13139,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 머신러닝실험실(503호)"
         }
       ],
@@ -13174,7 +13174,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 머신러닝실험실(503호)"
         }
       ],
@@ -13209,7 +13209,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 강의실(501호)"
         }
       ],
@@ -13244,7 +13244,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "5공학관 강의실(501호)"
         }
       ],
@@ -13279,7 +13279,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 전력전자실험실(101호)"
         }
       ],
@@ -13314,7 +13314,7 @@
         {
           "weekday": 4,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 자동제어실험실(201호)"
         }
       ],
@@ -13349,7 +13349,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 머신러닝실험실(503호)"
         }
       ],
@@ -13384,7 +13384,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 머신러닝실험실(504호)"
         }
       ],
@@ -13419,7 +13419,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 전자회로실험실(403호)"
         }
       ],
@@ -13454,7 +13454,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 캡스톤디자인실(301호)"
         }
       ],
@@ -13489,7 +13489,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 강의실(604호)"
         }
       ],
@@ -13524,7 +13524,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 네트워크실험실(304호)"
         }
       ],
@@ -13559,7 +13559,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 네트워크실험실(304호)"
         }
       ],
@@ -13594,13 +13594,13 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 정보통신응용실험실(318호)"
         }
       ],
@@ -13635,7 +13635,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 네트워크실험실(304호)"
         }
       ],
@@ -13670,7 +13670,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 네트워크실험실(304호)"
         }
       ],
@@ -13705,7 +13705,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 디지털회로실험실(202호)"
         }
       ],
@@ -13740,7 +13740,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 자동제어실험실(201호)"
         }
       ],
@@ -13775,7 +13775,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 캡스톤디자인실(301호)"
         }
       ],
@@ -13810,7 +13810,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 자동제어실험실(201호)"
         }
       ],
@@ -13845,7 +13845,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 전자회로실험실(403호)"
         }
       ],
@@ -13880,7 +13880,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 자동제어실험실(201호)"
         }
       ],
@@ -13915,13 +13915,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 머신러닝실습실(505호)"
         }
       ],
@@ -13956,13 +13956,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 컴퓨터실습실(418호)"
         },
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "5공학관 컴퓨터실습실(418호)"
         }
       ],
@@ -13997,7 +13997,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 컴퓨터실습실(418호)"
         }
       ],
@@ -14032,7 +14032,7 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 컴퓨터실습실(418호)"
         }
       ],
@@ -14067,7 +14067,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "5공학관 정보통신응용실험실(318호)"
         }
       ],
@@ -14102,7 +14102,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 강의실(601호)"
         }
       ],
@@ -14137,7 +14137,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 디지털회로실험실(202호)"
         }
       ],
@@ -14172,7 +14172,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 강의실(601호)"
         }
       ],
@@ -14207,7 +14207,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "5공학관 강의실(604호)"
         }
       ],
@@ -14242,7 +14242,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 기초시각디자인실(302호)"
         }
       ],
@@ -14277,7 +14277,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 기초시각디자인실(302호)"
         }
       ],
@@ -14312,7 +14312,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 기초시각디자인실(302호)"
         }
       ],
@@ -14347,7 +14347,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 기초시각디자인실(302호)"
         }
       ],
@@ -14382,7 +14382,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 기초시각디자인실(302호)"
         }
       ],
@@ -14417,7 +14417,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -14452,7 +14452,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -14487,7 +14487,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 PC1실(306호)"
         }
       ],
@@ -14522,7 +14522,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "정보화본부 PC1실(306호)"
         }
       ],
@@ -14557,7 +14557,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 PC1실(306호)"
         }
       ],
@@ -14592,7 +14592,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 멀티미디어실(405호)"
         }
       ],
@@ -14627,7 +14627,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -14662,7 +14662,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -14697,7 +14697,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -14732,7 +14732,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 컴퓨터그랙픽실(404호)"
         }
       ],
@@ -14767,7 +14767,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -14802,7 +14802,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -14837,7 +14837,7 @@
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -14872,7 +14872,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -14907,7 +14907,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "조형관 컴퓨터그랙픽실(404호)"
         }
       ],
@@ -14942,7 +14942,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "정보화본부 PC1실(306호)"
         }
       ],
@@ -14977,7 +14977,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 시각디자인전공실Ⅱ(509호)"
         }
       ],
@@ -15012,7 +15012,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -15047,7 +15047,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 기초디자인실(501호)"
         }
       ],
@@ -15082,7 +15082,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 기초디자인실(501호)"
         }
       ],
@@ -15117,7 +15117,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -15152,7 +15152,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 시각디자인전공실Ⅱ(509호)"
         }
       ],
@@ -15187,7 +15187,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 멀티미디어실(405호)"
         }
       ],
@@ -15222,7 +15222,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -15257,7 +15257,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -15292,7 +15292,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 시각디자인전공실Ⅱ(509호)"
         }
       ],
@@ -15327,7 +15327,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 멀티미디어실(405호)"
         }
       ],
@@ -15362,7 +15362,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 컴퓨터그랙픽실(404호)"
         }
       ],
@@ -15397,7 +15397,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 컴퓨터그랙픽실(404호)"
         }
       ],
@@ -15432,7 +15432,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -15467,7 +15467,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "조형관 컴퓨터그랙픽실(404호)"
         }
       ],
@@ -15502,7 +15502,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -15537,7 +15537,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -15572,7 +15572,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -15607,7 +15607,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 컴퓨터그랙픽실(404호)"
         }
       ],
@@ -15642,7 +15642,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 기초시각디자인실(302호)"
         }
       ],
@@ -15677,7 +15677,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 기초시각디자인실(302호)"
         }
       ],
@@ -15712,7 +15712,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -15747,7 +15747,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -15782,7 +15782,7 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -15817,7 +15817,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -15852,7 +15852,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 멀티미디어실(405호)"
         }
       ],
@@ -15887,7 +15887,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 공업디자인전공실-1(601호)"
         }
       ],
@@ -15922,7 +15922,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 강의 및 실습실(510호)"
         }
       ],
@@ -15957,7 +15957,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 기초디자인실습실(303호)"
         }
       ],
@@ -15992,7 +15992,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 기초디자인실습실(303호)"
         }
       ],
@@ -16027,7 +16027,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 일반공작실(204호)"
         }
       ],
@@ -16062,7 +16062,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 일반공작실(204호)"
         }
       ],
@@ -16097,7 +16097,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 일반공작실(204호)"
         }
       ],
@@ -16132,7 +16132,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 프린팅텍스타일디자인실습실(401호)"
         }
       ],
@@ -16167,7 +16167,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 프린팅텍스타일디자인실습실(401호)"
         }
       ],
@@ -16202,7 +16202,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 프린팅텍스타일디자인실습실(401호)"
         }
       ],
@@ -16237,7 +16237,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 칠실(211호)"
         }
       ],
@@ -16272,7 +16272,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 칠실(211호)"
         }
       ],
@@ -16307,7 +16307,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 염색디자인실습실(201호)"
         }
       ],
@@ -16342,7 +16342,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 염색디자인실습실(201호)"
         }
       ],
@@ -16377,7 +16377,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 컴퓨터실습실(410호)"
         }
       ],
@@ -16412,7 +16412,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 칠실(211호)"
         }
       ],
@@ -16447,7 +16447,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 칠실(211호)"
         }
       ],
@@ -16482,7 +16482,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 일반공작실(204호)"
         }
       ],
@@ -16517,7 +16517,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 컴퓨터실습실(410호)"
         }
       ],
@@ -16552,7 +16552,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 컴퓨터실습실(410호)"
         }
       ],
@@ -16587,7 +16587,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -16622,7 +16622,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -16657,7 +16657,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -16692,7 +16692,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "조형관 칠실(211호)"
         }
       ],
@@ -16727,7 +16727,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 일반공작실(204호)"
         }
       ],
@@ -16762,7 +16762,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 일반공작실(204호)"
         }
       ],
@@ -16797,7 +16797,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 일반공작실(204호)"
         }
       ],
@@ -16832,7 +16832,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 프린팅텍스타일디자인실습실(401호)"
         }
       ],
@@ -16867,7 +16867,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -16902,7 +16902,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 기초디자인실습실(303호)"
         }
       ],
@@ -16937,7 +16937,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 기초디자인실습실(303호)"
         }
       ],
@@ -16972,7 +16972,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "정보화본부 PC1실(306호)"
         }
       ],
@@ -17007,7 +17007,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "정보화본부 PC1실(306호)"
         }
       ],
@@ -17042,7 +17042,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 강의 및 실습실(508호)"
         }
       ],
@@ -17077,7 +17077,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 성형실C(210호)"
         }
       ],
@@ -17112,7 +17112,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 성형실C(210호)"
         }
       ],
@@ -17147,7 +17147,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 물레실A(202호)"
         }
       ],
@@ -17182,7 +17182,7 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 물레실A(202호)"
         }
       ],
@@ -17217,7 +17217,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 물레실A(202호)"
         }
       ],
@@ -17252,7 +17252,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 기초디자인실습실(303호)"
         }
       ],
@@ -17287,7 +17287,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "조형관 기초디자인실습실(303호)"
         }
       ],
@@ -17322,7 +17322,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 물레실B(203호)"
         }
       ],
@@ -17357,7 +17357,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 물레실B(203호)"
         }
       ],
@@ -17392,7 +17392,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 ceramic&glass제형실(207호)"
         }
       ],
@@ -17427,7 +17427,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 ceramic&glass제형실(207호)"
         }
       ],
@@ -17462,7 +17462,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 위빙텍스타일디자인실(301호)"
         }
       ],
@@ -17497,7 +17497,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 위빙텍스타일디자인실(301호)"
         }
       ],
@@ -17532,7 +17532,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "조형관 성형실B(209호)"
         }
       ],
@@ -17567,7 +17567,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "조형관 성형실B(209호)"
         }
       ],
@@ -17602,7 +17602,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "생활체육관 생활체육관(101호)"
         }
       ],
@@ -17637,7 +17637,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "체육관 체육관"
         }
       ],
@@ -17672,7 +17672,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -17707,7 +17707,7 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -17742,7 +17742,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 스포츠미디어실습실(306호)"
         }
       ],
@@ -17777,7 +17777,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 레저스포츠학과강의실(106호)"
         }
       ],
@@ -17812,7 +17812,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -17847,7 +17847,7 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -17882,7 +17882,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -17945,7 +17945,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -17980,7 +17980,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -18015,7 +18015,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 레저스포츠학과강의실(106호)"
         }
       ],
@@ -18078,7 +18078,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -18113,7 +18113,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 레저스포츠학과강의실(106호)"
         }
       ],
@@ -18148,7 +18148,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -18183,7 +18183,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -18218,7 +18218,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 레저스포츠학과강의실(106호)"
         }
       ],
@@ -18253,7 +18253,7 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -18288,7 +18288,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 레저스포츠학과강의실(106호)"
         }
       ],
@@ -18323,7 +18323,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -18442,7 +18442,7 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인문사회과학관 컴퓨터실습실(216호)"
         }
       ],
@@ -18505,7 +18505,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -18540,7 +18540,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -18575,7 +18575,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -18610,7 +18610,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -18645,7 +18645,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 레저스포츠학과강의실(106호)"
         }
       ],
@@ -18680,7 +18680,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 레저스포츠학과강의실(104호)"
         }
       ],
@@ -18715,7 +18715,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 레저스포츠학과강의실(105호)"
         }
       ],
@@ -18750,7 +18750,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 스포츠미디어실습실(306호)"
         }
       ],
@@ -18785,7 +18785,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 스포츠미디어실습실(306호)"
         }
       ],
@@ -18820,7 +18820,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 행정학과강의실 Ⅲ(418호)"
         }
       ],
@@ -18855,13 +18855,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 행정학과강의실I(509호)"
         }
       ],
@@ -18896,7 +18896,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 행정학과강의실 Ⅱ(417호)"
         }
       ],
@@ -18931,13 +18931,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 행정학과강의실I(509호)"
         }
       ],
@@ -18972,7 +18972,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 행정학과강의실I(509호)"
         }
       ],
@@ -19007,7 +19007,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인문사회과학관 행정학과강의실 Ⅱ(417호)"
         }
       ],
@@ -19070,7 +19070,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 행정학과강의실 Ⅱ(417호)"
         }
       ],
@@ -19105,13 +19105,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 행정학과강의실 Ⅱ(417호)"
         }
       ],
@@ -19146,13 +19146,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 행정학과강의실 Ⅲ(418호)"
         }
       ],
@@ -19187,7 +19187,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "인문사회과학관 행정학과강의실 Ⅱ(417호)"
         }
       ],
@@ -19222,13 +19222,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 행정학과강의실 Ⅲ(418호)"
         }
       ],
@@ -19263,7 +19263,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 행정학과강의실 Ⅲ(418호)"
         }
       ],
@@ -19298,13 +19298,13 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "강의동 강의실(307호)"
         }
       ],
@@ -19339,13 +19339,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(309호)"
         }
       ],
@@ -19380,7 +19380,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(309호)"
         }
       ],
@@ -19415,13 +19415,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(321호)"
         },
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(321호)"
         }
       ],
@@ -19456,13 +19456,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "강의동 강의실(309호)"
         }
       ],
@@ -19497,13 +19497,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(307호)"
         }
       ],
@@ -19538,7 +19538,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 카지노실습실(217호)"
         }
       ],
@@ -19573,7 +19573,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(309호)"
         }
       ],
@@ -19608,7 +19608,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 식음료실습실(218호)"
         }
       ],
@@ -19643,7 +19643,7 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(307호)"
         }
       ],
@@ -19678,7 +19678,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 공동강의실(301호)"
         }
       ],
@@ -19713,7 +19713,7 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 강의실(309호)"
         }
       ],
@@ -19748,7 +19748,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "그린에너지연구관 공동강의실(301호)"
         }
       ],
@@ -19783,7 +19783,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(309호)"
         }
       ],
@@ -19818,7 +19818,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "강의동 강의실(309호)"
         }
       ],
@@ -19853,7 +19853,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(321호)"
         }
       ],
@@ -19888,7 +19888,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -19923,7 +19923,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -19958,13 +19958,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 경제학강의실1(317호)"
         },
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 경제학강의실1(317호)"
         }
       ],
@@ -19999,7 +19999,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -20034,7 +20034,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -20069,13 +20069,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 경제학강의실1(317호)"
         }
       ],
@@ -20110,7 +20110,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -20145,13 +20145,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 컴퓨터실습실(216호)"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 경제학강의실1(317호)"
         }
       ],
@@ -20186,13 +20186,13 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 경제학강의실1(317호)"
         }
       ],
@@ -20227,7 +20227,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -20262,13 +20262,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 경제학강의실1(317호)"
         }
       ],
@@ -20303,7 +20303,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -20338,13 +20338,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -20379,13 +20379,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 경제모형실(319호)"
         }
       ],
@@ -20420,7 +20420,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -20455,7 +20455,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "그린에너지연구관 계단식강의실(204호)"
         }
       ],
@@ -20490,13 +20490,13 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -20531,13 +20531,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 경제모형실(319호)"
         },
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -20572,13 +20572,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -20613,7 +20613,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 경제학강의실2(318호)"
         }
       ],
@@ -20648,13 +20648,13 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 영상영어강의실(214호)"
         }
       ],
@@ -20689,7 +20689,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 영상영어강의실(214호)"
         }
       ],
@@ -20724,7 +20724,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 국제세미나실(215호)"
         }
       ],
@@ -20759,13 +20759,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "인문사회과학관 영어전용실습실(309호)"
         }
       ],
@@ -20800,13 +20800,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 영어전용실습실(309호)"
         }
       ],
@@ -20841,7 +20841,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 국제세미나실(215호)"
         }
       ],
@@ -20876,7 +20876,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 국제세미나실(215호)"
         }
       ],
@@ -20911,7 +20911,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 국제세미나실(215호)"
         }
       ],
@@ -20946,7 +20946,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 국제세미나실(215호)"
         }
       ],
@@ -20981,7 +20981,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 국제세미나실(215호)"
         }
       ],
@@ -21016,13 +21016,13 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 공동강의실(518호)"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 영상영어강의실(214호)"
         }
       ],
@@ -21057,7 +21057,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 국제세미나실(215호)"
         }
       ],
@@ -21092,13 +21092,13 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 영어전용실습실(309호)"
         }
       ],
@@ -21133,13 +21133,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 영상영어강의실(214호)"
         }
       ],
@@ -21174,13 +21174,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "인문사회과학관 영어전용실습실(309호)"
         }
       ],
@@ -21215,7 +21215,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 영상영어강의실(214호)"
         }
       ],
@@ -21250,7 +21250,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 컴퓨터실습실(216호)"
         }
       ],
@@ -21285,13 +21285,13 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(318호)"
         }
       ],
@@ -21326,13 +21326,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "그린에너지연구관 협동강의실1(306호)"
         }
       ],
@@ -21367,7 +21367,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 스마트강의실(323호)"
         }
       ],
@@ -21402,13 +21402,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "강의동 강의실(316호)"
         }
       ],
@@ -21443,7 +21443,7 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 강의실(320호)"
         }
       ],
@@ -21478,13 +21478,13 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "강의동 강의실(316호)"
         }
       ],
@@ -21519,13 +21519,13 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(318호)"
         }
       ],
@@ -21560,13 +21560,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(320호)"
         },
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "강의동 강의실(320호)"
         }
       ],
@@ -21601,13 +21601,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 스마트강의실(323호)"
         }
       ],
@@ -21642,13 +21642,13 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 스마트강의실(323호)"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "강의동 스마트강의실(323호)"
         }
       ],
@@ -21683,7 +21683,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 강의실(318호)"
         }
       ],
@@ -21718,7 +21718,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(318호)"
         }
       ],
@@ -21753,7 +21753,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(318호)"
         }
       ],
@@ -21788,7 +21788,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(318호)"
         }
       ],
@@ -21823,13 +21823,13 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "강의동 강의실(318호)"
         }
       ],
@@ -21864,7 +21864,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(320호)"
         }
       ],
@@ -21899,13 +21899,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "강의동 스마트강의실(323호)"
         },
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "강의동 스마트강의실(323호)"
         }
       ],
@@ -21940,7 +21940,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(316호)"
         }
       ],
@@ -21975,7 +21975,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "강의동 강의실(320호)"
         }
       ],
@@ -22010,7 +22010,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 강의실(320호)"
         }
       ],
@@ -22045,13 +22045,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": ""
         },
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 강의실2(517호)"
         }
       ],
@@ -22086,13 +22086,13 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "인문사회과학관 공동강의실(518호)"
         }
       ],
@@ -22127,13 +22127,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 강의실2(517호)"
         },
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 공동강의실(518호)"
         }
       ],
@@ -22168,7 +22168,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 강의실1(516호)"
         }
       ],
@@ -22203,7 +22203,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 강의실2(517호)"
         }
       ],
@@ -22294,7 +22294,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 강의실2(517호)"
         }
       ],
@@ -22329,7 +22329,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 공동강의실(518호)"
         }
       ],
@@ -22364,7 +22364,7 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 공동강의실(518호)"
         }
       ],
@@ -22399,7 +22399,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 강의실1(516호)"
         }
       ],
@@ -22434,7 +22434,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "인문사회과학관 강의실2(517호)"
         }
       ],
@@ -22469,13 +22469,13 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 강의실1(516호)"
         }
       ],
@@ -22510,7 +22510,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "인문사회과학관 강의실1(516호)"
         }
       ],
@@ -22545,7 +22545,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 공동강의실(518호)"
         }
       ],
@@ -22580,7 +22580,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "인문사회과학관 강의실2(517호)"
         }
       ],
@@ -22923,7 +22923,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "강의동 스포츠미디어실습실(306호)"
         }
       ],
@@ -22958,7 +22958,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "강의동 스포츠미디어실습실(306호)"
         }
       ],
@@ -22993,7 +22993,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "인문사회과학관 컴퓨터실습실(216호)"
         }
       ],
@@ -23420,7 +23420,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 머신러닝실습실(502호)"
         }
       ],
@@ -23455,7 +23455,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "5공학관 강의실(501호)"
         }
       ],
@@ -23490,7 +23490,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 AI융합실습실(401호)"
         }
       ],
@@ -23525,7 +23525,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "5공학관 머신러닝실험실(504호)"
         }
       ],
@@ -23560,7 +23560,7 @@
         {
           "weekday": 4,
           "startMinute": 1080,
-          "endMinute": 1310,
+          "endMinute": 1320,
           "classroom": "강의동 강의실(315호)"
         }
       ],
@@ -23595,7 +23595,7 @@
         {
           "weekday": 3,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "강의동 강의실(315호)"
         }
       ],
@@ -23630,7 +23630,7 @@
         {
           "weekday": 1,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "강의동 강의실(315호)"
         }
       ],
@@ -23665,7 +23665,7 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1250,
+          "endMinute": 1260,
           "classroom": "강의동 강의실(315호)"
         }
       ],

@@ -72,6 +72,50 @@ void main() {
   );
 
   test(
+    'Kangwon period meetings fill the whole slot including the break',
+    () async {
+      final data = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'kangwon',
+      );
+      var checked = 0;
+      for (final d in data) {
+        for (final c in d.courses) {
+          // 기관 봉사 강좌는 학교 원문이 시계 시각을 직접 적어 교시 슬롯 규칙에서 제외한다.
+          if (c.code == '14207025') continue;
+          final byDay = <String, List<ClassMeeting>>{};
+          for (final m in c.meetings) {
+            final start = m.originalStartMinute;
+            final len = m.originalEndMinute - start;
+            // 숫자 교시: 50분 수업+10분 휴식(60분 슬롯, 0교시=08:00),
+            // A교시: 75분 수업+15분 휴식(90분 슬롯, A1=09:00).
+            final numeric = (start - 480) % 60 == 0 && len % 60 == 0;
+            final aPeriod = (start - 540) % 90 == 0 && len % 90 == 0;
+            expect(numeric || aPeriod, isTrue, reason: c.sourceId);
+            byDay.putIfAbsent('${m.weekday}|${m.classroom}', () => []).add(m);
+            checked++;
+          }
+          // 같은 요일·같은 강의실의 연속 교시는 한 구간이어야 한다.
+          for (final list in byDay.values) {
+            list.sort(
+              (a, b) => a.originalStartMinute.compareTo(b.originalStartMinute),
+            );
+            for (var i = 1; i < list.length; i++) {
+              expect(
+                list[i].originalStartMinute - list[i - 1].originalEndMinute >=
+                    60,
+                isTrue,
+                reason: c.sourceId,
+              );
+            }
+          }
+        }
+      }
+      expect(checked, greaterThan(6900));
+    },
+  );
+
+  test(
     'Kangwon major offering labels all belong to an official college',
     () async {
       final data = await UniversityCatalog.load(

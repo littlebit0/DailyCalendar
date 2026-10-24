@@ -31,7 +31,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W12-117"
         }
       ],
@@ -66,7 +66,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-107"
         }
       ],
@@ -101,7 +101,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W11-501"
         }
       ],
@@ -136,7 +136,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W11-501"
         }
       ],
@@ -171,7 +171,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W9-105"
         }
       ],
@@ -206,7 +206,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W9-105"
         }
       ],
@@ -241,7 +241,7 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W11-501"
         }
       ],
@@ -276,7 +276,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W11-501"
         }
       ],
@@ -311,7 +311,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W11-501"
         }
       ],
@@ -346,7 +346,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W11-501"
         }
       ],
@@ -381,7 +381,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W9-102"
         }
       ],
@@ -416,7 +416,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W9-102"
         }
       ],
@@ -451,7 +451,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W9-104"
         }
       ],
@@ -486,7 +486,7 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W9-104"
         }
       ],
@@ -521,7 +521,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W9-105"
         }
       ],
@@ -556,7 +556,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W9-105"
         }
       ],
@@ -591,7 +591,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W9-104"
         }
       ],
@@ -626,7 +626,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W9-104"
         }
       ],
@@ -661,7 +661,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W9-104"
         }
       ],
@@ -696,7 +696,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W9-104"
         }
       ],
@@ -731,7 +731,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-104"
         }
       ],
@@ -766,7 +766,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-104"
         }
       ],
@@ -801,7 +801,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W12-111"
         }
       ],
@@ -836,7 +836,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W12-111"
         }
       ],
@@ -871,7 +871,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-106"
         }
       ],
@@ -906,7 +906,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W15-102"
         }
       ],
@@ -941,7 +941,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-104"
         }
       ],
@@ -976,7 +976,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "E1-106"
         }
       ],
@@ -1011,7 +1011,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W2-103 W2-405"
         }
       ],
@@ -1046,7 +1046,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W2-103 W2-405"
         }
       ],
@@ -1081,7 +1081,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W2-501"
         }
       ],
@@ -1116,7 +1116,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W2-202"
         }
       ],
@@ -1151,7 +1151,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W6-401"
         }
       ],
@@ -1186,7 +1186,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W6-103 W6-113"
         }
       ],
@@ -1221,7 +1221,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W6-103 W6-113"
         }
       ],
@@ -1256,13 +1256,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-107"
         },
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-107"
         }
       ],
@@ -1297,13 +1297,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-401 W6-411"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-401 W6-411"
         }
       ],
@@ -1338,13 +1338,13 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-401"
         },
         {
           "weekday": 5,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-401"
         }
       ],
@@ -1379,13 +1379,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W15-103"
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W15-103"
         }
       ],
@@ -1420,13 +1420,13 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-401"
         },
         {
           "weekday": 5,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-401"
         }
       ],
@@ -1461,13 +1461,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-401"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-401"
         }
       ],
@@ -1502,13 +1502,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-401 W6-411"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-401 W6-411"
         }
       ],
@@ -1543,13 +1543,13 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-401"
         },
         {
           "weekday": 5,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-401"
         }
       ],
@@ -1584,13 +1584,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-401"
         },
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-401"
         }
       ],
@@ -1625,13 +1625,13 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-401 W6-411"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-401 W6-411"
         }
       ],
@@ -1666,13 +1666,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-502"
         },
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-502"
         }
       ],
@@ -1707,13 +1707,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-502"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-502"
         }
       ],
@@ -1748,13 +1748,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-411"
         },
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-411"
         }
       ],
@@ -1789,13 +1789,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-411"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-411"
         }
       ],
@@ -1830,13 +1830,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-502"
         },
         {
           "weekday": 3,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-502"
         }
       ],
@@ -1871,7 +1871,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "W6-601"
         }
       ],
@@ -1906,13 +1906,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-709"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-709"
         }
       ],
@@ -1947,7 +1947,7 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-601"
         }
       ],
@@ -1982,7 +1982,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-601"
         }
       ],
@@ -2017,13 +2017,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-701"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-701"
         }
       ],
@@ -2058,7 +2058,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-611"
         }
       ],
@@ -2093,7 +2093,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-709"
         }
       ],
@@ -2128,13 +2128,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-611"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-611"
         }
       ],
@@ -2169,7 +2169,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-701"
         }
       ],
@@ -2204,7 +2204,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-709"
         }
       ],
@@ -2239,7 +2239,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-709"
         }
       ],
@@ -2274,7 +2274,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-709"
         }
       ],
@@ -2309,7 +2309,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-611"
         }
       ],
@@ -2344,7 +2344,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-611"
         }
       ],
@@ -2379,13 +2379,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-611 W6-709"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-611 W6-709"
         }
       ],
@@ -2420,13 +2420,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-601 W6-611"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-601 W6-611"
         }
       ],
@@ -2461,7 +2461,7 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-709"
         }
       ],
@@ -2496,7 +2496,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W15-401"
         }
       ],
@@ -2531,7 +2531,7 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W15-401"
         }
       ],
@@ -2594,7 +2594,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W15-205"
         }
       ],
@@ -2629,13 +2629,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-202"
         },
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-202"
         }
       ],
@@ -2670,13 +2670,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W15-202"
         },
         {
           "weekday": 3,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W15-202"
         }
       ],
@@ -2711,13 +2711,13 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W15-104"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W15-104"
         }
       ],
@@ -2752,13 +2752,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W15-104"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W15-104"
         }
       ],
@@ -2793,13 +2793,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W15-205"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-205"
         }
       ],
@@ -2834,13 +2834,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W15-205"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-205"
         }
       ],
@@ -2875,13 +2875,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W15-205"
         },
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W15-205"
         }
       ],
@@ -2916,13 +2916,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-205"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W15-205"
         }
       ],
@@ -2957,7 +2957,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-104"
         }
       ],
@@ -2992,13 +2992,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-104"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-104"
         }
       ],
@@ -3033,13 +3033,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W15-401"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W15-401"
         }
       ],
@@ -3074,13 +3074,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-205"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-205"
         }
       ],
@@ -3115,13 +3115,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W15-104"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-104"
         }
       ],
@@ -3156,7 +3156,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W15-205"
         }
       ],
@@ -3191,13 +3191,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-202"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W15-202"
         }
       ],
@@ -3288,7 +3288,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W12-332"
         }
       ],
@@ -3323,7 +3323,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-104"
         }
       ],
@@ -3358,7 +3358,7 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-1013"
         }
       ],
@@ -3393,13 +3393,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-1001"
         },
         {
           "weekday": 3,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-1001"
         }
       ],
@@ -3434,13 +3434,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-1101"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-1101"
         }
       ],
@@ -3503,13 +3503,13 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-1101"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-1101"
         }
       ],
@@ -3572,13 +3572,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-1101"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-1101"
         }
       ],
@@ -3613,7 +3613,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-1101"
         }
       ],
@@ -3648,13 +3648,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-109"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-109"
         }
       ],
@@ -3689,13 +3689,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-1013"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-1013"
         }
       ],
@@ -3758,13 +3758,13 @@
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-108"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-108"
         }
       ],
@@ -3799,7 +3799,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-1013"
         }
       ],
@@ -3834,13 +3834,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-109"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-109"
         }
       ],
@@ -3875,13 +3875,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-1110"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-1110"
         }
       ],
@@ -3916,13 +3916,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-1110"
         },
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-1110"
         }
       ],
@@ -3957,7 +3957,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-1013"
         }
       ],
@@ -3992,7 +3992,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-1101"
         }
       ],
@@ -4027,13 +4027,13 @@
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-1013"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-1013"
         }
       ],
@@ -4068,13 +4068,13 @@
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-1001"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-1001"
         }
       ],
@@ -4137,7 +4137,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W5-406"
         }
       ],
@@ -4172,7 +4172,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W15-102"
         }
       ],
@@ -4207,7 +4207,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W15-102"
         }
       ],
@@ -4242,7 +4242,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W5-406"
         }
       ],
@@ -4277,7 +4277,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-406"
         }
       ],
@@ -4312,7 +4312,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-201"
         }
       ],
@@ -4347,7 +4347,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-406"
         }
       ],
@@ -4382,7 +4382,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W5-201"
         }
       ],
@@ -4417,7 +4417,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W5-406"
         }
       ],
@@ -4452,7 +4452,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-406"
         }
       ],
@@ -4487,7 +4487,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-104"
         }
       ],
@@ -4522,7 +4522,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W6-104"
         }
       ],
@@ -4557,7 +4557,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W5-201"
         }
       ],
@@ -4592,7 +4592,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-406"
         }
       ],
@@ -4627,7 +4627,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-406"
         }
       ],
@@ -4662,7 +4662,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-406"
         }
       ],
@@ -4697,7 +4697,7 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-406"
         }
       ],
@@ -4732,7 +4732,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-201"
         }
       ],
@@ -4767,7 +4767,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-406"
         }
       ],
@@ -4802,7 +4802,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-2105"
         }
       ],
@@ -4837,7 +4837,7 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-2105"
         }
       ],
@@ -4872,7 +4872,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-2105"
         }
       ],
@@ -4907,7 +4907,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W5-2105"
         }
       ],
@@ -4942,7 +4942,7 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-201"
         }
       ],
@@ -4977,7 +4977,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-406"
         }
       ],
@@ -5012,7 +5012,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-406"
         }
       ],
@@ -5047,7 +5047,7 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-406"
         }
       ],
@@ -5082,7 +5082,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-407"
         }
       ],
@@ -5117,7 +5117,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W5-407"
         }
       ],
@@ -5152,7 +5152,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-407"
         }
       ],
@@ -5187,7 +5187,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-407"
         }
       ],
@@ -5222,7 +5222,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-407"
         }
       ],
@@ -5257,7 +5257,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-407"
         }
       ],
@@ -5292,7 +5292,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-407"
         }
       ],
@@ -5327,7 +5327,7 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W5-407"
         }
       ],
@@ -5446,7 +5446,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W5-407"
         }
       ],
@@ -5481,7 +5481,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-407"
         }
       ],
@@ -5516,7 +5516,7 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-407"
         }
       ],
@@ -5551,7 +5551,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-407"
         }
       ],
@@ -5754,7 +5754,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W5-408"
         }
       ],
@@ -5789,7 +5789,7 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-408"
         }
       ],
@@ -5880,7 +5880,7 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-408"
         }
       ],
@@ -5915,7 +5915,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-408"
         }
       ],
@@ -5950,7 +5950,7 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W5-201"
         }
       ],
@@ -5985,7 +5985,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W5-201"
         }
       ],
@@ -6020,7 +6020,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-408"
         }
       ],
@@ -6055,7 +6055,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-408"
         }
       ],
@@ -6090,7 +6090,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-101"
         }
       ],
@@ -6125,7 +6125,7 @@
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W5-101"
         }
       ],
@@ -6160,7 +6160,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-101"
         }
       ],
@@ -6195,7 +6195,7 @@
         {
           "weekday": 5,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W5-101"
         }
       ],
@@ -6314,7 +6314,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-408"
         }
       ],
@@ -6349,7 +6349,7 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-408"
         }
       ],
@@ -6468,7 +6468,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W5-408"
         }
       ],
@@ -6503,7 +6503,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W5-408"
         }
       ],
@@ -6538,7 +6538,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "W5-408"
         }
       ],
@@ -6573,7 +6573,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W5-408"
         }
       ],
@@ -6608,7 +6608,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W9-101"
         }
       ],
@@ -6643,7 +6643,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-405"
         }
       ],
@@ -6678,7 +6678,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-405"
         }
       ],
@@ -6713,7 +6713,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W9-501"
         }
       ],
@@ -6748,7 +6748,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W9-501"
         }
       ],
@@ -6783,7 +6783,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W9-407"
         }
       ],
@@ -6818,7 +6818,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-503"
         }
       ],
@@ -6853,7 +6853,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-503"
         }
       ],
@@ -6888,7 +6888,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-407"
         }
       ],
@@ -6923,7 +6923,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-407"
         }
       ],
@@ -6958,13 +6958,13 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W9-405"
         },
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W9-405"
         }
       ],
@@ -6999,7 +6999,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-405"
         }
       ],
@@ -7034,7 +7034,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W9-407"
         }
       ],
@@ -7069,7 +7069,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W9-407"
         }
       ],
@@ -7104,7 +7104,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W9-503"
         }
       ],
@@ -7139,7 +7139,7 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W9-502"
         }
       ],
@@ -7174,7 +7174,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W9-105"
         }
       ],
@@ -7209,7 +7209,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W9-105"
         }
       ],
@@ -7244,7 +7244,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-503"
         }
       ],
@@ -7279,7 +7279,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W9-503"
         }
       ],
@@ -7314,7 +7314,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W9-405"
         }
       ],
@@ -7349,7 +7349,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W9-405"
         }
       ],
@@ -7384,7 +7384,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W9-407"
         }
       ],
@@ -7419,7 +7419,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W9-405"
         }
       ],
@@ -7454,7 +7454,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-504"
         }
       ],
@@ -7489,7 +7489,7 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W2-402"
         }
       ],
@@ -7580,13 +7580,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-402"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W2-402"
         }
       ],
@@ -7621,13 +7621,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-402"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-402"
         }
       ],
@@ -7662,13 +7662,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-402"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-402"
         }
       ],
@@ -7703,13 +7703,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W2-402"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W2-402"
         }
       ],
@@ -7744,13 +7744,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-402"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W2-402"
         }
       ],
@@ -7785,13 +7785,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-504"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-504"
         }
       ],
@@ -7826,13 +7826,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W2-402"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W2-402"
         }
       ],
@@ -7867,13 +7867,13 @@
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-311"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W2-311"
         }
       ],
@@ -7908,13 +7908,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-311"
         },
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-311"
         }
       ],
@@ -7949,13 +7949,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-311"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-311"
         }
       ],
@@ -7990,13 +7990,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-311"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-311"
         }
       ],
@@ -8031,13 +8031,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W2-311 W2-402"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W2-311 W2-402"
         }
       ],
@@ -8100,13 +8100,13 @@
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-504"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-504"
         }
       ],
@@ -8141,13 +8141,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W2-311"
         },
         {
           "weekday": 3,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W2-311"
         }
       ],
@@ -8182,13 +8182,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-311 W2-405"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W2-311 W2-405"
         }
       ],
@@ -8223,7 +8223,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W2-311"
         }
       ],
@@ -8258,7 +8258,7 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W2-502-1"
         }
       ],
@@ -8321,7 +8321,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W2-501"
         }
       ],
@@ -8384,13 +8384,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-408"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-408"
         }
       ],
@@ -8453,13 +8453,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-501"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-501"
         }
       ],
@@ -8494,7 +8494,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W2-502-1"
         }
       ],
@@ -8529,7 +8529,7 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W2-408"
         }
       ],
@@ -8564,7 +8564,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W2-408"
         }
       ],
@@ -8599,13 +8599,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-408"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W2-408"
         }
       ],
@@ -8640,7 +8640,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W2-408"
         }
       ],
@@ -8675,7 +8675,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-407"
         }
       ],
@@ -8738,13 +8738,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W2-316"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W2-316"
         }
       ],
@@ -8779,13 +8779,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-316"
         },
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W2-316"
         }
       ],
@@ -8820,7 +8820,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W2-316"
         }
       ],
@@ -8855,7 +8855,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-316"
         }
       ],
@@ -8890,7 +8890,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W2-316"
         }
       ],
@@ -8925,13 +8925,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W2-503-1"
         },
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "W2-503-1"
         }
       ],
@@ -8966,7 +8966,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-502-1"
         }
       ],
@@ -9001,7 +9001,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W2-407"
         }
       ],
@@ -9036,7 +9036,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-502-1"
         }
       ],
@@ -9071,7 +9071,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W15-510"
         }
       ],
@@ -9106,13 +9106,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-501"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-501"
         }
       ],
@@ -9175,13 +9175,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-510"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-510"
         }
       ],
@@ -9244,13 +9244,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-510"
         },
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-510"
         }
       ],
@@ -9285,7 +9285,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W15-501"
         }
       ],
@@ -9320,7 +9320,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W15-510"
         }
       ],
@@ -9383,7 +9383,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W15-501"
         }
       ],
@@ -9418,13 +9418,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-501"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W15-501"
         }
       ],
@@ -9459,7 +9459,7 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W15-510"
         }
       ],
@@ -9494,7 +9494,7 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 795,
+          "endMinute": 810,
           "classroom": "W15-202"
         }
       ],
@@ -9529,7 +9529,7 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-103"
         }
       ],
@@ -9620,7 +9620,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-107"
         }
       ],
@@ -9655,7 +9655,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W15-102"
         }
       ],
@@ -9690,7 +9690,7 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-105"
         }
       ],
@@ -9781,7 +9781,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-108"
         }
       ],
@@ -9816,7 +9816,7 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-105"
         }
       ],
@@ -9851,13 +9851,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-105"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-105"
         }
       ],
@@ -9892,13 +9892,13 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-301"
         },
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-301"
         }
       ],
@@ -9933,13 +9933,13 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-301"
         },
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-301"
         }
       ],
@@ -9974,7 +9974,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-812"
         }
       ],
@@ -10009,13 +10009,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-215"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-215"
         }
       ],
@@ -10050,13 +10050,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-215"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-215"
         }
       ],
@@ -10091,13 +10091,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-802"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-802"
         }
       ],
@@ -10132,13 +10132,13 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-812"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W6-812"
         }
       ],
@@ -10173,7 +10173,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-812"
         }
       ],
@@ -10208,13 +10208,13 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-911"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-911"
         }
       ],
@@ -10249,13 +10249,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-201"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-201"
         }
       ],
@@ -10290,13 +10290,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-901 W6-911"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-901 W6-911"
         }
       ],
@@ -10331,13 +10331,13 @@
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-802"
         },
         {
           "weekday": 5,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-802"
         }
       ],
@@ -10372,13 +10372,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-215"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-215"
         }
       ],
@@ -10413,13 +10413,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-104"
         },
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-104"
         }
       ],
@@ -10454,13 +10454,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-812"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-812"
         }
       ],
@@ -10495,13 +10495,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-107"
         },
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-107"
         }
       ],
@@ -10536,13 +10536,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-911"
         },
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-911"
         }
       ],
@@ -10577,13 +10577,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-911"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-911"
         }
       ],
@@ -10618,13 +10618,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-215"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-215"
         }
       ],
@@ -10659,13 +10659,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-901 W6-911"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-901 W6-911"
         }
       ],
@@ -10700,13 +10700,13 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-901 W6-911"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-901 W6-911"
         }
       ],
@@ -10741,7 +10741,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-201"
         }
       ],
@@ -10776,13 +10776,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-812"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-812"
         }
       ],
@@ -10817,13 +10817,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-901 W6-911"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-901 W6-911"
         }
       ],
@@ -10858,13 +10858,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-901 W6-911"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W6-901 W6-911"
         }
       ],
@@ -10899,13 +10899,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-301"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-301"
         }
       ],
@@ -10940,7 +10940,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W6-902"
         }
       ],
@@ -10975,7 +10975,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "W6-313"
         }
       ],
@@ -11038,13 +11038,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-812"
         },
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W6-812"
         }
       ],
@@ -11079,13 +11079,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-802"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W6-802"
         }
       ],
@@ -11120,7 +11120,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W6-313"
         }
       ],
@@ -11155,7 +11155,7 @@
         {
           "weekday": 5,
           "startMinute": 810,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W6-313"
         }
       ],
@@ -11190,13 +11190,13 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
+          "endMinute": 600,
           "classroom": "W12-323"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W12-323"
         }
       ],
@@ -11231,13 +11231,13 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W12-323"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W12-323"
         }
       ],
@@ -11272,13 +11272,13 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-414"
         },
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-414"
         }
       ],
@@ -11313,7 +11313,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-111"
         }
       ],
@@ -11348,7 +11348,7 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-105"
         }
       ],
@@ -11383,13 +11383,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-311"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-311"
         }
       ],
@@ -11424,13 +11424,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W12-323"
         },
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W12-323"
         }
       ],
@@ -11465,13 +11465,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-323"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-323"
         }
       ],
@@ -11506,13 +11506,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W12-432"
         },
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W12-432"
         }
       ],
@@ -11547,13 +11547,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W12-432"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W12-432"
         }
       ],
@@ -11588,13 +11588,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-234"
         },
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-234"
         }
       ],
@@ -11629,13 +11629,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-411"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-411"
         }
       ],
@@ -11670,13 +11670,13 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W12-411"
         },
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W12-411"
         }
       ],
@@ -11711,13 +11711,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-414"
         },
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-414"
         }
       ],
@@ -11752,13 +11752,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-414"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-414"
         }
       ],
@@ -11793,13 +11793,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W12-323"
         },
         {
           "weekday": 3,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W12-323"
         }
       ],
@@ -11834,13 +11834,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W12-411"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-411"
         }
       ],
@@ -11903,13 +11903,13 @@
         {
           "weekday": 3,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-414"
         },
         {
           "weekday": 5,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-414"
         }
       ],
@@ -11944,13 +11944,13 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-414"
         },
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-414"
         }
       ],
@@ -11985,13 +11985,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-225"
         },
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W12-225"
         }
       ],
@@ -12026,13 +12026,13 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-225"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W12-225"
         }
       ],
@@ -12067,13 +12067,13 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-333"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-333"
         }
       ],
@@ -12108,13 +12108,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-333"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-333"
         }
       ],
@@ -12149,7 +12149,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W12-222"
         }
       ],
@@ -12184,7 +12184,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W12-237"
         }
       ],
@@ -12219,7 +12219,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W12-235"
         }
       ],
@@ -12254,7 +12254,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W12-236"
         }
       ],
@@ -12289,7 +12289,7 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W12-416"
         }
       ],
@@ -12324,13 +12324,13 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
+          "endMinute": 630,
           "classroom": "W12-311"
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
+          "endMinute": 900,
           "classroom": "W12-311"
         }
       ],
@@ -12365,13 +12365,13 @@
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-311"
         },
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-311"
         }
       ],
@@ -12406,13 +12406,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-323"
         },
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-323"
         }
       ],
@@ -12447,13 +12447,13 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-323"
         },
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
+          "endMinute": 720,
           "classroom": "W12-323"
         }
       ],
@@ -12488,13 +12488,13 @@
         {
           "weekday": 1,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W12-414"
         },
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W12-414"
         }
       ],
@@ -12529,13 +12529,13 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W12-415"
         },
         {
           "weekday": 3,
           "startMinute": 990,
-          "endMinute": 1065,
+          "endMinute": 1080,
           "classroom": "W12-415"
         }
       ],
@@ -12570,13 +12570,13 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-415"
         },
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
+          "endMinute": 990,
           "classroom": "W12-415"
         }
       ],
@@ -12611,13 +12611,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "학군단"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "학군단"
         }
       ],
@@ -12652,13 +12652,13 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "학군단"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "학군단"
         }
       ],
@@ -12693,7 +12693,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-106"
         }
       ],
@@ -12728,7 +12728,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W12-116"
         }
       ],
@@ -12763,7 +12763,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-108"
         }
       ],
@@ -12798,7 +12798,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W6-108"
         }
       ],
@@ -12833,7 +12833,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-107"
         }
       ],
@@ -12868,7 +12868,7 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-503-1"
         }
       ],
@@ -12903,7 +12903,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W2-503-1"
         }
       ],
@@ -12938,7 +12938,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-109"
         }
       ],
@@ -12973,7 +12973,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-109"
         }
       ],
@@ -13008,7 +13008,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-405"
         }
       ],
@@ -13043,7 +13043,7 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W12-117"
         }
       ],
@@ -13078,7 +13078,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-117"
         }
       ],
@@ -13113,7 +13113,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-117"
         }
       ],
@@ -13148,7 +13148,7 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "W12-117"
         }
       ],
@@ -13183,7 +13183,7 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W12-117"
         }
       ],
@@ -13218,7 +13218,7 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W12-117"
         }
       ],
@@ -13253,7 +13253,7 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-503-1"
         }
       ],
@@ -13288,7 +13288,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W2-503-1"
         }
       ],
@@ -13323,7 +13323,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-116"
         }
       ],
@@ -13358,7 +13358,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W12-116"
         }
       ],
@@ -13393,7 +13393,7 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-116"
         }
       ],
@@ -13428,7 +13428,7 @@
         {
           "weekday": 5,
           "startMinute": 720,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W12-118"
         }
       ],
@@ -13463,7 +13463,7 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W12-118"
         }
       ],
@@ -13498,7 +13498,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-108"
         }
       ],
@@ -13533,7 +13533,7 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W12-119"
         }
       ],
@@ -13680,7 +13680,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W11-504"
         }
       ],
@@ -13715,7 +13715,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W11-502"
         }
       ],
@@ -13750,7 +13750,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-107"
         }
       ],
@@ -13785,7 +13785,7 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "E1-105"
         }
       ],
@@ -13820,7 +13820,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-104"
         }
       ],
@@ -13855,7 +13855,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-104"
         }
       ],
@@ -13890,7 +13890,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W2-407"
         }
       ],
@@ -13925,7 +13925,7 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
+          "endMinute": 660,
           "classroom": "W6-104"
         }
       ],
@@ -13960,7 +13960,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W2-405"
         }
       ],
@@ -13995,7 +13995,7 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W12-116"
         }
       ],
@@ -14030,7 +14030,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W15-103"
         }
       ],
@@ -14065,7 +14065,7 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "E1-105"
         }
       ],
@@ -14100,7 +14100,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W15-102"
         }
       ],
@@ -14135,7 +14135,7 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W6-106"
         }
       ],
@@ -14170,7 +14170,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W2-501"
         }
       ],
@@ -14205,7 +14205,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W12-116"
         }
       ],
@@ -14240,7 +14240,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1070,
+          "endMinute": 1080,
           "classroom": "E1-105"
         }
       ],
@@ -14275,7 +14275,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "E1-106"
         }
       ],
@@ -14310,7 +14310,7 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "E1-105"
         }
       ],
@@ -14345,7 +14345,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "E1-105"
         }
       ],
@@ -14380,7 +14380,7 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1130,
+          "endMinute": 1140,
           "classroom": "E1-105"
         }
       ],
@@ -14415,7 +14415,7 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 830,
+          "endMinute": 840,
           "classroom": "W12-134"
         }
       ],
@@ -14450,7 +14450,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-104"
         }
       ],
@@ -14485,7 +14485,7 @@
         {
           "weekday": 5,
           "startMinute": 720,
-          "endMinute": 890,
+          "endMinute": 900,
           "classroom": "W2-405"
         }
       ],
@@ -14576,7 +14576,7 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 950,
+          "endMinute": 960,
           "classroom": "W2-501"
         }
       ],
@@ -14611,7 +14611,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 770,
+          "endMinute": 780,
           "classroom": "W6-106"
         }
       ],
@@ -14646,7 +14646,7 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-106"
         }
       ],
@@ -14681,7 +14681,7 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W15-102"
         }
       ],
@@ -18137,7 +18137,7 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-106"
         }
       ],
@@ -18172,7 +18172,7 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W6-109"
         }
       ],
@@ -18207,7 +18207,7 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-107"
         }
       ],
@@ -18242,7 +18242,7 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
+          "endMinute": 720,
           "classroom": "W12-111"
         }
       ],
@@ -18277,7 +18277,7 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
+          "endMinute": 1020,
           "classroom": "W6-109"
         }
       ],
