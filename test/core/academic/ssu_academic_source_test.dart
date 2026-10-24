@@ -29,7 +29,7 @@ void main() {
       final events = await source.fetch(2026);
       source.close();
       expect(requested, ['2025', '2026']);
-      expect(events, hasLength(61));
+      expect(events, hasLength(60));
       expect(events.any((e) => e.title.contains('개강')), isTrue);
       expect(events.any((e) => e.start.month == 1), isTrue);
       expect(events.any((e) => e.start.month == 12), isTrue);
@@ -65,6 +65,8 @@ void main() {
   );
 
   test('every published SSU undergraduate row is imported for each year', () {
+    // year: [published rows, graduate-only rows]
+    const expected = {2025: (58, 3), 2026: (63, 3)};
     for (final year in [2025, 2026]) {
       final titles = html
           .parse(fixture(year))
@@ -73,14 +75,25 @@ void main() {
           )
           .map((e) => e.text.trim())
           .toList();
-      final graduate = titles.where((t) => t.contains('(대학원)')).length;
+      final graduate = titles.where((t) => t.contains('대학원')).length;
+      expect((titles.length, graduate), expected[year]);
       final events = SsuAcademicSource.parse(fixture(year), year);
       expect(events, hasLength(titles.length - graduate));
       expect(
         events.map((e) => e.title),
-        titles.where((t) => !t.contains('(대학원)')),
+        titles.where((t) => !t.contains('대학원')),
       );
     }
+  });
+
+  test('SSU skips graduate-only rows with and without parentheses', () {
+    final titles = SsuAcademicSource.parse(
+      fixture(2026),
+      2026,
+    ).map((e) => e.title);
+    expect(titles.where((t) => t.contains('대학원')), isEmpty);
+    // The page writes a double space; common rows stay.
+    expect(titles.any((t) => RegExp(r'전기\s+학위수여식').hasMatch(t)), isTrue);
   });
 
   test('SSU keeps the previous year-title-occurrence event IDs', () {

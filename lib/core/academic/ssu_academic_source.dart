@@ -89,7 +89,9 @@ class SsuAcademicSource implements AcademicSource {
             last.isBefore(DateTime(year, month))) {
           throw const FormatException('Invalid SSU period');
         }
-        if (title.contains('(대학원)')) {
+        // Graduate-only rows are labelled "대학원" in the title: "(대학원)"
+        // suffix or "대학원 학위수여식"; they are not undergraduate schedules.
+        if (title.contains('대학원')) {
           continue;
         }
         final occurrence = occurrences.update(
