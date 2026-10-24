@@ -30,7 +30,7 @@ void main() {
       final events = await source.fetch(2026);
       source.close();
       expect(requested, [2025, 2026]);
-      expect(events, hasLength(90));
+      expect(events, hasLength(80));
       expect(events.where((e) => e.title == '1학기 개강'), hasLength(1));
       expect(events.map((e) => e.sourceId).toSet(), hasLength(events.length));
       expect(
@@ -54,24 +54,65 @@ void main() {
     },
   );
   test('every published SKKU record is imported for each academic year', () {
-    final rows = <int, int>{};
+    // Published rows = imported + graduate-only + combined-degree applications.
+    final counts = <int, List<int>>{};
     for (final year in [2025, 2026]) {
       final text = html
           .parse(fixture(year))
           .querySelector('textarea[name=articleText]')!
           .text;
-      final months = (jsonDecode(text) as Map).values;
-      rows[year] = months.fold<int>(
-        0,
-        (n, group) => n + ((group as List).single as Map)['size'] as int,
-      );
+      final titles = [
+        for (final group in (jsonDecode(text) as Map).values)
+          for (final entry in ((group as List).single as Map).entries)
+            if ('${entry.key}'.startsWith('con_')) '${entry.value}'.trim(),
+      ];
+      final graduate = titles.where(SkkuAcademicSource.isGraduateOnly).length;
+      final combined = titles
+          .where(SkkuAcademicSource.isCombinedDegreeApplication)
+          .length;
+      final events = SkkuAcademicSource.parse(fixture(year), year);
       expect(
-        SkkuAcademicSource.parse(fixture(year), year),
-        hasLength(rows[year]),
+        events.map((e) => e.title).toList()..sort(),
+        titles
+            .where(
+              (t) =>
+                  !SkkuAcademicSource.isGraduateOnly(t) &&
+                  !SkkuAcademicSource.isCombinedDegreeApplication(t),
+            )
+            .toList()
+          ..sort(),
       );
+      counts[year] = [titles.length, graduate, combined, events.length];
     }
-    expect(rows, {2025: 90, 2026: 91});
+    expect(counts, {
+      2025: [90, 8, 2, 80],
+      2026: [91, 8, 2, 81],
+    });
   });
+  test(
+    'SKKU leaves out graduate-only rows and combined-degree applications',
+    () {
+      final titles = SkkuAcademicSource.parse(
+        fixture(2026),
+        2026,
+      ).map((e) => e.title).toSet();
+      for (final excluded in [
+        '대학원과정 논문제출자격시험 응시(면제) 신청',
+        '대학원과정 학위논문 예비·심사 신청',
+        '2026년 8월 학위취득예정 대학원과정 학위논문 On-line 탑재 완료 기한',
+        '2026학년도 2학기 학부·대학원 연계과정 신청',
+      ]) {
+        expect(titles, isNot(contains(excluded)));
+      }
+      // Rows shared with undergraduates stay.
+      expect(titles, contains('학사·대학원과정 마이크로디그리 1차 신청'));
+      expect(titles, contains('학사과정 조기졸업/석사과정 수업연한 단축/석박사통합과정 조기수료·이수포기 신청'));
+      expect(
+        SkkuAcademicSource.parse(fixture(2025), 2025).map((e) => e.title),
+        isNot(contains('2026학년도 1학기 학사과정 학석사연계과정 신청')),
+      );
+    },
+  );
   test('SKKU profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000133',

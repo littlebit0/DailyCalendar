@@ -80,6 +80,9 @@ class SkkuAcademicSource implements AcademicSource {
             last.isAfter(DateTime(academicYear + 1, 3, 31))) {
           throw const FormatException('Invalid SKKU event period');
         }
+        if (isGraduateOnly(title) || isCombinedDegreeApplication(title)) {
+          continue;
+        }
         final identity = '$academicYear:${title.trim()}';
         final occurrence = occurrences.update(
           identity,
@@ -103,6 +106,16 @@ class SkkuAcademicSource implements AcademicSource {
     }
     return events;
   }
+
+  /// The page names each row's programme: `학사과정`, `대학원과정` or the joint
+  /// `학사·대학원과정`. Rows aimed at `대학원과정` alone are graduate-only.
+  static bool isGraduateOnly(String title) =>
+      RegExp(r'(^|\s)대학원과정(\s|$)').hasMatch(title);
+
+  /// Applications to the combined bachelor-master track, chosen after
+  /// admission (`학석사연계과정`, renamed `학부·대학원 연계과정` from 2026).
+  static bool isCombinedDegreeApplication(String title) =>
+      RegExp(r'(학석사|학부·대학원)\s*연계과정\s*신청').hasMatch(title);
 
   static DateTime _date(Object? value) {
     if (value is! String || !RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) {
