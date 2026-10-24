@@ -30,8 +30,13 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
   AcademicSourceRegistration(
     id: 'kangwon',
     institutionId: 'academyinfo:0000003',
-    // Chuncheon (main) and Samcheok; Gangneung/Wonju publish a separate board.
-    campusIds: {'academyinfo:0000003', 'academyinfo:0000004'},
+    // Every campus shares one calendar that merges both campus boards.
+    campusIds: {
+      'academyinfo:0000003',
+      'academyinfo:0000004',
+      'academyinfo:0003363',
+      'academyinfo:0003364',
+    },
     create: KangwonAcademicSource.new,
   ),
 ];
