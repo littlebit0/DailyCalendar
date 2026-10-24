@@ -100,14 +100,22 @@ class MjuAcademicSource implements AcademicSource {
         if (labelled.isNotEmpty && !text.startsWith('[')) {
           throw const FormatException('Unlabelled MJU title prefix');
         }
-        // Graduate-only notices are skipped; undergraduate and shared ones stay.
-        final titles = labelled.isEmpty
-            ? [text]
-            : [
-                for (final part in labelled)
-                  if (part[1]!.replaceAll(' ', '').contains('학부'))
-                    '[${part[1]!.replaceAll(' ', '')}] ${part[2]!.trim()}',
-              ];
+        // Graduate-only notices are skipped; undergraduate and shared ones
+        // stay. An unknown audience label fails the fetch instead of being
+        // dropped silently.
+        final titles = <String>[];
+        for (final part in labelled) {
+          final audience = part[1]!.replaceAll(' ', '');
+          switch (audience) {
+            case '대학원':
+              break;
+            case '학부' || '학부·대학원':
+              titles.add('[$audience] ${part[2]!.trim()}');
+            default:
+              throw const FormatException('Unknown MJU audience label');
+          }
+        }
+        if (labelled.isEmpty) titles.add(text);
         for (final title in titles) {
           final identity =
               '${start.toIso8601String()}:${last.toIso8601String()}:$title';

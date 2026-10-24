@@ -63,9 +63,10 @@ void main() {
         final labels = RegExp(
           r'\[([^\]]+)\]',
         ).allMatches(row.text).map((m) => m[1]!.replaceAll(' ', '')).toList();
+        expect(labels.toSet().difference({'학부', '학부·대학원', '대학원'}), isEmpty);
         final kept = labels.isEmpty
             ? 1
-            : labels.where((l) => l.contains('학부')).length;
+            : labels.where((l) => l != '대학원').length;
         if (kept == 0) graduateOnly++;
         parts += kept;
       }
@@ -120,5 +121,15 @@ void main() {
       ),
       throwsFormatException,
     );
+    // A new audience label is rejected rather than treated as graduate-only.
+    for (final label in ['[학 부 생]', '[대학원생]', '[학부·대학원·평생]']) {
+      expect(
+        () => MjuAcademicSource.parse(
+          fixture(2026).replaceFirst('[학부] 동계', '$label 동계'),
+          2026,
+        ),
+        throwsFormatException,
+      );
+    }
   });
 }
