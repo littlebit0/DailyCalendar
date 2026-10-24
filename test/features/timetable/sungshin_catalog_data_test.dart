@@ -44,18 +44,37 @@ List<UniversityCourse> _courses() => [
     ).courses,
 ];
 
-// 강의시간편성표: n교시 = 09:00 + (n-1)시간, 50분.
-Set<(String, int, int)> _expected(UniversityCourse course) => {
-  for (final block in course.sourceSchedule.split(','))
-    if (RegExp(r'^([월화수목금토])/(\d+)(?:-(\d+))?$').firstMatch(block)
-        case final m?)
-      for (final day in _teachingDates[_days.indexOf(m[1]!) + 1]!.split(' '))
-        (
-          '2026-$day',
-          480 + int.parse(m[2]!) * 60,
-          530 + int.parse(m[3] ?? m[2]!) * 60,
-        ),
-};
+// 시행세칙 제11조 교시표: n교시 = 09:00 + (n-1)시간 시작, 수업 50분 + 쉬는 시간 10분 = 60분 슬롯.
+// 같은 날짜의 구간은 간격이 60분 미만이면 하나로 합친다(강의실은 과목당 하나).
+Set<(String, int, int)> _expected(UniversityCourse course) {
+  final byDate = <String, List<(int, int)>>{};
+  for (final block in course.sourceSchedule.split(',')) {
+    final m = RegExp(r'^([월화수목금토일])/(\d+)(?:-(\d+))?$').firstMatch(block);
+    if (m == null) continue;
+    for (final day in _teachingDates[_days.indexOf(m[1]!) + 1]!.split(' ')) {
+      byDate.putIfAbsent('2026-$day', () => []).add((
+        480 + int.parse(m[2]!) * 60,
+        540 + int.parse(m[3] ?? m[2]!) * 60,
+      ));
+    }
+  }
+  return {
+    for (final e in byDate.entries)
+      ..._merge(e.value).map((r) => (e.key, r.$1, r.$2)),
+  };
+}
+
+List<(int, int)> _merge(List<(int, int)> ranges) {
+  final out = <(int, int)>[];
+  for (final r in ([...ranges]..sort((a, b) => a.$1.compareTo(b.$1)))) {
+    if (out.isNotEmpty && r.$1 - out.last.$2 < 60) {
+      out.last = (out.last.$1, r.$2 > out.last.$2 ? r.$2 : out.last.$2);
+    } else {
+      out.add(r);
+    }
+  }
+  return out;
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -146,7 +165,7 @@ void main() {
           .every((m) => m.weekday == DateTime.tuesday),
       isTrue,
     );
-    expect(scheduled.expand((c) => c.meetings), hasLength(26460));
+    expect(scheduled.expand((c) => c.meetings), hasLength(26370));
     for (final mode in [
       LectureMode.inPerson,
       LectureMode.liveOnline,
