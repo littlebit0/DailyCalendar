@@ -124,17 +124,34 @@ void main() {
             expect(course.sourceRemarks, contains('실제 캠퍼스는 미확인'));
           }
           final unique = <String>{};
+          // 학사내규 제6조 교시표에 쉬는 시간을 포함한 슬롯(50분 수업+10분=60분,
+          // 75분 수업+15분=90분)으로 보고, 같은 날 연속 교시는 한 구간으로 합친다.
           final expectedSpans = <String>{};
           for (final group in RegExp(
             r'([월화수목금토일]+)(\d+(?:\.\d+)*)',
           ).allMatches(compact(course.sourceSchedule))) {
             for (final day in group[1]!.split('')) {
-              for (final period in group[2]!.split('.')) {
-                final clock = clocks[period] as List;
-                expectedSpans.add(
-                  '${'월화수목금토일'.indexOf(day) + 1}/${clock[0]}/${clock[1]}',
-                );
+              final slots = <(int, int)>[
+                for (final period in group[2]!.split('.'))
+                  () {
+                    final clock = clocks[period] as List;
+                    final begin = clock[0] as int;
+                    return (begin, begin + (clock[1] - begin == 75 ? 90 : 60));
+                  }(),
+              ]..sort((a, b) => a.$1.compareTo(b.$1));
+              var start = slots.first.$1, end = slots.first.$2;
+              for (final slot in slots.skip(1)) {
+                if (slot.$1 - end < 60) {
+                  end = slot.$2 > end ? slot.$2 : end;
+                } else {
+                  expectedSpans.add(
+                    '${'월화수목금토일'.indexOf(day) + 1}/$start/$end',
+                  );
+                  start = slot.$1;
+                  end = slot.$2;
+                }
               }
+              expectedSpans.add('${'월화수목금토일'.indexOf(day) + 1}/$start/$end');
             }
           }
           final actualSpans = <String>{};
@@ -156,18 +173,17 @@ void main() {
               '2026-10-09',
               '2026-10-23',
             ], isNot(contains(meeting.date)));
-            expect(
-              clocks.values.any(
-                (dynamic clock) =>
-                    clock[0] == meeting.originalStartMinute &&
-                    clock[1] == meeting.originalEndMinute,
-              ),
-              isTrue,
-            );
+            // 끝은 쉬는 시간을 포함하므로 50분 교시 구간은 60분, 75분 교시 구간은 90분의
+            // 배수이고, 시작은 학사내규 제6조 교시 시작 시각이다. 정확한 구간은 아래
+            // expectedSpans 비교가 보장한다.
+            final starts = {
+              for (final p in clocks.keys) (clocks[p] as List)[0] as int,
+            };
+            expect(starts, contains(meeting.originalStartMinute));
             final duration =
                 meeting.originalEndMinute - meeting.originalStartMinute;
-            if (duration == 75) seventyFive++;
-            if (duration == 50) fifty++;
+            if (duration % 90 == 0) seventyFive++;
+            if (duration % 60 == 0) fifty++;
             expect(meeting.classroom, course.sourceClassroom);
             actualSpans.add(
               '${meeting.weekday}/${meeting.originalStartMinute}/${meeting.originalEndMinute}',
@@ -189,7 +205,7 @@ void main() {
       expect(seen, hasLength(1698));
       expect(closedRows, 104);
       expect(scheduled, hasLength(1368));
-      expect(slots, 35803);
+      expect(slots, 17157);
       expect(seventyFive, greaterThan(0));
       expect(fifty, greaterThan(0));
       for (final mode in [
