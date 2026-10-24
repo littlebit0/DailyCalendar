@@ -41,6 +41,53 @@ void main() {
   });
 
   test(
+    'Sunmoon period slots include the 10 minute break and merge runs',
+    () async {
+      final datasets = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'sunmoon',
+      );
+      final byPeriods = datasets.single.courses.where(
+        (c) =>
+            c.scheduleStatus == 'scheduled' && !c.sourceSchedule.contains(':'),
+      );
+      expect(byPeriods, hasLength(5));
+      // Rule table (60 minute class table: 50 + 10, period 1 at 09:30).
+      final expected = {
+        '053510': [(4, 750, 870)],
+        '210116': [(2, 570, 630), (4, 570, 690)],
+        '210138': [(2, 750, 870), (4, 870, 930)],
+        '210142': [(1, 570, 690), (3, 570, 630)],
+        '210113': [(1, 630, 690), (3, 570, 690)],
+      };
+      for (final c in byPeriods) {
+        expect(
+          [
+            for (final s in c.meetings)
+              (s.weekday, s.originalStartMinute, s.originalEndMinute),
+          ],
+          expected[c.code],
+          reason: c.code,
+        );
+      }
+      // Courses whose source states clock times keep them untouched.
+      final clock = datasets.single.courses.where(
+        (c) => c.sourceSchedule.contains(':'),
+      );
+      expect(
+        {
+          for (final c in clock)
+            c.code: (
+              c.meetings.single.originalStartMinute,
+              c.meetings.single.originalEndMinute,
+            ),
+        },
+        {'': (870, 1040), '920418': (930, 1100)},
+      );
+    },
+  );
+
+  test(
     'Sunmoon leaves only the user-held HUSS label without an affiliation',
     () async {
       final catalog = await UniversityCatalog.load();

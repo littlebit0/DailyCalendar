@@ -35,7 +35,7 @@
         {
           "weekday": 4,
           "startMinute": 750,
-          "endMinute": 860,
+          "endMinute": 870,
           "classroom": ""
         }
       ],
@@ -86,13 +86,13 @@
         {
           "weekday": 2,
           "startMinute": 570,
-          "endMinute": 620,
+          "endMinute": 630,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 570,
-          "endMinute": 680,
+          "endMinute": 690,
           "classroom": ""
         }
       ],
@@ -155,13 +155,13 @@
         {
           "weekday": 2,
           "startMinute": 750,
-          "endMinute": 860,
+          "endMinute": 870,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 870,
-          "endMinute": 920,
+          "endMinute": 930,
           "classroom": ""
         }
       ],
@@ -224,13 +224,13 @@
         {
           "weekday": 1,
           "startMinute": 570,
-          "endMinute": 680,
+          "endMinute": 690,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 570,
-          "endMinute": 620,
+          "endMinute": 630,
           "classroom": ""
         }
       ],
@@ -293,13 +293,13 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 680,
+          "endMinute": 690,
           "classroom": ""
         },
         {
           "weekday": 3,
           "startMinute": 570,
-          "endMinute": 680,
+          "endMinute": 690,
           "classroom": ""
         }
       ],
@@ -752,6 +752,7 @@
         "21:30",
         "22:20"
       ]
-    ]
+    ],
+    "slotNote": "교시 슬롯은 수업 50분+휴식 10분을 합친 60분(1교시 09:30~10:30)이며 연속 교시는 한 구간으로 저장한다. 원문에 시계 시각이 있는 강좌는 그대로 둔다"
   }
 }
