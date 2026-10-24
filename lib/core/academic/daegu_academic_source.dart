@@ -65,8 +65,16 @@ class DaeguAcademicSource implements AcademicSource {
     for (final row in document.querySelectorAll('table.tbl_cal tr')) {
       final header = row.querySelector('th');
       final cells = row.querySelectorAll('td');
-      if (header == null || cells.isEmpty) {
+      // Only the known heading row is skipped; any other row without its own
+      // month heading means the layout changed and the calendar is refused.
+      if (cells.isEmpty &&
+          header != null &&
+          header.classes.contains('top_line') &&
+          header.text.trim().isEmpty) {
         continue;
+      }
+      if (header == null) {
+        throw const FormatException('Daegu row without its month');
       }
       final match = RegExp(r'^(\d{1,2})월$').firstMatch(header.text.trim());
       if (match == null || cells.length != 2) {

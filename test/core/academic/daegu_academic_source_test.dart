@@ -103,4 +103,22 @@ void main() {
       throwsFormatException,
     );
   });
+  test('Daegu refuses rows that lost their month heading', () {
+    final body = fixture(2026);
+    const heading = '<th rowspan="1" class="monthArea03">3월</th>';
+    final second = body.indexOf(heading, body.indexOf(heading) + 1);
+    expect(second, greaterThan(0));
+    for (final broken in [
+      // Standard rowspan layout: later rows of the month have no <th>.
+      body.replaceRange(second, second + heading.length, ''),
+      body.replaceFirst(heading, '<th class="monthArea03"></th>'),
+      body.replaceFirst('<tr>\n            $heading', '<tr>$heading</tr><tr>'),
+    ]) {
+      expect(broken, isNot(body));
+      expect(
+        () => DaeguAcademicSource.parse(broken, 2026),
+        throwsFormatException,
+      );
+    }
+  });
 }
