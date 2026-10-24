@@ -52,18 +52,40 @@ void main() {
   });
 
   test('every published Sookmyung row of the year is imported', () {
-    for (final year in [2025, 2026]) {
+    // Published rows = imported + combined-degree application rows.
+    for (final (year, published, combined) in [
+      (2025, 116, 5),
+      (2026, 120, 4),
+    ]) {
       final months = (jsonDecode(fixture(year)) as Map)['data'] as List;
       final rows = [
-        for (final month in months.take(12).cast<List>())
-          for (final row in month.cast<Map>()) '${row['calendarSeq']}',
+        for (final month in months.take(12).cast<List>()) ...month.cast<Map>(),
       ];
+      final excluded = rows.where(
+        (row) => SookmyungAcademicSource.isCombinedDegreeApplication(
+          row['content'] as String,
+        ),
+      );
       final events = SookmyungAcademicSource.parse(fixture(year), year);
-      expect(events, hasLength(rows.length));
-      expect(events.map((e) => e.sourceId).toSet(), rows.toSet());
+      expect(rows, hasLength(published));
+      expect(excluded, hasLength(combined));
+      expect(events, hasLength(published - combined));
+      expect(events.map((e) => e.sourceId).toSet(), {
+        for (final row in rows)
+          if (!excluded.contains(row)) '${row['calendarSeq']}',
+      });
     }
-    expect(SookmyungAcademicSource.parse(fixture(2025), 2025), hasLength(116));
-    expect(SookmyungAcademicSource.parse(fixture(2026), 2026), hasLength(120));
+  });
+
+  test('Sookmyung leaves out combined-degree track applications', () {
+    final body = fixture(2026);
+    expect(body, contains('"content":"학석사연계과정 지원자 모집"'));
+    expect(body, contains('"content":"학석사연계과정 합격자 발표"'));
+    final events = SookmyungAcademicSource.parse(body, 2026);
+    expect(events.any((e) => e.title.contains('학석사연계과정')), isFalse);
+    for (final id in ['5946', '5957', '6057', '6067']) {
+      expect(events.map((e) => e.sourceId), isNot(contains(id)));
+    }
   });
 
   test('Sookmyung keeps calendarSeq IDs and date-only ranges', () async {
@@ -72,7 +94,7 @@ void main() {
     final events = await calendar.fetch(2026);
     calendar.close();
     expect(requested, ['2025', '2026']);
-    expect(events, hasLength(120));
+    expect(events, hasLength(116));
     final winter = events.singleWhere((e) => e.sourceId == '6238');
     expect(winter.title, '겨울계절학기');
     expect(winter.start, DateTime(2026, 1, 1));
@@ -93,7 +115,13 @@ void main() {
     calendar.close();
     expect(requested, ['2026', '2027']);
     final januaryRows =
-        ((jsonDecode(fixture(2027)) as Map)['data'] as List).first as List;
+        (((jsonDecode(fixture(2027)) as Map)['data'] as List).first as List)
+            .cast<Map>()
+            .where(
+              (row) => !SookmyungAcademicSource.isCombinedDegreeApplication(
+                row['content'] as String,
+              ),
+            );
     // Two 2026 December periods end in January 2027.
     expect(events, hasLength(januaryRows.length + 2));
     expect(

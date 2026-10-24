@@ -97,6 +97,7 @@ class SookmyungAcademicSource implements AcademicSource {
         if (start.year != bucket.year || start.month != bucket.month) {
           throw const FormatException('Unexpected Sookmyung period');
         }
+        if (isCombinedDegreeApplication(raw['content'] as String)) continue;
         _add(
           events,
           AcademicEvent(
@@ -112,6 +113,11 @@ class SookmyungAcademicSource implements AcademicSource {
     }
     return events.values.toList();
   }
+
+  /// Recruiting and admission results of the combined bachelor-master track,
+  /// which students enter by selection after admission.
+  static bool isCombinedDegreeApplication(String content) =>
+      content.trim().startsWith('학석사연계과정');
 
   static bool _overlaps(AcademicEvent event, int year) =>
       event.start.isBefore(DateTime(year + 1)) &&
