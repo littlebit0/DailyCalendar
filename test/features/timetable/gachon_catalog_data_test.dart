@@ -107,28 +107,28 @@ void main() {
             if (course.codeAndSection == '05271-001' &&
                 m.date == '2026-09-24') {
               expect(m.originalStartMinute, 660);
-              expect(m.originalEndMinute, 770);
+              expect(m.originalEndMinute, 780);
               expect(saved.modeOn(m, m.teachingDate!), LectureMode.liveOnline);
               continue;
             }
             if (course.codeAndSection == '10130-001' &&
                 m.date == '2026-10-05') {
               expect(m.originalStartMinute, 600);
-              expect(m.originalEndMinute, 770);
+              expect(m.originalEndMinute, 780);
               expect(saved.modeOn(m, m.teachingDate!), LectureMode.inPerson);
               continue;
             }
             if (course.codeAndSection == '14478-002' &&
                 m.date == '2026-10-09') {
               expect(m.originalStartMinute, 900);
-              expect(m.originalEndMinute, 1070);
+              expect(m.originalEndMinute, 1080);
               expect(saved.modeOn(m, m.teachingDate!), LectureMode.liveOnline);
               continue;
             }
             if (course.codeAndSection == '10275-001' &&
                 m.date == '2026-10-09') {
               expect(m.originalStartMinute, 840);
-              expect(m.originalEndMinute, 1010);
+              expect(m.originalEndMinute, 1020);
               expect(saved.modeOn(m, m.teachingDate!), LectureMode.liveOnline);
               continue;
             }
@@ -173,4 +173,54 @@ void main() {
       expect(orientation.meetings.single.originalEndMinute, 840);
     },
   );
+
+  test('Gachon period slots include the 10 minute break (60 minute slots)', () {
+    // 교시 시작은 60분 간격(50분 수업+10분 쉬는 시간): 1교시 09:00, 2교시 10:00 ...
+    // 근거: gachon-current-scope-clock-term-manifest.json clock50minPeriods
+    // (https://www.gachon.ac.kr/bbs/kor/475/151337/download.do), 학교 규정 문서는 미확인.
+    var checked = 0;
+    var clockText = 0;
+    for (final campus in ['global', 'medical']) {
+      final raw =
+          jsonDecode(
+                File(
+                  'assets/timetable/gachon-$campus-2026-2.json',
+                ).readAsStringSync(),
+              )
+              as Map<String, dynamic>;
+      for (final course in raw['courses'] as List) {
+        final byDay = <String, List<Map>>{};
+        for (final s in (course as Map)['schedules'] as List) {
+          final start = s['startMinute'] as int;
+          final end = s['endMinute'] as int;
+          if (course['sourceId'] == 'gachon/20/2026/2/12718/001') {
+            // 원문이 시각을 직접 적은 오리엔테이션(13:00~14:00)은 그대로 둔다.
+            expect(end, 840);
+            clockText++;
+            continue;
+          }
+          expect(start % 60, 0, reason: course['sourceId']);
+          expect(end % 60, 0, reason: course['sourceId']);
+          checked++;
+          byDay.putIfAbsent('${s['date']}|${s['classroom']}', () => []).add(s);
+        }
+        for (final list in byDay.values) {
+          list.sort(
+            (a, b) =>
+                (a['startMinute'] as int).compareTo(b['startMinute'] as int),
+          );
+          for (var i = 1; i < list.length; i++) {
+            expect(
+              (list[i]['startMinute'] as int) -
+                  (list[i - 1]['endMinute'] as int),
+              greaterThanOrEqualTo(60),
+              reason: course['sourceId'],
+            );
+          }
+        }
+      }
+    }
+    expect(checked, 58144);
+    expect(clockText, 1);
+  });
 }
