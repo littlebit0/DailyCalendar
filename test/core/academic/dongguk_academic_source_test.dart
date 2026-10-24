@@ -11,7 +11,7 @@ String fixture(bool wise, int year) => File(
 ).readAsStringSync();
 
 void main() {
-  for (final (wise, count) in [(false, 90), (true, 88)]) {
+  for (final (wise, count) in [(false, 88), (true, 86)]) {
     final campus = wise ? 'WISE' : 'Seoul';
     test(
       'Dongguk $campus keeps its own official undergraduate periods',
@@ -39,7 +39,7 @@ void main() {
         expect(events.length, count);
         expect(events.map((e) => e.sourceId).toSet().length, count);
         expect(events.any((e) => e.title.contains('대학원')), isFalse);
-        expect(events.any((e) => e.title.contains('학·석사연계과정')), isTrue);
+        expect(events.any((e) => e.title.contains('학·석사연계과정')), isFalse);
         final winter = events.singleWhere(
           (e) => e.title == '겨울 계절학기' && e.start == DateTime(2026, 12, 22),
         );
@@ -48,10 +48,11 @@ void main() {
     );
 
     test('every published Dongguk $campus undergraduate row is imported', () {
-      for (final (year, rows, imported)
+      // Published rows = imported + graduate-only + combined-degree applications.
+      for (final (year, rows, graduate, combined, imported)
           in wise
-              ? [(2025, 97, 81), (2026, 102, 87)]
-              : [(2025, 121, 99), (2026, 102, 84)]) {
+              ? [(2025, 97, 16, 0, 81), (2026, 102, 15, 2, 85)]
+              : [(2025, 121, 22, 2, 97), (2026, 102, 18, 2, 82)]) {
         final body = fixture(wise, year);
         final published = html
             .parse(body)
@@ -59,7 +60,7 @@ void main() {
         final events = DonggukAcademicSource.parse(body, year, wise: wise);
         expect(published, hasLength(rows));
         expect(events, hasLength(imported));
-        var graduateOnly = 0;
+        var graduateOnly = 0, combinedDegree = 0;
         for (final row in published) {
           final cell = row.querySelectorAll('td')[1];
           final office = cell.querySelector('p')?.text ?? '';
@@ -69,10 +70,13 @@ void main() {
               .join()
               .replaceAll(RegExp(r'\s+'), ' ')
               .trim();
+          if (title.contains('학·석사연계과정')) {
+            combinedDegree++;
+            expect(events.any((e) => e.title == title), isFalse);
+            continue;
+          }
           if (title.contains('대학원') ||
-              (office.contains('대학원') &&
-                  !office.contains('/') &&
-                  !title.contains('학·석사'))) {
+              (office.contains('대학원') && !office.contains('/'))) {
             graduateOnly++;
             continue;
           }
@@ -82,8 +86,36 @@ void main() {
             reason: '$year $title',
           );
         }
-        expect(graduateOnly, rows - imported);
+        expect(graduateOnly, graduate, reason: '$year');
+        expect(combinedDegree, combined, reason: '$year');
+        expect(rows, imported + graduate + combined);
       }
+    });
+
+    test('Dongguk $campus leaves out graduate-office-only rows', () {
+      final body = fixture(wise, 2026);
+      final titles = DonggukAcademicSource.parse(
+        body,
+        2026,
+        wise: wise,
+      ).map((e) => e.title).toSet();
+      expect(titles.any((t) => t.contains('학·석사연계과정')), isFalse);
+      expect(titles, contains('재입학 신청'));
+      expect(
+        DonggukAcademicSource.isGraduateOnly('2026-2학기 학·석사연계과정 신청', '대학원교학팀'),
+        isTrue,
+      );
+      expect(
+        DonggukAcademicSource.isGraduateOnly('수강신청 확인 및 정정', '대학원교학팀'),
+        isTrue,
+      );
+      expect(
+        DonggukAcademicSource.isGraduateOnly(
+          '수강신청 확인 및 정정',
+          '(주관부서: 학사지원팀/대학원실)',
+        ),
+        isFalse,
+      );
     });
 
     test('Dongguk $campus rejects stale row years and invalid dates', () {

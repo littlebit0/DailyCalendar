@@ -137,14 +137,7 @@ class DonggukAcademicSource implements AcademicSource {
       }
       final title = cells[1].text.replaceAll(RegExp(r'\s+'), ' ').trim();
       if (title.isEmpty) throw const FormatException('Missing Dongguk title');
-      // Graduate-only entries are distinct from joint undergraduate entries.
-      // Undergraduate combined-degree applications remain included.
-      if (title.contains('대학원') ||
-          (department.contains('대학원') &&
-              !department.contains('/') &&
-              !title.contains('학·석사'))) {
-        continue;
-      }
+      if (isGraduateOnly(title, department)) continue;
       final key = '$title:${start.toIso8601String()}';
       final occurrence = occurrences.update(
         key,
@@ -171,6 +164,14 @@ class DonggukAcademicSource implements AcademicSource {
     }
     return events;
   }
+
+  /// Graduate-only entries: the title names the graduate school, or a graduate
+  /// office is the sole organiser. Joint offices (`학사지원팀/대학원실`) stay.
+  /// The combined bachelor-master application (`학·석사연계과정 신청`) is run by
+  /// the graduate office alone, so it is left out by the same rule.
+  static bool isGraduateOnly(String title, String department) =>
+      title.contains('대학원') ||
+      (department.contains('대학원') && !department.contains('/'));
 
   @override
   void close() => _client.close();
