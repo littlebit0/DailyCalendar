@@ -355,11 +355,19 @@ class HoseoAcademicSource implements AcademicSource {
     );
   }
 
-  /// Rows the source itself marks as graduate-school only, e.g.
-  /// `후기 학위수여식(대학원)`. Rows marked `(학부/대학원)` stay.
+  /// Rows the source itself marks as graduate-school only: a trailing
+  /// `(대학원)`, a leading `[대학원]`/`(대학원)`, or a title starting with
+  /// `대학원 `. Rows whose target also names `학부`, e.g. `(학부/대학원)`, stay.
   static bool isGraduateOnly(String title) {
-    final target = RegExp(r'\(([^()]*)\)\s*$').firstMatch(title)?.group(1);
-    return target != null && target.contains('대학원') && !target.contains('학부');
+    final text = title.trim();
+    final targets = [
+      RegExp(r'\(([^()]*)\)\s*$').firstMatch(text)?.group(1),
+      RegExp(r'^[\[(]([^\])]*)[\])]').firstMatch(text)?.group(1),
+      if (text.startsWith('대학원 ')) text,
+    ];
+    return targets.any(
+      (t) => t != null && t.contains('대학원') && !t.contains('학부'),
+    );
   }
 
   static List<AcademicEvent> _ranges(

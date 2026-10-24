@@ -349,7 +349,13 @@ void main() {
     expect(HoseoAcademicSource.isGraduateOnly('후기 학위수여식(대학원)'), isTrue);
     expect(HoseoAcademicSource.isGraduateOnly('제42회 학위수여식(학부/대학원)'), isFalse);
     expect(HoseoAcademicSource.isGraduateOnly('후기 학위수여일(학부)'), isFalse);
-    expect(HoseoAcademicSource.isGraduateOnly('대학원 입학식'), isFalse);
+    expect(HoseoAcademicSource.isGraduateOnly('대학원 입학식'), isTrue);
+    expect(HoseoAcademicSource.isGraduateOnly('[대학원] 학위청구논문 제출'), isTrue);
+    expect(HoseoAcademicSource.isGraduateOnly('(대학원) 수강신청'), isTrue);
+    expect(HoseoAcademicSource.isGraduateOnly('(학부/대학원) 수강신청'), isFalse);
+    expect(HoseoAcademicSource.isGraduateOnly('[학부/대학원] 수강신청'), isFalse);
+    expect(HoseoAcademicSource.isGraduateOnly('대학원 학부 합동 행사'), isFalse);
+    expect(HoseoAcademicSource.isGraduateOnly('1학기 수강신청 기간'), isFalse);
   });
   test('Hoseo profile resolves to its registered calendar', () {
     for (final id in [
