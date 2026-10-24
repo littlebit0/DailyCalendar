@@ -350,6 +350,19 @@
           }
         }
       ]
+    },
+    {
+      "university": "pknu",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://www.pknu.ac.kr/main/163?action=view&no=725810&cd=10003",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-20"
+        }
+      ]
     }
   ]
 }
