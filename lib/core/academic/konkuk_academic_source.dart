@@ -125,20 +125,26 @@ class KonkukAcademicSource implements AcademicSource {
           ),
         );
       }
-      // The same holds for summer: the 2025 summer notice exists only on the
-      // archive board, as "2025학년도 하계 계절학기 시행계획 안내(수정)" with no
-      // dates in its body, so a year without a dated notice gets no session.
+      // Summer notices move to the archive board like winter ones (the 2025
+      // notice "2025학년도 하계 계절학기 시행계획 안내(수정)" is only there).
+      // shortcut: a year with no recognised notice on either board is taken as
+      // not yet published (summer notices appear in April-June); the boards give
+      // no signal that tells this apart from a renamed notice.
       final summer = await search(keyword: '하계방학');
-      if (has(summer, year, winter: false)) {
+      final summerArchived = !has(summer, year, winter: false);
+      final summerNotices = summerArchived
+          ? await search(archive: true, keyword: '하계')
+          : summer;
+      if (has(summerNotices, year, winter: false)) {
         add(
           parseSupplement(
-            summer,
+            summerNotices,
             year,
             winter: false,
-            host: 'www.kku.ac.kr',
-            menu: '1740',
-            site: '2',
-            board: '18',
+            host: summerArchived ? 'formativeart.kku.ac.kr' : 'www.kku.ac.kr',
+            menu: summerArchived ? '160' : '1740',
+            site: summerArchived ? '38' : '2',
+            board: summerArchived ? '3' : '18',
           ),
         );
       }
@@ -161,12 +167,16 @@ class KonkukAcademicSource implements AcademicSource {
   static String _clean(String value) =>
       value.replaceAll(RegExp(r'\s+'), ' ').trim();
 
-  // The archive titles the 2024 winter notice "2024 동계 계절 학기 시행 계획".
+  // Official title variants: "2024 동계 계절 학기 시행 계획",
+  // "2023학년도 하계방학 중 학사일정 안내", "2024학년도하계계절학기운영계획".
   static bool _isNotice(String title, int year, bool winter) {
     final compact = title.replaceAll(RegExp(r'\s+'), '');
-    return winter
-        ? RegExp('$year(?:학년도)?동계계절학기(?:안내|시행계획)').hasMatch(compact)
-        : compact.contains('$year학년도') && compact.contains('하계방학주요학사일정');
+    return RegExp(
+      winter
+          ? '$year(?:학년도)?동계계절학기(?:안내|시행계획)'
+          : '$year학년도하계방학(?:중)?(?:주요)?학사일정|'
+                '$year(?:학년도)?하계계절학기(?:시행|운영)계획',
+    ).hasMatch(compact);
   }
 
   static AcademicEvent _event(
@@ -306,13 +316,17 @@ class KonkukAcademicSource implements AcademicSource {
     final row = notices.first;
     if (row['SITE_NO'].toString() != site ||
         row['BOARD_SEQ'].toString() != board ||
+        !row.containsKey('CONTENTS') ||
         row['CONTENTS'] is! String?) {
       throw const FormatException('Wrong GLOCAL notice scope');
     }
+    // CONTENTS is null for an attachment-only notice (the 2024 winter notice).
     final doc = html.parse(row['CONTENTS'] as String? ?? '');
-    // A notice published without any date in its body (the 2024 winter notice
-    // has only attachments) creates no event; dates are never guessed.
-    if (!RegExp(r'\d{1,2}\.\s*\d{1,2}\.').hasMatch(doc.body?.text ?? '')) {
+    // A notice without any date in its body creates no event; dates are never
+    // guessed. Any date form ("12.22(월)", "12월 22일") must parse or fail.
+    if (!RegExp(
+      r'\d{1,2}\.\s*\d{1,2}|\d{1,2}\s*월\s*\d{1,2}\s*일',
+    ).hasMatch(doc.body?.text ?? '')) {
       return const [];
     }
     String raw;

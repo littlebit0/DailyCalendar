@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_source.dart';
 import 'package:daily/core/academic/konkuk_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart' as html;
@@ -202,8 +203,9 @@ void main() {
         ),
         throwsFormatException,
       );
-      // 2025: the previous winter notice has no dates and no dated 2025 summer
-      // notice is on the current board, so the annual rows are returned alone.
+      // 2025: the previous winter notice has no dates and the 2025 summer
+      // notice, found on the archive board, has none either ("\u00a0" body), so
+      // the annual rows are returned alone.
       final source = KonkukAcademicSource.glocal(
         client: MockClient((r) async {
           final body = Uri.splitQueryString(r.body);
@@ -211,7 +213,13 @@ void main() {
             return ok(fixture('konkuk-glocal-${body['SCH_YEAR']}.json'));
           }
           if (r.url.host == 'formativeart.kku.ac.kr') {
-            return ok(fixture('konkuk-glocal-winter-notices.json'));
+            return ok(
+              fixture(
+                body['SEARCH'] == '동계'
+                    ? 'konkuk-glocal-winter-notices.json'
+                    : 'konkuk-glocal-archive-summer-notices.json',
+              ),
+            );
           }
           return ok(
             fixture(
@@ -233,6 +241,83 @@ void main() {
         annual.map((e) => e.sourceId).toSet(),
       );
       expect(events.where((e) => e.title.endsWith('계절학기')), isEmpty);
+    },
+  );
+
+  test('GLOCAL notice bodies with dates in any form must parse or fail', () {
+    List<AcademicEvent> parse(String contents, {bool drop = false}) {
+      final data = jsonDecode(fixture('konkuk-glocal-winter-notices.json'));
+      for (final r in data['data']['list'] as List) {
+        if (r['BBS_SEQ'] != 34368) continue;
+        if (drop) {
+          (r as Map).remove('CONTENTS');
+        } else {
+          r['CONTENTS'] = contents;
+        }
+      }
+      return KonkukAcademicSource.parseSupplement(
+        jsonEncode(data),
+        2024,
+        winter: true,
+        host: 'formativeart.kku.ac.kr',
+        menu: '160',
+        site: '38',
+        board: '3',
+      );
+    }
+
+    for (final dated in [
+      '<p>12.22(월)~1.12(월) 운영</p>',
+      '<p>12월 22일부터 운영</p>',
+      '<p>12.23.~1.14. 운영</p>',
+    ]) {
+      expect(() => parse(dated), throwsFormatException, reason: dated);
+    }
+    expect(parse('<p>※문의처: 교무처 학사지원팀(043-840-3253)</p>'), isEmpty);
+    // Only a present-but-null CONTENTS is an attachment-only notice.
+    expect(() => parse('', drop: true), throwsFormatException);
+  });
+
+  test(
+    'GLOCAL summer session is read from the archive board after it moves',
+    () async {
+      final moved = jsonDecode(fixture('konkuk-glocal-summer-notices.json'));
+      final list = moved['data']['list'] as List;
+      final notice = list.singleWhere((r) => r['BBS_SEQ'] == 120100) as Map;
+      notice['SITE_NO'] = 38;
+      notice['BOARD_SEQ'] = 3;
+      notice['SUBJECT'] = '2026학년도 하계방학 중 주요 학사일정 안내';
+      list.remove(notice);
+      final archive = jsonDecode(
+        fixture('konkuk-glocal-archive-summer-notices.json'),
+      );
+      (archive['data']['list'] as List).insert(0, notice);
+      final source = KonkukAcademicSource.glocal(
+        client: MockClient((r) async {
+          final body = Uri.splitQueryString(r.body);
+          if (r.url.path == '/ajax/FR_SCH_SVC/ScheduleListData.do') {
+            return ok(fixture('konkuk-glocal-${body['SCH_YEAR']}.json'));
+          }
+          if (r.url.host == 'formativeart.kku.ac.kr') {
+            return ok(
+              body['SEARCH'] == '동계'
+                  ? fixture('konkuk-glocal-winter-notices.json')
+                  : jsonEncode(archive),
+            );
+          }
+          return ok(
+            body['SEARCH'] == '동계'
+                ? fixture('konkuk-glocal-current-winter-notices.json')
+                : jsonEncode(moved),
+          );
+        }),
+      );
+      final events = await source.fetch(2026);
+      source.close();
+      final summer = events.singleWhere((e) => e.title == '하계 계절학기');
+      expect(summer.start, DateTime(2026, 6, 23));
+      expect(summer.end, DateTime(2026, 7, 15));
+      expect(Uri.parse(summer.url).host, 'formativeart.kku.ac.kr');
     },
   );
 
