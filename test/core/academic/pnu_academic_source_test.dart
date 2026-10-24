@@ -58,8 +58,9 @@ Future<(List<AcademicEvent>, List<String>)> fetchFixtures(int year) async {
 
 void main() {
   test('PNU fetch keeps every published row dated in the year', () async {
-    // Distinct rows overlapping each year across the four fetched lists.
-    for (final (year, count) in [(2025, 158), (2026, 167)]) {
+    // Distinct undergraduate rows overlapping each year across the four lists
+    // (158 and 167 before 33 and 38 graduate-only rows were left out).
+    for (final (year, count) in [(2025, 125), (2026, 129)]) {
       final (events, requested) = await fetchFixtures(year);
       expect(requested, [
         '${year - 1}-0020',
@@ -101,23 +102,38 @@ void main() {
     );
   });
 
-  test('every published PNU row is imported for each term', () {
-    for (final (year, term) in [
-      (2024, '0020'),
-      (2025, '0010'),
-      (2025, '0020'),
-      (2026, '0010'),
-      (2026, '0020'),
-      (2027, '0010'),
+  test('every published PNU row is imported except graduate-only rows', () {
+    // Rows whose title ends in "(대학원)" or "(...대학원)" are graduate-only.
+    for (final (year, term, graduateOnly) in [
+      (2024, '0020', 7),
+      (2025, '0010', 20),
+      (2025, '0020', 13),
+      (2026, '0010', 17),
+      (2026, '0020', 21),
+      (2027, '0010', 0),
     ]) {
       final document = html.parse(fixture(year, term));
       final rows = document.querySelectorAll('#resultTbody > tr').length;
       expect(int.parse(document.querySelector('.text-total')!.text), rows);
-      expect(
-        PnuAcademicSource.parse(fixture(year, term), year, term),
-        hasLength(rows),
-      );
+      final events = PnuAcademicSource.parse(fixture(year, term), year, term);
+      expect(events, hasLength(rows - graduateOnly), reason: '$year-$term');
     }
+  });
+
+  test('PNU leaves out graduate-only rows and keeps undergraduate ones', () {
+    final events = PnuAcademicSource.parse(fixture(2026, '0020'), 2026, '0020');
+    final titles = events.map((e) => e.title);
+    expect(titles.where((t) => t.contains('대학원')), isEmpty);
+    expect(titles, contains('2학기 수강신청(학부)'));
+    expect(titles.any((t) => t.contains('수강신청(타대생)')), isTrue);
+    final withGraduate = fixture(
+      2026,
+      '0020',
+    ).replaceFirst('2학기 수강신청(학부)', '2학기 수강신청(학부,대학원)');
+    expect(
+      PnuAcademicSource.parse(withGraduate, 2026, '0020').map((e) => e.title),
+      contains('2학기 수강신청(학부,대학원)'),
+    );
   });
 
   test('PNU profile resolves to its registered calendar', () {

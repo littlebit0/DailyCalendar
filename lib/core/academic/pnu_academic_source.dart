@@ -169,6 +169,8 @@ class PnuAcademicSource implements AcademicSource {
         .padLeft(size * 2, '0');
   }
 
+  static final _graduateOnly = RegExp(r'\((?![^()]*(?:학부|대학/))[^()]*대학원\)\s*$');
+
   /// [allowEmpty] accepts a term whose schedule is not yet published.
   static List<AcademicEvent> parse(
     String body,
@@ -210,6 +212,10 @@ class PnuAcademicSource implements AcademicSource {
 
       final start = date(dates.first), last = date(dates.last);
       final title = cells[2].text.replaceAll(RegExp(r'\s+'), ' ').trim();
+      // 사용자 결정(2026-10-24): 대학원 전용 행은 넣지 않는다. 원문이 행 제목 끝
+      // 괄호에 대상을 "(대학원)"·"(환경대학원)"처럼 적은 행만 제외하고, 학부와
+      // 함께 적은 행은 유지한다.
+      if (_graduateOnly.hasMatch(title)) continue;
       if (title.isEmpty ||
           last.isBefore(start) ||
           start.year < year - 1 ||
