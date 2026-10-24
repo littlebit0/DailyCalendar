@@ -350,6 +350,51 @@
           }
         }
       ]
+    },
+    {
+      "university": "jnu",
+      "sourceUrl": "https://events.jnu.ac.kr/Schedule.aspx?mode=1&YY=2026",
+      "checkedAt": "2026-09-26",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "1",
+          "start": "2026-03-03",
+          "end": "2026-06-23",
+          "sourceTitles": [
+            "제1학기 개강",
+            "제1학기 종강"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "여름",
+          "start": "2026-06-29",
+          "end": "2026-07-23",
+          "sourceTitles": [
+            "하계 계절학기"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "제2학기 개강",
+            "제2학기 종강"
+          ]
+        },
+        {
+          "year": 2026,
+          "semester": "겨울",
+          "start": "2026-12-28",
+          "end": "2027-01-22",
+          "sourceTitles": [
+            "동계 계절학기"
+          ]
+        }
+      ]
     }
   ]
 }
