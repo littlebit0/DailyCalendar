@@ -168,6 +168,10 @@ void main() {
         ...(audit['excludedHolidays'] as List),
         ...(audit['excludedMidtermDates'] as List),
       };
+      // 교시 슬롯 = 수업 + 쉬는 시간: 주간 50분+10분, 야간 45분+5분(교학규정 제52조).
+      // 같은 날 같은 강의실에서 앞 구간 끝과 뒤 구간 시작의 간격이 60분 미만이면 합친다.
+      int slotEnd(List<int> clock) =>
+          clock[0] + (clock[1] - clock[0] == 50 ? 60 : 50);
       final syntax = RegExp(r'([월화수목금토일])(야간)?(\d+(?:,\d+)*)');
       var count = 0;
       for (final c in courses.where((c) => c.meetings.isNotEmpty)) {
@@ -179,7 +183,7 @@ void main() {
         expect(syntax.allMatches(native), isNotEmpty);
         expect(native.replaceAll(syntax, ''), isEmpty);
         expect(c.sourceClassroom, source['강의실']);
-        final expected = <String>{};
+        final pieces = <List<Object>>[];
         for (
           var day = DateTime(2026, 9, 1);
           !day.isAfter(DateTime(2026, 12, 7));
@@ -217,10 +221,29 @@ void main() {
                 // An unresolved composite room is not assigned to a specific session.
                 if (room == '') expect(c.sourceClassroom, source['강의실']);
               }
-              expected.add('$date/$weekday/${clock[0]}/${clock[1]}/$room');
+              pieces.add([date, weekday, clock[0], slotEnd(clock), room]);
             }
           }
         }
+        pieces.sort((a, b) {
+          final byDate = (a[0] as String).compareTo(b[0] as String);
+          return byDate != 0 ? byDate : (a[2] as int).compareTo(b[2] as int);
+        });
+        final merged = <List<Object>>[];
+        for (final p in pieces) {
+          final last = merged.isEmpty ? null : merged.last;
+          if (last != null &&
+              last[0] == p[0] &&
+              last[4] == p[4] &&
+              (p[2] as int) - (last[3] as int) < 60) {
+            last[3] = p[3];
+          } else {
+            merged.add([...p]);
+          }
+        }
+        final expected = {
+          for (final p in merged) '${p[0]}/${p[1]}/${p[2]}/${p[3]}/${p[4]}',
+        };
         final actual = <String>{};
         for (final m in c.meetings) {
           count++;
@@ -235,7 +258,7 @@ void main() {
         }
         expect(actual, expected, reason: 'native ${c.code}/${c.section}');
       }
-      expect(count, 56362);
+      expect(count, 29211);
       expect(courses.where((c) => c.meetings.isNotEmpty), hasLength(1505));
     },
   );
@@ -275,7 +298,7 @@ void main() {
           );
         }
         expect(values, hasLength(1505));
-        expect(count, 56362);
+        expect(count, 29211);
         final doc = TimetableSyncDocument.records(
           courses: values,
           schemaVersion: 2,
