@@ -94,7 +94,20 @@ class MokpoAcademicSource implements AcademicSource {
           year != academicYear + (month < 3 ? 1 : 0)) {
         throw const FormatException('Unexpected Mokpo month coverage');
       }
-      for (final row in section.querySelectorAll('.scheList > ul > li > dl')) {
+      final lists = section.querySelectorAll('.scheList');
+      if (lists.length != 1) {
+        throw const FormatException('Unexpected Mokpo schedule list');
+      }
+      // Every published item must keep its record; a partial row fails the year.
+      for (final item in section.querySelectorAll('li')) {
+        final row = item.children.length == 1 ? item.children.single : null;
+        if (row == null ||
+            row.localName != 'dl' ||
+            row.parent?.parent?.parent != lists.single ||
+            row.querySelector('dt') == null ||
+            row.querySelector('dd') == null) {
+          throw const FormatException('Invalid Mokpo schedule item');
+        }
         final title = (row.querySelector('dd')?.text ?? '').trim().replaceAll(
           RegExp(r'\s+'),
           ' ',

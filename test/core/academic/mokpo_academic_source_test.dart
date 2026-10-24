@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/mokpo_academic_source.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
@@ -42,10 +41,8 @@ void main() {
       (2026, 2),
     ]) {
       final body = fixture(year, semester);
-      final rows = html
-          .parse(body)
-          .querySelectorAll('.yearSchdulWrap .scheList > ul > li > dl')
-          .length;
+      // Count raw list items so the check does not reuse the parser selector.
+      final rows = RegExp(r'<li\b').allMatches(body).length;
       expect(rows, greaterThan(0));
       expect(MokpoAcademicSource.parse(body, year, semester), hasLength(rows));
     }
@@ -111,6 +108,22 @@ void main() {
       ),
       throwsFormatException,
     );
+  });
+
+  test('Mokpo refuses a schedule item that lost or rewrapped its record', () {
+    final body = fixture(2026, 2);
+    for (final broken in [
+      body
+          .replaceFirst('<dl>', '<div><dl>')
+          .replaceFirst('</dl>', '</dl></div>'),
+      body.replaceFirst(RegExp(r'<dl>[\s\S]*?</dl>'), '<span>공지</span>'),
+      body.replaceFirst('<li class="">', '<li class=""><dl><dt></dt></dl>'),
+    ]) {
+      expect(
+        () => MokpoAcademicSource.parse(broken, 2026, 2),
+        throwsFormatException,
+      );
+    }
   });
 
   test(
