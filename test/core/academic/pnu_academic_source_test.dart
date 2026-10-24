@@ -59,8 +59,8 @@ Future<(List<AcademicEvent>, List<String>)> fetchFixtures(int year) async {
 void main() {
   test('PNU fetch keeps every published row dated in the year', () async {
     // Distinct undergraduate rows overlapping each year across the four lists
-    // (158 and 167 before 33 and 38 graduate-only rows were left out).
-    for (final (year, count) in [(2025, 125), (2026, 129)]) {
+    // (158 and 167 before 37 and 46 graduate-only rows were left out).
+    for (final (year, count) in [(2025, 121), (2026, 121)]) {
       final (events, requested) = await fetchFixtures(year);
       expect(requested, [
         '${year - 1}-0020',
@@ -103,13 +103,14 @@ void main() {
   });
 
   test('every published PNU row is imported except graduate-only rows', () {
-    // Rows whose title ends in "(대학원)" or "(...대학원)" are graduate-only.
+    // Graduate-only: a title ending in "(대학원)"/"(...대학원)", or one naming
+    // graduate-programme terms (학위청구, 학위논문, 수료후연구생).
     for (final (year, term, graduateOnly) in [
-      (2024, '0020', 7),
-      (2025, '0010', 20),
-      (2025, '0020', 13),
-      (2026, '0010', 17),
-      (2026, '0020', 21),
+      (2024, '0020', 10),
+      (2025, '0010', 21),
+      (2025, '0020', 16),
+      (2026, '0010', 21),
+      (2026, '0020', 25),
       (2027, '0010', 0),
     ]) {
       final document = html.parse(fixture(year, term));
@@ -133,6 +134,39 @@ void main() {
     expect(
       PnuAcademicSource.parse(withGraduate, 2026, '0020').map((e) => e.title),
       contains('2학기 수강신청(학부,대학원)'),
+    );
+  });
+
+  test('PNU leaves out rows naming graduate-programme terms only', () {
+    final titles = [
+      for (final (year, term) in [(2025, '0010'), (2025, '0020')])
+        ...PnuAcademicSource.parse(
+          fixture(year, term),
+          year,
+          term,
+        ).map((e) => e.title),
+    ];
+    for (final term in ['학위청구', '학위논문', '수료후연구생']) {
+      expect(titles.where((t) => t.contains(term)), isEmpty, reason: term);
+    }
+    // Undergraduate degree rows are not graduate-programme rows.
+    expect(titles, contains('1학기 학사학위취득유예신청기간'));
+    expect(titles, contains('1학기 후기 학위수여식'));
+    expect(titles, contains('2학기 전기 학위수여식'));
+  });
+
+  test('PNU still rejects a malformed graduate-only row', () {
+    final body = fixture(2025, '0020');
+    final at = body.indexOf('2학기 전기 학위청구 심사용 논문 제출');
+    final end = body.lastIndexOf('2025-10-14', at);
+    expect(at, greaterThan(0));
+    expect(
+      () => PnuAcademicSource.parse(
+        body.replaceRange(end, end + 10, '2025-10-13'),
+        2025,
+        '0020',
+      ),
+      throwsFormatException,
     );
   });
 

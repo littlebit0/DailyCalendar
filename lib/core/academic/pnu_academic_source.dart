@@ -169,7 +169,16 @@ class PnuAcademicSource implements AcademicSource {
         .padLeft(size * 2, '0');
   }
 
-  static final _graduateOnly = RegExp(r'\((?![^()]*(?:학부|대학/))[^()]*대학원\)\s*$');
+  // 원문이 제목 끝 괄호에 대상을 "(대학원)"·"(환경대학원)"처럼 적은 행(학부와
+  // 함께 적은 행은 제외)과, 대학원 과정에만 있는 제도 용어(학위청구·학위논문·
+  // 수료후연구생)가 들어간 행. 학부의 학사학위취득유예·학위수여식은 걸리지 않는다.
+  static final _graduateTarget = RegExp(
+    r'\((?![^()]*(?:학부|대학/))[^()]*대학원\)\s*$',
+  );
+  static final _graduateTerm = RegExp(r'학위청구|학위논문|수료후연구생');
+
+  static bool _isGraduateOnly(String title) =>
+      _graduateTarget.hasMatch(title) || _graduateTerm.hasMatch(title);
 
   /// [allowEmpty] accepts a term whose schedule is not yet published.
   static List<AcademicEvent> parse(
@@ -212,16 +221,15 @@ class PnuAcademicSource implements AcademicSource {
 
       final start = date(dates.first), last = date(dates.last);
       final title = cells[2].text.replaceAll(RegExp(r'\s+'), ' ').trim();
-      // 사용자 결정(2026-10-24): 대학원 전용 행은 넣지 않는다. 원문이 행 제목 끝
-      // 괄호에 대상을 "(대학원)"·"(환경대학원)"처럼 적은 행만 제외하고, 학부와
-      // 함께 적은 행은 유지한다.
-      if (_graduateOnly.hasMatch(title)) continue;
       if (title.isEmpty ||
           last.isBefore(start) ||
           start.year < year - 1 ||
           last.year > year + 1) {
         throw const FormatException('Invalid PNU period');
       }
+      // 사용자 결정(2026-10-24): 대학원 전용 행은 넣지 않는다. 검증을 통과한
+      // 행만 거르므로 날짜가 깨진 행은 대학원 행이어도 오류로 처리된다.
+      if (_isGraduateOnly(title)) continue;
       final identity =
           '${start.toIso8601String()}:${last.toIso8601String()}:$title';
       events[identity] = AcademicEvent(
