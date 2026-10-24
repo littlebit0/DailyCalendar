@@ -92,6 +92,25 @@ void main() {
           expect(m.teachingDate!.isBefore(DateTime(2026, 9, 1)), isFalse);
           expect(m.teachingDate!.isAfter(DateTime(2026, 12, 14)), isFalse);
           expect(closed, isNot(contains(m.date)));
+          // 학사안내(key=8430): 60분제는 50분 수업+10분 휴식(슬롯 60분),
+          // 90분제(L)는 75분 수업+15분 휴식(슬롯 90분)이라 휴식 포함 슬롯이다.
+          final span = m.originalEndMinute - m.originalStartMinute;
+          if (c.sourceSchedule.contains('L')) {
+            expect(span % 90, 0, reason: c.sourceId);
+          } else {
+            expect(m.originalStartMinute % 60, 0, reason: c.sourceId);
+            expect(span % 60, 0, reason: c.sourceId);
+          }
+          for (final o in c.meetings) {
+            if (identical(m, o) || m.date != o.date) continue;
+            expect(
+              m.classroom == o.classroom &&
+                  (o.originalStartMinute - m.originalEndMinute).abs() < 60 &&
+                  o.originalStartMinute >= m.originalEndMinute,
+              isFalse,
+              reason: '${c.sourceId} ${m.date}',
+            );
+          }
         }
         if (!c.hasSchedulableMeetings) {
           continue;
@@ -129,7 +148,7 @@ void main() {
           thursdays.every(
             (m) =>
                 m.originalStartMinute == 540 &&
-                m.originalEndMinute == 590 &&
+                m.originalEndMinute == 600 &&
                 m.classroom.isEmpty,
           ),
           isTrue,
@@ -201,22 +220,20 @@ void main() {
       );
       expect(
         ninth.meetings.every(
-          (m) => m.originalStartMinute == 1020 && m.originalEndMinute == 1070,
+          (m) => m.originalStartMinute == 1020 && m.originalEndMinute == 1080,
         ),
         isTrue,
       );
       // 2026-2 공식 변경 공지: 바뀐 요일만 반영하고 공지에 없는 강의실은 비운다.
       for (final (id, weekday, count) in [('0529', 5, 13), ('1300', 3, 15)]) {
-        final moved = model.courses.singleWhere(
-          (c) => c.sourceId.endsWith(id),
-        );
+        final moved = model.courses.singleWhere((c) => c.sourceId.endsWith(id));
         expect(moved.meetings.length, count);
         expect(
           moved.meetings.every(
             (m) =>
                 m.weekday == weekday &&
                 m.originalStartMinute == 840 &&
-                m.originalEndMinute == 1010 &&
+                m.originalEndMinute == 1020 &&
                 m.classroom.isEmpty,
           ),
           isTrue,
