@@ -1,0 +1,92 @@
+        var toDetailParam = '&amp;amp;pageIndex=1&amp;amp;pageItm=10&amp;amp;searchOrderSort=0&amp;amp;searchYear=2026&amp;amp;searchMonth=10&amp;amp;searchGbn=0';
+
+        // 서버에서 전달받은 일정 데이터
+        var scheduleData = [];
+        
+        scheduleData.push({
+            pstSn: 84,
+            ttl: "석사학위청구논문 심사신청".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.10.12",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.10.23",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 83,
+            ttl: "박사학위청구논문 심사신청".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.09.21",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.10.02",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 61,
+            ttl: "2학기 중간시험 종료일".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.10.30",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.10.30",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 60,
+            ttl: "수업일수 1/2선, 장기결석 면담, 수업점검".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.10.28",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.10.28",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 59,
+            ttl: "2학기 중간 수업평가".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.10.12",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.10.16",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 58,
+            ttl: "수업일수 1/3선, 장기결석 면담".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.10.08",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.10.08",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+
+        // 날짜 오름차순 정렬
+        scheduleData.sort(function(a, b) {
+            var cmp = (a.etc1Cn || '').localeCompare(b.etc1Cn || '');
+            return cmp !== 0 ? cmp : (a.etc3Cn || '').localeCompare(b.etc3Cn || '');
+        });
+
+        // 현재 연월 설정
+        var today = new Date();
+        var currentYear = parseInt($('#searchYear').val()) || today.getFullYear();
+        var currentMonth = parseInt($('#searchMonth').val()) || (today.getMonth() + 1);
+
+        // 일정 데이터를 날짜별로 매핑
+        var scheduleMap = {};
+        var bbsId = 'chuncheon_calender';
