@@ -38,5 +38,17 @@
   "assets/timetable/gachon-medical-2026-2.json": {
     "sha256": "799e1a15910fc66002890b290aa6b30b31166691531e371d95ae506fa683a133",
     "reason": "#412 가천대 교시 슬롯을 쉬는 시간(10분)을 포함한 60분 단위로 다시 만들어 교시 기반 구간 끝을 10분 늘림(연속 교시는 이미 한 구간, 합칠 구간 없음)"
+  },
+  "assets/timetable/organizations/catholic.json": {
+    "sha256": "e02d759638060cd5ac76d9fd0873fdf900ae6758cf1ae29878a960e474cbe48d",
+    "reason": "#550 가톨릭대 공식 대학 안내 기준 약학과를 약학대학, 음악과·성악과를 예체능계열, 교직과를 교직과정, 융합전공학부를 융합전공에 배정하고 AI전자정보융합대학·국제교류·입학팀·취업지원팀을 독립 개설 단위로 등록"
+  },
+  "assets/timetable/catholic-songsim-2026-2.json": {
+    "sha256": "ea4a47b4bc1565bdf2c9e8d0b1ab3166a461de6df142043bb468e6624d5a73ef",
+    "reason": "#567 가톨릭대 교시 슬롯을 50분 수업+10분 쉬는 시간(교시 시작 간격 60분)으로 다시 만들고 연속 교시를 한 구간으로 합침(근거 문서 미확인)"
+  },
+  "assets/timetable/catholic-unknown-2026-2.json": {
+    "sha256": "97ad2533f1bdfbe4e63fb585f6bdb22c935439ecddedeb886975189a6954486b",
+    "reason": "#567 가톨릭대 교시 슬롯을 50분 수업+10분 쉬는 시간(교시 시작 간격 60분)으로 다시 만들고 연속 교시를 한 구간으로 합침(근거 문서 미확인)"
   }
 }

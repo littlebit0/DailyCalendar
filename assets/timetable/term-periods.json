@@ -366,6 +366,20 @@
           ]
         }
       ]
+    },
+    {
+      "university": "catholic",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?articleNo=40671&mode=view",
+      "checkedAt": "2026-10-08",
+      "boundaryScope": "Catholic-issued current-semester exchange guide; public regular timetable is a planned schedule, individual exceptions and dated meetings take precedence.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-18"
+        }
+      ]
     }
   ]
 }
