@@ -41,6 +41,7 @@ import 'sku_academic_source.dart';
 import 'smu_academic_source.dart';
 import 'snu_academic_source.dart';
 import 'sogang_academic_source.dart';
+import 'sookmyung_academic_source.dart';
 import 'ssu_academic_source.dart';
 import 'sunchon_academic_source.dart';
 import 'sungshin_academic_source.dart';
@@ -415,6 +416,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000151',
     campusIds: {'academyinfo:0000151'},
     create: YuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'sookmyung',
+    institutionId: 'academyinfo:0000141',
+    campusIds: {'academyinfo:0000141'},
+    create: SookmyungAcademicSource.new,
   ),
 ];
 
