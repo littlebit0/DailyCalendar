@@ -1,0 +1,376 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/core/academic/academic_source.dart';
+import 'package:daily/core/academic/konkuk_academic_source.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:html/parser.dart' as html;
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+
+String fixture(String name) =>
+    File('test/fixtures/academic/$name').readAsStringSync();
+
+http.Response ok(String body) => http.Response.bytes(
+  utf8.encode(body),
+  200,
+  headers: {'content-type': 'text/html;charset=utf-8'},
+);
+
+void main() {
+  test(
+    'Seoul annual dates retain whole winters and strict numeric boundaries',
+    () {
+      final previous = KonkukAcademicSource.parseSeoul(
+        fixture('konkuk-2025.html'),
+        2025,
+      );
+      final events = KonkukAcademicSource.parseSeoul(
+        fixture('konkuk-2026.html'),
+        2026,
+      );
+      expect(events, hasLength(34));
+      final winter = previous.singleWhere((e) => e.title == '동계 계절학기');
+      expect(winter.start, DateTime(2025, 12, 22));
+      expect(winter.end, DateTime(2026, 1, 16));
+      expect(
+        events.singleWhere((e) => e.title.contains('동계 계절학기')).end,
+        DateTime(2027, 1, 15),
+      );
+      expect(
+        () =>
+            KonkukAcademicSource.parseSeoul(fixture('konkuk-2026.html'), 2025),
+        throwsFormatException,
+      );
+      expect(
+        () => KonkukAcademicSource.parseSeoul(
+          fixture('konkuk-2026.html').replaceFirst('02.20', '02.30'),
+          2026,
+        ),
+        throwsFormatException,
+      );
+    },
+  );
+
+  test('Seoul fetch keeps previous winter rows that reach the year', () async {
+    final requested = <String>[];
+    final source = KonkukAcademicSource(
+      client: MockClient((r) async {
+        expect(r.url.host, 'www.konkuk.ac.kr');
+        expect(r.url.path, '/schdulmanage/konkuk/23/yearSchdul.do');
+        final year = Uri.splitQueryString(r.body)['year']!;
+        requested.add(year);
+        return ok(fixture('konkuk-$year.html'));
+      }),
+    );
+    final events = await source.fetch(2026);
+    source.close();
+    expect(requested, ['2025', '2026']);
+    // 34 rows of 2026 plus the 2025 winter vacation and winter session.
+    expect(events, hasLength(36));
+    expect(
+      events.any(
+        (e) =>
+            e.title == '동계방학' &&
+            e.start == DateTime(2025, 12, 20) &&
+            e.end == DateTime(2026, 2, 27),
+      ),
+      isTrue,
+    );
+  });
+
+  test(
+    'GLOCAL preserves previous vacation and its separately published seasonal periods',
+    () {
+      final annual = KonkukAcademicSource.parseGlocal(
+        fixture('konkuk-glocal-2026.json'),
+        2026,
+      );
+      expect(annual, hasLength(14));
+      final vacation = annual.singleWhere(
+        (e) => e.title == '동계방학' && e.start.year == 2025,
+      );
+      expect(vacation.start, DateTime(2025, 12, 20));
+      expect(vacation.end, DateTime(2026, 3, 3));
+      final winter = KonkukAcademicSource.parseSupplement(
+        fixture('konkuk-glocal-winter-notices.json'),
+        2025,
+        winter: true,
+        host: 'formativeart.kku.ac.kr',
+        menu: '160',
+        site: '38',
+        board: '3',
+      ).single;
+      expect(winter.start, DateTime(2025, 12, 22));
+      expect(winter.end, DateTime(2026, 1, 15));
+      final summer = KonkukAcademicSource.parseSupplement(
+        fixture('konkuk-glocal-summer-notices.json'),
+        2026,
+        winter: false,
+        host: 'www.kku.ac.kr',
+        menu: '1740',
+        site: '2',
+        board: '18',
+      ).single;
+      expect(summer.start, DateTime(2026, 6, 23));
+      expect(summer.end, DateTime(2026, 7, 15));
+      expect(
+        () => KonkukAcademicSource.parseSupplement(
+          fixture('konkuk-glocal-winter-notices.json'),
+          2026,
+          winter: true,
+          host: 'formativeart.kku.ac.kr',
+          menu: '160',
+          site: '38',
+          board: '3',
+        ),
+        throwsFormatException,
+      );
+    },
+  );
+
+  test(
+    'GLOCAL fetch adds only seasonal periods with a published notice',
+    () async {
+      final source = KonkukAcademicSource.glocal(
+        client: MockClient((r) async {
+          final body = Uri.splitQueryString(r.body);
+          if (r.url.path == '/ajax/FR_SCH_SVC/ScheduleListData.do') {
+            expect(r.url.host, 'www.kku.ac.kr');
+            return ok(fixture('konkuk-glocal-${body['SCH_YEAR']}.json'));
+          }
+          expect(r.url.path, '/ajax/FR_SVC/BBSViewList2.do');
+          if (r.url.host == 'formativeart.kku.ac.kr') {
+            expect(body['SEARCH'], '동계');
+            return ok(fixture('konkuk-glocal-winter-notices.json'));
+          }
+          expect(r.url.host, 'www.kku.ac.kr');
+          return ok(
+            fixture(
+              body['SEARCH'] == '동계'
+                  ? 'konkuk-glocal-current-winter-notices.json'
+                  : 'konkuk-glocal-summer-notices.json',
+            ),
+          );
+        }),
+      );
+      final events = await source.fetch(2026);
+      source.close();
+      // 14 annual rows (2025 feed adds only the same winter vacation) plus the
+      // 2025 winter and 2026 summer sessions. The 2026 winter session notice has
+      // no published dates yet, so nothing is invented for it.
+      expect(events, hasLength(16));
+      final sessions = events.where((e) => e.title.endsWith('계절학기')).toList();
+      expect(sessions.map((e) => (e.title, e.start, e.end)), [
+        ('동계 계절학기', DateTime(2025, 12, 22), DateTime(2026, 1, 15)),
+        ('하계 계절학기', DateTime(2026, 6, 23), DateTime(2026, 7, 15)),
+      ]);
+    },
+  );
+
+  test(
+    'GLOCAL creates no seasonal session from a notice without dates',
+    () async {
+      // The archived 2024 winter notice is titled "2024 동계 계절 학기 시행 계획"
+      // and publishes its schedule only as attachments (empty body).
+      expect(
+        KonkukAcademicSource.parseSupplement(
+          fixture('konkuk-glocal-winter-notices.json'),
+          2024,
+          winter: true,
+          host: 'formativeart.kku.ac.kr',
+          menu: '160',
+          site: '38',
+          board: '3',
+        ),
+        isEmpty,
+      );
+      // A body with dates in an unknown layout still fails rather than being
+      // silently dropped.
+      final changed = jsonDecode(fixture('konkuk-glocal-winter-notices.json'));
+      for (final r in changed['data']['list'] as List) {
+        if (r['BBS_SEQ'] == 34368) r['CONTENTS'] = '<p>12.23.~1.14. 운영</p>';
+      }
+      expect(
+        () => KonkukAcademicSource.parseSupplement(
+          jsonEncode(changed),
+          2024,
+          winter: true,
+          host: 'formativeart.kku.ac.kr',
+          menu: '160',
+          site: '38',
+          board: '3',
+        ),
+        throwsFormatException,
+      );
+      // 2025: the previous (2024) winter notice and the 2025 summer notice on
+      // the archive board have no dates ("\u00a0" body), so they add nothing.
+      // The 2025 winter notice is no longer on the current board but its dated
+      // archive copy (BBS_SEQ 36586) still adds the 2025 winter session.
+      final source = KonkukAcademicSource.glocal(
+        client: MockClient((r) async {
+          final body = Uri.splitQueryString(r.body);
+          if (r.url.path == '/ajax/FR_SCH_SVC/ScheduleListData.do') {
+            return ok(fixture('konkuk-glocal-${body['SCH_YEAR']}.json'));
+          }
+          if (r.url.host == 'formativeart.kku.ac.kr') {
+            return ok(
+              fixture(
+                body['SEARCH'] == '동계'
+                    ? 'konkuk-glocal-winter-notices.json'
+                    : 'konkuk-glocal-archive-summer-notices.json',
+              ),
+            );
+          }
+          return ok(
+            fixture(
+              body['SEARCH'] == '동계'
+                  ? 'konkuk-glocal-current-winter-notices.json'
+                  : 'konkuk-glocal-summer-notices.json',
+            ),
+          );
+        }),
+      );
+      final events = await source.fetch(2025);
+      source.close();
+      final annual = KonkukAcademicSource.parseGlocal(
+        fixture('konkuk-glocal-2025.json'),
+        2025,
+      );
+      final sessions = events.where((e) => e.title.endsWith('계절학기')).toList();
+      expect(sessions.map((e) => (e.title, e.start, e.end)), [
+        ('동계 계절학기', DateTime(2025, 12, 22), DateTime(2026, 1, 15)),
+      ]);
+      expect(
+        Uri.parse(sessions.single.url).queryParameters['BBS_SEQ'],
+        '36586',
+      );
+      expect(
+        events
+            .where((e) => !sessions.contains(e))
+            .map((e) => e.sourceId)
+            .toSet(),
+        annual.map((e) => e.sourceId).toSet(),
+      );
+    },
+  );
+
+  test('GLOCAL notice bodies with dates in any form must parse or fail', () {
+    List<AcademicEvent> parse(String contents, {bool drop = false}) {
+      final data = jsonDecode(fixture('konkuk-glocal-winter-notices.json'));
+      for (final r in data['data']['list'] as List) {
+        if (r['BBS_SEQ'] != 34368) continue;
+        if (drop) {
+          (r as Map).remove('CONTENTS');
+        } else {
+          r['CONTENTS'] = contents;
+        }
+      }
+      return KonkukAcademicSource.parseSupplement(
+        jsonEncode(data),
+        2024,
+        winter: true,
+        host: 'formativeart.kku.ac.kr',
+        menu: '160',
+        site: '38',
+        board: '3',
+      );
+    }
+
+    for (final dated in [
+      '<p>12.22(월)~1.12(월) 운영</p>',
+      '<p>12월 22일부터 운영</p>',
+      '<p>12.23.~1.14. 운영</p>',
+    ]) {
+      expect(() => parse(dated), throwsFormatException, reason: dated);
+    }
+    expect(parse('<p>※문의처: 교무처 학사지원팀(043-840-3253)</p>'), isEmpty);
+    // Only a present-but-null CONTENTS is an attachment-only notice.
+    expect(() => parse('', drop: true), throwsFormatException);
+  });
+
+  test(
+    'GLOCAL summer session is read from the archive board after it moves',
+    () async {
+      final moved = jsonDecode(fixture('konkuk-glocal-summer-notices.json'));
+      final list = moved['data']['list'] as List;
+      final notice = list.singleWhere((r) => r['BBS_SEQ'] == 120100) as Map;
+      notice['SITE_NO'] = 38;
+      notice['BOARD_SEQ'] = 3;
+      notice['SUBJECT'] = '2026학년도 하계방학 중 주요 학사일정 안내';
+      list.remove(notice);
+      final archive = jsonDecode(
+        fixture('konkuk-glocal-archive-summer-notices.json'),
+      );
+      (archive['data']['list'] as List).insert(0, notice);
+      final source = KonkukAcademicSource.glocal(
+        client: MockClient((r) async {
+          final body = Uri.splitQueryString(r.body);
+          if (r.url.path == '/ajax/FR_SCH_SVC/ScheduleListData.do') {
+            return ok(fixture('konkuk-glocal-${body['SCH_YEAR']}.json'));
+          }
+          if (r.url.host == 'formativeart.kku.ac.kr') {
+            return ok(
+              body['SEARCH'] == '동계'
+                  ? fixture('konkuk-glocal-winter-notices.json')
+                  : jsonEncode(archive),
+            );
+          }
+          return ok(
+            body['SEARCH'] == '동계'
+                ? fixture('konkuk-glocal-current-winter-notices.json')
+                : jsonEncode(moved),
+          );
+        }),
+      );
+      final events = await source.fetch(2026);
+      source.close();
+      final summer = events.singleWhere((e) => e.title == '하계 계절학기');
+      expect(summer.start, DateTime(2026, 6, 23));
+      expect(summer.end, DateTime(2026, 7, 15));
+      expect(Uri.parse(summer.url).host, 'formativeart.kku.ac.kr');
+    },
+  );
+
+  test('every published Konkuk row is imported for each year', () {
+    for (final year in [2025, 2026]) {
+      final seoul = fixture('konkuk-$year.html');
+      final seoulRows = html
+          .parse(seoul)
+          .querySelectorAll('.yearSchdul .list-date')
+          .length;
+      final seoulEvents = KonkukAcademicSource.parseSeoul(seoul, year);
+      expect(seoulEvents, hasLength(seoulRows));
+      expect(seoulEvents.map((e) => e.sourceId).toSet(), hasLength(seoulRows));
+
+      final glocal = fixture('konkuk-glocal-$year.json');
+      final glocalRows = (jsonDecode(glocal)['data'] as List).length;
+      final glocalEvents = KonkukAcademicSource.parseGlocal(glocal, year);
+      expect(glocalEvents, hasLength(glocalRows));
+      expect(
+        glocalEvents.map((e) => e.sourceId).toSet(),
+        hasLength(glocalRows),
+      );
+    }
+  });
+
+  test('Konkuk profiles resolve to the calendar of their campus', () {
+    String? resolve(String universityId, [String? campusId]) => AcademicProfile(
+      universityId: universityId,
+      universityName: '건국대학교',
+      schoolKind: 'fourYear',
+      campusId: campusId,
+    ).academicSourceId;
+    expect(resolve('institution:academyinfo:0000052'), 'konkuk');
+    expect(
+      resolve('institution:academyinfo:0000052', 'academyinfo:0000052'),
+      'konkuk',
+    );
+    expect(
+      resolve('institution:academyinfo:0000052', 'academyinfo:0000053'),
+      'konkuk-glocal',
+    );
+    expect(resolve('academyinfo:0000052'), 'konkuk');
+    expect(resolve('academyinfo:0000053'), 'konkuk-glocal');
+  });
+}
