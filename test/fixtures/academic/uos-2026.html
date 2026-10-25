@@ -1,0 +1,2467 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,  minimum-scale=1.0">
+	<meta name="WT.ti" content="학사일정(대학)_학사_대학/대학원_서울시립대학교">
+	<title>학사일정 &lt; 학사 &lt; 대학 및 대학원 &lt; 서울시립대학교</title>
+	<link rel="stylesheet" type="text/css" href="/css/kor2021/layout.css?v=20240826">
+<link rel="stylesheet" type="text/css" href="/css/kor2021/common.css">
+<link rel="stylesheet" type="text/css" href="/css/kor2021/oldSub.css?v=20261014_2">
+<link rel="stylesheet" type="text/css" href="/css/kor2021/sub.css?v=261016">
+<link rel="stylesheet" type="text/css" href="/css/kor2021/respon.css?v=20240826">
+<link rel="stylesheet" type="text/css" href="/css/common/loading.css">
+<link rel="stylesheet" type="text/css" href="/css/kor2021/darkmode.css">
+<script src="/js/common/jquery-3.7.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-migrate-3.4.1.min.js"></script>
+<script src="/js/kor2021/BxSlider.js"></script>
+<script type="module" src="/js/kor2021/js.js?v=260130"></script>
+<script src="/js/kor2021/common.js"></script>
+<script>
+    var domain_name = "www.uos.ac.kr";
+</script>
+<!-- 서울 GNB 스크립트 -->
+<!-- 모바일 버전으로 시작 -->
+<script>
+    function getCookie(name) {
+        var cookies = document.cookie.split(";");
+        for(var i=0; i<cookies.length; i++) {
+            if(cookies[i].indexOf("=") == -1) {
+                if(name == cookies[i])
+                    return "";
+            }else {
+                var crumb = cookies[i].split("=");
+                if(name == crumb[0].trim())
+                    return unescape(crumb[1].trim());
+            }
+        }
+    };
+
+    // 쿠키 생성
+    function setCookie(cName, cValue, cDay){
+        var expire = new Date();
+        expire.setDate(expire.getDate() + cDay);
+        cookies = cName + '=' + escape(cValue) + '; path=/ '; // 한글 깨짐을 막기위해 escape(cValue)를 합니다.
+        if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
+        document.cookie = cookies;
+    }
+
+    // var desktopModeTF = getCookie("DesktopMode");
+    // var Scale = getCookie("DesktopModeScale");
+    // if (desktopModeTF == "true") {
+    //     document.write('<meta name="viewport" id="viewport" content="width=1300,  initial-scale=0.25001 ,     minimum-scale=0.1">');
+    // } else {
+    //     document.write('<meta name="viewport" content="width=device-width, initial-scale=1.0">');
+    // }
+    //
+    // function desktopMode() {
+    //     alert("PC버전보기 에서는 일부페이지가 정상적으로 보이지 않을 수 있습니다.");
+    //     setCookie("DesktopMode", "", -1);
+    //     // document.cookie="DesktopMode=true";
+    //     setCookie("DesktopMode", "true", 1);
+    //     document.cookie="DesktopModeScale="+$('html').width()/1024;
+    //     window.scrollTo(0,0);
+    //     location.reload();
+    // }
+    //
+    // function undesktopMode() {
+    //     setCookie("DesktopMode", "", -1);
+    //     // document.cookie="DesktopMode=false";
+    //     location.reload();
+    // }
+
+    function fnHeaderLogin () {
+        // $("#form").find("input[name='menuid']").val("2000100001000000000");
+        $("#form").attr("target", "_self").attr("action", "/kor/login/login.do?menuid=2000100001000000000").submit();
+    }
+
+    function fnHeaderLogout () {
+        $("#return_url").val("");
+        $("#form").attr("target", "_self").attr("action", "/kor/login/logout.do").submit();
+    }
+
+    function fnGoSearch () {
+        var mess = $("#search").val();
+        if ($("#search").val().trim() == null || $("#search").val().trim() == "") {
+
+            alert("검색어를 입력하세요.");
+            $("#search").focus();
+            return;
+        }
+        $("#gubun").val("total");
+        $("#sform").attr("target", "_blank").attr("action", "/MainSearchAction2.do?q="+mess).submit();
+    }
+
+    function fnGoSearch2 () {
+
+        if ($("#search2").val().trim() == null || $("#search2").val().trim() == "") {
+            alert("검색어를 입력하세요.");
+            $("#search2").focus();
+            return;
+        }
+        $("#search").val($("#search2").val());
+        var mess = $("#search").val();
+        $("#gubun").val("total");
+        $("#sform").attr("target", "_blank").attr("action", "/MainSearchAction2.do?q="+mess).submit();
+    }
+
+    function searchFocus(){
+        $("#search").focus();
+        if($("#searchBtn").hasClass("on")){
+        }else {
+            setTimeout(function(){$("#search").focus();},1);
+        }
+    }
+
+    //vr 기기체크
+    function vrMove(){
+        //모바일
+        if( navigator.userAgent.match(/Android/i)
+            || navigator.userAgent.match(/webOS/i)
+            || navigator.userAgent.match(/iPhone/i)
+            || navigator.userAgent.match(/iPad/i)
+            || navigator.userAgent.match(/iPod/i)
+            || navigator.userAgent.match(/BlackBerry/i)
+            || navigator.userAgent.match(/Windows Phone/i)
+            || navigator.userAgent.match(/Opera Mini/i)
+            || navigator.userAgent.match(/IEMobile/i)
+        ){
+            window.open("/vr2/index.html","_blank");
+        }
+        // pc페이지
+        else {
+            window.open("/vr/index.html","_blank");
+        }
+    }
+
+    function fnClick(num){
+        if(num == 1){
+            $(".btnPause").css("display","none");
+            $(".btnPlay").css("display","block");
+            $("#play").focus();
+
+        }else{
+            $(".btnPause").css("display","block");
+            $(".btnPlay").css("display","none");
+            $("#pause").focus();
+        }
+    }
+
+    function fnMovePortal(){
+        alert("서울시립대 포털사이트로 이동하겠습니다.");
+        location.href = "https://portal.uos.ac.kr";
+    }
+
+    function confirmMove(){
+        msg="연구ㆍ산학협력단 홈페이지로 이동합니다."
+        if(confirm(msg)!=0){
+            var newWindow = window.open("about:blank");
+            newWindow.location.href = "https://research.uos.ac.kr/";
+        }else {
+
+        }
+    }
+
+    function toggleDarkMode() {
+    	if (!$('body').hasClass('hc-mode')) {
+            $('body').removeClass("hc-mode");
+    		$('body').addClass('hc-mode');
+    		setCookie("dark-mode", "true", 1);
+
+    		var agent = navigator.userAgent.toLowerCase();
+    		if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ) {
+    			alert("주의 : 다크모드는 웹표준을 준수하지않는 인터넷 익스플로러 계열 및 일부 브라우저 환경에서 정상적으로 동작하지 않을 수 있습니다.");//
+    		}
+    	} else {
+            $('body').removeClass("hc-mode");
+    		setCookie("dark-mode", "false", 1);
+    	}
+    }
+
+    //웹접근성 점검결과 조치
+    $(function(){
+        $('.fileLyaer .close').focus(function(){
+            $(this).keydown(function(e) {
+                if (e.keyCode == 13) {
+                    $('.fileLyaer').hide();
+                    setTimeout(function(){
+                        $('.file .fileDown').focus();
+                    }, 100);
+                }
+            });
+        });
+
+        // GNB 로딩 스크립트
+        // Yjs.Gnb.init('G200', 'seoul-common-gnb');
+        // setTimeout(function() {
+        // 	$("#seoul-gnb-plugin").addClass("white");
+        // }, 500);
+    });
+</script>
+<script src="/js/kor2021/common.js"></script>
+	<script src="/js/kor2021/ui_common.js"></script>
+	<script src="/js/kor/calendarBoard.js"></script>
+	<script>
+		function prevYear() {
+			$("#year_code").val(Number($("#year_code").val()) - 1);
+			jQuery("#listForm").attr("action", "/korCalendarYear/list.do").submit();
+		}
+
+		function nextYear() {
+			$("#year_code").val(Number($("#year_code").val()) + 1);
+			jQuery("#listForm").attr("action", "/korCalendarYear/list.do").submit();
+		}
+	</script>
+	<style>
+		body.hc-mode > div.s-container > div.wid > div.content-area > ul.tabList.cnt2 {
+			filter: invert(1);
+			-webkit-filter: invert(1);
+			-ms-filter: invert(1);
+		}
+
+		body.hc-mode > div.s-container > div.wid > div.content-area > form {
+			filter: invert(1);
+			-webkit-filter: invert(1);
+			-ms-filter: invert(1);
+		}
+
+		body.hc-mode > div.s-container > div.wid > div.content-area > form > .yaer-sbk > .mSel.lsLine > a {
+			background-color: rgb(34,91,198);
+		}
+		@media screen and (max-width: 699px) {
+			.w120px.date01{ width: 70px !important;}
+			.w180px.date02{ width: 70px !important;}
+			.th.date01 {font-size: 14px;}
+			.th.date02 {padding: 5px; font-size: 13px;}
+			.al.title01 {padding: 5px;font-size: 13px;font-weight: normal;}
+		}
+	</style>
+</head>
+<body>
+<!-- Google tag (gtag.js) -->
+<script src="/js/common/netfunnel.js?20160126"></script>
+<script>
+	NetFunnel_Action({},function(ev,ret){
+	});
+
+	$(function() {
+		$('.top-layer:hidden').each(function(index) {
+			if(getCookie('top-layer-visible1') != 'false') {
+				$(this).show();
+			}
+		});
+	});
+
+	if (getCookie("dark-mode") == "true") {
+		$('body').addClass('hc-mode');
+	}
+
+	function closeTopLayer(index) {
+		console.log('abc');
+		if ($('#top-layer-cc'+index).prop('checked')) {
+			setCookie("top-layer-visible"+index, "false", 1);
+		}
+		$('#top-layer'+index).slideUp(200);
+	}
+
+	// function toggleSearchButton() {
+	// 	if ($('.ht-lk').hasClass('opened')) {
+	// 		$('.ht-lk').removeClass('opened');
+	// 		$('.toggle-button').children('span').text('검색 열기');
+	//
+	// 	} else {
+	// 		$('.ht-lk').addClass('opened');
+	// 		$('.toggle-button').children('span').text('검색 닫기');
+	// 		$('#quicksearch').focus();
+	// 	}
+	// }
+
+	function fnSearchCheck(type) {
+		if (type == "quick_search") {
+			if ($('[name=quick_search_form] [name=searchword]').val().trim() == '') {
+				alert('검색어를 입력하세요.');
+				return false;
+			}
+		} else if (type == "search") {
+			if ($('[name=search_form] [name=searchword]').val().trim() == '') {
+				alert('검색어를 입력하세요.');
+				return false;
+			}
+		}
+	}
+
+	
+
+
+
+	const openInNewTab = (url) => {
+		const newWindow = window.open(url, '_blank', 'noopener,noreferrer')
+		if (newWindow) newWindow.opener = null
+	}
+
+	function callLogin(){
+		if (!confirm("통합로그인은 포털홈페이지에서 가능합니다. 포털홈페이지로 이동하시겠습니까?")) {
+			return;
+		} else {
+			openInNewTab("https://portal.uos.ac.kr");
+		}
+	}
+
+	function callLogout(){
+		if(!confirm("통합로그아웃은 포털홈페이지에서 가능합니다. 포털홈페이지로 이동하시겠습니까?")) {
+			return;
+		} else {
+			openInNewTab("https://portal.uos.ac.kr");
+		}
+	}
+
+
+	function openLoginPopup(){
+		if(confirm("서울시립대학교 구성원(교직원, 재학생, 졸업생)만 이용가능합니다. 팝업설정이 차단되어있는지확인하세요.")) {
+			
+			const popupWindow = window.open("https://www.uos.ac.kr/exsignon/sso/login.do", "popupWindow", "width=430,height=670");
+
+			if (!popupWindow || popupWindow.closed || typeof popupWindow.closed === 'undefined') {
+				// 팝업 차단이 의심되면 사용자에게 대체 방법으로 confirm 창을 띄움
+				if (!confirm("팝업이 차단되었습니다. 통합로그인은 포털홈페이지에서 가능합니다. 포털홈페이지로 이동하시겠습니까?")) {
+					return;
+				} else {
+					openInNewTab("https://portal.uos.ac.kr");
+				}
+			}
+		}
+	}
+
+	window.addEventListener("message", function(event) {
+		if ((event.origin !== "https://www.uos.ac.kr") && (event.origin !== "https://sso.uos.ac.kr")) {
+			return;
+		}
+		location.href = "https://www.uos.ac.kr";
+	});
+</script>
+
+
+
+<!-- DEV : 20240102 skip-nav 위치 변경
+     2026 접근성 때문에  20260106 skip-nav, seoul-common-gnb 위치 변경 -->
+<div id="skip-nav">
+	<a href="#contents">본문내용 바로가기</a>
+	<a href="#Menu">상단메뉴 가기</a>
+</div>
+
+<!-- 서울 GNB 영역 end -->
+<div id='seoul-common-gnb'></div>
+
+<div id="wrap">
+	<div class="header">
+		<div class="hd-wp">
+			<h1 class="logo"><a href="/main.do">서울시립대학교</a></h1>
+			<div class="seoul-logo">
+				&nbsp;
+			</div>
+			<a href="javascript:void(0)" class="mo-mbt"><img src="/images/kor2021/main/mo_mbt.png" alt="메뉴"></a>
+			<div class="menu-box">
+				<a href="javascript:;" id="Menu" tabindex="-1" class="hidden" style="top: 0;">메뉴 시작</a>
+<div class="mo-mclo">
+					<ul style="display:flex;justify-content: space-between;width: 100%">
+					<li><a href="#n" onclick="callLogin();" title="로그인" style="color: #fff; font-size: 14px;">LOGIN<span class="blind">(새 창 열림)</span></a></li>
+<li>
+						<a href="https://eng.uos.ac.kr/eng" target="_blank" title="서울시립대학교 영문 대표 홈페이지 새창으로 열기" class="en" style="color: #fff; font-size: 14px;">
+							<img src="/images/kor2021/main/tp_enlk_icw.png" style="margin-right:5px;" alt="영문 홈페이지 이미지">ENGLISH
+						</a>
+					</li>
+					</ul>
+					<a href="javascript:void(0)"><img src="/images/kor2021/main/mo_mclo.png" alt="닫기"></a>
+				</div>
+
+<ul class="depth1">
+					<li>
+								<a href="javascript:void(0)" class="nx">UOS소개</a>
+									<div class="dp2-bx">
+									<div>
+										<div class="dp2-itx">
+											<h2>UOS소개</h2>
+											<span>U, OUR STAR</span>
+											<p>그대, 서울과 시대를 밝히는 별이 되어라</p>
+										</div>
+										<ul class="depth2">
+										<li>
+														<a href="/kor/html/auos/president/welcome/welcome.do?menuid=2000001001001000000">총장실</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/president/welcome/welcome.do?menuid=2000001001001000000" >인사말</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/president/profile/profile.do?menuid=2000001001002000000" >프로필</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/president/past/past.do?menuid=2000001001003000000" >역대총장</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/president/hope/hope.do?menuid=2000001001004000000" >총장에게 바란다</a>
+																			</li>
+																		<li>
+																				<a href="/korColumn/list.do?list_id=AA1&menuid=2000001001006000000" >말과글</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/auos/vision/vision/vision.do?menuid=2000001002001000000">비전 및 이념</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/vision/vision/vision.do?menuid=2000001002001000000" >비전 및 목표</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/vision/core_competency/core_competency.do?menuid=2000001002003000000" >핵심역량</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/vision/principle/principle.do?menuid=2000001002006000000" >이념</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/auos/history/history.do?menuid=2000001003001000000">역사</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/history/history.do?menuid=2000001003001000000" >약사</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/history/history2.do?menuid=2000001003002000000" >연표</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/auos/symbol/mark/mark.do?menuid=2000001004001000000">상징</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/symbol/mark/mark.do?menuid=2000001004001000000" >교표</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/symbol/song/song.do?menuid=2000001004002000000" >교가</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/symbol/ui/ui.do?menuid=2000001004003000000" >UI</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/symbol/anniversary/anniversary.do?menuid=2000001004004000000" >90주년 기념 엠블럼</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/symbol/anniversary100/anniversary.do?menuid=2000001004005000000" >100주년 기념 엠블럼</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/auos/organization/chart/chart.do">대학기구</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/organization/chart/chart.do?menuid=2000001005001001000" >조직도</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/organization/center/center.do?menuid=2000001005002001000" >대학본부</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/organization/institution/institution11.do?menuid=2000001005003011000" >직속·부속기관</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/organization/general/general.do?menuid=2000001005004001000" >일반기구</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/auos/vision/number/number.do?menuid=2000001006007000000">대학현황</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/vision/number/number.do?menuid=2000001006007000000" >숫자로보는 UOS</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/uos/disclosure/university-info-disclosure.do?menuid=2000001006006000000" >대학정보공시</a>
+																			</li>
+																		<li>
+																				<a href="http://rule.uos.ac.kr/lmxsrv/main/main.srv" class="newWin" target="_blank" title="새창으로 열기">규정</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/prospectus/2026.do?menuid=2000001006004000000" >대학요람/대학원편람</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/uos/evaluate/evaluate.do?menuid=2000001006005001000" >대학자체평가</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/auos/clean/clean.do?menuid=2000001007001000000">청렴이야기</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/clean/clean.do?menuid=2000001007001000000" >클린신고센터</a>
+																			</li>
+																		<li>
+																				<a href="/korFree/list.do?list_id=AA22&menuid=2000001007002000000" >청렴소통방</a>
+																			</li>
+																		<li>
+																				<a href="/korNotice/list.do?list_id=AB20&menuid=2000001007003000000" >예산 및 결산</a>
+																			</li>
+																		<li>
+																				<a href="/committee/list.do?menuid=2000001007004000000" >위원회 회의록</a>
+																			</li>
+																		<li>
+																				<a href="/korNotice/list.do?list_id=educost&menuid=2000001007006000000" >교육, 연구 및 학생지도 비용</a>
+																			</li>
+																		<li>
+																				<a href="/korFree/list.do?list_id=AA23&menuid=2000001007007000000" >감사결과</a>
+																			</li>
+																		<li>
+																				<a href="/triprpt/list.do?menuid=2000001007008000000" >공무국외출장 귀국보고서</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/auos/guide/map/map.do">캠퍼스 안내</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/auos/guide/map/map.do?menuid=2000001008001000000" >캠퍼스맵</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/guide/local/local1_1.do?menuid=2000001008002001000" >오시는길</a>
+																			</li>
+																		<li>
+																				<a href="/korEventPhoto/list.do?list_id=JC3&menuid=2000001008003000000" >UOS 갤러리</a>
+																			</li>
+																		<li>
+																				<a href="/prom/campus/tour/selectTourKind.do?menuid=2000001008004000000" >캠퍼스투어</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/korColumn/list.do?list_id=about02&menuid=2000001009005000000">About UOS</a>
+														<ul>
+															<li>
+																				<a href="/prom/youtube/list.do?menuid=2000001009002000000" >홍보영상</a>
+																			</li>
+																		<li>
+																				<a href="/prom/broshure/broshure.do?menuid=2000001009004000000" >브로슈어</a>
+																			</li>
+																		<li>
+																				<a href="/korColumn/list.do?list_id=about02&menuid=2000001009005000000" >보도자료</a>
+																			</li>
+																		<li>
+																				<a href="/korColumn/list.do?list_id=about04&menuid=2000001009008000000" >UOS 인터뷰</a>
+																			</li>
+																		<li>
+																				<a href="/korColumn/list.do?list_id=about03&menuid=2000001009006000000" >연구성과</a>
+																			</li>
+																		<li>
+																				<a href="/prom/jbs/youtube.do?menuid=2000001009007000000" >대학방송국 영상</a>
+																			</li>
+																		</ul>
+													</li>
+												</ul>
+										</div>
+								</div>
+							</li>
+						<li>
+								<a href="javascript:void(0)" class="nx">입학</a>
+									<div class="dp2-bx">
+									<div>
+										<div class="dp2-itx">
+											<h2>입학</h2>
+											<span>U, OUR STAR</span>
+											<p>그대, 서울과 시대를 밝히는 별이 되어라</p>
+										</div>
+										<ul class="depth2">
+										<li>
+														<a href="https://admission.uos.ac.kr/">대학 입학안내</a>
+														<ul>
+															<li>
+																				<a href="https://admission.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">입학처</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="http://www.uos.ac.kr/graduate">대학원 입학안내</a>
+														<ul>
+															<li>
+																				<a href="https://graduate.uos.ac.kr/graduateNew/html/admission/general/regular.do?menuid=3000002001001000000" class="newWin" target="_blank" title="새창으로 열기">일반대학원</a>
+																			</li>
+																		<li>
+																				<a href="https://gtax.uos.ac.kr/gtaxNew/html/admissions/intro.do?menuid=3002003001000000000" class="newWin" target="_blank" title="새창으로 열기">세무전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="http://gsd.uos.ac.kr/gsd/recruit/new/new.do" class="newWin" target="_blank" title="새창으로 열기">디자인전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="http://lawschool.uos.ac.kr/lawschool/admission/prospectus/prospectus.do" class="newWin" target="_blank" title="새창으로 열기">법학전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="http://gurbans.uos.ac.kr/gurbans/admission/prospectus.do" class="newWin" target="_blank" title="새창으로 열기">도시과학대학원</a>
+																			</li>
+																		<li>
+																				<a href="https://mba.uos.ac.kr/mba/web/contents/admission01" class="newWin" target="_blank" title="새창으로 열기">경영대학원</a>
+																			</li>
+																		<li>
+																				<a href="https://gengineer.uos.ac.kr/gengineerNew/html/admission/intro.do?menuid=3004003001000000000" class="newWin" target="_blank" title="새창으로 열기">과학기술대학원</a>
+																			</li>
+																		<li>
+																				<a href="https://gedu.uos.ac.kr/gedu/web/contents/GEDU_ADM_01" class="newWin" target="_blank" title="새창으로 열기">교육대학원</a>
+																			</li>
+																		<li>
+																				<a href="http://isuskor.uos.ac.kr/isuskor/iphak/recruit/recruit.do" class="newWin" target="_blank" title="새창으로 열기">국제도시과학전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="http://www.uos.ac.kr/gsuph/admission/prospectus.do" class="newWin" target="_blank" title="새창으로 열기">도시보건대학원</a>
+																			</li>
+																		</ul>
+													</li>
+												</ul>
+										</div>
+								</div>
+							</li>
+						<li class="on">
+								<a href="javascript:void(0)" class="nx">대학 및 대학원</a>
+									<div class="dp2-bx">
+									<div>
+										<div class="dp2-itx">
+											<h2>대학 및 대학원</h2>
+											<span>U, OUR STAR</span>
+											<p>그대, 서울과 시대를 밝히는 별이 되어라</p>
+										</div>
+										<ul class="depth2">
+										<li>
+														<a href="/kor/html/academic/college/social.do">대학</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/academic/college/social.do?menuid=2000003001002000000" >정경대학</a>
+																			</li>
+																		<li>
+																				<a href="https://biz.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">경영대학</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/college/engineering.do?menuid=2000003001004000000" >공과대학</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/college/liberalarts.do?menuid=2000003001005000000" >인문대학</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/college/science.do?menuid=2000003001006000000" >자연과학대학</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/college/urbansciences.do?menuid=2000003001007000000" >도시과학대학</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/college/artandsport.do?menuid=2000003001008000000" >예술체육대학</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/college/clacds.do?menuid=2000003001009000000" >자유융합대학</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/college/aiuos.do?menuid=2000003001010000000" >인공지능융합대학</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/academic/gschool/general/general.do?menuid=2000003002001000000">대학원</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/academic/gschool/general/general.do?menuid=2000003002001000000" >일반대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gstaxation/gstaxation.do?menuid=2000003002002000000" >세무전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gsdesign/gsdesign.do?menuid=2000003002003000000" >디자인전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/lawschool/lawschool.do?menuid=2000003002004000000" >법학전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gsuscience/gsuscience.do?menuid=2000003002005000000" >도시과학대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gsbadministration/gsbadministration.do?menuid=2000003002006000000" >경영대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gsengineering/gsengineering.do?menuid=2000003002007000000" >과학기술대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gseducation/gseducation.do?menuid=2000003002008000000" >교육대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gsiuscience/gsiuscience.do?menuid=2000003002009000000" >국제도시과학전문대학원</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/academic/gschool/gshealth/gshealth.do?menuid=2000003002010000000" >도시보건대학원</a>
+																			</li>
+																		</ul>
+													</li>
+												<li class="on">
+														<a href="/korCalendarYear/list.do?list_id=CA1&menuid=2000003003001000000">학사</a>
+														<ul>
+															<li class="on selected">
+																				<a href="/korCalendarYear/list.do?list_id=CA1&menuid=2000003003001000000" >학사일정</a>
+																			</li>
+																		<li>
+																				<a href="/korFree/list.do?list_id=CA2&menuid=2000003003002000000" >개설교과목</a>
+																			</li>
+																		<li>
+																				<a href="https://volunteer.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">사회공헌</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/uaInfo/major/curriculum/curriculum2026.do?menuid=2000003003004000000" >교과/교직/복수전공/부전공/전과/모듈형교육과정</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/uaInfo/result/order/order.do?menuid=2000003003005004000" >수강/성적/학점교류</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/uaInfo/graduate/rest/rest.do?menuid=2000003003006005000" >학적변동/졸업</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/international/exchange/exchange.do?menuid=2000003003007000000" >국제교류</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="https://www.uos.ac.kr/kor/html/education/usip/intro.do?menuid=2000003004008001000">교육지원</a>
+														<ul>
+															<li>
+																				<a href="https://ctl.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">교수학습개발센터</a>
+																			</li>
+																		<li>
+																				<a href="https://uostory.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">UOStory(비교과/진로/취업/상담)</a>
+																			</li>
+																		<li>
+																				<a href="https://iei.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">교양교육</a>
+																			</li>
+																		<li>
+																				<a href="http://abeek.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">공학교육혁신</a>
+																			</li>
+																		<li>
+																				<a href="http://uclass.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">온라인강의실</a>
+																			</li>
+																		<li>
+																				<a href="https://www.kmooc.kr/view/course/institution/uosk" class="newWin" target="_blank" title="새창으로 열기">UOS MOOC</a>
+																			</li>
+																		<li>
+																				<a href="https://field.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">현장실습 온라인시스템</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/education/usip/intro.do?menuid=2000003004008001000" >대학혁신지원사업</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/uos/edu/edu2_2.do?menuid=2000003004010000000" >ACE+사업</a>
+																			</li>
+																		<li>
+																				<a href="/kor/bk21/introduce/introduce.do?menuid=2000003004011000000" >4단계 BK21 사업</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/uos/convergence-sharing.do?menuid=2000003004012001000" >첨단분야 혁신융합대학사업</a>
+																			</li>
+																		<li>
+																				<a href="https://early.uos.ac.kr/kr/index.php" class="newWin" target="_blank" title="새창으로 열기">조기취업형 계약학과 사업</a>
+																			</li>
+																		<li>
+																				<a href="https://rise.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">서울RISE사업단</a>
+																			</li>
+																		<li>
+																				<a href="https://semi.uos.ac.kr/Default.asp" class="newWin" target="_blank" title="새창으로 열기">반도체연구센터</a>
+																			</li>
+																		<li>
+																				<a href="https://swuniv.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">AI·SW융합교육원</a>
+																			</li>
+																		</ul>
+													</li>
+												</ul>
+										</div>
+								</div>
+							</li>
+						<li>
+								<a href="javascript:void(0)" class="nx">연구산학</a>
+									<div class="dp2-bx">
+									<div>
+										<div class="dp2-itx">
+											<h2>연구산학</h2>
+											<span>U, OUR STAR</span>
+											<p>그대, 서울과 시대를 밝히는 별이 되어라</p>
+										</div>
+										<ul class="depth2">
+										<li>
+														<a href="#">연구-산학</a>
+														<ul>
+															<li>
+																				<a href="https://research.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">연구처-산학협력단</a>
+																			</li>
+																		<li>
+																				<a href="https://pure.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">연구자정보(PURE)</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="#">연구원</a>
+														<ul>
+															<li>
+																				<a href="https://usi.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">도시과학연구원</a>
+																			</li>
+																		<li>
+																				<a href="https://ie.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">공학연구원</a>
+																			</li>
+																		<li>
+																				<a href="http://ubai.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">도시과학빅데이터 AI연구원</a>
+																			</li>
+																		</ul>
+													</li>
+												</ul>
+										</div>
+								</div>
+							</li>
+						<li>
+								<a href="javascript:void(0)" class="nx">캠퍼스생활</a>
+									<div class="dp2-bx">
+									<div>
+										<div class="dp2-itx">
+											<h2>캠퍼스생활</h2>
+											<span>U, OUR STAR</span>
+											<p>그대, 서울과 시대를 밝히는 별이 되어라</p>
+										</div>
+										<ul class="depth2">
+										<li>
+														<a href="/kor/html/life/minwon/studentiss.do?menuid=2000005001001000000">학생민원서비스</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/life/minwon/studentiss.do?menuid=2000005001001000000" >학생증 발급</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/minwon/certificate.do?menuid=2000005001002000000" >인터넷증명서 발급</a>
+																			</li>
+																		<li>
+																				<a href="/korFree/list.do?list_id=EA1&menuid=2000005001003000000" >캠퍼스자료실</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/life/job/job.do?menuid=2000005002001000000">취업/고시반</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/life/job/job.do?menuid=2000005002001000000" >취업/고시반</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="https://www.uos.ac.kr/kor/html/life/support/scholarship.do?menuid=2000005003002000000">학생지원</a>
+														<ul>
+															<li>
+																				<a href="http://hrc.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">인권센터</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/support/scholarship.do?menuid=2000005003002000000" >장학/학자금대출</a>
+																			</li>
+																		<li>
+																				<a href="https://cis.uos.ac.kr/" class="newWin" target="_blank" title="새창으로 열기">IT서비스</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/auos/site/organization/organization.do?menuid=2000005003004000000" >교내주요사이트</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/life/scholarship/tuition/tuition.do?menuid=2000005004001000000">등록금</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/life/scholarship/tuition/tuition.do?menuid=2000005004001000000" >등록안내</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/scholarship/tuition/tuition2.do?menuid=2000005004002000000" >등록금납부안내</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/scholarship/tuition/tuition4.do?menuid=2000005004003000000" >등록금반환</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/life/military/administration/administration.do?menuid=2000005005001000000">병무안내</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/life/military/administration/administration.do?menuid=2000005005001000000" >병무행정</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/military/rotc/rotc.do?menuid=2000005005002000000" >학생군사교육단</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/military/workplace/workplace.do?menuid=2000005005003000000" >대학직장예비군연대</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/life/facility/house/house.do?menuid=2000005006001000000">시설이용</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/life/facility/house/house.do?menuid=2000005006001000000" >기숙사</a>
+																			</li>
+																		<li>
+																				<a href="/food/placeList.do?menuid=2000005006002000000" >식당 및 식단표</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/facility/physical/physical.do?menuid=2000005006003000000" >체육시설</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/facility/etc/etc.do?menuid=2000005006004008000" >편의시설</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/facility/smoking/smoking.do?menuid=2000005006005000000" >캠퍼스 흡연구역 안내</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/facility/booking-guide/booking-guide.do?menuid=2000005006006000000" >강의실 사용 신청</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/facility/booking-guide/booking-guide2.do?menuid=2000005006007000000" >다중이용시설 사용예약 안내</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/kor/html/life/campusLife/festival/festival.do?menuid=2000005007001000000">캠퍼스생활</a>
+														<ul>
+															<li>
+																				<a href="/kor/html/life/campusLife/festival/festival.do?menuid=2000005007001000000" >축제</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/campusLife/club/club.do?menuid=2000005007002000000" >동아리</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/guide/guide.do?menuid=2000005007003000000" >새내기가이드</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/facility/insurance/insurance.do?menuid=2000005007004000000" >학교배상책임보험</a>
+																			</li>
+																		<li>
+																				<a href="/kor/html/life/campusLife/office/office.do?menuid=2000005007005000000" >학생자치기구</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/korNotice/list.do?list_id=FA1&menuid=2000005009002000000">UOS공지</a>
+														<ul>
+															<li>
+																				<a href="/korNotice/list.do?list_id=FA1&menuid=2000005009002000000" >일반공지</a>
+																			</li>
+																		<li>
+																				<a href="/korNotice/list.do?list_id=FA2&menuid=2000005009003000000" >학사공지</a>
+																			</li>
+																		<li>
+																				<a href="https://scholarship.uos.ac.kr/scholarship/notice/notice/list.do?brdBbsseq=1" class="newWin" target="_blank" title="새창으로 열기">장학공지</a>
+																			</li>
+																		<li>
+																				<a href="/korNotice/list.do?list_id=FA34&menuid=2000005009004000000" >직원채용</a>
+																			</li>
+																		<li>
+																				<a href="/korColumn/list.do?list_id=FA35&menuid=2000005009005000000" >창업공지</a>
+																			</li>
+																		<li>
+																				<a href="/korFree/list.do?list_id=FA22&menuid=2000005009006000000" >입찰공고</a>
+																			</li>
+																		<li>
+																				<a href="/korNotice/list.do?list_id=FA25&menuid=2000005009007000000" >시설공사</a>
+																			</li>
+																		<li>
+																				<a href="/korCalendarMonth/list.do?list_id=FA3&menuid=2000005009008000000" >행사안내</a>
+																			</li>
+																		<li>
+																				<a href="https://uostory.uos.ac.kr/index.jsp?epTicket=LOG" class="newWin" target="_blank" title="새창으로 열기">UOStory(비교과/진로/취업/상담)</a>
+																			</li>
+																		<li>
+																				<a href="/korNotice/list.do?list_id=FA5&menuid=2000005009011000000" >개인정보보호</a>
+																			</li>
+																		</ul>
+													</li>
+												<li>
+														<a href="/korReply/list.do?list_id=FA6&menuid=2000005010001000000">Q&A</a>
+														<ul>
+															<li>
+																				<a href="/korReply/list.do?list_id=FA6&menuid=2000005010001000000" >학사관련</a>
+																			</li>
+																		<li>
+																				<a href="https://admission.uos.ac.kr/admissionNew/replyGroupBoard/list.do?list_id=KE1,LE1,MC2" class="newWin" target="_blank" title="새창으로 열기">입학관련</a>
+																			</li>
+																		<li>
+																				<a href="https://scholarship.uos.ac.kr/scholarship/notice/qna/list.do?brdBbsseq=2" class="newWin" target="_blank" title="새창으로 열기">장학관련</a>
+																			</li>
+																		<li>
+																				<a href="https://volunteer.uos.ac.kr/community/03_1.php" class="newWin" target="_blank" title="새창으로 열기">사회봉사</a>
+																			</li>
+																		</ul>
+													</li>
+												</ul>
+										</div>
+								</div>
+							</li>
+						</ul>
+			</div>
+			<div class="menu-bg"></div>
+			<div class="ht-lk opened">
+				<ul
+
+				>
+					<li><a href="/main.do">Home</a></li>
+<li><a href="#n" onclick="callLogin();" title="로그인" style="font-size: 14px;">LOGIN<span class="blind">(새 창 열림)</span></a></li>
+<li><a href="/kor/html/site/sitemap/sitemap.do">사이트맵</a></li>
+					<li><a href="https://eng.uos.ac.kr/eng" target="_blank" title="서울시립대학교 영문 대표 홈페이지 새창으로 열기" class="en">ENGLISH</a></li>
+				</ul>
+				<div class="total-search">
+					<div class="input-search">
+						<form name="search_form" method="get" action="/search/search2.do" onsubmit="return fnSearchCheck('search');" style="height: 20px;">
+							<input id="quicksearch" type="text" name="searchword" title="검색어" placeholder="검색어를 넣어주세요" style="padding-top:0px; padding-bottom: 5px; width:155px; height:19px; padding-left: 5px; float:left;">
+							<button type="submit" class="input-search-button"><span class="hidden">검색</span></button>
+						</form>
+					</div>
+
+</div>
+			</div>
+<a href="/search/search2.do" class="mo-srsw"><img src="/images/kor2021/main/mo_srsw.png" alt="검색"></a>
+		</div>
+	</div>
+</div>
+<div class="s-container">
+	<div class="wid">
+		<div class="sub-tp">
+			<div class="title-bk clearfix">
+				<h2 class="pg-tit">학사일정(대학)</h2>
+				<script>
+
+    var nowZoom = 100;
+    var agent = navigator.userAgent.toLowerCase();
+    function zoomIn() {
+        nowZoom -= 10;
+        if(nowZoom <= 70) nowZoom = 70;
+        zooms();
+    }
+
+    function zoomOut() {
+        nowZoom += 20;
+        if(nowZoom >= 500) nowZoom = 500;
+        zooms();
+    }
+
+    function zoomReset(){
+        nowZoom = 100;
+        zooms();
+    }
+
+    function zooms(){
+        document.body.style.position = "relative";
+        document.body.style.zoom = nowZoom + '%';
+
+        if(nowZoom==70){
+            alert ("더 이상 축소할 수 없습니다.");
+        }
+
+        if(nowZoom==500){
+            alert ("더 이상 확대할 수 없습니다.");
+        }
+    }
+	
+	function contents_print(dName)
+	{
+		 printArea();
+	}
+	var initBody = "";
+	function beforePrint()
+	{
+		initBody = document.body.innerHTML;
+		document.body.innerHTML = contents.innerHTML;
+	}
+	function afterPrint()
+	{	
+		document.body.innerHTML = initBody;	
+	}
+    function printArea()
+    {
+        $('#header').hide();
+        $('#left').hide();
+        $('#footer').hide();
+        $('#location').hide();
+        $('#cmd').hide();
+        $('#container').css("margin-left","-240px");
+
+        document.execCommand('print', false, null) || popupWin.window.print();
+
+        $('#header').show();
+        $('#left').show();
+        $('#footer').show();
+        $('#location').show();
+        $('#cmd').show();
+        $('#container').css("margin-left","");
+
+    }
+	function fnBookmarkPop() {
+		var loginCheck = "false";
+		if ( loginCheck == null || loginCheck == "" || loginCheck == "false" ) {
+			alert("로그인을 먼저 하셔야 합니다.");
+			return;
+		}
+		window.open("", "bookmarkPop", "width=543, height=233");
+		jQuery("#form").attr("target", "bookmarkPop").attr("action", "/kor/myPage/bookmark/writePop.do").submit();
+	}
+
+	function fnCopyUrl() {
+		var $temp = $("<input>");
+		$("body").append($temp);
+		var successful = '';
+		var ua = navigator.userAgent.toLowerCase ();
+		var url = $(location).attr('href').split('.do');		
+		var param = $('#listForm').serialize();	
+		if(param != '' && param != "undefined") param = ".do?"+param;
+		else param = ".do";	
+
+        //$("#copyurl").html(url[0]+param);
+		if( ua.indexOf ('msie') != -1 || ua.indexOf('trident') != - 1 ){
+	          if(window.clipboardData){
+	        	  var ret = clipboardData.clearData();
+		          if(ret){
+		        	  //$temp.val($("#copyurl").html()).select();
+		        	  $temp.val(url[0]+param).select();
+		      		  successful = document.execCommand("copy");
+			          if(successful) alert('복사되었습니다.');
+	               }
+	          }
+	    }else{
+	          //$temp.val($("#copyurl").html()).select();
+	          $temp.val(url[0]+param).select();
+      		  successful = document.execCommand("copy");
+	          if(successful) alert('복사되었습니다.');
+	    }
+		$temp.remove();
+	}
+
+</script>
+<ul class="stp-bt clearfix">
+    <li class="zoom clearfix">
+        <a href="#n" onclick="zoomIn();" class="minus"><span>화면축소</span></a>
+        <a href="#n" onclick="zoomReset();" class="default"><span>기본화면</span></a>
+        <a href="#n" onclick="zoomOut();" class="plus"><span>화면확대</span></a>
+    </li>
+    <li class="print"><a href="#n" onclick="contents_print('contents');"><img src="/images/kor2021/main/print_ic.jpg" alt="인쇄"></a></li>
+    <li class="copyUrl"><a href="#n" onclick="fnCopyUrl();">주소복사</a></li>
+</ul>
+</div>
+			<div class="sub-nav">
+	<ul class="line-map clearfix" style="padding: 15px;">
+		<li class="home"><a href="/main.do"><img src="/images/kor2021/main/home_ic.png" alt="홈"></a></li>
+		<li>
+				<a href="#n" title="하위메뉴 열기">대학 및 대학원</a>
+					<ul>
+					<li><a href="/kor/html/auos/president/welcome/welcome.do?menuid=2000001001001000000" >UOS소개</a></li>
+					<li><a href="http://admission.uos.ac.kr/" >입학</a></li>
+					<li><a href="/kor/html/academic/college/social.do" >대학 및 대학원</a></li>
+					<li><a href="" >연구산학</a></li>
+					<li><a href="/kor/html/life/minwon/studentiss.do?menuid=2000005001001000000" >캠퍼스생활</a></li>
+					</ul>
+			</li>
+			<li>
+				<a href="#n" title="하위메뉴 열기">학사</a>
+					<ul>
+					<li><a href="/kor/html/academic/college/social.do" >대학</a></li>
+						<li><a href="/kor/html/academic/gschool/general/general.do?menuid=2000003002001000000" >대학원</a></li>
+						<li><a href="/korCalendarYear/list.do?list_id=CA1&menuid=2000003003001000000" >학사</a></li>
+						<li><a href="https://www.uos.ac.kr/kor/html/education/usip/intro.do?menuid=2000003004008001000" >교육지원</a></li>
+						</ul>
+			</li>
+		<li>
+			<a href="#n" title="하위메뉴 열기">
+				학사일정</a>
+			<ul>
+				<li><a href="/korCalendarYear/list.do?list_id=CA1&menuid=2000003003001000000" >학사일정</a></li>
+							<li><a href="/korFree/list.do?list_id=CA2&menuid=2000003003002000000" >개설교과목</a></li>
+							<li><a href="https://volunteer.uos.ac.kr" class="newWin" target="_blank" title="새창으로 열기">사회공헌</a></li>
+							<li><a href="/kor/html/uaInfo/major/curriculum/curriculum2026.do?menuid=2000003003004000000" >교과/교직/복수전공/부전공/전과/모듈형교육과정</a></li>
+							<li><a href="/kor/html/uaInfo/result/order/order.do?menuid=2000003003005004000" >수강/성적/학점교류</a></li>
+							<li><a href="/kor/html/uaInfo/graduate/rest/rest.do?menuid=2000003003006005000" >학적변동/졸업</a></li>
+							<li><a href="/kor/html/life/international/exchange/exchange.do?menuid=2000003003007000000" >국제교류</a></li>
+							</ul>
+		</li>
+	</ul>
+</div>
+</div>
+		<div class="content-area">
+			<div id="contents"> <ul class="tabList cnt2">
+					<li class="on"><a href="#a" title="선택됨"><span>대학</span></a></li>
+					<li><a href="https://graduate.uos.ac.kr/graduateNew/korCalendarYear2/list.do?list_id=30001C4" class="newWin" target="_blank" title="대학원 학사일정 새창으로"><span>대학원</span></a></li>
+				</ul>
+				<form name="frm" method="post">
+					<h3 class="blind">대학</h3>
+					<div class="yaer-sbk">
+						<div class="ySel">
+							<a href="javascript:prevYear();"><img src="/images/kor2016/btn/btn_prev2.png" alt="이전 년도 학사일정 보기"></a> &nbsp;
+							2026<a href="javascript:nextYear();"><img src="/images/kor2016/btn/btn_next2.png" alt="다음 년도 학사일정 보기"></a>
+						</div>
+						<div class="mSel lsLine">
+							<select title="월 선택" class="w80px" id="monthSelect">
+								<option value="">전체</option>
+								<option value="202601">1월</option>
+								<option value="202602">2월</option>
+								<option value="202603">3월</option>
+								<option value="202604">4월</option>
+								<option value="202605">5월</option>
+								<option value="202606">6월</option>
+								<option value="202607">7월</option>
+								<option value="202608">8월</option>
+								<option value="202609">9월</option>
+								<option value="202610">10월</option>
+								<option value="202611">11월</option>
+								<option value="202612">12월</option>
+								<option value="202701">2027년 1월</option>
+								<option value="202702">2027년 2월</option>
+							</select><a href="javascript:monthSelect('2026');" class="btn btnBl" style="height: 44px;">GO</a>
+						</div>
+					</div>
+					<div class="listType02 mt30">
+						<table>
+							<caption>이 표는 월별 대학의 학사 일정을 나타내는 표입니다.</caption>
+							<colgroup>
+								<col class="w120px date01">
+								<col class="w180px date02">
+								<col>
+							</colgroup>
+
+							<tbody>
+							<tr style="display:none;">
+								<th>&nbsp;</th>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							</tr>
+							<script>
+								function listView(seq, year, month) {
+									if ($("#c" + year + month + seq).hasClass("hide")) {
+										$("#c" + year + month + seq).removeClass("hide");
+									} else {
+										$("#c" + year + month + seq).addClass("hide");
+									}
+								}
+
+								function monthSelect(year) {
+									var ms = $("#monthSelect").val();
+									var year2 = Number(year) + 1;
+									if (ms == "") {
+										$("#year_code").val(Number($("#year_code").val()));
+										jQuery("#listForm").attr("action", "/korCalendarYear2/list.do").submit();
+									} else {
+										for (var i = 1; i <= 14; i++) {
+											var it = String(i);
+											var it2 = "";
+											if (String(i).length == "1") {
+												it = "0" + i;
+											}
+											var lc = $("#in" + year + it).val();
+											if (it == '13') {
+												lc = $("#in" + (Number(year) + 1) + "01").val();
+												it2 = "01";
+											} else if (it == '14') {
+												lc = $("#in" + (Number(year) + 1) + "02").val();
+												it2 = "02";
+											}
+											$("#m" + year + it).addClass("hide");
+											$("#m" + year2 + it).addClass("hide");
+											$("#m" + ms).removeClass("hide");
+											for (var j = 0; j <= lc; j++) {
+												$("#m" + year + it + "c" + j).addClass("hide");
+												$("#m" + year + it + "cc" + j).addClass("hide");
+												$("#m" + year2 + it + "c" + j).addClass("hide");
+												$("#m" + year2 + it2 + "c" + j).addClass("hide");
+												$("#m" + year2 + it + "cc" + j).addClass("hide");
+												$("#m" + ms + "c" + j).removeClass("hide");
+												$("#m" + ms + "cc" + j).removeClass("hide");
+											}
+										}
+									}
+								}
+							</script>
+							<!--
+						<tr id="m202601">
+								<th class="th" rowspan="11">2026년<br>01월<input type="hidden" id="in202601" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202601c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>01월<input type="hidden" id="in202601" value="11">
+								</th>
+								<td class="th date02">[12-22
+									~ 01-19]
+								</td>
+								<td class="al title01">
+										<span>겨울 계절수업 [Winter session]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc0" class="">
+								<td id="c202601839" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202601c1" class="">
+								<td class="th date02">[12-30
+									~ 01-05]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc1" class="">
+								<td id="c202601841" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202601c2" class="">
+								<td class="th date02">[01-12
+									~ 01-16]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 조기졸업 신청 [2026 1st semester early graduation application]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc2" class="">
+								<td id="c202601842" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202601c3" class="">
+								<td class="th date02">[01-19
+									~ 01-23]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 복학 신청 [2026 1st semester return to school application]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc3" class="">
+								<td id="c202601843" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202601c4" class="">
+								<td class="th date02">[01-19
+									~ 01-23]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 학부 교내장학 신청(2차) [2026 1st semester undergraduate internal scholarship application (2nd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202601cc4" class="">
+								<td id="c202601844" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202602">
+								<th class="th" rowspan="13">2026년<br>02월<input type="hidden" id="in202602" value="13">
+								</th>
+						</tr>-->
+							<tr id="m202602c0" class="">
+								<th class="th date01" rowspan="12">2026년<br>02월<input type="hidden" id="in202602" value="13">
+								</th>
+								<td class="th date02">[02-09
+									~ 02-11]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 수강 신청 *9일: 4학년ㆍ5학년,초과학기, 10일: 3학년, 11일: 2학년 [2026 1st semester course registration * Feb. 9: 4th &amp; 5th year, extended semester; Feb. 10: 3rd year; Feb. 11: 2nd year]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc0" class="">
+								<td id="c202602845" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202602c1" class="">
+								<td class="th date02">[02-23
+									~ 02-23]
+								</td>
+								<td class="al title01">
+										<span>2026.1학기 신입생 및 편입생 장바구니 수강신청 [New/transfer student 1st semester course shopping cart]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc1" class="">
+								<td id="c202602846" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202602c2" class="">
+								<td class="th date02">[02-23
+									~ 02-27]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 휴학 신청 [2026 1st semester leave of absence application]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc2" class="">
+								<td id="c202602848" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202602c3" class="">
+								<td class="th date02">[02-24
+									~ 02-24]
+								</td>
+								<td class="al title01">
+										<span>2026년 2월(2025학년도 전기) 학위수여식 [Feb 2026 (2025 academic year spring) graduation ceremony]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc3" class="">
+								<td id="c202602849" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202602c4" class="">
+								<td class="th date02">[02-25
+									~ 02-26]
+								</td>
+								<td class="al title01">
+										<span>2026. 1학기 수강신청 *25일: 신입생 및 편입생, 26일: 전체 [2026 1st semester course registration * Feb. 25: new/transfer students; Feb. 26: all]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc4" class="">
+								<td id="c202602847" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202602c5" class="">
+								<td class="th date02">[02-28
+									~ 02-28]
+								</td>
+								<td class="al title01">
+										<span>2학기 종료 [End of 2nd semester]</span>
+								</td>
+							</tr>
+							<tr id="m202602cc5" class="">
+								<td id="c202602850" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202603">
+								<th class="th" rowspan="13">2026년<br>03월<input type="hidden" id="in202603" value="13">
+								</th>
+						</tr>-->
+							<tr id="m202603c0" class="">
+								<th class="th date01" rowspan="12">2026년<br>03월<input type="hidden" id="in202603" value="13">
+								</th>
+								<td class="th date02">[03-01
+									~ 03-01]
+								</td>
+								<td class="al title01">
+										<span>2026. 제1학기 시작 [2026 1st semester begins]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc0" class="">
+								<td id="c202603852" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202603c1" class="">
+								<td class="th date02">[03-03
+									~ 03-03]
+								</td>
+								<td class="al title01">
+										<span>2026. 제1학기 개강 [2026 1st semester classes begin]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc1" class="">
+								<td id="c202603853" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202603c2" class="">
+								<td class="th date02">[03-03
+									~ 03-09]
+								</td>
+								<td class="al title01">
+										<span>수강신청 확인 및 변경 [Course registration confirmation and changes]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc2" class="">
+								<td id="c202603854" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202603c3" class="">
+								<td class="th date02">[03-03
+									~ 03-09]
+								</td>
+								<td class="al title01">
+										<span>1학기 학부 교내장학 신청(3차) [1st semester undergraduate internal scholarship application (3rd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc3" class="">
+								<td id="c202603855" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202603c4" class="">
+								<td class="th date02">[03-18
+									~ 03-20]
+								</td>
+								<td class="al title01">
+										<span>수강신청 취소 [Course withdrawal]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc4" class="">
+								<td id="c202603856" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202603c5" class="">
+								<td class="th date02">[03-30
+									~ 03-30]
+								</td>
+								<td class="al title01">
+										<span>수업일수 1/4(일반휴학 만기) [1/4 of semester (general leave of absence deadline)]</span>
+								</td>
+							</tr>
+							<tr id="m202603cc5" class="">
+								<td id="c202603857" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202604">
+								<th class="th" rowspan="3">2026년<br>04월<input type="hidden" id="in202604" value="3">
+								</th>
+						</tr>-->
+							<tr id="m202604c0" class="">
+								<th class="th date01" rowspan="2">2026년<br>04월<input type="hidden" id="in202604" value="3">
+								</th>
+								<td class="th date02">[04-27
+									~ 04-27]
+								</td>
+								<td class="al title01">
+										<span>수업일수 2/4 [2/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202604cc0" class="">
+								<td id="c202604858" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202605">
+								<th class="th" rowspan="11">2026년<br>05월<input type="hidden" id="in202605" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202605c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>05월<input type="hidden" id="in202605" value="11">
+								</th>
+								<td class="th date02">[05-01
+									~ 05-01]
+								</td>
+								<td class="al title01">
+										<span>개교기념일 [University foundation day]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc0" class="">
+								<td id="c202605859" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202605c1" class="">
+								<td class="th date02">[05-11
+									~ 05-14]
+								</td>
+								<td class="al title01">
+										<span>2학기 복수전공 신청 [2nd semester double major application]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc1" class="">
+								<td id="c202605860" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202605c2" class="">
+								<td class="th date02">[05-19
+									~ 05-25]
+								</td>
+								<td class="al title01">
+										<span>보강주간 [Make-up class week]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc2" class="">
+								<td id="c202605861" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202605c3" class="">
+								<td class="th date02">[05-25
+									~ 05-25]
+								</td>
+								<td class="al title01">
+										<span>수업일수 3/4 [3/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc3" class="">
+								<td id="c202605862" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202605c4" class="">
+								<td class="th date02">[05-26
+									~ 05-29]
+								</td>
+								<td class="al title01">
+										<span>2학기 재입학 신청 [2nd semester re-admission application]</span>
+								</td>
+							</tr>
+							<tr id="m202605cc4" class="">
+								<td id="c202605863" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202606">
+								<th class="th" rowspan="17">2026년<br>06월<input type="hidden" id="in202606" value="17">
+								</th>
+						</tr>-->
+							<tr id="m202606c0" class="">
+								<th class="th date01" rowspan="16">2026년<br>06월<input type="hidden" id="in202606" value="17">
+								</th>
+								<td class="th date02">[06-01
+									~ 06-04]
+								</td>
+								<td class="al title01">
+										<span>2학기 부전공 신청 [2nd semester minor application]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc0" class="">
+								<td id="c202606864" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202606c1" class="">
+								<td class="th date02">[06-08
+									~ 06-12]
+								</td>
+								<td class="al title01">
+										<span>2학기 학부 교내장학 신청(1차) [2nd semester undergraduate internal scholarship application (1st round)]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc1" class="">
+								<td id="c202606865" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202606c2" class="">
+								<td class="th date02">[06-16
+									~ 06-22]
+								</td>
+								<td class="al title01">
+										<span>기말시험 [Final exams]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc2" class="">
+								<td id="c202606866" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202606c3" class="">
+								<td class="th date02">[06-23
+									~ 06-23]
+								</td>
+								<td class="al title01">
+										<span>여름방학 [Summer vacation]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc3" class="">
+								<td id="c202606867" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202606c4" class="">
+								<td class="th date02">[06-23
+									~ 07-17]
+								</td>
+								<td class="al title01">
+										<span>여름 계절수업 [Summer session]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc4" class="">
+								<td id="c202606868" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202606c5" class="">
+								<td class="th date02">[06-29
+									~ 06-29]
+								</td>
+								<td class="al title01">
+										<span>성적제출 마감 [Grade submission deadline]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc5" class="">
+								<td id="c202606869" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202606c6" class="">
+								<td class="th date02">[06-30
+									~ 06-30]
+								</td>
+								<td class="al title01">
+										<span>성적열람 시작 [Grade viewing begins]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc6" class="">
+								<td id="c202606870" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202606c7" class="">
+								<td class="th date02">[06-30
+									~ 07-03]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202606cc7" class="">
+								<td id="c202606871" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202607">
+								<th class="th" rowspan="11">2026년<br>07월<input type="hidden" id="in202607" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202607c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>07월<input type="hidden" id="in202607" value="11">
+								</th>
+								<td class="th date02">[06-23
+									~ 07-17]
+								</td>
+								<td class="al title01">
+										<span>여름 계절수업 [Summer session]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc0" class="">
+								<td id="c202607868" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202607c1" class="">
+								<td class="th date02">[06-30
+									~ 07-03]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc1" class="">
+								<td id="c202607871" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202607c2" class="">
+								<td class="th date02">[07-13
+									~ 07-17]
+								</td>
+								<td class="al title01">
+										<span>2학기 조기졸업 신청 [2nd semester early graduation application]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc2" class="">
+								<td id="c202607872" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202607c3" class="">
+								<td class="th date02">[07-20
+									~ 07-24]
+								</td>
+								<td class="al title01">
+										<span>2학기 복학 신청 [2nd semester return to school application]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc3" class="">
+								<td id="c202607873" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202607c4" class="">
+								<td class="th date02">[07-20
+									~ 07-24]
+								</td>
+								<td class="al title01">
+										<span>2학기 학부 교내장학 신청(2차) [2nd semester undergraduate internal scholarship application (2nd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202607cc4" class="">
+								<td id="c202607874" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202608">
+								<th class="th" rowspan="9">2026년<br>08월<input type="hidden" id="in202608" value="9">
+								</th>
+						</tr>-->
+							<tr id="m202608c0" class="">
+								<th class="th date01" rowspan="8">2026년<br>08월<input type="hidden" id="in202608" value="9">
+								</th>
+								<td class="th date02">[08-10
+									~ 08-14]
+								</td>
+								<td class="al title01">
+										<span>2학기 수강신청*10일:4ㆍ5학년,초과, 11일:3학년, 12일:2학년, 13일:1학년, 14일:전체 [2026 2nd semester course registration, Aug.10: 4th&amp;5th year; Aug.11: 3rd year; Aug.12: 2nd year; Aug.13: 1st year; Aug.14: All students]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc0" class="">
+								<td id="c202608875" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202608c1" class="">
+								<td class="th date02">[08-21
+									~ 08-21]
+								</td>
+								<td class="al title01">
+										<span>2026년 8월(2025학년도 후기) 학위수여식 [Aug 2026 (2025 academic year fall) graduation ceremony]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc1" class="">
+								<td id="c202608876" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202608c2" class="">
+								<td class="th date02">[08-24
+									~ 08-28]
+								</td>
+								<td class="al title01">
+										<span>2학기 휴학신청 [2nd semester leave of absence application]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc2" class="">
+								<td id="c202608877" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202608c3" class="">
+								<td class="th date02">[08-31
+									~ 08-31]
+								</td>
+								<td class="al title01">
+										<span>1학기 종료 [End of 1st semester]</span>
+								</td>
+							</tr>
+							<tr id="m202608cc3" class="">
+								<td id="c202608878" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202609">
+								<th class="th" rowspan="13">2026년<br>09월<input type="hidden" id="in202609" value="13">
+								</th>
+						</tr>-->
+							<tr id="m202609c0" class="">
+								<th class="th date01" rowspan="12">2026년<br>09월<input type="hidden" id="in202609" value="13">
+								</th>
+								<td class="th date02">[09-01
+									~ 09-01]
+								</td>
+								<td class="al title01">
+										<span>2학기 시작 [2nd semester begins]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc0" class="">
+								<td id="c202609879" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202609c1" class="">
+								<td class="th date02">[09-01
+									~ 09-01]
+								</td>
+								<td class="al title01">
+										<span>2학기 개강 [2nd semester classes begin]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc1" class="">
+								<td id="c202609880" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202609c2" class="">
+								<td class="th date02">[09-01
+									~ 09-07]
+								</td>
+								<td class="al title01">
+										<span>수강신청 확인 및 변경 [Course registration confirmation and changes]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc2" class="">
+								<td id="c202609881" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202609c3" class="">
+								<td class="th date02">[09-01
+									~ 09-07]
+								</td>
+								<td class="al title01">
+										<span>2학기 학부 교내장학 신청(3차) [2nd semester undergraduate internal scholarship application (3rd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc3" class="">
+								<td id="c202609882" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202609c4" class="">
+								<td class="th date02">[09-17
+									~ 09-21]
+								</td>
+								<td class="al title01">
+										<span>수강신청 취소 [Course withdrawal]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc4" class="">
+								<td id="c202609883" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202609c5" class="">
+								<td class="th date02">[09-28
+									~ 09-28]
+								</td>
+								<td class="al title01">
+										<span>수업일수 1/4(일반휴학 만기) [1/4 of semester (general leave of absence deadline)]</span>
+								</td>
+							</tr>
+							<tr id="m202609cc5" class="">
+								<td id="c202609884" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202610">
+								<th class="th" rowspan="3">2026년<br>10월<input type="hidden" id="in202610" value="3">
+								</th>
+						</tr>-->
+							<tr id="m202610c0" class="">
+								<th class="th date01" rowspan="2">2026년<br>10월<input type="hidden" id="in202610" value="3">
+								</th>
+								<td class="th date02">[10-26
+									~ 10-26]
+								</td>
+								<td class="al title01">
+										<span>수업일수 2/4 [2/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202610cc0" class="">
+								<td id="c202610885" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202611">
+								<th class="th" rowspan="11">2026년<br>11월<input type="hidden" id="in202611" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202611c0" class="">
+								<th class="th date01" rowspan="10">2026년<br>11월<input type="hidden" id="in202611" value="11">
+								</th>
+								<td class="th date02">[11-02
+									~ 11-05]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 복수전공 신청 [2027 1st semester double major application]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc0" class="">
+								<td id="c202611886" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202611c1" class="">
+								<td class="th date02">[11-16
+									~ 11-20]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 전과, 재입학 신청 [2027 1st semester department transfer, re-admission application]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc1" class="">
+								<td id="c202611888" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202611c2" class="">
+								<td class="th date02">[11-17
+									~ 11-23]
+								</td>
+								<td class="al title01">
+										<span>보강주간 [Make-up class week]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc2" class="">
+								<td id="c202611887" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202611c3" class="">
+								<td class="th date02">[11-23
+									~ 11-23]
+								</td>
+								<td class="al title01">
+										<span>수업일수 3/4 [3/4 of semester]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc3" class="">
+								<td id="c202611889" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202611c4" class="">
+								<td class="th date02">[11-23
+									~ 11-26]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 부전공 신청 [2027 1st semester minor application]</span>
+								</td>
+							</tr>
+							<tr id="m202611cc4" class="">
+								<td id="c202611890" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202612">
+								<th class="th" rowspan="15">2026년<br>12월<input type="hidden" id="in202612" value="15">
+								</th>
+						</tr>-->
+							<tr id="m202612c0" class="">
+								<th class="th date01" rowspan="14">2026년<br>12월<input type="hidden" id="in202612" value="15">
+								</th>
+								<td class="th date02">[12-07
+									~ 12-11]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 학부 교내장학 신청(1차) [2027 1st semester undergraduate internal scholarship application (1st round)]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc0" class="">
+								<td id="c202612891" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202612c1" class="">
+								<td class="th date02">[12-15
+									~ 12-21]
+								</td>
+								<td class="al title01">
+										<span>기말시험 [Final exams]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc1" class="">
+								<td id="c202612892" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202612c2" class="">
+								<td class="th date02">[12-22
+									~ 12-22]
+								</td>
+								<td class="al title01">
+										<span>겨울방학 [Winter vacation]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc2" class="">
+								<td id="c202612893" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202612c3" class="">
+								<td class="th date02">[12-22
+									~ 01-19]
+								</td>
+								<td class="al title01">
+										<span>겨울 계절수업 [Winter session]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc3" class="">
+								<td id="c202612894" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202612c4" class="">
+								<td class="th date02">[12-28
+									~ 12-28]
+								</td>
+								<td class="al title01">
+										<span>성적제출 마감 [Grade submission deadline]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc4" class="">
+								<td id="c202612895" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202612c5" class="">
+								<td class="th date02">[12-29
+									~ 12-29]
+								</td>
+								<td class="al title01">
+										<span>성적열람 시작 [Grade viewing begins]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc5" class="">
+								<td id="c202612896" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202612c6" class="">
+								<td class="th date02">[12-29
+									~ 01-04]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202612cc6" class="">
+								<td id="c202612897" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202701">
+								<th class="th" rowspan="11">2027년<br>01월<input type="hidden" id="in202701" value="11">
+								</th>
+						</tr>-->
+							<tr id="m202701c0" class="">
+								<th class="th date01" rowspan="10">2027년<br>01월<input type="hidden" id="in202701" value="11">
+								</th>
+								<td class="th date02">[12-22
+									~ 01-19]
+								</td>
+								<td class="al title01">
+										<span>겨울 계절수업 [Winter session]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc0" class="">
+								<td id="c202701894" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202701c1" class="">
+								<td class="th date02">[12-29
+									~ 01-04]
+								</td>
+								<td class="al title01">
+										<span>성적정정 [Grade correction]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc1" class="">
+								<td id="c202701897" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202701c2" class="">
+								<td class="th date02">[01-11
+									~ 01-15]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 조기졸업 신청 [2027 1st semester early graduation application]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc2" class="">
+								<td id="c202701898" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202701c3" class="">
+								<td class="th date02">[01-18
+									~ 01-22]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 복학 신청 [2027 1st semester return to school application]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc3" class="">
+								<td id="c202701899" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202701c4" class="">
+								<td class="th date02">[01-18
+									~ 01-22]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 학부 교내장학 신청(2차) [2027 1st semester undergraduate internal scholarship application (2nd round)]</span>
+								</td>
+							</tr>
+							<tr id="m202701cc4" class="">
+								<td id="c202701900" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<!--
+						<tr id="m202702">
+								<th class="th" rowspan="9">2027년<br>02월<input type="hidden" id="in202702" value="9">
+								</th>
+						</tr>-->
+							<tr id="m202702c0" class="">
+								<th class="th date01" rowspan="8">2027년<br>02월<input type="hidden" id="in202702" value="9">
+								</th>
+								<td class="th date02">[02-17
+									~ 02-24]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 수강 신청 ※ 17:4학년,18:3학년,19:2학년,23:,24:전체 [2027 1st semester course registration * Feb.17: 4th,5th year; Feb.18: 3rd year; Feb.19: 2nd year;Feb.23: 1st year; Feb.24: All students]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc0" class="">
+								<td id="c202702901" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202702c1" class="">
+								<td class="th date02">[02-22
+									~ 02-25]
+								</td>
+								<td class="al title01">
+										<span>2027. 1학기 휴학 신청 [2027 1st semester leave of absence application]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc1" class="">
+								<td id="c202702902" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202702c2" class="">
+								<td class="th date02">[02-23
+									~ 02-23]
+								</td>
+								<td class="al title01">
+										<span>2027년 2월(2026학년도 전기) 학위수여식 [Feb 2027 (2026 academic year spring) graduation ceremony]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc2" class="">
+								<td id="c202702903" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							<tr id="m202702c3" class="">
+								<td class="th date02">[02-28
+									~ 02-28]
+								</td>
+								<td class="al title01">
+										<span>2학기 종료 [End of 2nd semester]</span>
+								</td>
+							</tr>
+							<tr id="m202702cc3" class="">
+								<td id="c202702904" class="al l20 hide" colspan="2">
+									<ul class="dotList02">
+</ul>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- Footer -->
+<div id="footer">
+	<div class="footer">
+	<div style="width: 140px; bottom: 64px;" class="topBannerFooterFirst">
+</div>
+	<div class="mobileDarkModeButton">
+		<a href="javascript:toggleDarkMode();">
+			<img src="/images/kor2021/main/blank-icon.png" alt="모바일용 다크모드버튼">
+		</a>
+	</div>
+	<div class="topBtnFooter">
+		<a href="#">
+			<img src="/images/kor2021/btn/btn_top.png" alt="상단으로 이동">
+		</a>
+	</div>
+	<div class="ft-tp">
+		<div class="wid">
+			<ul class="ft-lk">
+				<li><a href="/kor/html/site/personalInfo/personalInfo.do" class="first" style="color: #6dc1ff;">개인정보처리방침</a></li>
+				<li><a href="http://www.academyinfo.go.kr/popup/pubinfo1690/list.do?schlId=0000040" target="_blank" title="새창열림">대학정보공시</a></li>
+				<li><a href="/kor/html/auos/uos/evaluate/evaluate.do?menuid=2000001006005001000" target="_blank" title="새창열림">대학자체평가</a></li>
+				<li><a href="/kor/html/auos/organization/chart/chart.do">교직원전화번호</a></li>
+				<li><a href="/kor/html/auos/guide/local/local1_1.do">오시는길</a></li>
+<li><a href="/kor/html/site/sitemap/sitemap.do">사이트맵</a></li>
+</ul>
+		</div>
+	</div>
+	<div class="ft-bm">
+		<div class="mvs-cbbx" style="position: absolute; bottom: auto; right: 0px;">
+			<a href="javascript:toggleDarkMode();"><img src="/images/engNew2021/remastered/main/blank-icon.png" alt="다크모드버튼"></a>
+		</div>
+		<div class="wid clearfix">
+			<div class="ft-logo"><img src="/images/kor2021/main/ft_logo.png" alt="서울시립대학교"></div>
+			<div class="ft-loc">
+				<p>(02504) 서울특별시 동대문구 서울시립대로 163(전농동)</p>
+				<p>전화 : 02-6490-6114 / 서울시통합문의 : 02-120</p>
+				<p>©The University of Seoul all rights reserved.</p>
+			</div>
+
+			<ul class="ft-mk">
+				<li>
+					<a title="새창" href="http://www.wa.or.kr/board/list.asp?search=title&amp;SearchString=%BD%C3%B8%B3%B4%EB&amp;BoardID=0006" target="_blank">
+						<img src="/images/kor2021/main/ft_mk2_260126.png" alt="웹 접근성 인증마크(WA인증마크)">
+					</a>
+				</li>
+				<li><img src="/images/kor2021/main/ft_mk3_1.png" alt="대학혁신 지원사업"></li>
+				<li><img src="/images/kor2021/main/ft_mk4.png" alt="특성화 사업단"></li>
+			</ul>
+
+			<div class="footer-banner">
+				<script>//<!--<![CDATA[
+				let m3_b = '';
+				let m3_u = (location.protocol=='https:'?'https://delivery.dighty.com/www/delivery/ajs.php':'http://delivery.dighty.com/www/delivery/ajs.php');
+				let m3_r = Math.floor(Math.random()*99999999999);
+				if(document.cookie.indexOf('ACEUACS=')>-1){
+					let m3_b = document.cookie.substr(document.cookie.indexOf('ACEUACS=')+8,19);}
+				if (!document.MAX_used) document.MAX_used = ',';
+				document.write ("<scr"+"ipt type='text/javascript' src='"+m3_u);
+				document.write ("?zoneid=609");
+				document.write ('&amp;cb=' + m3_r);
+				if (m3_b!='')document.write('&amp;bd=' + m3_b);
+				if (document.MAX_used != ',') document.write ("&amp;exclude=" + document.MAX_used);
+				document.write (document.charset ? '&amp;charset='+document.charset : (document.characterSet ? '&amp;charset='+document.characterSet : ''));
+				document.write ("&amp;loc=" + escape(window.location));
+				if (document.referrer) document.write ("&amp;referer=" + escape(document.referrer));
+				if (document.context) document.write ("&context=" + escape(document.context));
+				if (document.mmm_fo) document.write ("&amp;mmm_fo=1");
+				document.write ("'><\/scr"+"ipt>");
+				//]]>--></script>
+				<noscript>
+					<a href='https://delivery.dighty.com/www/delivery/ck.php?n=d7a728a6&amp;cb=INSERT_RANDOM_NUMBER_HERE' target='_blank'>
+						<img src='https://delivery.dighty.com/www/delivery/avw.php?zoneid=609&amp;cb=INSERT_RANDOM_NUMBER_HERE&amp;n=d7a728a6' alt=''>
+					</a>
+				</noscript>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!-- SDC 로그분석 소스 시작-->
+
+<noscript>
+	<img alt="dcsimg" id="DCSIMG" src="//sdclog.uos.ac.kr/dcszok5lz8kopydwu3s7qm9bq_7w2j/njs.gif?dcsuri=/nojavascript&amp;WT.js=No&amp;WT.tv=8.0.3" style="border: 0; width: 1px; height: 1px;">
+</noscript>
+<!-- SDC 로그분석 소스 끝-->
+<script>
+	let loggingCustomSid = "www.uos.ac.kr";
+</script>
+<script async src="//weblog.eseoul.go.kr/wlo/js/install.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-V3FRB78B9N"></script>
+<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', 'G-V3FRB78B9N');
+
+	$(document).on('click','.mobileDarkModeButton > a',function(){
+		$(this).toggleClass('on');
+		if( $(this).hasClass('on') ){
+			$(this).children().attr('alt','모바일용 다크모드 해제 버튼');
+		} else{
+			$(this).children().attr('alt','모바일용 다크모드 버튼');
+		}
+	});
+
+	// 서울시 배너 a link 에 타이틀 새 창 열림 추가
+	$(function() {
+		let aFooterBanner = $('.footer-banner a');
+
+		aFooterBanner.each(function() {
+			let $this = $(this),
+					hasTitle = $this.is('[title]');
+
+			if (!hasTitle) {
+				$this.attr('title', '새 창 열림');
+			}
+		});
+	});
+</script>
+</div>
+<form id="listForm" name="listForm" method="get">
+	<input type="hidden" id="llist_id" name="list_id" value="CA1">
+	<input id="year_code" name="year_code" type="hidden" value="2026">
+	<input id="menuid" name="menuid" type="hidden" value="2000003003001000000">
+</form>
+<form id="form" name="form" method="post">
+	<input type="hidden" id="return_url" name="return_url"
+	       value="/korCalendarYear/list.do?list_id=CA1">
+	<input type="hidden" id="list_id" name="list_id" value="CA1">
+	<input type="hidden" id="z" name="z" value="3">
+	<input type="hidden" id="x" name="x" value="3">
+	<input type="hidden" id="y" name="y" value="1">
+</form>
+</body>
+</html>
