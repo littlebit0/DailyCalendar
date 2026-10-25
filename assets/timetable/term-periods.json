@@ -366,6 +366,19 @@
           ]
         }
       ]
+    },
+    {
+      "university": "hanbat",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://hanbat.ac.kr/prog/schafsSchdul/kor/sub05_0201/A/scheduleList.do",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
     }
   ]
 }
