@@ -35,6 +35,7 @@ import 'konkuk_academic_source.dart';
 import 'konyang_academic_source.dart';
 import 'kookmin_academic_source.dart';
 import 'korea_academic_source.dart';
+import 'koreatech_academic_source.dart';
 import 'kunsan_academic_source.dart';
 import 'kwangwoon_academic_source.dart';
 import 'kyonggi_academic_source.dart';
@@ -519,6 +520,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000030',
     campusIds: {'academyinfo:0000030'},
     create: CbnuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'koreatech',
+    institutionId: 'academyinfo:0000189',
+    campusIds: {'academyinfo:0000189'},
+    create: KoreatechAcademicSource.new,
   ),
 ];
 
