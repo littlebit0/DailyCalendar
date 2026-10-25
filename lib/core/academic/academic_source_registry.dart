@@ -2,6 +2,7 @@ import 'academic_source.dart';
 import 'gachon_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'knu_academic_source.dart';
+import 'konkuk_academic_source.dart';
 import 'kyonggi_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
@@ -53,6 +54,19 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000056',
     campusIds: {'academyinfo:0000056', 'academyinfo:0000058'},
     create: KyonggiAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'konkuk',
+    institutionId: 'academyinfo:0000052',
+    campusIds: {'academyinfo:0000052'},
+    create: KonkukAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'konkuk-glocal',
+    institutionId: 'academyinfo:0000052',
+    campusIds: {'academyinfo:0000053'},
+    create: KonkukAcademicSource.glocal,
+    primary: false,
   ),
 ];
 
