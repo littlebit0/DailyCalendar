@@ -31,6 +31,7 @@ import 'nsu_academic_source.dart';
 import 'pcu_academic_source.dart';
 import 'pknu_academic_source.dart';
 import 'pnu_academic_source.dart';
+import 'smu_academic_source.dart';
 import 'sunchon_academic_source.dart';
 import 'ut_academic_source.dart';
 
@@ -289,6 +290,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000107',
     campusIds: {'academyinfo:0000107'},
     create: DeuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'smu',
+    institutionId: 'academyinfo:0000117',
+    campusIds: {'academyinfo:0000117', 'academyinfo:0002959'},
+    create: SangmyungAcademicSource.new,
   ),
 ];
 
