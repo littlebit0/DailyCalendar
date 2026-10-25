@@ -1,9 +1,11 @@
 import 'academic_source.dart';
 import 'catholic_academic_source.dart';
+import 'changwon_academic_source.dart';
 import 'daegu_academic_source.dart';
 import 'dju_academic_source.dart';
 import 'dku_academic_source.dart';
 import 'gachon_academic_source.dart';
+import 'geochang_academic_source.dart';
 import 'gknu_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'hanbat_academic_source.dart';
@@ -20,6 +22,7 @@ import 'kunsan_academic_source.dart';
 import 'kwangwoon_academic_source.dart';
 import 'kyonggi_academic_source.dart';
 import 'mokpo_academic_source.dart';
+import 'namhae_academic_source.dart';
 import 'pknu_academic_source.dart';
 import 'sunchon_academic_source.dart';
 import 'ut_academic_source.dart';
@@ -210,6 +213,26 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000095',
     campusIds: {'academyinfo:0000095'},
     create: DjuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'changwon',
+    institutionId: 'academyinfo:0000028',
+    campusIds: {'academyinfo:0000028'},
+    create: ChangwonAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'changwon-geochang',
+    institutionId: 'academyinfo:0000028',
+    campusIds: {'academyinfo:0003297'},
+    create: GeochangAcademicSource.new,
+    primary: false,
+  ),
+  AcademicSourceRegistration(
+    id: 'changwon-namhae',
+    institutionId: 'academyinfo:0000028',
+    campusIds: {'academyinfo:0003298'},
+    create: NamhaeAcademicSource.new,
+    primary: false,
   ),
 ];
 
