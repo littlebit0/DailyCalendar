@@ -26,5 +26,9 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/snu-main-2026-2.json": {
+    "sha256": "a5f297aec1a8b06b5c04f550c3ad165212475acf18757ff3b6efad1a218621cd",
+    "reason": "#685 서울대 같은 강의실 연속 구간(간격 60분 미만)을 쉬는 시간 포함 하나로 합침(구간 5,339 -> 5,030, 265강좌), 원문 시각은 유지"
   }
 }

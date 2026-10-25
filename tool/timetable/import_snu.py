@@ -109,7 +109,23 @@ def parse_page(body, year, semester):
         # Never let a partially parsed meeting silently create an incomplete schedule.
         if course['scheduleStatus'] != 'scheduled':
             course['schedules'] = []
+        else:
+            course['schedules'] = merge_adjacent(course['schedules'])
     return int(total[1].replace(',', '')), courses
+
+
+def merge_adjacent(schedules):
+    """Merge same-day, same-room meetings whose gap is under 60 minutes (class + break)."""
+    merged = []
+    for row in sorted(schedules, key=lambda r: (r['weekday'], r['classroom'], r['startMinute'])):
+        previous = next((m for m in merged if m['weekday'] == row['weekday'] and m['classroom'] == row['classroom']
+                         and row['startMinute'] - m['endMinute'] < 60 and m['startMinute'] <= row['startMinute']), None)
+        if previous:
+            previous['endMinute'] = max(previous['endMinute'], row['endMinute'])
+        elif row not in merged:
+            merged.append(dict(row))
+    order = {id(m): min(i for i, r in enumerate(schedules) if r['weekday'] == m['weekday'] and r['classroom'] == m['classroom'] and r['startMinute'] == m['startMinute']) for m in merged}
+    return sorted(merged, key=lambda m: order[id(m)])
 
 
 def main():
