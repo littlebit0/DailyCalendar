@@ -68,6 +68,7 @@ import 'sunmoon_academic_source.dart';
 import 'suwon_academic_source.dart';
 import 'swu_academic_source.dart';
 import 'tuk_academic_source.dart';
+import 'ulsan_academic_source.dart';
 import 'uos_academic_source.dart';
 import 'ut_academic_source.dart';
 import 'yonsei_academic_source.dart';
@@ -575,6 +576,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000211',
     campusIds: {'academyinfo:0000211'},
     create: HoseoAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'ulsan',
+    institutionId: 'academyinfo:0000158',
+    campusIds: {'academyinfo:0000158'},
+    create: UlsanAcademicSource.new,
   ),
 ];
 
