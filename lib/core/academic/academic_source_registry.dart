@@ -8,6 +8,7 @@ import 'knu_academic_source.dart';
 import 'kongju_academic_source.dart';
 import 'konkuk_academic_source.dart';
 import 'konyang_academic_source.dart';
+import 'kwangwoon_academic_source.dart';
 import 'kyonggi_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
@@ -112,6 +113,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000008',
     campusIds: {'academyinfo:0000008'},
     create: KongjuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'kwangwoon',
+    institutionId: 'academyinfo:0000074',
+    campusIds: {'academyinfo:0000074'},
+    create: KwangwoonAcademicSource.new,
   ),
 ];
 
