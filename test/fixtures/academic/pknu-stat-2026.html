@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" /> 
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />	
+	Tell the browser to be responsive to screen width
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/> -->
+    <meta charset="utf-8">
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimal-ui">
+	<meta name="mobile-web-app-capable" content="yes">	
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<meta name="Robots" content="ALL" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	
+	<!-- Bootstrap 3.3.5 -->
+<link rel="stylesheet" href="/x2/bootstrap/css/bootstrap-tagsinput.css" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/ms-icon-70x70.png"><!-- favicon -->
+    <!-- Select2 -->
+  	<link rel="stylesheet" href="/x2/plugins/select2/select2.min.css" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/x2/plugins/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="/x2/plugins/ionicons/2.0.1/css/ionicons.min.css" />
+    <!-- Theme style -->
+<!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="/x2/dist/css/skins/_all-skins.min.css" />
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/x2/plugins/iCheck/all.css" />
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="/x2/plugins/morris/morris.css" />
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="/x2/plugins/jvectormap/jquery-jvectormap-1.2.2.css" />
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="/x2/plugins/datepicker/datepicker3.css" />
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="/x2/plugins/daterangepicker/daterangepicker-bs3.css" />
+    <!-- switchery -->
+    <link rel="stylesheet" href="/x2/plugins/switchery/switchery.min.css" />
+    <!-- ionslider -->
+    <link rel="stylesheet" href="/x2/plugins/ionslider/ion.rangeSlider.2.3.css" />
+    <link rel="stylesheet" href="/x2/plugins/ionslider/ion.rangeSlider.skinModern.css?v=2" />
+    <link rel="stylesheet" href="/x2/plugins/pace/pace.min.css" />
+    
+    <link rel="stylesheet" href="/css/cms/style.css" />
+    <link rel="stylesheet" href="/css/front/style.css?v=20251015" />
+    <link rel="stylesheet" href="/css/front/default.css" />
+    <link rel="stylesheet" href="/css/cms/animate.css" />
+    <link rel="stylesheet" href="/css/front/common.css" />
+    
+    <link rel="stylesheet" href="/css/front/slick.css" />
+    
+    <link rel="stylesheet" href="/css/front/sns.css" />
+    <!-- GridStack -->
+    <script>
+	var pageContext = "";
+	var sUserId = "";
+	var sUserName = "";
+	var sUserNo = "";
+	var sUserNum = "";
+	var sUserLevel = "";
+	
+	function searchPost() {
+		
+	    new daum.Postcode({
+	        oncomplete: function(data) {
+	            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+	            // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+	            // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+	            var fullAddr = ''; // 최종 주소 변수
+	            var extraAddr = ''; // 조합형 주소 변수
+
+	            // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+	            if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+	                fullAddr = data.roadAddress;
+
+	            } else { // 사용자가 지번 주소를 선택했을 경우(J)
+	                fullAddr = data.jibunAddress;
+	            }
+
+	            // 사용자가 선택한 주소가 도로명 타입일때 조합한다.
+	            if(data.userSelectedType === 'R'){
+	                //법정동명이 있을 경우 추가한다.
+	                if(data.bname !== ''){
+	                    extraAddr += data.bname;
+	                }
+	                // 건물명이 있을 경우 추가한다.
+	                if(data.buildingName !== ''){
+	                    extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+	                }
+	                // 조합형주소의 유무에 따라 양쪽에 괄호를 추가하여 최종 주소를 만든다.
+	                fullAddr += (extraAddr !== '' ? ' ('+ extraAddr +')' : '');
+	            }
+				
+	            $(".zip").val(data.zonecode);
+	            $(".addr1").val(fullAddr);
+	            $(".addr2").focus();
+	        }
+	    }).open();
+	}
+	</script>
+    <!--[if lt IE 9]>
+        <script src="/x4/plugins/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="/x4/plugins/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    
+    <!-- jQuery 2.1.4 -->
+    <script src="/x4/plugins/jquery/jquery.min.js"></script>
+    <script src="/x2/plugins/validate/jquery.validate.js"></script>
+   	<script type="text/javascript" src="/js/front/jquery.easing.1.2.js"></script>
+	<script type="text/javascript" src="/js/front/placeholders.min.js"></script>
+	<script type="text/javascript" src="/js/front/slick.min.js"></script>
+	<script type="text/javascript" src="/js/front/common.js"></script>
+	<script type="text/javascript" src="/js/front/main.js"></script>
+	<script type="text/javascript" src="/js/front/mapType.js"></script>
+	<script type="text/javascript" src="/js/front/jquery.rwdImageMaps.min.js"></script>
+	<script type="text/javascript" src="/js/common/common.js"></script>
+	
+	<!-- pdf viewer -->
+	<script src="/x4/plugins/pdfjs/build/pdf.js"></script>
+	<script src="/x4/plugins/pdfobject/pdfobject.min.js"></script>
+    
+    <script src="/x4/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/x4/plugins/font-awesome/5.8.1/js/all.min.js"></script>
+    
+    <!-- datepicker -->
+    <script src="/x2/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="/x2/plugins/datepicker/locales/bootstrap-datepicker.kr.js"></script>
+    
+    <!-- daterangepicker -->
+    <script src="/x2/plugins/moment/2.10.2/moment.min.js"></script>  
+    <script src="/x2/plugins/moment/2.10.2/ko.js"></script>
+    <script src="/x2/plugins/daterangepicker/daterangepicker.js"></script>
+    
+    <!-- typing -->
+    <script src="/x4/plugins/rsa/jsbn.js"></script>
+	<script src="/x4/plugins/rsa/rsa.js"></script>
+	<script src="/x4/plugins/rsa/prng4.js"></script>
+	<script src="/x4/plugins/rsa/rng.js"></script>
+    <script src="/x4/plugins/jquery/jquery.cookie.js"></script>
+    
+    <!-- <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5b3e616199ce56b29925142e6f10bbbc&libraries=services"></script> --> <!-- 로컬 -->
+	<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e8d5dea3655e901b24c2a2a176521205&libraries=services"></script> <!-- 서버 -->
+ <script type="text/javascript" src="/x4/plugins/owlCarousel/owl.carousel.js"></script>
+	<link rel="stylesheet" href="/x4/plugins/owlCarousel/owl.carousel.min.css" />
+	<link rel="stylesheet" href="/x4/plugins/owlCarousel/owl.theme.green.min.css" />
+	
+	
+
+<script type="text/javascript" src="/js/front/board.js"></script>
+</head>	             
+<body>        
+<div id="wrap" class="wrapper">                                                                           
+	<link rel="stylesheet" href="/css/font/customFont/customFont.css" />
+
+<head>
+<title>국립부경대학교 | 통계·데이터사이언스</title>
+<script>
+
+function incQckToggle(){
+	var windowWidth = $( window ).width();
+	if(windowWidth > 1670) {
+	//창 가로 크기가 500 미만일 경우
+	$('.incQck').css('display','block')
+	} else {
+	//창 가로 크기가 500보다 클 경우
+	$('.incQck').css('display','none')
+	}
+}
+$( window ).resize(function() {
+	   //창크기 변화 감지
+	   if('281' > 1){
+	   	   incQckToggle()
+	   }
+	});
+$(function(){
+	
+	$('.logoutBtn').on('click', function(){
+		if(confirm('로그아웃 하시겠습니까?')){
+			location.href='/main/155';
+		}
+	});
+	
+	//getBookmarkList();
+	
+	$(".navbar-toggler").on("click", function(){
+		$('#sidebar').toggleClass('active');
+	});	
+	
+    var LogOutTimer = function() {
+        var S = {
+                      timer : null,
+                      limit : 1000 * 60 * 60, 
+                      fnc   : function() {},
+                      start : function() {
+                                S.timer = window.setTimeout(S.fnc, S.limit);
+                              },
+                      reset : function() {
+                                window.clearTimeout(S.timer);
+                                S.start();
+                              }
+                    };
+            
+    	document.onmousemove = function() { S.reset(); };
+            
+            return S;
+          }();
+          
+          // 로그아웃 체크시간 설정
+          LogOutTimer.limit = 1000 * 60 * 60;
+          
+          // 로그아웃 함수 설정
+          LogOutTimer.fnc = function() {
+            //alert("LogOut");
+            if('' != ''){
+            alert("장시간 사용하지 않아 로그아웃 되었습니다.");
+            location.href="/main";
+            }
+          }
+          
+          // 로그아웃 타이머 실행
+          LogOutTimer.start();
+	
+          
+          
+	// sns 모달 close할 시 body scroll overflow제거
+	$('#youtubeModal').on('hidden.bs.modal', function (event) {
+		$('body').css('overflow','');
+	})
+});
+
+
+function getCookie(name){
+	var cookieName = name + "=";
+	var i = 0;
+	while(i <= document.cookie.length){
+		var c = (i + cookieName.length);
+		if(document.cookie.substring(i, c) == cookieName){
+			if((lastCharCookie = document.cookie.indexOf(";", c)) == -1) lastCharCookie = document.cookie.length;
+			return encodeURI(document.cookie.substring(c, lastCharCookie));
+		}
+		
+		i = document.cookie.indexOf(" ", i) + 1
+		if(i == 0) break;			
+	}
+	return "";
+}
+
+function snsModal(url) {
+	// 매개변수 : youtube, insta, none
+	let someUrl = url
+	//모달
+	let modal = $('#youtubeModal');
+	//iframe src
+	let youtube_url = $('#youtube_url');
+	
+	//youtube 일때
+	if (someUrl.includes('youtube.com') == 1) {
+		let urlIndex = someUrl.indexOf('v=') + 2
+		//키값추출
+		youtube_url.attr('src',"https://www.youtube.com/embed/"+someUrl.slice(urlIndex)+"?enablejsapi=1&version=3&playerapiid=ytplayer");
+		//모달show
+		$('body').css('overflow','hidden');
+		modal.modal('show');
+	}else if (url === 'none') { //none 일때
+		return false;
+	}else { //instagram 및 타 URL
+		window.open(url)
+	} 
+}
+</script>
+
+
+<style>
+	/*폰트 사이즈*/
+	.fontSize0 {}
+	
+	.fontSize14{font-size: 14px !important;}
+	.fontSize15{font-size: 15px !important;}
+	.fontSize16{font-size: 16px !important;}
+	.fontSize17{font-size: 17px !important;}
+	.fontSize18{font-size: 18px !important;}
+	.fontSize19{font-size: 19px !important;}
+	.fontSize20{font-size: 20px !important;}
+	.fontSize22{font-size: 22px !important;}
+	.fontSize24{font-size: 24px !important;}
+	.fontSize26{font-size: 26px !important;}
+	.fontSize28{font-size: 28px !important;}
+	.fontSize30{font-size: 30px !important;}
+	
+	
+	/*폰트 컬러*/
+	.fontColor0{}
+	.fontColor1{color: #DB1818 !important;}
+	.fontColor2{color: #003377 !important;}
+	.fontColor3{color: #fca311 !important;}
+	.fontColor4{color: #669bbc !important;}
+	.fontColor5{color: #3a5a40 !important;}
+	.fontColor6{color: #90e0ef !important;}
+	.fontColor7{color: #fb8500 !important;}
+	.fontColor8{color: #c1121f !important;}
+	.fontColor9{color: #dda15e !important;}
+	.fontColor10{color: #bc6c25 !important;}
+	.fontColor11{color: #264653 !important;}
+	.fontColor12{color: #2a9d8f !important;}
+	.fontColor13{color: #e9c46a !important;}
+	.fontColor14{color: #f4a261 !important;}
+	.fontColor15{color: #e76f51 !important;}
+	.fontColor16{color: #000000 !important;}
+	.fontColor17{color: #14213d !important;}
+	.fontColor18{color: #fca311 !important;}
+	.fontColor19{color: #e5e5e5 !important;}
+	.fontColor20{color: #ffffff !important;}
+	.fontColor21{color: #edede9 !important;}
+	.fontColor22{color: #d6ccc2 !important;}
+	.fontColor23{color: #f5ebe0 !important;}
+	.fontColor24{color: #e3d5ca !important;}
+	.fontColor25{color: #d5bdaf !important;}
+	.fontColor26{color: #240046 !important;}
+	.fontColor27{color: #5a189a !important;}
+	.fontColor28{color: #7b2cbf !important;}
+	.fontColor29{color: #9d4edd !important;}
+	.fontColor30{color: #c3a995 !important;}
+	.fontColor31{color: #ab947e !important;}
+	.fontColor32{color: #6f5e53 !important;}
+	.fontColor33{color: #593d3b !important;}
+	
+	/*폰트 패밀리*/
+	.fontFamily0{}
+	
+</style>
+
+</head> 
+
+<header>
+		<div id="b_gnb">
+		    <div id="b_gnbTop">
+		        <h1 id="b_gnbLogo"><a href="/stat/1">
+		        	<span>국립부경대학교</span>
+		        		통계·데이터사이언스</a>
+		        </h1>
+		        <div id="b_gbtLft">
+		            <ul>
+		                <li><a href="https://www.pknu.ac.kr/main">대표홈페이지</a></li>
+		                <li><a href="https://portal.pknu.ac.kr/">부경포털</a></li>
+		            </ul>
+		        </div><!-- gbtLft -->
+		        <div id="b_gbtRht">
+		            <ul class="b_gbtMenu">
+		                <li><a href="/stat/1">HOME</a></li>
+		                <li><a href="/stat/9999">SITEMAP</a></li>
+		            </ul>
+					<div class="b_gbtLang">
+					       	<button onclick="window.open('http://stat-eng.pknu.ac.kr')"><i class="fa fa-globe" aria-hidden="true"></i>&nbsp;ENGLISH</button>
+					  	</div> 
+				    </div><!-- gbtRht -->
+		    </div><!-- gnbTop -->
+		    <div id="b_gnbBot">
+		        
+		        <div id="b_gnbMenu">
+		            <ul class="gbm">
+		                <li >
+			                    <h4 class="gnbDpt1"><a href="/stat/264" target="_self" title="전공안내" class="fontColor fontFamily fontSize">전공안내</a>
+			                    	<span></span>
+			                    	</h4>
+			                    <ul>
+			                    	<li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/1220" target="_self" title="통계·데이터사이언스 소개">통계·데이터사이언스 소개</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/265" target="_self" title="연혁">연혁</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/1219" target="_self" title="학과홍보동영상">학과홍보동영상</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/5984" target="_self" title="찾아오시는길">찾아오시는길</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        </ul>
+			                </li>
+		                <li >
+			                    <h4 class="gnbDpt1"><a href="/stat/1111" target="_self" title="구성원" class="fontColor fontFamily fontSize">구성원</a>
+			                    	<span></span>
+			                    	</h4>
+			                    <ul>
+			                    	<li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/272" target="_self" title="교수">교수</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/1114" target="_self" title="강사">강사</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/1115" target="_self" title="조교">조교</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        </ul>
+			                </li>
+		                <li >
+			                    <h4 class="gnbDpt1"><a href="/stat/266" target="_self" title="학사과정" class="fontColor fontFamily fontSize">학사과정</a>
+			                    	<span></span>
+			                    	</h4>
+			                    <ul>
+			                    	<li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/277" target="_self" title="교육과정">교육과정</a>
+			                        			<span></span>
+							                        		</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	<li>
+						                        		<a href="/stat/420" target="_self" title="통계·데이터사이언스전공">통계·데이터사이언스전공</a>
+						                        	</li>
+						                        <li>
+						                        		<a href="/stat/4554" target="_self" title="데이터비즈니스융합전공">데이터비즈니스융합전공</a>
+						                        	</li>
+						                        </ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/271" target="_self" title="교육목적 및 인재상">교육목적 및 인재상</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/278" target="_self" title="졸업요건">졸업요건</a>
+			                        			<span></span>
+							                        		</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	<li>
+						                        		<a href="/stat/422" target="_self" title="학부">학부</a>
+						                        	</li>
+						                        </ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/279" target="_self" title="학사서식">학사서식</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/281" target="_self" title="학사일정">학사일정</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        </ul>
+			                </li>
+		                <li >
+			                    <h4 class="gnbDpt1"><a href="/stat/6472" target="_self" title="대학원과정" class="fontColor fontFamily fontSize">대학원과정</a>
+			                    	<span></span>
+			                    	</h4>
+			                    <ul>
+			                    	<li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/6473" target="_self" title="교육과정">교육과정</a>
+			                        			<span></span>
+							                        		</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	<li>
+						                        		<a href="/stat/6477" target="_self" title="대학원(통계학과)">대학원(통계학과)</a>
+						                        	</li>
+						                        </ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/6474" target="_self" title="졸업요건">졸업요건</a>
+			                        			<span></span>
+							                        		</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	<li>
+						                        		<a href="/stat/421" target="_self" title="대학원(통계학과)">대학원(통계학과)</a>
+						                        	</li>
+						                        </ul>
+			                        	</li>
+			                        </ul>
+			                </li>
+		                <li >
+			                    <h4 class="gnbDpt1"><a href="/stat/6460" target="_self" title="취업안내" class="fontColor fontFamily fontSize">취업안내</a>
+			                    	<span></span>
+			                    	</h4>
+			                    <ul>
+			                    	<li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/6480" target="_self" title="졸업 후 진로">졸업 후 진로</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/6461" target="_self" title="취업정보게시판">취업정보게시판</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/6479" target="_top" title="취업길라잡이">취업길라잡이</a>
+			                        			</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	</ul>
+			                        	</li>
+			                        </ul>
+			                </li>
+		                <li >
+			                    <h4 class="gnbDpt1"><a href="/stat/403" target="_self" title="정보마당" class="fontColor fontFamily fontSize">정보마당</a>
+			                    	<span></span>
+			                    	</h4>
+			                    <ul>
+			                    	<li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/6482" target="_self" title="공지사항">공지사항</a>
+			                        			<span></span>
+							                        		</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	<li>
+						                        		<a href="/stat/6464" target="_self" title="공지사항(학부)">공지사항(학부)</a>
+						                        	</li>
+						                        <li>
+						                        		<a href="/stat/6463" target="_self" title="공지사항(대학원)">공지사항(대학원)</a>
+						                        	</li>
+						                        </ul>
+			                        	</li>
+			                        <li>
+			                        		<h5 class="gnbDpt2">
+			                        			<a href="/stat/6483" target="_self" title="커뮤니티">커뮤니티</a>
+			                        			<span></span>
+							                        		</h5>
+			                        		<ul class="gnbDpt2_ul gnbDpt2_ul_location">
+						                    	<li>
+						                        		<a href="/stat/407" target="_self" title="포토갤러리">포토갤러리</a>
+						                        	</li>
+						                        <li>
+						                        		<a href="/stat/406" target="_self" title="학생회">학생회</a>
+						                        	</li>
+						                        <li>
+						                        		<a href="/stat/416" target="_self" title="통계카페">통계카페</a>
+						                        	</li>
+						                        <li>
+						                        		<a href="/stat/1099" target="_self" title="주요링크">주요링크</a>
+						                        	</li>
+						                        <li>
+						                        		<a href="/stat/408" target="_self" title="질문과 답변">질문과 답변</a>
+						                        	</li>
+						                        </ul>
+			                        	</li>
+			                        </ul>
+			                </li>
+		                </ul><!-- gbm -->
+		            <div id="b_gmTop"></div>
+		        </div><!-- gnbMenu -->
+		        
+		
+		        <button id="b_gnbBtn">
+		            <span>전체메뉴 열기</span>
+		            <em></em>
+		            <em></em>
+		            <em></em>
+		        </button><!-- gnbBtn -->
+		        <button id="b_gnbMo">
+		            <span>전체메뉴 열기</span>
+		            <em></em>
+		            <em></em>
+		            <em></em>
+		        </button><!-- gnbBtn -->
+		        <div id="b_gnbAll"><div class="container"></div></div>
+		        <!-- gnbAll -->
+		    </div><!-- gnbBot -->
+		</div>
+	</header>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+<div id="container" class="">		
+		
+
+
+<script>
+
+var currentZoom = 100;
+// 줌아웃
+function zoomOut(){
+	currentZoom = currentZoom - 10;
+	zoomDisplay();
+}
+//줌인
+function zoomIn(){
+	currentZoom = currentZoom + 10;
+	zoomDisplay();
+}
+// 줌화면 표시
+function zoomDisplay(){
+	if(currentZoom <= 50){
+		if('KOR' == 'KOR'){
+			alert("더 이상 축소할 수 없습니다.");
+			document.body.style.zoom = '60%';
+			currentZoom = 60;
+		}else{
+			alert("Can't zoom out any more.");
+			document.body.style.zoom = '60%';
+			currentZoom = 60;
+		}
+	}
+	if(currentZoom >= 150){
+		if('KOR' == 'KOR'){
+			alert("더 이상 확대할 수 없습니다.");
+			document.body.style.zoom = '140%';
+			currentZoom = 140;
+		}else{
+			alert("Can't zoom in any more.");
+			document.body.style.zoom = '140%';
+			currentZoom = 140;
+		}
+	}
+	if(currentZoom > 50 && currentZoom < 150){
+		document.body.style.zoom = currentZoom + '%';
+	}
+}
+
+</script>
+<div id="a_subTop" style="background: url('/upload//143/banner/2021/07/28/e7b3aa8b-e8b4-44d9-bc5e-264f2d1c5188.jpg');">
+		<div>
+		<div>
+			<div class="container">
+				<h2></h2>
+					<ul class="a_sbtSet">
+					<li><a href="javascript:zoomIn()" class="sbtZom">확대</a></li>
+					<li><a href="javascript:zoomOut()" class="sbtOut">축소</a></li>
+					<li><a href="javascript:window.print() return false;" class="sbtPrt" onclick="window.print()">프린트</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>		
+	</div><!-- subTop -->
+	<div id="sub">
+		<div class="container">
+
+			<div id="sbWrap">
+				<div id="a_sbLft">
+					<dl class="a_sbtNav">
+						<dt>홈</dt>
+						<dd>학사과정</dd>
+						<dd>학사일정</dd>
+						</dl>
+					<h3>학사과정</h3>
+					<ul>
+						<li>
+									<ul class="gnbDpt2">
+										<li>
+											<a  href="/stat/277" title="교육과정" target="_self"><b>교육과정</b></a>
+											<span style="display: block; position: absolute; left: 15%;right: 0;top: 0;bottom: 0; width: 100px;"></span>
+										</li>
+										<li>
+											<ul class="gnbDpt2_ul_m">
+									           	<li>
+										           		<a  href="/stat/420" target="_self" title="통계·데이터사이언스전공">·&nbsp; 통계·데이터사이언스전공</a>
+										           	</li>
+									            <li>
+										           		<a  href="/stat/4554" target="_self" title="데이터비즈니스융합전공">·&nbsp; 데이터비즈니스융합전공</a>
+										           	</li>
+									            </ul>
+										</li>
+									</ul>
+								</li>
+								
+							<li>
+									<ul class="gnbDpt2">
+										<li>
+											<a  href="/stat/271" title="교육목적 및 인재상" target="_self"><b>교육목적 및 인재상</b></a>
+											<span style="display: block; position: absolute; left: 15%;right: 0;top: 0;bottom: 0; width: 100px;"></span>
+										</li>
+										<li>
+											<ul class="gnbDpt2_ul_m">
+									           	</ul>
+										</li>
+									</ul>
+								</li>
+								
+							<li>
+									<ul class="gnbDpt2">
+										<li>
+											<a  href="/stat/278" title="졸업요건" target="_self"><b>졸업요건</b></a>
+											<span style="display: block; position: absolute; left: 15%;right: 0;top: 0;bottom: 0; width: 100px;"></span>
+										</li>
+										<li>
+											<ul class="gnbDpt2_ul_m">
+									           	<li>
+										           		<a  href="/stat/422" target="_self" title="학부">·&nbsp; 학부</a>
+										           	</li>
+									            </ul>
+										</li>
+									</ul>
+								</li>
+								
+							<li>
+									<ul class="gnbDpt2">
+										<li>
+											<a  href="/stat/279" title="학사서식" target="_self"><b>학사서식</b></a>
+											<span style="display: block; position: absolute; left: 15%;right: 0;top: 0;bottom: 0; width: 100px;"></span>
+										</li>
+										<li>
+											<ul class="gnbDpt2_ul_m">
+									           	</ul>
+										</li>
+									</ul>
+								</li>
+								
+							<li>
+									<ul class="gnbDpt2">
+										<li>
+											<a class="dep2_on" href="/stat/281" title="학사일정" target="_self"><b>학사일정</b></a>
+											<span style="display: block; position: absolute; left: 15%;right: 0;top: 0;bottom: 0; width: 100px;"></span>
+										</li>
+										<li>
+											<ul class="gnbDpt2_ul_m">
+									           	</ul>
+										</li>
+									</ul>
+								</li>
+								
+							</ul>
+				</div>
+<!-- /////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+<div id="sub">
+		<div class="container">
+			<div id="sbWrap">
+				<div id="sbCont">
+					<h3 id="subTitle">학사일정</h3>
+					<!-- bdCont -->
+					<div class="nnl">
+						<div style="text-align: center; font-size: 25px; margin-bottom: 100px;">
+							<a href="?year=2025" style="color: #27348a;">◀</a>
+							<span>2026년 학사일정</span>
+							<a href="?year=2027"  style="color: #27348a;">▶</a>
+						</div>
+						<div class="lesson_bg">
+							<ul>
+								<li class="bull_1">부경대학교 학사일정을 한 눈에 보실 수 있습니다.</li>
+								<li class="bull_2">아래 링크를 클릭하시면 좀 더 자세한 일정을 보실 수 있습니다.</li>
+							</ul>
+							<a href="https://www.pknu.ac.kr/main/31" target="_blank" title="새창으로열림" class="lesson_btn">부경대학교 전체 학사일정 바로가기</a>
+						</div>
+						<label style="font-size:20px;">2026년 1학기</label>
+						<table class="box box-primary text-center table" style="text-align: left;">
+							<colgroup>
+								<col width="30%">
+								<col width="70%">
+							</colgroup>
+							<thead>
+								<tr>
+									<th scope="col"><h4>일정</h4></th>
+									<th scope="col"><h4>일정내용</h4></th>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr style="font-size:17px;">
+											<td>
+												2026.02.02  ~ 2026.04.06 </td>
+											<td>2026학년도 제1학기 휴·복학</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.02.11  ~ 2026.02.13 </td>
+											<td>2026학년도 제1학기 수강신청</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.03.03 </td>
+											<td>2026학년도 제1학기 개강</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.03.03  ~ 2026.03.09 </td>
+											<td>제1학기 수강신청 변경</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.03.16  ~ 2026.03.20 </td>
+											<td>제1학기 수강취소 (일반대학원생, 경영대학원생, 교육대학원생 제외)</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.04.01  ~ 2026.04.14 </td>
+											<td>제1학기 중간 강의평가</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.04.06 </td>
+											<td>제1학기 수업일수 1/3선</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.04.21  ~ 2026.04.27 </td>
+											<td>제1학기 중간고사</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.05.01 </td>
+											<td>근로자의 날</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.05.10 </td>
+											<td>개교기념일</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.05.12  ~ 2026.05.14 </td>
+											<td>봄축제</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.05.18 </td>
+											<td>제1학기 수업일수 2/3선</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.05.18  ~ 2026.05.20 </td>
+											<td>하계 계절수업 수강신청</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.06.08  ~ 2026.07.03 </td>
+											<td>제1학기 강의평가</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.06.09  ~ 2026.06.17 </td>
+											<td>제1학기 보강지정</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.06.18  ~ 2026.06.24 </td>
+											<td>제1학기 기말고사</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.06.25 </td>
+											<td>하계방학</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.06.29  ~ 2026.07.20 </td>
+											<td>하계 계절수업</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.08.21 </td>
+											<td>2026년 8월 학위수여식</td>
+										</tr>
+									</tbody>
+						</table>
+						<label style="font-size:20px;">2026년 2학기</label>
+						<table class="box box-primary text-center table" style="text-align: left;">
+							<colgroup>
+								<col width="30%">
+								<col width="70%">
+							</colgroup>
+							<thead>
+								<tr style="font-size:17px;">
+									<th scope="col"><h4>일정</h4></th>
+									<th scope="col"><h4>일정내용</h4></th>
+								</tr>	
+							</thead>
+							<tbody>
+								<tr style="font-size:17px;">
+											<td>
+												2026.07.20  ~ 2026.07.22 </td>
+											<td>제2학기 예비수강신청</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.08.03  ~ 2026.10.08 </td>
+											<td>제2학기 휴·복학</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.08.05  ~ 2026.08.07 </td>
+											<td>제2학기 수강신청</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.09.01 </td>
+											<td>2026학년도 제2학기 개강</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.09.01  ~ 2026.09.07 </td>
+											<td>제2학기 수강신청 변경</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.09.21  ~ 2026.09.29 </td>
+											<td>제2학기 수강취소 (일반대학원생, 경영대학원생, 교육대학원생 제외)</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.10.02  ~ 2026.10.15 </td>
+											<td>제2학기 중간 강의평가</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.10.08 </td>
+											<td>제2학기 수업일수 1/3선</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.10.20  ~ 2026.10.26 </td>
+											<td>제2학기 중간고사</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.10.29 </td>
+											<td>부경학술문화제</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.11.11  ~ 2026.11.13 </td>
+											<td>동계 계절수업 수강신청</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.11.13 </td>
+											<td>제2학기 수업일수 2/3선</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.12.07  ~ 2026.12.30 </td>
+											<td>제2학기 강의평가</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.12.08  ~ 2026.12.11 </td>
+											<td>제2학기 보강지정</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.12.14  ~ 2026.12.20 </td>
+											<td>제2학기 기말고사</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.12.21 </td>
+											<td>동계방학</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2026.12.21  ~ 2027.01.12 </td>
+											<td>동계 계절수업</td>
+										</tr>
+									<tr style="font-size:17px;">
+											<td>
+												2027.02.19 </td>
+											<td>2027년 2월 학위수여식</td>
+										</tr>
+									</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		 </div>
+		<!-- container -->
+	</div>
+	<!-- sub -->
+</div><!-- sbWrap -->
+</div><!-- container -->
+</div><!-- sub -->
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+
+
+
+</div>
+	<footer>
+	
+		<div id="botSite">
+			<!-- topBtn -->
+			<div class="topBtn">
+				<a href="#">TOP</a>
+			</div>
+			<!-- topBtn -->
+			<button class="btsBtn">교내 주요사이트</button>
+			<div class="btsCont">
+				<div class="container">
+					<div class="btsTb">
+	<dl>
+		<dt>학생</dt>
+		<dd><a href="http://www.kcucon.or.kr/" target="_blank">kcu 바로가기</a></dd>
+		<dd><a href="http://cons.ocu.ac.kr/" target="_blank">ocu  바로가기</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/115" target="_blank">국제 학생증</a></dd>
+		<dd><a href="http://mail.pukyong.ac.kr/main/main.jsp" target="_blank">부경구글앱스</a></dd>
+		<dd><a href="https://whalebe.pknu.ac.kr/" target="_blank">비교과신청바로가기</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/110" target="_blank">수강신청</a></dd>
+		<dd><a href="https://icc.pknu.ac.kr/main/3" target="_blank">실무전산</a></dd>
+		<dd><a href="https://oia.pknu.ac.kr/kr/index.php?pCode=MN0000037" target="_blank">실용영어(글로벌어학교육센터)</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/92" target="_blank">인터넷 휴ㆍ복학</a></dd>
+		<dd><a href="http://www.pknua.or.kr/" target="_blank">총동창회</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/260" target="_blank">경영자배상책임보험</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/26" target="_blank">학사정보안내</a></dd>
+	</dl>
+	<dl>
+		<dt>교직원</dt>
+		<dd><a href="http://pknu.korus.ac.kr/" target="_blank">KORUS</a></dd>
+		<dd><a href="https://ssl1.korus.kr/" target="_blank">KORUS VPN</a></dd>
+		<dd><a href="https://pknuac.nhi.go.kr/" target="_blank">나라배움터</a></dd>
+		<dd><a href="https://www.gwp.or.kr/wus/cmmn/lgn/login.jdo" target="_blank">맞춤형 복지포털</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/137" target="_blank">생활공감정책제안방</a></dd>
+		<dd><a href="http://mail.pknu.ac.kr" target="_blank">웹메일</a></dd>
+		<dd><a href="https://icms.pknu.ac.kr" target="_blank">홈페이지 빌더</a></dd>
+	</dl>
+	<dl>
+		<dt>대학정보알림</dt>
+		<dd><a href="https://www.pknu.ac.kr/main/305" target="_blank">교육 수요자 만족도</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/rule/main.do" target="_blank">규정집</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/175" target="_blank">대학자체평가</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/178" target="_blank">재정현황</a></dd>
+		<dd><a href="https://www.academyinfo.go.kr/pubinfo/pubinfo1600/doInit.do?schlId=0000013" target="_blank">정보공시(대학알리미)</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/179" target="_blank">정책실명제(국민신청실명제)</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/180" target="_blank">평의원회</a></dd>
+		<dd><a href="https://www.pknu.ac.kr/main/181" target="_blank">현업공무원 지정 및 초과근무수당</a></dd>
+	</dl>
+	<dl>
+		<dt>교내 주요사이트</dt>
+		<dd><a href="https://clc.pknu.ac.kr/Default.asp" target="_blank">공동실험실습관</a></dd>
+		<dd><a href="https://icee.pknu.ac.kr" target="_blank">공학교육혁신센터</a></dd>
+		<dd><a href="https://faculty.pknu.ac.kr/index.Pknu" target="_blank">교수회</a></dd>
+		<dd><a href="https://icms.pknu.ac.kr/pknu20304R" target="_blank">국립대학육성사업</a></dd>
+		<dd><a href="https://fund.pknu.ac.kr" target="_blank">대학발전기금</a></dd>
+		<dd><a href="https://libweb.pknu.ac.kr/" target="_blank">도서관</a></dd>
+		<dd><a href="https://icms.pknu.ac.kr/dsbacademy/" target="_blank">디지털스마트부산아카데미사업단</a></dd>
+		<dd><a href="https://rise.pknu.ac.kr" target="_blank">RISE 사업단</a></dd>
+		<dd><a href="https://museum.pknu.ac.kr" target="_blank">박물관</a></dd>
+		<dd><a href="https://health.pknu.ac.kr" target="_blank">보건진료소</a></dd>
+		<dd><a href="http://archives.pknu.ac.kr/" target="_blank">부경대학교 기록포털</a></dd>
+	</dl>
+	<dl>
+		<dt>&nbsp;</dt>
+		<dd><a href="https://stones.pknu.ac.kr/main.do" target="_blank">부경대학교 디딤돌시스템</a></dd>
+		<dd><a href="http://sh.pknu.ac.kr/" target="_blank">산학협력단</a></dd>
+		<dd><a href="https://pknucoop.pknu.ac.kr/" target="_blank">소비자생활협동조합</a></dd>
+		<dd><a href="http://hkplus.pknu.ac.kr/intro/intro_02.php" target="_blank">인문한국플러스(HK+)사업단</a></dd>
+		<dd><a href="https://support.pknu.ac.kr" target="_blank">장애학생지원센터</a></dd>
+		<dd><a href="https://icc.pknu.ac.kr" target="_blank">AI정보혁신본부</a></dd>
+		<dd><a href="https://pknucc.pknu.ac.kr" target="_blank">직장어린이집</a></dd>
+		<dd><a href="https://sports.pknu.ac.kr" target="_blank">체육진흥원</a></dd>
+		<dd><a href="https://ps.pknu.ac.kr:14005/kr/" target="_blank">미래교육원</a></dd>
+		<dd><a href="http://dormitory.pknu.ac.kr/main/main.php" target="_blank">학생생활관</a></dd>
+		<dd><a href="https://cms.pknu.ac.kr/mfrbk/main.do" target="_blank">해양어류지원기탁기관</a></dd>
+	</dl>
+	<dl>
+		<dt>교외 주요사이트</dt>
+		<dd><a href="https://www.privacy.go.kr/" target="_blank">개인정보보호 포털</a></dd>
+		<dd><a href="https://www.moe.go.kr/main.do?s=moe" target="_blank">교육부</a></dd>
+		<dd><a href="https://www.koies.or.kr/" target="_blank">한국교육시설안전원</a></dd>
+		<dd><a href="https://www.knu39.org" target="_blank">국립대학육성사업 발전협의회</a></dd>
+		<dd><a href="https://www.mma.go.kr/index.do" target="_blank">병무청</a></dd>
+		<dd><a href="https://www.gov.kr/portal/main" target="_blank">정부민원포털 민원24</a></dd>
+		<dd><a href="https://www.neti.go.kr/index.go" target="_blank">중앙교육연수원</a></dd>
+		<dd><a href="https://www.ktcu.or.kr" target="_blank">한국교직원공제회</a></dd>
+	</dl>
+</div></div>
+			</div>
+		</div>
+	
+		<div id="a_footer">
+			<div class="container">
+				<!-- <ul class="a_ftTop">
+					<li><a href="/main/168" class="sky">개인정보처리방침</a></li>
+					<li><a href="/main/172">이메일무단수집금지</a></li>
+					<li><a href="/main/174">대학행정서비스 헌장</a></li>
+					<li><a href="/main/183">정보공개방</a></li>
+					<li><a href="/main/179">정책실명제</a></li>
+					<li><a href="/main/54">NEWS Letter 신청</a></li>
+					<li><a href="/main/176">대학알리미</a></li>
+					<li><a href="/main/167">행정예고</a></li>
+					<li><a href="/main/185">청렴센터</a></li>
+				</ul> -->
+				<div class="a_ftBot">
+					<div class="ft_site">
+							<ul class='school_list'>
+								<li><a href="http://www.pknu.ac.kr" target="_blank" title="국립부경대학교">국립부경대학교</a></li>
+								<li><a href="http://graduate.pknu.ac.kr" target="_blank" title="국립부경대학교 대학원">국립부경대학교 대학원</a></li>
+								<li><a href="https://itc.pknu.ac.kr" target="_blank" title="국립부경대학교 정보융합대학">국립부경대학교 정보융합대학</a></li>
+								<li><a href="http://cafe.naver.com/pknustatistics" target="_blank" title="통계학과 학생회">통계학과 학생회</a></li>
+								</ul>
+							<button class="school_btn">교내사이트</button>
+						</div>
+					<a class="text-red" href="https://www.pknu.ac.kr/main/168" target="_blank" title="개인정보처리방침">개인정보처리방침</a>
+					<pre style="color: #4a4a4a; font-size: 12pt; font-family: 'Noto Sans KR', sans-serif; white-space: pre-wrap;">부산광역시 남구 용소로 45 부경대학교 대연캠퍼스 자연과학2관(C24) 7110호  I  TEL : 051-629-5534~5  ㅣ  FAX : 051-629-5544</pre>
+					<p class="ftCpy">COPYRIGHT(C) 2021 PUKYONG NATIONAL UNIVERSITY. ALL RIGHTS RESERVED.</p>
+
+				</div>
+			</div>
+		</div><!-- footer -->
+	
+	</footer>
+<!-- //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+
+
+
+</div>	
+</body>
+</html>
