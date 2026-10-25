@@ -347,15 +347,22 @@ class WeeklyTimetableGrid extends StatelessWidget {
                 style: Theme.of(sheetContext).textTheme.titleMedium,
               ),
             ),
-            for (final member in block.members)
-              ListTile(
-                key: ValueKey('timetable-segment-${member.id}'),
-                leading: const Icon(Icons.schedule),
-                title: Text(
-                  '${_timeLabel(sheetContext, member.meeting.startMinute)}–${_timeLabel(sheetContext, member.meeting.endMinute)}',
-                ),
-                onTap: () => Navigator.pop(sheetContext, member),
+            Flexible(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  for (final member in block.members)
+                    ListTile(
+                      key: ValueKey('timetable-segment-${member.id}'),
+                      leading: const Icon(Icons.schedule),
+                      title: Text(
+                        '${_timeLabel(sheetContext, member.meeting.startMinute)}–${_timeLabel(sheetContext, member.meeting.endMinute)}',
+                      ),
+                      onTap: () => Navigator.pop(sheetContext, member),
+                    ),
+                ],
               ),
+            ),
           ],
         ),
       ),

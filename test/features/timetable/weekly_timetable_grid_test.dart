@@ -579,6 +579,43 @@ void main() {
       expect(tapped, [parts[1].id, parts[2].id]);
     });
 
+    testWidgets('낮은 가로 화면에서도 구간 선택 목록을 스크롤해 끝 구간을 고른다', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(720, 260));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final parts = split('low', [
+        (540, 600),
+        (600, 660),
+        (660, 720),
+        (720, 780),
+        (780, 840),
+      ]);
+      final tapped = <String>[];
+      await tester.pumpWidget(
+        app(
+          courses: parts,
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      final last = find.byKey(ValueKey('timetable-segment-${parts.last.id}'));
+      await tester.scrollUntilVisible(
+        last,
+        60,
+        scrollable: find.descendant(
+          of: find.byType(BottomSheet),
+          matching: find.byType(Scrollable),
+        ),
+      );
+      await tester.ensureVisible(last);
+      await tester.pumpAndSettle();
+      await tester.tap(last);
+      await tester.pumpAndSettle();
+      expect(tapped, [parts.last.id]);
+      expect(tester.takeException(), isNull);
+    });
+
     testWidgets('구간 선택을 닫으면 아무 구간도 열리지 않는다', (tester) async {
       final tapped = <String>[];
       await tester.pumpWidget(
