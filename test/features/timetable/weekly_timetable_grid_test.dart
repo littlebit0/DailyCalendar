@@ -543,6 +543,73 @@ void main() {
       expect(tester.getSemantics(blocks()).label, contains('09:00–12:00'));
     });
 
+    testWidgets('합쳐진 블록을 누르면 구간을 고를 수 있고 각각 눌린다', (tester) async {
+      final parts = split('seg', [(540, 600), (600, 660), (660, 720)]);
+      final tapped = <String>[];
+      await tester.pumpWidget(
+        app(
+          courses: parts,
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsOneWidget);
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      for (final part in parts) {
+        expect(
+          find.byKey(ValueKey('timetable-segment-${part.id}')),
+          findsOneWidget,
+        );
+      }
+      expect(find.text('10:00–11:00'), findsOneWidget);
+      // 가운데 구간도 따로 열 수 있다.
+      await tester.tap(
+        find.byKey(ValueKey('timetable-segment-${parts[1].id}')),
+      );
+      await tester.pumpAndSettle();
+      expect(tapped, [parts[1].id]);
+      // 마지막 구간도 마찬가지다.
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(ValueKey('timetable-segment-${parts[2].id}')),
+      );
+      await tester.pumpAndSettle();
+      expect(tapped, [parts[1].id, parts[2].id]);
+    });
+
+    testWidgets('구간 선택을 닫으면 아무 구간도 열리지 않는다', (tester) async {
+      final tapped = <String>[];
+      await tester.pumpWidget(
+        app(
+          courses: split('close', [(540, 600), (600, 660)]),
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
+      expect(tapped, isEmpty);
+    });
+
+    testWidgets('합쳐지지 않은 블록은 바로 열린다', (tester) async {
+      final tapped = <String>[];
+      final single = split('single', [(540, 600)]);
+      await tester.pumpWidget(
+        app(
+          courses: single,
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      expect(tapped, [single.single.id]);
+    });
+
     testWidgets('한양형 0분 간격은 1블록이 된다', (tester) async {
       await tester.pumpWidget(
         app(courses: split('hy', [(540, 600), (600, 660)])),

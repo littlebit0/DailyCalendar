@@ -237,8 +237,7 @@ class WeeklyTimetableGrid extends StatelessWidget {
                           placement.block.occurrence.course.id,
                         ),
                         compact: compact,
-                        onTap: () =>
-                            onOccurrenceTap(placement.block.occurrence),
+                        onTap: () => _tapBlock(context, placement.block),
                       ),
                     ),
               ],
@@ -326,6 +325,42 @@ class WeeklyTimetableGrid extends StatelessWidget {
         );
       },
     );
+  }
+
+  /// A merged block stands for several stored meetings, each with its own
+  /// mode override, so a tap on it first asks which segment is meant.
+  Future<void> _tapBlock(BuildContext context, _TimetableBlock block) async {
+    if (block.members.length == 1) {
+      onOccurrenceTap(block.occurrence);
+      return;
+    }
+    final chosen = await showModalBottomSheet<ClassOccurrence>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              title: Text(
+                block.occurrence.course.title,
+                style: Theme.of(sheetContext).textTheme.titleMedium,
+              ),
+            ),
+            for (final member in block.members)
+              ListTile(
+                key: ValueKey('timetable-segment-${member.id}'),
+                leading: const Icon(Icons.schedule),
+                title: Text(
+                  '${_timeLabel(sheetContext, member.meeting.startMinute)}–${_timeLabel(sheetContext, member.meeting.endMinute)}',
+                ),
+                onTap: () => Navigator.pop(sheetContext, member),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (chosen != null) onOccurrenceTap(chosen);
   }
 
   String _timeLabel(BuildContext context, int minute) {
@@ -532,15 +567,19 @@ class _ClassBlock extends StatelessWidget {
 }
 
 /// Consecutive meetings of one course drawn as a single grid block. The
-/// occurrence is the first meeting, so taps and keys still address stored data.
+/// occurrence is the first meeting, so keys still address stored data; every
+/// merged meeting stays in [members] so each can still be opened and
+/// overridden on its own.
 class _TimetableBlock {
   const _TimetableBlock(
     this.occurrence,
     this.startMinute,
     this.endMinute,
     this.sourceEndMinute,
+    this.members,
   );
   final ClassOccurrence occurrence;
+  final List<ClassOccurrence> members;
   final int startMinute;
   final int endMinute;
 
@@ -580,6 +619,7 @@ List<_TimetableBlock> _mergeContinuousOccurrences(
         previous.startMinute,
         math.max(previous.endMinute, item.meeting.endMinute),
         math.max(previous.sourceEndMinute, item.meeting.originalEndMinute),
+        [...previous.members, item],
       );
     } else {
       open[key] = result.length;
@@ -589,6 +629,7 @@ List<_TimetableBlock> _mergeContinuousOccurrences(
           item.meeting.startMinute,
           item.meeting.endMinute,
           item.meeting.originalEndMinute,
+          [item],
         ),
       );
     }
