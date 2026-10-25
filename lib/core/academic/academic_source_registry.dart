@@ -37,6 +37,7 @@ import 'sku_academic_source.dart';
 import 'smu_academic_source.dart';
 import 'sogang_academic_source.dart';
 import 'sunchon_academic_source.dart';
+import 'uos_academic_source.dart';
 import 'ut_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
@@ -324,6 +325,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000036',
     campusIds: {'academyinfo:0000036'},
     create: SeoultechAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'uos',
+    institutionId: 'academyinfo:0000040',
+    campusIds: {'academyinfo:0000040'},
+    create: UosAcademicSource.new,
   ),
 ];
 
