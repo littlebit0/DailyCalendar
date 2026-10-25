@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'bu_academic_source.dart';
 import 'catholic_academic_source.dart';
 import 'changwon_academic_source.dart';
 import 'daegu_academic_source.dart';
@@ -254,6 +255,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     campusIds: {'academyinfo:0000101'},
     create: DonggukAcademicSource.wiseCampus,
     primary: false,
+  ),
+  AcademicSourceRegistration(
+    id: 'bu',
+    institutionId: 'academyinfo:0000178',
+    campusIds: {'academyinfo:0000178'},
+    create: BuAcademicSource.new,
   ),
 ];
 
