@@ -366,6 +366,24 @@
           ]
         }
       ]
+    },
+    {
+      "university": "uos",
+      "sourceUrl": "https://www.uos.ac.kr/korCalendarYear/list.do?identified=anonymous&list_id=CA1&year_code=2026",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "2학기 개강",
+            "2학기 기말시험",
+            "겨울방학 시작 12월 22일"
+          ]
+        }
+      ]
     }
   ]
 }
