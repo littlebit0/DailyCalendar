@@ -366,6 +366,25 @@
           ]
         }
       ]
+    },
+    {
+      "university": "seoultech",
+      "sourceUrl": "https://aai.seoultech.ac.kr/bachelor/bachelor?year=2026&typ=3",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14",
+          "sourceTitles": [
+            "2학기 개강",
+            "12월15~21일 16주차 보강주",
+            "12월21일 종강"
+          ],
+          "note": "Regular recurrence ends before the explicit week16 makeup window; academic end remains Dec21. Individually proven dated meetings retain their actual dates."
+        }
+      ]
     }
   ]
 }
