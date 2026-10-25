@@ -1,4 +1,12 @@
 {
+  "assets/timetable/hongik-sejong-2026-2.json": {
+    "sha256": "09b022127c3d0c368e35503b2600b2e98fce5fed6018f6601aed4692e6bf0ee1",
+    "reason": "#681 홍익대 교시 구간에 쉬는 시간 10분을 포함하고(수업 50분+쉬는 시간 10분=60분 슬롯) 같은 과목·요일(날짜)·강의실의 이어진 교시를 한 구간으로 합침 (세종 1468→1443구간)"
+  },
+  "assets/timetable/hongik-seoul-2026-2.json": {
+    "sha256": "345e1965f9302d5139fefe10f0ac36afc4feec1ee0978a4ec6f3b3129bfcd6c1",
+    "reason": "#681 홍익대 교시 구간에 쉬는 시간 10분을 포함하고(수업 50분+쉬는 시간 10분=60분 슬롯) 같은 과목·요일(날짜)·강의실의 이어진 교시를 한 구간으로 합침 (서울 3022→3001구간)"
+  },
   "assets/timetable/organizations/ajou.json": {
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
     "reason": "#92 아주대 원자료 분류를 공식 학과 목록·학사안내 기준 소속(공과대학·경영대학·연계전공·마이크로전공)으로 배정"
