@@ -1,0 +1,1135 @@
+{
+  "schemaVersion": 2,
+  "universityId": "knu",
+  "campus": "dongin",
+  "campusName": "동인동캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "completionClaim": false,
+  "publishedDate": "2026-10-07",
+  "sourceCollectedDate": "2026-10-23",
+  "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+  "period": {
+    "startDate": "2026-09-01",
+    "endDate": "2026-12-18"
+  },
+  "courses": [
+    {
+      "sourceId": "knu/dongin/2026/2/CLTR0210/016",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0210",
+      "section": "016",
+      "courseName": "명저읽기와 토론",
+      "professor": "최은경,강경훈",
+      "credits": 3.0,
+      "sourceSchedule": "금 09:00 ~ 10:30,수 09:00 ~ 10:30",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N127",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "교양"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/CLTR0210/017",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0210",
+      "section": "017",
+      "courseName": "명저읽기와 토론",
+      "professor": "강지연,김균후",
+      "credits": 3.0,
+      "sourceSchedule": "금 09:00 ~ 10:30,수 09:00 ~ 10:30",
+      "sourceClassroom": "동인동 캠퍼스 의학 전문대학원(의대본관) / 125",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의학 전문대학원(의대본관) / 125"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의학 전문대학원(의대본관) / 125"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "교양"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/CLTR0210/018",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0210",
+      "section": "018",
+      "courseName": "명저읽기와 토론",
+      "professor": "여상희,최지웅,하은지",
+      "credits": 3.0,
+      "sourceSchedule": "금 09:00 ~ 10:30,수 09:00 ~ 10:30",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N138",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N138"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N138"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "교양"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/MEDE0318/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0318",
+      "section": "001",
+      "courseName": "환자-의사-사회 1",
+      "professor": "이승재,여상희,감신,김신우,고혜진,강유나,강지연,장성만,정운선,우정민,이상원,이지민",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00 ~ 10:30,수 10:30 ~ 12:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / L101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/MEDE0318/002",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0318",
+      "section": "002",
+      "courseName": "환자-의사-사회 1",
+      "professor": "이승재,여상희,감신,김신우,고혜진,강유나,강지연,장성만,정운선,우정민,이상원,이지민",
+      "credits": 3.0,
+      "sourceSchedule": "수 09:00 ~ 10:30,월 10:30 ~ 12:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N227",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/MEDE0335/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0335",
+      "section": "001",
+      "courseName": "의학생화학 2",
+      "professor": "최제용,권태환,김균후,부용출,이병헌,이재만,허근",
+      "credits": 3.0,
+      "sourceSchedule": "금 11:00 ~ 12:00,금 12:00 ~ 13:00,월 12:00 ~ 13:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / L101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/MEDE0335/002",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0335",
+      "section": "002",
+      "courseName": "의학생화학 2",
+      "professor": "권태환,최제용,김균후,부용출,이병헌,이재만,허근",
+      "credits": 3.0,
+      "sourceSchedule": "금 09:00 ~ 10:00,금 10:00 ~ 11:00,수 12:00 ~ 13:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N227",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/MEDE0336/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0336",
+      "section": "001",
+      "courseName": "의학세포분자생물학",
+      "professor": "허근,최제용,권태환,이병헌,이재만,김균후,백문창,김정은,남성욱",
+      "credits": 3.0,
+      "sourceSchedule": "금 14:00 ~ 15:00,수 14:00 ~ 15:00,금 15:00 ~ 16:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N127",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PREM0213/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0213",
+      "section": "001",
+      "courseName": "의학입문Ⅰ",
+      "professor": "홍장원,강민규,최은경,강지연,황소윤,김정민,정성문,박은희,차지은,김신우",
+      "credits": 2.0,
+      "sourceSchedule": "금 16:00 ~ 17:00,금 17:00 ~ 18:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N127",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 2.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PREM0228/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0228",
+      "section": "001",
+      "courseName": "의학의 역사",
+      "professor": "김신우,김유경,함지연,박성식,염헌규,김인겸,황양하,안병철,강지연,최은경",
+      "credits": 2.0,
+      "sourceSchedule": "화 09:00 ~ 10:00,화 10:00 ~ 11:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / L101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 2.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PREM0228/002",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0228",
+      "section": "002",
+      "courseName": "의학의 역사",
+      "professor": "최은경,강지연,김유경,함지연,박성식,염헌규,권태환,안병철,김신우,김인겸,황양하",
+      "credits": 2.0,
+      "sourceSchedule": "화 11:00 ~ 12:00,화 12:00 ~ 13:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N227",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 2.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PREM0236/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0236",
+      "section": "001",
+      "courseName": "의학물리학",
+      "professor": "안병철,김하정,김명남,김원화,남성욱,박서영,박종무,양은경,염헌규,윤성원,이상우,이소미,이종민,장용민,정성문,정신영,한형수",
+      "credits": 3.0,
+      "sourceSchedule": "수 09:00 ~ 10:30,월 10:30 ~ 12:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / L101",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / L101"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PREM0236/002",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0236",
+      "section": "002",
+      "courseName": "의학물리학",
+      "professor": "안병철,김하정,남성욱,한형수,김명남,김원화,박서영,박종무,양은경,염헌규,윤성원,이상우,이소미,이종민,장용민,정성문,정신영",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00 ~ 10:30,수 10:30 ~ 12:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N227",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 630,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N227"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PREM0254/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0254",
+      "section": "001",
+      "courseName": "의료신호처리",
+      "professor": "김명남,정성문,이정현,성기웅,김상욱,양수",
+      "credits": 3.0,
+      "sourceSchedule": "금 10:30 ~ 12:00,수 10:30 ~ 12:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N127",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 630,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N127"
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/DETI0259/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0259",
+      "section": "001",
+      "courseName": "구강악안면병리학",
+      "professor": "김미선",
+      "credits": 1.0,
+      "sourceSchedule": "화 19:00 ~ 20:00,화 21:00 ~ 22:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N271",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 1140,
+          "endMinute": 1200,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N271"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1260,
+          "endMinute": 1320,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N271"
+        }
+      ],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/ACHE0392/004",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ACHE0392",
+      "section": "004",
+      "courseName": "기초생화학",
+      "professor": "이영균,김재영",
+      "credits": 2.0,
+      "sourceSchedule": "화 13:00 ~ 14:00,화 14:00 ~ 15:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/DETI0257/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0257",
+      "section": "001",
+      "courseName": "인문사회와자원봉사Ⅰ",
+      "professor": "이헌진",
+      "credits": 1.0,
+      "sourceSchedule": "수 15:00 ~ 16:00,수 16:00 ~ 17:00",
+      "sourceClassroom": "동인동 캠퍼스 복지후생동 / 303",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "동인동 캠퍼스 복지후생동 / 303"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "동인동 캠퍼스 복지후생동 / 303"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 1.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "SU평가강좌\n\n학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/DETI0261/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0261",
+      "section": "001",
+      "courseName": "치아형태학및실습",
+      "professor": "이규복,김소연,이제식,이수지,나종헌,장대희,이동근",
+      "credits": 2.0,
+      "sourceSchedule": "화 09:00 ~ 10:00,화 10:00 ~ 11:00,화 11:00 ~ 12:00",
+      "sourceClassroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 206",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 206"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 206"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 206"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PMED0201/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PMED0201",
+      "section": "001",
+      "courseName": "행동과학",
+      "professor": "정현석",
+      "credits": 2.0,
+      "sourceSchedule": "수 17:00 ~ 18:00,수 18:00 ~ 19:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1080,
+          "endMinute": 1140,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PRED0209/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PRED0209",
+      "section": "001",
+      "courseName": "치의학통계학 및 실습",
+      "professor": "최연희,김은경",
+      "credits": 2.0,
+      "sourceSchedule": "목 09:00 ~ 10:00,목 10:00 ~ 11:00,목 11:00 ~ 12:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PRED0211/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PRED0211",
+      "section": "001",
+      "courseName": "치의과학연구",
+      "professor": "박찬호,이정훈,안동국,윤동호,최연희,박의균,김미선,김윤숙,이헌진,장일성,김도연,김재영,이영균,김은경,홍수형,곽소영",
+      "credits": 2.0,
+      "sourceSchedule": "화 15:00 ~ 16:00,화 16:00 ~ 17:00,화 17:00 ~ 18:00,화 18:00 ~ 19:00",
+      "sourceClassroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 106",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 106"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 106"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 106"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1080,
+          "endMinute": 1140,
+          "classroom": "동인동 캠퍼스 치의학임상연구동(치대교사) / 106"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "SU평가강좌\n\n학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PRED0212/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PRED0212",
+      "section": "001",
+      "courseName": "치과재료물성학",
+      "professor": "박찬호,이정훈",
+      "credits": 2.0,
+      "sourceSchedule": "목 13:00 ~ 14:00,목 14:00 ~ 15:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PRED0213/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PRED0213",
+      "section": "001",
+      "courseName": "우리몸의 이해 및 실습",
+      "professor": "김윤숙,배용철,이승엽,김종호,홍재현",
+      "credits": 2.0,
+      "sourceSchedule": "금 13:00 ~ 14:00,금 14:00 ~ 15:00,금 15:00 ~ 16:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PRED0216/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PRED0216",
+      "section": "001",
+      "courseName": "치과의사학으로 배우는 인문치의학",
+      "professor": "이재목,정재광,최연희,안서영",
+      "credits": 2.0,
+      "sourceSchedule": "목 15:00 ~ 16:00,목 16:00 ~ 17:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PRED0218/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PRED0218",
+      "section": "001",
+      "courseName": "생활법률과 세무",
+      "professor": "이형균",
+      "credits": 2.0,
+      "sourceSchedule": "월 15:00 ~ 16:00,월 16:00 ~ 17:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/dongin/2026/2/PRED0219/001",
+      "universityId": "knu",
+      "campus": "dongin",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PRED0219",
+      "section": "001",
+      "courseName": "예술의 이해와 감상",
+      "professor": "박연숙",
+      "credits": 2.0,
+      "sourceSchedule": "수 13:00 ~ 14:00,수 14:00 ~ 15:00",
+      "sourceClassroom": "동인동 캠퍼스 의대신관및강의동 / N409",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "동인동 캠퍼스 의대신관및강의동 / N409"
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 2.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 2"
+      }
+    }
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}
