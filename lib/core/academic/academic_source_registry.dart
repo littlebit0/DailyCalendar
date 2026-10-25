@@ -21,6 +21,7 @@ import 'gknu_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'hanbat_academic_source.dart';
 import 'hansung_academic_source.dart';
+import 'hanyang_academic_source.dart';
 import 'hufs_academic_source.dart';
 import 'inha_academic_source.dart';
 import 'inje_academic_source.dart';
@@ -547,6 +548,19 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000200',
     campusIds: {'academyinfo:0000200'},
     create: HansungAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'hanyang',
+    institutionId: 'academyinfo:0000203',
+    campusIds: {'academyinfo:0000203'},
+    create: HanyangAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'hanyang-erica',
+    institutionId: 'academyinfo:0000203',
+    campusIds: {'academyinfo:0000204'},
+    create: HanyangAcademicSource.erica,
+    primary: false,
   ),
 ];
 
