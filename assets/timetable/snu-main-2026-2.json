@@ -10230,12 +10230,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "152-1-208(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "152-1-208(무선랜제공)"
         }
@@ -10353,12 +10347,6 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "83-502(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "83-502(무선랜제공)"
         }
@@ -10394,12 +10382,6 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": ""
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": ""
         }
@@ -10680,12 +10662,6 @@
         {
           "weekday": 5,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "3-102(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "3-102(무선랜제공)"
         }
@@ -14556,12 +14532,6 @@
         {
           "weekday": 2,
           "startMinute": 570,
-          "endMinute": 620,
-          "classroom": "83-503(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 630,
           "endMinute": 740,
           "classroom": "83-503(무선랜제공)"
         }
@@ -14772,12 +14742,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "74-407(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "74-407(무선랜제공)"
         }
@@ -14813,12 +14777,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "74-407(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "74-407(무선랜제공)"
         }
@@ -18949,12 +18907,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "52-107"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "52-107"
         }
@@ -38024,12 +37976,6 @@
         {
           "weekday": 4,
           "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "6-107"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "6-107"
         }
@@ -38065,12 +38011,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "1-102(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "1-102(무선랜제공)"
         },
@@ -38112,12 +38052,6 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 950,
-          "classroom": "8-302(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "8-302(무선랜제공)"
         }
@@ -38159,12 +38093,6 @@
         {
           "weekday": 5,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "5-205(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 710,
           "classroom": "5-205(무선랜제공)"
         }
@@ -38376,12 +38304,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 770,
-          "classroom": "3-104(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 780,
           "endMinute": 830,
           "classroom": "3-104(무선랜제공)"
         }
@@ -38416,14 +38338,8 @@
       "schedules": [
         {
           "weekday": 5,
-          "startMinute": 780,
-          "endMinute": 950,
-          "classroom": "3-105(무선랜제공)"
-        },
-        {
-          "weekday": 5,
           "startMinute": 720,
-          "endMinute": 770,
+          "endMinute": 950,
           "classroom": "3-105(무선랜제공)"
         }
       ],
@@ -38458,12 +38374,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1010,
-          "classroom": "1-209(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "1-209(무선랜제공)"
         }
@@ -41956,24 +41866,12 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1070,
-          "classroom": "24-211(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1080,
           "endMinute": 1130,
           "classroom": "24-211(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
-          "classroom": "24-211(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1080,
           "endMinute": 1130,
           "classroom": "24-211(무선랜제공)"
         }
@@ -52277,12 +52175,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "26-101(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "26-101(무선랜제공)"
         }
@@ -53097,12 +52989,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "26-102(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "26-102(무선랜제공)"
         }
@@ -53454,12 +53340,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "16-543"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "16-543"
         }
@@ -53606,12 +53486,6 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "222-635(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "222-635(무선랜제공)"
         }
@@ -57381,12 +57255,6 @@
         {
           "weekday": 3,
           "startMinute": 570,
-          "endMinute": 680,
-          "classroom": "83-601(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 690,
           "endMinute": 800,
           "classroom": "83-601(무선랜제공)"
         }
@@ -57533,12 +57401,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "58-325(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "58-325(무선랜제공)"
         }
@@ -58623,24 +58485,12 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "28-301"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "28-301"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "28-301"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "28-301"
         }
@@ -59675,12 +59525,6 @@
         {
           "weekday": 6,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "24-423"
-        },
-        {
-          "weekday": 6,
-          "startMinute": 600,
           "endMinute": 830,
           "classroom": "24-423"
         }
@@ -59716,12 +59560,6 @@
         {
           "weekday": 6,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "24-423"
-        },
-        {
-          "weekday": 6,
-          "startMinute": 900,
           "endMinute": 1130,
           "classroom": "24-423"
         }
@@ -59757,12 +59595,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "24-423"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1130,
           "classroom": "24-423"
         }
@@ -60208,12 +60040,6 @@
         {
           "weekday": 6,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "22-412"
-        },
-        {
-          "weekday": 6,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "22-412"
         }
@@ -60697,24 +60523,12 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "222-216(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "222-219(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 650,
           "classroom": "222-216(무선랜제공)"
         },
         {
           "weekday": 2,
-          "startMinute": 720,
+          "startMinute": 660,
           "endMinute": 770,
           "classroom": "222-219(무선랜제공)"
         }
@@ -60750,24 +60564,12 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "222-216(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "222-219(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 600,
           "endMinute": 650,
           "classroom": "222-216(무선랜제공)"
         },
         {
           "weekday": 3,
-          "startMinute": 720,
+          "startMinute": 660,
           "endMinute": 770,
           "classroom": "222-219(무선랜제공)"
         }
@@ -60803,12 +60605,6 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "222-226(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "222-226(무선랜제공)"
         }
@@ -60844,12 +60640,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "222-225(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "222-225(무선랜제공)"
         }
@@ -60885,12 +60675,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "222-219(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "222-219(무선랜제공)"
         }
@@ -61058,12 +60842,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "222-B202(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "222-B202(무선랜제공)"
         }
@@ -61134,12 +60912,6 @@
         {
           "weekday": 1,
           "startMinute": 930,
-          "endMinute": 1040,
-          "classroom": "222-B202(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1050,
           "endMinute": 1160,
           "classroom": "222-B202(무선랜제공)"
         }
@@ -61280,12 +61052,6 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "222-701(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "222-701(무선랜제공)"
         }
@@ -61649,12 +61415,6 @@
         {
           "weekday": 1,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "39-508"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "39-508"
         }
@@ -61807,12 +61567,6 @@
         {
           "weekday": 4,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "39-507"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "39-507"
         }
@@ -62094,12 +61848,6 @@
         {
           "weekday": 4,
           "startMinute": 750,
-          "endMinute": 825,
-          "classroom": "39-409(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 915,
           "classroom": "39-409(무선랜제공)"
         }
@@ -62328,12 +62076,6 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "36-208"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 600,
           "endMinute": 770,
           "classroom": "36-208"
         }
@@ -64184,12 +63926,6 @@
         {
           "weekday": 1,
           "startMinute": 570,
-          "endMinute": 680,
-          "classroom": "200-2116(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 690,
           "endMinute": 800,
           "classroom": "200-2116(무선랜제공)"
         }
@@ -64253,12 +63989,6 @@
         {
           "weekday": 5,
           "startMinute": 570,
-          "endMinute": 620,
-          "classroom": "200-2116(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 630,
           "endMinute": 740,
           "classroom": "200-2116(무선랜제공)"
         }
@@ -64656,12 +64386,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "200-7218(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "200-7218(무선랜제공)"
         }
@@ -64697,12 +64421,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-2005(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-2005(무선랜제공)"
         }
@@ -64738,12 +64456,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-7218(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-7218(무선랜제공)"
         }
@@ -64779,12 +64491,6 @@
         {
           "weekday": 6,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-7218(무선랜제공)"
-        },
-        {
-          "weekday": 6,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-7218(무선랜제공)"
         }
@@ -64820,12 +64526,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-7218(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-7218(무선랜제공)"
         }
@@ -65054,12 +64754,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 710,
-          "classroom": "200-4213(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "200-4213(무선랜제공)"
         }
@@ -65294,12 +64988,6 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "200-9210"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 840,
           "endMinute": 1070,
           "classroom": "200-9210"
         }
@@ -65370,12 +65058,6 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "200-9207"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 840,
           "endMinute": 1070,
           "classroom": "200-9207"
         }
@@ -65446,12 +65128,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": ""
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": ""
         }
@@ -66844,12 +66520,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "50-106(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 950,
           "classroom": "50-106(무선랜제공)"
         },
@@ -66926,12 +66596,6 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "50-308"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 840,
           "endMinute": 1010,
           "classroom": "50-308"
         }
@@ -67884,12 +67548,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "50-305"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 600,
           "endMinute": 770,
           "classroom": "50-305"
         }
@@ -67925,12 +67583,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "50-101"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "50-101"
         }
@@ -67966,12 +67618,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "50-101"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "50-101"
         }
@@ -68007,12 +67653,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "50-101"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "50-101"
         }
@@ -68363,12 +68003,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "52-201(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "52-201(무선랜제공)"
         }
@@ -68404,12 +68038,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "52-201(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-201(무선랜제공)"
         }
@@ -68445,12 +68073,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "83-503(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 600,
           "endMinute": 710,
           "classroom": "83-503(무선랜제공)"
         }
@@ -68486,12 +68108,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "50-101"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "50-101"
         }
@@ -68527,12 +68143,6 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "51-101"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 1010,
           "classroom": "51-101"
         }
@@ -68603,12 +68213,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "50-301"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "50-301"
         }
@@ -68644,12 +68248,6 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "50-301"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "50-301"
         }
@@ -68685,12 +68283,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": ""
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": ""
         }
@@ -68726,12 +68318,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "2-201"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "2-201"
         }
@@ -68767,12 +68353,6 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": ""
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": ""
         }
@@ -68808,12 +68388,6 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "74-205(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "74-205(무선랜제공)"
         }
@@ -68849,12 +68423,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "74-207"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "74-207"
         }
@@ -68890,12 +68458,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "52-402"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "52-402"
         }
@@ -68931,12 +68493,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "74-205(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "74-205(무선랜제공)"
         }
@@ -68972,12 +68528,6 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-402"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-402"
         }
@@ -69013,12 +68563,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-1-201"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-1-201"
         }
@@ -69054,12 +68598,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-209"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-209"
         }
@@ -69095,12 +68633,6 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-402"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-402"
         }
@@ -69136,12 +68668,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "74-101(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "74-101(무선랜제공)"
         }
@@ -69177,12 +68703,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "52-305(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-305(무선랜제공)"
         }
@@ -69540,12 +69060,6 @@
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "220-417(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "220-417(무선랜제공)"
         }
@@ -69882,12 +69396,6 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "220-417(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "220-417(무선랜제공)"
         }
@@ -70027,14 +69535,8 @@
       "schedules": [
         {
           "weekday": 1,
-          "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "53-218"
-        },
-        {
-          "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
+          "endMinute": 1010,
           "classroom": "53-218"
         }
       ],
@@ -75165,12 +74667,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "#17--108"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "#17--108"
         }
@@ -76065,12 +75561,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "#17--108"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "#17--108"
         }
@@ -76293,12 +75783,6 @@
         {
           "weekday": 2,
           "startMinute": 1140,
-          "endMinute": 1190,
-          "classroom": "38-422(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1200,
           "endMinute": 1310,
           "classroom": "38-422(무선랜제공)"
         }
@@ -76333,19 +75817,7 @@
       "schedules": [
         {
           "weekday": 5,
-          "startMinute": 570,
-          "endMinute": 620,
-          "classroom": "38-B105(무선랜제공)"
-        },
-        {
-          "weekday": 5,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "38-B105(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 630,
           "endMinute": 800,
           "classroom": "38-B105(무선랜제공)"
         }
@@ -76437,12 +75909,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "38-B105(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "38-B105(무선랜제공)"
         }
@@ -76583,24 +76049,12 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "301-114(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "301-114(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "301-114(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "301-114(무선랜제공)"
         }
@@ -76957,12 +76411,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "52-402"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-402"
         }
@@ -76998,12 +76446,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "50-308"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "50-308"
         }
@@ -77039,12 +76481,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "50-308"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "50-308"
         }
@@ -77080,12 +76516,6 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "74-407(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "74-407(무선랜제공)"
         }
@@ -77121,12 +76551,6 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "74-407(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "74-407(무선랜제공)"
         }
@@ -77162,12 +76586,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "52-203"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-203"
         }
@@ -77203,12 +76621,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "52-203"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-203"
         }
@@ -77244,12 +76656,6 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "50-305"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "50-305"
         }
@@ -77285,12 +76691,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "50-305"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "50-305"
         }
@@ -78481,12 +77881,6 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "49-123(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "49-123(무선랜제공)"
         }
@@ -78655,12 +78049,6 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 840,
           "endMinute": 950,
           "classroom": "220-413(무선랜제공)"
         }
@@ -78696,12 +78084,6 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 840,
           "endMinute": 950,
           "classroom": "220-413(무선랜제공)"
         }
@@ -78940,12 +78322,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "49-114"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 650,
           "classroom": "49-114"
         }
@@ -79086,12 +78462,6 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "220-413(무선랜제공)"
         }
@@ -79505,12 +78875,6 @@
         {
           "weekday": 2,
           "startMinute": 1020,
-          "endMinute": 1130,
-          "classroom": "220-201(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1140,
           "endMinute": 1250,
           "classroom": "220-201(무선랜제공)"
         }
@@ -80305,12 +79669,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "75-306"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "75-306"
         }
@@ -80451,12 +79809,6 @@
         {
           "weekday": 1,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "200-1043(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "200-1043(무선랜제공)"
         }
@@ -82381,12 +81733,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "222-422(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "222-422(무선랜제공)"
         }
@@ -82492,12 +81838,6 @@
         {
           "weekday": 5,
           "startMinute": 1080,
-          "endMinute": 1190,
-          "classroom": "58-106(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1200,
           "endMinute": 1310,
           "classroom": "58-106(무선랜제공)"
         }
@@ -83596,24 +82936,12 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 860,
-          "classroom": ""
-        },
-        {
-          "weekday": 2,
-          "startMinute": 870,
           "endMinute": 920,
           "classroom": ""
         },
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 860,
-          "classroom": ""
-        },
-        {
-          "weekday": 4,
-          "startMinute": 870,
           "endMinute": 920,
           "classroom": ""
         }
@@ -84047,12 +83375,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "301-304(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "301-304(무선랜제공)"
         }
@@ -84326,12 +83648,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "52-203"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-203"
         }
@@ -84367,12 +83683,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-210"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-210"
         }
@@ -84449,12 +83759,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": ""
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": ""
         }
@@ -84490,12 +83794,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "50-301"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "50-301"
         }
@@ -84531,12 +83829,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "50-301"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "50-301"
         }
@@ -84572,12 +83864,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": ""
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": ""
         }
@@ -84613,12 +83899,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-402"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-402"
         }
@@ -84654,12 +83934,6 @@
         {
           "weekday": 3,
           "startMinute": 870,
-          "endMinute": 980,
-          "classroom": ""
-        },
-        {
-          "weekday": 3,
-          "startMinute": 990,
           "endMinute": 1100,
           "classroom": ""
         }
@@ -84695,12 +83969,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "2-201"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "2-201"
         }
@@ -84736,12 +84004,6 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-402"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-402"
         }
@@ -84777,12 +84039,6 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": ""
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": ""
         }
@@ -84818,12 +84074,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "50-301"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "50-301"
         }
@@ -84859,12 +84109,6 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "74-207"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "74-207"
         }
@@ -84900,12 +84144,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": ""
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": ""
         }
@@ -84941,12 +84179,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": ""
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": ""
         }
@@ -84982,12 +84214,6 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 1010,
-          "classroom": "2-201"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1020,
           "endMinute": 1130,
           "classroom": "2-201"
         }
@@ -85058,12 +84284,6 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "50-301"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "50-301"
         }
@@ -85099,12 +84319,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "52-402"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "52-402"
         }
@@ -88421,12 +87635,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "220-414(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "220-414(무선랜제공)"
         }
@@ -88532,12 +87740,6 @@
         {
           "weekday": 5,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1020,
           "endMinute": 1130,
           "classroom": "220-413(무선랜제공)"
         }
@@ -88573,12 +87775,6 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1020,
           "endMinute": 1130,
           "classroom": "220-413(무선랜제공)"
         }
@@ -88614,12 +87810,6 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "220-413(무선랜제공)"
         }
@@ -88655,12 +87845,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "220-413(무선랜제공)"
         }
@@ -91077,12 +90261,6 @@
         {
           "weekday": 3,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "18-505A"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "18-505A"
         }
@@ -93754,12 +92932,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "62-106"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "62-106"
         }
@@ -93795,12 +92967,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "83-501(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "83-501(무선랜제공)"
         }
@@ -93912,12 +93078,6 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 1010,
-          "classroom": "3-103(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1020,
           "endMinute": 1130,
           "classroom": "3-103(무선랜제공)"
         }
@@ -94006,12 +93166,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "61-321"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "61-321"
         }
@@ -94170,12 +93324,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "62-205"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "62-205"
         }
@@ -94211,12 +93359,6 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "221-113(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "221-113(무선랜제공)"
         }
@@ -94252,12 +93394,6 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "61-321"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "61-321"
         }
@@ -99777,24 +98913,12 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "83-506"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 650,
           "classroom": "83-506"
         },
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "83-506"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 600,
           "endMinute": 650,
           "classroom": "83-506"
         }
@@ -99830,12 +98954,6 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "84-101(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "84-101(무선랜제공)"
         }
@@ -99906,24 +99024,12 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "84-102(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 710,
           "classroom": "84-102(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "84-102(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 710,
           "classroom": "84-102(무선랜제공)"
         }
@@ -100085,12 +99191,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "16-543"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "16-543"
         }
@@ -100196,12 +99296,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "101-240(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "101-240(무선랜제공)"
         }
@@ -100692,12 +99786,6 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "83-601(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "83-601(무선랜제공)"
         }
@@ -100908,12 +99996,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "83-601(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "83-601(무선랜제공)"
         }
@@ -106131,12 +105213,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "500-L311(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1130,
           "classroom": "500-L311(무선랜제공)"
         }
@@ -106254,12 +105330,6 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "25-1-304"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "25-1-304"
         }
@@ -106980,12 +106050,6 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 950,
-          "classroom": ""
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": ""
         }
@@ -107450,12 +106514,6 @@
         {
           "weekday": 6,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "56-219(무선랜제공)"
-        },
-        {
-          "weekday": 6,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "56-219(무선랜제공)"
         }
@@ -107719,24 +106777,12 @@
         {
           "weekday": 2,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "222-635(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 710,
           "classroom": "222-635(무선랜제공)"
         },
         {
           "weekday": 4,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "222-635(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 710,
           "classroom": "222-635(무선랜제공)"
         }
@@ -107964,12 +107010,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "222-216(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "222-216(무선랜제공)"
         }
@@ -108005,12 +107045,6 @@
         {
           "weekday": 1,
           "startMinute": 870,
-          "endMinute": 980,
-          "classroom": "222-225(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 990,
           "endMinute": 1100,
           "classroom": "222-225(무선랜제공)"
         }
@@ -108448,12 +107482,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "222-422(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "222-422(무선랜제공)"
         }
@@ -109071,12 +108099,6 @@
         {
           "weekday": 4,
           "startMinute": 570,
-          "endMinute": 680,
-          "classroom": "39-415(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 690,
           "endMinute": 800,
           "classroom": "39-415(무선랜제공)"
         }
@@ -109111,14 +108133,8 @@
       "schedules": [
         {
           "weekday": 2,
-          "startMinute": 1080,
-          "endMinute": 1190,
-          "classroom": "35-315(무선랜제공)"
-        },
-        {
-          "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1070,
+          "endMinute": 1190,
           "classroom": "35-315(무선랜제공)"
         }
       ],
@@ -109153,12 +108169,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "301-204"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "301-204"
         }
@@ -109194,12 +108204,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "301-105(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "301-105(무선랜제공)"
         }
@@ -109589,36 +108593,12 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 855,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 870,
-          "endMinute": 945,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1035,
           "classroom": "39-601"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 855,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 870,
-          "endMinute": 945,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1035,
           "classroom": "39-601"
         }
@@ -109654,36 +108634,12 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-602(무선랜제공)"
         },
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-602(무선랜제공)"
         }
@@ -109719,36 +108675,12 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-602(무선랜제공)"
         },
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-602(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-602(무선랜제공)"
         }
@@ -109854,36 +108786,12 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 855,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 870,
-          "endMinute": 945,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1035,
           "classroom": "39-601"
         },
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 855,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 870,
-          "endMinute": 945,
-          "classroom": "39-601"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1035,
           "classroom": "39-601"
         }
@@ -109919,36 +108827,12 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-603"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-603"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-603"
         },
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-603"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-603"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-603"
         }
@@ -109984,36 +108868,12 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-438-2(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-438-2(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-438-2(무선랜제공)"
         },
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-438-2(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-438-2(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-438-2(무선랜제공)"
         }
@@ -110201,31 +109061,13 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 1035,
-          "classroom": "39-507"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1050,
-          "endMinute": 1125,
-          "classroom": "39-507"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1140,
-          "endMinute": 1215,
-          "classroom": "39-507"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1140,
           "endMinute": 1215,
           "classroom": "39-507"
         },
         {
           "weekday": 5,
           "startMinute": 960,
-          "endMinute": 1125,
+          "endMinute": 1215,
           "classroom": "39-507"
         }
       ],
@@ -110260,36 +109102,12 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-515(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-515(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-515(무선랜제공)"
         },
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-515(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-515(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-515(무선랜제공)"
         }
@@ -110325,36 +109143,12 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-520(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-520(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-520(무선랜제공)"
         },
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "39-520(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 930,
-          "endMinute": 1005,
-          "classroom": "39-520(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1020,
           "endMinute": 1095,
           "classroom": "39-520(무선랜제공)"
         }
@@ -110390,12 +109184,6 @@
         {
           "weekday": 5,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "39-508"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "39-508"
         }
@@ -110431,12 +109219,6 @@
         {
           "weekday": 2,
           "startMinute": 570,
-          "endMinute": 645,
-          "classroom": "39-438-2(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 735,
           "classroom": "39-438-2(무선랜제공)"
         }
@@ -111303,24 +110085,12 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "34-316(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "34-316(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "34-316(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "34-316(무선랜제공)"
         }
@@ -111479,12 +110249,6 @@
         {
           "weekday": 1,
           "startMinute": 930,
-          "endMinute": 980,
-          "classroom": "34-203(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 990,
           "endMinute": 1040,
           "classroom": "34-203(무선랜제공)"
         },
@@ -113460,12 +112224,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "301-103(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "301-103(무선랜제공)"
         },
@@ -113507,12 +112265,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "301-104(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "301-104(무선랜제공)"
         },
@@ -113554,12 +112306,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "301-201"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "301-201"
         },
@@ -113601,12 +112347,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "301-202"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "301-202"
         },
@@ -113648,12 +112388,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "302-209"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "302-209"
         },
@@ -113695,12 +112429,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "302-408(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "302-408(무선랜제공)"
         },
@@ -113742,12 +112470,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "302-519(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "302-519(무선랜제공)"
         },
@@ -113789,12 +112511,6 @@
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1160,
-          "classroom": "301-118(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1170,
           "endMinute": 1280,
           "classroom": "301-118(무선랜제공)"
         },
@@ -114205,12 +112921,6 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "301-B119"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "301-B119"
         }
@@ -114615,24 +113325,12 @@
         {
           "weekday": 1,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "31-201(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "31-201(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "31-201(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "31-201(무선랜제공)"
         }
@@ -114668,24 +113366,12 @@
         {
           "weekday": 1,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-328(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-328(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-328(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-328(무선랜제공)"
         }
@@ -114721,24 +113407,12 @@
         {
           "weekday": 2,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-328(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-328(무선랜제공)"
         },
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-328(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-328(무선랜제공)"
         }
@@ -114774,24 +113448,12 @@
         {
           "weekday": 2,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "31-201(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "31-201(무선랜제공)"
         },
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "31-201(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "31-201(무선랜제공)"
         }
@@ -114991,24 +113653,12 @@
         {
           "weekday": 2,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-228(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-228(무선랜제공)"
         },
         {
           "weekday": 4,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-228(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-228(무선랜제공)"
         }
@@ -115044,24 +113694,12 @@
         {
           "weekday": 1,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-228(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-228(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 1110,
-          "endMinute": 1185,
-          "classroom": "33-228(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1200,
           "endMinute": 1275,
           "classroom": "33-228(무선랜제공)"
         }
@@ -115220,12 +113858,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "33-230(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 710,
           "classroom": "33-230(무선랜제공)"
         },
@@ -115267,12 +113899,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "33-228(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 710,
           "classroom": "33-228(무선랜제공)"
         },
@@ -115314,12 +113940,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "33-231(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 710,
           "classroom": "33-231(무선랜제공)"
         },
@@ -115443,12 +114063,6 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "200-1043(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "200-1043(무선랜제공)"
         }
@@ -117208,14 +115822,8 @@
       "schedules": [
         {
           "weekday": 5,
-          "startMinute": 1080,
-          "endMinute": 1130,
-          "classroom": "302-809(무선랜제공)"
-        },
-        {
-          "weekday": 5,
           "startMinute": 840,
-          "endMinute": 1070,
+          "endMinute": 1130,
           "classroom": "302-809(무선랜제공)"
         }
       ],
@@ -117250,12 +115858,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "302-808(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1130,
           "classroom": "302-808(무선랜제공)"
         }
@@ -117291,12 +115893,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "302-720(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1130,
           "classroom": "302-720(무선랜제공)"
         }
@@ -117741,12 +116337,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-1006(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-1006(무선랜제공)"
         }
@@ -117852,12 +116442,6 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "75-1-203(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "75-1-203(무선랜제공)"
         }
@@ -118039,12 +116623,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-1006(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-1006(무선랜제공)"
         }
@@ -118115,12 +116693,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-1043(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-1043(무선랜제공)"
         }
@@ -118226,12 +116798,6 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 1010,
-          "classroom": "200-1043A"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1130,
           "classroom": "200-1043A"
         }
@@ -118413,12 +116979,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "200-6116(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "200-6116(무선랜제공)"
         }
@@ -118454,12 +117014,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "200-6116(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "200-6116(무선랜제공)"
         }
@@ -119152,12 +117706,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-2005(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-2005(무선랜제공)"
         }
@@ -119228,12 +117776,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "200-7218(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "200-7218(무선랜제공)"
         }
@@ -119269,12 +117811,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "200-7218(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "200-7218(무선랜제공)"
         }
@@ -119351,12 +117887,6 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 1070,
-          "classroom": "200-1026(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1080,
           "endMinute": 1190,
           "classroom": "200-1026(무선랜제공)"
         }
@@ -119427,12 +117957,6 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "200-1026(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "200-1026(무선랜제공)"
         }
@@ -119778,12 +118302,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "200-4221"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "200-4221"
         }
@@ -119819,12 +118337,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-4213(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-4213(무선랜제공)"
         }
@@ -119860,12 +118372,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-4213(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-4213(무선랜제공)"
         }
@@ -119901,12 +118407,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-4213(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-4213(무선랜제공)"
         }
@@ -119942,12 +118442,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "200-1020(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "200-1020(무선랜제공)"
         }
@@ -120299,12 +118793,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "75-1-202(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "75-1-202(무선랜제공)"
         }
@@ -120539,24 +119027,12 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "200-5214(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 900,
           "endMinute": 950,
           "classroom": "200-5214(무선랜제공)"
         },
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "200-5214(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 900,
           "endMinute": 950,
           "classroom": "200-5214(무선랜제공)"
         }
@@ -120674,12 +119150,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "200-9210"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "200-9210"
         }
@@ -120750,12 +119220,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "200-9207"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 830,
           "classroom": "200-9207"
         }
@@ -120826,12 +119290,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "200-9210"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1130,
           "classroom": "200-9210"
         }
@@ -120867,12 +119325,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "200-9215"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1130,
           "classroom": "200-9215"
         }
@@ -120908,12 +119360,6 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "200-9207"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 1070,
           "classroom": "200-9207"
         }
@@ -121025,12 +119471,6 @@
         {
           "weekday": 5,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "200-1007(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "200-1007(무선랜제공)"
         }
@@ -121171,12 +119611,6 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "200-3220(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "200-3220(무선랜제공)"
         }
@@ -121212,12 +119646,6 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "200-1023(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "200-1023(무선랜제공)"
         }
@@ -121370,12 +119798,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "75-B121"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "75-B121"
         }
@@ -123023,12 +121445,6 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "52-107"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 840,
           "endMinute": 950,
           "classroom": "52-107"
         }
@@ -123064,12 +121480,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "50-101"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "50-101"
         }
@@ -123140,12 +121550,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-305(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-305(무선랜제공)"
         }
@@ -123181,12 +121585,6 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-210"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-210"
         }
@@ -123222,12 +121620,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "52-210"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-210"
         }
@@ -123263,12 +121655,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-1-303"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-1-303"
         }
@@ -123304,12 +121690,6 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-209"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-209"
         }
@@ -123345,12 +121725,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-209"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-209"
         }
@@ -123386,12 +121760,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-305(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-305(무선랜제공)"
         }
@@ -123427,12 +121795,6 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "52-305(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-305(무선랜제공)"
         }
@@ -123468,12 +121830,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-305(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-305(무선랜제공)"
         }
@@ -123509,12 +121865,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "52-305(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "52-305(무선랜제공)"
         }
@@ -123550,12 +121900,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "52-304(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-304(무선랜제공)"
         }
@@ -123591,12 +121935,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 650,
-          "classroom": "52-304(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "52-304(무선랜제공)"
         }
@@ -123632,12 +121970,6 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 710,
-          "classroom": "52-304(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 720,
           "endMinute": 830,
           "classroom": "52-304(무선랜제공)"
         }
@@ -123673,12 +122005,6 @@
         {
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "74-206(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "74-206(무선랜제공)"
         }
@@ -123714,12 +122040,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "74-101(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "74-101(무선랜제공)"
         }
@@ -123755,12 +122075,6 @@
         {
           "weekday": 2,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "74-101(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "74-101(무선랜제공)"
         }
@@ -123831,12 +122145,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "74-101(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "74-101(무선랜제공)"
         }
@@ -123907,12 +122215,6 @@
         {
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "74-101(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 660,
           "endMinute": 770,
           "classroom": "74-101(무선랜제공)"
         }
@@ -123983,12 +122285,6 @@
         {
           "weekday": 2,
           "startMinute": 900,
-          "endMinute": 950,
-          "classroom": "220-202(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "220-202(무선랜제공)"
         }
@@ -124024,12 +122320,6 @@
         {
           "weekday": 3,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "220-417(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "220-417(무선랜제공)"
         }
@@ -124065,12 +122355,6 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "220-415(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "220-415(무선랜제공)"
         }
@@ -124106,12 +122390,6 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "220-427"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "220-427"
         }
@@ -124147,12 +122425,6 @@
         {
           "weekday": 2,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "220-202(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "220-202(무선랜제공)"
         }
@@ -124188,12 +122460,6 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "220-427"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "220-427"
         }
@@ -124481,12 +122747,6 @@
         {
           "weekday": 3,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "220-417(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "220-417(무선랜제공)"
         }
@@ -124522,12 +122782,6 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
-          "classroom": "220-415(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "220-415(무선랜제공)"
         }
@@ -124563,12 +122817,6 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "220-202(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "220-202(무선랜제공)"
         }
@@ -124604,12 +122852,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 590,
-          "classroom": "220-202(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 600,
           "endMinute": 650,
           "classroom": "220-202(무선랜제공)"
         }
@@ -124645,12 +122887,6 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
-          "classroom": "220-427"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "220-427"
         }
@@ -125694,12 +123930,6 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 950,
-          "classroom": "220-202(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "220-202(무선랜제공)"
         }
@@ -125805,12 +124035,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "49-125"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 950,
           "classroom": "49-125"
         }
@@ -125846,12 +124070,6 @@
         {
           "weekday": 5,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "220-202(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "220-202(무선랜제공)"
         }
@@ -125887,12 +124105,6 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "49-123(무선랜제공)"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "49-123(무선랜제공)"
         }
@@ -126103,12 +124315,6 @@
         {
           "weekday": 5,
           "startMinute": 900,
-          "endMinute": 950,
-          "classroom": "220-417(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "220-417(무선랜제공)"
         }
@@ -126466,12 +124672,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "220-413(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "220-413(무선랜제공)"
         }
@@ -126542,12 +124742,6 @@
         {
           "weekday": 1,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "220-415(무선랜제공)"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "220-415(무선랜제공)"
         }
@@ -126583,12 +124777,6 @@
         {
           "weekday": 4,
           "startMinute": 660,
-          "endMinute": 710,
-          "classroom": "220-415(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 770,
           "classroom": "220-415(무선랜제공)"
         }
@@ -126659,12 +124847,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 890,
-          "classroom": "220-415(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 950,
           "classroom": "220-415(무선랜제공)"
         }
@@ -126735,12 +124917,6 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "220-415(무선랜제공)"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "220-415(무선랜제공)"
         }
@@ -136809,12 +134985,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "13-102"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "13-102"
         }
@@ -136850,12 +135020,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "13-102"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "13-102"
         }
@@ -136891,12 +135055,6 @@
         {
           "weekday": 1,
           "startMinute": 780,
-          "endMinute": 890,
-          "classroom": "13-102"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 900,
           "endMinute": 1010,
           "classroom": "13-102"
         }
@@ -139551,12 +137709,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 950,
-          "classroom": "56-105(무선랜제공)"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
           "endMinute": 1070,
           "classroom": "56-105(무선랜제공)"
         }
@@ -140153,12 +138305,6 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1130,
-          "classroom": "220-201(무선랜제공)"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1140,
           "endMinute": 1250,
           "classroom": "220-201(무선랜제공)"
         }
