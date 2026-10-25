@@ -38,5 +38,13 @@
   "assets/timetable/gachon-medical-2026-2.json": {
     "sha256": "799e1a15910fc66002890b290aa6b30b31166691531e371d95ae506fa683a133",
     "reason": "#412 가천대 교시 슬롯을 쉬는 시간(10분)을 포함한 60분 단위로 다시 만들어 교시 기반 구간 끝을 10분 늘림(연속 교시는 이미 한 구간, 합칠 구간 없음)"
+  },
+  "assets/timetable/organizations/nsu.json": {
+    "sha256": "d38f1e2fe9987f4eb189b0203041fb7b4568b5b4e2261be0681ea54078ea1bef",
+    "reason": "#590 남서울대 학과 매핑 16개의 근거 문구를 공식 홈페이지 학과 바로가기 목록 원문 인용으로 교체, 소속은 그대로"
+  },
+  "assets/timetable/nsu-unknown-2026-2.json": {
+    "sha256": "29fbde1da62d4b5fcf612e380fa3d4c0f52a18f1b12dbdfc68125a956f8fa423",
+    "reason": "#605 남서울대 교시 슬롯을 수강신청 편람 교시표(1~9교시 50분+쉬는 시간 10분) 기준으로 쉬는 시간을 포함해 다시 만들고, 같은 날 같은 강의실의 연속 교시를 한 구간으로 합침"
   }
 }
