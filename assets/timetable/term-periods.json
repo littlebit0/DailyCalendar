@@ -366,6 +366,20 @@
           ]
         }
       ]
+    },
+    {
+      "university": "yonsei",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://yonsei.ac.kr/sc/373/subview.do",
+      "periodBoundaryMeaning": "Derived day before printed Dec22 winter vacation; ordinary reservations end Dec7.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
     }
   ]
 }
