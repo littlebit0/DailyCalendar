@@ -366,6 +366,24 @@
           ]
         }
       ]
+    },
+    {
+      "university": "kmu",
+      "sourceUrl": "https://www.kmu.ac.kr/uni/main/page.jsp?mnu_uid=3373&parm_doc_year=2026",
+      "checkedAt": "2026-10-07",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18",
+          "sourceTitles": [
+            "2학기 개시일(개강일)",
+            "2학기 정기시험",
+            "동계방학 및 계절학기 시작"
+          ]
+        }
+      ]
     }
   ]
 }
