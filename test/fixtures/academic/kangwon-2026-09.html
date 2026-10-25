@@ -1,0 +1,92 @@
+        var toDetailParam = '&amp;amp;pageIndex=1&amp;amp;pageItm=10&amp;amp;searchOrderSort=0&amp;amp;searchYear=2026&amp;amp;searchMonth=9&amp;amp;searchGbn=0';
+
+        // 서버에서 전달받은 일정 데이터
+        var scheduleData = [];
+        
+        scheduleData.push({
+            pstSn: 57,
+            ttl: "KNU 대동제(춘천)".replace(/'/g, "\\'"),
+            cd1Vl: 1,
+            etc1Cn: "2026.09.15",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.09.17",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 83,
+            ttl: "박사학위청구논문 심사신청".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.09.21",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.10.02",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 82,
+            ttl: "학위논문제출 자격 &lt;외국어시험&gt;".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.09.11",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.09.11",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 81,
+            ttl: "학위논문제출 자격 &lt;전공시험&gt;".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.09.01",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.09.10",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 56,
+            ttl: "2학기 수강신청 변경 및 취소".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.09.01",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.09.07",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 55,
+            ttl: "2학기 개강".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.09.01",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.09.01",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+
+        // 날짜 오름차순 정렬
+        scheduleData.sort(function(a, b) {
+            var cmp = (a.etc1Cn || '').localeCompare(b.etc1Cn || '');
+            return cmp !== 0 ? cmp : (a.etc3Cn || '').localeCompare(b.etc3Cn || '');
+        });
+
+        // 현재 연월 설정
+        var today = new Date();
+        var currentYear = parseInt($('#searchYear').val()) || today.getFullYear();
+        var currentMonth = parseInt($('#searchMonth').val()) || (today.getMonth() + 1);
+
+        // 일정 데이터를 날짜별로 매핑
+        var scheduleMap = {};
+        var bbsId = 'chuncheon_calender';
