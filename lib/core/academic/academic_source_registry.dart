@@ -9,6 +9,7 @@ import 'knu_academic_source.dart';
 import 'kongju_academic_source.dart';
 import 'konkuk_academic_source.dart';
 import 'konyang_academic_source.dart';
+import 'kunsan_academic_source.dart';
 import 'kwangwoon_academic_source.dart';
 import 'kyonggi_academic_source.dart';
 
@@ -126,6 +127,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000021',
     campusIds: {'academyinfo:0000021'},
     create: GknuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'kunsan',
+    institutionId: 'academyinfo:0000009',
+    campusIds: {'academyinfo:0000009'},
+    create: KunsanAcademicSource.new,
   ),
 ];
 
