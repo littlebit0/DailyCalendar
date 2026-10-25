@@ -23,6 +23,7 @@ import 'hanbat_academic_source.dart';
 import 'hansung_academic_source.dart';
 import 'hanyang_academic_source.dart';
 import 'hongik_academic_source.dart';
+import 'hoseo_academic_source.dart';
 import 'hufs_academic_source.dart';
 import 'inha_academic_source.dart';
 import 'inje_academic_source.dart';
@@ -67,6 +68,7 @@ import 'sunmoon_academic_source.dart';
 import 'suwon_academic_source.dart';
 import 'swu_academic_source.dart';
 import 'tuk_academic_source.dart';
+import 'ulsan_academic_source.dart';
 import 'uos_academic_source.dart';
 import 'ut_academic_source.dart';
 import 'yonsei_academic_source.dart';
@@ -568,6 +570,18 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000212',
     campusIds: {'academyinfo:0000212', 'academyinfo:0002949'},
     create: HongikAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'hoseo',
+    institutionId: 'academyinfo:0000211',
+    campusIds: {'academyinfo:0000211'},
+    create: HoseoAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'ulsan',
+    institutionId: 'academyinfo:0000158',
+    campusIds: {'academyinfo:0000158'},
+    create: UlsanAcademicSource.new,
   ),
 ];
 
