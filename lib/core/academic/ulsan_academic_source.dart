@@ -98,10 +98,14 @@ class UlsanAcademicSource implements AcademicSource {
         }
 
         final start = date(range.first, year);
-        var last = date(range.last, year);
-        if (last.month < start.month) {
-          last = date(range.last, year + 1);
+        final lastMonth = int.tryParse(range.last.split('.').first.trim());
+        if (lastMonth == null) {
+          throw const FormatException('Invalid Ulsan date');
         }
+        final last = date(
+          range.last,
+          lastMonth < start.month ? year + 1 : year,
+        );
         if (start.month != month || last.isBefore(start)) {
           throw const FormatException('Conflicting Ulsan period');
         }

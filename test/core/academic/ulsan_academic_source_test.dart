@@ -49,6 +49,49 @@ void main() {
       expect(UlsanAcademicSource.parse(fixture(year), year), hasLength(rows));
     }
   });
+  test('Ulsan validates a winter leap day in its ending year', () async {
+    String winterPage(int year) {
+      final document = html.parse(fixture(2026).replaceAll('2026', '$year'));
+      final winter = document
+          .querySelectorAll('.daily-li')
+          .singleWhere(
+            (row) =>
+                row.querySelector('.body-core')?.text.trim() ==
+                '$year학년도 겨울계절수업',
+          );
+      winter.querySelector('.date-core')!.text = '12. 22(수)∼02. 29(화)';
+      return document.outerHtml;
+    }
+
+    final page = winterPage(2027);
+    final winter = UlsanAcademicSource.parse(
+      page,
+      2027,
+    ).singleWhere((event) => event.title == '2027학년도 겨울계절수업');
+    expect(winter.start, DateTime(2027, 12, 22));
+    expect(winter.end, DateTime(2028, 3, 1));
+
+    final source = UlsanAcademicSource(
+      client: MockClient((request) async {
+        final year = int.parse(request.url.queryParameters['calendar_year']!);
+        return http.Response(
+          year == 2027 ? page : fixture(2026).replaceAll('2026', '$year'),
+          200,
+          headers: {'content-type': 'text/html; charset=utf-8'},
+        );
+      }),
+    );
+    addTearDown(source.close);
+    final events = await source.fetch(2028);
+    expect(
+      events.singleWhere((event) => event.sourceId == winter.sourceId).end,
+      DateTime(2028, 3, 1),
+    );
+    expect(
+      () => UlsanAcademicSource.parse(winterPage(2026), 2026),
+      throwsFormatException,
+    );
+  });
   test('Ulsan profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000158',
