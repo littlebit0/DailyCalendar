@@ -366,6 +366,23 @@
           ]
         }
       ]
+    },
+    {
+      "university": "dju",
+      "sourceUrl": "https://www.dju.ac.kr/dju/sv/schdulView/schdulCalendarView.do?mi=1166",
+      "checkedAt": "2026-10-23",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "2학기 개강일",
+            "기말시험"
+          ]
+        }
+      ]
     }
   ]
 }
