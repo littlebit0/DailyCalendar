@@ -55,9 +55,13 @@ def extract(src, out):
 
 
 DAYS = '월화수목금토일'
-NUM = {n: (480 + 60 * n, 530 + 60 * n) for n in range(0, 14)}  # 0교시 08:00, 1교시 09:00 ... 13교시 21:00
-LET = {'Z': (490, 565), 'A': (570, 645), 'B': (660, 735), 'C': (810, 885), 'D': (900, 975),
-       'E': (990, 1065), 'F': (1080, 1155), 'G': (1170, 1245), 'H': (1260, 1335)}
+# 학사가이드 수업시간표: 50분제는 수업 50분 + 쉬는 시간 10분, 75분제는 수업 75분 + 쉬는 시간 15분.
+# 슬롯은 교시 시작부터 다음 교시 시작까지(수업 + 쉬는 시간)이고, Z는 A 시작에서 끊는다(08:10~09:30).
+NUM = {n: (480 + 60 * n, 540 + 60 * n) for n in range(0, 14)}  # 0교시 08:00, 1교시 09:00 ... 13교시 21:00
+LET = {'Z': (490, 570), 'A': (570, 660), 'B': (660, 750), 'C': (810, 900), 'D': (900, 990),
+       'E': (990, 1080), 'F': (1080, 1170), 'G': (1170, 1260), 'H': (1260, 1350)}
+# 같은 날·같은 강의실에서 사이가 이 값(분) 미만이면 한 구간으로 합친다.
+MERGE_GAP = 60
 
 def nfkc(s):
     return unicodedata.normalize('NFKC', s or '')
@@ -82,7 +86,7 @@ def slots_shared(t):
     return out
 
 def meetings(slots, room):
-    """Merge consecutive numeric periods on the same day; letter periods stay separate (existing pcu rule)."""
+    """Slots of one day and room whose gap is under MERGE_GAP minutes become one block."""
     res = []
     for s in slots:
         day, p = s[0], s[1]
@@ -92,15 +96,15 @@ def meetings(slots, room):
             if n not in NUM:
                 return None
             st, en = NUM[n]
-            if res and res[-1]['_num'] is not None and res[-1]['weekday'] == day and res[-1]['_num'] == n - 1 and res[-1]['classroom'] == r:
-                res[-1]['endMinute'] = en; res[-1]['_num'] = n
-                continue
-            res.append({'weekday': day, 'startMinute': st, 'endMinute': en, 'classroom': r, '_num': n})
         else:
             st, en = LET[p]
-            res.append({'weekday': day, 'startMinute': st, 'endMinute': en, 'classroom': r, '_num': None})
-    for m in res:
-        del m['_num']
+        for m in res:
+            if m['weekday'] == day and m['classroom'] == r and st - m['endMinute'] < MERGE_GAP and m['startMinute'] - en < MERGE_GAP:
+                m['startMinute'] = min(m['startMinute'], st)
+                m['endMinute'] = max(m['endMinute'], en)
+                break
+        else:
+            res.append({'weekday': day, 'startMinute': st, 'endMinute': en, 'classroom': r})
     return res
 
 
