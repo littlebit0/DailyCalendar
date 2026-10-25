@@ -366,6 +366,22 @@
           ]
         }
       ]
+    },
+    {
+      "university": "sungshin",
+      "sourceUrl": "https://www.sungshin.ac.kr/bbs/main_kor/3181/157409/artclView.do",
+      "checkedAt": "2026-10-23",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-22",
+          "sourceTitles": [
+            "2026학년도 2학기 수업기간: 2026. 9. 1.(화) ~ 2026. 12. 22.(화)"
+          ]
+        }
+      ]
     }
   ]
 }
