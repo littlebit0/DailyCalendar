@@ -366,6 +366,19 @@
           ]
         }
       ]
+    },
+    {
+      "university": "scnu",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://www.scnu.ac.kr/elec/sv/schdulView/schdulCalendarView.do?mi=3878",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18"
+        }
+      ]
     }
   ]
 }
