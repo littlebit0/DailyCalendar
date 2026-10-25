@@ -9,6 +9,7 @@ import 'dju_academic_source.dart';
 import 'dku_academic_source.dart';
 import 'donga_academic_source.dart';
 import 'dongguk_academic_source.dart';
+import 'ewha_academic_source.dart';
 import 'gachon_academic_source.dart';
 import 'geochang_academic_source.dart';
 import 'gknu_academic_source.dart';
@@ -450,6 +451,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000169',
     campusIds: {'academyinfo:0000169'},
     create: InhaAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'ewha',
+    institutionId: 'academyinfo:0000163',
+    campusIds: {'academyinfo:0000163'},
+    create: EwhaAcademicSource.new,
   ),
 ];
 
