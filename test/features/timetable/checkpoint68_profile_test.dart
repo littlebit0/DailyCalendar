@@ -58,6 +58,7 @@ void main() {
         );
         expect(profile.timetableUniversity, 'koreatech');
         expect(profile.timetableCampus, 'unknown');
+        expect(profile.academicSourceId, 'koreatech');
         expect(
           AcademicProfile(
             universityId: id,
