@@ -147,6 +147,12 @@ void main() {
                 c['metadata']['originalEducationalRecords'][0]['values']['강의형태'],
                 '원격(사이버)',
               );
+              // 개별 수강유의사항이 실시간 수업 요일·시각을 적은 강좌는 제외한다.
+              expect(
+                jsonEncode(c['metadata']['originalEducationalRecords']),
+                isNot(contains('실시간')),
+                reason: c['sourceId'],
+              );
               expect(c['remarks'], startsWith(b['remarks'] as String));
               expect(c['remarks'], contains('원격수업 운영 내규 제2조 제3항 제1호'));
               expect(c['schedules'], isEmpty);
@@ -231,7 +237,9 @@ void main() {
       }
       expect(added, 4);
       expect(recheckCount, recheckAdded.length);
-      expect(cyberUnscheduled, 45);
+      // 수강유의사항에 '1,7,14주차 실시간 수업'과 요일·시각이 적힌 논리적사고와소프트웨어
+      // (21104205) 12개 분반은 비실시간 규정으로 지우지 않고 시각 미확정으로 둔다.
+      expect(cyberUnscheduled, 33);
     },
   );
   test(
