@@ -3050,24 +3050,6 @@
         {
           "weekday": 5,
           "startMinute": 840,
-          "endMinute": 940,
-          "classroom": "양산Y04-205"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 960,
-          "endMinute": 1060,
-          "classroom": "양산Y04-205"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1080,
-          "endMinute": 1180,
-          "classroom": "양산Y04-205"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1200,
           "endMinute": 1300,
           "classroom": "양산Y04-205"
         }
@@ -3127,12 +3109,6 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1180,
-          "classroom": "양산Y04-201"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1200,
           "endMinute": 1300,
           "classroom": "양산Y04-201"
         }
@@ -3174,12 +3150,6 @@
         {
           "weekday": 4,
           "startMinute": 480,
-          "endMinute": 580,
-          "classroom": "양산Y04-205"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 600,
           "endMinute": 700,
           "classroom": "양산Y04-205"
         },
@@ -3257,12 +3227,6 @@
         {
           "weekday": 5,
           "startMinute": 480,
-          "endMinute": 580,
-          "classroom": "양산Y04-307"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 600,
           "endMinute": 700,
           "classroom": "양산Y04-307"
         }
@@ -3604,12 +3568,6 @@
         {
           "weekday": 5,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-513"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-513"
         }
@@ -3686,12 +3644,6 @@
         {
           "weekday": 5,
           "startMinute": 720,
-          "endMinute": 795,
-          "classroom": "양산Y04-513"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 810,
           "endMinute": 885,
           "classroom": "양산Y04-513"
         }
@@ -3768,12 +3720,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-415"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-415"
         }
@@ -3809,12 +3755,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-312"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-312"
         }
@@ -3850,12 +3790,6 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 795,
-          "classroom": "양산Y04-415"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 810,
           "endMinute": 885,
           "classroom": "양산Y04-415"
         }
@@ -3891,12 +3825,6 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 795,
-          "classroom": "양산Y04-312"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 810,
           "endMinute": 885,
           "classroom": "양산Y04-312"
         }
@@ -3932,12 +3860,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-318"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-318"
         },
@@ -3979,12 +3901,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-412"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-412"
         },
@@ -4026,12 +3942,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-318"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-318"
         },
@@ -4073,12 +3983,6 @@
         {
           "weekday": 4,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-412"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-412"
         },
@@ -4495,12 +4399,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-509"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-509"
         }
@@ -4536,12 +4434,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-511"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-511"
         }
@@ -4577,12 +4469,6 @@
         {
           "weekday": 1,
           "startMinute": 720,
-          "endMinute": 795,
-          "classroom": "양산Y04-509"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 810,
           "endMinute": 885,
           "classroom": "양산Y04-509"
         }
@@ -4618,12 +4504,6 @@
         {
           "weekday": 2,
           "startMinute": 720,
-          "endMinute": 795,
-          "classroom": "양산Y04-511"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 810,
           "endMinute": 885,
           "classroom": "양산Y04-511"
         }
@@ -4764,12 +4644,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "양산Y04-414"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "양산Y04-414"
         }
@@ -4928,18 +4802,6 @@
         {
           "weekday": 2,
           "startMinute": 960,
-          "endMinute": 990,
-          "classroom": "양산Y04-301"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 990,
-          "endMinute": 1020,
-          "classroom": "양산Y04-301"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1020,
           "endMinute": 1050,
           "classroom": "양산Y04-301"
         }
@@ -4975,18 +4837,6 @@
         {
           "weekday": 3,
           "startMinute": 960,
-          "endMinute": 990,
-          "classroom": "양산Y04-301"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 990,
-          "endMinute": 1020,
-          "classroom": "양산Y04-301"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1020,
           "endMinute": 1050,
           "classroom": "양산Y04-301"
         }
@@ -5022,12 +4872,6 @@
         {
           "weekday": 4,
           "startMinute": 960,
-          "endMinute": 1010,
-          "classroom": "양산Y04-212"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1020,
           "endMinute": 1070,
           "classroom": "양산Y04-212"
         }
@@ -5308,12 +5152,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 940,
-          "classroom": "양산Y15-412"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 960,
           "endMinute": 1060,
           "classroom": "양산Y15-412"
         }
@@ -5548,12 +5386,6 @@
         {
           "weekday": 3,
           "startMinute": 480,
-          "endMinute": 580,
-          "classroom": "양산Y04-301"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 600,
           "endMinute": 700,
           "classroom": "양산Y04-301"
         }
@@ -5589,12 +5421,6 @@
         {
           "weekday": 3,
           "startMinute": 720,
-          "endMinute": 820,
-          "classroom": "양산Y04-301"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 840,
           "endMinute": 940,
           "classroom": "양산Y04-301"
         }

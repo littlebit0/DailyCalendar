@@ -26,5 +26,17 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/pnu-busan-2026-2.json": {
+    "sha256": "508e38da8ef848cb8509ab509bc3178bdc59403a4fc472107eb3918cb872018a",
+    "reason": "#686 부산대 busan 같은 강의실 간격 60분 미만 연속 구간을 하나로 합침(부산 65쌍, 시각은 원문 그대로)"
+  },
+  "assets/timetable/pnu-miryang-2026-2.json": {
+    "sha256": "c74e24c789b576bd531bf57c9c978216dda6739fe16fca50f47145db27ff4eff",
+    "reason": "#686 부산대 miryang 같은 강의실 간격 60분 미만 연속 구간을 하나로 합침(밀양 5쌍, 시각은 원문 그대로)"
+  },
+  "assets/timetable/pnu-yangsan-2026-2.json": {
+    "sha256": "563194abcf594c73d06c841b412b9621321712425c31fe85197514f33b0d8807",
+    "reason": "#686 부산대 yangsan 같은 강의실 간격 60분 미만 연속 구간을 하나로 합침(양산 29쌍, 시각은 원문 그대로)"
   }
 }
