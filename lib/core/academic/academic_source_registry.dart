@@ -45,6 +45,7 @@ import 'ssu_academic_source.dart';
 import 'sunchon_academic_source.dart';
 import 'sungshin_academic_source.dart';
 import 'sunmoon_academic_source.dart';
+import 'suwon_academic_source.dart';
 import 'swu_academic_source.dart';
 import 'uos_academic_source.dart';
 import 'ut_academic_source.dart';
@@ -394,6 +395,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000138',
     campusIds: {'academyinfo:0000138'},
     create: SejongAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'suwon',
+    institutionId: 'academyinfo:0000140',
+    campusIds: {'academyinfo:0000140'},
+    create: SuwonAcademicSource.new,
   ),
 ];
 
