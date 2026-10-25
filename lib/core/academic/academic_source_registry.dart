@@ -4,6 +4,7 @@ import 'changwon_academic_source.dart';
 import 'daegu_academic_source.dart';
 import 'dju_academic_source.dart';
 import 'dku_academic_source.dart';
+import 'dongguk_academic_source.dart';
 import 'gachon_academic_source.dart';
 import 'geochang_academic_source.dart';
 import 'gknu_academic_source.dart';
@@ -240,6 +241,19 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000245',
     campusIds: {'academyinfo:0000245'},
     create: NsuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'dongguk-seoul',
+    institutionId: 'academyinfo:0000100',
+    campusIds: {'academyinfo:0000100'},
+    create: DonggukAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'dongguk-wise',
+    institutionId: 'academyinfo:0000100',
+    campusIds: {'academyinfo:0000101'},
+    create: DonggukAcademicSource.wiseCampus,
+    primary: false,
   ),
 ];
 
