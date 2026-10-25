@@ -1,0 +1,1458 @@
+
+
+
+
+<link href="/common/bootstrap-table-master/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="/common/bootstrap-table-master/dist/bootstrap-table.min.js"></script>
+<div id="popups">
+<section class="sec-2">
+	<div class="sec-body">
+		<!-- 검색영역 -->
+		<div class="search-box">
+            <div class="col-md req-txt"><span class="text-danger">*표시는 필수 입력 사항입니다.</span></div>
+			<div class="b-table-box flex-col-1" role="table" aria-label="조회">
+				<div class="b-row-box" role="row">
+					<div class="b-row-item">
+						<div class="b-title-box" role="rowheader">
+							<label class="req" data-lang>학년도/학기</label>
+						</div>
+						<div class="b-con-box" role="cell">
+							<div class="row">
+								<div class="col-xl-4">
+									<input id="SCH_SYEAR" class="form-control" type="number" maxlength="4" oninput="maxLengthCheck(this)" title="학년도입력">
+								</div>
+								<div class="col-xl-4">
+									<select id="SCH_TERM_GCD" class="form-control" title="학기선택"></select>
+								</div>
+								<div class="col-xl-4">
+									<div class="btn-box">
+										<div class="form-row">
+											<div class="col-auto">
+												<button class="btn search-btn" type="button" onclick="javascript:return fn_openChangeSchPopup();" data-lang="">조회</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="b-con-box" role="cell">
+									<input id="SCH_COMMON_CD" class="form-control" onkeyup="gfn_com_enterFunc(event,fn_sch);">
+								</div> -->
+					</div>
+				</div>
+			</div>
+			<!-- <div class="btn-box">
+				<div class="form-row">
+					<div class="col-auto">
+						<button class="btn search-btn" type="button" onclick="javascript:return fn_openChangeSchPopup();" data-lang="">조회</button>
+					</div>
+				</div>
+			</div> -->
+		</div>
+		<!-- /END 검색영역 -->
+
+
+		<div class="table-box">
+			<div class="table-header">
+				<div class="header-item">
+					<span class="mr-2"> Total <span class="text-total">80</span> 건
+					</span>
+				</div>
+
+			</div>
+			<div class="table-body">
+				<table class="table table-hover schTable"  data-toggle="table" data-show-column="true">
+					<!--data-height="400"  -->
+					<caption>학사일정정보</caption>
+					<colgroup>
+						<col style="width:10%">
+						<col style="width:45%">
+						<col style="width:45%">
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">No</th>
+							<th scope="col">일정</th>
+							<th scope="col">내용</th>
+
+						</tr>
+					</thead>
+					<tbody id="resultTbody">
+
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>1</td>
+								<td>2026-04-24 (금) 09:00<br/> ~ 2026-04-30 (목) 18:00</td>
+								<td> 여름계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>2</td>
+								<td>2026-05-12 (화) 09:00<br/> ~ 2026-05-14 (목) 18:00</td>
+								<td> 여름계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>3</td>
+								<td>2026-05-22 (금) 09:00<br/> ~ 2026-05-26 (화) 18:00</td>
+								<td> 여름계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>4</td>
+								<td>2026-06-04 (목) 09:00<br/> ~ 2026-06-05 (금) 18:00</td>
+								<td> 여름계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>5</td>
+								<td>2026-06-23 (화) 09:00<br/> ~ 2026-06-29 (월) 18:00</td>
+								<td>2학기 휴·복학 신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>6</td>
+								<td>2026-07-09 (목) 09:00<br/> ~ 2026-07-31 (금) 17:00</td>
+								<td>2학기 학사학위취득유예신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>7</td>
+								<td>2026-07-13 (월) 09:00<br/> ~ 2026-07-15 (수) 18:00</td>
+								<td>2학기 부전공 신청</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>8</td>
+								<td>2026-07-13 (월) 09:00<br/> ~ 2026-07-15 (수) 18:00</td>
+								<td>2학기 복수전공 신청</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>9</td>
+								<td>2026-07-13 (월) 09:00<br/> ~ 2026-07-15 (수) 18:00</td>
+								<td>2학기 연계전공 신청</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>10</td>
+								<td>2026-07-13 (월) 09:00<br/> ~ 2026-07-24 (금) 23:59</td>
+								<td>2학기 국문ㆍ영문 교수계획표 입력</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>11</td>
+								<td>2026-07-24 (금) 09:00<br/> ~ 2026-07-31 (금) 18:00</td>
+								<td>2학기 휴·복학 신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>12</td>
+								<td>2026-08-03 (월) 00:00<br/> ~ 2026-08-10 (월) 18:00</td>
+								<td>2학기 수료후연구생 신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>13</td>
+								<td>2026-08-03 (월) 10:00<br/> ~ 2026-08-04 (화) 17:00</td>
+								<td>2학기 희망과목담기</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>14</td>
+								<td>2026-08-05 (수) 09:00<br/> ~ 2026-08-05 (수) 18:00</td>
+								<td>2학기 자동신청결과확인</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>15</td>
+								<td>2026-08-05 (수) 10:00<br/> ~ 2026-08-11 (화) 18:00</td>
+								<td>2학기 분할납부신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>16</td>
+								<td>2026-08-10 (월) 08:00<br/> ~ 2026-08-12 (수) 17:00</td>
+								<td>2학기 수강신청(학부)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>17</td>
+								<td>2026-08-10 (월) 08:00<br/> ~ 2026-08-12 (수) 17:00</td>
+								<td>2학기 수강신청(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>18</td>
+								<td>2026-08-10 (월) 08:00<br/> ~ 2026-08-12 (수) 17:00</td>
+								<td>2학기 수강신청(타대생)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>19</td>
+								<td>2026-08-10 (월) 10:00<br/> ~ 2026-08-12 (수) 17:00</td>
+								<td>2학기 대기순번제 적용기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>20</td>
+								<td>2026-08-18 (화) 10:00<br/> ~ 2026-08-19 (수) 17:00</td>
+								<td>2학기 수강신청(학부)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>21</td>
+								<td>2026-08-18 (화) 10:00<br/> ~ 2026-08-19 (수) 17:00</td>
+								<td>2학기 수강신청(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>22</td>
+								<td>2026-08-18 (화) 10:00<br/> ~ 2026-08-19 (수) 17:00</td>
+								<td>2학기 수강신청(타대생)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>23</td>
+								<td>2026-08-24 (월) 00:00<br/> ~ 2026-09-04 (금) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청(기술창업대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>24</td>
+								<td>2026-08-24 (월) 00:00<br/> ~ 2026-09-04 (금) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청(산업대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>25</td>
+								<td>2026-08-24 (월) 00:00<br/> ~ 2026-09-04 (금) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청(환경대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>26</td>
+								<td>2026-08-24 (월) 00:00<br/> ~ 2026-09-17 (목) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청_조회(기술창업대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>27</td>
+								<td>2026-08-24 (월) 00:00<br/> ~ 2026-09-30 (수) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청_조회(환경대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>28</td>
+								<td>2026-08-24 (월) 00:00<br/> ~ 2026-09-30 (수) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청_조회(산업대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>29</td>
+								<td>2026-08-24 (월) 09:00<br/> ~ 2026-08-27 (목) 18:00</td>
+								<td>2학기 휴·복학 신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>30</td>
+								<td>2026-08-24 (월) 09:00<br/> ~ 2026-09-07 (월) 23:59</td>
+								<td>2학기 학위청구자격시험 WEB 신청(데이터사이언스전문대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>31</td>
+								<td>2026-08-24 (월) 09:00<br/> ~ 2026-10-12 (월) 18:00</td>
+								<td>2학기 학위청구자격시험(외국어시험) WEB 신청(데이터사이언스전문대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>32</td>
+								<td>2026-08-24 (월) 10:00<br/> ~ 2026-08-27 (목) 23:59</td>
+								<td>2학기 재학생 등록금납부</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>33</td>
+								<td>2026-08-24 (월) 10:00<br/> ~ 2026-09-04 (금) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>34</td>
+								<td>2026-08-24 (월) 10:00<br/> ~ 2026-09-04 (금) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청(법학전문대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>35</td>
+								<td>2026-08-24 (월) 10:00<br/> ~ 2026-09-18 (금) 18:00</td>
+								<td>2학기 학위청구자격시험(외국어시험) WEB 신청(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>36</td>
+								<td>2026-08-24 (월) 10:00<br/> ~ 2026-09-18 (금) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청_조회(법학전문대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>37</td>
+								<td>2026-08-24 (월) 10:00<br/> ~ 2026-09-18 (금) 18:00</td>
+								<td>2학기 학위청구자격시험(외국어시험) WEB 신청(법학전문대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>38</td>
+								<td>2026-08-24 (월) 10:00<br/> ~ 2026-10-01 (목) 18:00</td>
+								<td>2학기 학위논문제출자격시험 WEB 결과발표</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>39</td>
+								<td>2026-08-27 (목) 00:00<br/> ~ 2026-08-27 (목) 00:00</td>
+								<td>2학기 1차 폐강강좌 공고</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>40</td>
+								<td>2026-08-28 (금) 09:30<br/> ~ 2026-09-04 (금) 18:00</td>
+								<td>2학기 학위청구자격시험 WEB 신청(행정대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>41</td>
+								<td>2026-09-01 (화) 00:00<br/> ~ 2026-09-01 (화) 00:00</td>
+								<td>2학기 개강</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>42</td>
+								<td>2026-09-01 (화) 08:00<br/> ~ 2026-09-07 (월) 17:00</td>
+								<td>2학기 수강정정(학부,타대생)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>43</td>
+								<td>2026-09-01 (화) 08:00<br/> ~ 2026-09-07 (월) 23:59</td>
+								<td>2학기 수강정정(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>44</td>
+								<td>2026-09-01 (화) 09:00<br/> ~ 2026-09-03 (목) 18:00</td>
+								<td>2학기 휴·복학 신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>45</td>
+								<td>2026-09-01 (화) 10:00<br/> ~ 2026-09-03 (목) 23:59</td>
+								<td>2학기 재학생 등록금납부</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>46</td>
+								<td>2026-09-02 (수) 00:00<br/> ~ 2026-09-09 (수) 18:00</td>
+								<td>2학기 수료후연구생 신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>47</td>
+								<td>2026-09-14 (월) 00:00<br/> ~ 2026-09-14 (월) 00:00</td>
+								<td>2학기 2차 폐강강좌 공고</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>48</td>
+								<td>2026-09-14 (월) 00:00<br/> ~ 2026-09-18 (금) 00:00</td>
+								<td>2학기 전기 학위청구자격 종합시험</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>49</td>
+								<td>2026-09-15 (화) 10:00<br/> ~ 2026-09-16 (수) 17:00</td>
+								<td>2학기 수강정정(학부,타대생)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>50</td>
+								<td>2026-09-15 (화) 10:00<br/> ~ 2026-09-16 (수) 17:00</td>
+								<td>2학기 수강정정(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>51</td>
+								<td>2026-09-17 (목) 09:00<br/> ~ 2026-09-17 (목) 00:00</td>
+								<td>2학기 확정출석부 출력</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>52</td>
+								<td>2026-09-21 (월) 09:00<br/> ~ 2026-09-23 (수) 18:00</td>
+								<td>2학기 휴·복학 신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>53</td>
+								<td>2026-09-21 (월) 10:00<br/> ~ 2026-09-23 (수) 23:59</td>
+								<td>2학기 재학생 등록금납부</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>54</td>
+								<td>2026-09-21 (월) 10:00<br/> ~ 2026-09-23 (수) 23:59</td>
+								<td>2학기 재학생 차등납부등록</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>55</td>
+								<td>2026-10-01 (목) 09:00<br/> ~ 2026-10-08 (목) 18:00</td>
+								<td>2학기 수강취소</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>56</td>
+								<td>2026-10-08 (목) 00:00<br/> ~ 2026-10-08 (목) 00:00</td>
+								<td>2학기 수업일수 1/3선</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>57</td>
+								<td>2026-10-19 (월) 09:00<br/> ~ 2026-10-24 (토) 23:59</td>
+								<td>2학기 중간고사</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>58</td>
+								<td>2026-10-19 (월) 10:00<br/> ~ 2026-10-30 (금) 23:59</td>
+								<td>2학기 강의평가실시(중간)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>59</td>
+								<td>2026-10-28 (수) 00:00<br/> ~ 2026-10-28 (수) 00:00</td>
+								<td>2학기 수업일수 1/2선</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>60</td>
+								<td>2026-11-09 (월) 10:00<br/> ~ 2026-11-10 (화) 12:00</td>
+								<td>겨울계절/도약수업 희망과목담기</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>61</td>
+								<td>2026-11-11 (수) 09:00<br/> ~ 2026-11-11 (수) 18:00</td>
+								<td>겨울계절/도약수업 자동신청결과확인</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>62</td>
+								<td>2026-11-13 (금) 00:00<br/> ~ 2026-11-13 (금) 00:00</td>
+								<td>2학기 수업일수 2/3선</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>63</td>
+								<td>2026-11-13 (금) 08:00<br/> ~ 2026-11-17 (화) 17:00</td>
+								<td>겨울계절/도약수업 수강신청(학부)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>64</td>
+								<td>2026-11-13 (금) 08:00<br/> ~ 2026-11-17 (화) 17:00</td>
+								<td>겨울계절/도약수업 수강신청(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>65</td>
+								<td>2026-11-13 (금) 08:00<br/> ~ 2026-11-17 (화) 17:00</td>
+								<td>겨울계절/도약수업 수강신청(타대생)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>66</td>
+								<td>2026-11-24 (화) 00:00<br/> ~ 2026-11-24 (화) 00:00</td>
+								<td>겨울계절수업 1차 폐강강좌 공고</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>67</td>
+								<td>2026-11-25 (수) 10:00<br/> ~ 2026-11-26 (목) 17:00</td>
+								<td>겨울계절/도약수업 수강정정(학부,타대생)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>68</td>
+								<td>2026-11-25 (수) 10:00<br/> ~ 2026-11-26 (목) 17:00</td>
+								<td>겨울계절/도약수업 수강정정(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>69</td>
+								<td>2026-12-03 (목) 00:00<br/> ~ 2026-12-03 (목) 00:00</td>
+								<td>겨울계절수업 2차 폐강강좌 공고</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>70</td>
+								<td>2026-12-04 (금) 10:00<br/> ~ 2026-12-07 (월) 17:00</td>
+								<td>겨울계절/도약수업 수강정정(학부,타대생)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>71</td>
+								<td>2026-12-04 (금) 10:00<br/> ~ 2026-12-07 (월) 17:00</td>
+								<td>겨울계절/도약수업 수강정정(대학원)</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>72</td>
+								<td>2026-12-11 (금) 10:00<br/> ~ 2026-12-14 (월) 17:00</td>
+								<td>겨울도약수업 등록금납부</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>73</td>
+								<td>2026-12-11 (금) 10:00<br/> ~ 2026-12-14 (월) 17:00</td>
+								<td>겨울계절수업 등록금납부</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>74</td>
+								<td>2026-12-15 (화) 09:00<br/> ~ 2026-12-21 (월) 23:59</td>
+								<td>2학기 기말고사</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>75</td>
+								<td>2026-12-15 (화) 09:00<br/> ~ 2026-12-28 (월) 23:59</td>
+								<td>2학기 성적입력</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>76</td>
+								<td>2026-12-22 (화) 00:00<br/> ~ 2026-12-22 (화) 00:00</td>
+								<td>2학기 겨울휴가 시작</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>77</td>
+								<td>2026-12-24 (목) 00:00<br/> ~ 2027-01-21 (목) 00:00</td>
+								<td>겨울계절수업 강의시작종료일</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>78</td>
+								<td>2026-12-29 (화) 09:00<br/> ~ 2027-01-04 (월) 18:00</td>
+								<td>2학기 성적열람 및 정정신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							
+							<tr>
+								<td>79</td>
+								<td>2027-01-06 (수) 00:00<br/> ~ 2027-01-06 (수) 00:00</td>
+								<td>2학기 성적 학적이관</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>80</td>
+								<td>2027-01-22 (금) 00:00<br/> ~ 2027-02-19 (금) 23:59</td>
+								<td>겨울도약수업 강의시작종료일</td>
+							</tr>
+						
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+</div>
+
+<script>
+	$(document).ready(
+			function() {
+				loadLangInfo("popup");
+				/*학기 공통코드 바인드*/
+				$("#SCH_TERM_GCD").dropDownList({
+					dataSource : null,
+					commonCode : "0001_TERM_GCD",
+					dataTextField : "COMMON_DETAIL_CD_KOR_NM",
+					dataValueField : "COMMON_DETAIL_CD",
+					optionLabel : "",
+					optionValue : "",
+					defaultValue : "",
+					expnCondition : "AND CHAR_1_CONTENT LIKE '%A%' ",
+					dataBound : function(e) {
+						$("#SCH_SYEAR").val("2026");
+						$("#SCH_TERM_GCD").val("0020");
+					}
+				});
+
+				setTimeout(function() {
+					var theader_cell = $("#resultTbody").closest(".fixed-table-container").find(".fixed-table-header").find(".fht-cell");
+					if ($("#resultTbody").find("tr").eq(0).attr("class") != "no-records-found") {
+							$("#resultTbody").find("tr").eq(0).find("td").each(function(i, o) {
+									theader_cell.eq(i).css("width",$(this).css("width"));
+							});
+					}
+					if ($("#resultTbody").closest(".fixed-table-body").hasVerticalScrollBar()) {
+						theader_cell.filter(":last").css("width",parseInt(theader_cell.filter(":last").css("width").replace('px', '')) + 15);
+						$("#resultTbody").attr("tabindex",0);
+					} else {
+						$("#resultTbody").closest(".fixed-table-container").find(".fixed-table-header").css("margin-right", "");
+					}
+				}, 500);
+				
+				// 웹접근성 수정
+				// 모달 열린 후 포커스 트랩
+			    setTimeout(function() {
+			        var popup = $("#popups").closest(".modal, .layer-popup, .popup");
+			        if (popup.length === 0) popup = $(".modal.show, .layer-popup:visible").last();
+
+			        var focusable = popup.find('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])')
+			            .not('.linkEndAppend, [tabindex="-1"]');
+
+			        if (focusable.length > 0) {
+			            var first = focusable[0];
+			            var last = focusable[focusable.length - 1];
+
+			            popup.off('keydown.focustrap').on('keydown.focustrap', function(e) {
+			                if (e.key !== 'Tab') return;
+
+			                if (e.shiftKey) {
+			                    if (document.activeElement === first) {
+			                        e.preventDefault();
+			                        last.focus();
+			                    }
+			                } else {
+			                    if (document.activeElement === last) {
+			                        e.preventDefault();
+			                        first.focus();
+			                    }
+			                }
+			            });
+
+			            first.focus();
+			        }
+			    }, 300);
+
+			});
+
+	function fn_openChangeSchPopup() {
+		var reqData = {};
+		reqData.SCH_SYEAR = $("#SCH_SYEAR").val();
+		reqData.SCH_TERM_GCD = $("#SCH_TERM_GCD").val();
+		gfn_bbs_changeModalPopup({
+			width : 600,
+			height : 650,
+			index : 5,
+			target : null,
+			title : "학사일정 ",
+			include : '/core/main/selectScheduleListPop.do',
+			reqData : reqData,
+			dataBound : function(e) {
+	        }
+	    });
+	}
+</script>

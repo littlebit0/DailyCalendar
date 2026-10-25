@@ -1,0 +1,164 @@
+        var toDetailParam = '&amp;amp;pageIndex=1&amp;amp;pageItm=10&amp;amp;searchOrderSort=0&amp;amp;searchYear=2026&amp;amp;searchMonth=7&amp;amp;searchGbn=0';
+
+        // 서버에서 전달받은 일정 데이터
+        var scheduleData = [];
+        
+        scheduleData.push({
+            pstSn: 80,
+            ttl: "최종 학위논문 제출".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.16",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.16",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 49,
+            ttl: "2학기 예비 수강신청".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.30",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.31",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 48,
+            ttl: "계절학기 성적 확정".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.20",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.20",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 47,
+            ttl: "2학기 수업계획서 입력".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.20",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.28",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 46,
+            ttl: "계절학기 종강".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.14",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.14",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 45,
+            ttl: "계절학기 성적 입력".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.14",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.15",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 44,
+            ttl: "2학기 우선감면 장학금 신청".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.13",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.24",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 43,
+            ttl: "2학기 복학 신청".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.13",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.08.31",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 42,
+            ttl: "계절학기 수업평가".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.06",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.10",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 41,
+            ttl: "1학기 성적 확정".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.07.06",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.06",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 40,
+            ttl: "1학기 확정 전 성적 공개".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.26",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.02",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 39,
+            ttl: "1학기 기말 수업평가".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.26",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.02",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+
+        // 날짜 오름차순 정렬
+        scheduleData.sort(function(a, b) {
+            var cmp = (a.etc1Cn || '').localeCompare(b.etc1Cn || '');
+            return cmp !== 0 ? cmp : (a.etc3Cn || '').localeCompare(b.etc3Cn || '');
+        });
+
+        // 현재 연월 설정
+        var today = new Date();
+        var currentYear = parseInt($('#searchYear').val()) || today.getFullYear();
+        var currentMonth = parseInt($('#searchMonth').val()) || (today.getMonth() + 1);
+
+        // 일정 데이터를 날짜별로 매핑
+        var scheduleMap = {};
+        var bbsId = 'chuncheon_calender';
