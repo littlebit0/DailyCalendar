@@ -3476,7 +3476,7 @@
           "weekday": 2,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "창조과학관 전공강의실(450호)"
         },
         {
           "weekday": 3,
@@ -3517,7 +3517,7 @@
           "weekday": 2,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "창조과학관 대학원세미나(551호)"
         },
         {
           "weekday": 3,
@@ -3809,7 +3809,7 @@
           "weekday": 1,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "창조과학관 전공강의실(450호)"
         },
         {
           "weekday": 2,
@@ -3885,7 +3885,7 @@
           "weekday": 1,
           "startMinute": 540,
           "endMinute": 600,
-          "classroom": ""
+          "classroom": "창조과학관 강의실(338호)"
         },
         {
           "weekday": 3,
@@ -3961,7 +3961,7 @@
           "weekday": 1,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "창조과학관 전공강의실(450호)"
         },
         {
           "weekday": 3,
@@ -4002,7 +4002,7 @@
           "weekday": 2,
           "startMinute": 540,
           "endMinute": 600,
-          "classroom": ""
+          "classroom": "창조과학관 전공강의실(450호)"
         },
         {
           "weekday": 3,
@@ -4043,7 +4043,7 @@
           "weekday": 1,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "창조과학관 전공강의실(450호)"
         },
         {
           "weekday": 2,
@@ -4084,7 +4084,7 @@
           "weekday": 1,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "창조과학관 강의실(338호)"
         },
         {
           "weekday": 3,
@@ -4242,7 +4242,7 @@
           "weekday": 2,
           "startMinute": 540,
           "endMinute": 660,
-          "classroom": ""
+          "classroom": "창조과학관 강의실2(621호)"
         },
         {
           "weekday": 3,
@@ -4324,7 +4324,7 @@
           "weekday": 1,
           "startMinute": 660,
           "endMinute": 780,
-          "classroom": ""
+          "classroom": "창조과학관 강의실3(623호)"
         },
         {
           "weekday": 2,
@@ -4441,7 +4441,7 @@
           "weekday": 1,
           "startMinute": 540,
           "endMinute": 660,
-          "classroom": ""
+          "classroom": "창조과학관 강의실2(621호)"
         },
         {
           "weekday": 2,
@@ -4482,7 +4482,7 @@
           "weekday": 1,
           "startMinute": 660,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "창조과학관 강의실2(621호)"
         },
         {
           "weekday": 4,
@@ -4523,7 +4523,7 @@
           "weekday": 1,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "창조과학관 강의실3(623호)"
         },
         {
           "weekday": 3,
@@ -4564,7 +4564,7 @@
           "weekday": 1,
           "startMinute": 900,
           "endMinute": 1020,
-          "classroom": ""
+          "classroom": "창조과학관 강의실3(623호)"
         },
         {
           "weekday": 2,
@@ -5463,7 +5463,7 @@
           "weekday": 1,
           "startMinute": 840,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "보건과학관 건강사정실(214호)"
         },
         {
           "weekday": 2,
@@ -6785,7 +6785,7 @@
           "weekday": 3,
           "startMinute": 780,
           "endMinute": 840,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(623호)"
         },
         {
           "weekday": 4,
@@ -6902,7 +6902,7 @@
           "weekday": 3,
           "startMinute": 540,
           "endMinute": 600,
-          "classroom": ""
+          "classroom": "보건과학관 전기통증치료, 해부생리학실(650호)"
         },
         {
           "weekday": 4,
@@ -7176,7 +7176,7 @@
           "weekday": 2,
           "startMinute": 780,
           "endMinute": 840,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(623호)"
         },
         {
           "weekday": 3,
@@ -7336,7 +7336,7 @@
           "weekday": 2,
           "startMinute": 780,
           "endMinute": 840,
-          "classroom": ""
+          "classroom": "보건과학관 신경및정형물리치료실습실(651호)"
         },
         {
           "weekday": 3,
@@ -7529,7 +7529,7 @@
           "weekday": 3,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "보건과학관 전기통증치료, 해부생리학실(650호)"
         },
         {
           "weekday": 4,
@@ -7605,7 +7605,7 @@
           "weekday": 2,
           "startMinute": 840,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "보건과학관 신경및정형물리치료실습실(651호)"
         },
         {
           "weekday": 3,
@@ -7979,7 +7979,7 @@
           "weekday": 2,
           "startMinute": 840,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(453호)"
         },
         {
           "weekday": 3,
@@ -8405,7 +8405,7 @@
           "weekday": 2,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "창조과학관 기초방사선과학실험실(321호)"
         },
         {
           "weekday": 4,
@@ -8487,7 +8487,7 @@
           "weekday": 2,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "보건과학관 영상학실습실(537호)"
         },
         {
           "weekday": 3,
@@ -8528,7 +8528,7 @@
           "weekday": 2,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "창조과학관 기초방사선과학실험실(321호)"
         },
         {
           "weekday": 4,
@@ -8569,7 +8569,7 @@
           "weekday": 1,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "보건과학관 영상학실습실(537호)"
         },
         {
           "weekday": 2,
@@ -8692,7 +8692,7 @@
           "weekday": 3,
           "startMinute": 840,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "보건과학관 강의실1(521호)"
         },
         {
           "weekday": 4,
@@ -8733,7 +8733,7 @@
           "weekday": 4,
           "startMinute": 780,
           "endMinute": 840,
-          "classroom": ""
+          "classroom": "보건과학관 강의실1(521호)"
         },
         {
           "weekday": 5,
@@ -8815,7 +8815,7 @@
           "weekday": 1,
           "startMinute": 900,
           "endMinute": 1020,
-          "classroom": ""
+          "classroom": "도계오픈캠퍼스1호관 강의실204호"
         },
         {
           "weekday": 3,
@@ -8856,7 +8856,7 @@
           "weekday": 1,
           "startMinute": 840,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "보건과학관 영상학실습실(537호)"
         },
         {
           "weekday": 2,
@@ -8897,7 +8897,7 @@
           "weekday": 2,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "보건과학관 강의실1(521호)"
         },
         {
           "weekday": 3,
@@ -9014,7 +9014,7 @@
           "weekday": 2,
           "startMinute": 960,
           "endMinute": 1080,
-          "classroom": ""
+          "classroom": "보건과학관 영상학실습실(537호)"
         },
         {
           "weekday": 3,
@@ -9055,7 +9055,7 @@
           "weekday": 2,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "보건과학관 PACS실(550호)"
         },
         {
           "weekday": 3,
@@ -9096,7 +9096,7 @@
           "weekday": 2,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "보건과학관 PACS실(550호)"
         },
         {
           "weekday": 3,
@@ -9435,7 +9435,7 @@
           "weekday": 3,
           "startMinute": 720,
           "endMinute": 780,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(333호)"
         },
         {
           "weekday": 4,
@@ -9517,7 +9517,7 @@
           "weekday": 3,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(333호)"
         },
         {
           "weekday": 4,
@@ -9558,7 +9558,7 @@
           "weekday": 2,
           "startMinute": 840,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(333호)"
         },
         {
           "weekday": 4,
@@ -9634,7 +9634,7 @@
           "weekday": 2,
           "startMinute": 720,
           "endMinute": 780,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(333호)"
         },
         {
           "weekday": 4,
@@ -9890,7 +9890,7 @@
           "weekday": 1,
           "startMinute": 540,
           "endMinute": 780,
-          "classroom": ""
+          "classroom": "보건과학관 검안실습실(617호)"
         },
         {
           "weekday": 3,
@@ -9972,7 +9972,7 @@
           "weekday": 2,
           "startMinute": 540,
           "endMinute": 660,
-          "classroom": ""
+          "classroom": "보건과학관 콘텍트렌즈실습실(621호)"
         },
         {
           "weekday": 3,
@@ -10118,7 +10118,7 @@
           "weekday": 2,
           "startMinute": 660,
           "endMinute": 780,
-          "classroom": ""
+          "classroom": "보건과학관 콘텍트렌즈실습실(621호)"
         },
         {
           "weekday": 3,
@@ -10159,7 +10159,7 @@
           "weekday": 1,
           "startMinute": 840,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "보건과학관 검안실습실(617호)"
         },
         {
           "weekday": 3,
@@ -11298,7 +11298,7 @@
           "weekday": 2,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "보건과학관 일반응급실습실(518호)"
         },
         {
           "weekday": 4,
@@ -11500,7 +11500,7 @@
           "weekday": 2,
           "startMinute": 660,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(423호)"
         },
         {
           "weekday": 3,
@@ -11541,7 +11541,7 @@
           "weekday": 2,
           "startMinute": 840,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "보건과학관 강의실(423호)"
         },
         {
           "weekday": 3,
@@ -11734,7 +11734,7 @@
           "weekday": 2,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "보건과학관 임상작업치료실습실(525호)"
         },
         {
           "weekday": 3,
@@ -12336,7 +12336,7 @@
           "weekday": 2,
           "startMinute": 540,
           "endMinute": 600,
-          "classroom": ""
+          "classroom": "보건과학관 임상작업치료실습실(525호)"
         },
         {
           "weekday": 3,
@@ -13474,7 +13474,7 @@
           "weekday": 1,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "창조과학관 강의실2(433호)"
         },
         {
           "weekday": 2,
@@ -13550,7 +13550,7 @@
           "weekday": 1,
           "startMinute": 900,
           "endMinute": 960,
-          "classroom": ""
+          "classroom": "창조과학관 강의실3(435호)"
         },
         {
           "weekday": 3,
@@ -13591,7 +13591,7 @@
           "weekday": 1,
           "startMinute": 600,
           "endMinute": 720,
-          "classroom": ""
+          "classroom": "창조과학관 강의실3(435호)"
         },
         {
           "weekday": 3,
@@ -13632,7 +13632,7 @@
           "weekday": 1,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "창조과학관 강의실1(434호)"
         },
         {
           "weekday": 3,
@@ -13825,7 +13825,7 @@
           "weekday": 1,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "창조과학관 강의실3(435호)"
         },
         {
           "weekday": 4,
@@ -14053,7 +14053,7 @@
           "weekday": 1,
           "startMinute": 780,
           "endMinute": 900,
-          "classroom": ""
+          "classroom": "창조과학관 강의실2(433호)"
         },
         {
           "weekday": 3,

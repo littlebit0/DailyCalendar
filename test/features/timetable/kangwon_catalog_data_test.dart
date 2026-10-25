@@ -19,6 +19,34 @@ class _Files extends CachingAssetBundle {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
+    'a single trailing classroom applies to every meeting of the course',
+    () async {
+      final data = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'kangwon',
+      );
+      var checked = 0;
+      for (final course in [for (final d in data) ...d.courses]) {
+        // '월A1,목A1(60주년기념관 209)': the room is printed once after the slots.
+        final match = RegExp(
+          r'^([^()]+)\((.+)\)$',
+        ).firstMatch(course.sourceSchedule);
+        if (match == null || match[1]!.contains('(')) continue;
+        final shared = course.meetings.map((m) => m.classroom).toSet();
+        if (shared.length <= 1 && !shared.contains('')) {
+          if (shared.isNotEmpty) checked++;
+          continue;
+        }
+        expect(
+          course.meetings.map((m) => m.classroom),
+          everyElement(isNot('')),
+          reason: course.sourceId,
+        );
+      }
+      expect(checked, greaterThan(1000));
+    },
+  );
+  test(
     'Kangwon registered whole catalog retains five campus filters and safe source meetings',
     () async {
       final data = await UniversityCatalog.load(
