@@ -14,6 +14,7 @@ import 'geochang_academic_source.dart';
 import 'gknu_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'hanbat_academic_source.dart';
+import 'inha_academic_source.dart';
 import 'inje_academic_source.dart';
 import 'inu_academic_source.dart';
 import 'jbnu_academic_source.dart';
@@ -443,6 +444,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000025',
     campusIds: {'academyinfo:0000025'},
     create: JbnuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'inha',
+    institutionId: 'academyinfo:0000169',
+    campusIds: {'academyinfo:0000169'},
+    create: InhaAcademicSource.new,
   ),
 ];
 
