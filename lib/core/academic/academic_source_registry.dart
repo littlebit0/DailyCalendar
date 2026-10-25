@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'ajou_academic_source.dart';
 import 'bu_academic_source.dart';
 import 'catholic_academic_source.dart';
 import 'changwon_academic_source.dart';
@@ -380,6 +381,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000143',
     campusIds: {'academyinfo:0000143'},
     create: SsuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'ajou',
+    institutionId: 'academyinfo:0000146',
+    campusIds: {'academyinfo:0000146'},
+    create: AjouAcademicSource.new,
   ),
 ];
 
