@@ -366,6 +366,20 @@
           ]
         }
       ]
+    },
+    {
+      "university": "donga",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://wwwnew.donga.ac.kr/article/bbs-62/8464209?from=%2Fcommunity%2Facademic-notices",
+      "periodBoundaryMeaning": "Current official semester guide printed term/final end; explicit makeup weekdays retained.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18"
+        }
+      ]
     }
   ]
 }
