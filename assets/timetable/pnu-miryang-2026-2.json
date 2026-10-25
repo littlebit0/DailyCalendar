@@ -1320,12 +1320,6 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
-          "classroom": "밀양M03-3550"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 975,
           "classroom": "밀양M03-3550"
         }
@@ -7251,12 +7245,6 @@
         {
           "weekday": 1,
           "startMinute": 810,
-          "endMinute": 885,
-          "classroom": "밀양M03-3550"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 900,
           "endMinute": 975,
           "classroom": "밀양M03-3550"
         }
@@ -7292,12 +7280,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "밀양M03-3550"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "밀양M03-3550"
         }
@@ -7818,12 +7800,6 @@
         {
           "weekday": 3,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "밀양M03-3546"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "밀양M03-3546"
         }
@@ -8005,12 +7981,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 615,
-          "classroom": "밀양M03-3524"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 630,
           "endMinute": 705,
           "classroom": "밀양M03-3524"
         }
