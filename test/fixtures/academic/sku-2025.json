@@ -1,0 +1,706 @@
+{
+  "kind": "calendar#events",
+  "summary": "포탈 학부/학사",
+  "description": "서경대학교 학사일정",
+  "updated": "2026-10-13T01:08:03.715Z",
+  "timeZone": "Asia/Seoul",
+  "nextSyncToken": "CN_ZupLntZcDEAAYASDd0uzdAyjd0uzdAw==",
+  "items": [
+    {
+      "kind": "calendar#event",
+      "id": "17302oev14qtdh5imelehkn489",
+      "status": "confirmed",
+      "summary": "설날연휴(※휴일)",
+      "start": {
+        "date": "2025-01-28"
+      },
+      "end": {
+        "date": "2025-01-31"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "30ujlrbq7fr0k54jpau33q23c1",
+      "status": "confirmed",
+      "summary": "임시휴일(※휴일)",
+      "start": {
+        "date": "2025-01-31"
+      },
+      "end": {
+        "date": "2025-02-01"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "16dhsf6mek6kneptehrv18j5bg",
+      "status": "confirmed",
+      "summary": "2025학년도 1학기 수강신청",
+      "start": {
+        "date": "2025-02-17"
+      },
+      "end": {
+        "date": "2025-02-20"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5pn1am8uqugs4m9u6ppd22h0qi",
+      "status": "confirmed",
+      "summary": "제 75회 전기 학위수여식",
+      "start": {
+        "date": "2025-02-20"
+      },
+      "end": {
+        "date": "2025-02-21"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "3gat6p9anhp636ibiqi4l00nl8",
+      "status": "confirmed",
+      "summary": "2024학년도 동계계절학기",
+      "start": {
+        "date": "2024-12-27"
+      },
+      "end": {
+        "date": "2025-01-18"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1e4t7qvgl0pt9sjnbda3c4gnd4",
+      "status": "confirmed",
+      "summary": "2학기 성적평가 입력",
+      "start": {
+        "date": "2024-12-27"
+      },
+      "end": {
+        "date": "2025-01-03"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "0v23ort9v1fc9lqoquv9e55upf",
+      "status": "confirmed",
+      "summary": "2학기 성적열람 및 정정(기말강의평가)",
+      "start": {
+        "date": "2025-01-03"
+      },
+      "end": {
+        "date": "2025-01-13"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5pk2muvj4veppjo40279ovcf5a",
+      "status": "confirmed",
+      "summary": "2학기 성적발표",
+      "start": {
+        "date": "2025-01-13"
+      },
+      "end": {
+        "date": "2025-01-14"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1qcubdip80tjts9raql1e1ojql",
+      "status": "confirmed",
+      "summary": "1학기 휴학, 복학, 재입학, 전과신청",
+      "start": {
+        "date": "2025-01-20"
+      },
+      "end": {
+        "date": "2025-02-08"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7220168lj0v5qd7h788c96l38p",
+      "status": "confirmed",
+      "summary": "2학기 성적열람 및 정정(기말강의평가)",
+      "start": {
+        "date": "2025-12-31"
+      },
+      "end": {
+        "date": "2026-01-10"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7hf6nhmocaab63aedj4cv6co5n",
+      "status": "confirmed",
+      "summary": "2025학년도 동계계절학기",
+      "start": {
+        "date": "2025-12-26"
+      },
+      "end": {
+        "date": "2026-01-17"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7gvnv9tk90sdj4cfoaolt1is1m",
+      "status": "confirmed",
+      "summary": "2학기 성적평가 입력",
+      "start": {
+        "date": "2025-12-24"
+      },
+      "end": {
+        "date": "2025-12-31"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6nfqlc2jrn0cpgmtdagbr13ea4",
+      "status": "confirmed",
+      "summary": "동계방학",
+      "start": {
+        "date": "2025-12-24"
+      },
+      "end": {
+        "date": "2025-12-25"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "51tjtnaeontfoqe7prgdtkkqkr",
+      "status": "confirmed",
+      "summary": "2학기 기말시험",
+      "start": {
+        "date": "2025-12-17"
+      },
+      "end": {
+        "date": "2025-12-24"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7a475rjr5dmt4o0l3oldsf5ic8",
+      "status": "confirmed",
+      "summary": "학기개시 90일",
+      "start": {
+        "date": "2025-11-29"
+      },
+      "end": {
+        "date": "2025-11-30"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2fca1oce6dvumgjfjjrmneia2n",
+      "status": "confirmed",
+      "summary": "수업일수 3/4",
+      "start": {
+        "date": "2025-11-26"
+      },
+      "end": {
+        "date": "2025-11-27"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "72ekt2g4genicvvifm35ni7ae0",
+      "status": "confirmed",
+      "summary": "수업일수 2/4선, 학기개시 60일",
+      "start": {
+        "date": "2025-10-30"
+      },
+      "end": {
+        "date": "2025-10-31"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "3rrqtgcp9f38jfkfv0r9sql2q9",
+      "status": "confirmed",
+      "summary": "2학기 중간강의평가",
+      "start": {
+        "date": "2025-10-27"
+      },
+      "end": {
+        "date": "2025-11-08"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1de2m6jaq72dic9813j4dq9533",
+      "status": "confirmed",
+      "summary": "2학기 중간시험(8주차)",
+      "start": {
+        "date": "2025-10-27"
+      },
+      "end": {
+        "date": "2025-11-01"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2ukqsqrdtj433tbmebrei5d61g",
+      "status": "confirmed",
+      "summary": "개교기념일(78주년) 대체휴업일(※ 휴일)",
+      "start": {
+        "date": "2025-10-24"
+      },
+      "end": {
+        "date": "2025-10-25"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6p9hdnlfb9lref63p9o3o7c754",
+      "status": "confirmed",
+      "summary": "개교기념일(78주년)(※정상수업 진행함.)",
+      "start": {
+        "date": "2025-10-22"
+      },
+      "end": {
+        "date": "2025-10-23"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6uln1bohi3gvbltls9h720bc8p",
+      "status": "confirmed",
+      "summary": "임시휴업일(※휴일)",
+      "start": {
+        "date": "2025-10-10"
+      },
+      "end": {
+        "date": "2025-10-11"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7ifp47vfm775r0quvjl9o1usvk",
+      "status": "confirmed",
+      "summary": "한글날(※휴일)",
+      "start": {
+        "date": "2025-10-09"
+      },
+      "end": {
+        "date": "2025-10-10"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "3ctsoq1hkojo1lk79pg3h83v0l",
+      "status": "confirmed",
+      "summary": "추석연휴(※휴일)",
+      "start": {
+        "date": "2025-10-06"
+      },
+      "end": {
+        "date": "2025-10-09"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "2of42pi4q4nnvd34o0jmlud086",
+      "status": "confirmed",
+      "summary": "개천절(※휴일)",
+      "start": {
+        "date": "2025-10-03"
+      },
+      "end": {
+        "date": "2025-10-04"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7m4cnfui2bbjubvho5247casqq",
+      "status": "confirmed",
+      "summary": "학기개시 30일",
+      "start": {
+        "date": "2025-09-30"
+      },
+      "end": {
+        "date": "2025-10-01"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7fvj4vnbj1nsktotfgdu684jl1",
+      "status": "confirmed",
+      "summary": "수업일수 1/4선",
+      "start": {
+        "date": "2025-09-25"
+      },
+      "end": {
+        "date": "2025-09-26"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "35l2dbjt4uh8jsqv3ed5b722c8",
+      "status": "confirmed",
+      "summary": "2학기 수강신청 정정",
+      "start": {
+        "date": "2025-09-01"
+      },
+      "end": {
+        "date": "2025-09-06"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "16q83l8rlnbmqhn6ivn1guslvg",
+      "status": "confirmed",
+      "summary": "2학기 개강",
+      "start": {
+        "date": "2025-09-01"
+      },
+      "end": {
+        "date": "2025-09-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1uvbrcinbfeftc7d76qr6t0vds",
+      "status": "confirmed",
+      "summary": "2학기 수강신청",
+      "start": {
+        "date": "2025-08-18"
+      },
+      "end": {
+        "date": "2025-08-22"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "36vqjttn379c0mbgovvkq846l3",
+      "status": "confirmed",
+      "summary": "광복절(※휴일)",
+      "start": {
+        "date": "2025-08-15"
+      },
+      "end": {
+        "date": "2025-08-16"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "13s7b0r235ql603v4h859m2it2",
+      "status": "confirmed",
+      "summary": "제 75회 후기 학위수여일",
+      "start": {
+        "date": "2025-08-14"
+      },
+      "end": {
+        "date": "2025-08-15"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "69l86hmnda9d8sj04rct0nkt0u",
+      "status": "confirmed",
+      "summary": "2학기 휴학, 복학, 재입학, 전과신청",
+      "start": {
+        "date": "2025-07-21"
+      },
+      "end": {
+        "date": "2025-08-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "10u6qtd3lori3kl1e3i3pvs8oi",
+      "status": "confirmed",
+      "summary": "현충일(※휴일)",
+      "start": {
+        "date": "2025-06-06"
+      },
+      "end": {
+        "date": "2025-06-07"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "36hrctcvtmtj3epspo2gsbi6d0",
+      "status": "confirmed",
+      "summary": "학기개시 90일",
+      "start": {
+        "date": "2025-06-01"
+      },
+      "end": {
+        "date": "2025-06-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "47foicggalbgv1avbpa7ndpre9",
+      "status": "confirmed",
+      "summary": "수업일수 3/4선",
+      "start": {
+        "date": "2025-05-26"
+      },
+      "end": {
+        "date": "2025-05-27"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "1qvc3005mu592k07rqbtdramll",
+      "status": "confirmed",
+      "summary": "어린이날/부처님오신날 대체공휴일(※휴일)",
+      "start": {
+        "date": "2025-05-06"
+      },
+      "end": {
+        "date": "2025-05-07"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "516l7qu670ajsd2ma0fa7o7tns",
+      "status": "confirmed",
+      "summary": "어린이날/부처님 오신날(※휴일)",
+      "start": {
+        "date": "2025-05-05"
+      },
+      "end": {
+        "date": "2025-05-06"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "487k6o0voojeq2lih9nd2lbt0n",
+      "status": "confirmed",
+      "summary": "임시휴업일(※휴일), 학기개시 60일",
+      "start": {
+        "date": "2025-05-02"
+      },
+      "end": {
+        "date": "2025-05-03"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5avnr3qv6h1papl00r14j9s1cg",
+      "status": "confirmed",
+      "summary": "근로자의날(※휴일)",
+      "start": {
+        "date": "2025-05-01"
+      },
+      "end": {
+        "date": "2025-05-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4opukikorei7ub05bq83ap4ckr",
+      "status": "confirmed",
+      "summary": "수업일수 2/4선",
+      "start": {
+        "date": "2025-04-23"
+      },
+      "end": {
+        "date": "2025-04-24"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5eavhl3ng8l22vmbj3202anq38",
+      "status": "confirmed",
+      "summary": "1학기 중간강의평가",
+      "start": {
+        "date": "2025-04-22"
+      },
+      "end": {
+        "date": "2025-05-06"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "7ul0jbgvduana6tp7c1carng8r",
+      "status": "confirmed",
+      "summary": "1학기 중간시험(8주차)",
+      "start": {
+        "date": "2025-04-22"
+      },
+      "end": {
+        "date": "2025-04-29"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "077dn44a8ka17d22j2fsvjp782",
+      "status": "confirmed",
+      "summary": "학기개시 30일",
+      "start": {
+        "date": "2025-04-02"
+      },
+      "end": {
+        "date": "2025-04-03"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "3t7uqdmkro9pth096lnbjr30ff",
+      "status": "confirmed",
+      "summary": "수업일수 1/4선",
+      "start": {
+        "date": "2025-03-28"
+      },
+      "end": {
+        "date": "2025-03-29"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6jobk59v4rl55eo636nghdq3av",
+      "status": "confirmed",
+      "summary": "1학기 수강신청 정정",
+      "start": {
+        "date": "2025-03-04"
+      },
+      "end": {
+        "date": "2025-03-11"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "07hms15l5ipucqtvqtttca8htv",
+      "status": "confirmed",
+      "summary": "2025학년도 1학기 개강",
+      "start": {
+        "date": "2025-03-04"
+      },
+      "end": {
+        "date": "2025-03-05"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "0k7mfrt4kpo40omuesieee1kso",
+      "status": "confirmed",
+      "summary": "대통령선거일(※휴일)",
+      "start": {
+        "date": "2025-06-03"
+      },
+      "end": {
+        "date": "2025-06-04"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "78kibkijh7vktd0dd0bl9c2mru",
+      "status": "confirmed",
+      "summary": "1학기 기말시험",
+      "start": {
+        "date": "2025-06-18"
+      },
+      "end": {
+        "date": "2025-06-26"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4cscgk0947s2j1rb70t87uih1u",
+      "status": "confirmed",
+      "summary": "1학기 성적평가 입력",
+      "start": {
+        "date": "2025-06-25"
+      },
+      "end": {
+        "date": "2025-07-02"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "6uot8k3pqr1ppul7n427gqb7cj",
+      "status": "confirmed",
+      "summary": "하계방학",
+      "start": {
+        "date": "2025-06-26"
+      },
+      "end": {
+        "date": "2025-06-27"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "4qlbt4dga1kooas2rdm6obv0ni",
+      "status": "confirmed",
+      "summary": "2025학년도 하계계절학기",
+      "start": {
+        "date": "2025-06-26"
+      },
+      "end": {
+        "date": "2025-07-17"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "61anc55k65712lr1b8eegrvksf",
+      "status": "confirmed",
+      "summary": "1학기 성적열람 및 정정(기말강의평가)",
+      "start": {
+        "date": "2025-07-02"
+      },
+      "end": {
+        "date": "2025-07-12"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "53pbq8bvo69k9ir8qb50pu8seq",
+      "status": "confirmed",
+      "summary": "1학기 성적발표",
+      "start": {
+        "date": "2025-07-14"
+      },
+      "end": {
+        "date": "2025-07-15"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "5mulfjq1i1imh10j716hovs8bs",
+      "status": "confirmed",
+      "summary": "보강일(추석연휴, 개천절, 한글날, 임시휴업일, 개교기념일) ※보강만 진행함",
+      "start": {
+        "date": "2025-12-08"
+      },
+      "end": {
+        "date": "2025-12-17"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "3btm4mprln3o2qrnci7im93fke",
+      "status": "confirmed",
+      "summary": "보강일(어린이날/부처님오신날 대체공휴일, 대통령선거일, 현충일, 근로자의날, 임시 휴업일, 어린이날/부처님오신날) ※보강만 진행함",
+      "start": {
+        "date": "2025-06-10"
+      },
+      "end": {
+        "date": "2025-06-18"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "144cd6n4oumk6n02llfspj1tnd",
+      "status": "confirmed",
+      "summary": "2학기 기말시험 (※무전공전형 입학자만 해당)",
+      "start": {
+        "date": "2025-12-17"
+      },
+      "end": {
+        "date": "2025-12-25"
+      }
+    },
+    {
+      "kind": "calendar#event",
+      "id": "0j234bghprgqudh6jk8kphimb5",
+      "status": "confirmed",
+      "summary": "성탄절(※휴일)",
+      "start": {
+        "date": "2025-12-25"
+      },
+      "end": {
+        "date": "2025-12-26"
+      }
+    }
+  ]
+}
