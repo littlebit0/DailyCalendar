@@ -86,10 +86,10 @@ void main() {
       );
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
-        {'humanities': 1470, 'naturalScience': 1266, 'icampus': 47},
+        {'humanities': 1469, 'naturalScience': 1266, 'icampus': 47},
       );
       final courses = datasets.expand((d) => d.courses).toList();
-      expect(courses.map((c) => c.sourceId).toSet(), hasLength(2783));
+      expect(courses.map((c) => c.sourceId).toSet(), hasLength(2782));
       expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1843));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),

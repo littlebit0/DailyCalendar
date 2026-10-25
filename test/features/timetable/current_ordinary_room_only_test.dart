@@ -69,7 +69,7 @@ const rules = {
 };
 const campuses = {
   'dongguk-seoul-2026-2': [2359, 2080, 38188],
-  'skku-humanities-2026-2': [1470, 927, 23564],
+  'skku-humanities-2026-2': [1469, 926, 23536],
 };
 void main() {
   test(
