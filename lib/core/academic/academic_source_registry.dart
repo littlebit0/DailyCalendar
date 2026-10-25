@@ -5,6 +5,7 @@ import 'changwon_academic_source.dart';
 import 'daegu_academic_source.dart';
 import 'dju_academic_source.dart';
 import 'dku_academic_source.dart';
+import 'donga_academic_source.dart';
 import 'dongguk_academic_source.dart';
 import 'gachon_academic_source.dart';
 import 'geochang_academic_source.dart';
@@ -268,6 +269,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000113',
     campusIds: {'academyinfo:0000113'},
     create: PcuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'donga',
+    institutionId: 'academyinfo:0000105',
+    campusIds: {'academyinfo:0000105'},
+    create: DongaAcademicSource.new,
   ),
 ];
 
