@@ -38,5 +38,9 @@
   "assets/timetable/gachon-medical-2026-2.json": {
     "sha256": "799e1a15910fc66002890b290aa6b30b31166691531e371d95ae506fa683a133",
     "reason": "#412 가천대 교시 슬롯을 쉬는 시간(10분)을 포함한 60분 단위로 다시 만들어 교시 기반 구간 끝을 10분 늘림(연속 교시는 이미 한 구간, 합칠 구간 없음)"
+  },
+  "assets/timetable/organizations/baekseok.json": {
+    "sha256": "9266dd7454a4a26beda8b996cd33f5b34c794b64bc51f771f1b7021eb5d019b8",
+    "reason": "#603 백석대 공식 '학부 전체보기' 기준 학부(과)·혁신교육플랫폼대학 18개를 최상위 개설 단위로 등록(상위 단과대 없음)"
   }
 }
