@@ -14,6 +14,7 @@ import 'geochang_academic_source.dart';
 import 'gknu_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'hanbat_academic_source.dart';
+import 'inu_academic_source.dart';
 import 'kangwon_academic_source.dart';
 import 'khu_academic_source.dart';
 import 'kmu_academic_source.dart';
@@ -422,6 +423,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000141',
     campusIds: {'academyinfo:0000141'},
     create: SookmyungAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'inu',
+    institutionId: 'academyinfo:0002660',
+    campusIds: {'academyinfo:0002660'},
+    create: InuAcademicSource.new,
   ),
 ];
 
