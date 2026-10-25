@@ -111,7 +111,9 @@ def main():
             key = lambda s: json.dumps(s, sort_keys=True)  # noqa: E731
             rebuilt = slots(review['nativeClockBlocks'],
                             review['individualPublishedExamDateHold'])
-            assert sorted(map(key, rebuilt)) == sorted(map(key, c['schedules'])), c['sourceId']
+            # 시험 약속(deliveryMode)은 정규 예약이 아니라 그대로 보존된 일정이다.
+            regular = [x for x in c['schedules'] if 'deliveryMode' not in x]
+            assert sorted(map(key, rebuilt)) == sorted(map(key, regular)), c['sourceId']
             checked += 1
             continue
         reasons = review.get('holdReasons') or []
