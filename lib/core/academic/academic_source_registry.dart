@@ -26,6 +26,7 @@ import 'kyonggi_academic_source.dart';
 import 'mokpo_academic_source.dart';
 import 'namhae_academic_source.dart';
 import 'nsu_academic_source.dart';
+import 'pcu_academic_source.dart';
 import 'pknu_academic_source.dart';
 import 'sunchon_academic_source.dart';
 import 'ut_academic_source.dart';
@@ -261,6 +262,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000178',
     campusIds: {'academyinfo:0000178'},
     create: BuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'pcu',
+    institutionId: 'academyinfo:0000113',
+    campusIds: {'academyinfo:0000113'},
+    create: PcuAcademicSource.new,
   ),
 ];
 
