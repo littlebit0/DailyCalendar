@@ -20,6 +20,7 @@ import 'geochang_academic_source.dart';
 import 'gknu_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'hanbat_academic_source.dart';
+import 'hufs_academic_source.dart';
 import 'inha_academic_source.dart';
 import 'inje_academic_source.dart';
 import 'inu_academic_source.dart';
@@ -526,6 +527,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000189',
     campusIds: {'academyinfo:0000189'},
     create: KoreatechAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'hufs',
+    institutionId: 'academyinfo:0000192',
+    campusIds: {'academyinfo:0000192'},
+    create: HufsAcademicSource.new,
   ),
 ];
 
