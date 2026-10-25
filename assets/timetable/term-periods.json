@@ -262,7 +262,7 @@
           "start": "2026-08-31",
           "end": "2026-12-18",
           "sourceTitles": [
-            "2026-2학기 개강일",
+            "2026-2학기 개강(개시)일",
             "2026-2학기 보강주간"
           ]
         },
@@ -348,6 +348,22 @@
             "sourceUrl": "https://www.hongik.ac.kr/sso/APICipher.jsp",
             "basis": "Official calendar native2026-2개강/종강; intensive dated classes retain their exact published bounds"
           }
+        }
+      ]
+    },
+    {
+      "university": "gachon",
+      "sourceUrl": "https://www.gachon.ac.kr/kor/1075/subview.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "2026학년도 2학기 학사일정 및 개별 강의계획서 수업기간"
+          ]
         }
       ]
     }
