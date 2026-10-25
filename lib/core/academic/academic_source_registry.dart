@@ -28,6 +28,7 @@ import 'jbnu_academic_source.dart';
 import 'jeju_academic_source.dart';
 import 'jnu_academic_source.dart';
 import 'kangwon_academic_source.dart';
+import 'kau_academic_source.dart';
 import 'khu_academic_source.dart';
 import 'kmu_academic_source.dart';
 import 'knu_academic_source.dart';
@@ -533,6 +534,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000192',
     campusIds: {'academyinfo:0000192'},
     create: HufsAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'kau',
+    institutionId: 'academyinfo:0000194',
+    campusIds: {'academyinfo:0000194'},
+    create: KauAcademicSource.new,
   ),
 ];
 
