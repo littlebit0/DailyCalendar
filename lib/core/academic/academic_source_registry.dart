@@ -3,6 +3,7 @@ import 'ajou_academic_source.dart';
 import 'bu_academic_source.dart';
 import 'catholic_academic_source.dart';
 import 'cau_academic_source.dart';
+import 'cbnu_academic_source.dart';
 import 'changwon_academic_source.dart';
 import 'chosun_academic_source.dart';
 import 'cnu_academic_source.dart';
@@ -512,6 +513,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000247',
     campusIds: {'academyinfo:0000247'},
     create: TukAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'cbnu',
+    institutionId: 'academyinfo:0000030',
+    campusIds: {'academyinfo:0000030'},
+    create: CbnuAcademicSource.new,
   ),
 ];
 
