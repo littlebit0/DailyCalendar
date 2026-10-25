@@ -1,0 +1,503 @@
+
+
+<!DOCTYPE html>
+<html lang="ko" >
+<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta http-equiv="x-ua-compatible" content="ie=edge; chrome=1" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="format-detection" content="telephone=no, address=no, email=no" /><meta name="rating" content="General" /> 
+    <!-- Favicon -->
+    <link rel="favicon" href="Resource/favicon64.ico" type="image/x-icon" sizes="16x16" /><link rel="shortcut icon" href="Resource/favicon64.ico" /> 
+    
+    <!-- Fonts -->
+    
+    <link rel="stylesheet" href="Resource/font/nanumsquareneo.css" />
+    
+ 
+    <!-- CSS Global Compulsory -->
+    <link rel="stylesheet" href="Resource/vendor/bootstrap/bootstrap.min.css" /><link rel="stylesheet" href="Resource/vendor/bootstrap/offcanvas.css" /><link rel="stylesheet" href="Resource/vendor/jquery-ui/themes/base/jquery-ui.min.css" />
+    <!-- CSS Global Icons -->
+    <link rel="stylesheet" href="Resource/vendor/icon-awesome/css/font-awesome.min.css" /><link rel="stylesheet" href="Resource/vendor/icon-line/css/simple-line-icons.css" /><link rel="stylesheet" href="Resource/vendor/icon-etlinefont/style.css" /><link rel="stylesheet" href="Resource/vendor/icon-line-pro/style.css" /><link rel="stylesheet" href="Resource/vendor/icon-hs/style.css" /><link rel="stylesheet" href="Resource/vendor/chosen/chosen.css" /><link rel="stylesheet" href="Resource/vendor/dzsparallaxer/dzsparallaxer.css" /><link rel="stylesheet" href="Resource/vendor/dzsparallaxer/dzsscroller/scroller.css" /><link rel="stylesheet" href="Resource/vendor/dzsparallaxer/advancedscroller/plugin.css" /><link rel="stylesheet" href="Resource/vendor/animate.css" /><link rel="stylesheet" href="Resource/vendor/hamburgers/hamburgers.min.css" /><link rel="stylesheet" href="Resource/vendor/hs-megamenu/src/hs.megamenu.css" /><link rel="stylesheet" href="Resource/vendor/slick-carousel/slick/slick.css" /><link rel="stylesheet" href="Resource/vendor/fancybox/jquery.fancybox.css" /><link rel="stylesheet" href="Resource/vendor/malihu-scrollbar/jquery.mCustomScrollbar.min.css" /><link rel="stylesheet" href="Resource/vendor/custombox/custombox.min.css" />
+
+    <!-- CSS Unify -->
+    <link rel="stylesheet" href="Resource/css/unify-core.css" /><link rel="stylesheet" href="Resource/css/unify-components.css" /><link rel="stylesheet" href="Resource/css/unify-globals.css" />
+
+    <!-- CSS Customization -->
+    <link rel="stylesheet" href="Resource/css/custom.css?v=20211124" /><link rel="stylesheet" href="Resource/css/custom_v2.css?v=20261014-2" /><title>
+	전남대학교 행사일정 CNU Events
+</title>
+</head>
+<body>
+    <form method="post" action="./Schedule.aspx?mode=1&amp;YY=2026" id="form1">
+<div class="aspNetHidden">
+<input type="hidden" name="__EVENTS_CSRF" id="__EVENTS_CSRF" value="R2ukrYRpGy8SUy8ABqyD5iXuOtYHG9PrX0kHWpxwMLY=" />
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="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" />
+</div>
+
+<div class="aspNetHidden">
+
+	<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="8E87A3C4" />
+	<input type="hidden" name="__VIEWSTATEENCRYPTED" id="__VIEWSTATEENCRYPTED" value="" />
+</div>
+        <main>
+    <!-- Header -->
+      <header id="js-header" class="u-header">
+        <div class="u-header__section"> 
+        <div class="u-header__section u-header__section--hidden u-header__section--dark g-bg-events g-transition-0_3 g-py-10">
+        <div class="container">
+          <div class="row flex-column flex-sm-row justify-content-between align-items-center text-uppercase g-font-weight-600 g-color-white g-font-size-12 g-mx-0--lg">
+            <div class="col-auto" style="padding-left: 0px;">
+                <a class="navbar-brand g-max-width-170 g-max-width-200--lg" href="/" style="padding-top: 0;">
+                <img class="img-fluid-logo g-hidden-lg-down" src="/Resource/img/logo/events_logo_s.svg" alt="전남대학교 행사일정">
+                <img class="img-fluid-logo g-hidden-md-down g-hidden-xl-up" src="/Resource/img/logo/events_logo_s.svg" alt="전남대학교 행사일정">
+                <img class="img-fluid-logo g-hidden-lg-up" src="/Resource/img/logo/events_logo_s.svg" alt="전남대학교 행사일정">
+              </a>
+            </div>
+
+            <div class="col-auto">
+             
+            </div>
+
+            <div class="col-auto">
+             
+            </div>
+
+            <div class="col-auto g-pos-rel">
+            
+            </div>
+
+            <div class="col-auto"> 
+              <!-- Search -->
+              <div class="d-inline-block g-valign-middle g-pos-rel g-top-minus-1">
+                
+
+                  <ul class="list-inline g-overflow-hidden g-pt-1 g-mx-minus-4 mb-0 g-font-size-15">
+                
+                      <li class="list-inline-item g-mx-15">
+                          <a class="g-color-white g-text-underline--none--hover g-font-weight-400" href="https://www.jnu.ac.kr" target="_blank">전남대학교</a>
+                      </li>
+                      <li class="list-inline-item g-mx-15">
+                          <a class="g-color-white g-text-underline--none--hover g-font-weight-400" href="https://portal.jnu.ac.kr" target="_blank">전남대포털</a>
+                      </li>
+                      <li class="list-inline-item g-mx-15" style="margin-right: 0 !important;">
+                          
+                          
+                          <a class="g-color-white g-text-underline--none--hover g-font-weight-400" href="/Common/SsoLogin.aspx?returnUrl=%2f">로그인</a>
+                      </li>
+                  </ul>
+              </div>
+              <!-- End Search -->
+            </div>
+          </div>
+        </div>
+      </div>
+           
+          <div class="container">
+            <!-- Nav -->
+            <nav class="js-mega-menu navbar navbar-expand-lg g-px-0 g-py-5 g-py-0--lg">
+
+
+              <!-- Responsive Toggle Button -->
+              <button class="navbar-toggler navbar-toggler-right btn g-line-height-1 g-brd-none g-pa-0" type="button"
+                      aria-label="Toggle navigation"
+                      aria-expanded="false"
+                      aria-controls="navBar"
+                      data-toggle="collapse"
+                      data-target="#navBar">
+                <span class="hamburger hamburger--slider g-px-0">
+                  <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                  </span>
+                </span>
+              </button>
+              <!-- End Responsive Toggle Button -->
+
+              <!-- Navigation -->
+              <div id="navBar" class="collapse navbar-collapse">
+                  <div class="input-group u-shadow-v19 g-max-width-search g-border-search g-rounded-right-30" style="    height: 45px;">
+                   
+                    <!-- End Datepicker -->
+                    <input id="txtSearchInput" class="form-control g-color-searchfont border-0 g-px-20 g-font-weight-500" type="text" placeholder="행사명, 내용, 주최기관, 장소 등" aria-label="검색어를 입력하세요">
+                    <span class="input-group-addon g-bg-search g-border-search g-rounded-right-30">
+                        <button id="btnSearch" class="btn u-btn-search g-width-40 g-height-40" style="font-size: 1.5em; padding: 0" type="button">
+                            <i class="fa fa-search" style="letter-spacing: 2.5px;"></i>
+                        </button>
+                    </span>
+                    
+                </div>
+                <ul class="navbar-nav align-items-lg-center g-py-30 g-py-0--lg ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link g-color-navbar g-font-weight-600 g-font-size-18 g-px-30 g-py-10 g-py-30--lg" href="/Search.aspx?mode=cate&amp;query=">
+                           🔎 행사검색
+                        </a>
+                    </li> 
+                  <li class="nav-item">
+                    <a class="nav-link g-color-navbar g-font-weight-600  g-font-size-18 g-px-30 g-py-10 g-py-30--lg" href="/Schedule.aspx?mode=1">
+                      🗓️ 학사일정
+                    </a>
+                  </li>
+               
+                    
+                   
+                 
+                </ul>
+              </div>
+              <!-- End Navigation -->
+            </nav>
+            <!-- End Nav -->
+          </div>
+        </div>
+      </header>
+        
+
+      <!-- End Header -->
+      <!-- Key Events -->
+        
+        
+        
+    
+    
+    <hr class="g-brd-gray-light-v4 g-ma-0">
+    <section class="g-bg-gray-light-v5 g-py-15">
+        <div class="container g-py-0 g-px-30">
+    
+            <div class="d-sm-flex">
+                <div class="align-self-start">
+                    <div class="input-group u-shadow-v19 g-rounded-50 g-max-width-600">
+                   
+                    </div>
+                </div>
+
+                <div class="align-self-center ml-auto">
+                    <ul class="u-list-inline">
+                        <li class="list-inline-item g-mr-5">
+                            <a class="u-link-v5 g-color-main g-color-primary--hover" href="/">처음으로</a>
+                            <i class="g-color-gray-light-v2 g-ml-5">/</i>
+                        </li>
+                        <li class="list-inline-item g-mr-5">
+                            <a class="u-link-v5 g-color-main g-color-primary--hover"> 학사일정</a>
+                            <i class="g-color-gray-light-v2 g-ml-5">/</i>
+                        </li> 
+                        <li class="list-inline-item g-color-primary">
+                             
+                            <span>대학 학사일정</span>  
+                        </li> 
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <hr class="g-brd-gray-light-v4 g-mt-0 g-mb-10 g-pa-0">
+
+    <div class="container g-pt-50 g-pb-70">
+        
+           
+        <div class="row">
+            <div class="col-6">
+                <a  class="btn btn-block btn-lg btn-info"
+                    href="/Schedule.aspx?mode=1&YY=2026">대학 학사일정</a> 
+
+            </div>
+            <div class="col-6">
+                <a    class="btn btn-block btn-lg btn-info"
+                    href="/Schedule.aspx?mode=2&YY=2026">대학원 학사일정</a>  
+            </div>
+        </div>
+        <ul>
+          
+           
+        </ul>
+       
+        
+        <div class="text-center">
+            
+            <a  class="g-mr-15"
+                title="이전년도" 
+                 href="/Schedule.aspx?mode=1&YY=2025"><i class="fa fa-angle-double-left fa-4x"></i></a> 
+            
+
+        
+                
+               <span class="g-font-size-45">2026년</span>  
+
+            <a 
+                class="g-ml-15 "
+                title="다음년도" 
+               href="/Schedule.aspx?mode=1&YY=2027"><i class="fa fa-angle-double-right fa-4x"></i></a>
+        </div>
+
+
+        <div>
+	<table class="table" cellspacing="0" id="ContentPlaceHolder1_SubContentPlaceHolder1_gvList" style="border-collapse:collapse;">
+		<tr>
+			<th class="text-center g-font-weight-600" scope="col">일정</th><th class="text-center g-font-weight-600" scope="col">일정명</th>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.01.02 (금) ~ 2026.01.02 (금)</td><td>제2학기 성적정정 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.01.05 (월) ~ 2026.01.05 (월)</td><td>제2학기 성적제출 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.01.07 (수) ~ 2026.01.21 (수)</td><td>제1학기 수업계획서 입력</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.01.29 (목) ~ 2026.01.29 (목)</td><td>동계 계절학기 성적제출 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.02.02 (월) ~ 2026.02.03 (화)</td><td>수강희망과목 예약</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.02.06 (금) ~ 2026.02.13 (금)</td><td>제1학기 수강신청(학년별): 2.6(4학년), 2.9(3학년), 2.10(2학년), 2.11(1학년), 2.12~13(전학년 공통)</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.02.20 (금) ~ 2026.02.25 (수)</td><td>제1학기 등록 및 수료후 등록</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.02.26 (목) ~ 2026.02.26 (목)</td><td>제74회 전기(&#39;26년 2월) 학위수여식</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.02.27 (금) ~ 2026.02.27 (금)</td><td>2026학년도 입학식</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.02.27 (금) ~ 2026.02.27 (금)</td><td>2026학년도 입학식</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.03.03 (화) ~ 2026.03.09 (월)</td><td>제1학기 수강신청 정정</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.03.03 (화) ~ 2026.03.03 (화)</td><td>제1학기 개강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.03.27 (금) ~ 2026.03.27 (금)</td><td>제1학기 수업일수 1/4</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.04.13 (월) ~ 2026.04.24 (금)</td><td>제1학기 중간 수업평가</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.04.20 (월) ~ 2026.04.24 (금)</td><td>제1학기 중간고사</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.04.23 (목) ~ 2026.04.23 (목)</td><td>제1학기 수업일수 2/4</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.05.01 (금) ~ 2026.05.01 (금)</td><td>근로자의 날(휴업)</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.05.22 (금) ~ 2026.05.22 (금)</td><td>제1학기 수업일수 3/4</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.09 (화) ~ 2026.06.09 (화)</td><td>개교기념일(휴업)</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.10 (수) ~ 2026.06.10 (수)</td><td>6. 3.(수) 전국동시지방선거일 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.11 (목) ~ 2026.06.11 (목)</td><td>5. 5.(화) 어린이날 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.12 (금) ~ 2026.06.12 (금)</td><td>5. 1.(금) 근로자의 날 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.15 (월) ~ 2026.06.15 (월)</td><td>5. 25.(월) 부처님오신날 대체휴일 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.16 (화) ~ 2026.06.16 (화)</td><td>자체 보강일</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.17 (수) ~ 2026.07.01 (수)</td><td>제1학기 최종 수업평가</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.17 (수) ~ 2026.06.23 (화)</td><td>제1학기 기말고사</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.17 (수) ~ 2026.07.07 (화)</td><td>제1학기 교수수업개선서(CQI) 입력</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.23 (화) ~ 2026.06.23 (화)</td><td>제1학기 종강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.29 (월) ~ 2026.07.23 (목)</td><td>하계 계절학기</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.06.29 (월) ~ 2026.06.29 (월)</td><td>제1학기 성적공고 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.07.02 (목) ~ 2026.07.02 (목)</td><td>제1학기 성적정정 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.07.03 (금) ~ 2026.07.03 (금)</td><td>제1학기 성적제출 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.07.08 (수) ~ 2026.07.22 (수)</td><td>제2학기 수업계획서 입력</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.07.30 (목) ~ 2026.07.30 (목)</td><td>하계 계절학기 성적제출 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.08.04 (화) ~ 2026.08.05 (수)</td><td>수강희망과목 예약</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.08.07 (금) ~ 2026.08.14 (금)</td><td>제2학기 수강신청(학년별): 8.7.(4학년), 8.10.(3학년), 8.11.(2학년), 8.12.(1학년), 8.13~14(전학년 공통)</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.08.18 (화) ~ 2026.08.21 (금)</td><td>제2학기 등록 및 수료후 등록</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.08.26 (수) ~ 2026.08.26 (수)</td><td>제74회 후기(&#39;26년 8월) 학위수여식</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.09.01 (화) ~ 2026.09.07 (월)</td><td>제2학기 수강신청 정정</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.09.01 (화) ~ 2026.09.01 (화)</td><td>제2학기 개강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.09.29 (화) ~ 2026.09.29 (화)</td><td>제2학기 수업일수 1/4</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.10.12 (월) ~ 2026.10.23 (금)</td><td>제2학기 중간 수업평가</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.10.19 (월) ~ 2026.10.23 (금)</td><td>제2학기 중간고사</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.10.28 (수) ~ 2026.10.28 (수)</td><td>제2학기 수업일수 2/4</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.11.24 (화) ~ 2026.11.24 (화)</td><td>제2학기 수업일수 3/4</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.08 (화) ~ 2026.12.08 (화)</td><td>자체 보강일</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.09 (수) ~ 2026.12.09 (수)</td><td>10. 5.(월) 개천절 대체휴일 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.10 (목) ~ 2026.12.10 (목)</td><td>9. 24.(목) 추석연휴 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.11 (금) ~ 2026.12.11 (금)</td><td>9. 25.(금) 추석연휴 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.14 (월) ~ 2026.12.14 (월)</td><td>10. 9.(금) 한글날 보강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.15 (화) ~ 2026.12.31 (목)</td><td>제2학기 최종 수업평가</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.15 (화) ~ 2026.12.21 (월)</td><td>제2학기 기말고사</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.15 (화) ~ 2027.01.06 (수)</td><td>제2학기 교수수업개선서(CQI) 입력</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.21 (월) ~ 2026.12.21 (월)</td><td>제2학기 종강</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.28 (월) ~ 2026.12.28 (월)</td><td>제2학기 성적공고 마감</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.28 (월) ~ 2027.01.22 (금)</td><td>동계 계절학기</td>
+		</tr><tr>
+			<td class="text-center" style="width:30%;">2026.12.31 (목) ~ 2026.12.31 (목)</td><td>제2학기 성적정정 마감</td>
+		</tr>
+	</table>
+</div>
+
+
+    </div>
+
+
+      
+       <!-- Footer --> 
+<footer class="g-bg-black-opacity-0_9 g-color-white-opacity-0_8 g-py-10" style="border-color: #0ea04f !important;">
+ 
+    <div class="container events-footer-container">
+        <div class="events-footer-layout g-mt-20">
+            <div class="events-footer-logo">
+                <img class="img-fluid" src="/Resource/img/logo/footer_logo.svg" alt="전남대학교" width="200">
+            </div>
+            <div class="events-footer-addresses g-brd-gray-light-v7" tabindex="0" role="region" aria-label="캠퍼스 주소 및 전화번호">
+                <address class="g-color-gray-dark-v4 g-mb-0 g-font-size-15 g-font-weight-500 g-mb-5"><strong class="g-color-gray-dark-v3 g-pr-3">광주캠퍼스</strong> (61186) 전남광주통합특별시 북구 용봉로 77(용봉동)<strong class="g-px-10 g-font-weight-100">|</strong><strong class="g-font-weight-500">전화번호</strong> : 062-530-5114</address>
+                <address class="g-color-gray-dark-v4 g-mb-0 g-font-size-15 g-font-weight-500"><strong class="g-color-gray-dark-v3 g-pr-3">여수캠퍼스</strong> (59626) 전남광주통합특별시 여수시 대학로 50(둔덕동)<strong class="g-px-10 g-font-weight-100">|</strong><strong class="g-font-weight-500">전화번호</strong> : 061-659-6114</address>
+            </div>
+            <div class="events-footer-contact">
+                <address class="g-color-gray-dark-v4 g-mb-0 g-font-size-15 g-font-weight-500 g-mb-5"><strong class="g-color-gray-dark-v3 g-pr-3">행사등록</strong></address>
+                <address class="g-color-gray-dark-v4 g-mb-0 g-font-size-15 g-font-weight-500"><strong class="g-color-gray-dark-v3 g-pr-3">코러스 콜센터</strong> : 1522-3982</address>
+            </div>
+        </div>
+    </div>
+    <div class="container events-footer-container g-py-30">
+        <div class="row">
+            <div class="col-md-12 text-center text-md-left g-mb-10 g-mb-0--md">
+                <div class="d-lg-flex">
+                    <small class="d-block g-font-size-default g-mr-10 g-mb-10 g-mb-0--md">Copyright© CHONNAM NATIONAL UNIVERSITY. All Rights Reserved</small>
+                    <ul class="u-list-inline">
+                        <li class="list-inline-item">
+                            <a class="g-color-white-opacity-0_8 g-color-white--hover" target="_blank" href="https://www.jnu.ac.kr/MainGuide/Policy/Protection">개인정보처리방침</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <span>|</span>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="g-color-white-opacity-0_8 g-color-white--hover"  target="_blank" href="https://www.jnu.ac.kr/MainGuide/Rejection/Rejection">이메일무단수집거부</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <span>|</span>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="g-color-white-opacity-0_8 g-color-white--hover" target="_blank" href="https://www.jnu.ac.kr/MainIntro/CampusInfo/Way">오시는길</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <span>|</span>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="g-color-white-opacity-0_8 g-color-white--hover" target="_blank" href="https://www.academyinfo.go.kr/pubinfo/pubinfo1600/doInit.do?schlId=0000023">대학정보공시</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+       
+        </div>
+    </div>
+</footer>
+ 
+        
+        
+           <script src="/Resource/vendor/jquery/jquery.min.js"></script>
+                <script src="/Resource/vendor/jquery-migrate/jquery-migrate.min.js"></script>
+                <script src="/Resource/vendor/popper.min.js"></script>
+                <script src="/Resource/vendor/bootstrap/bootstrap.min.js"></script> 
+                <script src="/Resource/vendor/bootstrap/offcanvas.js"></script>
+
+                <!-- JS Implementing Plugins -->
+                <script src="/Resource/vendor/hs-megamenu/src/hs.megamenu.js"></script>
+                <script src="/Resource/vendor/dzsparallaxer/dzsparallaxer.js"></script>
+                <script src="/Resource/vendor/dzsparallaxer/dzsscroller/scroller.js"></script>
+                <script src="/Resource/vendor/dzsparallaxer/advancedscroller/plugin.js"></script>
+                <script src="/Resource/vendor/masonry/dist/masonry.pkgd.min.js"></script>
+                <script src="/Resource/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+                <script src="/Resource/vendor/slick-carousel/slick/slick.js"></script>
+                <script src="/Resource/vendor/malihu-scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+                <script src="/Resource/vendor/fancybox/jquery.fancybox.min.js"></script> 
+                <script src="/Resource/vendor/custombox/custombox.min.js"></script>
+                <script src="/Resource/vendor/custombox/custombox.legacy.min.js"></script>
+                <script src="/Resource/vendor/jquery-ui/ui/widgets/datepicker.js"></script>  
+                <script src="/Resource/vendor/jquery.filer/js/jquery.filer.min.js"></script>
+                <script src="/Resource/vendor/chosen/chosen.jquery.js"></script>
+                <!-- JS Unify -->
+                <script src="/Resource/js/hs.core.js"></script>
+
+                <script src="/Resource/js/components/hs.header.js"></script>
+                <script src="/Resource/js/helpers/hs.hamburgers.js"></script>
+                <script src="/Resource/js/components/hs.dropdown.js"></script>
+                <script src="/Resource/js/components/hs.select.js"></script>
+                <script src="/Resource/js/components/hs.datepicker.js"></script>
+                <script src="/Resource/js/components/hs.tabs.js"></script>
+                <script src="/Resource/js/components/hs.popup.js"></script>
+                <script src="/Resource/js/components/hs.carousel.js"></script> 
+                <script src="/Resource/js/components/hs.scrollbar.js"></script>
+                <script src="/Resource/js/components/hs.go-to.js"></script> 
+                <script src="/Resource/js/components/hs.modal-window.js"></script>  
+                <script src="/Resource/js/helpers/hs.focus-state.js"></script>
+                <script src="/Resource/js/components/hs.file-attachement.js"></script>
+                <script>window.eventsConfig = {"appRoot":"/","searchUrl":"/Search.aspx","scheduleUrl":"/api/Schedule","uploadApiUrl":"/api/UploadFiles","uploadBaseUrl":"https://events.jnu.ac.kr/upload"};</script>
+                <script src="/Resource/js/events-common.js"></script>
+
+                <script>
+
+                    $(document).on('ready', function () {
+                        // initialization of header
+                        $.HSCore.components.HSHeader.init($('#js-header'));
+                        $.HSCore.helpers.HSHamburgers.init('.hamburger');
+
+                        // initialization of HSMegaMenu component
+                        $('.js-mega-menu').HSMegaMenu({
+                            event: 'hover',
+                            pageContainer: $('.container'),
+                            breakpoint: 991
+                        });
+
+                        // initialization of HSDropdown component
+                        $.HSCore.components.HSDropdown.init($('[data-dropdown-target]'), {
+                            afterOpen: function () {
+                                $(this).find('input[type="search"]').focus();
+                            }
+                        });
+
+                        // initialization of forms
+                        //$.HSCore.components.HSDatepicker.init('#datepickerInline');
+
+                        //// initialization of custom select
+                        //$.HSCore.components.HSSelect.init('.js-custom-select');
+
+                        //// initialization of go to
+                        //$.HSCore.components.HSGoTo.init('.js-go-to');
+                    });
+                </script>
+        
+        
+        
+        
+    
+    
+
+
+        </main>
+        <button type="button" id="events-back-to-top" class="events-back-to-top" aria-label="맨 위로 이동" title="맨 위로 이동" hidden>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+                <path d="M5 12l7-7 7 7M12 5v14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+        </button>
+        <script src="/Resource/js/events-back-to-top.js?v=20261014"></script>
+    </form>
+
+ <!-- JS Global Compulsory -->
+ 
+     
+</body>
+</html>
