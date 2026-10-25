@@ -189,6 +189,8 @@ def main():
     parser.add_argument('--campus', choices=('seoul', 'glocal'), required=True)
     parser.add_argument('--glocal-seed', type=Path)
     args = parser.parse_args()
+    if args.campus == 'glocal' and args.glocal_seed is None:
+        parser.error('--glocal-seed is required with --campus glocal')
     args.output.mkdir(parents=True, exist_ok=True)
     if args.campus == 'seoul':
         seoul(args.output, 2026, 'B01012')
