@@ -366,6 +366,23 @@
           ]
         }
       ]
+    },
+    {
+      "university": "konkuk",
+      "sourceUrl": "https://www.konkuk.ac.kr/konkuk/2161/subview.do",
+      "checkedAt": "2026-10-23",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-18",
+          "sourceTitles": [
+            "2026학년도 2학기 개강",
+            "2학기 기말고사"
+          ]
+        }
+      ]
     }
   ]
 }
