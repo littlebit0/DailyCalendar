@@ -1,0 +1,116 @@
+        var toDetailParam = '&amp;amp;pageIndex=1&amp;amp;pageItm=10&amp;amp;searchOrderSort=0&amp;amp;searchYear=2026&amp;amp;searchMonth=6&amp;amp;searchGbn=0';
+
+        // 서버에서 전달받은 일정 데이터
+        var scheduleData = [];
+        
+        scheduleData.push({
+            pstSn: 79,
+            ttl: "학위청구논문 심사결과 보고".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.11",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.06.11",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 40,
+            ttl: "1학기 확정 전 성적 공개".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.26",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.02",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 39,
+            ttl: "1학기 기말 수업평가".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.26",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.07.02",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 38,
+            ttl: "계절학기 개강".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.24",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.06.24",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 37,
+            ttl: "1학기 기말시험 종료일/종강, 수업점검".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.19",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.06.19",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 36,
+            ttl: "강의보충기간".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.16",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.06.19",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 35,
+            ttl: "1학기 성적 입력".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.15",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.06.25",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 34,
+            ttl: "개교기념일".replace(/'/g, "\\'"),
+            cd1Vl: 5,
+            etc1Cn: "2026.06.14",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.06.14",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+
+        // 날짜 오름차순 정렬
+        scheduleData.sort(function(a, b) {
+            var cmp = (a.etc1Cn || '').localeCompare(b.etc1Cn || '');
+            return cmp !== 0 ? cmp : (a.etc3Cn || '').localeCompare(b.etc3Cn || '');
+        });
+
+        // 현재 연월 설정
+        var today = new Date();
+        var currentYear = parseInt($('#searchYear').val()) || today.getFullYear();
+        var currentMonth = parseInt($('#searchMonth').val()) || (today.getMonth() + 1);
+
+        // 일정 데이터를 날짜별로 매핑
+        var scheduleMap = {};
+        var bbsId = 'chuncheon_calender';
