@@ -16,6 +16,7 @@ import 'kwangwoon_academic_source.dart';
 import 'kyonggi_academic_source.dart';
 import 'mokpo_academic_source.dart';
 import 'pknu_academic_source.dart';
+import 'sunchon_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -161,6 +162,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000068',
     campusIds: {'academyinfo:0000068'},
     create: KmuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'sunchon',
+    institutionId: 'academyinfo:0000020',
+    campusIds: {'academyinfo:0000020'},
+    create: SunchonAcademicSource.new,
   ),
 ];
 
