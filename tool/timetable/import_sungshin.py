@@ -28,8 +28,9 @@ from pathlib import Path
 import re
 
 DAYS = '월화수목금토일'
-# 강의시간편성표: n교시 = 09:00 + (n-1)h, 50 minutes.
-CLOCK = {p: (480 + p * 60, 530 + p * 60) for p in range(1, 13)}
+# 강의시간편성표: n교시 = 09:00 + (n-1)h, 50분 수업 + 10분 쉬는 시간.
+# 쉬는 시간을 각 교시에 포함한 60분 슬롯으로 기록한다(종료 = 시작 + 60).
+CLOCK = {p: (480 + p * 60, 540 + p * 60) for p in range(1, 13)}
 # 2026-2 수강신청 안내 p5, 요일별 1~15주차 수업일.
 TEACHING_DATES = {
     1: '09-07 09-14 09-21 09-28 10-12 10-19 10-26 11-02 11-09 11-16 11-23 11-30 12-07 12-14 12-21',
@@ -96,7 +97,15 @@ def meetings_for(parsed, rooms, dates_by_weekday):
             result.append({'date': date.isoformat(), 'weekday': date.isoweekday(),
                            'startMinute': start, 'endMinute': end, 'classroom': room})
     result.sort(key=lambda m: (m['date'], m['startMinute'], m['endMinute']))
-    return result
+    # 같은 날 이어지는 교시(사이가 한 교시 미만)는 한 구간으로 합친다.
+    merged = []
+    for meeting in result:
+        last = merged[-1] if merged else None
+        if last and last['date'] == meeting['date'] and meeting['startMinute'] - last['endMinute'] < 60:
+            last['endMinute'] = max(last['endMinute'], meeting['endMinute'])
+        else:
+            merged.append(meeting)
+    return merged
 
 
 def schedule(row, raw_dir):
