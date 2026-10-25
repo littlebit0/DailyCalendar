@@ -19,7 +19,9 @@ GROUPS = ['U0209001', 'U0209002', 'U0209003', 'U0209004', 'U0209005', 'U0209007'
 # Official class-hour reference (2026-2):
 # https://help.ajou.ac.kr/gs/community/notice.do?articleNo=372627&mode=view
 # Additional symbols are kept unparsed until their published bounds are verified.
-LETTER_PERIODS = {letter: (540 + index * 90, 615 + index * 90) for index, letter in enumerate('ABCDEFGH')}
+# Each period slot runs from its start to the next period start (class + break):
+# A-H 75+15 = 90 min, numeric periods 50+10 = 60 min. Clock-time ranges are kept as published.
+LETTER_PERIODS = {letter: (540 + index * 90, 630 + index * 90) for index, letter in enumerate('ABCDEFGH')}
 TERM_CODES = {'1': 'U0002001', '여름': 'U0002002', '2': 'U0002003', '겨울': 'U0002004'}
 
 
@@ -33,31 +35,36 @@ def meetings(text):
             return [], 'unparsed'
         cursor = match.end()
         period = match[2].strip()
+        clock = False
         if period in LETTER_PERIODS:
             start, end = LETTER_PERIODS[period]
         elif re.fullmatch(r'\d{1,2}(?:\.5)?', period):
             start = 540 + int((Decimal(period) - 1) * 60)
-            end = start + 50
+            end = start + 60
         elif (times := re.fullmatch(r'(\d{2}):(\d{2})~(\d{2}):(\d{2})', period)):
             if int(times[2]) > 59 or int(times[4]) > 59:
                 raise ValueError('Invalid Ajou clock minute')
             start = int(times[1]) * 60 + int(times[2])
             end = int(times[3]) * 60 + int(times[4])
+            clock = True
         else:
             return [], 'unparsed'
         if not (0 <= start < end <= 1440):
             raise ValueError('Invalid Ajou meeting interval')
-        result.append({'weekday': '월화수목금토일'.index(match[1]) + 1, 'startMinute': start, 'endMinute': end, 'classroom': match[3] or ''})
+        result.append({'weekday': '월화수목금토일'.index(match[1]) + 1, 'startMinute': start, 'endMinute': end, 'classroom': match[3] or '', 'clock': clock})
     if cursor != len(text.rstrip()) or not result:
         return [], 'unparsed'
-    # Merge adjacent numeric periods while preserving the official classroom.
+    # Merge same-room periods of one day when the gap is under 60 minutes; clock-time ranges stay as published.
     merged = []
     for row in sorted(result, key=lambda r: (r['weekday'], r['startMinute'], r['classroom'])):
         previous = merged[-1] if merged else None
-        if previous and previous['weekday'] == row['weekday'] and previous['classroom'] == row['classroom'] and previous['endMinute'] <= row['startMinute'] <= previous['endMinute'] + 10:
-            previous['endMinute'] = row['endMinute']
+        if previous and not (previous['clock'] and row['clock']) and previous['weekday'] == row['weekday'] and previous['classroom'] == row['classroom'] and row['startMinute'] - previous['endMinute'] < 60:
+            previous['endMinute'] = max(previous['endMinute'], row['endMinute'])
+            previous['clock'] = previous['clock'] or row['clock']
         elif row not in merged:
             merged.append(row)
+    for row in merged:
+        del row['clock']
     return merged, 'scheduled'
 
 
