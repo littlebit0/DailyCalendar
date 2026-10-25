@@ -401,6 +401,7 @@ class AcademicCalendarService extends ChangeNotifier {
         source.id,
         events,
         subscription.baselines,
+        subscription.excludedEvents,
       ).entries)
         if (!excludedEvents.contains(entry.value)) entry.key: entry.value,
     };
@@ -507,12 +508,14 @@ class AcademicCalendarService extends ChangeNotifier {
   /// shift when a same-title event is inserted earlier in the year, so an
   /// event identical to an imported baseline keeps that baseline's row first.
   /// The rest reuse the row last imported for the same source record (so a
-  /// date correction updates it), else their own ID, or a start-dated ID when
-  /// that row already represents another event.
+  /// date correction updates it), else the row of a record the school
+  /// corrected under a new source ID (see [_corrections]), else their own ID,
+  /// or a start-dated ID when that row already represents another event.
   static Map<String, AcademicEvent> _localIds(
     String universityId,
     List<AcademicEvent> events,
     Map<String, AcademicEvent> baselines,
+    List<AcademicEvent> excludedEvents,
   ) {
     final result = <String, AcademicEvent>{};
     final unmatched = <AcademicEvent>[];
@@ -530,7 +533,37 @@ class AcademicCalendarService extends ChangeNotifier {
         result[baseline.key] = event;
       }
     }
+    // Source IDs that embed dates or titles change when the school corrects
+    // them; such an event takes over the row of the record it replaced.
+    final feedIds = {for (final event in events) event.sourceId};
+    final vanished = [
+      for (final entry in baselines.entries)
+        if (!result.containsKey(entry.key) &&
+            !feedIds.contains(entry.value.sourceId))
+          entry,
+    ];
+    final orphans = [
+      for (final event in unmatched)
+        if (!baselines.values.any((b) => b.sourceId == event.sourceId)) event,
+    ];
+    // A vanished exclusion is a candidate too, so an event that may be the
+    // excluded record never takes an imported row.
+    final corrected = _corrections(orphans, [
+      for (final entry in vanished) entry.value,
+      for (final snapshot in excludedEvents)
+        if (!feedIds.contains(snapshot.sourceId) &&
+            !events.any((event) => _sameSource(event, snapshot)))
+          snapshot,
+    ]);
+    final adopted = Set<AcademicEvent>.identity();
+    for (final MapEntry(key: orphan, value: record) in corrected.entries) {
+      if (record < vanished.length) {
+        result[vanished[record].key] = orphans[orphan];
+        adopted.add(orphans[orphan]);
+      }
+    }
     for (final event in unmatched) {
+      if (adopted.contains(event)) continue;
       var id = event.dailyId(universityId);
       // A date correction keeps the row last imported for this source record,
       // including one that was given a start-dated ID after a shift.
@@ -607,7 +640,81 @@ class AcademicCalendarService extends ChangeNotifier {
         events.add(i);
       }
     }
+    // An exclusion follows its record when the school corrected it under a
+    // new source ID; a vanished imported record is a candidate too, so a
+    // corrected imported event is never taken for the excluded one.
+    final feedIds = {for (final e in feed) e.sourceId};
+    final orphans = [
+      for (var i = 0; i < feed.length; i++)
+        if (!events.contains(i) &&
+            !snapshotIds.contains(feed[i].sourceId) &&
+            !subscription.baselines.values.any(
+              (b) => b.sourceId == feed[i].sourceId || _sameSource(b, feed[i]),
+            ))
+          i,
+    ];
+    final free = [
+      for (var j = 0; j < snapshots.length; j++)
+        if (!matches.containsKey(j) && !feedIds.contains(snapshots[j].sourceId))
+          j,
+    ];
+    final corrected = _corrections(
+      [for (final i in orphans) feed[i]],
+      [
+        for (final j in free) snapshots[j],
+        for (final b in subscription.baselines.values)
+          if (!feedIds.contains(b.sourceId) &&
+              !feed.any((e) => _sameSource(b, e)))
+            b,
+      ],
+    );
+    for (final MapEntry(key: orphan, value: record) in corrected.entries) {
+      if (record < free.length) {
+        events.add(orphans[orphan]);
+        matches[free[record]] = orphans[orphan];
+      }
+    }
     return (events: events, snapshots: matches);
+  }
+
+  /// Pairs feed events that match no earlier record ([orphans]) with records
+  /// that vanished from the feed ([previous]) when the school most likely
+  /// corrected one into the other: the same title starting in the same year
+  /// (a date correction), or the same dates and the same title once spaces
+  /// and bracketed notes are ignored (a title correction such as "개강일" to
+  /// "개강(개시)일"; an unrelated event on the same dates is no correction).
+  /// A pair is made only when, counting both kinds together, it is the sole
+  /// candidate on both sides; otherwise nothing is linked, so personal state
+  /// never moves to a different event.
+  static Map<int, int> _corrections(
+    List<AcademicEvent> orphans,
+    List<AcademicEvent> previous,
+  ) {
+    String core(String title) =>
+        title.replaceAll(RegExp(r'\([^)]*\)|\[[^\]]*\]|\s'), '');
+    bool corrected(AcademicEvent a, AcademicEvent b) =>
+        (a.title == b.title && a.start.year == b.start.year) ||
+        (a.start == b.start &&
+            a.end == b.end &&
+            core(a.title) == core(b.title));
+    final candidates = [
+      for (final orphan in orphans)
+        [
+          for (var j = 0; j < previous.length; j++)
+            if (corrected(orphan, previous[j])) j,
+        ],
+    ];
+    final claims = <int, int>{};
+    for (final found in candidates) {
+      for (final j in found) {
+        claims.update(j, (count) => count + 1, ifAbsent: () => 1);
+      }
+    }
+    return {
+      for (var i = 0; i < orphans.length; i++)
+        if (candidates[i].length == 1 && claims[candidates[i].single] == 1)
+          i: candidates[i].single,
+    };
   }
 
   /// Source IDs of [events] that the saved subscription excludes; used to
