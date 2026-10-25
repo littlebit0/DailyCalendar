@@ -11,6 +11,7 @@ import 'knu_academic_source.dart';
 import 'kongju_academic_source.dart';
 import 'konkuk_academic_source.dart';
 import 'konyang_academic_source.dart';
+import 'kookmin_academic_source.dart';
 import 'korea_academic_source.dart';
 import 'kunsan_academic_source.dart';
 import 'kwangwoon_academic_source.dart';
@@ -182,6 +183,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000039',
     campusIds: {'academyinfo:0000039'},
     create: HanbatAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'kookmin',
+    institutionId: 'academyinfo:0000078',
+    campusIds: {'academyinfo:0000078'},
+    create: KookminAcademicSource.new,
   ),
 ];
 
