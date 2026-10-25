@@ -33,6 +33,7 @@ import 'pcu_academic_source.dart';
 import 'pknu_academic_source.dart';
 import 'pnu_academic_source.dart';
 import 'smu_academic_source.dart';
+import 'sogang_academic_source.dart';
 import 'sunchon_academic_source.dart';
 import 'ut_academic_source.dart';
 
@@ -303,6 +304,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000109',
     campusIds: {'academyinfo:0000109', 'academyinfo:0000111'},
     create: MjuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'sogang',
+    institutionId: 'academyinfo:0000120',
+    campusIds: {'academyinfo:0000120'},
+    create: SogangAcademicSource.new,
   ),
 ];
 
