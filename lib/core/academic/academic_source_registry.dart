@@ -1,4 +1,5 @@
 import 'academic_source.dart';
+import 'catholic_academic_source.dart';
 import 'gachon_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'khu_academic_source.dart';
@@ -74,6 +75,16 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000066',
     campusIds: {'academyinfo:0000066'},
     create: KhuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'catholic',
+    institutionId: 'academyinfo:0000046',
+    campusIds: {
+      'academyinfo:0000046',
+      'academyinfo:0000048',
+      'academyinfo:0000049',
+    },
+    create: CatholicAcademicSource.new,
   ),
 ];
 
