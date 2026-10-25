@@ -5,6 +5,7 @@ import 'gknu_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'kangwon_academic_source.dart';
 import 'khu_academic_source.dart';
+import 'kmu_academic_source.dart';
 import 'knu_academic_source.dart';
 import 'kongju_academic_source.dart';
 import 'konkuk_academic_source.dart';
@@ -154,6 +155,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000013',
     campusIds: {'academyinfo:0000013'},
     create: PknuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'kmu',
+    institutionId: 'academyinfo:0000068',
+    campusIds: {'academyinfo:0000068'},
+    create: KmuAcademicSource.new,
   ),
 ];
 
