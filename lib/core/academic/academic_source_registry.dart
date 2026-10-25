@@ -20,6 +20,7 @@ import 'inha_academic_source.dart';
 import 'inje_academic_source.dart';
 import 'inu_academic_source.dart';
 import 'jbnu_academic_source.dart';
+import 'jnu_academic_source.dart';
 import 'kangwon_academic_source.dart';
 import 'khu_academic_source.dart';
 import 'kmu_academic_source.dart';
@@ -469,6 +470,13 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
       'academyinfo:0002911',
     },
     create: EuljiAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'jnu',
+    institutionId: 'academyinfo:0000023',
+    // Gwangju and Yeosu publish one shared undergraduate calendar.
+    campusIds: {'academyinfo:0000023', 'academyinfo:0000024'},
+    create: ChonnamAcademicSource.new,
   ),
 ];
 
