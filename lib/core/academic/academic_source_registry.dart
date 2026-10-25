@@ -17,6 +17,7 @@ import 'kyonggi_academic_source.dart';
 import 'mokpo_academic_source.dart';
 import 'pknu_academic_source.dart';
 import 'sunchon_academic_source.dart';
+import 'ut_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -168,6 +169,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000020',
     campusIds: {'academyinfo:0000020'},
     create: SunchonAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'ut',
+    institutionId: 'academyinfo:0000034',
+    campusIds: {'academyinfo:0000034'},
+    create: UtAcademicSource.new,
   ),
 ];
 
