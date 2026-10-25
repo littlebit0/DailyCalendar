@@ -59,6 +59,7 @@ import 'sungshin_academic_source.dart';
 import 'sunmoon_academic_source.dart';
 import 'suwon_academic_source.dart';
 import 'swu_academic_source.dart';
+import 'tuk_academic_source.dart';
 import 'uos_academic_source.dart';
 import 'ut_academic_source.dart';
 import 'yonsei_academic_source.dart';
@@ -505,6 +506,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000175',
     campusIds: {'academyinfo:0000175', 'academyinfo:0000174'},
     create: CauAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'tuk',
+    institutionId: 'academyinfo:0000247',
+    campusIds: {'academyinfo:0000247'},
+    create: TukAcademicSource.new,
   ),
 ];
 
