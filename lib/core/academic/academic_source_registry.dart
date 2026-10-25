@@ -25,6 +25,7 @@ import 'korea_academic_source.dart';
 import 'kunsan_academic_source.dart';
 import 'kwangwoon_academic_source.dart';
 import 'kyonggi_academic_source.dart';
+import 'mju_academic_source.dart';
 import 'mokpo_academic_source.dart';
 import 'namhae_academic_source.dart';
 import 'nsu_academic_source.dart';
@@ -296,6 +297,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000117',
     campusIds: {'academyinfo:0000117', 'academyinfo:0002959'},
     create: SangmyungAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'mju',
+    institutionId: 'academyinfo:0000109',
+    campusIds: {'academyinfo:0000109', 'academyinfo:0000111'},
+    create: MjuAcademicSource.new,
   ),
 ];
 
