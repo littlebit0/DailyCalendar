@@ -1,5 +1,15 @@
 # Daily Agent Memory — current handoff
 
+## #679 Academic correction linking — 2026-10-25
+
+- Shared `AcademicCalendarService` now links a school-corrected record whose
+  source ID changed (date or title embedded in the ID) to the row and exclusion
+  of the record it replaced, only when it is the sole candidate on both sides
+  (same title and start year, or same dates and same title ignoring spaces and
+  bracketed notes). Adapter source-ID formats, storage and Drive sync are
+  unchanged. Decided 2026-10-25 instead of changing 1st-tier adapter IDs.
+- Dart-only; no native counterpart. Mac/iPhone: not device-verified.
+
 ## University support reset — 1st tier start, 2026-10-22
 
 - User decision: academic calendar feature removed entirely (all sources, service, store,
