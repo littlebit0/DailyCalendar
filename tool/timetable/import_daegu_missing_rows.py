@@ -160,13 +160,17 @@ def main():
     index = {(r['sourcePage'], r['nativeRegistrationNumber']): r for r in rows}
     z = lambda s: re.sub(r'\s+', '', s or '')
     compared = 0
+    missing = []
     for o in old:
         r = index.get((o['sourcePage'], o['nativeRegistrationNumber']))
         if r is None:
+            missing.append((o['sourcePage'], o['nativeRegistrationNumber']))
             continue
         compared += 1
         for k, v in o['education'].items():
             assert z(v) == z(r['education'].get(k)), (o['sourcePage'], o['nativeRegistrationNumber'], k)
+    # A dropped continuation page must fail here, not write an incomplete asset.
+    assert not missing and compared == len(old), f'earlier major rows not rebuilt: {missing[:10]}'
     known = {o['nativeRegistrationNumber'] for o in old}
     known_keys = {(o['sourcePage'], o['nativeRegistrationNumber']) for o in old}
     added_rows = [r for r in rows if (r['sourcePage'], r['nativeRegistrationNumber']) not in known_keys]
