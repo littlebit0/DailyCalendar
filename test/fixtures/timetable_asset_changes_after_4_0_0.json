@@ -7,6 +7,10 @@
     "sha256": "aeea83387a3b13285a7b08a211d01d4ef2c564d6b154779118a379d36cefaca2",
     "reason": "#92 단국대 퇴계·율곡혁신칼리지 광역 모집단위와 토탈분석기기융합학 연계전공 배정"
   },
+  "assets/timetable/organizations/dongguk.json": {
+    "sha256": "5aa5af4e030bca6f4f76a23ac62f53873e7243f5431d327511616ec36b29498e",
+    "reason": "#596 동국대 소속 없던 학과·전공 10개와 원자료 개설 라벨 24개를 공식 종합강의시간표 개설대학·개설학과 코드 트리와 2026-2 다전공 신청가능 목록 기준 단과대·연계전공·융합전공에 배정"
+  },
   "assets/timetable/organizations/hongik.json": {
     "sha256": "34745ee3ed6272096ca5a91f981f4d2856fbe4d582fbab99b0f45486631a6330",
     "reason": "#92 홍익대 교학과 3곳을 해당 단과대 개설로, 미술대학 학과 2개, 게임학부 전공 2개, 교양과 2곳 등록"
