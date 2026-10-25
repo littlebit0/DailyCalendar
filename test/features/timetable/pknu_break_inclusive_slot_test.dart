@@ -21,18 +21,16 @@ void main() {
         final byKey = <String, List<Map<String, dynamic>>>{};
         for (final m in (c['schedules'] as List).cast<Map<String, dynamic>>()) {
           total++;
+          expect(m.containsKey('sourcePeriods'), false);
           final unit = m['sourceMinuteUnit'] as int?;
           final start = m['startMinute'] as int;
           final len = (m['endMinute'] as int) - start;
           if (unit != null) {
             final slot = unit == 50 ? 60 : 90;
-            final periods =
-                (m['sourcePeriods'] as List?) ?? [m['sourcePeriod']];
-            expect(len, slot * periods.length, reason: '${c['sourceId']}');
-            for (var i = 1; i < periods.length; i++) {
-              expect(periods[i], periods[i - 1] + 1);
-            }
-            final first = periods.first as int;
+            // 구간 길이는 슬롯 길이의 정수배(합친 교시 수)여야 한다.
+            expect(len % slot, 0, reason: '${c['sourceId']}');
+            expect(len, greaterThan(0));
+            final first = m['sourcePeriod'] as int;
             expect(
               start,
               unit == 50 ? 480 + 60 * first : 540 + 90 * (first - 1),

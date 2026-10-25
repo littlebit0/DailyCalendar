@@ -7958,13 +7958,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -7973,13 +7967,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -7988,13 +7976,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -8003,13 +7985,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -8018,13 +7994,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -8033,13 +8003,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -8048,13 +8012,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -8063,13 +8021,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -8078,13 +8030,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -8093,13 +8039,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -8108,13 +8048,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -8123,13 +8057,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -8138,13 +8066,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -8153,13 +8075,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -8530,12 +8446,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-04",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-04"
         },
         {
           "weekday": 5,
@@ -8544,12 +8455,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-11",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-11"
         },
         {
           "weekday": 5,
@@ -8558,12 +8464,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-18",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-18"
         },
         {
           "weekday": 5,
@@ -8572,12 +8473,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-02"
         },
         {
           "weekday": 5,
@@ -8586,12 +8482,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-16",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-16"
         },
         {
           "weekday": 5,
@@ -8600,12 +8491,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-23",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-23"
         },
         {
           "weekday": 5,
@@ -8614,12 +8500,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-30",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-30"
         },
         {
           "weekday": 5,
@@ -8628,12 +8509,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-06",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-06"
         },
         {
           "weekday": 5,
@@ -8642,12 +8518,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-13",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-13"
         },
         {
           "weekday": 5,
@@ -8656,12 +8527,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-20",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-20"
         },
         {
           "weekday": 5,
@@ -8670,12 +8536,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-27",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-27"
         },
         {
           "weekday": 5,
@@ -8684,12 +8545,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-04",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-12-04"
         }
       ],
       "sourceNativePeriods": [
@@ -9186,11 +9042,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -9199,11 +9051,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -9212,11 +9060,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -9225,11 +9069,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -9238,11 +9078,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -9251,11 +9087,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -9264,11 +9096,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -9277,11 +9105,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -9290,11 +9114,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -9303,11 +9123,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -9316,11 +9132,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -9329,11 +9141,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -9342,11 +9150,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -9437,11 +9241,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -9450,11 +9250,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -9463,11 +9259,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -9476,11 +9268,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -9489,11 +9277,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -9502,11 +9286,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -9515,11 +9295,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -9528,11 +9304,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -9541,11 +9313,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -9554,11 +9322,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -9567,11 +9331,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -9580,11 +9340,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -9593,11 +9349,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -9688,11 +9440,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -9701,11 +9449,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -9714,11 +9458,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -9727,11 +9467,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -9740,11 +9476,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -9753,11 +9485,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -9766,11 +9494,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -9779,11 +9503,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -9792,11 +9512,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -9805,11 +9521,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -9818,11 +9530,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -9831,11 +9539,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -9844,11 +9548,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -9939,11 +9639,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-04",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-09-04"
         },
         {
           "weekday": 5,
@@ -9952,11 +9648,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-11",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-09-11"
         },
         {
           "weekday": 5,
@@ -9965,11 +9657,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-18",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-09-18"
         },
         {
           "weekday": 5,
@@ -9978,11 +9666,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-02",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-10-02"
         },
         {
           "weekday": 5,
@@ -9991,11 +9675,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-16",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-10-16"
         },
         {
           "weekday": 5,
@@ -10004,11 +9684,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-23",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-10-23"
         },
         {
           "weekday": 5,
@@ -10017,11 +9693,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-30",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-10-30"
         },
         {
           "weekday": 5,
@@ -10030,11 +9702,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-06",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-06"
         },
         {
           "weekday": 5,
@@ -10043,11 +9711,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-13",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-13"
         },
         {
           "weekday": 5,
@@ -10056,11 +9720,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-20",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-20"
         },
         {
           "weekday": 5,
@@ -10069,11 +9729,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-27",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-11-27"
         },
         {
           "weekday": 5,
@@ -10082,11 +9738,7 @@
           "classroom": "",
           "sourcePeriod": 2,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-04",
-          "sourcePeriods": [
-            2,
-            3
-          ]
+          "date": "2026-12-04"
         }
       ],
       "sourceNativePeriods": [
@@ -10177,11 +9829,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-04",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-09-04"
         },
         {
           "weekday": 5,
@@ -10190,11 +9838,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-11",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-09-11"
         },
         {
           "weekday": 5,
@@ -10203,11 +9847,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-18",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-09-18"
         },
         {
           "weekday": 5,
@@ -10216,11 +9856,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-02",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-10-02"
         },
         {
           "weekday": 5,
@@ -10229,11 +9865,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-16",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-10-16"
         },
         {
           "weekday": 5,
@@ -10242,11 +9874,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-23",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-10-23"
         },
         {
           "weekday": 5,
@@ -10255,11 +9883,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-30",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-10-30"
         },
         {
           "weekday": 5,
@@ -10268,11 +9892,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-06",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-06"
         },
         {
           "weekday": 5,
@@ -10281,11 +9901,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-13",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-13"
         },
         {
           "weekday": 5,
@@ -10294,11 +9910,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-20",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-20"
         },
         {
           "weekday": 5,
@@ -10307,11 +9919,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-27",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-11-27"
         },
         {
           "weekday": 5,
@@ -10320,11 +9928,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-04",
-          "sourcePeriods": [
-            5,
-            6
-          ]
+          "date": "2026-12-04"
         }
       ],
       "sourceNativePeriods": [
@@ -10415,11 +10019,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-04",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-09-04"
         },
         {
           "weekday": 5,
@@ -10428,11 +10028,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-11",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-09-11"
         },
         {
           "weekday": 5,
@@ -10441,11 +10037,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-18",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-09-18"
         },
         {
           "weekday": 5,
@@ -10454,11 +10046,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-02",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-10-02"
         },
         {
           "weekday": 5,
@@ -10467,11 +10055,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-16",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-10-16"
         },
         {
           "weekday": 5,
@@ -10480,11 +10064,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-23",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-10-23"
         },
         {
           "weekday": 5,
@@ -10493,11 +10073,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-30",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-10-30"
         },
         {
           "weekday": 5,
@@ -10506,11 +10082,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-06",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-06"
         },
         {
           "weekday": 5,
@@ -10519,11 +10091,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-13",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-13"
         },
         {
           "weekday": 5,
@@ -10532,11 +10100,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-20",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-20"
         },
         {
           "weekday": 5,
@@ -10545,11 +10109,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-27",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-11-27"
         },
         {
           "weekday": 5,
@@ -10558,11 +10118,7 @@
           "classroom": "",
           "sourcePeriod": 8,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-04",
-          "sourcePeriods": [
-            8,
-            9
-          ]
+          "date": "2026-12-04"
         }
       ],
       "sourceNativePeriods": [
@@ -10653,13 +10209,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-03",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-03"
         },
         {
           "weekday": 4,
@@ -10668,13 +10218,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-10",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-10"
         },
         {
           "weekday": 4,
@@ -10683,13 +10227,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-17",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-17"
         },
         {
           "weekday": 4,
@@ -10698,13 +10236,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-01"
         },
         {
           "weekday": 4,
@@ -10713,13 +10245,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-08",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-08"
         },
         {
           "weekday": 4,
@@ -10728,13 +10254,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-15",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-15"
         },
         {
           "weekday": 4,
@@ -10743,13 +10263,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-22",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-22"
         },
         {
           "weekday": 4,
@@ -10758,13 +10272,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-29",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-29"
         },
         {
           "weekday": 4,
@@ -10773,13 +10281,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-05",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-05"
         },
         {
           "weekday": 4,
@@ -10788,13 +10290,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-12",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-12"
         },
         {
           "weekday": 4,
@@ -10803,13 +10299,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-19",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-19"
         },
         {
           "weekday": 4,
@@ -10818,13 +10308,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-26",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-26"
         },
         {
           "weekday": 4,
@@ -10833,13 +10317,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-03",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-03"
         }
       ],
       "sourceNativePeriods": [
@@ -10938,13 +10416,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-03",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-03"
         },
         {
           "weekday": 4,
@@ -10953,13 +10425,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-10",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-10"
         },
         {
           "weekday": 4,
@@ -10968,13 +10434,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-17",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-17"
         },
         {
           "weekday": 4,
@@ -10983,13 +10443,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-01",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-01"
         },
         {
           "weekday": 4,
@@ -10998,13 +10452,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-08",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-08"
         },
         {
           "weekday": 4,
@@ -11013,13 +10461,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-15",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-15"
         },
         {
           "weekday": 4,
@@ -11028,13 +10470,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-22",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-22"
         },
         {
           "weekday": 4,
@@ -11043,13 +10479,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-29",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-29"
         },
         {
           "weekday": 4,
@@ -11058,13 +10488,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-05",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-05"
         },
         {
           "weekday": 4,
@@ -11073,13 +10497,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-12",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-12"
         },
         {
           "weekday": 4,
@@ -11088,13 +10506,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-19",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-19"
         },
         {
           "weekday": 4,
@@ -11103,13 +10515,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-26",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-26"
         },
         {
           "weekday": 4,
@@ -11118,13 +10524,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-03",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-03"
         }
       ],
       "sourceNativePeriods": [
@@ -11223,12 +10623,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -11237,12 +10632,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -11251,12 +10641,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -11265,12 +10650,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -11279,12 +10659,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -11293,12 +10668,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -11307,12 +10677,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -11321,12 +10686,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -11335,12 +10695,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -11349,12 +10704,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -11363,12 +10713,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -11377,12 +10722,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -11391,12 +10731,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -11405,12 +10740,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -11505,12 +10835,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-02",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-02"
         },
         {
           "weekday": 3,
@@ -11519,12 +10844,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-09",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-09"
         },
         {
           "weekday": 3,
@@ -11533,12 +10853,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-16",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-16"
         },
         {
           "weekday": 3,
@@ -11547,12 +10862,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-23",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-23"
         },
         {
           "weekday": 3,
@@ -11561,12 +10871,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-30",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-30"
         },
         {
           "weekday": 3,
@@ -11575,12 +10880,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-07",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-07"
         },
         {
           "weekday": 3,
@@ -11589,12 +10889,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-14",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-14"
         },
         {
           "weekday": 3,
@@ -11603,12 +10898,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-21",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-21"
         },
         {
           "weekday": 3,
@@ -11617,12 +10907,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-28",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-28"
         },
         {
           "weekday": 3,
@@ -11631,12 +10916,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-04",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-04"
         },
         {
           "weekday": 3,
@@ -11645,12 +10925,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-11",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-11"
         },
         {
           "weekday": 3,
@@ -11659,12 +10934,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-18",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-18"
         },
         {
           "weekday": 3,
@@ -11673,12 +10943,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-25",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-25"
         },
         {
           "weekday": 3,
@@ -11687,12 +10952,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-02",
-          "sourcePeriods": [
-            6,
-            7,
-            8
-          ]
+          "date": "2026-12-02"
         }
       ],
       "sourceNativePeriods": [
@@ -11791,13 +11051,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-05",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-05"
         },
         {
           "weekday": 6,
@@ -11806,13 +11060,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-12",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-12"
         },
         {
           "weekday": 6,
@@ -11821,13 +11069,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-19",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-19"
         },
         {
           "weekday": 6,
@@ -11836,13 +11078,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-10",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-10"
         },
         {
           "weekday": 6,
@@ -11851,13 +11087,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-17",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-17"
         },
         {
           "weekday": 6,
@@ -11866,13 +11096,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-24",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-24"
         },
         {
           "weekday": 6,
@@ -11881,13 +11105,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-31",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-31"
         },
         {
           "weekday": 6,
@@ -11896,13 +11114,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-07"
         },
         {
           "weekday": 6,
@@ -11911,13 +11123,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-14",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-14"
         },
         {
           "weekday": 6,
@@ -11926,13 +11132,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-21",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-21"
         },
         {
           "weekday": 6,
@@ -11941,13 +11141,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-28",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-28"
         },
         {
           "weekday": 6,
@@ -11956,13 +11150,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-05",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-05"
         }
       ],
       "sourceNativePeriods": [
@@ -13225,13 +12413,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -13240,13 +12422,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -13255,13 +12431,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -13270,13 +12440,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -13285,13 +12449,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -13300,13 +12458,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -13315,13 +12467,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -13330,13 +12476,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -13345,13 +12485,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -13360,13 +12494,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -13375,13 +12503,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -13390,13 +12512,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -13405,13 +12521,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -13420,13 +12530,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -13529,13 +12633,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -13544,13 +12642,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -13559,13 +12651,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -13574,13 +12660,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -13589,13 +12669,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -13604,13 +12678,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -13619,13 +12687,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -13634,13 +12696,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -13649,13 +12705,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -13664,13 +12714,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -13679,13 +12723,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -13694,13 +12732,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -13709,13 +12741,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -13724,13 +12750,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -13833,13 +12853,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -13848,13 +12862,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -13863,13 +12871,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -13878,13 +12880,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -13893,13 +12889,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -13908,13 +12898,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -13923,13 +12907,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -13938,13 +12916,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -13953,13 +12925,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -13968,13 +12934,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -13983,13 +12943,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -13998,13 +12952,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -14013,13 +12961,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -14124,13 +13066,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -14139,13 +13075,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -14154,13 +13084,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -14169,13 +13093,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -14184,13 +13102,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -14199,13 +13111,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -14214,13 +13120,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -14229,13 +13129,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -14244,13 +13138,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -14259,13 +13147,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -14274,13 +13156,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -14289,13 +13165,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -14304,13 +13174,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -14415,13 +13279,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -14430,13 +13288,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -14445,13 +13297,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -14460,13 +13306,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -14475,13 +13315,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -14490,13 +13324,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -14505,13 +13333,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -14520,13 +13342,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -14535,13 +13351,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -14550,13 +13360,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -14565,13 +13369,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -14580,13 +13378,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -14595,13 +13387,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -14704,13 +13490,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -14719,13 +13499,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -14734,13 +13508,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -14749,13 +13517,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -14764,13 +13526,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -14779,13 +13535,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -14794,13 +13544,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -14809,13 +13553,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -14824,13 +13562,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -14839,13 +13571,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -14854,13 +13580,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -14869,13 +13589,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -14884,13 +13598,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -14989,13 +13697,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -15004,13 +13706,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -15019,13 +13715,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -15034,13 +13724,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -15049,13 +13733,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -15064,13 +13742,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -15079,13 +13751,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -15094,13 +13760,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -15109,13 +13769,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -15124,13 +13778,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -15139,13 +13787,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -15154,13 +13796,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -15169,13 +13805,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -15311,13 +13941,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-03",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-03"
         },
         {
           "weekday": 4,
@@ -15326,13 +13950,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-10",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-10"
         },
         {
           "weekday": 4,
@@ -15341,13 +13959,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-17",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-17"
         },
         {
           "weekday": 4,
@@ -15356,13 +13968,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-01"
         },
         {
           "weekday": 4,
@@ -15371,13 +13977,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-08",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-08"
         },
         {
           "weekday": 4,
@@ -15386,13 +13986,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-15",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-15"
         },
         {
           "weekday": 4,
@@ -15401,13 +13995,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-22",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-22"
         },
         {
           "weekday": 4,
@@ -15416,13 +14004,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-29",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-29"
         },
         {
           "weekday": 4,
@@ -15431,13 +14013,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-05",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-05"
         },
         {
           "weekday": 4,
@@ -15446,13 +14022,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-12",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-12"
         },
         {
           "weekday": 4,
@@ -15461,13 +14031,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-19",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-19"
         },
         {
           "weekday": 4,
@@ -15476,13 +14040,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-26",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-26"
         },
         {
           "weekday": 4,
@@ -15491,13 +14049,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-03",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-03"
         }
       ],
       "sourceNativePeriods": [
@@ -15611,13 +14163,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-02",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-02"
         },
         {
           "weekday": 3,
@@ -15626,13 +14172,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-09",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-09"
         },
         {
           "weekday": 3,
@@ -15641,13 +14181,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-16",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-16"
         },
         {
           "weekday": 3,
@@ -15656,13 +14190,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-23",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-23"
         },
         {
           "weekday": 3,
@@ -15671,13 +14199,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-30",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-30"
         },
         {
           "weekday": 3,
@@ -15686,13 +14208,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-07",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-07"
         },
         {
           "weekday": 3,
@@ -15701,13 +14217,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-14",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-14"
         },
         {
           "weekday": 3,
@@ -15716,13 +14226,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-21",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-21"
         },
         {
           "weekday": 3,
@@ -15731,13 +14235,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-28",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-28"
         },
         {
           "weekday": 3,
@@ -15746,13 +14244,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-04",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-04"
         },
         {
           "weekday": 3,
@@ -15761,13 +14253,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-11",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-11"
         },
         {
           "weekday": 3,
@@ -15776,13 +14262,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-18",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-18"
         },
         {
           "weekday": 3,
@@ -15791,13 +14271,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-25",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-25"
         },
         {
           "weekday": 3,
@@ -15806,13 +14280,7 @@
           "classroom": "C26-103A",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-02",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-12-02"
         }
       ],
       "sourceNativePeriods": [
@@ -16006,13 +14474,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-03",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-09-03"
         },
         {
           "weekday": 4,
@@ -16021,13 +14483,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-10",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-09-10"
         },
         {
           "weekday": 4,
@@ -16036,13 +14492,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-17",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-09-17"
         },
         {
           "weekday": 4,
@@ -16051,13 +14501,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-01",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-10-01"
         },
         {
           "weekday": 4,
@@ -16066,13 +14510,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-08",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-10-08"
         },
         {
           "weekday": 4,
@@ -16081,13 +14519,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-15",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-10-15"
         },
         {
           "weekday": 4,
@@ -16096,13 +14528,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-22",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-10-22"
         },
         {
           "weekday": 4,
@@ -16111,13 +14537,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-29",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-10-29"
         },
         {
           "weekday": 4,
@@ -16126,13 +14546,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-05",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-11-05"
         },
         {
           "weekday": 4,
@@ -16141,13 +14555,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-12",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-11-12"
         },
         {
           "weekday": 4,
@@ -16156,13 +14564,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-19",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-11-19"
         },
         {
           "weekday": 4,
@@ -16171,13 +14573,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-26",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-11-26"
         },
         {
           "weekday": 4,
@@ -16186,13 +14582,7 @@
           "classroom": "",
           "sourcePeriod": 7,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-03",
-          "sourcePeriods": [
-            7,
-            8,
-            9,
-            10
-          ]
+          "date": "2026-12-03"
         }
       ],
       "sourceNativePeriods": [
@@ -16291,13 +14681,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-04",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-04"
         },
         {
           "weekday": 5,
@@ -16306,13 +14690,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-11",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-11"
         },
         {
           "weekday": 5,
@@ -16321,13 +14699,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-18",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-18"
         },
         {
           "weekday": 5,
@@ -16336,13 +14708,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-02"
         },
         {
           "weekday": 5,
@@ -16351,13 +14717,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-16",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-16"
         },
         {
           "weekday": 5,
@@ -16366,13 +14726,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-23",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-23"
         },
         {
           "weekday": 5,
@@ -16381,13 +14735,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-30",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-30"
         },
         {
           "weekday": 5,
@@ -16396,13 +14744,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-06",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-06"
         },
         {
           "weekday": 5,
@@ -16411,13 +14753,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-13",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-13"
         },
         {
           "weekday": 5,
@@ -16426,13 +14762,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-20",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-20"
         },
         {
           "weekday": 5,
@@ -16441,13 +14771,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-27",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-27"
         },
         {
           "weekday": 5,
@@ -16456,13 +14780,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-04",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-04"
         }
       ],
       "sourceNativePeriods": [
@@ -16561,13 +14879,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -16576,13 +14888,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -16591,13 +14897,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -16606,13 +14906,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -16621,13 +14915,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -16636,13 +14924,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -16651,13 +14933,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -16666,13 +14942,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -16681,13 +14951,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -16696,13 +14960,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -16711,13 +14969,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -16726,13 +14978,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -16741,13 +14987,7 @@
           "classroom": "",
           "sourcePeriod": 6,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -16846,13 +15086,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -16861,13 +15095,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -16876,13 +15104,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -16891,13 +15113,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -16906,13 +15122,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -16921,13 +15131,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -16936,13 +15140,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -16951,13 +15149,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -16966,13 +15158,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -16981,13 +15167,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -16996,13 +15176,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -17011,13 +15185,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -17026,13 +15194,7 @@
           "classroom": "C28-304",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -17168,11 +15330,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-02",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-02"
         },
         {
           "weekday": 3,
@@ -17181,11 +15339,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-09",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-09"
         },
         {
           "weekday": 3,
@@ -17194,11 +15348,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-16",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-16"
         },
         {
           "weekday": 3,
@@ -17207,11 +15357,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-23",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-23"
         },
         {
           "weekday": 3,
@@ -17220,11 +15366,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-30",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-30"
         },
         {
           "weekday": 3,
@@ -17233,11 +15375,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-07",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-10-07"
         },
         {
           "weekday": 3,
@@ -17246,11 +15384,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-14",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-10-14"
         },
         {
           "weekday": 3,
@@ -17259,11 +15393,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-21",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-10-21"
         },
         {
           "weekday": 3,
@@ -17272,11 +15402,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-28",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-10-28"
         },
         {
           "weekday": 3,
@@ -17285,11 +15411,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-04",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-04"
         },
         {
           "weekday": 3,
@@ -17298,11 +15420,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-11",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-11"
         },
         {
           "weekday": 3,
@@ -17311,11 +15429,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-18",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-18"
         },
         {
           "weekday": 3,
@@ -17324,11 +15438,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-25",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-25"
         },
         {
           "weekday": 3,
@@ -17337,11 +15447,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-02",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-12-02"
         }
       ],
       "sourceNativePeriods": [
@@ -17432,11 +15538,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-02",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-02"
         },
         {
           "weekday": 3,
@@ -17445,11 +15547,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-09",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-09"
         },
         {
           "weekday": 3,
@@ -17458,11 +15556,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-16",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-16"
         },
         {
           "weekday": 3,
@@ -17471,11 +15565,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-23",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-23"
         },
         {
           "weekday": 3,
@@ -17484,11 +15574,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-30",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-30"
         },
         {
           "weekday": 3,
@@ -17497,11 +15583,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-07",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-10-07"
         },
         {
           "weekday": 3,
@@ -17510,11 +15592,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-14",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-10-14"
         },
         {
           "weekday": 3,
@@ -17523,11 +15601,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-21",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-10-21"
         },
         {
           "weekday": 3,
@@ -17536,11 +15610,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-28",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-10-28"
         },
         {
           "weekday": 3,
@@ -17549,11 +15619,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-04",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-04"
         },
         {
           "weekday": 3,
@@ -17562,11 +15628,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-11",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-11"
         },
         {
           "weekday": 3,
@@ -17575,11 +15637,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-18",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-18"
         },
         {
           "weekday": 3,
@@ -17588,11 +15646,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-25",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-25"
         },
         {
           "weekday": 3,
@@ -17601,11 +15655,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-02",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-12-02"
         }
       ],
       "sourceNativePeriods": [
@@ -17696,11 +15746,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -17709,11 +15755,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -17722,11 +15764,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -17735,11 +15773,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -17748,11 +15782,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -17761,11 +15791,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -17774,11 +15800,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -17787,11 +15809,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -17800,11 +15818,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -17813,11 +15827,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -17826,11 +15836,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -17839,11 +15845,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -17852,11 +15854,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            1,
-            2
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -17947,11 +15945,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-07",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-07"
         },
         {
           "weekday": 1,
@@ -17960,11 +15954,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-14",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-14"
         },
         {
           "weekday": 1,
@@ -17973,11 +15963,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-21",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-21"
         },
         {
           "weekday": 1,
@@ -17986,11 +15972,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-28",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-09-28"
         },
         {
           "weekday": 1,
@@ -17999,11 +15981,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-12",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-10-12"
         },
         {
           "weekday": 1,
@@ -18012,11 +15990,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-19",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-10-19"
         },
         {
           "weekday": 1,
@@ -18025,11 +15999,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-26",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-10-26"
         },
         {
           "weekday": 1,
@@ -18038,11 +16008,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-02",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-02"
         },
         {
           "weekday": 1,
@@ -18051,11 +16017,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-09",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-09"
         },
         {
           "weekday": 1,
@@ -18064,11 +16026,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-16",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-16"
         },
         {
           "weekday": 1,
@@ -18077,11 +16035,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-23",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-23"
         },
         {
           "weekday": 1,
@@ -18090,11 +16044,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-30",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-11-30"
         },
         {
           "weekday": 1,
@@ -18103,11 +16053,7 @@
           "classroom": "",
           "sourcePeriod": 3,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-07",
-          "sourcePeriods": [
-            3,
-            4
-          ]
+          "date": "2026-12-07"
         }
       ],
       "sourceNativePeriods": [
@@ -23225,13 +21171,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -23240,13 +21180,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -23255,13 +21189,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -23270,13 +21198,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -23285,13 +21207,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -23300,13 +21216,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -23315,13 +21225,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -23330,13 +21234,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -23345,13 +21243,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -23360,13 +21252,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -23375,13 +21261,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -23390,13 +21270,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -23405,13 +21279,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -23420,13 +21288,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -23525,13 +21387,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-02"
         },
         {
           "weekday": 3,
@@ -23540,13 +21396,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-09",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-09"
         },
         {
           "weekday": 3,
@@ -23555,13 +21405,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-16",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-16"
         },
         {
           "weekday": 3,
@@ -23570,13 +21414,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-23",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-23"
         },
         {
           "weekday": 3,
@@ -23585,13 +21423,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-30",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-09-30"
         },
         {
           "weekday": 3,
@@ -23600,13 +21432,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-07",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-07"
         },
         {
           "weekday": 3,
@@ -23615,13 +21441,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-14",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-14"
         },
         {
           "weekday": 3,
@@ -23630,13 +21450,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-21",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-21"
         },
         {
           "weekday": 3,
@@ -23645,13 +21459,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-28",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-10-28"
         },
         {
           "weekday": 3,
@@ -23660,13 +21468,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-04",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-04"
         },
         {
           "weekday": 3,
@@ -23675,13 +21477,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-11",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-11"
         },
         {
           "weekday": 3,
@@ -23690,13 +21486,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-18",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-18"
         },
         {
           "weekday": 3,
@@ -23705,13 +21495,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-25",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-11-25"
         },
         {
           "weekday": 3,
@@ -23720,13 +21504,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-02",
-          "sourcePeriods": [
-            1,
-            2,
-            3,
-            4
-          ]
+          "date": "2026-12-02"
         }
       ],
       "sourceNativePeriods": [
@@ -23825,13 +21603,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-03",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-03"
         },
         {
           "weekday": 4,
@@ -23840,13 +21612,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-10",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-10"
         },
         {
           "weekday": 4,
@@ -23855,13 +21621,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-17",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-09-17"
         },
         {
           "weekday": 4,
@@ -23870,13 +21630,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-01",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-01"
         },
         {
           "weekday": 4,
@@ -23885,13 +21639,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-08",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-08"
         },
         {
           "weekday": 4,
@@ -23900,13 +21648,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-15",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-15"
         },
         {
           "weekday": 4,
@@ -23915,13 +21657,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-22",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-22"
         },
         {
           "weekday": 4,
@@ -23930,13 +21666,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-29",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-10-29"
         },
         {
           "weekday": 4,
@@ -23945,13 +21675,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-05",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-05"
         },
         {
           "weekday": 4,
@@ -23960,13 +21684,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-12",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-12"
         },
         {
           "weekday": 4,
@@ -23975,13 +21693,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-19",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-19"
         },
         {
           "weekday": 4,
@@ -23990,13 +21702,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-26",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-11-26"
         },
         {
           "weekday": 4,
@@ -24005,13 +21711,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-03",
-          "sourcePeriods": [
-            5,
-            6,
-            7,
-            8
-          ]
+          "date": "2026-12-03"
         }
       ],
       "sourceNativePeriods": [
@@ -24110,12 +21810,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -24124,12 +21819,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -24138,12 +21828,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -24152,12 +21837,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -24166,12 +21846,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -24180,12 +21855,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -24194,12 +21864,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -24208,12 +21873,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -24222,12 +21882,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -24236,12 +21891,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -24250,12 +21900,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -24264,12 +21909,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -24278,12 +21918,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -24292,12 +21927,7 @@
           "classroom": "",
           "sourcePeriod": 1,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            1,
-            2,
-            3
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -24392,15 +22022,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -24409,15 +22031,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -24426,15 +22040,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -24443,15 +22049,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -24460,15 +22058,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -24477,15 +22067,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -24494,15 +22076,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -24511,15 +22085,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -24528,15 +22094,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -24545,15 +22103,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -24562,15 +22112,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -24579,15 +22121,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -24596,15 +22130,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -24613,15 +22139,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -24728,15 +22246,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-03",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-03"
         },
         {
           "weekday": 4,
@@ -24745,15 +22255,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-10",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-10"
         },
         {
           "weekday": 4,
@@ -24762,15 +22264,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-17",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-17"
         },
         {
           "weekday": 4,
@@ -24779,15 +22273,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-01",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-01"
         },
         {
           "weekday": 4,
@@ -24796,15 +22282,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-08",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-08"
         },
         {
           "weekday": 4,
@@ -24813,15 +22291,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-15",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-15"
         },
         {
           "weekday": 4,
@@ -24830,15 +22300,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-22",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-22"
         },
         {
           "weekday": 4,
@@ -24847,15 +22309,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-29",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-29"
         },
         {
           "weekday": 4,
@@ -24864,15 +22318,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-05",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-05"
         },
         {
           "weekday": 4,
@@ -24881,15 +22327,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-12",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-12"
         },
         {
           "weekday": 4,
@@ -24898,15 +22336,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-19",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-19"
         },
         {
           "weekday": 4,
@@ -24915,15 +22345,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-26",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-26"
         },
         {
           "weekday": 4,
@@ -24932,15 +22354,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-03",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-03"
         }
       ],
       "sourceNativePeriods": [
@@ -25047,15 +22461,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -25064,15 +22470,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -25081,15 +22479,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -25098,15 +22488,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -25115,15 +22497,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -25132,15 +22506,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -25149,15 +22515,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -25166,15 +22524,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -25183,15 +22533,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -25200,15 +22542,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -25217,15 +22551,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -25234,15 +22560,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -25251,15 +22569,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -25268,15 +22578,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -25383,15 +22685,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-01",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-01"
         },
         {
           "weekday": 2,
@@ -25400,15 +22694,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-08",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-08"
         },
         {
           "weekday": 2,
@@ -25417,15 +22703,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-15",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-15"
         },
         {
           "weekday": 2,
@@ -25434,15 +22712,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-22",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-22"
         },
         {
           "weekday": 2,
@@ -25451,15 +22721,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-29",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-09-29"
         },
         {
           "weekday": 2,
@@ -25468,15 +22730,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-06",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-06"
         },
         {
           "weekday": 2,
@@ -25485,15 +22739,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-13",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-13"
         },
         {
           "weekday": 2,
@@ -25502,15 +22748,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-20",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-20"
         },
         {
           "weekday": 2,
@@ -25519,15 +22757,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-27",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-10-27"
         },
         {
           "weekday": 2,
@@ -25536,15 +22766,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-03",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-03"
         },
         {
           "weekday": 2,
@@ -25553,15 +22775,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-10",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-10"
         },
         {
           "weekday": 2,
@@ -25570,15 +22784,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-17",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-17"
         },
         {
           "weekday": 2,
@@ -25587,15 +22793,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-24",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-11-24"
         },
         {
           "weekday": 2,
@@ -25604,15 +22802,7 @@
           "classroom": "",
           "sourcePeriod": 4,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-01",
-          "sourcePeriods": [
-            4,
-            5,
-            6,
-            7,
-            8,
-            9
-          ]
+          "date": "2026-12-01"
         }
       ],
       "sourceNativePeriods": [
@@ -26029,12 +23219,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-02",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-09-02"
         },
         {
           "weekday": 3,
@@ -26043,12 +23228,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-09",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-09-09"
         },
         {
           "weekday": 3,
@@ -26057,12 +23237,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-16",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-09-16"
         },
         {
           "weekday": 3,
@@ -26071,12 +23246,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-23",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-09-23"
         },
         {
           "weekday": 3,
@@ -26085,12 +23255,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-09-30",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-09-30"
         },
         {
           "weekday": 3,
@@ -26099,12 +23264,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-07",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-10-07"
         },
         {
           "weekday": 3,
@@ -26113,12 +23273,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-14",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-10-14"
         },
         {
           "weekday": 3,
@@ -26127,12 +23282,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-21",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-10-21"
         },
         {
           "weekday": 3,
@@ -26141,12 +23291,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-10-28",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-10-28"
         },
         {
           "weekday": 3,
@@ -26155,12 +23300,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-04",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-11-04"
         },
         {
           "weekday": 3,
@@ -26169,12 +23309,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-11",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-11-11"
         },
         {
           "weekday": 3,
@@ -26183,12 +23318,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-18",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-11-18"
         },
         {
           "weekday": 3,
@@ -26197,12 +23327,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-11-25",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-11-25"
         },
         {
           "weekday": 3,
@@ -26211,12 +23336,7 @@
           "classroom": "",
           "sourcePeriod": 5,
           "sourceMinuteUnit": 50,
-          "date": "2026-12-02",
-          "sourcePeriods": [
-            5,
-            6,
-            7
-          ]
+          "date": "2026-12-02"
         }
       ],
       "sourceNativePeriods": [
