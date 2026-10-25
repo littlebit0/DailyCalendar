@@ -1,0 +1,242 @@
+
+
+
+
+<link href="/common/bootstrap-table-master/dist/bootstrap-table.min.css" rel="stylesheet">
+<script src="/common/bootstrap-table-master/dist/bootstrap-table.min.js"></script>
+<div id="popups">
+<section class="sec-2">
+	<div class="sec-body">
+		<!-- 검색영역 -->
+		<div class="search-box">
+            <div class="col-md req-txt"><span class="text-danger">*표시는 필수 입력 사항입니다.</span></div>
+			<div class="b-table-box flex-col-1" role="table" aria-label="조회">
+				<div class="b-row-box" role="row">
+					<div class="b-row-item">
+						<div class="b-title-box" role="rowheader">
+							<label class="req" data-lang>학년도/학기</label>
+						</div>
+						<div class="b-con-box" role="cell">
+							<div class="row">
+								<div class="col-xl-4">
+									<input id="SCH_SYEAR" class="form-control" type="number" maxlength="4" oninput="maxLengthCheck(this)" title="학년도입력">
+								</div>
+								<div class="col-xl-4">
+									<select id="SCH_TERM_GCD" class="form-control" title="학기선택"></select>
+								</div>
+								<div class="col-xl-4">
+									<div class="btn-box">
+										<div class="form-row">
+											<div class="col-auto">
+												<button class="btn search-btn" type="button" onclick="javascript:return fn_openChangeSchPopup();" data-lang="">조회</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- <div class="b-con-box" role="cell">
+									<input id="SCH_COMMON_CD" class="form-control" onkeyup="gfn_com_enterFunc(event,fn_sch);">
+								</div> -->
+					</div>
+				</div>
+			</div>
+			<!-- <div class="btn-box">
+				<div class="form-row">
+					<div class="col-auto">
+						<button class="btn search-btn" type="button" onclick="javascript:return fn_openChangeSchPopup();" data-lang="">조회</button>
+					</div>
+				</div>
+			</div> -->
+		</div>
+		<!-- /END 검색영역 -->
+
+
+		<div class="table-box">
+			<div class="table-header">
+				<div class="header-item">
+					<span class="mr-2"> Total <span class="text-total">4</span> 건
+					</span>
+				</div>
+
+			</div>
+			<div class="table-body">
+				<table class="table table-hover schTable"  data-toggle="table" data-show-column="true">
+					<!--data-height="400"  -->
+					<caption>학사일정정보</caption>
+					<colgroup>
+						<col style="width:10%">
+						<col style="width:45%">
+						<col style="width:45%">
+					</colgroup>
+					<thead>
+						<tr>
+							<th scope="col">No</th>
+							<th scope="col">일정</th>
+							<th scope="col">내용</th>
+
+						</tr>
+					</thead>
+					<tbody id="resultTbody">
+
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>1</td>
+								<td>2026-10-29 (목) 09:00<br/> ~ 2026-11-04 (수) 18:00</td>
+								<td> 겨울계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>2</td>
+								<td>2026-11-13 (금) 09:00<br/> ~ 2026-11-17 (화) 18:00</td>
+								<td> 겨울계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>3</td>
+								<td>2026-11-25 (수) 09:00<br/> ~ 2026-11-26 (목) 18:00</td>
+								<td> 겨울계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+							
+							
+							
+							
+							
+							
+							
+								
+							
+							
+							<tr>
+								<td>4</td>
+								<td>2026-12-04 (금) 09:00<br/> ~ 2026-12-07 (월) 18:00</td>
+								<td> 겨울계절 및 도약수업 복학신청기간</td>
+							</tr>
+						
+
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</section>
+</div>
+
+<script>
+	$(document).ready(
+			function() {
+				loadLangInfo("popup");
+				/*학기 공통코드 바인드*/
+				$("#SCH_TERM_GCD").dropDownList({
+					dataSource : null,
+					commonCode : "0001_TERM_GCD",
+					dataTextField : "COMMON_DETAIL_CD_KOR_NM",
+					dataValueField : "COMMON_DETAIL_CD",
+					optionLabel : "",
+					optionValue : "",
+					defaultValue : "",
+					expnCondition : "AND CHAR_1_CONTENT LIKE '%A%' ",
+					dataBound : function(e) {
+						$("#SCH_SYEAR").val("2027");
+						$("#SCH_TERM_GCD").val("0010");
+					}
+				});
+
+				setTimeout(function() {
+					var theader_cell = $("#resultTbody").closest(".fixed-table-container").find(".fixed-table-header").find(".fht-cell");
+					if ($("#resultTbody").find("tr").eq(0).attr("class") != "no-records-found") {
+							$("#resultTbody").find("tr").eq(0).find("td").each(function(i, o) {
+									theader_cell.eq(i).css("width",$(this).css("width"));
+							});
+					}
+					if ($("#resultTbody").closest(".fixed-table-body").hasVerticalScrollBar()) {
+						theader_cell.filter(":last").css("width",parseInt(theader_cell.filter(":last").css("width").replace('px', '')) + 15);
+						$("#resultTbody").attr("tabindex",0);
+					} else {
+						$("#resultTbody").closest(".fixed-table-container").find(".fixed-table-header").css("margin-right", "");
+					}
+				}, 500);
+				
+				// 웹접근성 수정
+				// 모달 열린 후 포커스 트랩
+			    setTimeout(function() {
+			        var popup = $("#popups").closest(".modal, .layer-popup, .popup");
+			        if (popup.length === 0) popup = $(".modal.show, .layer-popup:visible").last();
+
+			        var focusable = popup.find('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled])')
+			            .not('.linkEndAppend, [tabindex="-1"]');
+
+			        if (focusable.length > 0) {
+			            var first = focusable[0];
+			            var last = focusable[focusable.length - 1];
+
+			            popup.off('keydown.focustrap').on('keydown.focustrap', function(e) {
+			                if (e.key !== 'Tab') return;
+
+			                if (e.shiftKey) {
+			                    if (document.activeElement === first) {
+			                        e.preventDefault();
+			                        last.focus();
+			                    }
+			                } else {
+			                    if (document.activeElement === last) {
+			                        e.preventDefault();
+			                        first.focus();
+			                    }
+			                }
+			            });
+
+			            first.focus();
+			        }
+			    }, 300);
+
+			});
+
+	function fn_openChangeSchPopup() {
+		var reqData = {};
+		reqData.SCH_SYEAR = $("#SCH_SYEAR").val();
+		reqData.SCH_TERM_GCD = $("#SCH_TERM_GCD").val();
+		gfn_bbs_changeModalPopup({
+			width : 600,
+			height : 650,
+			index : 5,
+			target : null,
+			title : "학사일정 ",
+			include : '/core/main/selectScheduleListPop.do',
+			reqData : reqData,
+			dataBound : function(e) {
+	        }
+	    });
+	}
+</script>
