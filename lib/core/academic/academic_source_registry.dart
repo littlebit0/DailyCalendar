@@ -50,6 +50,7 @@ import 'swu_academic_source.dart';
 import 'uos_academic_source.dart';
 import 'ut_academic_source.dart';
 import 'yonsei_academic_source.dart';
+import 'yu_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
 class AcademicSourceRegistration {
@@ -408,6 +409,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000149',
     campusIds: {'academyinfo:0000149', 'academyinfo:0000150'},
     create: YonseiAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'yu',
+    institutionId: 'academyinfo:0000151',
+    campusIds: {'academyinfo:0000151'},
+    create: YuAcademicSource.new,
   ),
 ];
 
