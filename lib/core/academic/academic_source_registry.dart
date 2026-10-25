@@ -32,6 +32,7 @@ import 'nsu_academic_source.dart';
 import 'pcu_academic_source.dart';
 import 'pknu_academic_source.dart';
 import 'pnu_academic_source.dart';
+import 'sch_academic_source.dart';
 import 'seoultech_academic_source.dart';
 import 'skku_academic_source.dart';
 import 'sku_academic_source.dart';
@@ -359,6 +360,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000136',
     campusIds: {'academyinfo:0000136'},
     create: SungshinAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'sch',
+    institutionId: 'academyinfo:0000142',
+    campusIds: {'academyinfo:0000142'},
+    create: SchAcademicSource.new,
   ),
 ];
 
