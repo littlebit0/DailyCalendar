@@ -1,0 +1,6506 @@
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE HTML>
+<html lang="ko">
+<head>
+<meta charset="utf-8" >
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>
+
+	    [ 
+
+
+
+학사일정 > 학사일정 > 학사안내 > 대학생활 > 
+]
+	
+</title>
+
+<meta name="author" content="건양대학교 대표홈페이지, 학사일정" >
+<meta name="Keywords" content="건양대학교 대표홈페이지, 학사일정" >
+<meta name="description" content="건양대학교 대표홈페이지, 학사일정" >
+<meta name="copyright" content="건양대학교 대전 메디컬 캠퍼스 : [주소] 35365 대전광역시 서구 관저동로 158 [전화] 042-600-1631~6 [팩스] 042-600-1641 / 논산 창의융합캠퍼스 : [주소] 32992 충청남도 논산시 대학로 121 [전화] 041-730-5114 [팩스] 041-733-2070" >
+<meta name="format-detection" content="telephone=no">
+
+<!-- 파비콘 -->
+<link href="/images/common/favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link href="/images/common/favicon_152.png" rel="apple-touch-icon">
+
+<!-- 폰트 -->
+<link rel="stylesheet" type="text/css" href="/css/font/pretendard/fontStyle.css">
+<link rel="stylesheet" type="text/css" href="/css/common/font.css">
+<link rel="stylesheet" type="text/css" href="/css/kor/2022/font.css">
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="/css/common/common.css" ><!--초기화-->
+<link rel="stylesheet" type="text/css" href="/css/common/component.css" ><!--기본스타일-->
+<link rel="stylesheet" type="text/css" href="/css/common/ui.css" ><!--도식스타일-->
+<link rel="stylesheet" type="text/css" href="/css/common/prog.css" ><!--프로그램-->
+<link rel="stylesheet" type="text/css" href="/css/kor/2026/layout.css?ver2608241824">
+<link rel="stylesheet" type="text/css" href="/css/kor/content.css" ><!--건양대 컨텐츠-->
+
+<!-- 라이브러리 script -->
+<script src="/js/common/jquery-1.11.2.min.js"></script>
+<script src="/js/common/jquery.easing.1.3.js"></script>
+
+<!-- script -->
+<script src="/js/common/script.js"></script><!--자주사용 스크립트-->
+<script src="/js/common/lnb.js"></script><!--왼쪽메뉴-->
+<script src="/js/common/content.js"></script><!--전체공통-->
+<script src="/js/common/common-scroll.js"></script><!--스크롤롤링-->
+<script src="/js/common/common-popup.js"></script>
+<script src="/js/kor/2026/topmenu.js"></script><!--메뉴동작-->
+<script src="/js/kor/content.js"></script><!--과공통-->
+<script src="/js/kor/2020/script.js"></script>
+<script defer src="/js/kor/2026/layout.js"></script>
+<script defer src="/js/kor/2026/translate.js"></script>
+<script src="https://www.google.com/jsapi"></script>
+<script>
+google.load("visualization", "1", {packages:["corechart"]});
+(function(){
+$(function() {
+ 	var chartCount =  parseInt($(".chartCount").val());
+
+	google.setOnLoadCallback(drawChart);
+	function drawChart() {
+
+		 for(var i=1; i<=chartCount; i++){
+
+	 		(function (i) {
+	 				 var val1 = Number(document.getElementById('value0'+i+'_01').value);
+	 				 var val2 = Number(document.getElementById('value0'+i+'_02').value);
+	 				 var val3 = Number(document.getElementById('value0'+i+'_03').value);
+
+	  				data = google.visualization.arrayToDataTable([
+	    			["Element", "", { role: "style" } ],
+	    			[document.getElementById('year0'+i+'_01').value+"년", val1, "#7dc242"],
+	    			[document.getElementById('year0'+i+'_02').value+"년", val2, "#7dc242"],
+	    			[document.getElementById('year0'+i+'_03').value+"년", val3, "#00693f"],
+
+	    				]);
+
+	 	var view = new google.visualization.DataView(data);
+	 		 view.setColumns([0, 1,
+	                   	{ calc: "stringify",
+	                    	 sourceColumn: 1,
+	                    	 type: "string",
+	                    	 role: "annotation" },
+	                   2]);
+
+	 		 var formatter = new google.visualization.NumberFormat(
+	 			      {pattern: '###,###.###'});
+	 			      formatter.format(data, 1);
+
+	 		 var options = {
+	   					title: document.getElementById('name0'+i).value,
+	   					titleTextStyle: {fontSize: 13},
+	    				bar: {groupWidth: "70%"},
+	    				legend: { position: "none" },
+		  				vAxis: {
+		  				format: 'decimal',
+		  				minValue: 0,
+						gridlines: { count: 0 }
+
+	     		 }
+	 		 };
+	 			 var chart = new google.visualization.ColumnChart(document.getElementById("chart-container"+i));
+	  			chart.draw(view, options);
+	 	})(i);
+	 	};
+
+	 };
+});
+}());
+</script>
+<!--//스크립트-->
+<script src="/js/flexcroll/flexcroll.js"></script>
+<!-- <script src="/js/print/jquery.printElement.js"></script> -->
+<script type="text/javascript">
+  $(document).ready(function(){ responseTable(); });
+  $(window).resize(function(){ responseTable(); });
+</script>
+
+
+<script src="/js/common/paginate.js"></script>
+<script>
+	//페이지목록 수 :  
+	//페이지 갯수 : 
+	//현재 페이지번호  : 
+	//총갯수 :  
+	$(document).ready(function(){
+		var a = "";
+		var mode = "";
+		if(mode == "list"){
+			if(a != ""){
+				paginate('','','','');
+			}
+		}
+	});
+</script>
+
+
+<script src="/js/print/jquery.PrintArea.js"></script>
+<script>
+$(function(){
+	function _in(event){
+		$("#txt").printArea({
+			popWd:$("#txt").outerWidth(),
+			popHt:$("#txt").outerHeight(),
+			mode:"popup",
+			popClose:true,
+			//extraCss:"/common/css/print.css",
+			retainAttr:["id","class"],
+			extraHead:"<meta charset=\"utf-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\">"
+		});
+
+		event.preventDefault();
+	}
+
+	$("#print").on("click",_in);
+});
+</script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-8WFM43PMX1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-8WFM43PMX1');
+</script>
+
+</head>
+
+<body>
+  <div id="shadow_device"></div>
+  <div id="touchArea"></div>
+
+	<!-- 스킵네비케이션 -->
+	<p id="skipToContent">
+		<a href="#location_box">본문 바로가기</a>
+		<a href="#tm">대메뉴 바로가기</a>
+		<a href="#lnb">하위메뉴 바로가기</a>
+	</p>
+	<!-- 스킵네비케이션 -->
+<div id="swrap">
+
+	<!-- header -->
+	
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+  function formChk(){
+    var qt = $("input[name=qt]").val();
+    var frm = document.topSearchForm;
+    frm.action = "http://search.konyang.ac.kr:8080/main.jsp?qt="+qt;
+    /*   frm.submit();  */
+  }
+</script>
+
+<script type="text/javascript">
+	function logout() {
+		$.ajax({
+			type : "POST",
+			url : "/uat/uia/userLogout.do",
+			dataType : "json",
+			success : function(data) {
+				$("#logout").css('display', 'none');
+			},
+			error : function(data, status, err) {
+				$("#logout").css('display', 'none');
+			}
+		});
+
+		alert("로그아웃 되었습니다.");
+	}
+</script>
+
+<header id="header">
+  <div class="header-wrap">
+    <div class="header-layout layout">
+
+      <div class="logo-wrap">
+        <h1 class="main-logo">
+          <a href="/kor.do">
+            <span class="blind">건양대학교</span>
+          </a>
+        </h1>
+      </div>
+
+      <nav id="gnb" class="gnb">
+        <div id="gnbwrap" class="gnb-wrap">
+           <ul id="tm" class="depth1-ul">
+           <li class='th1'>
+<a class='th1_lnk' href="/kor/sub01_01_05.do">대학소개</a>
+<div class="depth1-content">
+<div class="layout">
+<div class="depth1-header">
+<strong class="depth1-title">대학소개</strong>
+<p class="depth1-desc">최고의 경쟁력을 갖춘 모범사학 대학, 꿈과 미래에 투자하는 대학 건양대학교</p>
+</div>
+<ul id='summery1' class="depth2-ul">
+<li class='th2_1 th2_lnk'><a href="/kor/sub01_01_05.do" class='th2_link'><span class='icon'></span>열린총장실</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub01_01_05.do" target="_self" ><span>인사말</span></a></li>
+<li><a href="/kor/sub01_01_02.do" target="_self" ><span>프로필</span></a></li>
+<li><a href="/kor/sub01_01_03.do" target="_self" ><span>공감 총장실</span></a></li>
+</ul>
+</li>
+<li class='th2_2 th2_lnk'><a href="/kor/sub01_02_09.do" class='th2_link'><span class='icon'></span>건양소개</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub01_02_09.do" target="_self" ><span>설립자 소개</span></a></li>
+<li><a href="/kor/sub01_02_01.do" target="_self" ><span>한눈에 보는 건양</span></a></li>
+<li><a href="/kor/sub01_02_02_01.do" target="_self" ><span>캠퍼스 특성화</span></a></li>
+<li><a href="/kor/sub01_02_04.do" target="_self" ><span>교육목표 및 인재상</span></a></li>
+<li><a href="/kor/sub01_02_03.do" target="_self" ><span>비전체계도</span></a></li>
+<li><a href="/kor/sub01_02_08.do" target="_self" ><span>발전전략</span></a></li>
+<li><a href="/kor/sub01_02_05_01.do" target="_self" ><span>연혁</span></a></li>
+<li><a href="/kor/sub01_02_06_01.do" target="_self" ><span>상징</span></a></li>
+<li><a href="/kor/sub01_02_10.do" target="_self" ><span>건양프렌즈(홍보대사)</span></a></li>
+</ul>
+</li>
+<li class='th2_3 th2_lnk'><a href="/kor/sub01_03_01_01.do" class='th2_link'><span class='icon'></span>대학현황</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub01_03_01_01.do" target="_self" ><span>학교법인</span></a></li>
+<li><a href="/kor/sub01_03_03.do" target="_self" ><span>주요성과</span></a></li>
+<li><a href="http://rule.konyang.ac.kr" target="_blank" ><span>학칙 · 규정</span></a></li>
+<li><a href="/kor/sub01_03_05_01.do" target="_self" ><span>대학평의원회</span></a></li>
+<li><a href="/kor/sub01_03_06_01.do" target="_self" ><span>등록금심의위원회</span></a></li>
+<li><a href="/kor/sub01_03_07_01.do" target="_self" ><span>기금운용심의위원회</span></a></li>
+</ul>
+</li>
+<li class='th2_4 th2_lnk'><a href="/kor/sub01_04_01.do" class='th2_link'><span class='icon'></span>대학기관</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub01_04_01.do" target="_self" ><span>조직도</span></a></li>
+<li><a href="/prog/buseosogae/kor/sub01_04_02_02/view.do?buseo_cd=24400100" target="_self" ><span>행정부서</span></a></li>
+<li><a href="/kor/sub01_04_06_01.do" target="_self" ><span>국책사업통합관리본부</span></a></li>
+<li><a href="/kor/sub01_04_04.do" target="_self" ><span>학군단</span></a></li>
+<li><a href="/kor/sub01_04_05.do" target="_self" ><span>예비군대대</span></a></li>
+<li><a href="https://audit.konyang.ac.kr/" target="_blank" ><span>감사행정</span></a></li>
+<li><a href="https://audit.konyang.ac.kr/audit/sub04_06.do" target="_blank" ><span>공익제보</span></a></li>
+</ul>
+</li>
+<li class='th2_5 th2_lnk'><a href="/prog/tel/kor/sub01_05_01/search.do" class='th2_link'><span class='icon'></span>캠퍼스안내</a>
+<ul class="depth3-ul">
+<li><a href="/prog/tel/kor/sub01_05_01/search.do" target="_self" ><span>전화번호안내</span></a></li>
+<li><a href="http://www.konyang.ac.kr/cyber/" target="_blank" ><span>캠퍼스맵</span></a></li>
+<li><a href="/kor/sub01_05_03_01.do" target="_self" ><span>찾아오시는길</span></a></li>
+</ul>
+</li>
+<li class='th2_6 th2_lnk'><a href="https://glocal.konyang.ac.kr/" class='th2_link'><span class='icon'></span>국책사업</a>
+<ul class="depth3-ul">
+<li><a href="https://glocal.konyang.ac.kr/" target="_blank" ><span>글로컬대학사업추진단</span></a></li>
+<li><a href="https://kyusw.konyang.ac.kr/" target="_blank" ><span>SW중심대학사업단</span></a></li>
+<li><a href="https://human.konyang.ac.kr/human.do" target="_blank" ><span>대학혁신지원사업단</span></a></li>
+<li><a href="https://rise.konyang.ac.kr/linc.do" target="_blank" ><span>앵커사업단</span></a></li>
+<li><a href="https://huss.konyang.ac.kr/" target="_blank" ><span>인문사회융합인재양성사업단</span></a></li>
+<li><a href="https://youngjae.konyang.ac.kr/" target="_blank" ><span>AI·정보보호영재교육원</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li class='th1'>
+<a class='th1_lnk' href="/kor/sub02_01.do">입학안내</a>
+<div class="depth1-content">
+<div class="layout">
+<div class="depth1-header">
+<strong class="depth1-title">입학안내</strong>
+<p class="depth1-desc">홈페이지를 방문하시면 건양대학교 입학에 관한 정보를 확인하실 수 있습니다.</p>
+</div>
+<ul id='summery2' class="depth2-ul">
+<li class='th2_1 th2_lnk'><a href="/kor/sub02_01.do" class='th2_link'><span class='icon'></span>입학홈페이지</a>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li class='th1'>
+<a class='th1_lnk' href="/kor/sub03_01_01.do">대학</a>
+<div class="depth1-content">
+<div class="layout">
+<div class="depth1-header">
+<strong class="depth1-title">대학</strong>
+<p class="depth1-desc">글로벌 경쟁력을 갖춘 인재 육성, 진리탐구의 장을 제공하는 건양대학교</p>
+</div>
+<ul id='summery3' class="depth2-ul">
+<li class='th2_1 th2_lnk'><a href="/kor/sub03_01_01.do" class='th2_link'><span class='icon'></span>캠퍼스별 대학현황</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_01_01.do" target="_self" ><span>메디컬캠퍼스</span></a></li>
+<li><a href="/kor/sub03_01_03.do" target="_self" ><span>글로컬캠퍼스</span></a></li>
+<li><a href="/kor/sub03_18_19.do" target="_self" ><span>2025학년도 이전</span></a></li>
+</ul>
+</li>
+<li class='th2_2 th2_lnk'><a href="/prog/buseosogae/kor/sub03_02_02/view.do?buseo_cd=30700000" class='th2_link'><span class='icon'></span>의과대학</a>
+<ul class="depth3-ul">
+<li><a href="/prog/buseosogae/kor/sub03_02_02/view.do?buseo_cd=30700000" target="_self" ><span>단과대학 소개</span></a></li>
+<li><a href="/kor/sub03_02_01_01.do" target="_self" ><span>의학과</span></a></li>
+<li><a href="/kor/sub03_02_03_01.do" target="_self" ><span>데이터의학과</span></a></li>
+</ul>
+</li>
+<li class='th2_3 th2_lnk'><a href="/prog/buseosogae/kor/sub03_03_02/view.do?buseo_cd=31700000" class='th2_link'><span class='icon'></span>간호대학</a>
+<ul class="depth3-ul">
+<li><a href="/prog/buseosogae/kor/sub03_03_02/view.do?buseo_cd=31700000" target="_self" ><span>단과대학 소개</span></a></li>
+<li><a href="/kor/sub03_03_01_01.do" target="_self" ><span>간호학과</span></a></li>
+</ul>
+</li>
+<li class='th2_4 th2_lnk'><a href="/kor/sub03_04_09.do" class='th2_link'><span class='icon'></span>의과학계열</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_04_09.do" target="_self" ><span>의과학계열 소개</span></a></li>
+<li><a href="/kor/sub03_04_01_01.do" target="_self" ><span>작업치료학과</span></a></li>
+<li><a href="/kor/sub03_04_02_01.do" target="_self" ><span>병원경영학과</span></a></li>
+<li><a href="/kor/sub03_04_03_01.do" target="_self" ><span>안경광학과</span></a></li>
+<li><a href="/kor/sub03_04_04_01.do" target="_self" ><span>임상병리학과</span></a></li>
+<li><a href="/kor/sub03_04_05_01.do" target="_self" ><span>방사선학과</span></a></li>
+<li><a href="/kor/sub03_04_06_01.do" target="_self" ><span>치위생학과</span></a></li>
+<li><a href="/kor/sub03_04_07_01.do" target="_self" ><span>물리치료학과</span></a></li>
+<li><a href="/kor/sub03_04_08_01.do" target="_self" ><span>응급구조학과</span></a></li>
+</ul>
+</li>
+<li class='th2_5 th2_lnk'><a href="/kor/sub03_05_06.do" class='th2_link'><span class='icon'></span>의료공과계열</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_05_06.do" target="_self" ><span>의료공과계열 소개</span></a></li>
+<li><a href="/kor/sub03_05_01_01.do" target="_self" ><span>의공학과</span></a></li>
+<li><a href="/kor/sub03_05_02_01.do" target="_self" ><span>의료IT공학과</span></a></li>
+<li><a href="/kor/sub03_05_03_01.do" target="_self" ><span>의료공간디자인학과</span></a></li>
+<li><a href="/kor/sub03_05_04_01.do" target="_self" ><span>의료신소재학과</span></a></li>
+<li><a href="/kor/sub03_05_05_01.do" target="_self" ><span>제약생명공학과</span></a></li>
+</ul>
+</li>
+<li class='th2_6 th2_lnk'><a href="/kor/sub03_13_01.do" class='th2_link'><span class='icon'></span>AI∙SW융합대학</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_13_01.do" target="_self" ><span>단과대학 소개</span></a></li>
+<li><a href="/kor/sub03_13_02_01.do" target="_self" ><span>인공지능학과</span></a></li>
+<li><a href="/kor/sub03_13_03_01.do" target="_self" ><span>스마트보안학과</span></a></li>
+<li><a href="/kor/sub03_13_04_01.do" target="_self" ><span>기업소프트웨어학부</span></a></li>
+<li><a href="/kor/sub03_13_05_01.do" target="_self" ><span>국방XR학부</span></a></li>
+<li><a href="/kor/sub03_13_06_01.do" target="_self" ><span>스마트팜학부</span></a></li>
+</ul>
+</li>
+<li class='th2_7 th2_lnk'><a href="/kor/sub03_15_02_01.do" class='th2_link'><span class='icon'></span>국방산학융합원</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_15_02_01.do" target="_self" ><span>유무인항공학과</span></a></li>
+<li><a href="/kor/sub03_15_03_01.do" target="_self" ><span>국방반도체공학과</span></a></li>
+<li><a href="/kor/sub03_15_04_01.do" target="_self" ><span>ND산업디자인학부</span></a></li>
+<li><a href="/kor/sub03_15_06_01.do" target="_self" ><span>방위산업공학부 재난안전소방학전공</span></a></li>
+<li><a href="/kor/sub03_15_05_01.do" target="_self" ><span>방위산업공학부 방위산업공학전공</span></a></li>
+</ul>
+</li>
+<li class='th2_8 th2_lnk'><a href="/kor/sub03_16_02_01.do" class='th2_link'><span class='icon'></span>국방바이오연구원</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_16_02_01.do" target="_self" ><span>국방산업경영학부</span></a></li>
+<li><a href="/kor/sub03_16_03_01.do" target="_self" ><span>임상의약바이오학과</span></a></li>
+<li><a href="/kor/sub03_16_04_01.do" target="_self" ><span>식품생명공학과</span></a></li>
+<li><a href="/kor/sub03_16_05_01.do" target="_self" ><span>휴먼사이언스학부 글로벌의료뷰티학전공</span></a></li>
+<li><a href="/kor/sub03_16_06_01.do" target="_self" ><span>휴먼사이언스학부 스포츠의학전공</span></a></li>
+</ul>
+</li>
+<li class='th2_9 th2_lnk'><a href="/kor/sub03_17_02_01.do" class='th2_link'><span class='icon'></span>사회과학학술원</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_17_02_01.do" target="_self" ><span>심리상담치료학과</span></a></li>
+<li><a href="/kor/sub03_17_03_01.do" target="_self" ><span>유아교육과</span></a></li>
+<li><a href="/kor/sub03_17_04_01.do" target="_self" ><span>재활퍼스널트레이닝학과</span></a></li>
+<li><a href="/kor/sub03_17_05_01.do" target="_self" ><span>국방경찰행정학부</span></a></li>
+<li><a href="/kor/sub03_17_06_01.do" target="_self" ><span>군사학과</span></a></li>
+<li><a href="/kor/sub03_17_07_01.do" target="_self" ><span>사회복지학과</span></a></li>
+<li><a href="/kor/sub03_17_08_01.do" target="_self" ><span>특수교육과</span></a></li>
+</ul>
+</li>
+<li class='th2_10 th2_lnk'><a href="/kor/sub03_18_19.do" class='th2_link'><span class='icon'></span>2025학년도 이전</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_18_19.do" target="_self" ><span>2025학년도 이전 계열별 학부과 안내</span></a></li>
+<li><a href="/kor/sub03_18_01_01.do" target="_self" ><span>아동교육학과</span></a></li>
+<li><a href="/kor/sub03_18_02_01.do" target="_self" ><span>초등특수교육과</span></a></li>
+<li><a href="/kor/sub03_18_03_01.do" target="_self" ><span>중등특수교육과</span></a></li>
+<li><a href="/kor/sub03_18_04_01.do" target="_self" ><span>디지털콘텐츠학과</span></a></li>
+<li><a href="/kor/sub03_18_05_01.do" target="_self" ><span>시각디자인학과</span></a></li>
+<li><a href="/kor/sub03_18_06_01.do" target="_self" ><span>경영학부</span></a></li>
+<li><a href="/kor/sub03_18_07_01.do" target="_self" ><span>금융세무학부</span></a></li>
+<li><a href="/kor/sub03_18_08_01.do" target="_self" ><span>호텔관광학과</span></a></li>
+<li><a href="/kor/sub03_18_09_01.do" target="_self" ><span>글로벌경영학과</span></a></li>
+<li><a href="/kor/sub03_18_10_01.do" target="_self" ><span>마케팅비즈니스학과</span></a></li>
+<li><a href="/kor/sub03_18_11_01.do" target="_self" ><span>금융학과</span></a></li>
+<li><a href="/kor/sub03_18_12_01.do" target="_self" ><span>세무학과</span></a></li>
+<li><a href="/kor/sub03_18_13_01.do" target="_self" ><span>융합디자인학과</span></a></li>
+<li><a href="/kor/sub03_18_14_01.do" target="_self" ><span>임상의약학과</span></a></li>
+<li><a href="/kor/sub03_18_15_01.do" target="_self" ><span>의약바이오학과</span></a></li>
+<li><a href="/kor/sub03_18_16_01.do" target="_self" ><span>드론기계학과</span></a></li>
+<li><a href="/kor/sub03_18_17_01.do" target="_self" ><span>융합IT학과</span></a></li>
+<li><a href="/kor/sub03_18_18_01.do" target="_self" ><span>글로벌프론티어학과</span></a></li>
+</ul>
+</li>
+<li class='th2_11 th2_lnk'><a href="/kor/sub03_14_02_01.do" class='th2_link'><span class='icon'></span>International College</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub03_14_02_01.do" target="_self" ><span>K-문화산업학과</span></a></li>
+<li><a href="/kor/sub03_14_03_01.do" target="_self" ><span>국제의료관광학과</span></a></li>
+<li><a href="/kor/sub03_14_04_01.do" target="_self" ><span>국제군사학과</span></a></li>
+<li><a href="/kor/sub03_14_05_01.do" target="_self" ><span>글로벌헬스케어서비스학과</span></a></li>
+</ul>
+</li>
+<li class='th2_12 th2_lnk'><a href="/prog/buseosogae/kor/sub03_11_01/view.do?buseo_cd=32200000" class='th2_link'><span class='icon'></span>휴머니티칼리지</a>
+<ul class="depth3-ul">
+<li><a href="/prog/buseosogae/kor/sub03_11_01/view.do?buseo_cd=32200000" target="_self" ><span>단과대학 소개</span></a></li>
+<li><a href="/kor/sub03_11_02_01.do" target="_self" ><span>인문융합학부</span></a></li>
+<li><a href="/kor/sub03_11_03_01.do" target="_self" ><span>기초교육학부</span></a></li>
+<li><a href="/kor/sub03_11_05_01.do" target="_self" ><span>브리꼴레르학부</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li class='th1'>
+<a class='th1_lnk' href="http://kygrad.konyang.ac.kr/">대학원</a>
+<div class="depth1-content">
+<div class="layout">
+<div class="depth1-header">
+<strong class="depth1-title">대학원</strong>
+<p class="depth1-desc">우수한 교수진과 첨단 교육여건, 실용적 인재를 양성하는 건양대학교 대학원</p>
+</div>
+<ul id='summery4' class="depth2-ul">
+<li class='th2_1 th2_lnk'><a href="http://kygrad.konyang.ac.kr/" class='th2_link'><span class='icon'></span>일반대학원</a>
+<ul class="depth3-ul">
+<li><a href="http://kygrad.konyang.ac.kr/" target="_blank" ><span>일반대학원(박사·석사)</span></a></li>
+</ul>
+</li>
+<li class='th2_2 th2_lnk'><a href="http://kygrad.konyang.ac.kr/" class='th2_link'><span class='icon'></span>특수대학원</a>
+<ul class="depth3-ul">
+<li><a href="http://kygrad.konyang.ac.kr/" target="_blank" ><span>경영사회복지대학원</span></a></li>
+<li><a href="http://kygrad.konyang.ac.kr/" target="_blank" ><span>보건복지대학원</span></a></li>
+<li><a href="http://kygrad.konyang.ac.kr/" target="_blank" ><span>안보대학원</span></a></li>
+<li><a href="http://kygrad.konyang.ac.kr/" target="_blank" ><span>상담대학원</span></a></li>
+<li><a href="http://kygrad.konyang.ac.kr/" target="_blank" ><span>AX융합대학원</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li class='th1'>
+<a class='th1_lnk' href="/prog/rsrchAct/kor/sub05_01_01/list.do">연구·산학</a>
+<div class="depth1-content">
+<div class="layout">
+<div class="depth1-header">
+<strong class="depth1-title">연구·산학</strong>
+<p class="depth1-desc">건양인의 미래를 생각하는 대학 건양인의 꿈을 키워드립니다.</p>
+</div>
+<ul id='summery5' class="depth2-ul">
+<li class='th2_1 th2_lnk'><a href="https://r-bay.co.kr/agency/main/bjdteElITjJvQ010Y01Nb2dJWDBrdz09" class='th2_link'><span class='icon'></span>생명윤리위원회(IRB)</a>
+</li>
+<li class='th2_2 th2_lnk'><a href="/prog/rsrchAct/kor/sub05_01_01/list.do" class='th2_link'><span class='icon'></span>연구성과</a>
+<ul class="depth3-ul">
+<li><a href="/prog/rsrchAct/kor/sub05_01_01/list.do" target="_self" ><span>연구활동</span></a></li>
+</ul>
+</li>
+<li class='th2_3 th2_lnk'><a href="/kor/sub05_02_01.do" class='th2_link'><span class='icon'></span>부설연구소 및 센터</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub05_02_01.do" target="_self" ><span>군사과학연구소</span></a></li>
+<li><a href="/kor/sub05_02_02.do" target="_self" ><span>명곡안연구소</span></a></li>
+<li><a href="/kor/sub05_02_03.do" target="_self" ><span>미래융합기술연구원</span></a></li>
+<li><a href="/kor/sub05_02_04.do" target="_self" ><span>예학교육연구원</span></a></li>
+<li><a href="/kor/sub05_02_05.do" target="_self" ><span>창의력개발연구소</span></a></li>
+<li><a href="/kor/sub05_02_06.do" target="_self" ><span>충남지역문화연구소</span></a></li>
+<li><a href="/kor/sub05_02_07.do" target="_self" ><span>공공안전연구소</span></a></li>
+<li><a href="/kor/sub05_02_08.do" target="_self" ><span>마음행복연구소</span></a></li>
+<li><a href="/kor/sub05_02_09.do" target="_self" ><span>명곡의과학연구소</span></a></li>
+<li><a href="/kor/sub05_02_10.do" target="_self" ><span>박범신 문학콘텐츠연구소</span></a></li>
+<li><a href="/kor/sub05_02_12.do" target="_self" ><span>웰다잉융합연구소</span></a></li>
+<li><a href="/kor/sub05_02_13.do" target="_self" ><span>이주민사회통합연구소</span></a></li>
+<li><a href="/kor/sub05_02_14.do" target="_self" ><span>치매과학연구소</span></a></li>
+<li><a href="/kor/sub05_02_15.do" target="_self" ><span>ESG연구원</span></a></li>
+<li><a href="/kor/sub05_02_16_01.do" target="_self" ><span>한국 카르다노 블록체인 연구소</span></a></li>
+<li><a href="/kor/sub05_02_17.do" target="_self" ><span>논산시 탄소중립지원센터</span></a></li>
+</ul>
+</li>
+<li class='th2_4 th2_lnk'><a href="/kor/sub05_03.do" class='th2_link'><span class='icon'></span>산학협력단</a>
+</li>
+<li class='th2_5 th2_lnk'><a href="/kor/sub05_04_01.do" class='th2_link'><span class='icon'></span>연구실 안전관리</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub05_04_01.do" target="_self" ><span>안전관리본부 소개</span></a></li>
+<li><a href="/kor/sub05_04_02.do" target="_self" ><span>안전교육 안내</span></a></li>
+<li><a href="/kor/sub05_04_03.do" target="_self" ><span>사이버교육센터</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000001711/selectBoardList.do" target="_self" ><span>공고게시판</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li class='th1'>
+<a class='th1_lnk' href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do">대학생활</a>
+<div class="depth1-content">
+<div class="layout">
+<div class="depth1-header">
+<strong class="depth1-title">대학생활</strong>
+<p class="depth1-desc">알찬 대학생활을 위해 필요한 학생서비스 및 편의 정보 안내</p>
+</div>
+<ul id='summery6' class="depth2-ul">
+<li class='th2_1 th2_lnk'><a href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do" class='th2_link'><span class='icon'></span>학사안내</a>
+<ul class="depth3-ul">
+<li><a href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do" target="_self" ><span>학사일정</span></a></li>
+<li><a href="/kor/sub06_01_03.do" target="_self" ><span>등록</span></a></li>
+<li><a href="/kor/sub06_01_04_01.do" target="_self" ><span>수업</span></a></li>
+<li><a href="/kor/sub06_01_05_01.do" target="_self" ><span>다전공</span></a></li>
+<li><a href="/kor/sub06_01_06_04.do" target="_self" ><span>학적</span></a></li>
+<li><a href="/kor/sub06_01_10_01.do" target="_self" ><span>공결 · 병결</span></a></li>
+<li><a href="/kor/sub06_01_07_01.do" target="_self" ><span>휴복학</span></a></li>
+<li><a href="/kor/sub06_01_08_01.do" target="_self" ><span>성적 · 졸업</span></a></li>
+<li><a href="/kor/sub06_01_11_01.do" target="_self" ><span>졸업인증</span></a></li>
+<li><a href="/kor/sub06_01_09_01.do" target="_self" ><span>병무 · 예비군 · 학군사관</span></a></li>
+</ul>
+</li>
+<li class='th2_2 th2_lnk'><a href="/cop/bbs/BBSMSTR_000000000577/selectBoardList.do" class='th2_link'><span class='icon'></span>장학안내</a>
+<ul class="depth3-ul">
+<li><a href="/cop/bbs/BBSMSTR_000000000577/selectBoardList.do" target="_self" ><span>장학 FAQ</span></a></li>
+<li><a href="/kor/sub06_02_01_01.do" target="_self" ><span>장학금 지급기준</span></a></li>
+<li><a href="/prog/janghakFind/kor/sub06_02_02/search.do" target="_self" ><span>장학금 찾기</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000861/selectBoardList.do" target="_self" ><span>장학 일정표</span></a></li>
+<li><a href="/kor/sub06_02_04_01.do" target="_self" ><span>학자금</span></a></li>
+<li><a href="https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000000585/selectBoardList.do" target="_self" ><span>공지사항(장학 · 학자금)</span></a></li>
+</ul>
+</li>
+<li class='th2_3 th2_lnk'><a href="/kor/sub06_03_01_01.do" class='th2_link'><span class='icon'></span>교육지원</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub06_03_01_01.do" target="_self" ><span>해외학점교류</span></a></li>
+<li><a href="/kor/sub06_03_02.do" target="_self" ><span>장애학생</span></a></li>
+<li><a href="/kor/sub06_03_03.do" target="_self" ><span>현장실습</span></a></li>
+<li><a href="/kor/sub06_03_06_01.do" target="_self" ><span>비교과 활동</span></a></li>
+</ul>
+</li>
+<li class='th2_4 th2_lnk'><a href="/kor/sub06_04_01.do" class='th2_link'><span class='icon'></span>학생활동</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub06_04_01.do" target="_self" ><span>사회봉사</span></a></li>
+<li><a href="/kor/sub06_04_03.do" target="_self" ><span>총학생회</span></a></li>
+<li><a href="/kor/sub06_04_05.do" target="_self" ><span>총대의원회</span></a></li>
+<li><a href="/kor/sub06_04_04_03.do" target="_self" ><span>동아리</span></a></li>
+</ul>
+</li>
+<li class='th2_5 th2_lnk'><a href="/kor/sub06_05_01_01.do" class='th2_link'><span class='icon'></span>학생 서비스</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub06_05_01_01.do" target="_self" ><span>증명서 · 학생증</span></a></li>
+<li><a href="/kor/sub06_05_02.do" target="_self" ><span>주소이전</span></a></li>
+<li><a href="/kor/sub06_05_03.do" target="_self" ><span>학생보험</span></a></li>
+<li><a href="/kor/sub06_05_04.do" target="_self" ><span>학적기재사항 변경 신청</span></a></li>
+</ul>
+</li>
+<li class='th2_6 th2_lnk'><a href="/kor/sub06_06_01_01.do" class='th2_link'><span class='icon'></span>복지·시설</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub06_06_01_01.do" target="_self" ><span>편의시설</span></a></li>
+<li><a href="/kor/sub06_06_06.do" target="_self" ><span>기숙사</span></a></li>
+<li><a href="https://housing.kyu.ac.kr/" target="_blank" ><span>주민자치행복주택</span></a></li>
+<li><a href="/kor/sub06_06_07.do" target="_self" ><span>의료시설 진료비 감면 혜택</span></a></li>
+<li><a href="/kor/sub06_06_08.do" target="_self" ><span>보건진료소 FAQ</span></a></li>
+<li><a href="/kor/sub06_06_02_01.do" target="_self" ><span>시설물 이용</span></a></li>
+<li><a href="/prog/sikdan/kor/sub06_06_03/list.do" target="_self" ><span>금주의 식단</span></a></li>
+<li><a href="/kor/sub06_06_04_03.do" target="_self" ><span>주차</span></a></li>
+<li><a href="https://lib.konyang.ac.kr/" target="_blank" ><span>도서관 이용</span></a></li>
+<li><a href="https://travel.konyang.ac.kr/" target="_blank" ><span>서천수련관</span></a></li>
+</ul>
+</li>
+<li class='th2_7 th2_lnk'><a href="/bus/sub01_00.do" class='th2_link'><span class='icon'></span>통학버스</a>
+<ul class="depth3-ul">
+<li><a href="/bus/sub01_00.do" target="_blank" ><span>통학버스 안내</span></a></li>
+</ul>
+</li>
+<li class='th2_8 th2_lnk'><a href="/kor/sub06_08_07.do" class='th2_link'><span class='icon'></span>IT서비스</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub06_08_07.do" target="_self" ><span>정보시스템 소개</span></a></li>
+<li><a href="/kor/sub06_08_01.do" target="_self" ><span>스마트키 안내</span></a></li>
+<li><a href="/kor/sub06_08_06.do" target="_self" ><span>건양모바일</span></a></li>
+<li><a href="/kor/sub06_08_02.do" target="_self" ><span>인터넷 서비스(Wi-Fi)</span></a></li>
+<li><a href="/kor/sub06_08_03.do" target="_self" ><span>알약 백신</span></a></li>
+<li><a href="/kor/sub06_08_04.do" target="_self" ><span>메일</span></a></li>
+</ul>
+</li>
+<li class='th2_9 th2_lnk'><a href="/kor/sub06_09_04.do" class='th2_link'><span class='icon'></span>대학생활 가이드</a>
+<ul class="depth3-ul">
+<li><a href="https://www.konyang.ac.kr/html/kor/KYU_AI.html" target="_blank" ><span>AI 활용 가이드라인</span></a></li>
+<li><a href="/kor/sub06_09_04.do" target="_self" ><span>건양 명예코드</span></a></li>
+<li><a href="/kor/sub06_09_01.do" target="_self" ><span>주요 민원부서</span></a></li>
+<li><a href="/kor/sub06_09_02.do" target="_self" ><span>새내기를 위한 팁</span></a></li>
+<li><a href="/kor/sub06_09_05.do" target="_self" ><span>신입생 안내</span></a></li>
+</ul>
+</li>
+<li class='th2_10 th2_lnk'><a href="/cop/bbs/BBSMSTR_000000000579/selectBoardList.do" class='th2_link'><span class='icon'></span>문의 및 서식</a>
+<ul class="depth3-ul">
+<li><a href="/cop/bbs/BBSMSTR_000000000579/selectBoardList.do" target="_self" ><span>통합 서식자료</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</li>
+<li class='th1'>
+<a class='th1_lnk' href="/kor/sub07_09_01_01.do">글로벌건양·라운지</a>
+<div class="depth1-content">
+<div class="layout">
+<div class="depth1-header">
+<strong class="depth1-title">글로벌건양·라운지</strong>
+<p class="depth1-desc">건양대학교과 관련 된 최신 소식 및 공지내용을 알려드립니다.</p>
+</div>
+<ul id='summery7' class="depth2-ul">
+<li class='th2_1 th2_lnk'><a href="/kor/sub07_09_01_01.do" class='th2_link'><span class='icon'></span>글로벌건양</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub07_09_01_01.do" target="_self" ><span>외국어프로그램</span></a></li>
+<li><a href="/kor/sub07_09_02_01.do" target="_self" ><span>해외연수 프로그램</span></a></li>
+<li><a href="/kor/sub07_09_03_01.do" target="_self" ><span>수기게시판</span></a></li>
+</ul>
+</li>
+<li class='th2_2 th2_lnk'><a href="/cop/bbs/BBSMSTR_000000000841/selectBoardList.do" class='th2_link'><span class='icon'></span>건양소식</a>
+<ul class="depth3-ul">
+<li><a href="/cop/bbs/BBSMSTR_000000000841/selectBoardList.do" target="_self" ><span>전체</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000842/selectBoardList.do" target="_self" ><span>행사</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000843/selectBoardList.do" target="_self" ><span>특강</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000844/selectBoardList.do" target="_self" ><span>협약</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000846/selectBoardList.do" target="_self" ><span>이슈</span></a></li>
+</ul>
+</li>
+<li class='th2_3 th2_lnk'><a href="/cop/bbs/BBSMSTR_000000000581/selectBoardList.do" class='th2_link'><span class='icon'></span>언론속의 건양</a>
+</li>
+<li class='th2_4 th2_lnk'><a href="/cop/bbs/BBSMSTR_000000000582/selectBoardList.do" class='th2_link'><span class='icon'></span>공지사항</a>
+<ul class="depth3-ul">
+<li><a href="/cop/bbs/BBSMSTR_000000000582/selectBoardList.do" target="_self" ><span>전체보기</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000583/selectBoardList.do" target="_self" ><span>일반</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000584/selectBoardList.do" target="_self" ><span>학사</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000585/selectBoardList.do" target="_self" ><span>장학 · 학자금</span></a></li>
+<li><a href="https://job.konyang.ac.kr/cop/bbs/BBSMSTR_000000001381/selectBoardList.do" target="_blank" ><span>취업</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000587/selectBoardList.do" target="_self" ><span>비교과</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000883/selectBoardList.do" target="_self" ><span>학생</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000588/selectBoardList.do" target="_self" ><span>채용</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000589/selectBoardList.do" target="_self" ><span>교외 소식</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000595/selectBoardList.do" target="_self" ><span>신종 코로나바이러스 소식</span></a></li>
+<li><a href="https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000001123/selectBoardList.do" target="_blank" ><span>ICT</span></a></li>
+</ul>
+</li>
+<li class='th2_5 th2_lnk'><a href="/cop/bbs/BBSMSTR_000000000851/selectBoardList.do" class='th2_link'><span class='icon'></span>홍보관</a>
+<ul class="depth3-ul">
+<li><a href="/cop/bbs/BBSMSTR_000000000851/selectBoardList.do" target="_self" ><span>홍보동영상 및 홍보책자</span></a></li>
+<li><a href="https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000000583/selectBoardArticle.do?nttId=279100" target="_self" ><span>글로컬대학 비전선포식</span></a></li>
+</ul>
+</li>
+<li class='th2_6 th2_lnk'><a href="/kor/sub07_06_04.do" class='th2_link'><span class='icon'></span>발전기금</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub07_06_04.do" target="_self" ><span>발전기금 안내</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000001651/selectBoardList.do" target="_self" ><span>발전기금 공지사항</span></a></li>
+</ul>
+</li>
+<li class='th2_7 th2_lnk'><a href="/cop/bbs/BBSMSTR_000000000590/selectBoardList.do" class='th2_link'><span class='icon'></span>건양人 커뮤니티</a>
+<ul class="depth3-ul">
+<li><a href="/cop/bbs/BBSMSTR_000000000590/selectBoardList.do" target="_self" ><span>건양人 광장</span></a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000001721/selectBoardList.do" target="_self" ><span>건양 제안 제도</span></a></li>
+</ul>
+</li>
+<li class='th2_8 th2_lnk'><a href="/kor/sub07_08_01.do" class='th2_link'><span class='icon'></span>건양SNS</a>
+<ul class="depth3-ul">
+<li><a href="/kor/sub07_08_01.do" target="_self" ><span>대학/홍보대사 및 방송국</span></a></li>
+<li><a href="/kor/sub07_08_02.do" target="_self" ><span>단과대학 및 학부과</span></a></li>
+<li><a href="/kor/sub07_08_04.do" target="_self" ><span>행정부서</span></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</li>
+
+           </ul>
+        </div>
+      </nav>
+    
+      <ul class="util-wrap">
+        
+        <li class="util-smartkey">
+          <a href="https://smartky.kyu.ac.kr/" target="_blank" title="SMART KY, 새 창 열림" class="txt-btn">
+            <span class="txt-ko" translate="no">스마트키</span>
+            <span class="txt-global" translate="no">SMART KY</span>
+            <i class="ico ico-smartkey"></i>
+          </a>
+        </li>
+
+        
+          
+          
+            <li class="util-log util-login">
+              <a href="/kor/sitemap_02.do" class="ico-btn logIn">
+                <i class="ico ico-login"></i>
+                <span class="blind">로그인</span>
+              </a>
+            </li>
+          
+        
+
+        <li class="util-trans">
+          <button type="button" class="ico-btn drop-btn">
+            <i class="ico ico-globe"></i>
+            <span class="blind">구글 번역</span>
+          </button>
+          <div class="drop-menu">
+            <ul></ul>
+            <div class="drop-bottom">
+              <button data-trans="reset" type="button" class="reset-btn"><span>초기화</span></button>
+            </div>
+          </div>
+        </li>
+
+        <li class="util-search">
+          <a class="ico-btn" href="https://search.konyang.ac.kr/search/front/Search.jsp" target="_blank" title="새 창 열림">
+            <i class="ico ico-search"></i>
+            <span class="blind">검색</span>
+          </a>
+        </li>
+            
+        <li class="util-allmenu pc">
+          <a href="/kor/sitemap_11.do" class="ico-btn">
+            <i class="ico ico-menu"></i>
+            <span class="blind">사이트맵</span>
+          </a>
+        </li>
+        <li class="util-allmenu mo">
+          <button type="button" class="ico-btn" id="open_mn">
+            <i class="ico ico-menu"></i>
+            <span class="blind">전체메뉴</span>
+          </button>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</header>
+
+<nav id="topmenu">
+	<h2 class="skip">모바일용 메뉴</h2>
+	<div class="mobile_global">
+		<!--global메뉴-->
+		<div class="global_l">
+			<ul>
+				<li><a href="http://www.konyang.ac.kr/" class="btn_home">처음으로</a></li>
+				<li class="line1"><a href="/kor/sitemap_11.do" class="btn_sitemap">사이트맵</a></li>
+				<li class="line2"><a href="/ipsi.do" target="_blank" title="입학정보 홈페이지 새창으로 열림" class="btn_info">입학정보</a></li>
+				<li><a href="/glocal.do" class="btn_glocal" target="_blank" title="새 창 열림"><span>글로컬대학</span></a></li>
+			</ul>
+		</div>
+		<!--//global메뉴-->
+		<!--로고-->
+		<h1><a href="/kor.do"><img src="/images/kor/common/mobile_logo.png" alt="건양대학교" /></a></h1>
+		<!--//로고-->
+	</div>
+
+	<ul id="gnb_device">
+		<li class="th1">
+<a data-thiscode='sub01_00' href="/kor/sub01_01_05.do" class="th1_lnk">대학소개</a>
+<ul class="depth2-ul">
+<li><a data-thiscode='sub01_01' href="/kor/sub01_01_05.do">열린총장실</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub01_01_05' href="/kor/sub01_01_05.do">인사말</a></li>
+<li><a data-thiscode='sub01_01_02' href="/kor/sub01_01_02.do">프로필</a></li>
+<li><a data-thiscode='sub01_01_03' href="/kor/sub01_01_03.do">공감 총장실</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub01_02' href="/kor/sub01_02_09.do">건양소개</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub01_02_09' href="/kor/sub01_02_09.do">설립자 소개</a></li>
+<li><a data-thiscode='sub01_02_01' href="/kor/sub01_02_01.do">한눈에 보는 건양</a></li>
+<li><a data-thiscode='sub01_02_02' href="/kor/sub01_02_02_01.do">캠퍼스 특성화</a></li>
+<li><a data-thiscode='sub01_02_04' href="/kor/sub01_02_04.do">교육목표 및 인재상</a></li>
+<li><a data-thiscode='sub01_02_03' href="/kor/sub01_02_03.do">비전체계도</a></li>
+<li><a data-thiscode='sub01_02_08' href="/kor/sub01_02_08.do">발전전략</a></li>
+<li><a data-thiscode='sub01_02_05' href="/kor/sub01_02_05_01.do">연혁</a></li>
+<li><a data-thiscode='sub01_02_06' href="/kor/sub01_02_06_01.do">상징</a></li>
+<li><a data-thiscode='sub01_02_10' href="/kor/sub01_02_10.do">건양프렌즈(홍보대사)</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub01_03' href="/kor/sub01_03_01_01.do">대학현황</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub01_03_01' href="/kor/sub01_03_01_01.do">학교법인</a></li>
+<li><a data-thiscode='sub01_03_03' href="/kor/sub01_03_03.do">주요성과</a></li>
+<li><a data-thiscode='sub01_03_04' href="http://rule.konyang.ac.kr">학칙 · 규정</a></li>
+<li><a data-thiscode='sub01_03_05' href="/kor/sub01_03_05_01.do">대학평의원회</a></li>
+<li><a data-thiscode='sub01_03_06' href="/kor/sub01_03_06_01.do">등록금심의위원회</a></li>
+<li><a data-thiscode='sub01_03_07' href="/kor/sub01_03_07_01.do">기금운용심의위원회</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub01_04' href="/kor/sub01_04_01.do">대학기관</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub01_04_01' href="/kor/sub01_04_01.do">조직도</a></li>
+<li><a  data-thiscode='sub01_04_02' href="/prog/buseosogae/kor/sub01_04_02_02/view.do?buseo_cd=24400100" target='_self' class='link_3th_ov leftmenu_one'>행정부서</a><ul class='leftmenu_one'><li><a href="/prog/buseosogae/kor/sub01_04_02_02/view.do?buseo_cd=24400100" class='link_3th'>교학처</a></li><li><a href="/prog/buseosogae/kor/sub01_04_02_01/view.do?buseo_cd=23001500" class='link_3th'>기획처</a></li><li><a href="/prog/buseosogae/kor/sub01_04_02_05/view.do?buseo_cd=23101100" class='link_3th'>총무처</a></li><li><a href="/prog/buseosogae/kor/sub01_04_02_04/view.do?buseo_cd=24500100" class='link_3th'>입학취업처</a></li><li><a href="/prog/buseosogae/kor/sub01_04_02_09/view.do?buseo_cd=24300100" class='link_3th'>대외협력처</a></li><li><a href="/kor/sub05_03.do" class='link_3th'>산학협력단</a></li><li><a href="/prog/buseosogae/kor/sub01_04_02_08/view.do?buseo_cd=20700600" class='link_3th'>평생교육원</a></li><li><a href="/prog/buseosogae/kor/sub01_04_02_10/view.do?buseo_cd=21000500" class='link_3th'>정보통신원</a></li><li><a href="/prog/buseosogae/kor/sub01_04_02_13/view.do?buseo_cd=21900000" class='link_3th'>명곡도서관</a></li><li><a href="/kor/sub01_04_02_21.do" class='link_3th'>비서실</a><li><a href="/kor/sub01_04_02_23.do" class='link_3th'>인권센터</a></li></ul></li>
+<li><a  data-thiscode='sub01_04_06' href="/kor/sub01_04_06_01.do" target='_self' class='link_3th_ov leftmenu_two'>국책사업통합관리본부</a><ul class='leftmenu_tow'><li><a href="/kor/sub01_04_06_01.do" class='link_3th'>창의융합형공학인재양성지원사업단</a></li><li><a href="/kor/sub01_04_06_02.do" class='link_3th'>대학혁신지원사업단</a></li><li><a href="/kor/sub01_04_06_05.do" class='link_3th'>SW중심대학사업단</a></li><li><a href="/kor/sub01_04_06_07.do" class='link_3th'>AI·정보보호영재교육원</a></li><li><a href="/kor/sub01_04_06_06.do" class='link_3th'>인문사회융합인재양성사업단</a></li><li><a href="/kor/sub01_04_06_03.do" class='link_3th'>CAMPUS Asia-AMIS 사업단</a></li></ul></li>
+<li><a data-thiscode='sub01_04_04' href="/kor/sub01_04_04.do">학군단</a></li>
+<li><a data-thiscode='sub01_04_05' href="/kor/sub01_04_05.do">예비군대대</a></li>
+<li><a data-thiscode='sub01_04_08' href="https://audit.konyang.ac.kr/">감사행정</a></li>
+<li><a data-thiscode='sub01_04_09' href="https://audit.konyang.ac.kr/audit/sub04_06.do">공익제보</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub01_05' href="/prog/tel/kor/sub01_05_01/search.do">캠퍼스안내</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub01_05_01' href="/prog/tel/kor/sub01_05_01/search.do">전화번호안내</a></li>
+<li><a data-thiscode='sub01_05_02' href="http://www.konyang.ac.kr/cyber/">캠퍼스맵</a></li>
+<li><a data-thiscode='sub01_05_03' href="/kor/sub01_05_03_01.do">찾아오시는길</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub01_07' href="https://glocal.konyang.ac.kr/">국책사업</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub01_07_01' href="https://glocal.konyang.ac.kr/">글로컬대학사업추진단</a></li>
+<li><a data-thiscode='sub01_07_02' href="https://kyusw.konyang.ac.kr/">SW중심대학사업단</a></li>
+<li><a data-thiscode='sub01_07_03' href="https://human.konyang.ac.kr/human.do">대학혁신지원사업단</a></li>
+<li><a data-thiscode='sub01_07_07' href="https://rise.konyang.ac.kr/linc.do">앵커사업단</a></li>
+<li><a data-thiscode='sub01_07_04' href="https://huss.konyang.ac.kr/">인문사회융합인재양성사업단</a></li>
+<li><a data-thiscode='sub01_07_05' href="https://youngjae.konyang.ac.kr/">AI·정보보호영재교육원</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="th1">
+<a data-thiscode='sub02_00' href="/kor/sub02_01.do" class="th1_lnk">입학안내</a>
+<ul class="depth2-ul">
+<li><a data-thiscode='sub02_01' href="/kor/sub02_01.do">입학홈페이지</a>
+</li>
+</ul>
+</li>
+<li class="th1">
+<a data-thiscode='sub03_00' href="/kor/sub03_01_01.do" class="th1_lnk">대학</a>
+<ul class="depth2-ul">
+<li><a data-thiscode='sub03_01' href="/kor/sub03_01_01.do">캠퍼스별 대학현황</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_01_01' href="/kor/sub03_01_01.do">메디컬캠퍼스</a></li>
+<li><a data-thiscode='sub03_01_03' href="/kor/sub03_01_03.do">글로컬캠퍼스</a></li>
+<li><a data-thiscode='sub03_01_02' href="/kor/sub03_18_19.do">2025학년도 이전</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_02' href="/prog/buseosogae/kor/sub03_02_02/view.do?buseo_cd=30700000">의과대학</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_02_02' href="/prog/buseosogae/kor/sub03_02_02/view.do?buseo_cd=30700000">단과대학 소개</a></li>
+<li><a data-thiscode='sub03_02_01' href="/kor/sub03_02_01_01.do">의학과</a></li>
+<li><a data-thiscode='sub03_02_03' href="/kor/sub03_02_03_01.do">데이터의학과</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_03' href="/prog/buseosogae/kor/sub03_03_02/view.do?buseo_cd=31700000">간호대학</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_03_02' href="/prog/buseosogae/kor/sub03_03_02/view.do?buseo_cd=31700000">단과대학 소개</a></li>
+<li><a data-thiscode='sub03_03_01' href="/kor/sub03_03_01_01.do">간호학과</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_04' href="/kor/sub03_04_09.do">의과학계열</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_04_09' href="/kor/sub03_04_09.do">의과학계열 소개</a></li>
+<li><a data-thiscode='sub03_04_01' href="/kor/sub03_04_01_01.do">작업치료학과</a></li>
+<li><a data-thiscode='sub03_04_02' href="/kor/sub03_04_02_01.do">병원경영학과</a></li>
+<li><a data-thiscode='sub03_04_03' href="/kor/sub03_04_03_01.do">안경광학과</a></li>
+<li><a data-thiscode='sub03_04_04' href="/kor/sub03_04_04_01.do">임상병리학과</a></li>
+<li><a data-thiscode='sub03_04_05' href="/kor/sub03_04_05_01.do">방사선학과</a></li>
+<li><a data-thiscode='sub03_04_06' href="/kor/sub03_04_06_01.do">치위생학과</a></li>
+<li><a data-thiscode='sub03_04_07' href="/kor/sub03_04_07_01.do">물리치료학과</a></li>
+<li><a data-thiscode='sub03_04_08' href="/kor/sub03_04_08_01.do">응급구조학과</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_05' href="/kor/sub03_05_06.do">의료공과계열</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_05_06' href="/kor/sub03_05_06.do">의료공과계열 소개</a></li>
+<li><a data-thiscode='sub03_05_01' href="/kor/sub03_05_01_01.do">의공학과</a></li>
+<li><a data-thiscode='sub03_05_02' href="/kor/sub03_05_02_01.do">의료IT공학과</a></li>
+<li><a data-thiscode='sub03_05_03' href="/kor/sub03_05_03_01.do">의료공간디자인학과</a></li>
+<li><a data-thiscode='sub03_05_04' href="/kor/sub03_05_04_01.do">의료신소재학과</a></li>
+<li><a data-thiscode='sub03_05_05' href="/kor/sub03_05_05_01.do">제약생명공학과</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_13' href="/kor/sub03_13_01.do">AI∙SW융합대학</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_13_01' href="/kor/sub03_13_01.do">단과대학 소개</a></li>
+<li><a data-thiscode='sub03_13_02' href="/kor/sub03_13_02_01.do">인공지능학과</a></li>
+<li><a data-thiscode='sub03_13_03' href="/kor/sub03_13_03_01.do">스마트보안학과</a></li>
+<li><a data-thiscode='sub03_13_04' href="/kor/sub03_13_04_01.do">기업소프트웨어학부</a></li>
+<li><a data-thiscode='sub03_13_05' href="/kor/sub03_13_05_01.do">국방XR학부</a></li>
+<li><a data-thiscode='sub03_13_06' href="/kor/sub03_13_06_01.do">스마트팜학부</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_15' href="/kor/sub03_15_02_01.do">국방산학융합원</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_15_02' href="/kor/sub03_15_02_01.do">유무인항공학과</a></li>
+<li><a data-thiscode='sub03_15_03' href="/kor/sub03_15_03_01.do">국방반도체공학과</a></li>
+<li><a data-thiscode='sub03_15_04' href="/kor/sub03_15_04_01.do">ND산업디자인학부</a></li>
+<li><a data-thiscode='sub03_15_06' href="/kor/sub03_15_06_01.do">방위산업공학부 재난안전소방학전공</a></li>
+<li><a data-thiscode='sub03_15_05' href="/kor/sub03_15_05_01.do">방위산업공학부 방위산업공학전공</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_16' href="/kor/sub03_16_02_01.do">국방바이오연구원</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_16_02' href="/kor/sub03_16_02_01.do">국방산업경영학부</a></li>
+<li><a data-thiscode='sub03_16_03' href="/kor/sub03_16_03_01.do">임상의약바이오학과</a></li>
+<li><a data-thiscode='sub03_16_04' href="/kor/sub03_16_04_01.do">식품생명공학과</a></li>
+<li><a data-thiscode='sub03_16_05' href="/kor/sub03_16_05_01.do">휴먼사이언스학부 글로벌의료뷰티학전공</a></li>
+<li><a data-thiscode='sub03_16_06' href="/kor/sub03_16_06_01.do">휴먼사이언스학부 스포츠의학전공</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_17' href="/kor/sub03_17_02_01.do">사회과학학술원</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_17_02' href="/kor/sub03_17_02_01.do">심리상담치료학과</a></li>
+<li><a data-thiscode='sub03_17_03' href="/kor/sub03_17_03_01.do">유아교육과</a></li>
+<li><a data-thiscode='sub03_17_04' href="/kor/sub03_17_04_01.do">재활퍼스널트레이닝학과</a></li>
+<li><a data-thiscode='sub03_17_05' href="/kor/sub03_17_05_01.do">국방경찰행정학부</a></li>
+<li><a data-thiscode='sub03_17_06' href="/kor/sub03_17_06_01.do">군사학과</a></li>
+<li><a data-thiscode='sub03_17_07' href="/kor/sub03_17_07_01.do">사회복지학과</a></li>
+<li><a data-thiscode='sub03_17_08' href="/kor/sub03_17_08_01.do">특수교육과</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_18' href="/kor/sub03_18_19.do">2025학년도 이전</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_18_19' href="/kor/sub03_18_19.do">2025학년도 이전 계열별 학부과 안내</a></li>
+<li><a data-thiscode='sub03_18_01' href="/kor/sub03_18_01_01.do">아동교육학과</a></li>
+<li><a data-thiscode='sub03_18_02' href="/kor/sub03_18_02_01.do">초등특수교육과</a></li>
+<li><a data-thiscode='sub03_18_03' href="/kor/sub03_18_03_01.do">중등특수교육과</a></li>
+<li><a data-thiscode='sub03_18_04' href="/kor/sub03_18_04_01.do">디지털콘텐츠학과</a></li>
+<li><a data-thiscode='sub03_18_05' href="/kor/sub03_18_05_01.do">시각디자인학과</a></li>
+<li><a data-thiscode='sub03_18_06' href="/kor/sub03_18_06_01.do">경영학부</a></li>
+<li><a data-thiscode='sub03_18_07' href="/kor/sub03_18_07_01.do">금융세무학부</a></li>
+<li><a data-thiscode='sub03_18_08' href="/kor/sub03_18_08_01.do">호텔관광학과</a></li>
+<li><a data-thiscode='sub03_18_09' href="/kor/sub03_18_09_01.do">글로벌경영학과</a></li>
+<li><a data-thiscode='sub03_18_10' href="/kor/sub03_18_10_01.do">마케팅비즈니스학과</a></li>
+<li><a data-thiscode='sub03_18_11' href="/kor/sub03_18_11_01.do">금융학과</a></li>
+<li><a data-thiscode='sub03_18_12' href="/kor/sub03_18_12_01.do">세무학과</a></li>
+<li><a data-thiscode='sub03_18_13' href="/kor/sub03_18_13_01.do">융합디자인학과</a></li>
+<li><a data-thiscode='sub03_18_14' href="/kor/sub03_18_14_01.do">임상의약학과</a></li>
+<li><a data-thiscode='sub03_18_15' href="/kor/sub03_18_15_01.do">의약바이오학과</a></li>
+<li><a data-thiscode='sub03_18_16' href="/kor/sub03_18_16_01.do">드론기계학과</a></li>
+<li><a data-thiscode='sub03_18_17' href="/kor/sub03_18_17_01.do">융합IT학과</a></li>
+<li><a data-thiscode='sub03_18_18' href="/kor/sub03_18_18_01.do">글로벌프론티어학과</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_14' href="/kor/sub03_14_02_01.do">International College</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_14_02' href="/kor/sub03_14_02_01.do">K-문화산업학과</a></li>
+<li><a data-thiscode='sub03_14_03' href="/kor/sub03_14_03_01.do">국제의료관광학과</a></li>
+<li><a data-thiscode='sub03_14_04' href="/kor/sub03_14_04_01.do">국제군사학과</a></li>
+<li><a data-thiscode='sub03_14_05' href="/kor/sub03_14_05_01.do">글로벌헬스케어서비스학과</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub03_11' href="/prog/buseosogae/kor/sub03_11_01/view.do?buseo_cd=32200000">휴머니티칼리지</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub03_11_01' href="/prog/buseosogae/kor/sub03_11_01/view.do?buseo_cd=32200000">단과대학 소개</a></li>
+<li><a data-thiscode='sub03_11_02' href="/kor/sub03_11_02_01.do">인문융합학부</a></li>
+<li><a data-thiscode='sub03_11_03' href="/kor/sub03_11_03_01.do">기초교육학부</a></li>
+<li><a data-thiscode='sub03_11_05' href="/kor/sub03_11_05_01.do">브리꼴레르학부</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="th1">
+<a data-thiscode='sub04_00' href="http://kygrad.konyang.ac.kr/" class="th1_lnk">대학원</a>
+<ul class="depth2-ul">
+<li><a data-thiscode='sub04_01' href="http://kygrad.konyang.ac.kr/">일반대학원</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub04_01_03' href="http://kygrad.konyang.ac.kr/">일반대학원(박사·석사)</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub04_02' href="http://kygrad.konyang.ac.kr/">특수대학원</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub04_02_01' href="http://kygrad.konyang.ac.kr/">경영사회복지대학원</a></li>
+<li><a data-thiscode='sub04_02_02' href="http://kygrad.konyang.ac.kr/">보건복지대학원</a></li>
+<li><a data-thiscode='sub04_02_03' href="http://kygrad.konyang.ac.kr/">안보대학원</a></li>
+<li><a data-thiscode='sub04_02_04' href="http://kygrad.konyang.ac.kr/">상담대학원</a></li>
+<li><a data-thiscode='sub04_02_05' href="http://kygrad.konyang.ac.kr/">AX융합대학원</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="th1">
+<a data-thiscode='sub05_00' href="/prog/rsrchAct/kor/sub05_01_01/list.do" class="th1_lnk">연구·산학</a>
+<ul class="depth2-ul">
+<li><a data-thiscode='sub05_05' href="https://r-bay.co.kr/agency/main/bjdteElITjJvQ010Y01Nb2dJWDBrdz09">생명윤리위원회(IRB)</a>
+</li>
+<li><a data-thiscode='sub05_01' href="/prog/rsrchAct/kor/sub05_01_01/list.do">연구성과</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub05_01_01' href="/prog/rsrchAct/kor/sub05_01_01/list.do">연구활동</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub05_02' href="/kor/sub05_02_01.do">부설연구소 및 센터</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub05_02_01' href="/kor/sub05_02_01.do">군사과학연구소</a></li>
+<li><a data-thiscode='sub05_02_02' href="/kor/sub05_02_02.do">명곡안연구소</a></li>
+<li><a data-thiscode='sub05_02_03' href="/kor/sub05_02_03.do">미래융합기술연구원</a></li>
+<li><a data-thiscode='sub05_02_04' href="/kor/sub05_02_04.do">예학교육연구원</a></li>
+<li><a data-thiscode='sub05_02_05' href="/kor/sub05_02_05.do">창의력개발연구소</a></li>
+<li><a data-thiscode='sub05_02_06' href="/kor/sub05_02_06.do">충남지역문화연구소</a></li>
+<li><a data-thiscode='sub05_02_07' href="/kor/sub05_02_07.do">공공안전연구소</a></li>
+<li><a data-thiscode='sub05_02_08' href="/kor/sub05_02_08.do">마음행복연구소</a></li>
+<li><a data-thiscode='sub05_02_09' href="/kor/sub05_02_09.do">명곡의과학연구소</a></li>
+<li><a data-thiscode='sub05_02_10' href="/kor/sub05_02_10.do">박범신 문학콘텐츠연구소</a></li>
+<li><a data-thiscode='sub05_02_12' href="/kor/sub05_02_12.do">웰다잉융합연구소</a></li>
+<li><a data-thiscode='sub05_02_13' href="/kor/sub05_02_13.do">이주민사회통합연구소</a></li>
+<li><a data-thiscode='sub05_02_14' href="/kor/sub05_02_14.do">치매과학연구소</a></li>
+<li><a data-thiscode='sub05_02_15' href="/kor/sub05_02_15.do">ESG연구원</a></li>
+<li><a data-thiscode='sub05_02_16' href="/kor/sub05_02_16_01.do">한국 카르다노 블록체인 연구소</a></li>
+<li><a data-thiscode='sub05_02_17' href="/kor/sub05_02_17.do">논산시 탄소중립지원센터</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub05_03' href="/kor/sub05_03.do">산학협력단</a>
+</li>
+<li><a data-thiscode='sub05_04' href="/kor/sub05_04_01.do">연구실 안전관리</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub05_04_01' href="/kor/sub05_04_01.do">안전관리본부 소개</a></li>
+<li><a data-thiscode='sub05_04_02' href="/kor/sub05_04_02.do">안전교육 안내</a></li>
+<li><a data-thiscode='sub05_04_03' href="/kor/sub05_04_03.do">사이버교육센터</a></li>
+<li><a data-thiscode='sub05_04_04' href="/cop/bbs/BBSMSTR_000000001711/selectBoardList.do">공고게시판</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="th1">
+<a data-thiscode='sub06_00' href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do" class="th1_lnk">대학생활</a>
+<ul class="depth2-ul">
+<li><a data-thiscode='sub06_01' href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do">학사안내</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_01_01' href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do">학사일정</a></li>
+<li><a data-thiscode='sub06_01_03' href="/kor/sub06_01_03.do">등록</a></li>
+<li><a data-thiscode='sub06_01_04' href="/kor/sub06_01_04_01.do">수업</a></li>
+<li><a data-thiscode='sub06_01_05' href="/kor/sub06_01_05_01.do">다전공</a></li>
+<li><a data-thiscode='sub06_01_06' href="/kor/sub06_01_06_04.do">학적</a></li>
+<li><a data-thiscode='sub06_01_10' href="/kor/sub06_01_10_01.do">공결 · 병결</a></li>
+<li><a data-thiscode='sub06_01_07' href="/kor/sub06_01_07_01.do">휴복학</a></li>
+<li><a data-thiscode='sub06_01_08' href="/kor/sub06_01_08_01.do">성적 · 졸업</a></li>
+<li><a data-thiscode='sub06_01_11' href="/kor/sub06_01_11_01.do">졸업인증</a></li>
+<li><a data-thiscode='sub06_01_09' href="/kor/sub06_01_09_01.do">병무 · 예비군 · 학군사관</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_02' href="/cop/bbs/BBSMSTR_000000000577/selectBoardList.do">장학안내</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_02_05' href="/cop/bbs/BBSMSTR_000000000577/selectBoardList.do">장학 FAQ</a></li>
+<li><a data-thiscode='sub06_02_01' href="/kor/sub06_02_01_01.do">장학금 지급기준</a></li>
+<li><a data-thiscode='sub06_02_02' href="/prog/janghakFind/kor/sub06_02_02/search.do">장학금 찾기</a></li>
+<li><a data-thiscode='sub06_02_03' href="/cop/bbs/BBSMSTR_000000000861/selectBoardList.do">장학 일정표</a></li>
+<li><a data-thiscode='sub06_02_04' href="/kor/sub06_02_04_01.do">학자금</a></li>
+<li><a data-thiscode='sub06_02_06' href="https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000000585/selectBoardList.do">공지사항(장학 · 학자금)</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_03' href="/kor/sub06_03_01_01.do">교육지원</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_03_01' href="/kor/sub06_03_01_01.do">해외학점교류</a></li>
+<li><a data-thiscode='sub06_03_02' href="/kor/sub06_03_02.do">장애학생</a></li>
+<li><a data-thiscode='sub06_03_03' href="/kor/sub06_03_03.do">현장실습</a></li>
+<li><a data-thiscode='sub06_03_06' href="/kor/sub06_03_06_01.do">비교과 활동</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_04' href="/kor/sub06_04_01.do">학생활동</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_04_01' href="/kor/sub06_04_01.do">사회봉사</a></li>
+<li><a data-thiscode='sub06_04_03' href="/kor/sub06_04_03.do">총학생회</a></li>
+<li><a data-thiscode='sub06_04_05' href="/kor/sub06_04_05.do">총대의원회</a></li>
+<li><a data-thiscode='sub06_04_04' href="/kor/sub06_04_04_03.do">동아리</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_05' href="/kor/sub06_05_01_01.do">학생 서비스</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_05_01' href="/kor/sub06_05_01_01.do">증명서 · 학생증</a></li>
+<li><a data-thiscode='sub06_05_02' href="/kor/sub06_05_02.do">주소이전</a></li>
+<li><a data-thiscode='sub06_05_03' href="/kor/sub06_05_03.do">학생보험</a></li>
+<li><a data-thiscode='sub06_05_04' href="/kor/sub06_05_04.do">학적기재사항 변경 신청</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_06' href="/kor/sub06_06_01_01.do">복지·시설</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_06_01' href="/kor/sub06_06_01_01.do">편의시설</a></li>
+<li><a data-thiscode='sub06_06_06' href="/kor/sub06_06_06.do">기숙사</a></li>
+<li><a data-thiscode='sub06_06_09' href="https://housing.kyu.ac.kr/">주민자치행복주택</a></li>
+<li><a data-thiscode='sub06_06_07' href="/kor/sub06_06_07.do">의료시설 진료비 감면 혜택</a></li>
+<li><a data-thiscode='sub06_06_08' href="/kor/sub06_06_08.do">보건진료소 FAQ</a></li>
+<li><a data-thiscode='sub06_06_02' href="/kor/sub06_06_02_01.do">시설물 이용</a></li>
+<li><a data-thiscode='sub06_06_03' href="/prog/sikdan/kor/sub06_06_03/list.do">금주의 식단</a></li>
+<li><a data-thiscode='sub06_06_04' href="/kor/sub06_06_04_03.do">주차</a></li>
+<li><a data-thiscode='sub06_06_05' href="https://lib.konyang.ac.kr/">도서관 이용</a></li>
+<li><a data-thiscode='sub06_06_10' href="https://travel.konyang.ac.kr/">서천수련관</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_07' href="/bus/sub01_00.do">통학버스</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_07_05' href="/bus/sub01_00.do">통학버스 안내</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_08' href="/kor/sub06_08_07.do">IT서비스</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_08_07' href="/kor/sub06_08_07.do">정보시스템 소개</a></li>
+<li><a data-thiscode='sub06_08_01' href="/kor/sub06_08_01.do">스마트키 안내</a></li>
+<li><a data-thiscode='sub06_08_06' href="/kor/sub06_08_06.do">건양모바일</a></li>
+<li><a data-thiscode='sub06_08_02' href="/kor/sub06_08_02.do">인터넷 서비스(Wi-Fi)</a></li>
+<li><a data-thiscode='sub06_08_03' href="/kor/sub06_08_03.do">알약 백신</a></li>
+<li><a data-thiscode='sub06_08_04' href="/kor/sub06_08_04.do">메일</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_09' href="/kor/sub06_09_04.do">대학생활 가이드</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_09_03' href="https://www.konyang.ac.kr/html/kor/KYU_AI.html">AI 활용 가이드라인</a></li>
+<li><a data-thiscode='sub06_09_04' href="/kor/sub06_09_04.do">건양 명예코드</a></li>
+<li><a data-thiscode='sub06_09_01' href="/kor/sub06_09_01.do">주요 민원부서</a></li>
+<li><a data-thiscode='sub06_09_02' href="/kor/sub06_09_02.do">새내기를 위한 팁</a></li>
+<li><a data-thiscode='sub06_09_05' href="/kor/sub06_09_05.do">신입생 안내</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub06_10' href="/cop/bbs/BBSMSTR_000000000579/selectBoardList.do">문의 및 서식</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub06_10_03' href="/cop/bbs/BBSMSTR_000000000579/selectBoardList.do">통합 서식자료</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="th1">
+<a data-thiscode='sub07_00' href="/kor/sub07_09_01_01.do" class="th1_lnk">글로벌건양·라운지</a>
+<ul class="depth2-ul">
+<li><a data-thiscode='sub07_09' href="/kor/sub07_09_01_01.do">글로벌건양</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub07_09_01' href="/kor/sub07_09_01_01.do">외국어프로그램</a></li>
+<li><a data-thiscode='sub07_09_02' href="/kor/sub07_09_02_01.do">해외연수 프로그램</a></li>
+<li><a data-thiscode='sub07_09_03' href="/kor/sub07_09_03_01.do">수기게시판</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub07_01' href="/cop/bbs/BBSMSTR_000000000841/selectBoardList.do">건양소식</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub07_01_01' href="/cop/bbs/BBSMSTR_000000000841/selectBoardList.do">전체</a></li>
+<li><a data-thiscode='sub07_01_02' href="/cop/bbs/BBSMSTR_000000000842/selectBoardList.do">행사</a></li>
+<li><a data-thiscode='sub07_01_03' href="/cop/bbs/BBSMSTR_000000000843/selectBoardList.do">특강</a></li>
+<li><a data-thiscode='sub07_01_04' href="/cop/bbs/BBSMSTR_000000000844/selectBoardList.do">협약</a></li>
+<li><a data-thiscode='sub07_01_06' href="/cop/bbs/BBSMSTR_000000000846/selectBoardList.do">이슈</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub07_02' href="/cop/bbs/BBSMSTR_000000000581/selectBoardList.do">언론속의 건양</a>
+</li>
+<li><a data-thiscode='sub07_03' href="/cop/bbs/BBSMSTR_000000000582/selectBoardList.do">공지사항</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub07_03_01' href="/cop/bbs/BBSMSTR_000000000582/selectBoardList.do">전체보기</a></li>
+<li><a data-thiscode='sub07_03_02' href="/cop/bbs/BBSMSTR_000000000583/selectBoardList.do">일반</a></li>
+<li><a data-thiscode='sub07_03_03' href="/cop/bbs/BBSMSTR_000000000584/selectBoardList.do">학사</a></li>
+<li><a data-thiscode='sub07_03_04' href="/cop/bbs/BBSMSTR_000000000585/selectBoardList.do">장학 · 학자금</a></li>
+<li><a data-thiscode='sub07_03_05' href="https://job.konyang.ac.kr/cop/bbs/BBSMSTR_000000001381/selectBoardList.do">취업</a></li>
+<li><a data-thiscode='sub07_03_06' href="/cop/bbs/BBSMSTR_000000000587/selectBoardList.do">비교과</a></li>
+<li><a data-thiscode='sub07_03_09' href="/cop/bbs/BBSMSTR_000000000883/selectBoardList.do">학생</a></li>
+<li><a data-thiscode='sub07_03_07' href="/cop/bbs/BBSMSTR_000000000588/selectBoardList.do">채용</a></li>
+<li><a data-thiscode='sub07_03_08' href="/cop/bbs/BBSMSTR_000000000589/selectBoardList.do">교외 소식</a></li>
+<li><a data-thiscode='sub07_03_10' href="/cop/bbs/BBSMSTR_000000000595/selectBoardList.do">신종 코로나바이러스 소식</a></li>
+<li><a data-thiscode='sub07_03_11' href="https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000001123/selectBoardList.do">ICT</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub07_05' href="/cop/bbs/BBSMSTR_000000000851/selectBoardList.do">홍보관</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub07_05_01' href="/cop/bbs/BBSMSTR_000000000851/selectBoardList.do">홍보동영상 및 홍보책자</a></li>
+<li><a data-thiscode='sub07_05_02' href="https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000000583/selectBoardArticle.do?nttId=279100">글로컬대학 비전선포식</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub07_06' href="/kor/sub07_06_04.do">발전기금</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub07_06_04' href="/kor/sub07_06_04.do">발전기금 안내</a></li>
+<li><a data-thiscode='sub07_06_03' href="/cop/bbs/BBSMSTR_000000001651/selectBoardList.do">발전기금 공지사항</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub07_07' href="/cop/bbs/BBSMSTR_000000000590/selectBoardList.do">건양人 커뮤니티</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub07_07_01' href="/cop/bbs/BBSMSTR_000000000590/selectBoardList.do">건양人 광장</a></li>
+<li><a data-thiscode='sub07_07_08' href="/cop/bbs/BBSMSTR_000000001721/selectBoardList.do">건양 제안 제도</a></li>
+</ul>
+</li>
+<li><a data-thiscode='sub07_08' href="/kor/sub07_08_01.do">건양SNS</a>
+<ul class='depth3-ul'>
+<li><a data-thiscode='sub07_08_01' href="/kor/sub07_08_01.do">대학/홍보대사 및 방송국</a></li>
+<li><a data-thiscode='sub07_08_02' href="/kor/sub07_08_02.do">단과대학 및 학부과</a></li>
+<li><a data-thiscode='sub07_08_04' href="/kor/sub07_08_04.do">행정부서</a></li>
+</ul>
+</li>
+</ul>
+</li>
+
+	</ul>
+</nav>
+<div class="mobile_close">
+  <a href="#none">
+    <img src="/images/kor/common/mobile_close.png" alt="모바일메뉴 닫기" />
+  </a>
+</div>
+<script type="text/javascript">
+
+	var ismain = "sub06_01_01_01";
+	var code2 = 0;
+	var code3 = 0;
+
+	if(ismain != ""){
+		code2 = $("a[data-thiscode='"+ismain.substr(0,8)+"']").parent().index(); //01
+;
+		code3 = $("a[data-thiscode='"+ismain.substr(0,11)+"']").parent().index();
+	}
+
+	var param = "#topmenu";
+	var obj = "#wrap, #swrap";
+	var btn = "#open_mn";
+	var index1 = 06
+; // th1 메뉴코드, index로 사용
+	var index2 = code2; // th1 메뉴코드, index로 사용
+	var index3 = code3; // th1 메뉴코드, index로 사용
+	var dur = 300; // 애니메이션 진행 속도
+	var meth = "easeOutExpo"; // 애니메이션 진행 타입
+
+	gnb_open(param,obj,btn,index1,index2,index3,dur,meth,"sub06_01_01_01");
+
+</script>
+<!-- // header  -->
+
+
+	<!-- //header -->
+   
+	<!-- conatainer -->
+	<div id="container">
+		<div id="container_bg">
+		<div id="container_bg2">
+			<div id="container_box">
+				<!-- left menu -->
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<aside id="lnb">
+	<h2 id="leftTi"><span>대학생활
+</span></h2>
+	<div id="lnbwrap">
+
+	<ul class="lm_2th" id='leftmenu'>
+<li><a href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do" target='_self' class='link_2th_ov' >학사안내</a>
+<ul class='lm_3th'>
+<li><a href="/prog/schedule/kor/sub06_01_01_01/3/haksa.do" target='_self' class='link_3th_ov'>학사일정</a></li>
+<li><a href="/kor/sub06_01_03.do" target='_self' class='link_3th'><span>등록</span></a></li>
+<li><a href="/kor/sub06_01_04_01.do" target='_self' class='link_3th'><span>수업</span></a></li>
+<li><a href="/kor/sub06_01_05_01.do" target='_self' class='link_3th'><span>다전공</span></a></li>
+<li><a href="/kor/sub06_01_06_04.do" target='_self' class='link_3th'><span>학적</span></a></li>
+<li><a href="/kor/sub06_01_10_01.do" target='_self' class='link_3th'><span>공결 · 병결</span></a></li>
+<li><a href="/kor/sub06_01_07_01.do" target='_self' class='link_3th'><span>휴복학</span></a></li>
+<li><a href="/kor/sub06_01_08_01.do" target='_self' class='link_3th'><span>성적 · 졸업</span></a></li>
+<li><a href="/kor/sub06_01_11_01.do" target='_self' class='link_3th'><span>졸업인증</span></a></li>
+<li><a href="/kor/sub06_01_09_01.do" target='_self' class='link_3th'><span>병무 · 예비군 · 학군사관</span></a></li>
+</ul>
+</li>
+<li><a href="/cop/bbs/BBSMSTR_000000000577/selectBoardList.do" target='_self' class='link_2th'>장학안내</a>
+<ul class='lm_3th'>
+<li><a href="/cop/bbs/BBSMSTR_000000000577/selectBoardList.do" target='_self' class='link_3th'>장학 FAQ456</a></li>
+<li><a href="/kor/sub06_02_01_01.do" target='_self' class='link_3th'>장학금 지급기준456</a></li>
+<li><a href="/prog/janghakFind/kor/sub06_02_02/search.do" target='_self' class='link_3th'>장학금 찾기456</a></li>
+<li><a href="/cop/bbs/BBSMSTR_000000000861/selectBoardList.do" target='_self' class='link_3th'>장학 일정표456</a></li>
+<li><a href="/kor/sub06_02_04_01.do" target='_self' class='link_3th'>학자금456</a></li>
+<li><a href="https://www.konyang.ac.kr/cop/bbs/BBSMSTR_000000000585/selectBoardList.do" target='_self' class='link_3th'>공지사항(장학 · 학자금)456</a></li>
+</ul>
+</li>
+<li><a href="/kor/sub06_03_01_01.do" target='_self' class='link_2th'>교육지원</a>
+<ul class='lm_3th'>
+<li><a href="/kor/sub06_03_01_01.do" target='_self' class='link_3th'>해외학점교류456</a></li>
+<li><a href="/kor/sub06_03_02.do" target='_self' class='link_3th'>장애학생456</a></li>
+<li><a href="/kor/sub06_03_03.do" target='_self' class='link_3th'>현장실습456</a></li>
+<li><a href="/kor/sub06_03_06_01.do" target='_self' class='link_3th'>비교과 활동456</a></li>
+</ul>
+</li>
+<li><a href="/kor/sub06_04_01.do" target='_self' class='link_2th'>학생활동</a>
+<ul class='lm_3th'>
+<li><a href="/kor/sub06_04_01.do" target='_self' class='link_3th'>사회봉사456</a></li>
+<li><a href="/kor/sub06_04_03.do" target='_self' class='link_3th'>총학생회456</a></li>
+<li><a href="/kor/sub06_04_05.do" target='_self' class='link_3th'>총대의원회456</a></li>
+<li><a href="/kor/sub06_04_04_03.do" target='_self' class='link_3th'>동아리456</a></li>
+</ul>
+</li>
+<li><a href="/kor/sub06_05_01_01.do" target='_self' class='link_2th'>학생 서비스</a>
+<ul class='lm_3th'>
+<li><a href="/kor/sub06_05_01_01.do" target='_self' class='link_3th'>증명서 · 학생증456</a></li>
+<li><a href="/kor/sub06_05_02.do" target='_self' class='link_3th'>주소이전456</a></li>
+<li><a href="/kor/sub06_05_03.do" target='_self' class='link_3th'>학생보험456</a></li>
+<li><a href="/kor/sub06_05_04.do" target='_self' class='link_3th'>학적기재사항 변경 신청456</a></li>
+</ul>
+</li>
+<li><a href="/kor/sub06_06_01_01.do" target='_self' class='link_2th'>복지·시설</a>
+<ul class='lm_3th'>
+<li><a href="/kor/sub06_06_01_01.do" target='_self' class='link_3th'>편의시설456</a></li>
+<li><a href="/kor/sub06_06_06.do" target='_self' class='link_3th'>기숙사456</a></li>
+<li><a href="https://housing.kyu.ac.kr/" target='_blank' title='주민자치행복주택 페이지가 새창으로 열립니다.' class='link_3th'>주민자치행복주택</a></li>
+<li><a href="/kor/sub06_06_07.do" target='_self' class='link_3th'>의료시설 진료비 감면 혜택456</a></li>
+<li><a href="/kor/sub06_06_08.do" target='_self' class='link_3th'>보건진료소 FAQ456</a></li>
+<li><a href="/kor/sub06_06_02_01.do" target='_self' class='link_3th'>시설물 이용456</a></li>
+<li><a href="/prog/sikdan/kor/sub06_06_03/list.do" target='_self' class='link_3th'>금주의 식단456</a></li>
+<li><a href="/kor/sub06_06_04_03.do" target='_self' class='link_3th'>주차456</a></li>
+<li><a href="https://lib.konyang.ac.kr/" target='_blank' title='도서관 이용 페이지가 새창으로 열립니다.' class='link_3th'>도서관 이용</a></li>
+<li><a href="https://travel.konyang.ac.kr/" target='_blank' title='서천수련관 페이지가 새창으로 열립니다.' class='link_3th'>서천수련관</a></li>
+</ul>
+</li>
+<li><a href='/bus/sub01_00.do' target='_blank' title='통학버스 페이지가 새창으로 열립니다.' class='link_2th'>통학버스</a>
+<ul class='lm_3th'>
+<li><a href="/bus/sub01_00.do" target='_blank' title='통학버스 안내 페이지가 새창으로 열립니다.' class='link_3th'>통학버스 안내</a></li>
+</ul>
+</li>
+<li><a href="/kor/sub06_08_07.do" target='_self' class='link_2th'>IT서비스</a>
+<ul class='lm_3th'>
+<li><a href="/kor/sub06_08_07.do" target='_self' class='link_3th'>정보시스템 소개456</a></li>
+<li><a href="/kor/sub06_08_01.do" target='_self' class='link_3th'>스마트키 안내456</a></li>
+<li><a href="/kor/sub06_08_06.do" target='_self' class='link_3th'>건양모바일456</a></li>
+<li><a href="/kor/sub06_08_02.do" target='_self' class='link_3th'>인터넷 서비스(Wi-Fi)456</a></li>
+<li><a href="/kor/sub06_08_03.do" target='_self' class='link_3th'>알약 백신456</a></li>
+<li><a href="/kor/sub06_08_04.do" target='_self' class='link_3th'>메일456</a></li>
+</ul>
+</li>
+<li><a href="/kor/sub06_09_04.do" target='_self' class='link_2th'>대학생활 가이드</a>
+<ul class='lm_3th'>
+<li><a href="https://www.konyang.ac.kr/html/kor/KYU_AI.html" target='_blank' title='AI 활용 가이드라인 페이지가 새창으로 열립니다.' class='link_3th'>AI 활용 가이드라인</a></li>
+<li><a href="/kor/sub06_09_04.do" target='_self' class='link_3th'>건양 명예코드456</a></li>
+<li><a href="/kor/sub06_09_01.do" target='_self' class='link_3th'>주요 민원부서456</a></li>
+<li><a href="/kor/sub06_09_02.do" target='_self' class='link_3th'>새내기를 위한 팁456</a></li>
+<li><a href="/kor/sub06_09_05.do" target='_self' class='link_3th'>신입생 안내456</a></li>
+</ul>
+</li>
+<li><a href="/cop/bbs/BBSMSTR_000000000579/selectBoardList.do" target='_self' class='link_2th'>문의 및 서식</a>
+<ul class='lm_3th'>
+<li><a href="/cop/bbs/BBSMSTR_000000000579/selectBoardList.do" target='_self' class='link_3th'>통합 서식자료456</a></li>
+</ul>
+</li>
+
+	</ul>
+	</div>
+
+	
+
+	
+</aside>
+<script>leftmenu();</script>
+
+				<!-- //left menu -->
+				<!-- location -->
+				<div id="location_box">
+					<div class="location_box">
+						<section class="location">
+							<h2 class="skip">홈페이지 메뉴 경로</h2>
+							
+
+
+
+
+
+
+	
+	
+		
+
+
+
+
+
+
+
+
+<div class="navi">
+	<a href="/kor.do" class="navi_home">처음으로</a>
+	<a href='/prog/schedule/kor/sub06_01_01_01/3/haksa.do '><span></span>대학생활 </a>
+<a href='/prog/schedule/kor/sub06_01_01_01/3/haksa.do '><span></span> 학사안내 </a>
+<a href='/prog/schedule/kor/sub06_01_01_01/3/haksa.do '><span></span> 학사일정 </a>
+<a class="last" href="#toggle"><span></span> 학사일정 </a>
+
+</div>
+
+<div class="navi_btn">
+	
+	
+	
+	<a href="#none" id="print" ><span>print</span></a>
+	
+	
+	<a href="#" onclick="facebookOpen(); return false;" target="_blank" title="페이스북으로 현재 컨텐츠 공유, 새창열림"><span>페이스북</span></a>
+	<a href="#" onclick="instagramOpen(); return false;" target="_blank" title="인스타그램으로 현재 컨텐츠 공유, 새창열림"><span>인스타그램</span></a>
+	
+</div>
+
+<script>
+	function instagramOpen() {
+		alert("인스타그램에서는 웹 페이지 URL을 직접 공유할 수 없습니다.\nURL을 복사하여 인스타그램 앱에서 공유하세요.");
+		// or 인스타그램 프로필로 이동하도록 설정 가능
+		 window.open("https://www.instagram.com/", "_blank");
+	}
+	</script>
+							
+		
+
+
+						</section>
+					</div>
+				</div>
+				<!-- //location -->
+				<!-- containers -->
+				<div id="containers" class="sub06_01_01_01">
+					<div id="contentswrap">
+						<!-- sub contents -->
+						<section id="contents" class="sub06_01_01_01">
+							<h2 class="contTi"><span>학사일정
+</span></h2>
+							<!-- contents section -->
+							<div class="content" id="txt">
+								
+
+
+
+
+
+
+
+			
+
+
+
+
+
+
+<ul class='basic_tab'>
+<li class='on'><a href='/prog/schedule/kor/sub06_01_01_01/3/haksa.do' target='_self'><span>학사일정</span></a></li>
+<li><a href='/kor/sub06_01_01_03.do' target='_self'><span>지정휴업일</span></a></li>
+<li><a href='/kor/sub06_01_01_02.do' target='_self'><span>학사일정 해설</span></a></li>
+</ul>
+
+			
+								
+
+
+
+
+
+
+
+
+
+				
+
+				<p class="mb_20"><strong class="text_st2 c_bl">본 학사일정표는 <u>매학년도 시작인 3월부터</u> 당해년도의 학사일정으로 보여집니다.</strong>
+				<span class="ml_20">전 학년도 학사일정을 확인하시려면 검색리스트에서 선택하시기 바랍니다.</span></p>
+				<div class="schdule_title">
+					<p>2025학년도 일정</p>
+					<div class="prev_select">
+						<label for="prev_schdule" class="skip">년도별 학사일정 선택폼</label>
+						<form id="searchForm" name="searchForm" method="post" class="board_search" action="/prog/schedule/kor/sub06_01_01_01/3/haksa.do" >
+						<input type="hidden" name="schedule_seq" value="3" >
+						<select name="rdate" id="prev_schdule" title="년도별 학사일정 검색을 위한 선택폼입니다.">
+						<option value="">년도별 학사일정</option>
+						
+							<option value="2026-03-01" >2026학년도</option>
+						
+							<option value="2025-03-01"  selected="selected">2025학년도</option>
+						
+							<option value="2024-03-01" >2024학년도</option>
+						
+							<option value="2023-03-01" >2023학년도</option>
+						
+							<option value="2022-03-01" >2022학년도</option>
+						
+							<option value="2021-03-01" >2021학년도</option>
+						
+							<option value="2020-03-01" >2020학년도</option>
+						
+							<option value="2019-03-01" >2019학년도</option>
+						
+							<option value="2018-03-01" >2018학년도</option>
+						
+							<option value="2017-03-01" >2017학년도</option>
+						
+							<option value="2016-03-01" >2016학년도</option>
+						
+							<option value="2015-03-01" >2015학년도</option>
+						
+							<option value="2014-03-01" >2014학년도</option>
+						
+							<option value="2013-03-01" >2013학년도</option>
+						
+							<option value="2012-03-01" >2012학년도</option>
+						
+ 
+						</select>
+						<input type="submit" title="검색" value="검색" name="submitTy">
+						</form>
+					</div>
+				</div>
+				
+				
+				<!-- web style --> 
+				<div class="schedule_table_web">
+					<table>
+						<caption>
+						<strong>년도별 학사일정 정보 표</strong><p>년도별 학사일정 정보 표로 월, 일, 일정으로 나뉘어 설명합니다.</p>
+						</caption>
+						<col style="width:18%;">
+						<col style="width:15%;">
+						<col>
+						<thead>
+							<tr>
+								<th class="center" scope="col"><span>MONTH</span></th>
+								<th scope="col"><span>DATE</span></th>
+								<th scope="col"><span>SCHEDULE</span></th>
+							</tr>
+						</thead>
+						<tbody>
+						
+							
+							
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="4">3월</th>
+												
+													<td>03</td>
+													
+													
+												
+												<td>1학기 개강(학기개시일), 1TERM 개강</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>11 ~ 17</td>
+													
+												
+												<td>1학기 수강신청 포기기간</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>21</td>
+													
+													
+												
+												<td>수업일수 1/5선</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>24 ~ 28</td>
+													
+												
+												<td>1TERM 중간고사</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="4">4월</th>
+												
+													<td>11</td>
+													
+													
+												
+												<td>수업일수 2/5선</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>21 ~ 25</td>
+													
+												
+												<td>1학기 중간고사, 1TERM 기말고사</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>28 ~ 30</td>
+													
+												
+												<td>2TERM 개강 및 수강신청 포기기간</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>28</td>
+													
+													
+												
+												<td>2TERM  개강</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="4">5월</th>
+												
+													<td>02</td>
+													
+													
+												
+												<td>수업일수 3/5선</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>16</td>
+													
+													
+												
+												<td>개교기념일</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>19 ~ 23</td>
+													
+												
+												<td>2TERM 중간고사</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>23</td>
+													
+													
+												
+												<td>수업일수 4/5선</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="4">6월</th>
+												
+													
+													<td>16 ~ 20</td>
+													
+												
+												<td>1학기(2TERM) 기말고사</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>20</td>
+													
+													
+												
+												<td>1학기 종강</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>23 ~ 07.11</td>
+												
+												<td>하계 계절학기</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>30 ~ 07.03</td>
+												
+												<td>1학기 성적공람 및 이의신청</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="4">7월</th>
+												
+													<td>07</td>
+													
+													
+												
+												<td>1학기 성적발표</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>14 ~ 18</td>
+													
+												
+												<td>2학기 학적변동기간</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>16</td>
+													
+													
+												
+												<td>하계 계절학기 성적발표</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>28 ~ 08.01</td>
+												
+												<td>2학기 수강신청</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="4">8월</th>
+												
+													
+													<td>11 ~ 22</td>
+													
+												
+												<td>Advantage Semester(기간 중 운영)</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>14</td>
+													
+													
+												
+												<td>2024학년도 후기 학위수여식</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>18 ~ 22</td>
+													
+												
+												<td>2학기 등록기간</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>25</td>
+													
+													
+												
+												<td>2학기 개강(학기개시일), 3TERM 개강</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="3">9월</th>
+												
+													
+													<td>01 ~ 05</td>
+													
+												
+												<td>2학기 수강신청 포기기간</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>12</td>
+													
+													
+												
+												<td>수업일수 1/5선</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>15 ~ 19</td>
+													
+												
+												<td>3TERM 중간고사</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="5">10월</th>
+												
+													<td>03</td>
+													
+													
+												
+												<td>수업일수 2/5선</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>13 ~ 17</td>
+													
+												
+												<td>2학기 중간고사, 3TERM 기말고사</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>20 ~ 22</td>
+													
+												
+												<td>4TERM 개강 및 수강신청 포기기간</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>20</td>
+													
+													
+												
+												<td>4TERM  개강</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>24</td>
+													
+													
+												
+												<td>수업일수 3/5선</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="2">11월</th>
+												
+													
+													<td>10 ~ 14</td>
+													
+												
+												<td>4TERM 중간고사</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>14</td>
+													
+													
+												
+												<td>수업일수 4/5선</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="5">12월</th>
+												
+													
+													<td>08 ~ 12</td>
+													
+												
+												<td>2학기(4TERM) 기말고사</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>12</td>
+													
+													
+												
+												<td>2학기 종강</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>15 ~ 01.06</td>
+												
+												<td>동계 계절학기</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>22 ~ 26</td>
+													
+												
+												<td>2학기 성적공람 및 이의신청</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>30</td>
+													
+													
+												
+												<td>2학기 성적발표</td>	
+											</tr>
+										
+										
+										
+	
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+									
+										
+	 
+																			
+	
+	 
+								
+															
+							
+	
+	 
+							
+							
+							
+								
+															
+							
+								
+	 
+									
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="3">1월</th>
+												
+													
+													<td>05 ~ 09</td>
+													
+												
+												<td>2026학년도 1학기 학적변동기간</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+											<tr>
+												
+													<td>09</td>
+													
+													
+												
+												<td>동계 계절학기 성적발표</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+											<tr>
+												
+													
+													<td>26 ~ 30</td>
+													
+												
+												<td>2026학년도 1학기 수강신청</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 
+									
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+											<th scope="row" rowspan="2">2월</th>
+												
+													<td>12</td>
+													
+													
+												
+												<td>2025학년도 전기 학위수여식</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+											<tr>
+												
+													
+													<td>23 ~ 27</td>
+													
+												
+												<td>2026학년도 1학기 등록기간</td>	
+											</tr>
+										
+										
+										
+										
+																			
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+						</tbody>
+					</table>
+				</div>
+				<!-- //web style -->
+				<!-- mobile style --> 
+				<div class="schedule_table_mob">
+					<table>
+						<caption>
+						<strong>년도별 학사일정 정보 표</strong><p>년도별 학사일정 정보 표로 월, 일, 일정으로 나뉘어 설명합니다.</p>
+						</caption>
+						<col style="width:20%;">
+						<col style="width:80%;">
+						<tbody>
+							
+							
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">3월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													<td>03</td>
+													
+													
+												
+												<td>1학기 개강(학기개시일), 1TERM 개강</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>11 ~ 17</td>
+													
+												
+												<td>1학기 수강신청 포기기간</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>21</td>
+													
+													
+												
+												<td>수업일수 1/5선</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>24 ~ 28</td>
+													
+												
+												<td>1TERM 중간고사</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">4월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													<td>11</td>
+													
+													
+												
+												<td>수업일수 2/5선</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>21 ~ 25</td>
+													
+												
+												<td>1학기 중간고사, 1TERM 기말고사</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>28 ~ 30</td>
+													
+												
+												<td>2TERM 개강 및 수강신청 포기기간</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>28</td>
+													
+													
+												
+												<td>2TERM  개강</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">5월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													<td>02</td>
+													
+													
+												
+												<td>수업일수 3/5선</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>16</td>
+													
+													
+												
+												<td>개교기념일</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>19 ~ 23</td>
+													
+												
+												<td>2TERM 중간고사</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>23</td>
+													
+													
+												
+												<td>수업일수 4/5선</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">6월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													
+													<td>16 ~ 20</td>
+													
+												
+												<td>1학기(2TERM) 기말고사</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>20</td>
+													
+													
+												
+												<td>1학기 종강</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>23 ~ 07.11</td>
+												
+												<td>하계 계절학기</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>30 ~ 07.03</td>
+												
+												<td>1학기 성적공람 및 이의신청</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">7월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													<td>07</td>
+													
+													
+												
+												<td>1학기 성적발표</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>14 ~ 18</td>
+													
+												
+												<td>2학기 학적변동기간</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>16</td>
+													
+													
+												
+												<td>하계 계절학기 성적발표</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>28 ~ 08.01</td>
+												
+												<td>2학기 수강신청</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">8월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													
+													<td>11 ~ 22</td>
+													
+												
+												<td>Advantage Semester(기간 중 운영)</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>14</td>
+													
+													
+												
+												<td>2024학년도 후기 학위수여식</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>18 ~ 22</td>
+													
+												
+												<td>2학기 등록기간</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>25</td>
+													
+													
+												
+												<td>2학기 개강(학기개시일), 3TERM 개강</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">9월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													
+													<td>01 ~ 05</td>
+													
+												
+												<td>2학기 수강신청 포기기간</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>12</td>
+													
+													
+												
+												<td>수업일수 1/5선</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>15 ~ 19</td>
+													
+												
+												<td>3TERM 중간고사</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">10월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													<td>03</td>
+													
+													
+												
+												<td>수업일수 2/5선</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>13 ~ 17</td>
+													
+												
+												<td>2학기 중간고사, 3TERM 기말고사</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>20 ~ 22</td>
+													
+												
+												<td>4TERM 개강 및 수강신청 포기기간</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>20</td>
+													
+													
+												
+												<td>4TERM  개강</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>24</td>
+													
+													
+												
+												<td>수업일수 3/5선</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">11월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													
+													<td>10 ~ 14</td>
+													
+												
+												<td>4TERM 중간고사</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>14</td>
+													
+													
+												
+												<td>수업일수 4/5선</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 									
+	 									
+	 									
+	 									
+				
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">12월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													
+													<td>08 ~ 12</td>
+													
+												
+												<td>2학기(4TERM) 기말고사</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>12</td>
+													
+													
+												
+												<td>2학기 종강</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													
+													<td>15 ~ 01.06</td>
+												
+												<td>동계 계절학기</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													
+													<td>22 ~ 26</td>
+													
+												
+												<td>2학기 성적공람 및 이의신청</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+	 										<tr>
+												
+													<td>30</td>
+													
+													
+												
+												<td>2학기 성적발표</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+							
+							
+							
+								
+															
+							
+								
+	 
+									
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">1월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													
+													<td>05 ~ 09</td>
+													
+												
+												<td>2026학년도 1학기 학적변동기간</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+											<tr>
+												
+													<td>09</td>
+													
+													
+												
+												<td>동계 계절학기 성적발표</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+										
+										
+										
+											<tr>
+												
+													
+													<td>26 ~ 30</td>
+													
+												
+												<td>2026학년도 1학기 수강신청</td>	
+											</tr>
+										
+										
+										
+										
+									
+										
+									
+										
+																			
+								
+															
+							
+								
+	 
+									
+									
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+									
+										
+										
+										
+											<tr>
+												<th scope="col" colspan="2">2월</th>
+											</tr>
+											
+											<tr>
+											
+												
+													<td>12</td>
+													
+													
+												
+												<td>2025학년도 전기 학위수여식</td>	
+																			
+											</tr>									
+										
+										
+										
+										
+										
+									
+										
+										
+										
+										
+											<tr>
+												
+													
+													<td>23 ~ 27</td>
+													
+												
+												<td>2026학년도 1학기 등록기간</td>	
+											</tr>
+										
+										
+										
+										
+																			
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+							
+								
+															
+															
+						</tbody>
+					</table>
+				</div>
+				<!-- //mobile style -->
+							</div>
+							<!-- //contents section -->
+							<!-- 컨텐츠 담당자 -->
+							
+							
+							
+								
+
+
+
+<div class='charge'>
+<ul class='admin_info'>
+<li class='dept'><b><span></span>담당부서 :</b>
+<span>교학부</span></li>
+<li class='mngphone'><b><span></span>연락처 :</b>
+<span>041-730-5124~5/5122/5130</span></li>
+<li class='modDate'>
+<b>최종수정일 :</b>
+<span>2025-05-30 09:22</span>
+</ul>
+</div>
+
+
+							
+							
+							<!-- // 컨텐츠 담당자 -->
+						</section>
+						<!-- //sub contents -->
+					</div>
+				</div>
+				<!-- //containers -->
+			</div>
+		</div>
+		</div>
+	</div>
+	<!-- // conatainer -->
+
+	<!-- footer -->
+	
+
+
+
+
+
+
+
+<div class="sidefix">
+  <a href="#skipToContent" class="top-btn">
+    <span class="blind">상단으로</span>
+  </a>
+</div>
+
+<footer id="footer">
+
+  <div class="footer-family">
+    <ul class="list layout">
+      <li class="item drop-wrap">
+        <button type="button" class="drop-btn">
+          <span>대학</span>
+        </button>
+        <div class="drop-menu">
+          <ul>
+            <li>
+              <a href="https://med.konyang.ac.kr/" target="_blank" title="새 창 열림">의과대학</a>
+              <ul>
+                <li>
+                  <a href="https://med.konyang.ac.kr/" target="_blank" title="새 창 열림">의학과</a>
+                </li>
+                <li>
+                  <a href="https://dm.konyang.ac.kr/" target="_blank" title="새 창 열림">데이터의학과</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="https://nursingcollege.konyang.ac.kr/" target="_blank" title="새 창 열림">간호대학</a>
+              <ul>
+                <li>
+                  <a href="https://nursingcollege.konyang.ac.kr/nursingcollege/sub01_02.do" target="_blank"
+                    title="새 창 열림">간호학과</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/kor/sub03_04_09.do">의과학계열</a>
+              <ul>
+                <li>
+                  <a href="https://ot.konyang.ac.kr/" target="_blank" title="새 창 열림">작업치료학과</a>
+                </li>
+                <li>
+                  <a href="https://hospi.konyang.ac.kr/" target="_blank" title="새 창 열림">병원경영학과</a>
+                </li>
+                <li>
+                  <a href="https://opt.konyang.ac.kr/" target="_blank" title="새 창 열림">안경광학과</a>
+                </li>
+                <li>
+                  <a href="https://biomed.konyang.ac.kr/" target="_blank" title="새 창 열림">임상병리학과</a>
+                </li>
+                <li>
+                  <a href="https://radio.konyang.ac.kr/" target="_blank" title="새 창 열림">방사선학과</a>
+                </li>
+                <li>
+                  <a href="https://dental.konyang.ac.kr/" target="_blank" title="새 창 열림">치위생학과</a>
+                </li>
+                <li>
+                  <a href="https://kypt.konyang.ac.kr/" target="_blank" title="새 창 열림">물리치료학과</a>
+                </li>
+                <li>
+                  <a href="https://ems.konyang.ac.kr/" target="_blank" title="새 창 열림">응급구조학과</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/kor/sub03_05_06.do">의료공과계열</a>
+              <ul>
+                <li>
+                  <a href="http://bme.konyang.ac.kr" target="_blank" title="새 창 열림">의공학과</a>
+                </li>
+                <li>
+                  <a href="https://mie.konyang.ac.kr/" target="_blank" title="새 창 열림">의료IT공학과</a>
+                </li>
+                <li>
+                  <a href="https://msdm.konyang.ac.kr/" target="_blank" title="새 창 열림">의료공간디자인학과</a>
+                </li>
+                <li>
+                  <a href="https://biom.konyang.ac.kr/" target="_blank" title="새 창 열림">의료신소재학과</a>
+                </li>
+                <li>
+                  <a href="https://pharm.konyang.ac.kr/" target="_blank" title="새 창 열림">제약생명공학과</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="https://aisw.konyang.ac.kr/" target="_blank" title="새 창 열림">AI∙SW융합대학</a>
+              <ul>
+                <li>
+                  <a href="https://ai.konyang.ac.kr/" target="_blank" title="새 창 열림">인공지능학과</a>
+                </li>
+                <li>
+                  <a href="http://xr.konyang.ac.kr" title="새창열림" target="_blank">국방XR학부</a>
+                </li>
+                <li>
+                  <a href="https://smartfarm.konyang.ac.kr/" title="새창열림" target="_blank">스마트팜학부</a>
+                </li>
+                <li>
+                  <a href="https://sec.konyang.ac.kr/" title="새창열림" target="_blank">스마트보안학과</a>
+                </li>
+                <li>
+                  <a href="https://software.konyang.ac.kr/" title="새창열림" target="_blank">기업소프트웨어학부</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/kor/sub03_15_02_01.do">국방산학융합원</a>
+              <ul>
+                <li>
+                  <a href="https://aerial-mumt.konyang.ac.kr/" target="_blank" title="새 창 열림">유무인항공학과</a>
+                </li>
+                <li>
+                  <a href="https://semiconductor.konyang.ac.kr/" title="새창열림" target="_blank">국방반도체공학과</a>
+                </li>
+                <li>
+                  <a href="https://ndid.konyang.ac.kr/ndid.do" target="_blank" title="새 창 열림">ND산업디자인학부</a>
+                </li>
+                <li>
+                  <a href="http://fire.konyang.ac.kr/" target="_blank" title="새 창 열림">재난안전소방학전공</a>
+                </li>
+                <li>
+                  <a href="https://kdie.konyang.ac.kr/kdie.do" target="_blank" title="새 창 열림">방위산업공학전공</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/kor/sub03_16_02_01.do">국방바이오연구원</a>
+              <ul>
+                <li>
+                  <a href="https://dima.konyang.ac.kr/dima.do" target="_blank" title="새 창 열림">국방산업경영학부</a>
+                </li>
+                <li>
+                  <a href="https://clinicalmedbio.konyang.ac.kr/" title="새창열림" target="_blank">임상의약바이오학과</a>
+                <li>
+                  <a href="https://fsnb.konyang.ac.kr/" title="새창열림" target="_blank">식품생명공학과</a>
+                <li>
+                  <a href="http://kbeauty.konyang.ac.kr/" target="_blank" title="새 창 열림">글로벌의료뷰티학전공</a>
+                </li>
+                <li>
+                  <a href="http://exer.konyang.ac.kr/" target="_blank" title="새 창 열림">스포츠의학전공</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/kor/sub03_17_02_01.do">사회과학학술원</a>
+              <ul>
+                <li>
+                  <a href="http://psy.konyang.ac.kr/" target="_blank" title="새 창 열림">심리상담치료학과</a>
+                </li>
+                <li>
+                  <a href="http://ua.konyang.ac.kr/" target="_blank" title="새 창 열림">유아교육과</a>
+                </li>
+                <li>
+                  <a href="http://sports.konyang.ac.kr/" target="_blank" title="새 창 열림">재활퍼스널트레이닝학과</a>
+                </li>
+                <li>
+                  <a href="http://mpa.konyang.ac.kr/" target="_blank" title="새 창 열림">국방경찰행정학부</a>
+                </li>
+                <li>
+                  <a href="http://military.konyang.ac.kr/" target="_blank" title="새 창 열림">군사학과</a>
+                </li>
+                <li>
+                  <a href="http://swf.konyang.ac.kr/" target="_blank" title="새 창 열림">사회복지학과</a>
+                </li>
+                <li>
+                  <a href="https://se.konyang.ac.kr/sse.do" target="_blank" title="새 창 열림">특수교육과</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="/kor/sub03_14_02_01.do">International College</a>
+              <ul>
+                <li>
+                  <a href="/kor/sub03_14_02_01.do">K-문화산업학과</a>
+                </li>
+                <li>
+                  <a href="/kor/sub03_14_03_01.do">국제의료관광학과</a>
+                </li>
+                <li>
+                  <a href="/kor/sub03_14_04_01.do">국제군사학과</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="https://www.konyang.ac.kr/prog/buseosogae/kor/sub03_11_01/view.do?buseo_cd=32200000">휴머니티칼리지</a>
+            </li>
+            <li>
+              <a href="/kor/sub03_18_19.do">2025학년도 이전</a>
+              <ul>
+                <li>
+                  <a href="https://kychild.konyang.ac.kr/" target="_blank" title="새 창 열림">아동교육학과</a>
+                </li>
+                <li>
+                  <a href="http://dcd.konyang.ac.kr/" target="_blank" title="새 창 열림">디지털콘텐츠학과</a>
+                </li>
+                <li>
+                  <a href="https://vcd.konyang.ac.kr/" target="_blank" title="새 창 열림">시각디자인학과</a>
+                </li>
+                <li>
+                  <a href="https://Business.konyang.ac.kr/" target="_blank" title="새 창 열림">경영학부</a>
+                </li>
+                <li>
+                  <a href="https://fintax.konyang.ac.kr/" target="_blank" title="새 창 열림">금융세무학부</a>
+                </li>
+                <li>
+                  <a href="https://tourism.konyang.ac.kr/" target="_blank" title="새 창 열림">호텔관광학과</a>
+                </li>
+                <li>
+                  <a href="https://biz.konyang.ac.kr/" target="_blank" title="새 창 열림">글로벌경영학과</a>
+                </li>
+                <li>
+                  <a href="https://mktgbiz.konyang.ac.kr/" target="_blank" title="새 창 열림">마케팅비즈니스학과</a>
+                </li>
+                <li>
+                  <a href="https://finance.konyang.ac.kr/" target="_blank" title="새 창 열림">금융학과</a>
+                </li>
+                <li>
+                  <a href="https://tax.konyang.ac.kr/" target="_blank" title="새 창 열림">세무학과</a>
+                </li>
+                <li>
+                  <a href="https://www.ky-design.net/" title="새창열림" target="_blank">융합디자인학과</a>
+                </li>
+                <li>
+                  <a href="https://clinicalmed.konyang.ac.kr/clinicalmed.do" title="새창열림" target="_blank">임상의약학과</a>
+                </li>
+                <li>
+                  <a href="https://medbiosci.konyang.ac.kr/" title="새창열림" target="_blank">의약바이오학과</a>
+                </li>
+                <li>
+                  <a href="https://mce.konyang.ac.kr/" title="새창열림" target="_blank">드론기계학과</a>
+                </li>
+                <li>
+                  <a href="https://computer.konyang.ac.kr/" title="새창열림" target="_blank">융합IT학과</a>
+                </li>
+                <li>
+                  <a href="https://gfs.konyang.ac.kr/" title="새창열림" target="_blank">글로벌프론티어학과</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="item drop-wrap">
+        <button type="button" class="drop-btn">
+          <span>대학원</span>
+        </button>
+        <div class="drop-menu">
+          <ul>
+            <li>
+              <a href="https://kygrad.konyang.ac.kr/kygrad/sub02_01.do" target="_blank" title="새 창 열림">일반대학원</a>
+            </li>
+            <li>
+              <a href="https://kygrad.konyang.ac.kr/kygrad/sub03_01_01.do" target="_blank" title="새 창 열림">특수대학원</a>
+              <ul>
+                <li>
+                  <a href="https://kygrad.konyang.ac.kr/kygrad/sub03_01_01.do" target="_blank" title="새 창 열림">경영사회복지대학원</a>
+                </li>
+                <li>
+                  <a href="https://kygrad.konyang.ac.kr/kygrad/sub03_02_01.do" target="_blank" title="새 창 열림">보건복지대학원</a>
+                </li>
+                <li>
+                  <a href="https://kygrad.konyang.ac.kr/kygrad/sub03_03_01.do" target="_blank" title="새 창 열림">안보대학원</a>
+                </li>
+                <li>
+                  <a href="https://kygrad.konyang.ac.kr/kygrad/sub03_04_01.do" target="_blank" title="새 창 열림">상담대학원</a>
+                </li>
+                <li>
+                  <a href="https://kygrad.konyang.ac.kr/kygrad/sub03_05_01.do" target="_blank" title="새 창 열림">바이오융합대학원</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="item drop-wrap">
+        <button type="button" class="drop-btn">
+          <span>기타</span>
+        </button>
+        <div class="drop-menu">
+          <ul>
+            <li>
+              <a href="http://leaders.konyang.ac.kr" target="_blank" title="새 창 열림">평생교육원(통합)</a>
+            </li>
+            <li>
+              <a href="http://gymnasium.konyang.ac.kr" target="_blank" title="새 창 열림">건양 짐나지움</a>
+            </li>
+            <li>
+              <a href="https://www.goarmy.mil.kr:447/" target="_blank" title="새 창 열림">육군모집</a>
+            </li>
+            <li>
+              <a href="https://r-bay.co.kr/agency/main/bjdteElITjJvQ010Y01Nb2dJWDBrdz09" target="_blank"
+                title="새 창 열림">생명윤리위원회(IRB)</a>
+            </li>
+            <li>
+              <a href="https://www.ggoomgil.go.kr/" target="_blank" title="새 창 열림">논산계룡 진로직업체험지원센터</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="footer-wrap layout">
+
+    <div class="logo-wrap">
+      <div class="main-logo">
+        <span class="blind">건양대학교</span>
+      </div>
+    </div>
+
+    <address class="info-wrap">
+      <ul class="info-wrap-list">
+        <li class="item">
+          <strong>글로컬캠퍼스</strong>
+          <span>32992 충청남도 논산시 대학로 121</span>
+        </li>
+        <li class="item">
+          <strong>메디컬캠퍼스</strong>
+          <span>35365 대전광역시 서구 관저동로 158</span>
+        </li>
+      </ul>
+      <ul class="info-wrap-list">
+        <li class="item">
+          <strong>대표전화</strong>
+          <span>041-730-5114</span>
+        </li>
+        <li class="item">
+          <strong>팩스</strong>
+          <span>041-733-2070</span>
+        </li>
+      </ul>
+    </address>
+
+    <ul class="quick-wrap">
+      <li class="item drop-wrap">
+        <button type="button" class="drop-btn">
+          <span>교내사이트</span>
+        </button>
+        <div class="drop-menu">
+          <ul>
+            <li>
+              <a href="https://glocal.konyang.ac.kr/" target="_blank" title="새 창 열림">글로컬대학사업추진단</a>
+            </li>
+            <li>
+              <a href="https://kyusw.konyang.ac.kr/" target="_blank" title="새 창 열림">SW중심대학사업단</a>
+            </li>
+            <li>
+              <a href="https://rise.konyang.ac.kr/linc.do" target="_blank" title="새 창 열림">앵커사업단</a>
+            </li>
+            <li>
+              <a href="https://huss.konyang.ac.kr/" target="_blank" title="새 창 열림">인문사회융합인재양성사업단</a>
+            </li>
+            <li>
+              <a href="https://youngjae.konyang.ac.kr/" target="_blank" title="새 창 열림">AI·정보보호영재교육원</a>
+            </li>
+            <li>
+              <a href="https://merae.konyang.ac.kr/" target="_blank" title="새 창 열림">미래인재교육센터</a>
+            </li>
+            <li>
+              <a href="https://www.konyang.ac.kr/faculty.do" target="_blank" title="새 창 열림">교원정보</a>
+            </li>
+            <li>
+              <a href="https://teaching.konyang.ac.kr/" target="_blank" title="새 창 열림">교직부</a>
+            </li>
+            <li>
+              <a href="https://kctl.konyang.ac.kr/" target="_blank" title="새 창 열림">교수학습지원센터</a>
+            </li>
+            <li>
+              <a href="https://job.konyang.ac.kr/" target="_blank" title="새 창 열림">취업지원</a>
+            </li>
+            <li>
+              <a href="https://fieldpractice.konyang.ac.kr/" target="_blank" title="새 창 열림">현장실습지원센터</a>
+            </li>
+            <li>
+              <a href="https://volunteer.konyang.ac.kr/" target="_blank" title="새 창 열림">사회봉사센터</a>
+            </li>
+            <li>
+              <a href="https://disable.konyang.ac.kr/" target="_blank" title="새 창 열림">장애학생지원센터</a>
+            </li>
+            <li>
+              <a href="http://www.safetyedu.org/Account/LogOn?UserAgencyNo=100" target="_blank" title="새 창 열림">연구실
+                안전관리센터</a>
+            </li>
+            <li>
+              <a href="https://r-bay.co.kr/agency/main/bjdteElITjJvQ010Y01Nb2dJWDBrdz09" target="_blank"
+                title="새 창 열림">생명윤리위원회(IRB)</a>
+            </li>
+            <li>
+              <a href="https://kyicee.konyang.ac.kr/" target="_blank" title="새 창 열림">공학교육혁신센터</a>
+            </li>
+            <li>
+              <a href="https://kyucounsel.konyang.ac.kr/" target="_blank" title="새 창 열림">학생상담센터</a>
+            </li>
+            <li>
+              <a href="https://happy.konyang.ac.kr/" target="_blank" title="새 창 열림">마음행복연구소</a>
+            </li>
+            <li>
+              <a href="https://kychrge.konyang.ac.kr/kychrge.do" target="_blank" title="새 창 열림">인권센터</a>
+            </li>
+            <li>
+              <a href="https://kuicf.konyang.ac.kr/" target="_blank" title="새 창 열림">산학협력단</a>
+            </li>
+            <li>
+              <a href="https://ekubi.konyang.ac.kr/" target="_blank" title="새 창 열림">창업보육센터</a>
+            </li>
+            <li>
+              <a href="https://www.konyang.ac.kr/ict.do" target="_blank" title="새 창 열림">정보통신원 정보시스템</a>
+            </li>
+            <li>
+              <a href="https://irds.konyang.ac.kr/" target="_blank" title="새 창 열림">교육성과관리센터</a>
+            </li>
+            <li>
+              <a href="http://leaders.konyang.ac.kr" target="_blank" title="새 창 열림">평생교육원</a>
+            </li>
+            <li>
+              <a href="https://gymnasium.konyang.ac.kr" target="_blank" title="새 창 열림">건양 짐나지움</a>
+            </li>
+            <li>
+              <a href="https://insung.konyang.ac.kr/" target="_blank" title="새 창 열림">인성관(기숙사)</a>
+            </li>
+            <li>
+              <a href="https://housing.kyu.ac.kr/" target="_blank" title="새 창 열림">주민자치행복주택</a>
+            </li>
+            <li>
+              <a href="https://interedu.konyang.ac.kr/" target="_blank" title="새 창 열림">대외협력처</a>
+            </li>
+            <li>
+              <a href="https://travel.konyang.ac.kr/" target="_blank" title="새 창 열림">서천수련관</a>
+            </li>
+            <li>
+              <a href="https://human.konyang.ac.kr/" target="_blank" title="새 창 열림">대학혁신지원사업단</a>
+            </li>
+            <li>
+              <a href="http://rotc.konyang.ac.kr/" target="_blank" title="새 창 열림">학군단</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+      <li class="item drop-wrap">
+        <button type="button" class="drop-btn">
+          <span>학교법인 건양교육재단</span>
+        </button>
+        <div class="drop-menu">
+          <ul>
+            <li>
+              <a href="http://www.kyuh.ac.kr" target="_blank" title="새 창 열림">건양대학교병원</a>
+            </li>
+            <li>
+              <a href="http://www.kimeye.com/kimeye" target="_blank" title="새 창 열림">김안과병원</a>
+            </li>
+            <li>
+              <a href="http://www.kyuh.ac.kr/buyeo/" target="_blank" title="새 창 열림">건양대학교부여병원</a>
+            </li>
+            <li>
+              <a href="http://www.kycu.ac.kr" target="_blank" title="새 창 열림">건양사이버대학교</a>
+            </li>
+            <li>
+              <a href="http://kyu-kindergarten.kidis.co.kr/" target="_blank" title="새 창 열림">건양대학교 부속 유치원</a>
+            </li>
+            <li>
+              <a href="http://konyang.cnems.kr/main.do" target="_blank" title="새 창 열림">건양중학교</a>
+            </li>
+            <li>
+              <a href="http://konyang.cnehs.kr/main.do" target="_blank" title="새 창 열림">건양고등학교</a>
+            </li>
+          </ul>
+        </div>
+      </li>
+    </ul>
+
+    <div class="menu-wrap">
+      <a class="item point" href="/kor/sitemap_16_01.do">개인정보처리방침</a>
+      <a class="item" href="http://www.academyinfo.go.kr/popup/pubinfo1690/list.do?schlId=0000054" target="_blank" title="새 창 열림">대학정보공시</a>
+      <a class="item" href="/kor/sitemap_18_01_01.do">정보공개</a>
+      <a class="item" href="/cop/bbs/BBSMSTR_000000000597/selectBoardList.do">대학자체평가</a>
+      <a class="item" href="/kor/sitemap_17.do">이메일무단수집거부</a>
+      <a class="item" href="/cop/bbs/BBSMSTR_000000000598/selectBoardList.do">입찰공고</a>
+      <a class="item" href="/prog/info/kor/sitemap_18_04_02/yesan/lst.do">예·결산공고</a>
+      <a class="item" href="/cop/bbs/BBSMSTR_000000000588/selectBoardList.do">채용공고</a>
+      <a class="item" href="/kor/sub06_06_02_01.do">시설물 이용</a>
+      <a class="item" href="/kor/sub01_05_03_01.do">오시는길</a>
+      <a class="item" href="http://367.co.kr/" target="_blank" title="새 창 열림">원격지원</a>
+    </div>
+
+    <div class="copy-wrap">
+      <span class="ib">COPYRIGHT© KONYANG UNIVERSITY.</span>
+      <span class="ib">ALL RIGHTS RESERVED.</span>
+    </div>
+
+  </div>
+
+</footer>
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');  ga('create', 'UA-69953201-1', 'auto');
+  ga('send', 'pageview');
+</script>
+	<!-- // footer -->
+</div>
+<!-- // wrap -->
+
+</body>
+</html>
