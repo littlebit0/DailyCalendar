@@ -1,7 +1,15 @@
 {
+  "assets/timetable/chosun-unknown-2026-2.json": {
+    "sha256": "82aaa36033d2274d4385f950929a819d89bd11c6f1fe0d11317f4bcc5d57e4ab",
+    "reason": "#642 조선대 공개 개설교과목조회(2026-2 학부) 전체 3,255행 중 폐강 192행을 뺀 개설 3,063강좌로 교체(학과 게시판 부분 자료 135강좌 대체)"
+  },
   "assets/timetable/organizations/ajou.json": {
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
     "reason": "#92 아주대 원자료 분류를 공식 학과 목록·학사안내 기준 소속(공과대학·경영대학·연계전공·마이크로전공)으로 배정"
+  },
+  "assets/timetable/organizations/chosun.json": {
+    "sha256": "097b440481c032b6fa92f463a64bc65c748c9b5503e42dca3b19f7eead679c6c",
+    "reason": "#642 조선대 개설교과목조회 결과의 대학·학과 열 기준 개설 라벨 136개 배정(독립 개설 단위 14개)"
   },
   "assets/timetable/organizations/dku.json": {
     "sha256": "aeea83387a3b13285a7b08a211d01d4ef2c564d6b154779118a379d36cefaca2",
