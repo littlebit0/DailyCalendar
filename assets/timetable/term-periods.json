@@ -366,6 +366,26 @@
           ]
         }
       ]
+    },
+    {
+      "university": "hufs",
+      "sourceUrl": "https://www.hufs.ac.kr/hufs/11360/subview.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "2학기 개강 9월1일",
+            "보강주간12월8~14일",
+            "기말시험12월15~21일",
+            "종강12월21일"
+          ],
+          "note": "Full academic bounds; regular derived course dates end Dec7 and exclude actual school closure days. Individually printed dates retain their verified exam/makeup exceptions."
+        }
+      ]
     }
   ]
 }
