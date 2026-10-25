@@ -2,6 +2,7 @@ import 'academic_source.dart';
 import 'catholic_academic_source.dart';
 import 'gachon_academic_source.dart';
 import 'gnu_academic_source.dart';
+import 'kangwon_academic_source.dart';
 import 'khu_academic_source.dart';
 import 'knu_academic_source.dart';
 import 'konkuk_academic_source.dart';
@@ -92,6 +93,18 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000054',
     campusIds: {'academyinfo:0000054', 'academyinfo:0000055'},
     create: KonyangAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'kangwon',
+    institutionId: 'academyinfo:0000003',
+    // Every campus shares one calendar that merges both campus boards.
+    campusIds: {
+      'academyinfo:0000003',
+      'academyinfo:0000004',
+      'academyinfo:0003363',
+      'academyinfo:0003364',
+    },
+    create: KangwonAcademicSource.new,
   ),
 ];
 
