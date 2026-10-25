@@ -1,4 +1,12 @@
 {
+  "assets/timetable/cau-davinci-2026-2.json": {
+    "sha256": "81a4493e33fecc4d7bbfed76ca2395a474390bb79fe0ceba17eb5b839c89c345",
+    "reason": "#683 중앙대 다빈치 교시 구간에 쉬는 시간 포함(숫자 교시 60분·알파벳 교시 90분), 시계 시각 원문 구간은 유지"
+  },
+  "assets/timetable/cau-seoul-2026-2.json": {
+    "sha256": "beeca63ef523368b6af373be99684f5ebef54cfcbeb424f0345e8364e2d3994e",
+    "reason": "#683 중앙대 서울 교시 구간에 쉬는 시간 포함(숫자 교시 60분·알파벳 교시 90분), 시계 시각 원문 구간은 유지"
+  },
   "assets/timetable/organizations/ajou.json": {
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
     "reason": "#92 아주대 원자료 분류를 공식 학과 목록·학사안내 기준 소속(공과대학·경영대학·연계전공·마이크로전공)으로 배정"

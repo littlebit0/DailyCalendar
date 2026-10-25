@@ -3,6 +3,9 @@
 
 Official period reference: https://cse.cau.ac.kr/file/2026_haksa_guide.pdf
 Numeric periods are 50 minutes, starting 09:00 Seoul / 09:30 Davinci.
+Stored slots include the following break: numeric periods 60 minutes
+(50 + 10), letter periods 90 minutes (75 + 15), matching the next period's
+start in the guide's period table (p.120). Clock-time meetings stay verbatim.
 The public menu also publishes late periods 13/14; extend the same hourly
 cadence from the guide (13 = 21:00 Seoul, 14 = 22:00), bounded to these
 actually observed periods and checked to remain within the same day.
@@ -47,30 +50,35 @@ def meetings(text, campus):
             if int(match[3]) > 59 or int(match[5]) > 59:
                 raise ValueError('Invalid CAU clock minute')
             times = [(int(match[2])*60+int(match[3]), int(match[4])*60+int(match[5]))]
+            clock = True
         else:
             base = 540 if campus == '1' else 570
             times = []
+            clock = False
             for period in match[6].split(','):
                 if period in 'ABCDEFGH':
                     start = base + 'ABCDEFGH'.index(period)*90
-                    end = start + 75
+                    end = start + 90
                 elif re.fullmatch(r'\d{1,2}', period) and 0 <= int(period) <= 14:
                     start = base + (int(period)-1)*60
-                    end = start+50
+                    end = start+60
                 else:
                     return [], 'unparsed'
                 times.append((start, end))
         for start, end in times:
             if not 0 <= start < end <= 1440:
                 raise ValueError('Invalid CAU teaching interval')
-            result.append({'weekday': DAYS.index(match[1])+1, 'startMinute': start, 'endMinute': end, 'classroom': classroom})
+            result.append({'weekday': DAYS.index(match[1])+1, 'startMinute': start, 'endMinute': end, 'classroom': classroom, 'clock': clock})
     merged = []
     for meeting in sorted(result, key=lambda r: (r['weekday'], r['classroom'], r['startMinute'])):
         previous = merged[-1] if merged else None
-        if previous and previous['weekday'] == meeting['weekday'] and previous['classroom'] == meeting['classroom'] and previous['endMinute'] <= meeting['startMinute'] <= previous['endMinute']+10:
+        if previous and previous['weekday'] == meeting['weekday'] and previous['classroom'] == meeting['classroom'] and previous['endMinute'] <= meeting['startMinute'] <= previous['endMinute']+(10 if previous['clock'] or meeting['clock'] else 59):
             previous['endMinute'] = meeting['endMinute']
+            previous['clock'] = previous['clock'] and meeting['clock']
         elif meeting not in merged:
             merged.append(meeting)
+    for meeting in merged:
+        del meeting['clock']
     return merged, 'scheduled' if merged else 'unparsed'
 
 
