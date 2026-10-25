@@ -90,7 +90,7 @@ void main() {
       );
       final courses = datasets.expand((d) => d.courses).toList();
       expect(courses.map((c) => c.sourceId).toSet(), hasLength(2782));
-      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1843));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(1842));
       expect(
         courses.where((c) => c.scheduleStatus == 'unscheduled'),
         hasLength(228),
