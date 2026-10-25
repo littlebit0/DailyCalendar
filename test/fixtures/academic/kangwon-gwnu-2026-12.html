@@ -1,0 +1,68 @@
+        var toDetailParam = '&amp;amp;pageIndex=1&amp;amp;pageItm=10&amp;amp;searchOrderSort=0&amp;amp;searchYear=2026&amp;amp;searchMonth=12&amp;amp;searchGbn=0';
+
+        // 서버에서 전달받은 일정 데이터
+        var scheduleData = [];
+        
+        scheduleData.push({
+            pstSn: 44,
+            ttl: "2026학년도 제2학기 성적 입력 마감".replace(/'/g, "\\'"),
+            cd1Vl: 0,
+            etc1Cn: "2026.12.24",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.12.24",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 43,
+            ttl: "2026학년도 동계방학".replace(/'/g, "\\'"),
+            cd1Vl: 0,
+            etc1Cn: "2026.12.22",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.12.22",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 42,
+            ttl: "2026학년도 제2학기 기말시험 종료일, 종강".replace(/'/g, "\\'"),
+            cd1Vl: 0,
+            etc1Cn: "2026.12.21",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.12.21",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+        scheduleData.push({
+            pstSn: 41,
+            ttl: "보강기간".replace(/'/g, "\\'"),
+            cd1Vl: 0,
+            etc1Cn: "2026.12.15",
+            etc2Cn: "00:00",
+            etc3Cn: "2026.12.21",
+            etc4Cn: "00:00",
+            etc5Cn: "",
+            dataSttsCd: "A"
+        });
+        
+
+        // 날짜 오름차순 정렬
+        scheduleData.sort(function(a, b) {
+            var cmp = (a.etc1Cn || '').localeCompare(b.etc1Cn || '');
+            return cmp !== 0 ? cmp : (a.etc3Cn || '').localeCompare(b.etc3Cn || '');
+        });
+
+        // 현재 연월 설정
+        var today = new Date();
+        var currentYear = parseInt($('#searchYear').val()) || today.getFullYear();
+        var currentMonth = parseInt($('#searchMonth').val()) || (today.getMonth() + 1);
+
+        // 일정 데이터를 날짜별로 매핑
+        var scheduleMap = {};
+        var bbsId = 'gwnucalender';
