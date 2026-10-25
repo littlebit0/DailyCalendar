@@ -366,6 +366,19 @@
           ]
         }
       ]
+    },
+    {
+      "university": "khu",
+      "sourceUrl": "https://haksa.khu.ac.kr/nhaksa/user/contents/view.do?menuNo=21200042",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
     }
   ]
 }
