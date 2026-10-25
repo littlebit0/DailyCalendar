@@ -5,6 +5,7 @@ import 'gnu_academic_source.dart';
 import 'khu_academic_source.dart';
 import 'knu_academic_source.dart';
 import 'konkuk_academic_source.dart';
+import 'konyang_academic_source.dart';
 import 'kyonggi_academic_source.dart';
 
 /// Links a university calendar adapter to the academyinfo campuses it serves.
@@ -85,6 +86,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
       'academyinfo:0000049',
     },
     create: CatholicAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'konyang',
+    institutionId: 'academyinfo:0000054',
+    campusIds: {'academyinfo:0000054', 'academyinfo:0000055'},
+    create: KonyangAcademicSource.new,
   ),
 ];
 
