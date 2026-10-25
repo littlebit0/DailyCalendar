@@ -1,6 +1,7 @@
 import 'academic_source.dart';
 import 'catholic_academic_source.dart';
 import 'gachon_academic_source.dart';
+import 'gknu_academic_source.dart';
 import 'gnu_academic_source.dart';
 import 'kangwon_academic_source.dart';
 import 'khu_academic_source.dart';
@@ -119,6 +120,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000074',
     campusIds: {'academyinfo:0000074'},
     create: KwangwoonAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'gknu',
+    institutionId: 'academyinfo:0000021',
+    campusIds: {'academyinfo:0000021'},
+    create: GknuAcademicSource.new,
   ),
 ];
 
