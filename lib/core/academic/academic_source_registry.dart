@@ -3,6 +3,7 @@ import 'bu_academic_source.dart';
 import 'catholic_academic_source.dart';
 import 'changwon_academic_source.dart';
 import 'daegu_academic_source.dart';
+import 'deu_academic_source.dart';
 import 'dju_academic_source.dart';
 import 'dku_academic_source.dart';
 import 'donga_academic_source.dart';
@@ -282,6 +283,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     institutionId: 'academyinfo:0000014',
     campusIds: {'academyinfo:0000014'},
     create: PnuAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'deu',
+    institutionId: 'academyinfo:0000107',
+    campusIds: {'academyinfo:0000107'},
+    create: DeuAcademicSource.new,
   ),
 ];
 
