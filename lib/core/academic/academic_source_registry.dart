@@ -1,6 +1,7 @@
 import 'academic_source.dart';
 import 'gachon_academic_source.dart';
 import 'gnu_academic_source.dart';
+import 'khu_academic_source.dart';
 import 'knu_academic_source.dart';
 import 'konkuk_academic_source.dart';
 import 'kyonggi_academic_source.dart';
@@ -67,6 +68,12 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
     campusIds: {'academyinfo:0000053'},
     create: KonkukAcademicSource.glocal,
     primary: false,
+  ),
+  AcademicSourceRegistration(
+    id: 'khu',
+    institutionId: 'academyinfo:0000066',
+    campusIds: {'academyinfo:0000066'},
+    create: KhuAcademicSource.new,
   ),
 ];
 
