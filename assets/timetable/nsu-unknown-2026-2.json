@@ -14029,166 +14029,331 @@
           "date": "2026-08-31",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-07",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-14",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-21",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-28",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-12",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-19",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-26",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-02",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-09",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-16",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-23",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-30",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-07",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-14",
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7311",
           "sourcePeriod": 2,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7311",
+          "sourcePeriod": 4,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         }
       ],
       "closureExactTitleSectionTeacherMatches": [],
@@ -14549,166 +14714,331 @@
           "date": "2026-08-31",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-08-31",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-07",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-07",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-14",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-14",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-21",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-21",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-28",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-28",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-12",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-12",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-19",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-19",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-26",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-26",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-02",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-02",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-09",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-09",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-16",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-16",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-23",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-23",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-30",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-30",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-07",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-07",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-14",
           "weekday": 1,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7311",
           "sourcePeriod": 6,
           "sourceGrade": 2,
           "sourceBand": "g2mon-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-14",
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7311",
+          "sourcePeriod": 8,
+          "sourceGrade": 2,
+          "sourceBand": "g2mon-upper",
+          "sourceProfessor": "박세미"
         }
       ],
       "closureExactTitleSectionTeacherMatches": [],
@@ -17559,177 +17889,353 @@
           "date": "2026-09-02",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-09",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-16",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-23",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-30",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-07",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-14",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-21",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-28",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-04",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-11",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-18",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-25",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-02",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-09",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-16",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 720,
           "classroom": "7310",
           "sourcePeriod": 2,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-16",
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "7310",
+          "sourcePeriod": 4,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         }
       ],
       "closureExactTitleSectionTeacherMatches": [],
@@ -18101,177 +18607,353 @@
           "date": "2026-09-02",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-09",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-16",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-23",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-09-30",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-07",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-14",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-21",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-10-28",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-04",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-11",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-18",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-11-25",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-02",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-09",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         },
         {
           "date": "2026-12-16",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 960,
           "classroom": "7310",
           "sourcePeriod": 6,
           "sourceGrade": 3,
           "sourceBand": "g3wed-upper",
-          "sourceProfessor": "민경석 / 박세미"
+          "sourceProfessor": "민경석"
+        },
+        {
+          "date": "2026-12-16",
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "7310",
+          "sourcePeriod": 8,
+          "sourceGrade": 3,
+          "sourceBand": "g3wed-upper",
+          "sourceProfessor": "박세미"
         }
       ],
       "closureExactTitleSectionTeacherMatches": [],
@@ -19445,177 +20127,353 @@
           "date": "2026-09-02",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-09",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-16",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-23",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-30",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-07",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-14",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-21",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-28",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-04",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-11",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-18",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-25",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-12-02",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-12-09",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-12-16",
           "weekday": 3,
           "startMinute": 600,
-          "endMinute": 780,
+          "endMinute": 660,
           "classroom": "7316",
           "sourcePeriod": 2,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-12-16",
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "7316",
+          "sourcePeriod": 3,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         }
       ],
       "closureExactTitleSectionTeacherMatches": [],
@@ -19716,177 +20574,353 @@
           "date": "2026-09-02",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-02",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-09",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-09",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-16",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-16",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-23",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-09-30",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-09-30",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-07",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-07",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-14",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-14",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-21",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-21",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-10-28",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-10-28",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-04",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-04",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-11",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-11",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-18",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-18",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-11-25",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-11-25",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-12-02",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-12-02",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-12-09",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-12-09",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         },
         {
           "date": "2026-12-16",
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 1020,
+          "endMinute": 900,
           "classroom": "7316",
           "sourcePeriod": 6,
           "sourceGrade": 4,
           "sourceBand": "g4wed-upper",
-          "sourceProfessor": "손보식 / 윤유상"
+          "sourceProfessor": "손보식"
+        },
+        {
+          "date": "2026-12-16",
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "7316",
+          "sourcePeriod": 7,
+          "sourceGrade": 4,
+          "sourceBand": "g4wed-upper",
+          "sourceProfessor": "윤유상"
         }
       ],
       "closureExactTitleSectionTeacherMatches": [],

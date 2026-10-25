@@ -235,6 +235,7 @@ void main() {
         for (var i = 0; i < 5; i++) 1080 + 50 * i,
       ];
       final ends = [...starts.skip(1), 1330];
+      final splitByProfessor = <String>{};
       var segments = 0;
       var minutes = 0;
       for (final c in asset['courses'] as List) {
@@ -255,16 +256,25 @@ void main() {
             (a, b) => (a['startMinute'] as int) - (b['startMinute'] as int),
           );
           for (var i = 1; i < list.length; i++) {
-            expect(
-              (list[i]['startMinute'] as int) -
-                  (list[i - 1]['endMinute'] as int),
-              greaterThanOrEqualTo(60),
-              reason: '${c['sourceId']} ${list[i]['date']}',
-            );
+            final gap =
+                (list[i]['startMinute'] as int) -
+                (list[i - 1]['endMinute'] as int);
+            if (list[i]['sourceProfessor'] != list[i - 1]['sourceProfessor']) {
+              // 교수가 다르면 인접 교시여도 합치지 않고 나눠 저장한다.
+              expect(gap, greaterThanOrEqualTo(0));
+              if (gap < 60) splitByProfessor.add(c['sourceId'] as String);
+            } else {
+              expect(
+                gap,
+                greaterThanOrEqualTo(60),
+                reason: '${c['sourceId']} ${list[i]['date']}',
+              );
+            }
           }
         }
       }
-      expect(segments, 1596);
+      expect(splitByProfessor, hasLength(6));
+      expect(segments, 1690);
       expect(minutes, 3933 * 60);
     },
   );
