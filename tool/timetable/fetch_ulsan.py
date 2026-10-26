@@ -30,7 +30,7 @@ def curl(cookie, data=None, out=None):
         raise RuntimeError(f'HTTP {code}')
     return open(out, encoding='utf-8', errors='replace').read()
 
-from ulsan_view import P, check_navigation, check_term, form, options
+from ulsan_view import P, check_area_view, check_navigation, check_term, form, options
 
 
 OUT = sys.argv[1]
@@ -142,18 +142,38 @@ for dv, dn in (colleges if os.environ.get('SKIP_MAJOR') != '1' else []):
         json.dump(tree, open(os.path.join(OUT, 'tree.json'), 'w'), ensure_ascii=False, indent=1)
 
 # 영역별
-s = post(s, P + 'ddlSearchType', ddlSearchType='4')
+def goto_areas(tries=3):
+    global s
+    for t in range(tries):
+        try:
+            s = post(s, P + 'ddlSearchType', ddlSearchType='4')
+            check_area_view(s)
+            return
+        except RuntimeError as e:
+            print('retry area view', e, flush=True)
+            s = fresh()
+    raise RuntimeError('area view failed')
+
+goto_areas()
 areas = options(s, P + 'ddlYeong')
 area_results = []
 for av, an in areas:
     for y in '12345':
-        s = post(s, P + 'btnSearch', ddlSearchType='4', ddlYeong=av, ddlHagnyeon=y)
-        check_term(s)
-        f = form(s)
-        if (f[P + 'ddlYeong'], f[P + 'ddlHagnyeon']) != (av, y):
-            raise RuntimeError('area drift')
+        for t in range(3):
+            try:
+                s = post(s, P + 'btnSearch', ddlSearchType='4', ddlYeong=av, ddlHagnyeon=y)
+                check_area_view(s, av, y)
+                break
+            except RuntimeError as e:
+                print('retry area search', av, y, e, flush=True)
+                s = fresh(); goto_areas()
+        else:
+            raise RuntimeError('area search failed')
         r = rows(s)
         area_results.append({'mode': '영역별', 'area': [av, an], 'grade': y, 'rows': r})
         print('영역', an, y, len(r), flush=True)
+# Never replace an earlier area.json with a partial or empty crawl.
+if len(area_results) != len(areas) * 5 or not areas:
+    raise RuntimeError(f'incomplete area crawl {len(area_results)} of {len(areas) * 5}')
 json.dump(area_results, open(os.path.join(OUT, 'area.json'), 'w'), ensure_ascii=False)
 print('DONE', sum(len(x['rows']) for x in results), sum(len(x['rows']) for x in area_results))

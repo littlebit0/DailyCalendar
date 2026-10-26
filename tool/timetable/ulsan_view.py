@@ -59,3 +59,23 @@ def check_navigation(s, college, hagbu=None):
             raise RuntimeError('hagbu list missing')
         if f.get(P + 'ddlHagbu') != hagbu:
             raise RuntimeError(f'hagbu selection drift {f.get(P + "ddlHagbu")} != {hagbu}')
+
+
+def check_area_view(s, area=None, grade=None):
+    """Raises RuntimeError unless [s] is the 2026-2 영역별 (search type 4) view.
+
+    With [area]/[grade] it also checks that the search returned those selections.
+    A missing area list must never read as "no areas".
+    """
+    f = form(s)
+    if '__VIEWSTATE' not in f or P + 'ddlSearchType' not in f:
+        raise RuntimeError('missing form: not the timetable view')
+    check_term(s)
+    if f[P + 'ddlSearchType'] != '4':
+        raise RuntimeError(f'search type drift {f[P + "ddlSearchType"]} != 4')
+    if not options(s, P + 'ddlYeong'):
+        raise RuntimeError('area list missing')
+    if area is not None and f.get(P + 'ddlYeong') != area:
+        raise RuntimeError(f'area selection drift {f.get(P + "ddlYeong")} != {area}')
+    if grade is not None and f.get(P + 'ddlHagnyeon') != grade:
+        raise RuntimeError(f'grade selection drift {f.get(P + "ddlHagnyeon")} != {grade}')

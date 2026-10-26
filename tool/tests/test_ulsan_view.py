@@ -31,6 +31,19 @@ def page(college='11', hagbu=None, year='2026', term='2', viewstate=True, colleg
     return '<html><body><form>' + ''.join(parts) + '</form></body></html>'
 
 
+def area_page(search_type='4', area='A1', grade='1', areas=(('A1', '교양1'), ('A2', '교양2')), viewstate=True, term='2'):
+    parts = []
+    if viewstate:
+        parts.append('<input type="hidden" name="__VIEWSTATE" value="x" />')
+    parts.append('<input type="text" name="' + P + 'imedYy" value="2026" />')
+    parts.append(select('ddlHaggi', [('1', '1학기'), ('2', '2학기')], term))
+    parts.append(select('ddlSearchType', [('1', '전공별'), ('4', '영역별')], search_type))
+    if areas:
+        parts.append(select('ddlYeong', list(areas), area))
+    parts.append(select('ddlHagnyeon', [(str(i), str(i)) for i in range(1, 6)], grade))
+    return '<html><body><form>' + ''.join(parts) + '</form></body></html>'
+
+
 class UlsanViewTests(unittest.TestCase):
     def test_a_normal_navigation_response_passes(self):
         view.check_navigation(page('11'), '11')
@@ -65,6 +78,26 @@ class UlsanViewTests(unittest.TestCase):
             view.check_navigation(page('11', hagbu='111'), '11', '112')
         with self.assertRaises(RuntimeError):
             view.check_navigation(page('11'), '11', '112')
+
+    def test_area_view_accepts_the_real_switch_and_search_responses(self):
+        view.check_area_view(area_page())
+        view.check_area_view(area_page(area='A2', grade='3'), 'A2', '3')
+
+    def test_an_error_page_never_reads_as_an_empty_area_list(self):
+        error = '<html><body>오류가 발생했습니다</body></html>'
+        with self.assertRaises(RuntimeError):
+            view.check_area_view(error)
+        self.assertEqual(view.options(error, P + 'ddlYeong'), [])
+        for bad in (area_page(viewstate=False), area_page(areas=()), area_page(search_type='1'),
+                    area_page(term='1')):
+            with self.assertRaises(RuntimeError):
+                view.check_area_view(bad)
+
+    def test_area_or_grade_selection_drift_fails(self):
+        with self.assertRaises(RuntimeError):
+            view.check_area_view(area_page(area='A1'), 'A2', '1')
+        with self.assertRaises(RuntimeError):
+            view.check_area_view(area_page(grade='2'), 'A1', '1')
 
 
 if __name__ == '__main__':
