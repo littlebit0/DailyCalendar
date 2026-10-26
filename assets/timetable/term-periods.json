@@ -366,6 +366,21 @@
           ]
         }
       ]
+    },
+    {
+      "university": "pcu",
+      "sourceUrl": "https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507",
+      "checkedAt": "2026-10-12",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18",
+          "sourceUrl": "https://hakgwa.pcu.ac.kr/ce/article/depart_ce_notice/37507",
+          "sourceEvidence": {}
+        }
+      ]
     }
   ]
 }
