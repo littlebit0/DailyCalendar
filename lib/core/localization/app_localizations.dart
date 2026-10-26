@@ -278,6 +278,9 @@ const Map<String, Map<String, String>> _translations = {
     "광주캠퍼스": "Gwangju campus",
     "여수캠퍼스": "Yeosu campus",
     "공식 수업 시간": "Official class times",
+    "원격·시간 미정 강좌": "Remote & untimed courses",
+    "요일·시각이 없는 강좌입니다. 추가하면 시간표 아래 원격·시간 미정 강좌에 표시됩니다.":
+        "This course has no published weekday or time. Once added, it appears under Remote & untimed courses below the timetable.",
     "시간 확인 필요": "Check class times",
     "시간표에 배치할 수 있는 시간 정보가 없습니다. 학교에서 시간을 확인한 뒤 직접 추가해 주세요.":
         "Class times cannot be placed on the timetable. Confirm the times with your university, then add the class manually.",
@@ -1330,6 +1333,9 @@ const Map<String, Map<String, String>> _translations = {
     "광주캠퍼스": "光州キャンパス",
     "여수캠퍼스": "麗水キャンパス",
     "공식 수업 시간": "公式の授業時間",
+    "원격·시간 미정 강좌": "遠隔・時間未定の講座",
+    "요일·시각이 없는 강좌입니다. 추가하면 시간표 아래 원격·시간 미정 강좌에 표시됩니다.":
+        "曜日・時刻のない講座です。追加すると時間割の下の遠隔・時間未定の講座に表示されます。",
     "시간 확인 필요": "授業時間の確認が必要",
     "시간표에 배치할 수 있는 시간 정보가 없습니다. 학교에서 시간을 확인한 뒤 직접 추가해 주세요.":
         "時間割に配置できる時間情報がありません。大学で時間を確認してから手動で追加してください。",
@@ -2291,6 +2297,9 @@ const Map<String, Map<String, String>> _translations = {
     "광주캠퍼스": "光州校區",
     "여수캠퍼스": "麗水校區",
     "공식 수업 시간": "官方上課時間",
+    "원격·시간 미정 강좌": "遠距・時間未定課程",
+    "요일·시각이 없는 강좌입니다. 추가하면 시간표 아래 원격·시간 미정 강좌에 표시됩니다.":
+        "此課程沒有星期與時間。加入後會顯示在課表下方的遠距・時間未定課程。",
     "시간 확인 필요": "需確認上課時間",
     "시간표에 배치할 수 있는 시간 정보가 없습니다. 학교에서 시간을 확인한 뒤 직접 추가해 주세요.":
         "沒有可排入課表的時間資訊。請向學校確認時間後手動新增。",

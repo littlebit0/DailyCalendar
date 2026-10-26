@@ -272,6 +272,152 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('remote course section appears below the grid only while a '
+      'course without weekday or time is added', (tester) async {
+    final repo = await settings();
+    final store = repo.timetableStore;
+    await tester.pumpWidget(app(repo, const TimetablePage()));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('timetable-untimed')), findsNothing);
+    expect(find.text('원격·시간 미정 강좌'), findsNothing);
+
+    await store.save(
+      TimetableClass(
+        id: 'u1',
+        title: '녹화 강의',
+        academicYear: store.activeYear,
+        semester: store.activeSemester,
+        sourceId: 'src-u1',
+        sourceType: 'universityDataset',
+        meetings: const [],
+      ),
+    );
+    await store.save(
+      TimetableClass(
+        id: 'm1',
+        title: '시간 있는 강의',
+        academicYear: store.activeYear,
+        semester: store.activeSemester,
+        meetings: const [
+          ClassMeeting(id: 'mon', weekday: 1, startMinute: 540, endMinute: 600),
+        ],
+      ),
+    );
+    await tester.pumpAndSettle();
+    final section = find.byKey(const ValueKey('timetable-untimed'));
+    expect(section, findsOneWidget);
+    expect(find.text('원격·시간 미정 강좌'), findsOneWidget);
+    expect(
+      find.descendant(of: section, matching: find.text('녹화 강의')),
+      findsOneWidget,
+    );
+    expect(
+      find.descendant(of: section, matching: find.text('시간 있는 강의')),
+      findsNothing,
+    );
+    expect(
+      tester.getTopLeft(section).dy,
+      greaterThanOrEqualTo(
+        tester.getBottomLeft(find.byType(WeeklyTimetableGrid)).dy,
+      ),
+    );
+
+    await store.remove('u1');
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('timetable-untimed')), findsNothing);
+    expect(find.text('원격·시간 미정 강좌'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('many remote courses scroll in a bounded band without overflow', (
+    tester,
+  ) async {
+    await tester.binding.setSurfaceSize(const Size(360, 480));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final repo = await settings();
+    final store = repo.timetableStore;
+    for (var i = 0; i < 40; i++) {
+      await store.save(
+        TimetableClass(
+          id: 'u$i',
+          title: '긴 이름의 원격 강의 $i',
+          academicYear: store.activeYear,
+          semester: store.activeSemester,
+          sourceId: 'src-u$i',
+          sourceType: 'universityDataset',
+          meetings: const [],
+        ),
+      );
+    }
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(
+          size: Size(360, 480),
+          textScaler: TextScaler.linear(1.8),
+        ),
+        child: app(repo, const TimetablePage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final section = find.byKey(const ValueKey('timetable-untimed'));
+    expect(section, findsOneWidget);
+    expect(tester.getSize(section).height, lessThan(240));
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('saving only a memo keeps an untimed course untimed', (
+    tester,
+  ) async {
+    final repo = await settings();
+    final store = repo.timetableStore;
+    final course = TimetableClass(
+      id: 'u1',
+      title: '녹화 강의',
+      academicYear: store.activeYear,
+      semester: store.activeSemester,
+      sourceId: 'src-u1',
+      sourceType: 'universityDataset',
+      meetings: const [],
+    );
+    await store.save(course);
+    await tester.pumpWidget(
+      app(
+        repo,
+        Builder(
+          builder: (context) => TextButton(
+            onPressed: () => showClassEditor(context, store, course: course),
+            child: const Text('수정 열기'),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('수정 열기'));
+    await tester.pumpAndSettle();
+    // No default Monday block appears for a course the school left untimed.
+    expect(find.textContaining('월 09:00'), findsNothing);
+    expect(find.byIcon(Icons.remove_circle_outline), findsNothing);
+    await tester.enterText(find.byType(TextFormField).last, '메모만 수정');
+    await tester.ensureVisible(find.byKey(const ValueKey('class-save')));
+    await tester.tap(find.byKey(const ValueKey('class-save')));
+    await tester.pumpAndSettle();
+    final saved = store.classes.singleWhere((c) => c.id == 'u1');
+    expect(saved.meetings, isEmpty);
+    expect(saved.note, '메모만 수정');
+    expect(tester.takeException(), isNull);
+  });
+
+  test('a manual class without meetings is still invalid', () {
+    final manual = TimetableClass(
+      id: 'x',
+      title: '직접',
+      academicYear: 2026,
+      semester: '2',
+      meetings: const [],
+    );
+    expect(manual.isValid, isFalse);
+  });
+
   testWidgets('manual class persists after leaving editor', (tester) async {
     final repo = await settings();
     await tester.pumpWidget(app(repo, const TimetablePage()));
@@ -681,10 +827,17 @@ void main() {
       for (final dataset in datasets) {
         for (final c in dataset.courses) {
           expect(
-            c.toTimetable(id: 'test', mode: LectureMode.inPerson).isValid,
-            c.hasSchedulableMeetings,
+            c.canAddToTimetable,
+            c.hasSchedulableMeetings || c.scheduleStatus == 'unscheduled',
             reason: c.sourceId,
           );
+          if (c.canAddToTimetable) {
+            expect(
+              c.toTimetable(id: 'test', mode: LectureMode.inPerson).isValid,
+              true,
+              reason: c.sourceId,
+            );
+          }
           if (!c.hasSchedulableMeetings) {
             expect(c.scheduleStatus, isIn(['unscheduled', 'unrecognized']));
           }

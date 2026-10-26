@@ -89,6 +89,10 @@ class _TimetablePageState extends ConsumerState<TimetablePage> {
                       course.defaultMode,
                     ),
               ];
+        final untimedCourses = [
+          for (final course in courses)
+            if (course.meetings.isEmpty) course,
+        ];
         Widget grid({bool compact = false}) => WeeklyTimetableGrid(
           days: days,
           occurrences: occurrences,
@@ -299,6 +303,12 @@ class _TimetablePageState extends ConsumerState<TimetablePage> {
                             : grid(),
                       ),
                     ),
+                    if (untimedCourses.isNotEmpty)
+                      _UntimedCourses(
+                        courses: untimedCourses,
+                        onTap: (course) =>
+                            showTimetableClassDetails(context, store, course),
+                      ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 16,
@@ -430,6 +440,57 @@ String _detailTime(BuildContext context, int minute) {
     TimeOfDay(hour: (minute ~/ 60) % 24, minute: minute % 60),
     alwaysUse24HourFormat: use24HourTime,
   );
+}
+
+/// Courses the school publishes without weekday or time, shown under the grid.
+class _UntimedCourses extends StatelessWidget {
+  const _UntimedCourses({required this.courses, required this.onTap});
+  final List<TimetableClass> courses;
+  final ValueChanged<TimetableClass> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Padding(
+      key: const ValueKey('timetable-untimed'),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(context.tr('원격·시간 미정 강좌'), style: theme.textTheme.labelLarge),
+          const SizedBox(height: 4),
+          // The grid is Expanded above, so a long list scrolls inside a bounded
+          // band instead of overflowing small screens or large text.
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: (MediaQuery.sizeOf(context).height * .15).clamp(
+                48.0,
+                160.0,
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  for (final course in courses)
+                    ActionChip(
+                      key: ValueKey('timetable-untimed-${course.id}'),
+                      avatar: CircleAvatar(
+                        backgroundColor: Color(course.colorValue),
+                        radius: 6,
+                      ),
+                      label: Text(course.title),
+                      onPressed: () => onTap(course),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 Future<void> showTimetableClassDetails(
@@ -792,7 +853,9 @@ class _ClassEditorState extends State<_ClassEditor> {
   @override
   void initState() {
     super.initState();
-    if (_meetings.isEmpty) {
+    // Only a brand-new course starts with a default block. An existing course
+    // without published times stays untimed when just its memo or color changes.
+    if (_meetings.isEmpty && widget.course == null) {
       _meetings.add(
         ClassMeeting(
           id: const Uuid().v4(),
