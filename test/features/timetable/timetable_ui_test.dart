@@ -790,10 +790,18 @@ void main() {
     'bundled datasets validate every section and preserve cross-listed credits',
     () async {
       final datasets = catalog;
+      // The ten long-supported schools are pinned here; every other school's
+      // dataset is pinned by its own catalog data test.
+      const pinned = {
+        'ajou', 'cau', 'dku', 'ewha', 'hongik', //
+        'inha', 'pnu', 'sejong', 'smu', 'snu',
+      };
       expect(
         {
           for (final dataset in datasets)
-            '${dataset.universityId}/${dataset.campus}': dataset.courses.length,
+            if (pinned.contains(dataset.universityId))
+              '${dataset.universityId}/${dataset.campus}':
+                  dataset.courses.length,
         },
         {
           'smu/seoul': 1185,
