@@ -20,7 +20,7 @@ class HansungImportTest(unittest.TestCase):
         courses = {c['courseCode'] + '-' + c['section']: c for c in self.prepare()}
         night = courses['P012012-N']
         self.assertEqual(sorted({(m['weekday'], m['startMinute'], m['endMinute'])
-                          for m in night['schedules']}), [(1, 1080, 1155), (4, 1165, 1240)])
+                          for m in night['schedules']}), [(1, 1080, 1165), (4, 1165, 1245)])
         self.assertEqual(night['period'], {'startDate': '2026-08-31', 'endDate': '2026-12-06'})
         self.assertIn('계획서 수강대상:', '\n'.join(night['departmentRemarks'].values()))
         self.assertEqual(courses['GEN0925-@']['section'], '@')
@@ -60,6 +60,29 @@ class HansungImportTest(unittest.TestCase):
         for secret in ['x@example.org', '02-1234-5678', 'https://meet.example', 'employeeId', 'sourceResponseSha256']:
             self.assertNotIn(secret, serialized)
         self.assertIn('선수과목 필수', serialized)
+
+    def test_clock_uses_break_inclusive_slots(self):
+        self.assertEqual(H.clock(1, '1', '2'), (540, 630))
+        self.assertEqual(H.clock(1, '10', '11'), (1080, 1165))
+        self.assertEqual(H.clock(4, '11M', '12M'), (1165, 1245))
+        self.assertEqual(H.clock(3, '13', '14'), (1245, 1335))
+        self.assertEqual(H.clock(2, '1', '2M'), (540, 660))
+        self.assertEqual(H.clock(5, '9', '9M'), (1020, 1080))
+        self.assertEqual(H.clock(2, '10', '14M'), (1080, 1360))
+
+    def test_regenerated_meetings_equal_the_committed_asset(self):
+        asset = json.loads((ROOT / 'assets/timetable/hansung-main-2026-2.json').read_text(encoding='utf-8'))
+        compared = 0
+        for course in asset['courses']:
+            if course['scheduleStatus'] != 'scheduled' or not course['schedules']:
+                continue
+            got = {(m['weekday'], m['startMinute'], m['endMinute'], m['classroom'])
+                   for m in H.schedules(course['sourceClassroom'])}
+            want = {(m['weekday'], m['startMinute'], m['endMinute'], m['classroom'])
+                    for m in course['schedules']}
+            self.assertEqual(got, want, course['sourceId'])
+            compared += 1
+        self.assertGreater(compared, 1000)
 
 
 if __name__ == '__main__':

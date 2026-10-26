@@ -36,8 +36,10 @@ def regular_teaching_dates(meetings):
         day += timedelta(days=1)
     return result
 
-DAY75=[('1','2',540,615),('2M','3M',630,705),('4','5',720,795),('5M','6M',810,885),('7','8',900,975),('8M','9M',990,1065),('10','11',1080,1155),('11M','12M',1165,1240),('13','14',1245,1320)]
-NIGHT50={10:(1080,1130),11:(1135,1185),12:(1190,1240),13:(1245,1295),14:(1300,1350)}
+# 수강신청 안내 '강의시간 안내' 기준 쉬는 시간 포함 슬롯: 시작부터 다음 교시 시작 직전까지.
+# 마지막 교시는 같은 요일 그룹의 일반 슬롯(75분제 90분, 50분제 60분)을 쓴다.
+DAY75=[('1','2',540,630),('2M','3M',630,720),('4','5',720,810),('5M','6M',810,900),('7','8',900,990),('8M','9M',990,1080),('10','11',1080,1165),('11M','12M',1165,1245),('13','14',1245,1335)]
+NIGHT50={10:(1080,1135),11:(1135,1190),12:(1190,1245),13:(1245,1300),14:(1300,1360)}
 
 def clock(day, first, last):
     if day in [1,3,4]:
@@ -57,8 +59,8 @@ def clock(day, first, last):
         a,b=int(first),int(last[:-1])
         if not 1 <= a <= b <= 14:
             raise ValueError('Outofscope50minute clock')
-        start=(540+(a-1)*60,540+(a-1)*60+50) if a<=9 else NIGHT50[a]
-        end=(540+(b-1)*60,540+(b-1)*60+50) if b<=9 else NIGHT50[b]
+        start=(540+(a-1)*60,540+a*60) if a<=9 else NIGHT50[a]
+        end=(540+(b-1)*60,540+b*60) if b<=9 else NIGHT50[b]
         return start[0],end[1]
     raise ValueError('Saturday/Sunday clock not published by weekday guide')
 
@@ -203,7 +205,7 @@ def main():
     courses, reasons = prepare(rows, proofs, neutral)
     dataset = {'schemaVersion': 2, 'universityId': 'hansung', 'campus': 'main',
         'campusName': '본교', 'academicYear': 2026, 'semester': '2',
-        'publishedDate': '2026-10-08',
+        'publishedDate': '2026-10-24',
         'sourceUrl': 'https://info.hansung.ac.kr/jsp_21/student/kyomu/siganpyo_aui.jsp?viewMode=oc',
         'courses': courses}
     args.output.write_text(json.dumps(dataset, ensure_ascii=False, indent=2)+'\n')
