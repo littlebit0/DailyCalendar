@@ -366,6 +366,20 @@
           ]
         }
       ]
+    },
+    {
+      "university": "sku",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://www.skuniv.ac.kr/academy-calendar?timeMin=2025-12-31T15%3A00%3A00.000Z&timeMax=2026-12-31T14%3A59%3A59.999Z",
+      "periodBoundaryMeaning": "Derived day before printed Dec16 winter vacation, not printed final teaching date.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-15"
+        }
+      ]
     }
   ]
 }

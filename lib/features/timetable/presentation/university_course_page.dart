@@ -594,6 +594,7 @@ class _UniversityCoursePanelState extends State<UniversityCoursePanel> {
                               'ajou' => '아주대학교',
                               'cau' => '중앙대학교',
                               'sejong' => '세종대학교',
+                              'sku' => '서경대학교',
                               _ => widget.university,
                             }),
                             style: theme.textTheme.labelMedium,
