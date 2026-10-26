@@ -1,0 +1,133 @@
+{
+  "code": "ENA0135",
+  "section": "00",
+  "checkedAt": "2026-10-23",
+  "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
+  "responseSHA256": "cc09f1173a19109deac3ec3c7913da01348f5811015e0154f39dca0536b7b578",
+  "fields": {
+    "학수번호": "ENA0135",
+    "분반": "00",
+    "교과목명": "영어와문화",
+    "강의시간(장소)": "금1A(11406),금1B,금2A,금2B,금3A,금3B,",
+    "강의진행방식": "일반강의",
+    "수업운영방식": "대면",
+    "비대면솔루션": "미사용",
+    "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+    "시험강의실": "11412",
+    "시험일시": "~"
+  },
+  "weekly": [
+    {
+      "week": 1,
+      "education": [
+        "○ 수업 소개 - 수업 목표와 수업 중 과제 - 수업 진행 방식 및 수업 평가 방법 안내",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 2,
+      "education": [
+        "○ Unit 1-1. Social Relationships - (내용 이해) \"What Are They Thinking?\"을 읽고 동물의 인지 능력과 감정 에 대한 과학적 연구 이해 - (토론 주제) 동물은 인간처럼 생각하고 감정을 느낄 수 있는가? - (표현 학습) 추측 표현 (may, might, could, seem to), 과학적 증거 제시 (research indicates, studies show)",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 3,
+      "education": [
+        "○ Unit 1-2. Social Relationships - (내용 이해) “Gender in the Wild”를 읽고 야생 동물의 성(gender)과 사 회적 역할 분화를 사례로 정리 - (토론 주제) 동물 사회의 성 역할은 고정되어 있는가, 아니면 유동적인 가? - (표현 학습) 대조 표현 (On the one hand... / On the other hand..., whereas, while) - (쓰기 연습) Writing body paragraphs",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 4,
+      "education": [
+        "○ Unit 2-1. Science and Investigation - (내용 이해) “Tech Detectives”로 과학수사 기술(유전·디지털 포렌식) 이 사건 해결에 쓰이는 과정을 파악 - (토론 주제) 수사에서 기술 의존의 이점과 윤리적 한계는 무엇인가? - (표현 학습) 요약·바꾸어 쓰기(Paraphrasing)",
+        "○ 강의, 토론 ○ 쓰기 과제 1 - 제출시간: 화요일 24:00"
+      ]
+    },
+    {
+      "week": 5,
+      "education": [
+        "○ Unit 2-2. Science and Investigation - (내용 이해) “Face to Face with the Past”를 통해 과거 재구성에 활용되는 과학적 기법의 신뢰도 평가 - (토론 주제) 역사 재현에서 ‘증거의 무게’를 어떻게 판단할까? - (표현 학습) 사건의 순서(Sequence) 정리 - (쓰기 연습) Writing a summary",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 6,
+      "education": [
+        "○ Unit 3-1. City Solutions - (내용 이해) “Living on an Urban Planet”을 읽고 도시화의 장단점과 데 이터 해석 포인트 정리 - (토론 주제) 빠른 도시화에 대응하는 최우선 정책은 무엇인가? - (표현 학습) 도입·결론 단락 쓰기",
+        "○ 강의, 토론 ○ 쓰기 과제 2 - 제출시간: 화요일 24:00"
+      ]
+    },
+    {
+      "week": 7,
+      "education": [
+        "○ Unit 3-2. City Solutions - (내용 이해) “A City Up Against the Wall” 사례로 도시 문제 해결의 ‘문 제–해결’ 구조 분석 - (토론 주제) 우리 지역에 적용 가능한 해결책을 선정하고 근거 제시 - (표현 학습) 주장–근거 정당화 표현 - (쓰기 연습) Writing introductory and concluding paragraphs",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 8,
+      "education": [
+        "○ 중간고사",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 9,
+      "education": [
+        "○ Unit 7-1. Global Challenges - (내용 이해) “A Need for Change”를 통해 기후·환경 변화의 원인과 파 급효과 정리 - (토론 주제) 개인·기업·정부 중 변화의 촉발자는 누구여야 하는가? - (표현 학습) 관계절(Relative clauses)로 근거 보강",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 10,
+      "education": [
+        "○ Unit 7-2. Global Challenges - (내용 이해) “Eight Steps to a Sustainable Future”의 실천 전략을 비교· 평가 - (토론 주제) 우리 캠퍼스에서 실현 가능한 상위 3가지를 선정하고 실 행안을 제시 - (표현 학습) 우선순위 정하기·추천 표현 - (쓰기 연습) Writing an opinion essay",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 11,
+      "education": [
+        "○ Unit 8-1. Medical Innovations - (내용 이해) “A World of Pain”으로 통증 치료 혁신(신기술·신약) 원리 와 한계 파악 - (토론 주제) 신의료기술 도입 시 효과·비용·윤리의 균형 기준은? - (표현 학습) 인용·출처 밝히기(Quoting & Citing)",
+        "○ 강의, 토론 ○ 쓰기 과제 3 - 제출시간: 화요일 24:00"
+      ]
+    },
+    {
+      "week": 12,
+      "education": [
+        "○ Unit 8-2. Medical Innovations - (내용 이해) “The Future of Medicine”을 통해 예측·맞춤·원격 의료의 미 래 시나리오 논의 - (토론 주제) 환자 데이터의 활용과 프라이버시 보호의 균형점은? - (표현 학습) 수동태(Passives) 이해와 활용 - (쓰기 연습) Writing a research-based essay",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 13,
+      "education": [
+        "○ Unit 9-1. Languages and Culture - (내용 이해) “The Future of English”로 세계 영어의 확산과 다양성, 권 력 관계를 비판적으로 고찰 - (토론 주제) 공통어의 확산은 포용인가 지배인가? - (표현 학습) 반론 제시(Counterargument)",
+        "○ 강의, 토론 ○ 쓰기 과제 4 - 제출시간: 화요일 24:00"
+      ]
+    },
+    {
+      "week": 14,
+      "education": [
+        "○ Unit 9-2. Languages and Culture - (내용 이해) “A World of Stories”를 읽고 이야기 전통과 문화 정체성의 상호작용 분석 - (토론 주제) 번역·이주의 시대에 구전 서사가 유지·변형되는 방식은? - (표현 학습) 의도·목적 추론(Inference) - (쓰기 학습) Planning an essay using a T-chart",
+        "○ 강의, 토론"
+      ]
+    },
+    {
+      "week": 15,
+      "education": [
+        "보강주"
+      ]
+    },
+    {
+      "week": 16,
+      "education": [
+        "○ 기말고사",
+        ""
+      ]
+    }
+  ],
+  "completionClaim": false
+}

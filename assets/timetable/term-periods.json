@@ -366,6 +366,20 @@
           ]
         }
       ]
+    },
+    {
+      "university": "changwon",
+      "sourceUrl": "https://www.changwon.ac.kr/haksa/sv/schdulView/schdulCalendarView.do?mi=10980",
+      "checkedAt": "2026-10-08",
+      "periodBoundaryMeaning": "Day before published winter vacation December21; not a printed last teaching date",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-20"
+        }
+      ]
     }
   ]
 }

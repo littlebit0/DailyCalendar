@@ -1,0 +1,21 @@
+{
+  "code": "GEA8800",
+  "section": "00",
+  "checkedAt": "2026-10-23",
+  "sourceURL": "https://chains.changwon.ac.kr/abeek/lecture_plan/view.php",
+  "responseSHA256": "a882da604e26e099049b01e90b4c446d6b88b12403b101896ff3f0346a485cb6",
+  "fields": {
+    "학수번호": "GEA8800",
+    "분반": "00",
+    "교과목명": "자기주도융합탐구",
+    "강의시간(장소)": "",
+    "강의진행방식": "일반강의",
+    "수업운영방식": "대면",
+    "비대면솔루션": "미사용",
+    "시험방식": "미입력 ( * 미입력 상태이면 학생들에게 시험에관한 정보가 공개되지 않습니다 )",
+    "시험강의실": "",
+    "시험일시": "~"
+  },
+  "weekly": [],
+  "completionClaim": false
+}
