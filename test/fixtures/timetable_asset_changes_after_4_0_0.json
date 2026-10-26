@@ -27,6 +27,18 @@
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
   },
+  "assets/timetable/organizations/korea.json": {
+    "sha256": "1d8ce7e68cd43aecbda23ea7fd1a9f6db42bd7507dfaa509d8df1b361547c833",
+    "reason": "#564 고려대 세종 소속 미확인 학과 32개를 공식 개설과목 조회 학과 트리 기준 단과대로 배정, 의예과(의과대학)·공과대학 직접 개설·현장실습지원센터·법학전문대학원·취·창업지원센터 개설 단위 등록"
+  },
+  "assets/timetable/korea-seoul-2026-2.json": {
+    "sha256": "d4166e32c70e24f37b9778bd8787f2e89d32f1a8693dba432b6d6dc5a20b751e",
+    "reason": "#564 2026-10-23 공개 개설과목 재조회(NetFunnel 대기열 정상 통과) 결과 교수 변경 4강좌(NRSG288-01·02, ARDE157-00, SEDU309-04)와 강좌명 변경 1강좌(GESO157-00) 반영; #576 서울·세종 교시 슬롯을 쉬는 시간(서울 1~6교시 15분, 7~10교시 10분, 세종 10분)을 포함해 다시 만들고 같은 날 같은 강의실의 연속 교시를 한 구간으로 합침(근거 문서 미확인, 현재 자료의 연속 교시 시작 간격 기준); 10월 23일 재조회 변경 5건 반영에 맞춰 publishedDate·sourceCaptureDate를 2026-10-23으로 정정"
+  },
+  "assets/timetable/korea-sejong-2026-2.json": {
+    "sha256": "af5d12e8a2f47a8562893a9e89b2e7dc53db811376c4d1374aa8fa778b4c9fa1",
+    "reason": "#576 고려대 세종 교시 슬롯을 쉬는 시간(10분)을 포함해 다시 만들고 같은 날 같은 강의실의 연속 교시를 한 구간으로 합침(근거 문서 미확인, 현재 자료의 연속 교시 시작 간격 기준)"
+  },
   "assets/timetable/organizations/gachon.json": {
     "sha256": "b4f1eec7d9bad4ebb55c0aaaf46a2770bdfb541d7be26bab250b6f29b65f0899",
     "reason": "#412 가천대 원자료 분류 48개(학년·줄임말 개설 라벨)를 공식 시간표 학과 트리와 단과대 소개 기준 소속(경영·사회과학·바이오나노·공과·IT융합·예술·체육·한의과·의과대학)으로 배정"
