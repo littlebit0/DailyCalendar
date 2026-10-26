@@ -1,5 +1,6 @@
 import 'dart:convert';
 import '../../support/source_fixture.dart';
+import '../../support/suspended_assets.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -45,7 +46,13 @@ void main() {
         'hanyang/erica/2026-2/24136': 'ERICA 컨퍼런스홀 201 강의실,ERICA 컨퍼런스홀 101 강의실',
       };
       for (final campus in ['seoul', 'erica']) {
-        final raw = read('assets/timetable/hanyang-$campus-2026-2.json');
+        final raw =
+            jsonDecode(
+                  File(
+                    '$suspendedAssetRoot/timetable/hanyang-$campus-2026-2.json',
+                  ).readAsStringSync(),
+                )
+                as Map<String, dynamic>;
         final rawRows = {
           for (final r in raw['courses'] as List) r['sourceId']: r,
         };
