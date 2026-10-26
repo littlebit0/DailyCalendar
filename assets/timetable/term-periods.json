@@ -366,6 +366,19 @@
           ]
         }
       ]
+    },
+    {
+      "university": "daegu",
+      "sourceUrl": "https://www.daegu.ac.kr/schedule/detail?schedule_info_seq=1",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14"
+        }
+      ]
     }
   ]
 }
