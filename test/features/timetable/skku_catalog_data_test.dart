@@ -5,17 +5,9 @@ import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class _Files extends CachingAssetBundle {
-  @override
-  Future<String> loadString(String key, {bool cache = true}) async =>
-      File(key).readAsStringSync();
-  @override
-  Future<ByteData> load(String key) async =>
-      ByteData.sublistView(File(key).readAsBytesSync());
-}
+import '../../support/suspended_assets.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +17,7 @@ void main() {
       final data =
           jsonDecode(
                 File(
-                  'assets/timetable/skku-$campus-2026-2.json',
+                  '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
                 ).readAsStringSync(),
               )
               as Map<String, dynamic>;
@@ -81,7 +73,7 @@ void main() {
     'SKKU preserves whole search and verified dates across restore',
     () async {
       final datasets = await UniversityCatalog.load(
-        bundle: _Files(),
+        bundle: SuspendedAssetBundle(),
         university: 'skku',
       );
       expect(
@@ -118,7 +110,7 @@ void main() {
         final raw =
             jsonDecode(
                   File(
-                    'assets/timetable/skku-$campus-2026-2.json',
+                    '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>;
@@ -232,7 +224,9 @@ void main() {
         campusId: 'academyinfo:0000029',
       );
       expect(foreign.timetableSupported, isFalse);
-      final defaults = await TimetablePeriodDefaults.load(bundle: _Files());
+      final defaults = await TimetablePeriodDefaults.load(
+        bundle: SuspendedAssetBundle(),
+      );
       final period = defaults.periodFor(2026, '2', university: 'skku');
       expect(period?.start, DateTime(2026, 8, 31));
       expect(period?.end, DateTime(2026, 12, 18));

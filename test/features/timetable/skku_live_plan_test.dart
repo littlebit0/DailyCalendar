@@ -5,6 +5,8 @@ import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../support/suspended_assets.dart';
+
 void main() {
   test(
     'public live plans retain virtual rooms, modes and exceptions in Drive',
@@ -14,7 +16,7 @@ void main() {
           ...UniversityDataset.fromJson(
             jsonDecode(
                   File(
-                    'assets/timetable/skku-$campus-2026-2.json',
+                    '$suspendedAssetRoot/timetable/skku-$campus-2026-2.json',
                   ).readAsStringSync(),
                 )
                 as Map<String, dynamic>,
