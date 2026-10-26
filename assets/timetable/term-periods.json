@@ -366,6 +366,26 @@
           ]
         }
       ]
+    },
+    {
+      "university": "eulji",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "checkedAt": "2026-10-12",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+          "sourceEvidence": {
+            "start": "2026-09-01",
+            "end": "2026-12-21",
+            "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+            "scope": "수업기간 explicit regular15weeks+보강"
+          }
+        }
+      ]
     }
   ]
 }

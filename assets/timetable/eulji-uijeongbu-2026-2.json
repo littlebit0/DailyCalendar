@@ -1,0 +1,1454 @@
+{
+  "schemaVersion": 1,
+  "universityId": "eulji",
+  "campus": "uijeongbu",
+  "campusName": "의정부캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+  "publishedDate": "2026-08-19",
+  "sourceSha256": "15f1abd20333fa475892eac51104050b05bc24c6cd7eb2f052846b47b81fdbc1",
+  "sourceRowCount": 34,
+  "courses": [
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/6063d6488a591e51baddc4fe",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "실용금융",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 660,
+          "classroom": "일203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 H영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "nativeRow": "H영역             실용금융             001   GRADE    2    화     주1~2      일203",
+      "sourceSchedule": "화 주1~2",
+      "sourceClassroom": "일203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/d28c4ecb78afdd32ac83c637",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생활일본어",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 U영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "nativeRow": "U영역            생활일본어             001   GRADE    2    월     주6~7      일610",
+      "sourceSchedule": "월 주6~7",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/bd862b6b1b6b059d04c49921",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "영어청취및독해Ⅱ",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "일203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 U영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "nativeRow": "영어청취및독해Ⅱ         002  GRADE   2    금    주8~9     일203",
+      "sourceSchedule": "금 주8~9",
+      "sourceClassroom": "일203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/b2d40ce9ac6a3def8202b718",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "컴퓨터활용능력",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "일403"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 M영역"
+      },
+      "departmentRemarks": {
+        "교양": "교양 마이크로 디그리 과정"
+      },
+      "nativeRow": "M영역        컴퓨터활용능력          001  GRADE   2    수    주7~8     일403  교양 마이크로 디그리 과정",
+      "sourceSchedule": "수 주7~8",
+      "sourceClassroom": "일403",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/c399cd2fd04d916870cfc8e7",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "디지털리터러시와학습능력",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "일403"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 M영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "nativeRow": "디지털리터러시와학습능력        001  GRADE   3    화    주6~8     일403",
+      "sourceSchedule": "화 주6~8",
+      "sourceClassroom": "일403",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/0d676aade09bba101860f14b",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인격개발과치유",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 A영역"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "nativeRow": "A영역        인격개발과치유          001  GRADE   2    목    주6~7     일810  Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "목 주6~7",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/f4e147c398e69b34dec14448",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "일203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자유전공학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 001 GRADE 2 수 주5~6 일203 자유전공학부 1학년",
+      "sourceSchedule": "수 주5~6",
+      "sourceClassroom": "일203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/6e3cd1915d0a91de44e63c8d",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명윤리",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "일203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 EU인성영역"
+      },
+      "departmentRemarks": {
+        "교양": "자유전공학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "EU인성영역 생명윤리 002 GRADE 2 수 주7~8 일203 자유전공학부 1학년",
+      "sourceSchedule": "수 주7~8",
+      "sourceClassroom": "일203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/40616ae5d6faa1c7637c30d3",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 660,
+          "classroom": "일203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자유전공학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 001 GRADE 2 월 주1~2 일203 자유전공학부 1학년",
+      "sourceSchedule": "월 주1~2",
+      "sourceClassroom": "일203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/7254ee51d4e8b119157d6e3a",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작문과화법",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "일203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통교육)"
+      },
+      "departmentRemarks": {
+        "교양": "자유전공학부 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통교육) 작문과화법 002 GRADE 2 월 주3~4 일203 자유전공학부 1학년",
+      "sourceSchedule": "월 주3~4",
+      "sourceClassroom": "일203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/dcb34e6c08e3c9e15cfbd0bd",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 001 GRADE 2 수 주3~4 일610 간호학과 1학년",
+      "sourceSchedule": "수 주3~4",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/e4e2421f491b67c18e7d792c",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 002 GRADE 2 수 주6~7 일610 간호학과 1학년",
+      "sourceSchedule": "수 주6~7",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/2d208a0bada9dec1b8c2d5a6",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 003 GRADE 2 목 주3~4 일610 간호학과 1학년",
+      "sourceSchedule": "목 주3~4",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/0a863d7e5b918653246620b6",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "004",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 004 GRADE 2 목 주6~7 일610 임상병리학과 1학년",
+      "sourceSchedule": "목 주6~7",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/5fddcdcbeecbd047e06443a7",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌커뮤니케이션2",
+      "section": "005",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (의사소통 교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (의사소통 교육) 글로벌커뮤니케이션2 005 GRADE 2 목 주8~9 일610 임상병리학과 1학년",
+      "sourceSchedule": "목 주8~9",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/c892283f19d26dd2c76eb21a",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 540,
+          "endMinute": 660,
+          "classroom": "일403"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 001 GRADE 2 월 주1~2 일403 간호학과 1학년",
+      "sourceSchedule": "월 주1~2",
+      "sourceClassroom": "일403",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/95d8bc1ea663dd867b3febcc",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "일403"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "간호학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 002 GRADE 2 월 주3~4 일403 간호학과 1학년",
+      "sourceSchedule": "월 주3~4",
+      "sourceClassroom": "일403",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/dcabe58f67664d8086494518",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "인공지능과컴퓨팅사고",
+      "section": "003",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 720,
+          "endMinute": 840,
+          "classroom": "일403"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 기초영역 (컴퓨터적 사고교육)"
+      },
+      "departmentRemarks": {
+        "교양": "임상병리학과 1학년"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "기초영역 (컴퓨터적 사고교육) 인공지능과컴퓨팅사고 003 GRADE 2 수 주4~5 일403 임상병리학과 1학년",
+      "sourceSchedule": "수 주4~5",
+      "sourceClassroom": "일403",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/061f94df461727c28af75e42",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한국현대문학과사상",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 한국현대문학과사상 001 GRADE 2 금 주2~3 일810 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "금 주2~3",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/aee83a4914bf9501cd9b0ed5",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작가와문학세계",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 660,
+          "endMinute": 780,
+          "classroom": "일204"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 작가와문학세계 001 GRADE 2 월 주3~4 일204",
+      "sourceSchedule": "월 주3~4",
+      "sourceClassroom": "일204",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/0d17a070c741595ea8a5dc2f",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "작가와문학세계",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "일204"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 1영역 언어와 문학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "1영역 언어와 문학 작가와문학세계 002 GRADE 2 화 주2~3 일204",
+      "sourceSchedule": "화 주2~3",
+      "sourceClassroom": "일204",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/27f5cc8fd388ff26bbc32360",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "몸에대한철학적이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 960,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 몸에대한철학적이해 001 GRADE 2 화 주6~7 일810 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "화 주6~7",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/2c0e61cee9eba047aeefb724",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한국사",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "일203"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 한국사 001 GRADE 3 목 주2~4 일203",
+      "sourceSchedule": "목 주2~4",
+      "sourceClassroom": "일203",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/6f004ecdab9d3fdd0ba324a7",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "서양사",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 1020,
+          "classroom": "일204"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 2영역 역사와 철학"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "2영역 역사와 철학 서양사 001 GRADE 3 목 주6~8 일204",
+      "sourceSchedule": "목 주6~8",
+      "sourceClassroom": "일204",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/4291a65f26290b057db68ec9",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "심리학",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업 간호학과(의정부) 수강 제한"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 심리학 001 GRADE 3 화 주2~4 일810 Tri-Learn 텔레프레즌스 수업 간호학과(의정부) 수강 제한",
+      "sourceSchedule": "화 주2~4",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/937530ef15d5792b231031e5",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "젠더와미래사회",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 720,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 3영역 사회와 경제"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "3영역 사회와 경제 젠더와미래사회 001 GRADE 2 목 주2~3 일810 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "목 주2~3",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/65ecb4b88caa9b11be0814d3",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명과학의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "일205"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "Edu-Us 온라인 교과목 간호학과, 임상병리학과 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 생명과학의이해 001 GRADE 2 목 주5~6 일205 Edu-Us 온라인 교과목 간호학과, 임상병리학과 대상",
+      "sourceSchedule": "목 주5~6",
+      "sourceClassroom": "일205",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/74960a889a473a6fad6ffc79",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "생명과학의이해",
+      "section": "002",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 1020,
+          "classroom": "일205"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "Edu-Us 온라인 교과목 자유전공학부 대상"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 생명과학의이해 002 GRADE 2 목 주7~8 일205 Edu-Us 온라인 교과목 자유전공학부 대상",
+      "sourceSchedule": "목 주7~8",
+      "sourceClassroom": "일205",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/d594c2fc28dfce4a54da3eae",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "창의적사고와코딩",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "일403"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 4영역 과학과 자연"
+      },
+      "departmentRemarks": {
+        "교양": "마이크로 디그리 과정"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "4영역 과학과 자연 창의적사고와코딩 001 GRADE 3 화 주2~4 일403 마이크로 디그리 과정",
+      "sourceSchedule": "화 주2~4",
+      "sourceClassroom": "일403",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/c0def4c8ec8850cc1535900f",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "세계의문화와유산",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 960,
+          "endMinute": 1080,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 세계의문화와유산 001 GRADE 2 월 주8~9 일810 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "월 주8~9",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/23049347935c9cf72fcb5596",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "한국문화탐구",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 780,
+          "endMinute": 900,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 한국문화탐구 001 GRADE 2 월 주5~6 일810 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "월 주5~6",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/eb9f9c6276f06ff9e6940dcb",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "대중문화의이해",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 대중문화의이해 001 GRADE 3 월 주2~4 일810 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "월 주2~4",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/7e98f006dcbb4dd9902f5f16",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "지역문화와축제",
+      "section": "001",
+      "professor": "",
+      "credits": 3,
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 780,
+          "classroom": "일810"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 3
+      },
+      "departmentClassifications": {
+        "교양": "교양 5영역 예술과 문화"
+      },
+      "departmentRemarks": {
+        "교양": "Tri-Learn 텔레프레즌스 수업"
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+      "nativeRow": "5영역 예술과 문화 지역문화와축제 001 GRADE 3 수 주2~4 일810 Tri-Learn 텔레프레즌스 수업",
+      "sourceSchedule": "수 주2~4",
+      "sourceClassroom": "일810",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    },
+    {
+      "sourceId": "eulji/uijeongbu/2026/2/4bfc6008c72cc0f8a92235a5",
+      "universityId": "eulji",
+      "campus": "uijeongbu",
+      "campusName": "의정부캠퍼스",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "동계스포츠Ⅰ",
+      "section": "001",
+      "professor": "",
+      "credits": 2,
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1225,
+          "classroom": "일610"
+        }
+      ],
+      "departments": [
+        "교양"
+      ],
+      "departmentCredits": {
+        "교양": 2
+      },
+      "departmentClassifications": {
+        "교양": "교양 N영역"
+      },
+      "departmentRemarks": {
+        "교양": ""
+      },
+      "scheduleStatus": "scheduled",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+      "nativeRow": "N영역         동계스포츠Ⅰ          001  GRADE   2    목    야1~3     일610",
+      "sourceSchedule": "목 야1~3",
+      "sourceClassroom": "일610",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-21"
+      }
+    }
+  ],
+  "heldRows": [],
+  "periodEvidence": {
+    "start": "2026-09-01",
+    "end": "2026-12-21",
+    "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?mode=download&articleNo=40936&attachNo=16257",
+    "scope": "수업기간 explicit regular15weeks+보강"
+  },
+  "completionClaim": false,
+  "additionalSourceUrls": [
+    "https://www.eulji.ac.kr/?menuno=3160&bbsno=1077&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view",
+    "https://www.eulji.ac.kr/?menuno=3160&bbsno=1085&boardno=568&ztag=rO0ABXQAMTxjYWxsIHR5cGU9ImJvYXJkIiBubz0iNTY4IiBza2luPSJub3RpY2UiPjwvY2FsbD4%3D&siteno=194&act=view"
+  ],
+  "nightClockEvidence": {
+    "sourceUrl": "https://eulji.ac.kr/aac/index.html?menuno=2711",
+    "quote": "야간 1교시 18:00~18:45, 2교시 18:45~19:30, 3교시 19:30~20:15 (야간수업은 매 교시 45분 수업 단위로 수업을 진행하고 3교시 종료 후 10분 휴식)",
+    "retrieved": "2026-10-24",
+    "scope": "야1~3만 사용; 야4~6은 공식 표에서 4교시 20:25~21:10, 5교시 21:00~21:55로 겹쳐 사용하지 않음"
+  },
+  "slotRuleEvidence": {
+    "sourceUrl": "https://eulji.ac.kr/aac/index.html?menuno=2711",
+    "quote": "야간수업은 매 교시 45분 수업 단위로 수업을 진행하고 3교시 종료 후 10분 휴식",
+    "rule": "주간 1교시 09:00부터 50분 수업+10분 휴식(슬롯 60분, 교시 n 시작 = 09:00+60(n-1)분). 야간은 1~3교시가 연속 45분 슬롯이고 3교시 뒤 10분 휴식을 3교시 슬롯에 포함(야1~3 = 18:00~20:25). 야4·5교시는 공식 표가 겹쳐 확정하지 않음. 주간 50분+10분은 현재 자료의 연속 교시 시작 간격(60분)에서 읽음(공식 페이지 robots.txt가 점검 안내 HTML을 돌려줘 이번에 다시 조회하지 않음)",
+    "retrieved": "2026-10-24"
+  }
+}
