@@ -366,6 +366,23 @@
           ]
         }
       ]
+    },
+    {
+      "university": "ulsan",
+      "sourceUrl": "https://english.ulsan.ac.kr/english/2495",
+      "checkedAt": "2026-10-23",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21",
+          "sourceTitles": [
+            "2026-2학기 개강일",
+            "2026-2학기 기말고사"
+          ]
+        }
+      ]
     }
   ]
 }
