@@ -459,21 +459,33 @@ class _UntimedCourses extends StatelessWidget {
         children: [
           Text(context.tr('원격·시간 미정 강좌'), style: theme.textTheme.labelLarge),
           const SizedBox(height: 4),
-          Wrap(
-            spacing: 8,
-            runSpacing: 4,
-            children: [
-              for (final course in courses)
-                ActionChip(
-                  key: ValueKey('timetable-untimed-${course.id}'),
-                  avatar: CircleAvatar(
-                    backgroundColor: Color(course.colorValue),
-                    radius: 6,
-                  ),
-                  label: Text(course.title),
-                  onPressed: () => onTap(course),
-                ),
-            ],
+          // The grid is Expanded above, so a long list scrolls inside a bounded
+          // band instead of overflowing small screens or large text.
+          ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: (MediaQuery.sizeOf(context).height * .15).clamp(
+                48.0,
+                160.0,
+              ),
+            ),
+            child: SingleChildScrollView(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  for (final course in courses)
+                    ActionChip(
+                      key: ValueKey('timetable-untimed-${course.id}'),
+                      avatar: CircleAvatar(
+                        backgroundColor: Color(course.colorValue),
+                        radius: 6,
+                      ),
+                      label: Text(course.title),
+                      onPressed: () => onTap(course),
+                    ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -841,7 +853,9 @@ class _ClassEditorState extends State<_ClassEditor> {
   @override
   void initState() {
     super.initState();
-    if (_meetings.isEmpty) {
+    // Only a brand-new course starts with a default block. An existing course
+    // without published times stays untimed when just its memo or color changes.
+    if (_meetings.isEmpty && widget.course == null) {
       _meetings.add(
         ClassMeeting(
           id: const Uuid().v4(),
