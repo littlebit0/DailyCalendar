@@ -19,6 +19,7 @@ import json
 import re
 from pathlib import Path
 
+MAJOR_TITLE = '전공 강의시간표'
 NAMES = ['학년', '구분', '수강학과', '수강번호', '교과목명', '학점', '시간', '담당교수', '강의시간', '강의실', '비고', '']
 END = re.compile(r'^(※|1\. 교차설강|\* 강의담당|2\. 강의실|지정된 교과목)')
 HOLIDAYS = {'2026-09-24', '2026-09-25', '2026-09-26', '2026-10-03', '2026-10-05', '2026-10-09'}
@@ -37,7 +38,7 @@ def extract_major_rows(lines, cols):
     rows = []
     for page in sorted(cols):
         whole = lines[page]
-        if not any(l[0].strip() == '전공 강의시간표' for l in whole):
+        if not any(l[0].strip() == MAJOR_TITLE for l in whole):
             continue
         title = [clean(l[0]) for l in sorted(whole, key=lambda l: l[2]) if 80 < l[2] < 100]
         headers = [l[2] for l in whole if l[0].strip().startswith('교과목명')]
@@ -161,7 +162,10 @@ def main():
     z = lambda s: re.sub(r'\s+', '', s or '')
     compared = 0
     missing = []
-    for o in old:
+    # extract_major_rows rebuilds only 전공 강의시간표, so only the earlier 전공 rows can be
+    # compared; the other printed tables still count as known registration numbers below.
+    earlier_major = [o for o in old if (o.get('sourceTitleLines') or [''])[0] == MAJOR_TITLE]
+    for o in earlier_major:
         r = index.get((o['sourcePage'], o['nativeRegistrationNumber']))
         if r is None:
             missing.append((o['sourcePage'], o['nativeRegistrationNumber']))
@@ -170,7 +174,7 @@ def main():
         for k, v in o['education'].items():
             assert z(v) == z(r['education'].get(k)), (o['sourcePage'], o['nativeRegistrationNumber'], k)
     # A dropped continuation page must fail here, not write an incomplete asset.
-    assert not missing and compared == len(old), f'earlier major rows not rebuilt: {missing[:10]}'
+    assert not missing and compared == len(earlier_major), f'earlier major rows not rebuilt: {missing[:10]}'
     known = {o['nativeRegistrationNumber'] for o in old}
     known_keys = {(o['sourcePage'], o['nativeRegistrationNumber']) for o in old}
     added_rows = [r for r in rows if (r['sourcePage'], r['nativeRegistrationNumber']) not in known_keys]

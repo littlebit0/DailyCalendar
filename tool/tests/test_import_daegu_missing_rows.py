@@ -85,7 +85,13 @@ class DaeguMainTests(unittest.TestCase):
 
     def old_row(self, number, name):
         return {'sourcePage': 5, 'nativeRegistrationNumber': number,
+                'sourceTitleLines': ['전공 강의시간표'],
                 'education': {'수강번호': number, '교과목명': name}}
+
+    def other_table_row(self, number):
+        return {'sourcePage': 90, 'nativeRegistrationNumber': number,
+                'sourceTitleLines': ['교양·교직 강의시간표'],
+                'education': {'수강번호': number, '교과목명': '교양'}}
 
     def test_new_registration_numbers_are_appended_and_existing_courses_kept(self):
         with TemporaryDirectory() as folder:
@@ -116,6 +122,28 @@ class DaeguMainTests(unittest.TestCase):
             self.assertNotEqual(result.returncode, 0)
             self.assertFalse(report.exists())
             self.assertEqual(json.loads(path.read_text(encoding='utf-8')), asset)
+
+    def test_non_major_earlier_rows_are_not_expected_but_stay_known(self):
+        with TemporaryDirectory() as folder:
+            asset = {'courses': [{'courseCode': '1001', 'courseName': '가'},
+                                 {'courseCode': '7777', 'courseName': '교양'}]}
+            # 7777 is in a 교양 table the rebuild never reads; 2002 reuses its number.
+            old = [self.old_row('1001', '가'), self.other_table_row('7777')]
+            result, path, report = self.run_main(folder, old, asset)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            summary = json.loads(report.read_text(encoding='utf-8'))
+            self.assertEqual(summary['comparedWithEarlierRows'], 1)
+            data = json.loads(path.read_text(encoding='utf-8'))
+            self.assertEqual([c['courseCode'] for c in data['courses']], ['1001', '2002', '7777'])
+
+    def test_a_new_major_row_with_a_number_known_from_another_table_aborts(self):
+        with TemporaryDirectory() as folder:
+            asset = {'courses': [{'courseCode': '2002', 'courseName': '교양'}]}
+            old = [self.old_row('1001', '가'), self.other_table_row('2002')]
+            result, path, report = self.run_main(folder, old, asset)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('new row for an existing course', result.stderr)
+            self.assertFalse(report.exists())
 
 
 if __name__ == '__main__':
