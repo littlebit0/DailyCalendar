@@ -110,6 +110,18 @@ def meetings(slots, room):
 
 UNTIMED = {'온라인', 'X', '미배정'}
 
+def source_id(key, split):
+    """Final sourceId of an offering: code-section, plus the course name when one code+section is split."""
+    return f"pcu/main/2026-2/{key}" + (f"/{split}" if split else '')
+
+
+def existing_course(by_key, by_id, key, split):
+    """The already-imported course of an offering, so a rerun never adds its sourceId twice."""
+    if split is None and key in by_key:
+        return by_key[key]
+    return by_id.get(source_id(key, split))
+
+
 def listing_slots(l):
     t = l['time']
     if t is None:
@@ -208,6 +220,7 @@ def apply(rows_path, WT):
             groups[(k, None)] = L
 
     existing = {f"{c['courseCode']}-{c['section']}": c for c in ds['courses']}
+    existing_by_id = {c['sourceId']: c for c in ds['courses']}
     added, changed, owners = [], [], []
     stats = collections.Counter()
     fullwidth = [k for k, L in off.items() if any(l['time'] and l['time'] != nfkc(l['time']) for l in L)]
@@ -216,8 +229,8 @@ def apply(rows_path, WT):
         prim = L[0]
         others = [l for l in L[1:] if (l['time'], l['room']) != (prim['time'], prim['room'])]
         other_note = '; '.join(f"{where(l)} {join(l['raw'][8]) if l['room'] is None else (l['time'] or '빈칸') + ' ' + (l['room'] or '빈칸')}" for l in others[:4])
-        if k in existing and split is None:
-            c = existing[k]
+        c = existing_course(existing, existing_by_id, k, split)
+        if c is not None:
             stats[('existing', status, reason)] += 1
             if status == 'unrecognized' and c['scheduleStatus'] == 'scheduled':
                 c['scheduleStatus'] = 'unrecognized'
@@ -250,7 +263,7 @@ def apply(rows_path, WT):
         if status == 'scheduled' and other_rooms:
             remarks += ' | 다른 공식 목록 강의실: ' + '; '.join(other_rooms[:4])
             stats['room-differs'] += 1
-        sid = f"pcu/main/2026-2/{code}-{sec}" + (f"/{split}" if split else '')
+        sid = source_id(f"{code}-{sec}", split)
         added.append({
             'sourceId': sid, 'campus': 'main', 'academicYear': 2026, 'semester': '2',
             'courseCode': code, 'section': sec, 'courseName': join(prim['raw'][3]), 'professor': prof,

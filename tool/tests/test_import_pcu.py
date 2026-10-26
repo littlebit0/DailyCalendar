@@ -37,5 +37,23 @@ class ImportPcuTests(unittest.TestCase):
         self.assertIsNone(pcu.meetings([(1, '99')], 'AM108'))
 
 
+class ImportPcuRerunTests(unittest.TestCase):
+    def test_source_id_adds_the_course_name_only_for_split_offerings(self):
+        self.assertEqual(pcu.source_id('GEN22692-01', None), 'pcu/main/2026-2/GEN22692-01')
+        self.assertEqual(pcu.source_id('GEN22692-01', '사회봉사2'), 'pcu/main/2026-2/GEN22692-01/사회봉사2')
+
+    def test_a_rerun_finds_already_added_split_courses_by_their_final_source_id(self):
+        added = {'sourceId': 'pcu/main/2026-2/GEN22692-01/사회봉사2'}
+        plain = {'sourceId': 'pcu/main/2026-2/GEN22102-01'}
+        by_id = {c['sourceId']: c for c in (added, plain)}
+        by_key = {'GEN22102-01': plain, 'GEN22692-01': {'sourceId': 'other'}}
+        # A split offering is looked up by its own sourceId, never by code-section.
+        self.assertIs(pcu.existing_course(by_key, by_id, 'GEN22692-01', '사회봉사2'), added)
+        self.assertIsNone(pcu.existing_course(by_key, by_id, 'GEN22692-01', '사회봉사3'))
+        # An unsplit offering still matches the earlier extraction by code-section.
+        self.assertIs(pcu.existing_course(by_key, by_id, 'GEN22102-01', None), plain)
+        self.assertIsNone(pcu.existing_course(by_key, by_id, 'NEW00001-01', None))
+
+
 if __name__ == '__main__':
     unittest.main()
