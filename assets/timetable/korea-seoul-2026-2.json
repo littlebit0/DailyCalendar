@@ -5,7 +5,7 @@
   "campusName": "서울캠퍼스",
   "academicYear": 2026,
   "semester": "2",
-  "publishedDate": "2026-10-09",
+  "publishedDate": "2026-10-23",
   "sourceUrl": "https://sugang.korea.ac.kr/",
   "researchOnly": false,
   "completionClaim": false,
@@ -700383,7 +700383,7 @@
   "wholeUniversityCatalogComplete": false,
   "wholeOperatingVerified": false,
   "wholeSchoolCourseCoverageComplete": false,
-  "sourceCaptureDate": "2026-10-09",
+  "sourceCaptureDate": "2026-10-23",
   "sourceQueryScope": "131 current public Seoul department queries, including empty scopes; whole university coverage incomplete",
   "productionIntegrationEnabled": true,
   "researchRevision": "remarkful-own-clock-reviewed-v10-source-only"
