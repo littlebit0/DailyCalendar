@@ -49,6 +49,30 @@ void main() {
     },
   );
 
+  test('Eulji course names never carry the section column', () async {
+    final catalog = await UniversityCatalog.load();
+    var checked = 0;
+    for (final dataset in catalog.where((d) => d.universityId == 'eulji')) {
+      for (final course in dataset.courses) {
+        checked++;
+        expect(course.title.trim(), course.title, reason: course.sourceId);
+        expect(
+          course.title,
+          isNot(matches(RegExp(r'\s{2,}'))),
+          reason: course.sourceId,
+        );
+        if (course.section.isNotEmpty) {
+          expect(
+            course.title.endsWith(' ${course.section}'),
+            isFalse,
+            reason: course.sourceId,
+          );
+        }
+      }
+    }
+    expect(checked, 423);
+  });
+
   test('Eulji period slots include the following break', () {
     var checked = 0;
     for (final campus in ['seongnam', 'uijeongbu']) {
