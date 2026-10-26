@@ -5,6 +5,34 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test(
+    'SKU convergence-major courses count as major for their department',
+    () async {
+      final catalog = await UniversityCatalog.load();
+      var checked = 0;
+      final byCode = <String, bool>{};
+      for (final dataset in catalog.where((d) => d.universityId == 'sku')) {
+        for (final course in dataset.courses) {
+          if (course.sourceClassification != '융합') continue;
+          checked++;
+          // The raw classification stays as printed.
+          expect(course.sourceClassification, '융합');
+          for (final label in course.departments) {
+            expect(label, contains('융합전공'), reason: course.sourceId);
+            expect(
+              course.isMajorForSourceDepartment(label),
+              isTrue,
+              reason: course.sourceId,
+            );
+          }
+          byCode[course.code] = true;
+        }
+      }
+      expect(checked, 31);
+      expect(byCode.keys, containsAll(['SD1018', 'SD1305']));
+    },
+  );
+
+  test(
     'SKU leaves only user-held labels without an official affiliation',
     () async {
       final catalog = await UniversityCatalog.load();
