@@ -1,0 +1,212 @@
+import 'dart:io';
+import 'package:daily/core/academic/academic_profile.dart';
+import 'package:daily/features/timetable/data/university_catalog.dart';
+import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
+import 'package:daily/features/timetable/domain/timetable.dart';
+import 'package:daily/features/timetable/domain/university_course.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+class _Files extends CachingAssetBundle {
+  @override
+  Future<String> loadString(String key, {bool cache = true}) async =>
+      File(key).readAsStringSync();
+  @override
+  Future<ByteData> load(String key) async =>
+      ByteData.sublistView(File(key).readAsBytesSync());
+}
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  test(
+    'a single trailing classroom applies to every meeting of the course',
+    () async {
+      final data = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'kangwon',
+      );
+      var checked = 0;
+      for (final course in [for (final d in data) ...d.courses]) {
+        // '월A1,목A1(60주년기념관 209)': the room is printed once after the slots.
+        final match = RegExp(
+          r'^([^()]+)\((.+)\)$',
+        ).firstMatch(course.sourceSchedule);
+        if (match == null || match[1]!.contains('(')) continue;
+        final shared = course.meetings.map((m) => m.classroom).toSet();
+        if (shared.length <= 1 && !shared.contains('')) {
+          if (shared.isNotEmpty) checked++;
+          continue;
+        }
+        expect(
+          course.meetings.map((m) => m.classroom),
+          everyElement(isNot('')),
+          reason: course.sourceId,
+        );
+      }
+      expect(checked, greaterThan(1000));
+    },
+  );
+  test(
+    'Kangwon registered whole catalog retains five campus filters and safe source meetings',
+    () async {
+      final data = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'kangwon',
+      );
+      expect(
+        {for (final d in data) d.campus: d.courses.length},
+        {
+          'chuncheon': 2902,
+          'gangneung': 1293,
+          'wonju': 500,
+          'samcheok': 670,
+          'dogye': 396,
+        },
+      );
+      final courses = [for (final d in data) ...d.courses];
+      expect(courses, hasLength(5761));
+      expect(courses.map((c) => c.sourceId).toSet(), hasLength(5761));
+      expect(courses.where((c) => c.hasSchedulableMeetings), hasLength(5108));
+      expect(
+        courses.where((c) => c.scheduleStatus == 'unrecognized'),
+        hasLength(653),
+      );
+      for (final c in courses.where((c) => c.hasSchedulableMeetings)) {
+        final saved = c.toTimetable(id: c.sourceId, mode: LectureMode.inPerson);
+        final restored = TimetableClass.fromJson(saved.toJson());
+        expect(restored.isValid, isTrue, reason: c.sourceId);
+        expect(
+          restored.meetings.map((m) => m.toJson()).toList(),
+          saved.meetings.map((m) => m.toJson()).toList(),
+        );
+        expect(restored.period?.toJson(), saved.period?.toJson());
+      }
+      final service = courses.where(
+        (c) => c.code == '14207025' && c.hasSchedulableMeetings,
+      );
+      expect(service, hasLength(135));
+      for (final c in service) {
+        expect(
+          c.meetings.single.endMinute - c.meetings.single.startMinute,
+          120,
+        );
+        expect(c.meetings.single.classroom, isEmpty);
+        expect(c.departmentRemarks.values.join('\n'), contains('봉사기관:'));
+        expect(c.period!.contains(DateTime(2026, 9, 13)), isFalse);
+        expect(c.period!.contains(DateTime(2026, 12, 5)), isFalse);
+      }
+      expect(courseCategory('글로컬교양'), CourseCategory.generalEducation);
+    },
+  );
+
+  test(
+    'Kangwon period meetings fill the whole slot including the break',
+    () async {
+      final data = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'kangwon',
+      );
+      var checked = 0;
+      for (final d in data) {
+        for (final c in d.courses) {
+          // 기관 봉사 강좌는 학교 원문이 시계 시각을 직접 적어 교시 슬롯 규칙에서 제외한다.
+          if (c.code == '14207025') continue;
+          final byDay = <String, List<ClassMeeting>>{};
+          for (final m in c.meetings) {
+            final start = m.originalStartMinute;
+            final len = m.originalEndMinute - start;
+            // 숫자 교시: 50분 수업+10분 휴식(60분 슬롯, 0교시=08:00),
+            // A교시: 75분 수업+15분 휴식(90분 슬롯, A1=09:00).
+            final numeric = (start - 480) % 60 == 0 && len % 60 == 0;
+            final aPeriod = (start - 540) % 90 == 0 && len % 90 == 0;
+            expect(numeric || aPeriod, isTrue, reason: c.sourceId);
+            byDay.putIfAbsent('${m.weekday}|${m.classroom}', () => []).add(m);
+            checked++;
+          }
+          // 같은 요일·같은 강의실의 연속 교시는 한 구간이어야 한다.
+          for (final list in byDay.values) {
+            list.sort(
+              (a, b) => a.originalStartMinute.compareTo(b.originalStartMinute),
+            );
+            for (var i = 1; i < list.length; i++) {
+              expect(
+                list[i].originalStartMinute - list[i - 1].originalEndMinute >=
+                    60,
+                isTrue,
+                reason: c.sourceId,
+              );
+            }
+          }
+        }
+      }
+      expect(checked, greaterThan(6900));
+    },
+  );
+
+  test(
+    'Kangwon major offering labels all belong to an official college',
+    () async {
+      final data = await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'kangwon',
+      );
+      final raw = <String>{};
+      final orphans = <String>{};
+      for (final d in data) {
+        for (final c in d.courses) {
+          for (final l in c.departments) {
+            if (c.isMajorForSourceDepartment(l) &&
+                !c.offeringOrganizations.any((o) => o.sourceLabel == l)) {
+              raw.add('${d.campus} $l');
+            }
+          }
+          for (final o in c.offeringOrganizations) {
+            if (o.department != null &&
+                o.college == null &&
+                o.group == null &&
+                c.isMajorForOrganization(o)) {
+              orphans.add('${d.campus} ${o.department}');
+            }
+          }
+        }
+      }
+      expect(raw, isEmpty);
+      expect(orphans, isEmpty);
+    },
+  );
+
+  test(
+    'Kangwon unified profile selects actual campus defaults and excludes automatic makeup recurrence',
+    () async {
+      for (final entry in {
+        'academyinfo:0000003': 'chuncheon',
+        'academyinfo:0000004': 'samcheok',
+        'academyinfo:0003363': 'gangneung',
+        'academyinfo:0003364': 'wonju',
+      }.entries) {
+        final profile = AcademicProfile(
+          universityId: 'institution:academyinfo:0000003',
+          universityName: '강원대학교',
+          schoolKind: 'fourYear',
+          campusId: entry.key,
+        );
+        expect(profile.timetableUniversity, 'kangwon');
+        expect(profile.timetableCampus, entry.value);
+      }
+      const wrongCampus = AcademicProfile(
+        universityId: 'institution:academyinfo:0000003',
+        universityName: '강원대학교',
+        schoolKind: 'fourYear',
+        campusId: 'academyinfo:0000117',
+      );
+      expect(wrongCampus.timetableCampus, isNull);
+      final period = (await TimetablePeriodDefaults.load(
+        bundle: _Files(),
+      )).periodFor(2026, '2', university: 'kangwon')!;
+      expect(period.start, DateTime(2026, 9, 1));
+      expect(period.end, DateTime(2026, 12, 14));
+      expect(period.contains(DateTime(2026, 12, 15)), isFalse);
+      expect(period.contains(DateTime(2026, 12, 21)), isFalse);
+    },
+  );
+}
