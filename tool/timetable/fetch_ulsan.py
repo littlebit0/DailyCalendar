@@ -30,33 +30,12 @@ def curl(cookie, data=None, out=None):
         raise RuntimeError(f'HTTP {code}')
     return open(out, encoding='utf-8', errors='replace').read()
 
-def form(s):
-    d = {}
-    for m in re.finditer(r'<input[^>]*>', s):
-        t = m.group(0)
-        n = re.search(r'name="([^"]*)"', t)
-        if not n: continue
-        ty = re.search(r'type="([^"]*)"', t)
-        if ty and ty.group(1) in ('checkbox', 'radio') and 'checked' not in t: continue
-        v = re.search(r'value="([^"]*)"', t)
-        d[html.unescape(n.group(1))] = html.unescape(v.group(1)) if v else ''
-    for m in re.finditer(r'<select[^>]*name="([^"]*)"[^>]*>(.*?)</select>', s, re.S):
-        opts = re.findall(r'<option([^>]*)value="([^"]*)"', m.group(2))
-        sel = [v for a, v in opts if 'selected' in a] or [v for a, v in opts[:1]]
-        d[html.unescape(m.group(1))] = html.unescape(sel[0]) if sel else ''
-    return d
-
-def options(s, name):
-    m = re.search(r'<select[^>]*name="' + re.escape(name) + r'"[^>]*>(.*?)</select>', s, re.S)
-    if not m: return []
-    return [(html.unescape(v), ' '.join(html.unescape(re.sub('<[^>]+>', '', t)).split()))
-            for v, t in re.findall(r'<option[^>]*value="([^"]*)"[^>]*>(.*?)</option>', m.group(1), re.S)]
+from ulsan_view import P, check_navigation, check_term, form, options
 
 
 OUT = sys.argv[1]
 os.makedirs(OUT, exist_ok=True)
 CK = os.path.join(OUT, 'ck.txt')
-P = 'ctl01$CP1$'
 GRAD = {'11042', '11111', '11108', '11122', '11136', '12047', '12050', '12110', '12053'}
 ROW = re.compile(r'<tr>\s*<td>\s*<span id="CP1_iuwgList_lbIsuNm_(\d+)">(.*?)</span>(.*?)</tr>', re.S)
 
@@ -92,11 +71,6 @@ def post(s, target, **vals):
         f[P + k] = v
     return curl(CK, f, os.path.join(OUT, 'last.html'))
 
-def check_term(s):
-    f = form(s)
-    if f.get(P + 'imedYy') != '2026' or f.get(P + 'ddlHaggi') != '2':
-        raise RuntimeError('term drift')
-
 results = json.load(open(os.path.join(OUT, 'major.json'))) if os.path.exists(os.path.join(OUT, 'major.json')) else []
 done = {(r['daehag'][0], r['hagbu'][0], r['sosog'][0], r['grade']) for r in results}
 tree = json.load(open(os.path.join(OUT, 'tree.json'))) if os.path.exists(os.path.join(OUT, 'tree.json')) else []
@@ -111,8 +85,10 @@ def goto(dv, hv=None, tries=3):
     for t in range(tries):
         try:
             s = post(s, P + 'ddlDaehag', ddlDaehag=dv, ddlSearchType='1')
+            check_navigation(s, dv)
             if hv is not None:
                 s = post(s, P + 'ddlHagbu', ddlDaehag=dv, ddlHagbu=hv, ddlSearchType='1')
+                check_navigation(s, dv, hv)
             return s
         except RuntimeError as e:
             print('retry nav', dv, hv, e, flush=True)
