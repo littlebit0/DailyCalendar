@@ -18,6 +18,7 @@ import '../../features/events/data/app_database.dart';
 import '../../features/events/data/drift_event_repository.dart';
 import '../../features/events/data/owner_scoped_event_repository.dart';
 import '../lms/lms_controller.dart';
+import '../update/update_requirement.dart';
 import '../lms/lms_sync_service.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_category.dart';
@@ -59,6 +60,16 @@ class CalendarRange {
   @override
   int get hashCode => Object.hash(start, end);
 }
+
+/// The newer version this device must install first, or null. Overridden at
+/// startup; the default means no restriction (tests, tools).
+final requiredUpdateVersionProvider = Provider<ValueListenable<String?>>(
+  (ref) => ValueNotifier<String?>(null),
+);
+
+/// Drives the periodic release check; null when update enforcement is off.
+final updateRequirementControllerProvider =
+    Provider<UpdateRequirementController?>((ref) => null);
 
 final settingsRepositoryProvider = Provider<SettingsRepository>((ref) {
   throw UnimplementedError('settingsRepositoryProvider must be overridden');
@@ -289,6 +300,7 @@ final lmsControllerProvider = ChangeNotifierProvider<LmsController>((ref) {
     repository: ref.watch(eventRepositoryProvider),
     commands: ref.watch(eventCommandServiceProvider),
     analytics: ref.watch(productAnalyticsProvider),
+    blocked: () => ref.read(requiredUpdateVersionProvider).value != null,
     onIntegrationChanged: () {
       ref.read(appSettingsProvider.notifier).state = ref
           .read(settingsRepositoryProvider)

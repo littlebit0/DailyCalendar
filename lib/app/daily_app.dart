@@ -985,6 +985,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     switch (state) {
       case AppLifecycleState.resumed:
         ref.read(lmsControllerProvider).setForeground(true);
+        unawaited(ref.read(updateRequirementControllerProvider)?.check());
         _syncRestoreRetryTimer?.cancel();
         _syncRestoreRetryIndex = 0;
         // App Intents update the shared SQLite file outside Drift's active
@@ -1181,6 +1182,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
       }
     }
     if (!mounted) return;
+    if (ref.read(requiredUpdateVersionProvider).value != null) return;
     // Do not instantiate network/import services for users without a subscription.
     try {
       final store = ref.read(settingsRepositoryProvider).academicStore;

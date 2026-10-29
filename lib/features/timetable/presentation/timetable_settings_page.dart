@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/update/update_required_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/di/app_providers.dart';
@@ -29,109 +30,111 @@ class TimetableSettingsPage extends ConsumerWidget {
       key: const ValueKey('timetable-settings-page'),
       backgroundColor: DailyUi.pageBackground(context),
       appBar: DailyNavigationBar(title: context.tr('시간표 설정')),
-      body: AcademicFeatureGate(
-        child: DailyAdaptiveBody(
-          child: ListenableBuilder(
-            listenable: store,
-            builder: (context, _) {
-              final readable = store.loadError == null;
-              return ListView(
-                key: const ValueKey('timetable-settings-list'),
-                children: [
-                  if (!readable) ...[
-                    Text(context.tr('시간표 데이터를 읽지 못했습니다. 기존 데이터는 보존됩니다.')),
-                    const SizedBox(height: 16),
-                  ],
-                  DailyGroupedSection(
-                    children: [
-                      DailySettingsRow(
-                        key: const ValueKey('timetable-settings-term'),
-                        title: context.tr('시간표 선택'),
-                        subtitle: timetableTermLabel(
-                          context,
-                          store.activeYear,
-                          store.activeSemester,
-                        ),
-                        leading: const DailySettingsIcon(
-                          icon: Icons.calendar_view_week_outlined,
-                        ),
-                        enabled: readable,
-                        onTap: () => showTimetablePicker(
-                          context,
-                          store,
-                          suggestPeriod: suggestPeriod,
-                        ),
-                      ),
-                      DailySettingsRow(
-                        key: const ValueKey('timetable-settings-name'),
-                        title: context.tr('시간표 이름 변경'),
-                        subtitle: store.activeName ?? context.tr('내 시간표'),
-                        leading: const DailySettingsIcon(
-                          icon: Icons.edit_outlined,
-                        ),
-                        enabled: readable,
-                        onTap: () => _rename(context, store),
-                      ),
-                      DailySettingsRow(
-                        key: const ValueKey('timetable-settings-period'),
-                        title: context.tr('학기 기간 수정'),
-                        subtitle: store.activePeriod == null
-                            ? context.tr('학기 기간 설정 필요')
-                            : timetablePeriodLabel(
-                                context,
-                                store.activePeriod!,
-                              ),
-                        leading: const DailySettingsIcon(
-                          icon: Icons.date_range_outlined,
-                        ),
-                        enabled: readable,
-                        onTap: () => showTimetablePeriodEditor(
-                          context,
-                          store,
-                          store.activeYear,
-                          store.activeSemester,
-                          suggestPeriod: suggestPeriod,
-                        ),
-                      ),
+      body: UpdateRequiredGate(
+        child: AcademicFeatureGate(
+          child: DailyAdaptiveBody(
+            child: ListenableBuilder(
+              listenable: store,
+              builder: (context, _) {
+                final readable = store.loadError == null;
+                return ListView(
+                  key: const ValueKey('timetable-settings-list'),
+                  children: [
+                    if (!readable) ...[
+                      Text(context.tr('시간표 데이터를 읽지 못했습니다. 기존 데이터는 보존됩니다.')),
+                      const SizedBox(height: 16),
                     ],
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    context.tr('기간을 설정하면 주·일간 스케줄에 수업이 표시됩니다.'),
-                    style: TextStyle(color: DailyUi.secondaryText(context)),
-                  ),
-                  const SizedBox(height: 24),
-                  DailyGroupedSection(
-                    children: [
-                      DailySettingsRow(
-                        key: const ValueKey('timetable-settings-reset'),
-                        title: context.tr('시간표 전체 초기화'),
-                        subtitle: context.tr(
-                          '수업 {count}개',
-                          args: {'count': store.activeClasses.length},
+                    DailyGroupedSection(
+                      children: [
+                        DailySettingsRow(
+                          key: const ValueKey('timetable-settings-term'),
+                          title: context.tr('시간표 선택'),
+                          subtitle: timetableTermLabel(
+                            context,
+                            store.activeYear,
+                            store.activeSemester,
+                          ),
+                          leading: const DailySettingsIcon(
+                            icon: Icons.calendar_view_week_outlined,
+                          ),
+                          enabled: readable,
+                          onTap: () => showTimetablePicker(
+                            context,
+                            store,
+                            suggestPeriod: suggestPeriod,
+                          ),
                         ),
-                        leading: const DailySettingsIcon(
-                          icon: Icons.delete_outline,
-                          color: DailyUi.destructive,
+                        DailySettingsRow(
+                          key: const ValueKey('timetable-settings-name'),
+                          title: context.tr('시간표 이름 변경'),
+                          subtitle: store.activeName ?? context.tr('내 시간표'),
+                          leading: const DailySettingsIcon(
+                            icon: Icons.edit_outlined,
+                          ),
+                          enabled: readable,
+                          onTap: () => _rename(context, store),
                         ),
-                        enabled: readable && store.activeClasses.isNotEmpty,
-                        destructive: true,
-                        onTap: () => _reset(context, store),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    context.tr(
-                      store.hasPendingSync
-                          ? '시간표 Google Drive 동기화 대기 중'
-                          : '시간표는 Google Drive로 동기화됩니다.',
+                        DailySettingsRow(
+                          key: const ValueKey('timetable-settings-period'),
+                          title: context.tr('학기 기간 수정'),
+                          subtitle: store.activePeriod == null
+                              ? context.tr('학기 기간 설정 필요')
+                              : timetablePeriodLabel(
+                                  context,
+                                  store.activePeriod!,
+                                ),
+                          leading: const DailySettingsIcon(
+                            icon: Icons.date_range_outlined,
+                          ),
+                          enabled: readable,
+                          onTap: () => showTimetablePeriodEditor(
+                            context,
+                            store,
+                            store.activeYear,
+                            store.activeSemester,
+                            suggestPeriod: suggestPeriod,
+                          ),
+                        ),
+                      ],
                     ),
-                    style: TextStyle(color: DailyUi.secondaryText(context)),
-                  ),
-                ],
-              );
-            },
+                    const SizedBox(height: 12),
+                    Text(
+                      context.tr('기간을 설정하면 주·일간 스케줄에 수업이 표시됩니다.'),
+                      style: TextStyle(color: DailyUi.secondaryText(context)),
+                    ),
+                    const SizedBox(height: 24),
+                    DailyGroupedSection(
+                      children: [
+                        DailySettingsRow(
+                          key: const ValueKey('timetable-settings-reset'),
+                          title: context.tr('시간표 전체 초기화'),
+                          subtitle: context.tr(
+                            '수업 {count}개',
+                            args: {'count': store.activeClasses.length},
+                          ),
+                          leading: const DailySettingsIcon(
+                            icon: Icons.delete_outline,
+                            color: DailyUi.destructive,
+                          ),
+                          enabled: readable && store.activeClasses.isNotEmpty,
+                          destructive: true,
+                          onTap: () => _reset(context, store),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      context.tr(
+                        store.hasPendingSync
+                            ? '시간표 Google Drive 동기화 대기 중'
+                            : '시간표는 Google Drive로 동기화됩니다.',
+                      ),
+                      style: TextStyle(color: DailyUi.secondaryText(context)),
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

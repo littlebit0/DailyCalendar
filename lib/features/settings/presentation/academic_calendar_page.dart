@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/update/update_required_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -132,9 +133,11 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
             return Scaffold(
               appBar: DailyNavigationBar(title: text(AcademicText.title)),
               body: sourceId == null
-                  ? const AcademicFeatureGate(
-                      calendar: true,
-                      child: SizedBox.shrink(),
+                  ? const UpdateRequiredGate(
+                      child: AcademicFeatureGate(
+                        calendar: true,
+                        child: SizedBox.shrink(),
+                      ),
                     )
                   : Center(child: Text(text(AcademicText.unavailable))),
             );

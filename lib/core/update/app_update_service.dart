@@ -62,6 +62,29 @@ class AppUpdateService {
     );
   }
 
+  /// The newest published version, or null when it cannot be read. This only
+  /// reads the release feed; it never downloads or installs anything.
+  Future<String?> latestReleaseVersion() async {
+    try {
+      final response = await _client.get(
+        _latestReleaseUri,
+        headers: const {
+          'Accept': 'application/vnd.github+json',
+          'User-Agent': 'Daily-Update-Check',
+        },
+      );
+      if (response.statusCode != HttpStatus.ok) return null;
+      final release = jsonDecode(response.body) as Map<String, dynamic>;
+      final version = (release['tag_name'] as String? ?? '').replaceFirst(
+        RegExp(r'^v'),
+        '',
+      );
+      return RegExp(r'^\d+\.\d+\.\d+$').hasMatch(version) ? version : null;
+    } on Object {
+      return null;
+    }
+  }
+
   Future<void> _checkAndPrepare() async {
     Directory? directory;
     try {

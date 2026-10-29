@@ -22,6 +22,7 @@ class LmsController extends ChangeNotifier {
     required EventCommandService commands,
     LmsWebSession Function(String owner, String school)? createSession,
     FutureOr<void> Function()? onIntegrationChanged,
+    bool Function()? blocked,
     LmsCredentialsStore? credentialsStore,
     ProductAnalytics analytics = const NoopProductAnalytics(),
     List<Duration> automaticLoginRetryDelays = const [
@@ -33,6 +34,7 @@ class LmsController extends ChangeNotifier {
        _loginReporter = LmsLoginReporter(analytics),
        _settings = settings,
        _onIntegrationChanged = onIntegrationChanged,
+       _blocked = blocked,
        _createSession =
            createSession ??
            ((owner, school) =>
@@ -108,6 +110,7 @@ class LmsController extends ChangeNotifier {
 
   final SettingsRepository _settings;
   final FutureOr<void> Function()? _onIntegrationChanged;
+  final bool Function()? _blocked;
   final LmsWebSession Function(String, String) _createSession;
   late final LmsSyncService sync;
   LmsWebSession? _session;
@@ -215,7 +218,9 @@ class LmsController extends ChangeNotifier {
   }
 
   Future<void> refresh({bool force = false}) {
-    if (_disposed || _disconnecting) return Future.value();
+    if (_disposed || _disconnecting || (_blocked?.call() ?? false)) {
+      return Future.value();
+    }
     final running = _operation;
     if (running != null) {
       // A force request before collection starts belongs to the upcoming

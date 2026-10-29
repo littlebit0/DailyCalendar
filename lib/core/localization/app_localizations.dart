@@ -319,6 +319,10 @@ const Map<String, Map<String, String>> _translations = {
     "저장된 학사 정보": "Saved academic profile",
     "학사 정보 설정": "Set academic profile",
     "학사 정보 변경": "Change academic profile",
+    "업데이트가 필요합니다": "Update required",
+    "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "A new version ({version}) is available. Until you update, you can only view events; academic calendar, LMS, timetable, and adding or editing events are unavailable.",
+    "업데이트 받기": "Get the update",
     "저장 중": "Saving",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
         "Connect Google to save your academic profile and use it on other devices.",
@@ -1371,6 +1375,10 @@ const Map<String, Map<String, String>> _translations = {
     "저장된 학사 정보": "保存した学籍情報",
     "학사 정보 설정": "学籍情報を設定",
     "학사 정보 변경": "学籍情報を変更",
+    "업데이트가 필요합니다": "アップデートが必要です",
+    "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "新しいバージョン({version})があります。アップデートするまでは予定の確認のみ利用でき、学事日程・LMS・時間割と予定の追加・編集は利用できません。",
+    "업데이트 받기": "アップデートを入手",
     "저장 중": "保存中",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
         "Googleを連携すると学籍情報を保存して他の端末でも利用できます。",
@@ -2332,6 +2340,10 @@ const Map<String, Map<String, String>> _translations = {
     "저장된 학사 정보": "已儲存的學籍資訊",
     "학사 정보 설정": "設定學籍資訊",
     "학사 정보 변경": "變更學籍資訊",
+    "업데이트가 필요합니다": "需要更新",
+    "새 버전({version})이 나왔습니다. 업데이트하기 전까지는 일정 확인만 사용할 수 있고, 학사일정·LMS·시간표와 일정 추가·수정은 사용할 수 없습니다.":
+        "已有新版本({version})。更新之前只能查看行程，無法使用學校行事曆、LMS、課表，也無法新增或編輯行程。",
+    "업데이트 받기": "取得更新",
     "저장 중": "儲存中",
     "Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.":
         "連結 Google 即可儲存學籍資訊，並在其他裝置使用。",

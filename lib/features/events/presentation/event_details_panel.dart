@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../../core/update/update_required_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -316,6 +317,7 @@ class EventDetailsPanel extends ConsumerWidget {
     List<EventCategory> categories,
     List<int> defaultReminderMinutesList,
   ) async {
+    if (blockedByRequiredUpdate(context, ref)) return;
     final analytics = ref.read(productAnalyticsProvider);
     final stopwatch = Stopwatch()..start();
     unawaited(
@@ -367,6 +369,7 @@ class EventDetailsPanel extends ConsumerWidget {
     List<EventCategory> categories,
     List<int> defaultReminderMinutesList,
   ) async {
+    if (blockedByRequiredUpdate(context, ref)) return;
     final commandService = ref.read(eventCommandServiceProvider);
     final settingsRepository = ref.read(settingsRepositoryProvider);
     final analytics = ref.read(productAnalyticsProvider);
