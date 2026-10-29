@@ -7,7 +7,7 @@ void main() {
   test(
     'Jeju leaves only the user-held label without an official affiliation',
     () async {
-      final catalog = await UniversityCatalog.load();
+      final catalog = await UniversityCatalog.load(university: 'jeju');
       final raw = <String>{};
       final orphans = <String>{};
       for (final dataset in catalog.where((d) => d.universityId == 'jeju')) {
