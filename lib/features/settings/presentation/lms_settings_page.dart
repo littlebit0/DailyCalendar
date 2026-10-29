@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/update/update_required_view.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/lms/lms_sync_service.dart';
 import '../../../core/lms/lms_web_session.dart';
@@ -230,354 +231,371 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
             LmsSyncState.unsupported => '이 학교의 LMS 연결은 아직 지원하지 않습니다.',
             LmsSyncState.idle => '학교 계정으로 로그인해 연결하세요.',
           };
-    return Scaffold(
-      backgroundColor: DailyUi.pageBackground(context),
-      appBar: DailyNavigationBar(title: context.tr('학교 LMS 연결')),
-      body: SafeArea(
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 720),
-            child: ListView(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(20),
-              children: [
-                DailyGroupedSection(
-                  children: [
-                    DailySettingsRow(
-                      leading: const DailySettingsIcon(
-                        icon: Icons.school_outlined,
-                      ),
-                      title:
-                          settings.academicProfile?.displayName ??
-                          context.tr('학사 정보'),
-                      subtitle: context.tr('학교 LMS 연결'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                if (!hasGoogle)
-                  Text(context.tr('Google 계정 로그인이 필요합니다.'))
-                else if (!controller.supported)
-                  Text(context.tr('해당 대학의 LMS 연결은 아직 지원하지 않습니다.'))
-                else ...[
-                  Text(
-                    context.tr(
-                      '학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.',
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    context.tr(
-                      '연결하면 학교 LMS에서 수업명과 과제·퀴즈·학습 콘텐츠의 제목, 마감, 제출·학습 진행 상태를 읽어 일정으로 만듭니다. Google Drive 동기화를 사용하면 가져온 일정과 학교 사용자 번호, 연결 여부가 Google 계정의 앱 전용 저장 영역에 함께 저장됩니다. 학교 비밀번호·쿠키·세션은 Drive로 보내지 않습니다.',
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    context.tr(
-                      '앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.',
-                    ),
-                  ),
-                  const SizedBox(height: 16),
+    return UpdateRequiredPageGate(
+      title: context.tr('학교 LMS 연결'),
+      child: Scaffold(
+        backgroundColor: DailyUi.pageBackground(context),
+        appBar: DailyNavigationBar(title: context.tr('학교 LMS 연결')),
+        body: SafeArea(
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 720),
+              child: ListView(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(20),
+                children: [
                   DailyGroupedSection(
-                    label: context.tr('이 기기 자동 로그인'),
-                    footer: context.tr(_localLoginNotice),
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const DailySettingsIcon(
-                                  icon: Icons.lock_outline,
-                                ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        context.tr('ID'),
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.labelLarge,
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        controller.localLoginLoading
-                                            ? context.tr('로그인 정보를 확인하고 있습니다.')
-                                            : controller.localLoginReadFailed
-                                            ? context.tr(
-                                                '저장된 로그인 정보를 확인하지 못했습니다.',
-                                              )
-                                            : controller.localLoginUsername ??
-                                                  context.tr(
-                                                    '저장된 로그인 정보가 없습니다.',
-                                                  ),
-                                        key: const ValueKey(
-                                          'lms-local-login-username',
-                                        ),
-                                        style: Theme.of(
-                                          context,
-                                        ).textTheme.bodyLarge,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            if (controller.lastLoginFailure != null) ...[
-                              const SizedBox(height: 12),
-                              Text(
-                                context.tr(
-                                  controller.lastLoginFailure!.message,
-                                ),
-                                key: const ValueKey('lms-login-failure-reason'),
-                              ),
-                            ],
-                            if (controller.automaticLoginPaused) ...[
-                              const SizedBox(height: 12),
-                              Text(
-                                context.tr(
-                                  '자동 로그인을 일시 중지했습니다. 비밀번호나 추가 인증을 확인한 뒤 로그인 정보를 다시 저장해 주세요.',
-                                ),
-                              ),
-                            ],
-                            const SizedBox(height: 16),
-                            OutlinedButton.icon(
-                              key: const ValueKey('lms-local-login-configure'),
-                              onPressed: busy || controller.localLoginLoading
-                                  ? null
-                                  : _configureAutomaticLogin,
-                              icon: const Icon(Icons.edit_outlined),
-                              label: Text(context.tr('로그인 정보 저장·변경')),
-                            ),
-                            // Not while connected: a retry only signs in again
-                            // when the school session has ended.
-                            if (controller.localLoginUsername != null &&
-                                !controller.connected)
-                              FilledButton.tonalIcon(
-                                key: const ValueKey('lms-local-login-retry'),
-                                onPressed: busy || controller.localLoginLoading
-                                    ? null
-                                    : _retrySavedLogin,
-                                icon: const Icon(Icons.login_rounded),
-                                label: Text(context.tr('저장된 정보로 재로그인')),
-                              ),
-                            if (controller.localLoginUsername != null)
-                              TextButton.icon(
-                                key: const ValueKey('lms-local-login-remove'),
-                                onPressed: busy || controller.localLoginLoading
-                                    ? null
-                                    : _removeAutomaticLogin,
-                                style: TextButton.styleFrom(
-                                  foregroundColor: DailyUi.destructive,
-                                ),
-                                icon: const Icon(Icons.delete_outline),
-                                label: Text(context.tr('이 기기의 저장된 로그인 정보 삭제')),
-                              ),
-                          ],
+                      DailySettingsRow(
+                        leading: const DailySettingsIcon(
+                          icon: Icons.school_outlined,
                         ),
+                        title:
+                            settings.academicProfile?.displayName ??
+                            context.tr('학사 정보'),
+                        subtitle: context.tr('학교 LMS 연결'),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  DailyGroupedSection(
-                    label: context.tr('LMS 일정 분류'),
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            DropdownButtonFormField<String>(
-                              key: ValueKey('lms-category-$selectedCategory'),
-                              initialValue: selectedCategory,
-                              isExpanded: true,
-                              decoration: InputDecoration(
-                                labelText: context.tr('LMS 일정 분류'),
-                                border: const OutlineInputBorder(),
-                              ),
-                              items: [
-                                for (final category in categories)
-                                  DropdownMenuItem(
-                                    value: category.id,
-                                    child: Text(
-                                      category.label,
-                                      overflow: TextOverflow.ellipsis,
+                  const SizedBox(height: 12),
+                  if (!hasGoogle)
+                    Text(context.tr('Google 계정 로그인이 필요합니다.'))
+                  else if (!controller.supported)
+                    Text(context.tr('해당 대학의 LMS 연결은 아직 지원하지 않습니다.'))
+                  else ...[
+                    Text(
+                      context.tr(
+                        '학교의 공식 로그인 화면에서 인증하면 과제·퀴즈 마감과 출석 조건이 확인된 학습 일정을 자동으로 가져옵니다.',
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      context.tr(
+                        '연결하면 학교 LMS에서 수업명과 과제·퀴즈·학습 콘텐츠의 제목, 마감, 제출·학습 진행 상태를 읽어 일정으로 만듭니다. Google Drive 동기화를 사용하면 가져온 일정과 학교 사용자 번호, 연결 여부가 Google 계정의 앱 전용 저장 영역에 함께 저장됩니다. 학교 비밀번호·쿠키·세션은 Drive로 보내지 않습니다.',
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      context.tr(
+                        '앱 시작·복귀 시와 사용 중 5분 간격으로 확인합니다. 학교 인증이 만료되면 다시 로그인해야 합니다.',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    DailyGroupedSection(
+                      label: context.tr('이 기기 자동 로그인'),
+                      footer: context.tr(_localLoginNotice),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const DailySettingsIcon(
+                                    icon: Icons.lock_outline,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          context.tr('ID'),
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.labelLarge,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          controller.localLoginLoading
+                                              ? context.tr('로그인 정보를 확인하고 있습니다.')
+                                              : controller.localLoginReadFailed
+                                              ? context.tr(
+                                                  '저장된 로그인 정보를 확인하지 못했습니다.',
+                                                )
+                                              : controller.localLoginUsername ??
+                                                    context.tr(
+                                                      '저장된 로그인 정보가 없습니다.',
+                                                    ),
+                                          key: const ValueKey(
+                                            'lms-local-login-username',
+                                          ),
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyLarge,
+                                        ),
+                                      ],
                                     ),
                                   ),
+                                ],
+                              ),
+                              if (controller.lastLoginFailure != null) ...[
+                                const SizedBox(height: 12),
+                                Text(
+                                  context.tr(
+                                    controller.lastLoginFailure!.message,
+                                  ),
+                                  key: const ValueKey(
+                                    'lms-login-failure-reason',
+                                  ),
+                                ),
                               ],
-                              onChanged: _savingCategory
-                                  ? null
-                                  : _selectCategory,
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              context.tr(
-                                '선택한 분류로 LMS 일정을 자동 추가하고 동기화합니다. 기존 연결 일정에도 적용됩니다.',
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  DailyGroupedSection(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            if (busy || _savingCategory)
-                              const LinearProgressIndicator(),
-                            const SizedBox(height: 12),
-                            Text(
-                              context.tr(status),
-                              key: const ValueKey('lms-sync-status'),
-                            ),
-                            if (last != null)
-                              Text(
-                                context.tr(
-                                  '최근 확인: {time}',
-                                  args: {
-                                    'time': DateFormat.yMd(
-                                      context.l10n.locale.toLanguageTag(),
-                                    ).add_Hm().format(last.toLocal()),
-                                  },
+                              if (controller.automaticLoginPaused) ...[
+                                const SizedBox(height: 12),
+                                Text(
+                                  context.tr(
+                                    '자동 로그인을 일시 중지했습니다. 비밀번호나 추가 인증을 확인한 뒤 로그인 정보를 다시 저장해 주세요.',
+                                  ),
                                 ),
-                              ),
-                            if (result != null)
-                              Text(
-                                context.tr(
-                                  '수업 {courses}개 · 일정 {activities}개',
-                                  args: {
-                                    'courses': result.courses,
-                                    'activities':
-                                        result.activities - result.unscheduled,
-                                  },
-                                ),
-                              ),
-                            if (result != null && result.unscheduled > 0)
-                              Text(
-                                context.tr(
-                                  '마감일이 없는 항목 {count}개는 달력에 표시하지 않습니다.',
-                                  args: {'count': result.unscheduled},
-                                ),
-                              ),
-                            if ((result?.learningCoverageIncomplete == true ||
-                                (result?.unresolvedQuizStatuses ?? 0) > 0)) ...[
-                              const SizedBox(height: 12),
-                              DecoratedBox(
+                              ],
+                              const SizedBox(height: 16),
+                              OutlinedButton.icon(
                                 key: const ValueKey(
-                                  'lms-learning-coverage-notice',
+                                  'lms-local-login-configure',
                                 ),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.outlineVariant,
-                                  ),
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      if (result!.unresolvedLearningActivities >
-                                          0)
-                                        Text(
-                                          context.tr(
-                                            '학습 정보가 충분하지 않은 항목 {count}개는 추가하지 않았습니다.',
-                                            args: {
-                                              'count': result
-                                                  .unresolvedLearningActivities,
-                                            },
-                                          ),
-                                        ),
-                                      if (result.unresolvedQuizStatuses > 0)
-                                        Text(
-                                          context.tr(
-                                            '퀴즈 {count}개의 응시 상태를 확인하지 못했습니다. 기존 완료 상태는 유지됩니다.',
-                                            args: {
-                                              'count':
-                                                  result.unresolvedQuizStatuses,
-                                            },
-                                          ),
-                                        ),
-                                      if (result.failedLearningCourses > 0)
-                                        Text(
-                                          context.tr(
-                                            '강좌 {count}개의 학습 정보를 확인하지 못했습니다. 기존 학습 일정은 유지됩니다.',
-                                            args: {
-                                              'count':
-                                                  result.failedLearningCourses,
-                                            },
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                            if (_failed)
-                              Text(
-                                context.tr(
-                                  (controller.lastLoginFailure ??
-                                              _failureReason)
-                                          ?.message ??
-                                      '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.',
-                                ),
-                              ),
-                            const SizedBox(height: 20),
-                            if (!controller.connected || controller.needsLogin)
-                              FilledButton.icon(
-                                key: const ValueKey('lms-connect'),
-                                onPressed: busy ? null : _login,
-                                icon: const Icon(Icons.school_outlined),
-                                label: Text(context.tr('학교 계정으로 로그인')),
-                              )
-                            else ...[
-                              FilledButton.icon(
-                                onPressed: busy
+                                onPressed: busy || controller.localLoginLoading
                                     ? null
-                                    : () => controller.refresh(force: true),
-                                icon: const Icon(Icons.sync),
-                                label: Text(context.tr('지금 동기화')),
+                                    : _configureAutomaticLogin,
+                                icon: const Icon(Icons.edit_outlined),
+                                label: Text(context.tr('로그인 정보 저장·변경')),
+                              ),
+                              // Not while connected: a retry only signs in again
+                              // when the school session has ended.
+                              if (controller.localLoginUsername != null &&
+                                  !controller.connected)
+                                FilledButton.tonalIcon(
+                                  key: const ValueKey('lms-local-login-retry'),
+                                  onPressed:
+                                      busy || controller.localLoginLoading
+                                      ? null
+                                      : _retrySavedLogin,
+                                  icon: const Icon(Icons.login_rounded),
+                                  label: Text(context.tr('저장된 정보로 재로그인')),
+                                ),
+                              if (controller.localLoginUsername != null)
+                                TextButton.icon(
+                                  key: const ValueKey('lms-local-login-remove'),
+                                  onPressed:
+                                      busy || controller.localLoginLoading
+                                      ? null
+                                      : _removeAutomaticLogin,
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: DailyUi.destructive,
+                                  ),
+                                  icon: const Icon(Icons.delete_outline),
+                                  label: Text(
+                                    context.tr('이 기기의 저장된 로그인 정보 삭제'),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    DailyGroupedSection(
+                      label: context.tr('LMS 일정 분류'),
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              DropdownButtonFormField<String>(
+                                key: ValueKey('lms-category-$selectedCategory'),
+                                initialValue: selectedCategory,
+                                isExpanded: true,
+                                decoration: InputDecoration(
+                                  labelText: context.tr('LMS 일정 분류'),
+                                  border: const OutlineInputBorder(),
+                                ),
+                                items: [
+                                  for (final category in categories)
+                                    DropdownMenuItem(
+                                      value: category.id,
+                                      child: Text(
+                                        category.label,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                ],
+                                onChanged: _savingCategory
+                                    ? null
+                                    : _selectCategory,
                               ),
                               const SizedBox(height: 8),
-                              OutlinedButton(
-                                onPressed: busy ? null : controller.disconnect,
-                                child: Text(context.tr('학교 연결 해제')),
+                              Text(
+                                context.tr(
+                                  '선택한 분류로 LMS 일정을 자동 추가하고 동기화합니다. 기존 연결 일정에도 적용됩니다.',
+                                ),
                               ),
                             ],
-                          ],
+                          ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    DailyGroupedSection(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              if (busy || _savingCategory)
+                                const LinearProgressIndicator(),
+                              const SizedBox(height: 12),
+                              Text(
+                                context.tr(status),
+                                key: const ValueKey('lms-sync-status'),
+                              ),
+                              if (last != null)
+                                Text(
+                                  context.tr(
+                                    '최근 확인: {time}',
+                                    args: {
+                                      'time': DateFormat.yMd(
+                                        context.l10n.locale.toLanguageTag(),
+                                      ).add_Hm().format(last.toLocal()),
+                                    },
+                                  ),
+                                ),
+                              if (result != null)
+                                Text(
+                                  context.tr(
+                                    '수업 {courses}개 · 일정 {activities}개',
+                                    args: {
+                                      'courses': result.courses,
+                                      'activities':
+                                          result.activities -
+                                          result.unscheduled,
+                                    },
+                                  ),
+                                ),
+                              if (result != null && result.unscheduled > 0)
+                                Text(
+                                  context.tr(
+                                    '마감일이 없는 항목 {count}개는 달력에 표시하지 않습니다.',
+                                    args: {'count': result.unscheduled},
+                                  ),
+                                ),
+                              if ((result?.learningCoverageIncomplete == true ||
+                                  (result?.unresolvedQuizStatuses ?? 0) >
+                                      0)) ...[
+                                const SizedBox(height: 12),
+                                DecoratedBox(
+                                  key: const ValueKey(
+                                    'lms-learning-coverage-notice',
+                                  ),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Theme.of(
+                                        context,
+                                      ).colorScheme.outlineVariant,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (result!
+                                                .unresolvedLearningActivities >
+                                            0)
+                                          Text(
+                                            context.tr(
+                                              '학습 정보가 충분하지 않은 항목 {count}개는 추가하지 않았습니다.',
+                                              args: {
+                                                'count': result
+                                                    .unresolvedLearningActivities,
+                                              },
+                                            ),
+                                          ),
+                                        if (result.unresolvedQuizStatuses > 0)
+                                          Text(
+                                            context.tr(
+                                              '퀴즈 {count}개의 응시 상태를 확인하지 못했습니다. 기존 완료 상태는 유지됩니다.',
+                                              args: {
+                                                'count': result
+                                                    .unresolvedQuizStatuses,
+                                              },
+                                            ),
+                                          ),
+                                        if (result.failedLearningCourses > 0)
+                                          Text(
+                                            context.tr(
+                                              '강좌 {count}개의 학습 정보를 확인하지 못했습니다. 기존 학습 일정은 유지됩니다.',
+                                              args: {
+                                                'count': result
+                                                    .failedLearningCourses,
+                                              },
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                              if (_failed)
+                                Text(
+                                  context.tr(
+                                    (controller.lastLoginFailure ??
+                                                _failureReason)
+                                            ?.message ??
+                                        '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.',
+                                  ),
+                                ),
+                              const SizedBox(height: 20),
+                              if (!controller.connected ||
+                                  controller.needsLogin)
+                                FilledButton.icon(
+                                  key: const ValueKey('lms-connect'),
+                                  onPressed: busy ? null : _login,
+                                  icon: const Icon(Icons.school_outlined),
+                                  label: Text(context.tr('학교 계정으로 로그인')),
+                                )
+                              else ...[
+                                FilledButton.icon(
+                                  onPressed: busy
+                                      ? null
+                                      : () => controller.refresh(force: true),
+                                  icon: const Icon(Icons.sync),
+                                  label: Text(context.tr('지금 동기화')),
+                                ),
+                                const SizedBox(height: 8),
+                                OutlinedButton(
+                                  onPressed: busy
+                                      ? null
+                                      : controller.disconnect,
+                                  child: Text(context.tr('학교 연결 해제')),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      context.tr(
+                        '연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.',
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    context.tr(
-                      '연결을 해제하면 이 기기에 저장된 로그인 정보와 학교 세션이 삭제되고 새 항목을 가져오지 않습니다. 이미 가져온 일정은 삭제되지 않으며, 학교 사용자 번호는 다시 연결할 때까지 설정에 남습니다. Drive에 저장된 데이터는 Google 계정의 앱 데이터 관리에서 삭제할 수 있습니다.',
                     ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    context.tr(
-                      '제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.',
+                    const SizedBox(height: 12),
+                    Text(
+                      context.tr(
+                        '제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.',
+                      ),
                     ),
-                  ),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),

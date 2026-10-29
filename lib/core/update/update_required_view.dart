@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../di/app_providers.dart';
 import '../localization/app_localizations.dart';
+import '../theme/daily_ui.dart';
 
 final _releasePage = Uri.parse(
   'https://github.com/littlebit0/DailyCalendar/releases/latest',
@@ -29,6 +30,31 @@ class UpdateRequiredGate extends ConsumerWidget {
       valueListenable: ref.watch(requiredUpdateVersionProvider),
       builder: (context, version, _) =>
           version == null ? child : UpdateRequiredView(version: version),
+    );
+  }
+}
+
+/// Full-page variant for routes that are already open when a release is found.
+class UpdateRequiredPageGate extends ConsumerWidget {
+  const UpdateRequiredPageGate({
+    super.key,
+    required this.title,
+    required this.child,
+  });
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ValueListenableBuilder<String?>(
+      valueListenable: ref.watch(requiredUpdateVersionProvider),
+      builder: (context, version, _) => version == null
+          ? child
+          : Scaffold(
+              backgroundColor: DailyUi.pageBackground(context),
+              appBar: DailyNavigationBar(title: title),
+              body: UpdateRequiredView(version: version),
+            ),
     );
   }
 }
