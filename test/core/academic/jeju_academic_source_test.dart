@@ -23,7 +23,14 @@ void main() {
       );
       addTearDown(source.close);
       final events = await source.fetch(2026);
-      expect(events.length, 48);
+      expect(events.length, 68);
+      final closure = events.singleWhere((e) => e.title == '아라대동제 휴강');
+      expect(closure.start, DateTime(2026, 5, 29));
+      expect(closure.end, DateTime(2026, 5, 30));
+      expect(
+        events.singleWhere((e) => e.title == '1학기 보강(아라대동제)').start,
+        DateTime(2026, 6, 16),
+      );
       expect(events.any((e) => e.title.startsWith('(대학원)')), isFalse);
       final summer = events.singleWhere((e) => e.title == '하기계절수업 개강');
       expect(summer.start, DateTime(2026, 6, 29));
@@ -66,9 +73,28 @@ void main() {
           .length;
       expect(rows.length, year == 2025 ? 60 : 59);
       expect(graduate, 12);
+      // Each closure-table row adds its closure day and its make-up day.
+      final closures = year == 2025 ? 12 : 10;
       expect(
         JejuAcademicSource.parse(body, year),
-        hasLength(rows.length - graduate),
+        hasLength(rows.length - graduate + closures * 2),
+      );
+    }
+  });
+
+  test('Jeju rejects an impossible closure or make-up date', () {
+    final body = File(
+      'test/fixtures/academic/jeju-2026.html',
+    ).readAsStringSync();
+    expect(body, contains('2026-06-12'));
+    for (final broken in ['2026-06-31', '2026-6-12', '2026-06-12x']) {
+      expect(
+        () => JejuAcademicSource.parse(
+          body.replaceFirst('2026-06-12', broken),
+          2026,
+        ),
+        throwsFormatException,
+        reason: broken,
       );
     }
   });
