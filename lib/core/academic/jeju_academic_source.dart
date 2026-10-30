@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:html/dom.dart';
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 
@@ -116,6 +117,49 @@ class JejuAcademicSource implements AcademicSource {
     }
     if (months.length != 12 || events.isEmpty) {
       throw const FormatException('Incomplete Jeju calendar');
+    }
+    events.addAll(_makeupDays(document, year));
+    return events;
+  }
+
+  /// The separate closure and make-up day table, when the year publishes one.
+  static List<AcademicEvent> _makeupDays(Document document, int year) {
+    final tables = document
+        .querySelectorAll('table')
+        .where(
+          (t) => t.querySelector('caption')?.text.contains('휴/보강일') == true,
+        )
+        .toList();
+    if (tables.isEmpty) return const [];
+    final url =
+        'https://www.jejunu.ac.kr/admission/eduguide/degree/academyschedule/academic.htm?year=$year';
+    final events = <AcademicEvent>[];
+    var semester = '';
+    for (final row in tables.single.querySelectorAll('tbody tr')) {
+      final cells = row.children.map((c) => c.text.trim()).toList();
+      // The semester cell spans its rows, so only the first of them has four.
+      if (cells.length == 4) semester = cells.removeAt(0);
+      if (cells.length != 3 || semester.isEmpty || cells[2].isEmpty) {
+        throw const FormatException('Invalid Jeju make-up row');
+      }
+      for (final (title, value) in [
+        ('${cells[2]} 휴강', cells[0]),
+        ('$semester 보강(${cells[2]})', cells[1]),
+      ]) {
+        final day = DateTime.tryParse(value);
+        if (day == null || !RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) {
+          throw const FormatException('Invalid Jeju make-up date');
+        }
+        events.add(
+          AcademicEvent(
+            sourceId: '$year:$title:$value',
+            title: title,
+            start: day,
+            end: DateTime(day.year, day.month, day.day + 1),
+            url: url,
+          ),
+        );
+      }
     }
     return events;
   }
