@@ -82,6 +82,23 @@ void main() {
     }
   });
 
+  test('Jeju rejects an impossible closure or make-up date', () {
+    final body = File(
+      'test/fixtures/academic/jeju-2026.html',
+    ).readAsStringSync();
+    expect(body, contains('2026-06-12'));
+    for (final broken in ['2026-06-31', '2026-6-12', '2026-06-12x']) {
+      expect(
+        () => JejuAcademicSource.parse(
+          body.replaceFirst('2026-06-12', broken),
+          2026,
+        ),
+        throwsFormatException,
+        reason: broken,
+      );
+    }
+  });
+
   test('Jeju profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000027',

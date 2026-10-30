@@ -147,7 +147,8 @@ class JejuAcademicSource implements AcademicSource {
         ('$semester 보강(${cells[2]})', cells[1]),
       ]) {
         final day = DateTime.tryParse(value);
-        if (day == null || !RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) {
+        // tryParse rolls 2026-06-31 over to July, so compare it with the source.
+        if (day == null || day.toIso8601String().substring(0, 10) != value) {
           throw const FormatException('Invalid Jeju make-up date');
         }
         events.add(
