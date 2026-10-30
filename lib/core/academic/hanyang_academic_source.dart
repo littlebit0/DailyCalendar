@@ -51,6 +51,8 @@ class HanyangAcademicSource implements AcademicSource {
         selected,
         url: website.toString(),
       )) {
+        // Seoul's feed also lists rows for ERICA, which publishes its own feed.
+        if (!erica && event.title.contains('(ERICA)')) continue;
         if (event.start.isBefore(DateTime(year + 1)) &&
             event.end.isAfter(DateTime(year))) {
           events[event.sourceId] = event;

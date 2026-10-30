@@ -54,6 +54,7 @@ void main() {
         expect(winters.last.start, DateTime(2026, 12, 23));
         expect(winters.last.end, DateTime(2027, 1, 15));
         expect(events.any((e) => e.title == '2025학년도 후기 학위수여식(서울)'), !erica);
+        expect(events.any((e) => e.title == '2025학년도 후기 학위수여식(ERICA)'), erica);
         expect(
           AcademicProfile(
             universityId: 'institution:academyinfo:0000203',
