@@ -3,18 +3,24 @@ import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
 import 'academic_source.dart';
 
-/// KU's undergraduate schedule published on the Seoul (main) homepage. The
-/// annual view omits period ends, so read the monthly detail rows instead.
+/// KU's undergraduate schedules: Seoul and Sejong publish their own calendars,
+/// with some differing dates. The annual view omits period ends, so read the
+/// monthly detail rows instead.
 class KoreaAcademicSource implements AcademicSource {
-  KoreaAcademicSource({http.Client? client})
+  KoreaAcademicSource({this.sejong = false, http.Client? client})
     : _client = client ?? http.Client();
+  KoreaAcademicSource.sejong({http.Client? client})
+    : this(sejong: true, client: client);
+  final bool sejong;
   final http.Client _client;
   @override
-  String get id => 'korea';
+  String get id => sejong ? 'korea-sejong' : 'korea';
   @override
-  String get name => '고려대학교';
+  String get name => sejong ? '고려대학교 세종' : '고려대학교';
   @override
-  Uri get website => Uri.https('www.korea.ac.kr', '/ko/460/subview.do');
+  Uri get website => sejong
+      ? Uri.https('sejong.korea.ac.kr', '/koreaSejong/7935/subview.do')
+      : Uri.https('www.korea.ac.kr', '/ko/460/subview.do');
 
   @override
   Future<List<AcademicEvent>> fetch(int year) async {
@@ -28,7 +34,15 @@ class KoreaAcademicSource implements AcademicSource {
       }
       final response = await _client
           .post(
-            Uri.https('www.korea.ac.kr', '/schdulMng/ko/5/monthSchdul.do'),
+            sejong
+                ? Uri.https(
+                    'sejong.korea.ac.kr',
+                    '/schdulMng/koreaSejong/2/monthSchdul.do',
+                  )
+                : Uri.https(
+                    'www.korea.ac.kr',
+                    '/schdulMng/ko/5/monthSchdul.do',
+                  ),
             body: {
               'kind': '',
               'year': '$y',
@@ -41,7 +55,12 @@ class KoreaAcademicSource implements AcademicSource {
           )
           .timeout(const Duration(seconds: 20));
       checkAcademicResponse(response);
-      for (final event in parse(utf8.decode(response.bodyBytes), y, month)) {
+      for (final event in parse(
+        utf8.decode(response.bodyBytes),
+        y,
+        month,
+        url: website.toString(),
+      )) {
         if (event.start.isBefore(DateTime(year + 1)) &&
             event.end.isAfter(DateTime(year))) {
           events[event.sourceId] = event;
@@ -54,15 +73,22 @@ class KoreaAcademicSource implements AcademicSource {
     return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  static List<AcademicEvent> parse(String body, int year, int month) {
+  static List<AcademicEvent> parse(
+    String body,
+    int year,
+    int month, {
+    String url = 'https://www.korea.ac.kr/ko/460/subview.do',
+  }) {
     final d = html.parse(body);
     final tables = d.querySelectorAll('.sche-comt table');
     if (month < 1 ||
         month > 12 ||
         d.querySelector('#year')?.attributes['value'] != '$year' ||
         tables.length != 1 ||
-        tables.single.querySelector('caption')?.text.trim() !=
-            '$month월 학사일정 일정별 상세 목록입니다.') {
+        !{
+          '$month월 학사일정 일정별 상세 목록입니다.',
+          '$month월 학사일정 - 상세일정',
+        }.contains(tables.single.querySelector('caption')?.text.trim())) {
       throw const FormatException('Unexpected KU calendar scope');
     }
     final result = <AcademicEvent>[];
@@ -112,7 +138,7 @@ class KoreaAcademicSource implements AcademicSource {
           title: title,
           start: start,
           end: end,
-          url: 'https://www.korea.ac.kr/ko/460/subview.do',
+          url: url,
         ),
       );
     }

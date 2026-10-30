@@ -198,8 +198,15 @@ const academicSourceRegistrations = <AcademicSourceRegistration>[
   AcademicSourceRegistration(
     id: 'korea',
     institutionId: 'academyinfo:0000069',
-    campusIds: {'academyinfo:0000069', 'academyinfo:0000070'},
+    campusIds: {'academyinfo:0000069'},
     create: KoreaAcademicSource.new,
+  ),
+  AcademicSourceRegistration(
+    id: 'korea-sejong',
+    institutionId: 'academyinfo:0000069',
+    campusIds: {'academyinfo:0000070'},
+    create: KoreaAcademicSource.sejong,
+    primary: false,
   ),
   AcademicSourceRegistration(
     id: 'mokpo',

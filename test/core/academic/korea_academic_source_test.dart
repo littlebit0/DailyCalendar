@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/korea_academic_source.dart';
@@ -67,7 +68,11 @@ void main() {
   });
 
   test('KU profile resolves to its registered calendar on both campuses', () {
-    for (final campus in [null, 'academyinfo:0000069', 'academyinfo:0000070']) {
+    for (final (campus, source) in [
+      (null, 'korea'),
+      ('academyinfo:0000069', 'korea'),
+      ('academyinfo:0000070', 'korea-sejong'),
+    ]) {
       expect(
         AcademicProfile(
           universityId: 'institution:academyinfo:0000069',
@@ -75,19 +80,47 @@ void main() {
           schoolKind: 'fourYear',
           campusId: campus,
         ).academicSourceId,
-        'korea',
+        source,
       );
     }
-    for (final legacy in ['academyinfo:0000069', 'academyinfo:0000070']) {
+    for (final (legacy, source) in [
+      ('academyinfo:0000069', 'korea'),
+      ('academyinfo:0000070', 'korea-sejong'),
+    ]) {
       expect(
         AcademicProfile(
           universityId: legacy,
           universityName: '고려대학교',
           schoolKind: 'fourYear',
         ).academicSourceId,
-        'korea',
+        source,
       );
     }
+  });
+
+  test('KU Sejong reads its own calendar', () async {
+    final body = File(
+      'test/fixtures/academic/korea-sejong-2026-10.html',
+    ).readAsStringSync();
+    final events = KoreaAcademicSource.parse(
+      body,
+      2026,
+      10,
+      url: KoreaAcademicSource.sejong().website.toString(),
+    );
+    expect(events.any((e) => e.title == '제2학기 중간고사'), isTrue);
+    expect(events.first.url, contains('sejong.korea.ac.kr'));
+    final hosts = <String>{};
+    final source = KoreaAcademicSource.sejong(
+      client: MockClient((r) async {
+        hosts.add(r.url.host);
+        return http.Response.bytes(utf8.encode(body), 200);
+      }),
+    );
+    addTearDown(source.close);
+    await expectLater(source.fetch(2026), throwsFormatException);
+    expect(hosts, {'sejong.korea.ac.kr'});
+    expect(source.id, 'korea-sejong');
   });
 
   test(
