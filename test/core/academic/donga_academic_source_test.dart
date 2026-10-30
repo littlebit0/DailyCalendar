@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/donga_academic_source.dart';
@@ -7,26 +8,26 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 
 final page = File('test/fixtures/academic/donga-2026.html').readAsStringSync();
-String legacy(int year) =>
-    File('test/fixtures/academic/donga-legacy-$year.html').readAsStringSync();
+final feed =
+    jsonDecode(File('test/fixtures/academic/donga-api.json').readAsStringSync())
+        as Map<String, dynamic>;
 
 DongaAcademicSource source() => DongaAcademicSource(
   client: MockClient((r) async {
-    final legacyYear = int.tryParse(
-      r.url.queryParameters['calendar_year'] ?? '',
-    );
+    final month = RegExp(
+      r'^/api/v2/cms/donga_kor/schedule/public/(\d{4}/\d{1,2})$',
+    ).firstMatch(r.url.path)?[1];
     final String body;
     if (r.url.toString() ==
         'https://www.donga.ac.kr/community/academic-calendar') {
       body = page;
-    } else if (legacyYear != null &&
-        r.url == DongaAcademicSource.legacyYear(legacyYear)) {
-      body = legacy(legacyYear);
+    } else if (r.url.host == 'www.donga.ac.kr' && feed.containsKey(month)) {
+      body = jsonEncode(feed[month]);
     } else {
       fail('Unexpected request ${r.url}');
     }
-    return http.Response(
-      body,
+    return http.Response.bytes(
+      utf8.encode(body),
       200,
       headers: {'content-type': 'text/html; charset=utf-8'},
     );
@@ -57,43 +58,36 @@ void main() {
     expect(events.where((e) => e.title.endsWith('학기 개시일')), hasLength(2));
   });
 
-  test('every listed legacy row is imported, across the year boundary', () {
-    for (final (year, count) in [
-      (2024, 33),
-      (2025, 23),
-      (2026, 2),
-      (2027, 0),
-    ]) {
-      final body = legacy(year);
-      final rows = html
-          .parse(body)
-          .querySelectorAll('.sch-monlist-wr.yearly .daily-li:not(.hasNoData)');
-      expect(rows, hasLength(count), reason: '$year');
-      final events = DongaAcademicSource.parseLegacy(body, year);
-      expect(events, hasLength(count), reason: '$year');
-      expect(events.map((e) => e.sourceId).toSet(), hasLength(count));
-    }
-    final winter = DongaAcademicSource.parseLegacy(
-      legacy(2025),
-      2025,
-    ).singleWhere((e) => e.title == '동계방학');
-    expect(winter.start, DateTime(2025, 12, 20));
-    expect(winter.end, DateTime(2026, 3));
+  test('the month feed keeps add/drop, enrolment and event rows', () {
+    final events = DongaAcademicSource.parseMonth(jsonEncode(feed['2026/9']));
+    expect(
+      events.map((e) => e.title),
+      containsAll(['3차 수강신청(정정)', '수강취소', '분할납부 2차', '2026학년도 취업・진로박람회']),
+    );
+    final payment = DongaAcademicSource.parseMonth(
+      jsonEncode(feed['2026/11']),
+    ).singleWhere((e) => e.title == '분할납부 4차');
+    // Timed rows stay date-only so all-day handling never shifts them.
+    expect(payment.start, DateTime(2026, 11, 12));
+    expect(payment.end, DateTime(2026, 11, 14));
+    expect(DongaAcademicSource.parseMonth(jsonEncode(feed['2027/3'])), isEmpty);
     for (final broken in [
-      legacy(2025).replaceFirst(
-        '<em class="year">2025</em>',
-        '<em class="year">2024</em>',
-      ),
-      legacy(
-        2025,
-      ).replaceFirst('yearly" data-month="12"', 'yearly" data-month="13"'),
-      legacy(2025).replaceFirst('12. 27(SAT)', '11. 31(SAT)'),
+      '{"success":false,"data":null}',
+      '{"success":true,"data":{}}',
+      '{"success":true,"data":{"schedules":[{"status":"ACTIVE","title":"x","startDate":null,"endDate":null}]}}',
+      '{"success":true,"data":{"schedules":[{"status":"ACTIVE","title":"","startDate":"2026-01-01T00:00:00","endDate":"2026-01-01T00:00:00"}]}}',
     ]) {
       expect(
-        () => DongaAcademicSource.parseLegacy(broken, 2025),
+        () => DongaAcademicSource.parseMonth(broken),
         throwsFormatException,
       );
     }
+    expect(
+      DongaAcademicSource.parseMonth(
+        '{"success":true,"data":{"schedules":[{"status":"DELETED","title":"x","startDate":"2026-01-01T00:00:00","endDate":"2026-01-01T00:00:00"}]}}',
+      ),
+      isEmpty,
+    );
   });
 
   test('calendar year keeps overlapping rows of every academic year', () async {
@@ -102,10 +96,10 @@ void main() {
       final events = await s.fetch(2026);
       // 2026 academic-year rows ending in 2027 drop out; the Labour Day
       // holiday row and the schedule row of the same day share one ID. The
-      // previous academic year adds its December rows running into 2026 and
-      // its January/February rows.
-      expect(events, hasLength(54));
-      expect(events.map((e) => e.sourceId).toSet(), hasLength(54));
+      // feed adds the previous academic year's rows running into 2026, its
+      // January/February rows and 11 add/drop, enrolment and event rows.
+      expect(events, hasLength(65));
+      expect(events.map((e) => e.sourceId).toSet(), hasLength(65));
       final winters = events.where((e) => e.title == '동계방학').toList();
       expect(winters.map((e) => (e.start, e.end)), [
         (DateTime(2025, 12, 20), DateTime(2026, 3)),

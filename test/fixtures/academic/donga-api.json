@@ -1,0 +1,1271 @@
+{
+"2024/1": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2023-12-23T00:00:00",
+"endDate": "2024-02-29T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2023-12-30T00:00:00",
+"endDate": "2024-01-05T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적확정",
+"startDate": "2024-01-08T00:00:00",
+"endDate": "2024-01-08T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2024/10": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "임시공휴일",
+"startDate": "2024-10-01T00:00:00",
+"endDate": "2024-10-01T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "개천절 / 보강일(2024-12-12)",
+"startDate": "2024-10-03T00:00:00",
+"endDate": "2024-10-03T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "한글날 / 보강일(2024-12-13)",
+"startDate": "2024-10-09T00:00:00",
+"endDate": "2024-10-09T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 중간시험",
+"startDate": "2024-10-21T00:00:00",
+"endDate": "2024-10-27T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 4
+}
+},
+"2024/11": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "개교기념일 / 보강일(2024-12-16)",
+"startDate": "2024-11-01T00:00:00",
+"endDate": "2024-11-01T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2024/12": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제2학기 보강일",
+"startDate": "2024-12-09T00:00:00",
+"endDate": "2024-12-16T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 기말시험",
+"startDate": "2024-12-17T00:00:00",
+"endDate": "2024-12-23T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 성적입력",
+"startDate": "2024-12-24T00:00:00",
+"endDate": "2024-12-30T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "동계방학",
+"startDate": "2024-12-24T00:00:00",
+"endDate": "2025-02-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2024-12-31T00:00:00",
+"endDate": "2025-01-06T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 5
+}
+},
+"2024/2": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2023-12-23T00:00:00",
+"endDate": "2024-02-29T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 수강신청",
+"startDate": "2024-02-05T00:00:00",
+"endDate": "2024-02-07T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "학위수여식",
+"startDate": "2024-02-19T00:00:00",
+"endDate": "2024-02-23T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 등록",
+"startDate": "2024-02-20T00:00:00",
+"endDate": "2024-02-23T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 4
+}
+},
+"2024/3": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제1학기 개시일",
+"startDate": "2024-03-01T00:00:00",
+"endDate": "2024-03-01T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 개강",
+"startDate": "2024-03-04T00:00:00",
+"endDate": "2024-03-04T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 2
+}
+},
+"2024/4": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "22대 국회의원 선거 / 보강일(2024-06-10)",
+"startDate": "2024-04-10T00:00:00",
+"endDate": "2024-04-10T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 중간시험",
+"startDate": "2024-04-22T00:00:00",
+"endDate": "2024-04-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 2
+}
+},
+"2024/5": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "근로자의 날 / 보강일(2024-06-11)",
+"startDate": "2024-05-01T00:00:00",
+"endDate": "2024-05-01T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "어린이날 대체공휴일 / 보강일(2024-06-12)",
+"startDate": "2024-05-06T00:00:00",
+"endDate": "2024-05-06T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "부처님 오신 날 / 보강일(2024-06-13)",
+"startDate": "2024-05-15T00:00:00",
+"endDate": "2024-05-15T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2024/6": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "현충일 / 보강일(2024-06-14)",
+"startDate": "2024-06-06T00:00:00",
+"endDate": "2024-06-06T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 보강일",
+"startDate": "2024-06-10T00:00:00",
+"endDate": "2024-06-14T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 기말시험",
+"startDate": "2024-06-15T00:00:00",
+"endDate": "2024-06-21T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 성적입력",
+"startDate": "2024-06-22T00:00:00",
+"endDate": "2024-06-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "하계방학",
+"startDate": "2024-06-22T00:00:00",
+"endDate": "2024-08-31T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2024-06-29T00:00:00",
+"endDate": "2024-07-05T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 6
+}
+},
+"2024/7": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "하계방학",
+"startDate": "2024-06-22T00:00:00",
+"endDate": "2024-08-31T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2024-06-29T00:00:00",
+"endDate": "2024-07-05T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적확정",
+"startDate": "2024-07-08T00:00:00",
+"endDate": "2024-07-08T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2024/8": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "하계방학",
+"startDate": "2024-06-22T00:00:00",
+"endDate": "2024-08-31T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 수강신청",
+"startDate": "2024-08-07T00:00:00",
+"endDate": "2024-08-09T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 등록",
+"startDate": "2024-08-26T00:00:00",
+"endDate": "2024-08-29T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2024/9": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제2학기 개시일",
+"startDate": "2024-09-01T00:00:00",
+"endDate": "2024-09-01T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 개강",
+"startDate": "2024-09-02T00:00:00",
+"endDate": "2024-09-02T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "추석연휴 / 보강일(2024-12-09~2024-12-11)",
+"startDate": "2024-09-16T00:00:00",
+"endDate": "2024-09-18T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2025/1": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2024-12-24T00:00:00",
+"endDate": "2025-02-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2024-12-31T00:00:00",
+"endDate": "2025-01-06T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적확정",
+"startDate": "2025-01-07T00:00:00",
+"endDate": "2025-01-07T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2025/10": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제2학기 중간시험",
+"startDate": "2025-10-20T00:00:00",
+"endDate": "2025-10-26T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2025/11": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "개교기념일",
+"startDate": "2025-11-01T00:00:00",
+"endDate": "2025-11-01T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2025/12": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제2학기 보강일",
+"startDate": "2025-12-08T00:00:00",
+"endDate": "2025-12-12T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 기말시험",
+"startDate": "2025-12-13T00:00:00",
+"endDate": "2025-12-19T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 성적입력",
+"startDate": "2025-12-20T00:00:00",
+"endDate": "2025-12-26T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "동계방학",
+"startDate": "2025-12-20T00:00:00",
+"endDate": "2026-02-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2025-12-27T00:00:00",
+"endDate": "2026-01-02T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 5
+}
+},
+"2025/2": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2024-12-24T00:00:00",
+"endDate": "2025-02-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 수강신청",
+"startDate": "2025-02-05T00:00:00",
+"endDate": "2025-02-07T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "학위수여식",
+"startDate": "2025-02-17T00:00:00",
+"endDate": "2025-02-21T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 등록",
+"startDate": "2025-02-19T00:00:00",
+"endDate": "2025-02-21T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 등록",
+"startDate": "2025-02-24T00:00:00",
+"endDate": "2025-02-24T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 5
+}
+},
+"2025/3": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제1학기 개강",
+"startDate": "2025-03-04T00:00:00",
+"endDate": "2025-03-04T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2025/4": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제1학기 중간시험",
+"startDate": "2025-04-22T00:00:00",
+"endDate": "2025-04-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2025/5": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2025/6": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제1학기 보강일",
+"startDate": "2025-06-10T00:00:00",
+"endDate": "2025-06-13T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 기말시험",
+"startDate": "2025-06-14T00:00:00",
+"endDate": "2025-06-20T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 성적입력",
+"startDate": "2025-06-21T00:00:00",
+"endDate": "2025-06-27T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "하계방학",
+"startDate": "2025-06-21T00:00:00",
+"endDate": "2025-08-31T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2025-06-28T00:00:00",
+"endDate": "2025-07-04T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 5
+}
+},
+"2025/7": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "하계방학",
+"startDate": "2025-06-21T00:00:00",
+"endDate": "2025-08-31T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2025-06-28T00:00:00",
+"endDate": "2025-07-04T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적확정",
+"startDate": "2025-07-07T00:00:00",
+"endDate": "2025-07-07T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2025/8": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "하계방학",
+"startDate": "2025-06-21T00:00:00",
+"endDate": "2025-08-31T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 수강신청",
+"startDate": "2025-08-06T00:00:00",
+"endDate": "2025-08-08T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 등록",
+"startDate": "2025-08-25T00:00:00",
+"endDate": "2025-08-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2025/9": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제2학기 개강",
+"startDate": "2025-09-01T00:00:00",
+"endDate": "2025-09-01T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2026/1": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2025-12-20T00:00:00",
+"endDate": "2026-02-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2025-12-27T00:00:00",
+"endDate": "2026-01-02T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "성적확정",
+"startDate": "2026-01-05T00:00:00",
+"endDate": "2026-01-05T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2026/10": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "분할납부 3차",
+"startDate": "2026-10-15T09:00:00",
+"endDate": "2026-10-16T20:00:00",
+"allDay": null,
+"category": "enroll",
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 중간시험",
+"startDate": "2026-10-20T00:00:00",
+"endDate": "2026-10-26T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "개교 80주년 기념음악회",
+"startDate": "2026-10-29T20:05:00",
+"endDate": "2026-10-29T23:00:00",
+"allDay": null,
+"category": "event",
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2026/11": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "개교기념일",
+"startDate": "2026-11-01T00:00:00",
+"endDate": "2026-11-01T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "분할납부 4차",
+"startDate": "2026-11-12T09:00:00",
+"endDate": "2026-11-13T20:00:00",
+"allDay": null,
+"category": "enroll",
+"status": "ACTIVE"
+}
+],
+"totalCount": 2
+}
+},
+"2026/12": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제2학기 보강일",
+"startDate": "2026-12-08T00:00:00",
+"endDate": "2026-12-11T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 기말시험",
+"startDate": "2026-12-12T00:00:00",
+"endDate": "2026-12-18T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 성적입력",
+"startDate": "2026-12-19T00:00:00",
+"endDate": "2026-12-28T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "동계방학",
+"startDate": "2026-12-19T00:00:00",
+"endDate": "2027-02-28T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2026-12-29T00:00:00",
+"endDate": "2027-01-04T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+}
+],
+"totalCount": 5
+}
+},
+"2026/2": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2025-12-20T00:00:00",
+"endDate": "2026-02-28T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 수강신청",
+"startDate": "2026-02-04T00:00:00",
+"endDate": "2026-02-06T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "학위수여식",
+"startDate": "2026-02-23T00:00:00",
+"endDate": "2026-02-27T23:59:59",
+"allDay": true,
+"category": null,
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 등록",
+"startDate": "2026-02-23T00:00:00",
+"endDate": "2026-02-26T23:59:59",
+"allDay": true,
+"category": "enroll",
+"status": "ACTIVE"
+}
+],
+"totalCount": 4
+}
+},
+"2026/3": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제1학기 개강",
+"startDate": "2026-03-03T00:00:00",
+"endDate": "2026-03-03T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2026/4": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제1학기 중간시험",
+"startDate": "2026-04-21T00:00:00",
+"endDate": "2026-04-27T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2026/5": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "근로자의 날",
+"startDate": "2026-05-01T00:00:00",
+"endDate": "2026-05-01T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+}
+],
+"totalCount": 1
+}
+},
+"2026/6": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제1학기 보강일",
+"startDate": "2026-06-09T00:00:00",
+"endDate": "2026-06-12T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 기말시험",
+"startDate": "2026-06-13T00:00:00",
+"endDate": "2026-06-19T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "제1학기 성적입력",
+"startDate": "2026-06-20T00:00:00",
+"endDate": "2026-06-26T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "하계방학",
+"startDate": "2026-06-20T00:00:00",
+"endDate": "2026-08-31T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2026-06-27T00:00:00",
+"endDate": "2026-07-03T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+}
+],
+"totalCount": 5
+}
+},
+"2026/7": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "하계방학",
+"startDate": "2026-06-20T00:00:00",
+"endDate": "2026-08-31T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2026-06-27T00:00:00",
+"endDate": "2026-07-03T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "성적확정",
+"startDate": "2026-07-06T00:00:00",
+"endDate": "2026-07-06T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2026/8": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "하계방학",
+"startDate": "2026-06-20T00:00:00",
+"endDate": "2026-08-31T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "제2학기 수강신청",
+"startDate": "2026-08-05T00:00:00",
+"endDate": "2026-08-07T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "분할납부 1차",
+"startDate": "2026-08-24T09:00:00",
+"endDate": "2026-08-27T18:00:00",
+"allDay": null,
+"category": "enroll",
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2026/9": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "제2학기 개강",
+"startDate": "2026-09-01T00:00:00",
+"endDate": "2026-09-01T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "3차 수강신청(정정)",
+"startDate": "2026-09-03T11:00:00",
+"endDate": "2026-09-04T17:00:00",
+"allDay": null,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "3차 수강신청(정정)",
+"startDate": "2026-09-10T11:00:00",
+"endDate": "2026-09-11T17:00:00",
+"allDay": null,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "수강취소",
+"startDate": "2026-09-14T11:00:00",
+"endDate": "2026-09-15T17:00:00",
+"allDay": null,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "분할납부 2차",
+"startDate": "2026-09-17T09:00:00",
+"endDate": "2026-09-18T20:00:00",
+"allDay": null,
+"category": "enroll",
+"status": "ACTIVE"
+},
+{
+"title": "학기초과자, 학사학위취득유예생",
+"startDate": "2026-09-22T08:00:00",
+"endDate": "2026-09-23T20:00:00",
+"allDay": null,
+"category": "enroll",
+"status": "ACTIVE"
+},
+{
+"title": "재학생 및 복학생 등록",
+"startDate": "2026-09-22T13:00:00",
+"endDate": "2026-09-23T17:00:00",
+"allDay": null,
+"category": "enroll",
+"status": "ACTIVE"
+},
+{
+"title": "2026학년도 취업・진로박람회",
+"startDate": "2026-09-30T00:00:00",
+"endDate": "2026-09-30T18:00:00",
+"allDay": null,
+"category": "event",
+"status": "ACTIVE"
+}
+],
+"totalCount": 8
+}
+},
+"2027/1": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2026-12-19T00:00:00",
+"endDate": "2027-02-28T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "성적공시 및 정정",
+"startDate": "2026-12-29T00:00:00",
+"endDate": "2027-01-04T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "성적확정",
+"startDate": "2027-01-05T00:00:00",
+"endDate": "2027-01-05T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+}
+],
+"totalCount": 3
+}
+},
+"2027/10": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/11": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/12": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/2": {
+"success": true,
+"data": {
+"schedules": [
+{
+"title": "동계방학",
+"startDate": "2026-12-19T00:00:00",
+"endDate": "2027-02-28T23:59:59",
+"allDay": true,
+"category": "academic",
+"status": "ACTIVE"
+},
+{
+"title": "학위수여식",
+"startDate": "2027-02-22T00:00:00",
+"endDate": "2027-02-26T23:59:59",
+"allDay": true,
+"category": "event",
+"status": "ACTIVE"
+}
+],
+"totalCount": 2
+}
+},
+"2027/3": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/4": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/5": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/6": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/7": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/8": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+},
+"2027/9": {
+"success": true,
+"data": {
+"schedules": [],
+"totalCount": 0
+}
+}
+}
