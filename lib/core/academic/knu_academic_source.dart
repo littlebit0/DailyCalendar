@@ -27,7 +27,7 @@ class KnuAcademicSource implements AcademicSource {
   }
 
   static final _range = RegExp(
-    r'(?:(\d{4})\.)?(\d{1,2})\.(\d{1,2})\.?\s*~\s*(?:(\d{4})\.)?(\d{1,2})\.(\d{1,2})\.?',
+    r'(?:(\d{4})\.\s*)?(\d{1,2})\.\s*(\d{1,2})\.?\s*~\s*(?:(\d{4})\.\s*)?(\d{1,2})\.\s*(\d{1,2})\.?',
   );
 
   static List<AcademicEvent> parse(String body, int year) {
