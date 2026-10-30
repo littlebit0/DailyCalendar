@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
+import '../../../core/update/update_required_view.dart';
 import '../data/timetable_store.dart';
 import '../domain/timetable.dart';
 import '../domain/timetable_term.dart';
@@ -21,6 +22,7 @@ String _weekday(BuildContext context, int day) => DateFormat.E(
   Localizations.localeOf(context).toLanguageTag(),
 ).format(DateTime(2026, 1, 5 + day - 1));
 Future<bool> _save(BuildContext context, Future<void> Function() action) async {
+  if (blockedByRequiredUpdateIn(context)) return false;
   try {
     await action();
     return true;
@@ -526,7 +528,7 @@ Future<void> showTimetableClassDetails(
       ),
     ),
   );
-  if (edit == true && context.mounted) {
+  if (edit == true && context.mounted && !blockedByRequiredUpdateIn(context)) {
     await showClassEditor(context, store, course: course);
   }
 }
@@ -577,7 +579,9 @@ Future<void> showClassOccurrence(
       ],
     ),
   );
-  if (!context.mounted) return;
+  if (!context.mounted || action == null) return;
+  // The occurrence dialog may have stayed open while a release was found.
+  if (blockedByRequiredUpdateIn(context)) return;
   if (action == 'edit') {
     await showClassEditor(context, store, course: occurrence.course);
     return;

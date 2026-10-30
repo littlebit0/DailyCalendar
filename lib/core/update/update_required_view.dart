@@ -109,10 +109,25 @@ bool blockedByRequiredUpdate(BuildContext context, WidgetRef ref) {
   return true;
 }
 
+/// [blockedByRequiredUpdate] for dialogs and forms built outside a Consumer.
+/// Call it while [context] is mounted.
+bool blockedByRequiredUpdateIn(BuildContext context) {
+  final version = ProviderScope.containerOf(
+    context,
+    listen: false,
+  ).read(requiredUpdateVersionProvider).value;
+  if (version == null) return false;
+  _showNotice(context, version);
+  return true;
+}
+
 /// Explains the restriction; usable after an await only behind `context.mounted`.
 void showUpdateRequiredNotice(BuildContext context, WidgetRef ref) {
   final version = ref.read(requiredUpdateVersionProvider).value;
-  if (version == null) return;
+  if (version != null) _showNotice(context, version);
+}
+
+void _showNotice(BuildContext context, String version) {
   showDialog<void>(
     context: context,
     builder: (dialogContext) => AlertDialog(

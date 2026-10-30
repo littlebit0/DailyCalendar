@@ -213,6 +213,7 @@ class TimetableSettingsPage extends ConsumerWidget {
 }
 
 Future<void> _save(BuildContext context, Future<void> Function() action) async {
+  if (blockedByRequiredUpdateIn(context)) return;
   try {
     await action();
   } catch (_) {

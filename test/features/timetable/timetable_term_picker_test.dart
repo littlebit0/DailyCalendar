@@ -9,6 +9,7 @@ import 'package:daily/features/timetable/domain/timetable.dart';
 import 'package:daily/features/timetable/domain/timetable_term.dart';
 import 'package:daily/features/timetable/presentation/timetable_term_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -34,45 +35,47 @@ void main() {
     double scale = 1,
     double keyboard = 0,
     Locale locale = const Locale('ko'),
-  }) => MaterialApp(
-    locale: locale,
-    supportedLocales: AppLocalizations.supportedLocales,
-    localizationsDelegates: const [
-      AppLocalizations.delegate,
-      GlobalMaterialLocalizations.delegate,
-      GlobalWidgetsLocalizations.delegate,
-      GlobalCupertinoLocalizations.delegate,
-    ],
-    theme: DailyTheme.light(),
-    builder: (context, child) => MediaQuery(
-      data: MediaQuery.of(context).copyWith(
-        textScaler: TextScaler.linear(scale),
-        viewInsets: EdgeInsets.only(bottom: keyboard),
+  }) => ProviderScope(
+    child: MaterialApp(
+      locale: locale,
+      supportedLocales: AppLocalizations.supportedLocales,
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      theme: DailyTheme.light(),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context).copyWith(
+          textScaler: TextScaler.linear(scale),
+          viewInsets: EdgeInsets.only(bottom: keyboard),
+        ),
+        child: child!,
       ),
-      child: child!,
-    ),
-    home: Scaffold(
-      body: Builder(
-        builder: (context) => Column(
-          children: [
-            TextButton(
-              key: const ValueKey('open-picker'),
-              onPressed: () =>
-                  showTimetablePicker(context, store, suggestPeriod: suggest),
-              child: const Text('Picker'),
-            ),
-            TextButton(
-              key: const ValueKey('open-period'),
-              onPressed: () => showTimetablePeriodEditor(
-                context,
-                store,
-                store.activeYear,
-                store.activeSemester,
-                suggestPeriod: suggest,
+      home: Scaffold(
+        body: Builder(
+          builder: (context) => Column(
+            children: [
+              TextButton(
+                key: const ValueKey('open-picker'),
+                onPressed: () =>
+                    showTimetablePicker(context, store, suggestPeriod: suggest),
+                child: const Text('Picker'),
               ),
-              child: const Text('Period'),
-            ),
-          ],
+              TextButton(
+                key: const ValueKey('open-period'),
+                onPressed: () => showTimetablePeriodEditor(
+                  context,
+                  store,
+                  store.activeYear,
+                  store.activeSemester,
+                  suggestPeriod: suggest,
+                ),
+                child: const Text('Period'),
+              ),
+            ],
+          ),
         ),
       ),
     ),
