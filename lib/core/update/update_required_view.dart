@@ -98,10 +98,21 @@ class UpdateRequiredView extends StatelessWidget {
   }
 }
 
+/// True while this build must be updated before school features or editing.
+bool updateRequired(WidgetRef ref) =>
+    ref.read(requiredUpdateVersionProvider).value != null;
+
 /// True (after telling the user) when editing must wait for the update.
 bool blockedByRequiredUpdate(BuildContext context, WidgetRef ref) {
+  if (!updateRequired(ref)) return false;
+  showUpdateRequiredNotice(context, ref);
+  return true;
+}
+
+/// Explains the restriction; usable after an await only behind `context.mounted`.
+void showUpdateRequiredNotice(BuildContext context, WidgetRef ref) {
   final version = ref.read(requiredUpdateVersionProvider).value;
-  if (version == null) return false;
+  if (version == null) return;
   showDialog<void>(
     context: context,
     builder: (dialogContext) => AlertDialog(
@@ -127,5 +138,4 @@ bool blockedByRequiredUpdate(BuildContext context, WidgetRef ref) {
       ],
     ),
   );
-  return true;
 }

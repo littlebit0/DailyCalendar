@@ -305,6 +305,52 @@ void main() {
     }
   });
 
+  group('a required update', () {
+    testWidgets('refuses editing and deleting from the detail panel', (
+      tester,
+    ) async {
+      final event = _event();
+      await _pumpPanel(
+        tester,
+        event: event,
+        requiredUpdate: ValueNotifier<String?>('4.1.0'),
+      );
+      await tester.tap(find.byKey(ValueKey('event-edit-${event.id}')));
+      await tester.pumpAndSettle();
+      expect(find.byType(EventEditorDialog), findsNothing);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+      await tester.tap(find.text('닫기'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(ValueKey('event-delete-${event.id}')));
+      await tester.pumpAndSettle();
+      expect(find.text('일정 삭제'), findsNothing);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    testWidgets('is rechecked when saving an editor that was already open', (
+      tester,
+    ) async {
+      final event = _event();
+      final required = ValueNotifier<String?>(null);
+      final repository = await _pumpPanel(
+        tester,
+        event: event,
+        requiredUpdate: required,
+      );
+      await tester.tap(find.byKey(ValueKey('event-edit-${event.id}')));
+      await tester.pumpAndSettle();
+      expect(find.byType(EventEditorDialog), findsOneWidget);
+
+      required.value = '4.1.0';
+      await tester.enterText(find.byType(TextField).first, '바꾼 제목');
+      await tester.tap(find.text('저장').last);
+      await tester.pumpAndSettle();
+      expect(repository.event.title, event.title);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+  });
+
   testWidgets('repeating delete uses the delete-specific all scope label', (
     tester,
   ) async {
@@ -653,6 +699,7 @@ Future<_SingleEventRepository> _pumpPanel(
   ValueChanged<bool>? onEventDragStateChanged,
   TargetPlatform platform = TargetPlatform.android,
   Brightness brightness = Brightness.light,
+  ValueListenable<String?>? requiredUpdate,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final preferences = await SharedPreferences.getInstance();
@@ -671,6 +718,8 @@ Future<_SingleEventRepository> _pumpPanel(
         settingsRepositoryProvider.overrideWithValue(settingsRepository),
         eventRepositoryProvider.overrideWithValue(repository),
         eventCommandServiceProvider.overrideWithValue(commandService),
+        if (requiredUpdate != null)
+          requiredUpdateVersionProvider.overrideWithValue(requiredUpdate),
       ],
       child: MaterialApp(
         theme: ThemeData(platform: platform, brightness: brightness),

@@ -358,6 +358,10 @@ class EventDetailsPanel extends ConsumerWidget {
           .catchError((_) {}),
     );
     if (draft != null) {
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
+        return;
+      }
       await ref.read(eventCommandServiceProvider).create(draft);
     }
   }
@@ -416,6 +420,10 @@ class EventDetailsPanel extends ConsumerWidget {
     if (draft == null) {
       return;
     }
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
+      return;
+    }
 
     if (!event.isRecurring) {
       await commandService.save(
@@ -434,6 +442,10 @@ class EventDetailsPanel extends ConsumerWidget {
       actionLabel: context.tr('수정'),
     );
     if (scope == null) {
+      return;
+    }
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
       return;
     }
 
@@ -460,7 +472,7 @@ class EventDetailsPanel extends ConsumerWidget {
     WidgetRef ref,
     CalendarEvent event,
   ) async {
-    if (event.lms != null) return;
+    if (event.lms != null || blockedByRequiredUpdate(context, ref)) return;
     final commandService = ref.read(eventCommandServiceProvider);
     final confirmed = await showDialog<bool>(
       context: context,

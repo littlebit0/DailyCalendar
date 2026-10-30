@@ -4582,6 +4582,7 @@ class _CalendarMonthPage extends ConsumerWidget {
     if (event.readOnly || event.systemEvent || event.holiday) {
       return;
     }
+    if (blockedByRequiredUpdate(context, ref)) return;
     final sourceDate = _dateOnly(event.startAt);
     final normalizedTarget = _dateOnly(targetDate);
     var movedEvent = event;
@@ -4742,6 +4743,7 @@ Future<void> _handleCalendarEventDrop(
   if (!calendarEventCanMove(event)) {
     return;
   }
+  if (blockedByRequiredUpdate(context, ref)) return;
   final sourceDate = _dateOnly(event.startAt);
   final normalizedTarget = _dateOnly(targetDate);
   final rangeStart = sourceDate.isBefore(normalizedTarget)
@@ -4814,6 +4816,7 @@ Future<void> _handleCalendarEventTimeDrop(
   if (!calendarEventCanMove(event) || event.allDay) {
     return;
   }
+  if (blockedByRequiredUpdate(context, ref)) return;
   final sourceDate = _dateOnly(event.startAt);
   final targetDate = _dateOnly(targetStart);
   final rangeStart = sourceDate.isBefore(targetDate) ? sourceDate : targetDate;
@@ -5152,6 +5155,10 @@ Future<void> _openRangeEventEditor(
         .catchError((_) {}),
   );
   if (draft != null) {
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
+      return;
+    }
     await ref.read(eventCommandServiceProvider).create(draft);
   }
 }
