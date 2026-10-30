@@ -8,6 +8,7 @@ import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/sync/sync_service.dart';
 import 'package:daily/core/localization/app_localizations.dart';
 import 'package:daily/core/settings/settings_repository.dart';
+import 'package:daily/features/calendar/presentation/month_calendar_page.dart';
 import 'package:daily/features/calendar/widgets/calendar_event_drag_layer.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
@@ -347,6 +348,243 @@ void main() {
       await tester.tap(find.text('저장').last);
       await tester.pumpAndSettle();
       expect(repository.event.title, event.title);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    final repeating = _event().copyWith(
+      recurrence: const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+    );
+
+    testWidgets('is rechecked after the delete confirmation', (tester) async {
+      final event = _event();
+      final required = ValueNotifier<String?>(null);
+      final repository = await _pumpPanel(
+        tester,
+        event: event,
+        requiredUpdate: required,
+      );
+      await tester.tap(find.byKey(ValueKey('event-delete-${event.id}')));
+      await tester.pumpAndSettle();
+
+      required.value = '4.1.0';
+      await tester.tap(find.widgetWithText(FilledButton, '삭제'));
+      await tester.pumpAndSettle();
+      expect(repository.writes, 0);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    Future<_SingleEventRepository> openRepeatingDelete(
+      WidgetTester tester,
+      ValueNotifier<String?> required,
+    ) async {
+      final repository = await _pumpPanel(
+        tester,
+        event: repeating,
+        requiredUpdate: required,
+      );
+      await tester.tap(find.byKey(ValueKey('event-delete-${repeating.id}')));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(FilledButton, '삭제'));
+      await tester.pumpAndSettle();
+      expect(find.text('반복 일정 삭제'), findsOneWidget);
+      return repository;
+    }
+
+    testWidgets('lets a repeating delete through while up to date', (
+      tester,
+    ) async {
+      final repository = await openRepeatingDelete(
+        tester,
+        ValueNotifier<String?>(null),
+      );
+      await tester.tap(find.text('전체 삭제'));
+      await tester.pumpAndSettle();
+      expect(repository.writes, 1);
+    });
+
+    testWidgets('is rechecked after the repeating delete scope', (
+      tester,
+    ) async {
+      final required = ValueNotifier<String?>(null);
+      final repository = await openRepeatingDelete(tester, required);
+      required.value = '4.1.0';
+      await tester.tap(find.text('전체 삭제'));
+      await tester.pumpAndSettle();
+      expect(repository.writes, 0);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    testWidgets('is rechecked after the slow lookup of a repeating delete', (
+      tester,
+    ) async {
+      final required = ValueNotifier<String?>(null);
+      final repository = await openRepeatingDelete(tester, required);
+      final gate = Completer<void>();
+      repository.lookupGate = gate;
+      await tester.tap(find.text('전체 삭제'));
+      await tester.pump();
+      required.value = '4.1.0';
+      gate.complete();
+      await tester.pumpAndSettle();
+      expect(repository.writes, 0);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    Future<(BuildContext, WidgetRef, _SingleEventRepository)> pumpDropHost(
+      WidgetTester tester,
+      CalendarEvent event,
+      ValueNotifier<String?> required,
+    ) async {
+      SharedPreferences.setMockInitialValues({});
+      final preferences = await SharedPreferences.getInstance();
+      final settings = SettingsRepository(preferences: preferences);
+      final repository = _SingleEventRepository(event);
+      late BuildContext hostContext;
+      late WidgetRef hostRef;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            settingsRepositoryProvider.overrideWithValue(settings),
+            eventRepositoryProvider.overrideWithValue(repository),
+            eventCommandServiceProvider.overrideWithValue(
+              EventCommandService(
+                repository: repository,
+                settingsRepository: settings,
+                notificationService: _NoopNotificationService(),
+                syncService: _NoopSyncService(),
+              ),
+            ),
+            requiredUpdateVersionProvider.overrideWithValue(required),
+          ],
+          child: MaterialApp(
+            home: Scaffold(
+              body: Consumer(
+                builder: (context, ref, _) {
+                  hostContext = context;
+                  hostRef = ref;
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ),
+        ),
+      );
+      return (hostContext, hostRef, repository);
+    }
+
+    final target = DateTime(2026, 7, 20, 10);
+
+    testWidgets('lets a repeating time drop through while up to date', (
+      tester,
+    ) async {
+      final (context, ref, repository) = await pumpDropHost(
+        tester,
+        repeating,
+        ValueNotifier<String?>(null),
+      );
+      unawaited(debugDropCalendarEventAtTime(context, ref, repeating, target));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('이 일정만'));
+      await tester.pumpAndSettle();
+      expect(repository.writes, greaterThan(0));
+    });
+
+    testWidgets('refuses every drop when already required', (tester) async {
+      final (context, ref, repository) = await pumpDropHost(
+        tester,
+        _event(),
+        ValueNotifier<String?>('4.1.0'),
+      );
+      unawaited(debugDropCalendarEventOnDate(context, ref, _event(), target));
+      await tester.pumpAndSettle();
+      expect(repository.writes, 0);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    testWidgets('is rechecked before a plain drop writes', (tester) async {
+      final required = ValueNotifier<String?>(null);
+      final (context, ref, repository) = await pumpDropHost(
+        tester,
+        _event(),
+        required,
+      );
+      // The drop first reads the affected range, leaving time for a release.
+      final drop = debugDropCalendarEventAtTime(context, ref, _event(), target);
+      required.value = '4.1.0';
+      await tester.pumpAndSettle();
+      await drop;
+      expect(repository.writes, 0);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    for (final (name, drop)
+        in <(String, Future<void> Function(BuildContext, WidgetRef))>[
+          (
+            'time',
+            (context, ref) =>
+                debugDropCalendarEventAtTime(context, ref, repeating, target),
+          ),
+          (
+            'date',
+            (context, ref) =>
+                debugDropCalendarEventOnDate(context, ref, repeating, target),
+          ),
+        ]) {
+      testWidgets('is rechecked after the $name drop scope', (tester) async {
+        final required = ValueNotifier<String?>(null);
+        final (context, ref, repository) = await pumpDropHost(
+          tester,
+          repeating,
+          required,
+        );
+        unawaited(drop(context, ref));
+        await tester.pumpAndSettle();
+        expect(find.text('반복 일정 이동'), findsOneWidget);
+        required.value = '4.1.0';
+        await tester.tap(find.text('이 일정만'));
+        await tester.pumpAndSettle();
+        expect(repository.writes, 0);
+        expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+      });
+
+      testWidgets('is rechecked after the slow lookup of a $name drop', (
+        tester,
+      ) async {
+        final required = ValueNotifier<String?>(null);
+        final (context, ref, repository) = await pumpDropHost(
+          tester,
+          repeating,
+          required,
+        );
+        unawaited(drop(context, ref));
+        await tester.pumpAndSettle();
+        final gate = Completer<void>();
+        repository.lookupGate = gate;
+        await tester.tap(find.text('이 일정만'));
+        await tester.pump();
+        required.value = '4.1.0';
+        gate.complete();
+        await tester.pumpAndSettle();
+        expect(repository.writes, 0);
+        expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+      });
+    }
+
+    testWidgets('gates the class actions of the week and day schedules', (
+      tester,
+    ) async {
+      final required = ValueNotifier<String?>(null);
+      final (context, ref, _) = await pumpDropHost(tester, _event(), required);
+      var opened = 0;
+      final action = debugGatedClassActions(context, ref, {
+        'class': () => opened++,
+      })['class']!;
+      action();
+      expect(opened, 1);
+      required.value = '4.1.0';
+      action();
+      await tester.pumpAndSettle();
+      expect(opened, 1);
       expect(find.text('업데이트가 필요합니다'), findsOneWidget);
     });
   });
@@ -807,6 +1045,12 @@ class _SingleEventRepository implements EventRepository {
 
   CalendarEvent event;
 
+  /// Writes the panel or a drop handler actually asked for.
+  int writes = 0;
+
+  /// Holds [findById] open to simulate a slow lookup.
+  Completer<void>? lookupGate;
+
   @override
   Future<List<CalendarEvent>> allEventsForSync() async => [event];
 
@@ -814,7 +1058,9 @@ class _SingleEventRepository implements EventRepository {
   Future<void> clearAll() async {}
 
   @override
-  Future<void> delete(String eventId) async {}
+  Future<void> delete(String eventId) async {
+    writes++;
+  }
 
   @override
   Future<List<CalendarEvent>> eventsInRange(
@@ -823,7 +1069,10 @@ class _SingleEventRepository implements EventRepository {
   ) async => [event];
 
   @override
-  Future<CalendarEvent?> findById(String id) async => event;
+  Future<CalendarEvent?> findById(String id) async {
+    await lookupGate?.future;
+    return event;
+  }
 
   @override
   Future<void> hardDelete(String eventId) async {}
@@ -835,13 +1084,20 @@ class _SingleEventRepository implements EventRepository {
   Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
     Iterable<CalendarEvent> remoteEvents, {
     required RestoredEventResolver resolve,
-  }) async => const [];
+  }) async {
+    writes++;
+    for (final incoming in remoteEvents) {
+      resolve(incoming.id == event.id ? event : null, incoming);
+    }
+    return const [];
+  }
 
   @override
   Future<List<CalendarEvent>> pendingSyncEvents() async => [event];
 
   @override
   Future<void> save(CalendarEvent event) async {
+    writes++;
     this.event = event;
   }
 

@@ -522,6 +522,10 @@ class EventDetailsPanel extends ConsumerWidget {
       final base =
           await ref.read(visibleEventRepositoryProvider).findById(event.id) ??
           event;
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
+        return;
+      }
       switch (scope) {
         case _RecurringChangeScope.onlyThis:
           await commandService.save(_excludeOccurrence(base, event.startAt));

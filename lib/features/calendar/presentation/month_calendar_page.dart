@@ -4936,6 +4936,10 @@ Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
   if (base == null) {
     return null;
   }
+  if (updateRequired(ref)) {
+    if (ref.context.mounted) showUpdateRequiredNotice(ref.context, ref);
+    return null;
+  }
   switch (scope) {
     case _RecurringDragScope.onlyThis:
     case _RecurringDragScope.future:
@@ -8193,3 +8197,26 @@ Map<String, VoidCallback> _gatedClassActions(
       entry.value();
     },
 };
+
+@visibleForTesting
+Map<String, VoidCallback> debugGatedClassActions(
+  BuildContext context,
+  WidgetRef ref,
+  Map<String, VoidCallback> actions,
+) => _gatedClassActions(context, ref, actions);
+
+@visibleForTesting
+Future<void> debugDropCalendarEventAtTime(
+  BuildContext context,
+  WidgetRef ref,
+  CalendarEvent event,
+  DateTime targetStart,
+) => _handleCalendarEventTimeDrop(context, ref, event, targetStart);
+
+@visibleForTesting
+Future<void> debugDropCalendarEventOnDate(
+  BuildContext context,
+  WidgetRef ref,
+  CalendarEvent event,
+  DateTime targetDate,
+) => _handleCalendarEventDrop(context, ref, event, targetDate, 0);
