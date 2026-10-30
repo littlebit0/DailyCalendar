@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:daily/core/academic/academic_profile.dart';
 import 'package:daily/core/academic/korea_academic_source.dart';
@@ -98,29 +97,37 @@ void main() {
     }
   });
 
-  test('KU Sejong reads its own calendar', () async {
-    final body = File(
-      'test/fixtures/academic/korea-sejong-2026-10.html',
-    ).readAsStringSync();
-    final events = KoreaAcademicSource.parse(
-      body,
-      2026,
-      10,
-      url: KoreaAcademicSource.sejong().website.toString(),
-    );
-    expect(events.any((e) => e.title == '제2학기 중간고사'), isTrue);
-    expect(events.first.url, contains('sejong.korea.ac.kr'));
-    final hosts = <String>{};
+  test('KU Sejong reads its own calendar for the whole year', () async {
+    final requested = <String>[];
     final source = KoreaAcademicSource.sejong(
       client: MockClient((r) async {
-        hosts.add(r.url.host);
-        return http.Response.bytes(utf8.encode(body), 200);
+        expect(r.url.host, 'sejong.korea.ac.kr');
+        expect(r.url.path, '/schdulMng/koreaSejong/2/monthSchdul.do');
+        final q = Uri.splitQueryString(r.body);
+        final y = q['year']!, m = q['month']!.padLeft(2, '0');
+        requested.add('$y-$m');
+        return http.Response.bytes(
+          File(
+            'test/fixtures/academic/korea-sejong-$y-$m.html',
+          ).readAsBytesSync(),
+          200,
+        );
       }),
     );
     addTearDown(source.close);
-    await expectLater(source.fetch(2026), throwsFormatException);
-    expect(hosts, {'sejong.korea.ac.kr'});
+    final events = await source.fetch(2026);
+    expect(requested, [
+      '2025-12',
+      for (var m = 1; m <= 12; m++) '2026-${'$m'.padLeft(2, '0')}',
+    ]);
     expect(source.id, 'korea-sejong');
+    // Sejong publishes its own date for the rivalry games.
+    final rivalry = events.singleWhere((e) => e.title == '정기 고·연전');
+    expect(rivalry.start, DateTime(2026, 9, 18));
+    expect(rivalry.end, DateTime(2026, 9, 20));
+    expect(events.every((e) => e.url == source.website.toString()), isTrue);
+    expect(events.map((e) => e.sourceId).toSet(), hasLength(events.length));
+    expect(events.first.start.isBefore(DateTime(2026, 2)), isTrue);
   });
 
   test(
