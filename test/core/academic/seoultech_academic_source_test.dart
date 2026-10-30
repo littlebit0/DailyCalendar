@@ -10,10 +10,8 @@ String fixture(int year, int semester) => File(
   'test/fixtures/academic/seoultech-$year-$semester.html',
 ).readAsStringSync();
 
-// University finance office records the adapter leaves out on purpose.
-bool financeRow(String title) =>
-    RegExp(r'^\d{4}회계연도').hasMatch(title) &&
-    RegExp(r'재정위원회|예산|대학회계').hasMatch(title);
+// The one finance row published with a reversed range (2026.01.29 ~ 01.19).
+const reversedFinanceRow = '2026회계연도 본예산 재정위원회 제출';
 
 // Graduate-school-only rows, marked `(대학원)` on the page.
 bool graduateRow(String title) => title.contains('(대학원)');
@@ -39,7 +37,7 @@ void main() {
     final events = await source.fetch(2026);
     source.close();
     expect(requested, ['2025-3', '2026-2', '2026-3']);
-    expect(events, hasLength(66));
+    expect(events, hasLength(71));
     expect(events.every((e) => e.end.isAfter(DateTime(2026))), isTrue);
     expect(events.every((e) => e.start.isBefore(DateTime(2027))), isTrue);
     expect(events.map((e) => e.sourceId).toSet(), hasLength(events.length));
@@ -64,12 +62,12 @@ void main() {
   });
 
   test('every published Seoultech academic row is imported', () {
-    // Published rows = imported + finance office records + graduate-only rows.
-    for (final (year, semester, rows, finance, graduate) in [
-      (2025, 1, 31, 2, 6),
-      (2025, 2, 44, 4, 3),
-      (2026, 1, 28, 2, 0),
-      (2026, 2, 44, 4, 0),
+    // Published rows = imported + the reversed finance row + graduate-only rows.
+    for (final (year, semester, rows, reversed, graduate) in [
+      (2025, 1, 31, 0, 6),
+      (2025, 2, 44, 1, 3),
+      (2026, 1, 28, 0, 0),
+      (2026, 2, 44, 0, 0),
     ]) {
       final titles = html
           .parse(fixture(year, semester))
@@ -89,13 +87,13 @@ void main() {
       );
       expect(
         events.map((e) => e.title),
-        titles.where((t) => !financeRow(t) && !graduateRow(t)),
+        titles.where((t) => t != reversedFinanceRow && !graduateRow(t)),
         reason: '$year-$semester',
       );
       expect(titles, hasLength(rows));
-      expect(titles.where(financeRow), hasLength(finance));
+      expect(titles.where((t) => t == reversedFinanceRow), hasLength(reversed));
       expect(titles.where(graduateRow), hasLength(graduate));
-      expect(events, hasLength(rows - finance - graduate));
+      expect(events, hasLength(rows - reversed - graduate));
     }
   });
 
@@ -109,11 +107,12 @@ void main() {
     expect(fixture(2025, 1), contains('2025학년도 후기 대학원 신입생.편입생 원서접수(대학원) 예정'));
   });
 
-  test('Seoultech excludes finance office records and never repairs dates', () {
+  test('Seoultech keeps finance rows and never repairs dates', () {
     final previous = fixture(2025, 2);
     expect(previous, contains('2026.01.29 ~ 01.19'));
     final events = SeoultechAcademicSource.parse(previous, 2025, 2);
-    expect(events.any((e) => e.title.contains('회계연도')), isFalse);
+    expect(events.any((e) => e.title == '2025회계연도 대학회계 마감(회계연도 종료)'), isTrue);
+    expect(events.any((e) => e.title == reversedFinanceRow), isFalse);
     expect(
       () => SeoultechAcademicSource.parse(
         previous.replaceFirst('2026회계연도 본예산 재정위원회 제출', '2026학년도 수강신청'),

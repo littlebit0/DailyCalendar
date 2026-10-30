@@ -73,15 +73,6 @@ class SeoultechAcademicSource implements AcademicSource {
         link.remove(); // Calendar export control is not part of the event title.
       }
       final title = content?.text.trim() ?? '';
-      // Official regulations assign budgeting/accounting to the finance office,
-      // separately from academic management. These university-administration
-      // entries do not belong to the student's academic calendar. No dates are
-      // repaired, and malformed student academic events still fail validation.
-      if (RegExp(r'^\d{4}회계연도').hasMatch(title) &&
-          RegExp(r'재정위원회|예산|대학회계').hasMatch(title)) {
-        continue;
-      }
-
       final range = RegExp(
         r'^(\d{4})\.(\d{2})\.(\d{2})\s*~\s*(?:(\d{4})\.)?(\d{2})\.(\d{2})$',
       ).firstMatch(text);
@@ -108,6 +99,9 @@ class SeoultechAcademicSource implements AcademicSource {
         lastMonth,
         int.parse(range[6]!),
       );
+      // The finance office published one reversed range ("2026.01.29 ~ 01.19");
+      // it has no date to show, while academic rows must never be malformed.
+      if (last.isBefore(start) && title.contains('회계연도')) continue;
       if (start.year != academicYear + (start.month <= 2 ? 1 : 0) ||
           last.isBefore(start)) {
         throw const FormatException('Unexpected Seoultech period');
