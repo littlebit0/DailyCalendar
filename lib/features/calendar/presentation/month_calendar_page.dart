@@ -2946,7 +2946,7 @@ class _CalendarWeekPage extends ConsumerWidget {
             days: days,
             events: visibleEvents,
             builder: (scheduleEvents, classActions) => ScheduleTimelineView(
-              eventActions: classActions,
+              eventActions: _gatedClassActions(context, ref, classActions),
               days: days,
               holidayDates: {
                 for (final day in days)
@@ -3309,7 +3309,7 @@ class _CalendarDayPage extends ConsumerWidget {
             days: [date],
             events: visibleEvents,
             builder: (scheduleEvents, classActions) => ScheduleTimelineView(
-              eventActions: classActions,
+              eventActions: _gatedClassActions(context, ref, classActions),
               days: [date],
               showDateHeader: false,
               events: scheduleEvents,
@@ -4593,6 +4593,10 @@ class _CalendarMonthPage extends ConsumerWidget {
         if (scope == null || !context.mounted) {
           return;
         }
+        if (updateRequired(ref)) {
+          if (context.mounted) showUpdateRequiredNotice(context, ref);
+          return;
+        }
         final result = await _moveRecurringEvent(
           ref,
           event,
@@ -4771,12 +4775,20 @@ Future<void> _handleCalendarEventDrop(
   if (!context.mounted) {
     return;
   }
+  if (updateRequired(ref)) {
+    if (context.mounted) showUpdateRequiredNotice(context, ref);
+    return;
+  }
 
   var movedEvent = event;
   if (!_sameDay(sourceDate, normalizedTarget)) {
     if (event.isRecurring) {
       final scope = await _showCalendarRecurringDragScopeDialog(context);
       if (scope == null || !context.mounted) {
+        return;
+      }
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
         return;
       }
       final result = await _moveRecurringCalendarEvent(
@@ -4842,12 +4854,20 @@ Future<void> _handleCalendarEventTimeDrop(
   if (!context.mounted) {
     return;
   }
+  if (updateRequired(ref)) {
+    if (context.mounted) showUpdateRequiredNotice(context, ref);
+    return;
+  }
 
   var movedEvent = event;
   if (event.startAt != targetStart) {
     if (event.isRecurring) {
       final scope = await _showCalendarRecurringDragScopeDialog(context);
       if (scope == null || !context.mounted) {
+        return;
+      }
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
         return;
       }
       final result = await _moveRecurringCalendarEventToStart(
@@ -8161,3 +8181,15 @@ String _weekEventMeasureKey(CalendarEvent event, DateTime date) {
 DateTime _dateOnly(DateTime date) {
   return DateTime(date.year, date.month, date.day);
 }
+
+Map<String, VoidCallback> _gatedClassActions(
+  BuildContext context,
+  WidgetRef ref,
+  Map<String, VoidCallback> actions,
+) => {
+  for (final entry in actions.entries)
+    entry.key: () {
+      if (blockedByRequiredUpdate(context, ref)) return;
+      entry.value();
+    },
+};

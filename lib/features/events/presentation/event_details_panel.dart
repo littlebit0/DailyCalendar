@@ -497,6 +497,10 @@ class EventDetailsPanel extends ConsumerWidget {
     if (confirmed != true) {
       return;
     }
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
+      return;
+    }
 
     if (event.isRecurring) {
       if (!context.mounted) {
@@ -509,6 +513,10 @@ class EventDetailsPanel extends ConsumerWidget {
         allScopeLabel: context.tr('전체 삭제'),
       );
       if (scope == null) {
+        return;
+      }
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
         return;
       }
       final base =
