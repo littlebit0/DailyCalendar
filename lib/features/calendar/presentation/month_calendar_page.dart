@@ -1212,14 +1212,22 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                           child: _QuickTodoCategoryCard(
                                             group: groups[index],
                                             onCompletedChanged:
-                                                (event, completed) => ref
-                                                    .read(
-                                                      eventCommandServiceProvider,
-                                                    )
-                                                    .setCompleted(
-                                                      event,
-                                                      completed,
-                                                    ),
+                                                (event, completed) async {
+                                                  if (blockedByRequiredUpdate(
+                                                    context,
+                                                    ref,
+                                                  )) {
+                                                    return;
+                                                  }
+                                                  await ref
+                                                      .read(
+                                                        eventCommandServiceProvider,
+                                                      )
+                                                      .setCompleted(
+                                                        event,
+                                                        completed,
+                                                      );
+                                                },
                                             onOpen: (event) =>
                                                 _showQuickEventDetails(
                                                   context,

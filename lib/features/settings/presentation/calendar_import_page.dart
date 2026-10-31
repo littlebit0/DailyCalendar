@@ -11,6 +11,7 @@ import '../../../core/calendar_import/google_calendar_source.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
+import '../../../core/update/update_required_view.dart';
 
 class CalendarImportPage extends ConsumerStatefulWidget {
   const CalendarImportPage({super.key});
@@ -212,6 +213,7 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
   }
 
   Future<void> _import(List<ImportableCalendar> calendars) async {
+    if (blockedByRequiredUpdate(context, ref)) return;
     setState(() {
       _importBusy = true;
       _message = null;

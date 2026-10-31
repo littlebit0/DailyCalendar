@@ -1536,7 +1536,9 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   }
 
   Future<void> _setCompleted(bool completed) async {
-    if (_updatingCompletion || completed == _completed) {
+    if (_updatingCompletion ||
+        completed == _completed ||
+        blockedByRequiredUpdate(context, ref)) {
       return;
     }
     final previous = _completed;

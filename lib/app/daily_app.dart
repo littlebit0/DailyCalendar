@@ -813,6 +813,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
       _widgetTodoRunner.request();
 
   Future<void> _processPendingWidgetTodoActionsImpl() async {
+    // Unacknowledged requests stay queued and apply once the app is updated.
+    if (ref.read(requiredUpdateVersionProvider).value != null) return;
     final widgetService = ref.read(calendarWidgetServiceProvider);
     final actions = await widgetService.pendingTodoActions();
     if (actions.isEmpty) return;
@@ -825,6 +827,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     final appliedNow = <String>[];
     var staleOccurrence = false;
     for (final action in actions) {
+      if (ref.read(requiredUpdateVersionProvider).value != null) break;
       if (alreadyApplied.contains(action.token)) {
         // Applied before; only its acknowledgement was missing.
         acknowledged.add(action.token);

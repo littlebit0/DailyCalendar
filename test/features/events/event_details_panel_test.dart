@@ -14,6 +14,7 @@ import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
+import 'package:daily/features/events/presentation/event_completion_action.dart';
 import 'package:daily/features/events/presentation/event_details_panel.dart';
 import 'package:daily/features/events/presentation/event_editor_dialog.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
@@ -327,6 +328,69 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('일정 삭제'), findsNothing);
       expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    testWidgets('refuses the completion checkbox', (tester) async {
+      final event = _event();
+      await tester.binding.setSurfaceSize(const Size(800, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final required = ValueNotifier<String?>(null);
+      final repository = await _pumpPanel(
+        tester,
+        event: event,
+        requiredUpdate: required,
+      );
+      await tester.tap(find.text('비밀 회의').first);
+      await tester.pump(kDoubleTapTimeout);
+      await tester.pumpAndSettle();
+      required.value = '4.1.0';
+      await tester.tap(find.byKey(ValueKey('event-detail-todo-${event.id}')));
+      await tester.pumpAndSettle();
+      expect(repository.writes, 0);
+      expect(repository.event.completed, isFalse);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    testWidgets('refuses the double-tap completion, also after the lookup', (
+      tester,
+    ) async {
+      final event = _event();
+      VoidCallback? toggle;
+      final required = ValueNotifier<String?>('4.1.0');
+      final repository = await _pumpPanel(
+        tester,
+        event: event,
+        requiredUpdate: required,
+        body: EventCompletionAction(
+          event: event,
+          builder: (onDoubleTap) {
+            toggle = onDoubleTap;
+            return const SizedBox();
+          },
+        ),
+      );
+      toggle!();
+      await tester.pumpAndSettle();
+      expect(repository.writes, 0);
+      expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+      await tester.tap(find.text('닫기'));
+      await tester.pumpAndSettle();
+
+      required.value = null;
+      final gate = Completer<void>();
+      repository.lookupGate = gate;
+      toggle!();
+      await tester.pump();
+      required.value = '4.1.0';
+      gate.complete();
+      await tester.pumpAndSettle();
+      expect(repository.writes, 0);
+
+      required.value = null;
+      repository.lookupGate = null;
+      toggle!();
+      await tester.pumpAndSettle();
+      expect(repository.writes, greaterThan(0));
     });
 
     testWidgets('is rechecked when saving an editor that was already open', (
@@ -938,6 +1002,7 @@ Future<_SingleEventRepository> _pumpPanel(
   TargetPlatform platform = TargetPlatform.android,
   Brightness brightness = Brightness.light,
   ValueListenable<String?>? requiredUpdate,
+  Widget? body,
 }) async {
   SharedPreferences.setMockInitialValues({});
   final preferences = await SharedPreferences.getInstance();
@@ -962,12 +1027,14 @@ Future<_SingleEventRepository> _pumpPanel(
       child: MaterialApp(
         theme: ThemeData(platform: platform, brightness: brightness),
         home: Scaffold(
-          body: EventDetailsPanel(
-            date: event.startAt,
-            events: [event],
-            onEventDropped: onEventDropped,
-            onEventDragStateChanged: onEventDragStateChanged,
-          ),
+          body:
+              body ??
+              EventDetailsPanel(
+                date: event.startAt,
+                events: [event],
+                onEventDropped: onEventDropped,
+                onEventDragStateChanged: onEventDragStateChanged,
+              ),
         ),
       ),
     ),
