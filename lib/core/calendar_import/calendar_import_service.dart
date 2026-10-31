@@ -120,11 +120,9 @@ class CalendarImportService {
       }
     }
     _checkNotBlocked();
-    final importedIds = await _eventCommandService.importBatch(
-      pending,
-      isCurrent: () => !_isBlocked,
-    );
-    _checkNotBlocked();
+    // The event service stops before each write once an update is required;
+    // what it already saved keeps its reminder, alarm and upload.
+    final importedIds = await _eventCommandService.importBatch(pending);
     final invalid = events.length - skipped - pending.length;
     return CalendarImportResult(
       imported: importedIds.length,

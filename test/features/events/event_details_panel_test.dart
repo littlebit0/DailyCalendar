@@ -384,6 +384,36 @@ void main() {
         expect(repository.writes, 0);
       });
 
+      test(
+        'an event already saved still gets its reminder and upload',
+        () async {
+          SharedPreferences.setMockInitialValues({});
+          final event = _event();
+          final repository = _SingleEventRepository(event);
+          final notifications = _RecordingNotifications();
+          final sync = _RecordingSync();
+          var blocked = false;
+          repository.afterSave = () => blocked = true;
+          final service = EventCommandService(
+            repository: repository,
+            settingsRepository: SettingsRepository(
+              preferences: await SharedPreferences.getInstance(),
+            ),
+            notificationService: notifications,
+            syncService: sync,
+            blocked: () => blocked,
+          );
+          final saved = await service.importBatch([
+            event,
+            event.copyWith(id: 'second'),
+          ]);
+          expect(saved, {event.id});
+          expect(repository.writes, 1);
+          expect(notifications.scheduled, [event.id]);
+          expect(sync.upserts, [event.id]);
+        },
+      );
+
       test('deletes nothing', () async {
         final event = _event();
         final (service, repository, gate) = await waitingService(event);
@@ -1182,6 +1212,9 @@ class _SingleEventRepository implements EventRepository {
   /// Holds [findById] open to simulate a slow lookup.
   Completer<void>? lookupGate;
 
+  /// Runs right after a save, to simulate an update found at that moment.
+  void Function()? afterSave;
+
   @override
   Future<List<CalendarEvent>> allEventsForSync() async => [event];
 
@@ -1230,6 +1263,7 @@ class _SingleEventRepository implements EventRepository {
   Future<void> save(CalendarEvent event) async {
     writes++;
     this.event = event;
+    afterSave?.call();
   }
 
   @override
@@ -1304,6 +1338,24 @@ class _NoopNotificationService implements NotificationService {
     required int hour,
     required int minute,
   }) async {}
+}
+
+class _RecordingNotifications extends _NoopNotificationService {
+  final scheduled = <String>[];
+
+  @override
+  Future<void> scheduleEventReminder(
+    CalendarEvent event, {
+    bool allowImmediate = false,
+  }) async => scheduled.add(event.id);
+}
+
+class _RecordingSync extends _NoopSyncService {
+  final upserts = <String>[];
+
+  @override
+  Future<void> queueEventUpsert(CalendarEvent event) async =>
+      upserts.add(event.id);
 }
 
 class _NoopSyncService implements SyncService {

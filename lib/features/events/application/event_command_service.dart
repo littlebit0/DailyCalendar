@@ -703,11 +703,13 @@ class EventCommandService {
     Set<String>? skippedDeleted,
   }) async {
     // A batch stops, keeping what it already saved, when a required update appears.
-    bool current() =>
-        !(_blocked?.call() ?? false) && (isCurrent == null || isCurrent());
+    bool current() => isCurrent == null || isCurrent();
+    // A required update stops the next write, never the follow-up of an event
+    // that was already saved: its reminder, alarm and upload still complete.
+    bool writable() => !(_blocked?.call() ?? false) && current();
     final importedIds = <String>{};
     for (final event in events) {
-      if (!current()) break;
+      if (!writable()) break;
       CalendarEvent imported;
       try {
         if (resolveLatest != null) {
@@ -716,7 +718,7 @@ class EventCommandService {
           // overwritten by an older snapshot. Returning null keeps the row.
           CalendarEvent? decided;
           CalendarEvent resolve(CalendarEvent? latest, CalendarEvent incoming) {
-            if (!current()) {
+            if (!writable()) {
               throw StateError('가져오기 대상이 변경되었습니다.');
             }
             final result = resolveLatest(latest, incoming);
@@ -749,7 +751,7 @@ class EventCommandService {
           imported = decided!;
         } else {
           final prepared = prepare == null ? event : await prepare(event);
-          if (!current()) break;
+          if (!writable()) break;
           if (prepared == null) continue;
           imported = prepared
               .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
@@ -761,8 +763,7 @@ class EventCommandService {
             await _repository.mergeRestoredEventsAtomically(
               [imported],
               resolve: (latest, source) {
-                if (!current() ||
-                    !_isCurrentOwner(source)) {
+                if (!writable() || !_isCurrentOwner(source)) {
                   throw StateError('LMS 계정이 변경되었습니다.');
                 }
                 final destination = lmsCategory?.call();

@@ -84,7 +84,7 @@ class AcademicCalendarService extends ChangeNotifier {
   ) async {
     // The colour applies to every imported row of this subscription.
     _requireManageable(universityId);
-    bool current() => _isCurrent(generation);
+    bool current() => _isCurrentIgnoringBlock(generation);
     final change = await _settings.updateCategory(
       categoryId(universityId),
       (current) => current.copyWith(colorValue: colorValue),
@@ -185,8 +185,13 @@ class AcademicCalendarService extends ChangeNotifier {
   /// A reset (store generation) or account switch cancels remaining work, so a
   /// late write never lands in, or uploads for, a different account.
   bool _isCurrent(int generation) =>
+      !(_blocked?.call() ?? false) && _isCurrentIgnoringBlock(generation);
+
+  /// What event writes check. A required update is enforced by the event
+  /// service before each write, so an event already saved still completes its
+  /// reminder, alarm and upload.
+  bool _isCurrentIgnoringBlock(int generation) =>
       !_disposed &&
-      !(_blocked?.call() ?? false) &&
       generation == _store.generation &&
       _account() == _operationAccount;
 
@@ -448,7 +453,7 @@ class AcademicCalendarService extends ChangeNotifier {
     final recordedDeletions = <String>{};
     final saved = await _commands.importBatch(
       importing,
-      isCurrent: () => _isCurrent(generation),
+      isCurrent: () => _isCurrentIgnoringBlock(generation),
       skippedDeleted: recordedDeletions,
       resolveLatest: (local, incoming) {
         _check(generation);
@@ -778,7 +783,10 @@ class AcademicCalendarService extends ChangeNotifier {
     try {
       for (final id in subscription.pendingRemovals.toList()) {
         _check(generation);
-        await _commands.delete(id, isCurrent: () => _isCurrent(generation));
+        await _commands.delete(
+          id,
+          isCurrent: () => _isCurrentIgnoringBlock(generation),
+        );
         _check(generation);
         subscription.pendingRemovals.remove(id);
       }

@@ -145,8 +145,13 @@ class LmsSyncService extends ChangeNotifier {
           session.ownerId;
 
   bool _current(LmsSyncSession session, int epoch) =>
+      !(_blocked?.call() ?? false) && _currentIgnoringBlock(session, epoch);
+
+  /// What event writes check for account validity. A required update is
+  /// enforced by the event service before each write, so an event already
+  /// saved still gets its reminder, alarm and upload.
+  bool _currentIgnoringBlock(LmsSyncSession session, int epoch) =>
       !_disposed &&
-      !(_blocked?.call() ?? false) &&
       epoch == _epoch &&
       session.sameAs(_readSession()) &&
       _ownerMatches(session);
@@ -575,14 +580,14 @@ class LmsSyncService extends ChangeNotifier {
     if (owner.isEmpty || school == null || _configuredCategory() == null) {
       return;
     }
-    bool valid() =>
+    bool validAccount() =>
         !_disposed &&
-        !(_blocked?.call() ?? false) &&
         normalizeLmsOwner(
               _settings.dailyAccount()?.googleAccount?.email ?? '',
             ) ==
             owner &&
         _settings.load().academicProfile?.timetableUniversity == school;
+    bool valid() => !(_blocked?.call() ?? false) && validAccount();
     if (!valid()) return;
     final events = await _repository.allEventsForSync();
     if (!valid()) return;
@@ -593,7 +598,7 @@ class LmsSyncService extends ChangeNotifier {
             e.lms?.ownerId == owner &&
             e.lms?.schoolId == school,
       ),
-      isCurrent: valid,
+      isCurrent: validAccount,
       lmsCategory: _configuredCategory,
       preserveLmsSource: true,
       prepare: (event) async {
@@ -721,7 +726,7 @@ class LmsSyncService extends ChangeNotifier {
     final saved = await _commands.importBatch(
       candidates,
       lmsCategory: _configuredCategory,
-      isCurrent: () => _current(session, epoch),
+      isCurrent: () => _currentIgnoringBlock(session, epoch),
       prepare: (incoming) async {
         _check(session, epoch);
         final local = await _repository.findById(incoming.id);
@@ -794,7 +799,7 @@ class LmsSyncService extends ChangeNotifier {
         _check(session, epoch);
         await _commands.delete(
           event.id,
-          isCurrent: () => _current(session, epoch),
+          isCurrent: () => _currentIgnoringBlock(session, epoch),
         );
         _check(session, epoch);
         deleted++;
