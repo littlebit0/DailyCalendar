@@ -48,7 +48,9 @@ class AcademicCalendarService extends ChangeNotifier {
     required EventCommandService commands,
     required SyncService sync,
     DateTime Function()? now,
-  }) : _store = store,
+    bool Function()? blocked,
+  }) : _blocked = blocked,
+       _store = store,
        _settings = settings,
        _repository = repository,
        _commands = commands,
@@ -59,6 +61,7 @@ class AcademicCalendarService extends ChangeNotifier {
   }
 
   final List<AcademicSource> sources;
+  final bool Function()? _blocked;
   final AcademicStore _store;
   final SettingsRepository _settings;
   final EventRepository _repository;
@@ -183,6 +186,7 @@ class AcademicCalendarService extends ChangeNotifier {
   /// late write never lands in, or uploads for, a different account.
   bool _isCurrent(int generation) =>
       !_disposed &&
+      !(_blocked?.call() ?? false) &&
       generation == _store.generation &&
       _account() == _operationAccount;
 

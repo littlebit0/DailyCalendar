@@ -253,6 +253,7 @@ final calendarImportServiceProvider = Provider<CalendarImportService>((ref) {
     eventRepository: ref.watch(eventRepositoryProvider),
     eventCommandService: ref.watch(eventCommandServiceProvider),
     settingsRepository: ref.watch(settingsRepositoryProvider),
+    blocked: () => ref.read(requiredUpdateVersionProvider).value != null,
   );
 });
 
@@ -288,6 +289,7 @@ final academicCalendarServiceProvider = Provider<AcademicCalendarService>((
     repository: ref.watch(eventRepositoryProvider),
     commands: ref.watch(eventCommandServiceProvider),
     sync: ref.watch(syncServiceProvider),
+    blocked: () => ref.read(requiredUpdateVersionProvider).value != null,
   );
   ref.onDispose(service.dispose);
   return service;

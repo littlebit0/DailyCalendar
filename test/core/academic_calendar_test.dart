@@ -275,6 +275,32 @@ void main() {
     );
   }
 
+  test('a required update found during an import writes no event', () async {
+    var blocked = false;
+    final local = AcademicCalendarService(
+      sources: [source],
+      store: settings.academicStore,
+      settings: settings,
+      repository: repository,
+      commands: commands,
+      sync: sync,
+      now: () => now,
+      blocked: () => blocked,
+    );
+    addTearDown(local.dispose);
+    final preview = await local.preview(source, 2026);
+    blocked = true;
+    await expectLater(
+      local.importSelection(
+        preview,
+        preview.events.map((e) => e.sourceId).toSet(),
+      ),
+      throwsStateError,
+    );
+    expect(repository.events, isEmpty);
+    expect(local.unavailable, isFalse);
+  });
+
   test(
     'initial color persists on import and existing color wins on refresh',
     () async {

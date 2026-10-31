@@ -827,13 +827,13 @@ class _AppHomeState extends ConsumerState<_AppHome>
     final appliedNow = <String>[];
     var staleOccurrence = false;
     for (final action in actions) {
-      if (ref.read(requiredUpdateVersionProvider).value != null) break;
       if (alreadyApplied.contains(action.token)) {
         // Applied before; only its acknowledgement was missing.
         acknowledged.add(action.token);
         continue;
       }
       final event = await repository.findById(action.eventId);
+      if (ref.read(requiredUpdateVersionProvider).value != null) break;
       if (event == null || event.isDeleted) {
         acknowledged.add(action.token);
         continue;

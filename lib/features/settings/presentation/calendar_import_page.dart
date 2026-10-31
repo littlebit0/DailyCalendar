@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/analytics/product_analytics.dart';
 import '../../../core/calendar_import/calendar_import_models.dart';
+import '../../../core/calendar_import/calendar_import_service.dart';
 import '../../../core/calendar_import/google_calendar_source.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
@@ -248,6 +249,9 @@ class _CalendarImportPageState extends ConsumerState<CalendarImportPage> {
             ? summary
             : '$summary\n${context.tr('{count}개 일정은 지원하지 않는 반복 조건이 있어 한 번만 가져왔고 원래 규칙은 보존했습니다.', args: {'count': result.unsupportedRecurrence})}';
       });
+    } on CalendarImportCancelled {
+      _recordImportUsage(analytics, AnalyticsOutcome.canceled);
+      if (mounted) showUpdateRequiredNotice(context, ref);
     } on CalendarImportException catch (error) {
       if (!importFinished) _recordImportUsage(analytics, AnalyticsOutcome.failed);
       _showError(error);
