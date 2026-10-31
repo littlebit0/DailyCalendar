@@ -86,6 +86,7 @@ class LmsSyncService extends ChangeNotifier {
     required EventCommandService commands,
     required LmsFetchHtml fetchHtml,
     required LmsSyncSession? Function() readSession,
+    bool Function()? blocked,
     bool Function(Object error)? isAuthenticationError,
     DateTime Function()? now,
     Future<void> Function(Duration duration)? wait,
@@ -96,6 +97,7 @@ class LmsSyncService extends ChangeNotifier {
        _commands = commands,
        _fetchHtml = fetchHtml,
        _readSession = readSession,
+       _blocked = blocked,
        _isAuthenticationError = isAuthenticationError ?? ((_) => false),
        _now = now ?? DateTime.now,
        _wait = wait ?? Future<void>.delayed,
@@ -107,6 +109,7 @@ class LmsSyncService extends ChangeNotifier {
   final EventCommandService _commands;
   final LmsFetchHtml _fetchHtml;
   final LmsSyncSession? Function() _readSession;
+  final bool Function()? _blocked;
   final bool Function(Object) _isAuthenticationError;
   final DateTime Function() _now;
   final Future<void> Function(Duration) _wait;
@@ -143,6 +146,7 @@ class LmsSyncService extends ChangeNotifier {
 
   bool _current(LmsSyncSession session, int epoch) =>
       !_disposed &&
+      !(_blocked?.call() ?? false) &&
       epoch == _epoch &&
       session.sameAs(_readSession()) &&
       _ownerMatches(session);
@@ -266,7 +270,7 @@ class LmsSyncService extends ChangeNotifier {
   }
 
   Future<LmsSyncResult?> refresh({bool force = false}) {
-    if (_disposed) return Future.value();
+    if (_disposed || (_blocked?.call() ?? false)) return Future.value();
     final session = _readSession();
     final running = _inFlight;
     if (running != null) {

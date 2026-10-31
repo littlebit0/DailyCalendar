@@ -123,6 +123,7 @@ class _Session extends LmsWebSession {
   int confirmedRefreshes = 0;
   int preparations = 0, storedReads = 0, reads = 0, closes = 0, disconnects = 0;
   Completer<void>? prepareWait;
+  void Function()? onStoredRead;
   Completer<void>? disconnectWait;
   Completer<void>? recoveryWait;
   Object? prepareError;
@@ -167,6 +168,7 @@ class _Session extends LmsWebSession {
   @override
   Future<bool> hasStoredSession() async {
     storedReads++;
+    onStoredRead?.call();
     return stored;
   }
 
@@ -903,6 +905,71 @@ void main() {
       expect(settings.load().academicProfile?.lmsIntegrationEnabled, isTrue);
     },
   );
+
+  group('a required update found during an active refresh', () {
+    late bool blocked;
+    late LmsController local;
+
+    setUp(() {
+      blocked = false;
+      local = LmsController(
+        automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
+        settings: settings,
+        repository: repository,
+        commands: commands,
+        blocked: () => blocked,
+        createSession: (owner, school) {
+          final session = _Session(owner, school);
+          configure?.call(session);
+          sessions.add(session);
+          return session;
+        },
+      );
+      addTearDown(local.dispose);
+    });
+
+    test('stops before reading the school after restoration', () async {
+      final pending = Completer<void>();
+      configure = (session) => session.prepareWait = pending;
+      final refresh = local.refresh();
+      await pumpEventQueue();
+      blocked = true;
+      pending.complete();
+      await refresh;
+      expect(sessions.single.preparations, 1);
+      expect(sessions.single.reads, 0);
+      expect(local.restoring, isFalse);
+    });
+
+    test('does not submit the saved login', () async {
+      await LmsCredentialsStore().save(
+        'student@example.com',
+        'smu',
+        const LmsLocalCredentials('fixture-student', 'synthetic'),
+      );
+      configure = (session) {
+        session.stored = false;
+        session.onStoredRead = () => blocked = true;
+      };
+      await local.refresh();
+      expect(sessions.single.storedReads, 1);
+      expect(sessions.single.automaticLogins, 0);
+    });
+
+    test('abandons a read before anything is imported', () async {
+      configure = (session) {
+        session.answer = (url) async {
+          blocked = true;
+          session.answer = null;
+          return session.fetchHtml(url);
+        };
+      };
+      await local.refresh();
+      expect(sessions.single.reads, 2);
+      expect(repository.events, isEmpty);
+      expect(local.sync.lastResult, isNull);
+    });
+  });
 
   test(
     'Drive-selected principal blocks an already authenticated previous school account',

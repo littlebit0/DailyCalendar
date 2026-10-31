@@ -99,6 +99,8 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
   }
 
   Future<void> _perform(Future<void> Function() action) async {
+    // A dialog can outlive the gate that replaced this page underneath it.
+    if (blockedByRequiredUpdate(context, ref)) return;
     setState(() => _localError = false);
     try {
       await action();

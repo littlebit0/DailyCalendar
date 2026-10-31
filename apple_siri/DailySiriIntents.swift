@@ -801,6 +801,13 @@ private enum DailySiriText {
     "無法透過 Siri 變更或刪除學校行程。請在 Daily 編輯個人備註、分類及提醒。"
   ) }
 
+  static var updateRequired: String { localized(
+    "새 버전이 나왔습니다. 업데이트하기 전까지 Siri에서 일정을 추가·변경·삭제할 수 없습니다. 일정 조회는 계속 사용할 수 있습니다.",
+    "A new version is available. Until you update, Siri cannot add, change or delete events. You can still look up events.",
+    "新しいバージョンがあります。アップデートするまでSiriで予定の追加・変更・削除はできません。予定の確認は引き続き利用できます。",
+    "已有新版本。更新前無法透過 Siri 新增、變更或刪除行程，但仍可查詢行程。"
+  ) }
+
   static var lmsReadCompleted: String { localized(
     "학교 일정 조회 완료",
     "School event lookup completed",
@@ -2173,6 +2180,41 @@ enum DailyKoreanHolidayService {
   }
 }
 
+/// Native side of UpdateRequirementController. The stored version is compared
+/// here too because Siri can run after an update, before Flutter clears it.
+enum DailySiriUpdateRequirement {
+  static let storedVersionKey = "flutter.update.requiredVersion"
+
+  static var isActive: Bool {
+    #if DEBUG
+    return false
+    #else
+    guard let stored = UserDefaults.standard.string(forKey: storedVersionKey),
+          let current = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String else {
+      return false
+    }
+    return isNewer(stored, than: current)
+    #endif
+  }
+
+  static func isNewer(_ candidate: String, than current: String) -> Bool {
+    let candidateParts = parts(candidate)
+    let currentParts = parts(current)
+    for index in 0..<3 where candidateParts[index] != currentParts[index] {
+      return candidateParts[index] > currentParts[index]
+    }
+    return false
+  }
+
+  private static func parts(_ version: String) -> [Int] {
+    var parsed = version.split(separator: ".", omittingEmptySubsequences: false).prefix(3).map { part in
+      Int(part.prefix { $0.isNumber && $0.isASCII }) ?? 0
+    }
+    parsed += Array(repeating: 0, count: 3 - parsed.count)
+    return parsed
+  }
+}
+
 @available(iOS 16.0, macOS 13.0, *)
 private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
   case databaseUnavailable
@@ -2180,6 +2222,7 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
   case ambiguousEvent
   case invalidTime
   case lmsOriginalReadOnly
+  case updateRequired
 
   var localizedStringResource: LocalizedStringResource {
     switch self {
@@ -2193,6 +2236,8 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
       LocalizedStringResource(stringLiteral: DailySiriText.invalidTime)
     case .lmsOriginalReadOnly:
       LocalizedStringResource(stringLiteral: DailySiriText.lmsOriginalReadOnly)
+    case .updateRequired:
+      LocalizedStringResource(stringLiteral: DailySiriText.updateRequired)
     }
   }
 }
@@ -2214,6 +2259,7 @@ private enum DailySiriDatabase {
     alarmEnabled: Bool = false,
     allDayAlarmMinutes: Int = 540
   ) throws -> DailySiriEvent {
+    try requireNoUpdate()
     guard endAt > startAt else { throw DailySiriError.invalidTime }
     let id = UUID().uuidString
     let now = Int64(Date().timeIntervalSince1970)
@@ -2382,7 +2428,12 @@ private enum DailySiriDatabase {
     ).filter { !$0.isLms }
   }
 
+  private static func requireNoUpdate() throws {
+    guard !DailySiriUpdateRequirement.isActive else { throw DailySiriError.updateRequired }
+  }
+
   static func requireEditable(id: String) throws {
+    try requireNoUpdate()
     guard !id.hasPrefix("lms:") else { throw DailySiriError.lmsOriginalReadOnly }
     guard let event = try events(withIDs: [id]).first else { throw DailySiriError.eventNotFound }
     guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
@@ -2492,6 +2543,7 @@ private enum DailySiriDatabase {
     alarmEnabled: Bool?,
     entireSeries: Bool = false
   ) throws -> DailySiriEvent {
+    try requireNoUpdate()
     guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
     let sourceID = DailySiriOccurrenceIdentity.parse(event.id)?.sourceID ?? event.id
     let base: DailySiriEvent
@@ -2619,6 +2671,7 @@ private enum DailySiriDatabase {
   }
 
   private static func delete(event: DailySiriEvent, entireSeries: Bool = false) throws -> DailySiriEvent {
+    try requireNoUpdate()
     guard !event.isLms else { throw DailySiriError.lmsOriginalReadOnly }
     let sourceID = DailySiriOccurrenceIdentity.parse(event.id)?.sourceID ?? event.id
     let singleOccurrence = event.recurrenceFrequency != "none" && !entireSeries

@@ -53,6 +53,7 @@ class LmsController extends ChangeNotifier {
         return active.fetchHtml(uri);
       },
       readSession: _readIdentity,
+      blocked: blocked,
       isAuthenticationError: (error) =>
           error is LmsWebSessionException &&
           error.code == LmsWebSessionError.authenticationRequired,
@@ -111,6 +112,7 @@ class LmsController extends ChangeNotifier {
   final SettingsRepository _settings;
   final FutureOr<void> Function()? _onIntegrationChanged;
   final bool Function()? _blocked;
+  bool get _isBlocked => _blocked?.call() ?? false;
   final LmsWebSession Function(String, String) _createSession;
   late final LmsSyncService sync;
   LmsWebSession? _session;
@@ -218,7 +220,7 @@ class LmsController extends ChangeNotifier {
   }
 
   Future<void> refresh({bool force = false}) {
-    if (_disposed || _disconnecting || (_blocked?.call() ?? false)) {
+    if (_disposed || _disconnecting || _isBlocked) {
       return Future.value();
     }
     final running = _operation;
@@ -261,10 +263,7 @@ class LmsController extends ChangeNotifier {
   Future<void> saveAutomaticLogin(String username, String password) async {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
     final school = schoolId;
-    if (owner == null ||
-        !supported ||
-        school == null ||
-        (_blocked?.call() ?? false)) {
+    if (owner == null || !supported || school == null || _isBlocked) {
       return;
     }
     lastLoginFailure = null;
@@ -574,7 +573,7 @@ class LmsController extends ChangeNotifier {
 
   Future<void> _refresh({required bool force}) async {
     await loadLocalLoginInfo();
-    if (_disposed || _disconnecting) return;
+    if (_disposed || _disconnecting || _isBlocked) return;
     await sync.applyConfiguredCategory();
     final desired = _desiredKey;
     if (_key != desired) {
@@ -621,7 +620,8 @@ class LmsController extends ChangeNotifier {
         !_disposed &&
         generation == _generation &&
         identical(current, _session) &&
-        _key == _desiredKey;
+        _key == _desiredKey &&
+        !_isBlocked;
     _restoring = !current.isAuthenticated;
     _notify();
     try {
@@ -682,7 +682,7 @@ class LmsController extends ChangeNotifier {
         }
       }
     } finally {
-      if (valid()) {
+      if (valid() || _isBlocked) {
         _restoring = false;
         _notify();
       }
@@ -746,7 +746,7 @@ class LmsController extends ChangeNotifier {
         !identical(loginSession, _session) ||
         _key != _desiredKey ||
         !loginSession.isAuthenticated ||
-        (_blocked?.call() ?? false)) {
+        _isBlocked) {
       return;
     }
     lastLoginFailure = null;
