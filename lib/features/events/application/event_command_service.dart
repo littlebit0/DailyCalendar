@@ -74,6 +74,8 @@ class EventCommandService {
 
   /// Screens check before they start; this covers a release found while a
   /// change is already waiting on a lookup, right before the database write.
+  /// Resolvers call it too: an atomic merge reads its rows before resolving,
+  /// and throwing there rolls that transaction back.
   void _requireWritable() {
     if (_blocked?.call() ?? false) throw const EventWritesBlocked();
   }
@@ -135,6 +137,7 @@ class EventCommandService {
         final mutations = await _repository.mergeRestoredEventsAtomically(
           [updated],
           resolve: (latest, edited) {
+            _requireWritable();
             if (latest == null) {
               throw StateError('LMS 일정이 삭제되었습니다. 다시 확인해 주세요.');
             }
@@ -340,6 +343,7 @@ class EventCommandService {
     await _repository.mergeRestoredEventsAtomically(
       [occurrence, placeholder],
       resolve: (latest, incoming) {
+        _requireWritable();
         if (incoming.id == occurrence.id) {
           if (latest == null ||
               latest.isDeleted ||
@@ -498,6 +502,7 @@ class EventCommandService {
     await _repository.mergeRestoredEventsAtomically(
       [occurrence],
       resolve: (latest, _) {
+        _requireWritable();
         if (latest == null ||
             latest.isDeleted ||
             !calendarEventCanMove(latest) ||
@@ -562,6 +567,7 @@ class EventCommandService {
         final mutations = await _repository.mergeRestoredEventsAtomically(
           [updated],
           resolve: (latest, _) {
+            _requireWritable();
             if (latest == null) {
               throw StateError('LMS 일정이 삭제되었습니다. 다시 확인해 주세요.');
             }
@@ -626,6 +632,7 @@ class EventCommandService {
     await _repository.mergeRestoredEventsAtomically(
       [source, occurrence.copyWith(id: detachedID, clearOccurrenceId: true)],
       resolve: (latest, incoming) {
+        _requireWritable();
         if (incoming.id == source.id) {
           if (latest == null ||
               latest.isDeleted ||

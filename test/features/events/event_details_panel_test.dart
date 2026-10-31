@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:daily/core/auth/google_account.dart';
 import 'package:daily/core/di/app_providers.dart';
+import 'package:daily/core/lms/lms_models.dart';
+import 'package:daily/core/lms/lms_sync_service.dart';
 import 'package:daily/core/calendar/calendar_event_movement.dart';
 import 'package:daily/core/notifications/notification_service.dart';
 import 'package:daily/core/sync/sync_service.dart';
@@ -13,11 +16,13 @@ import 'package:daily/features/calendar/widgets/calendar_event_drag_layer.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
+import 'package:daily/features/events/domain/event_draft.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
 import 'package:daily/features/events/presentation/event_completion_action.dart';
 import 'package:daily/features/events/presentation/event_details_panel.dart';
 import 'package:daily/features/events/presentation/event_editor_dialog.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
+import 'package:daily/core/calendar/recurring_event_edit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -328,6 +333,113 @@ void main() {
       await tester.pumpAndSettle();
       expect(find.text('일정 삭제'), findsNothing);
       expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    });
+
+    group('found while an atomic write is reading its rows', () {
+      const email = 'student@example.com';
+      Future<(EventCommandService, _SingleEventRepository)> atomicService(
+        CalendarEvent event,
+      ) async {
+        SharedPreferences.setMockInitialValues({});
+        final settings = SettingsRepository(
+          preferences: await SharedPreferences.getInstance(),
+        );
+        await settings.saveGoogleAccount(const GoogleAccount(email: email));
+        final repository = _SingleEventRepository(event);
+        var blocked = false;
+        repository.beforeResolve = () => blocked = true;
+        return (
+          EventCommandService(
+            repository: repository,
+            settingsRepository: settings,
+            notificationService: _NoopNotificationService(),
+            syncService: _NoopSyncService(),
+            blocked: () => blocked,
+          ),
+          repository,
+        );
+      }
+
+      CalendarEvent repeating() => _event().copyWith(
+        recurrence: const RecurrenceRule(frequency: RecurrenceFrequency.daily),
+      );
+
+      CalendarEvent lmsEvent() {
+        final metadata = LmsEventMetadata(
+          schoolId: 'smu',
+          ownerId: email,
+          lmsUserId: '70001',
+          courseId: '8001',
+          courseTitle: '수업',
+          activityType: 'assignment',
+          activityId: '9001',
+          sourceUrl: 'https://ecampus.smu.ac.kr/mod/assign/view.php?id=9001',
+          dueAt: DateTime.utc(2026, 9, 26, 14, 59),
+        );
+        return _event().copyWith(
+          id: LmsSyncService.eventId(metadata),
+          lms: metadata,
+        );
+      }
+
+      Future<void> expectNoChange(
+        _SingleEventRepository repository,
+        Future<void> operation,
+      ) async {
+        await expectLater(operation, throwsA(isA<EventWritesBlocked>()));
+        expect(repository.resolved, 0);
+      }
+
+      test('moves no occurrence', () async {
+        final event = repeating();
+        final (service, repository) = await atomicService(event);
+        await expectNoChange(
+          repository,
+          service.moveRecurringOccurrence(
+            occurrence: event,
+            targetStart: event.startAt.add(const Duration(days: 1)),
+            scope: RecurringMoveScope.onlyThis,
+          ),
+        );
+      });
+
+      test('edits no series', () async {
+        final event = repeating();
+        final (service, repository) = await atomicService(event);
+        await expectNoChange(
+          repository,
+          service.editRecurringOccurrence(
+            occurrence: event,
+            draft: EventDraft(
+              title: '바뀐 제목',
+              startAt: event.startAt,
+              endAt: event.endAt,
+            ),
+            scope: RecurringEditScope.all,
+          ),
+        );
+      });
+
+      test('completes no occurrence', () async {
+        final event = repeating().copyWith(occurrenceId: 'occurrence');
+        final (service, repository) = await atomicService(event);
+        await expectNoChange(repository, service.setCompleted(event, true));
+      });
+
+      test('completes no school event', () async {
+        final event = lmsEvent();
+        final (service, repository) = await atomicService(event);
+        await expectNoChange(repository, service.setCompleted(event, true));
+      });
+
+      test('edits no school event', () async {
+        final event = lmsEvent();
+        final (service, repository) = await atomicService(event);
+        await expectNoChange(
+          repository,
+          service.save(event.copyWith(memo: '메모')),
+        );
+      });
     });
 
     group('found while the service is waiting on its lookup', () {
@@ -1215,6 +1327,12 @@ class _SingleEventRepository implements EventRepository {
   /// Runs right after a save, to simulate an update found at that moment.
   void Function()? afterSave;
 
+  /// Runs where an atomic merge has read its rows and is about to resolve.
+  void Function()? beforeResolve;
+
+  /// Rows an atomic merge resolved into a change.
+  int resolved = 0;
+
   @override
   Future<List<CalendarEvent>> allEventsForSync() async => [event];
 
@@ -1250,8 +1368,10 @@ class _SingleEventRepository implements EventRepository {
     required RestoredEventResolver resolve,
   }) async {
     writes++;
+    beforeResolve?.call();
     for (final incoming in remoteEvents) {
       resolve(incoming.id == event.id ? event : null, incoming);
+      resolved++;
     }
     return const [];
   }
