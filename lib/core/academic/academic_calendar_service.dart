@@ -195,6 +195,14 @@ class AcademicCalendarService extends ChangeNotifier {
       generation == _store.generation &&
       _account() == _operationAccount;
 
+  /// For bookkeeping of writes that already happened: a required update stops
+  /// further writes, but must not lose the record of the saved ones.
+  void _checkAccount(int generation) {
+    if (!_isCurrentIgnoringBlock(generation)) {
+      throw StateError('Academic operation cancelled');
+    }
+  }
+
   void _check(int generation) {
     if (!_isCurrent(generation)) {
       throw StateError('Academic operation cancelled');
@@ -495,7 +503,9 @@ class AcademicCalendarService extends ChangeNotifier {
         );
       },
     );
-    _check(generation);
+    // Without these baselines an update could later mistake a saved row for a
+    // user edit, or lose its link to a corrected source ID and duplicate it.
+    _checkAccount(generation);
     preserved += recordedDeletions.length;
     unchanged.addAll(recordedDeletions);
     for (final id in {...saved, ...unchanged}) {
@@ -787,11 +797,11 @@ class AcademicCalendarService extends ChangeNotifier {
           id,
           isCurrent: () => _isCurrentIgnoringBlock(generation),
         );
-        _check(generation);
+        _checkAccount(generation);
         subscription.pendingRemovals.remove(id);
       }
     } finally {
-      if (_isCurrent(generation)) {
+      if (_isCurrentIgnoringBlock(generation)) {
         try {
           await _store.save(_subscriptions, generation);
         } on Object {
