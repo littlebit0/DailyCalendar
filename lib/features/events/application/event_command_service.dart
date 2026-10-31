@@ -702,9 +702,12 @@ class EventCommandService {
     bool Function()? isCurrent,
     Set<String>? skippedDeleted,
   }) async {
+    // A batch stops, keeping what it already saved, when a required update appears.
+    bool current() =>
+        !(_blocked?.call() ?? false) && (isCurrent == null || isCurrent());
     final importedIds = <String>{};
     for (final event in events) {
-      if (isCurrent != null && !isCurrent()) break;
+      if (!current()) break;
       CalendarEvent imported;
       try {
         if (resolveLatest != null) {
@@ -713,7 +716,7 @@ class EventCommandService {
           // overwritten by an older snapshot. Returning null keeps the row.
           CalendarEvent? decided;
           CalendarEvent resolve(CalendarEvent? latest, CalendarEvent incoming) {
-            if (isCurrent != null && !isCurrent()) {
+            if (!current()) {
               throw StateError('가져오기 대상이 변경되었습니다.');
             }
             final result = resolveLatest(latest, incoming);
@@ -741,12 +744,12 @@ class EventCommandService {
               : await _repository.mergeRestoredEventsAtomically([
                   event,
                 ], resolve: resolve);
-          if (isCurrent != null && !isCurrent()) break;
+          if (!current()) break;
           if (mutations.isEmpty || decided == null) continue;
           imported = decided!;
         } else {
           final prepared = prepare == null ? event : await prepare(event);
-          if (isCurrent != null && !isCurrent()) break;
+          if (!current()) break;
           if (prepared == null) continue;
           imported = prepared
               .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
@@ -758,7 +761,7 @@ class EventCommandService {
             await _repository.mergeRestoredEventsAtomically(
               [imported],
               resolve: (latest, source) {
-                if (isCurrent != null && !isCurrent() ||
+                if (!current() ||
                     !_isCurrentOwner(source)) {
                   throw StateError('LMS 계정이 변경되었습니다.');
                 }
@@ -816,7 +819,7 @@ class EventCommandService {
       }
 
       importedIds.add(imported.id);
-      if (isCurrent != null && !isCurrent()) break;
+      if (!current()) break;
       if (imported.isDeleted || !_isCurrentOwner(imported)) continue;
       try {
         if (imported.lms != null && imported.completed) {
@@ -830,7 +833,7 @@ class EventCommandService {
       } on Object {
         // Import must preserve the event even if notification scheduling fails.
       }
-      if (isCurrent != null && !isCurrent()) break;
+      if (!current()) break;
       if (!_isCurrentOwner(imported)) break;
       try {
         if (imported.lms != null && imported.completed) {
@@ -841,7 +844,7 @@ class EventCommandService {
       } on Object {
         // Imported events do not enable alarms by default; keep this best-effort.
       }
-      if (isCurrent != null && !isCurrent()) break;
+      if (!current()) break;
       if (!_isCurrentOwner(imported)) break;
       try {
         await _syncService.queueEventUpsert(imported);

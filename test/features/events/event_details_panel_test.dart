@@ -369,6 +369,21 @@ void main() {
         expect(repository.writes, 0);
       });
 
+      test('a batch stops before writing', () async {
+        final event = _event();
+        final (service, repository, gate) = await waitingService(event);
+        final importing = service.importBatch(
+          [event],
+          prepare: (incoming) async {
+            await repository.findById(incoming.id);
+            return incoming;
+          },
+        );
+        gate.complete();
+        expect(await importing, isEmpty);
+        expect(repository.writes, 0);
+      });
+
       test('deletes nothing', () async {
         final event = _event();
         final (service, repository, gate) = await waitingService(event);

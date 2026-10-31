@@ -131,6 +131,7 @@ class _Harness {
     generation: 0,
   );
   var now = DateTime.utc(2026, 9, 26);
+  var updateRequired = false;
   final waits = <Duration>[];
   final requests = <Uri>[];
   final requestTimes = <DateTime>[];
@@ -176,6 +177,7 @@ class _Harness {
         }
       },
       readSession: () => session,
+      blocked: () => updateRequired,
       isAuthenticationError: (error) => error is _AuthRequired,
       now: () => now,
       wait: (duration) async {
@@ -772,6 +774,13 @@ void main() {
         profile.withLmsCategory('basic'),
         expectedGoogleEmail: 'student@example.com',
       );
+      h.updateRequired = true;
+      final upsertsBefore = h.sync.upserts.length;
+      await h.service.applyConfiguredCategory();
+      expect(h.repository.events[first.id]!.category.id, 'study');
+      expect(h.sync.upserts, hasLength(upsertsBefore));
+      h.updateRequired = false;
+
       await h.service.applyConfiguredCategory();
       final updated = h.repository.events[first.id]!;
       expect(updated.category.id, 'basic');

@@ -577,11 +577,13 @@ class LmsSyncService extends ChangeNotifier {
     }
     bool valid() =>
         !_disposed &&
+        !(_blocked?.call() ?? false) &&
         normalizeLmsOwner(
               _settings.dailyAccount()?.googleAccount?.email ?? '',
             ) ==
             owner &&
         _settings.load().academicProfile?.timetableUniversity == school;
+    if (!valid()) return;
     final events = await _repository.allEventsForSync();
     if (!valid()) return;
     await _commands.importBatch(
