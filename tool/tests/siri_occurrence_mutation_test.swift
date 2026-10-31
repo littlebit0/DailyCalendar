@@ -3,7 +3,8 @@ import SQLite3
 let dailySQLiteTransient = unsafeBitCast(-1, to: sqlite3_destructor_type.self)
 let testURL = URL(fileURLWithPath: CommandLine.arguments[1])
 struct DailySiriCategory { let id: String; let colorValue: Int64 }
-enum DailySiriError: Error { case databaseUnavailable, eventNotFound, ambiguousEvent, invalidTime, lmsOriginalReadOnly }
+enum DailySiriError: Error { case databaseUnavailable, eventNotFound, ambiguousEvent, invalidTime, lmsOriginalReadOnly, updateRequired }
+enum DailySiriUpdateRequirement { static var isActive = false }
 enum DailySiriText {
   static func recurrenceScope(title: String, start: Date, entireSeries: Bool) -> String { "scope" }
 }
@@ -165,6 +166,29 @@ let probe = try DailySiriDatabase.add(title: "read failure probe", startAt: prob
 let probeFrom = probeStart.addingTimeInterval(-3600)
 let probeTo = probeStart.addingTimeInterval(7200)
 verify(try DailySiriDatabase.events(withIDs: [probe.id]).count == 1)
+func blockedByUpdate(_ operation: () throws -> Void) {
+  do {
+    try operation()
+    fatalError("a mutation ran during a required update")
+  } catch DailySiriError.updateRequired {
+  } catch {
+    fatalError("unexpected error: \(error)")
+  }
+}
+DailySiriUpdateRequirement.isActive = true
+let changesBeforeBlock = DailySiriEventChangeSignal.changes.count
+blockedByUpdate {
+  _ = try DailySiriDatabase.add(title: "blocked", startAt: probeStart, endAt: probeStart.addingTimeInterval(3600),
+    allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+}
+blockedByUpdate { try DailySiriDatabase.requireEditable(id: probe.id) }
+blockedByUpdate { _ = try DailySiriDatabase.update(id: probe.id, newTitle: "blocked", newStartAt: nil, newEndAt: nil) }
+blockedByUpdate { _ = try DailySiriDatabase.delete(id: probe.id) }
+verify(try DailySiriDatabase.events(withIDs: [probe.id]).first!.title == probe.title)
+verify(try DailySiriDatabase.search("blocked").isEmpty)
+assert(DailySiriEventChangeSignal.changes.count == changesBeforeBlock)
+DailySiriUpdateRequirement.isActive = false
+print("Siri update requirement checks passed")
 var lockHolder: OpaquePointer?
 assert(sqlite3_open(testURL.path, &lockHolder) == SQLITE_OK)
 assert(sqlite3_exec(lockHolder, "BEGIN EXCLUSIVE", nil, nil, nil) == SQLITE_OK)

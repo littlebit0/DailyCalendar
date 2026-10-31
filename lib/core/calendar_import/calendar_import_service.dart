@@ -12,6 +12,11 @@ import 'calendar_import_models.dart';
 import 'google_calendar_source.dart';
 import 'native_calendar_source.dart';
 
+/// A required update was detected before the import committed anything further.
+class CalendarImportCancelled implements Exception {
+  const CalendarImportCancelled();
+}
+
 class CalendarImportService {
   CalendarImportService({
     required NativeCalendarSource nativeSource,
@@ -19,7 +24,9 @@ class CalendarImportService {
     required EventRepository eventRepository,
     required EventCommandService eventCommandService,
     required SettingsRepository settingsRepository,
-  }) : _nativeSource = nativeSource,
+    bool Function()? blocked,
+  }) : _blocked = blocked,
+       _nativeSource = nativeSource,
        _googleSource = googleSource,
        _eventRepository = eventRepository,
        _eventCommandService = eventCommandService,
@@ -30,6 +37,13 @@ class CalendarImportService {
   final EventRepository _eventRepository;
   final EventCommandService _eventCommandService;
   final SettingsRepository _settingsRepository;
+  final bool Function()? _blocked;
+
+  bool get _isBlocked => _blocked?.call() ?? false;
+
+  void _checkNotBlocked() {
+    if (_isBlocked) throw const CalendarImportCancelled();
+  }
 
   NativeCalendarSource get nativeSource => _nativeSource;
 
@@ -42,6 +56,7 @@ class CalendarImportService {
   Future<CalendarImportResult> importCalendars(
     Iterable<ImportableCalendar> calendars,
   ) async {
+    _checkNotBlocked();
     final selected = calendars.toList(growable: false);
     final categoriesByCalendar = await _ensureImportedCategories(selected);
     final nativeCalendars = selected
@@ -54,6 +69,7 @@ class CalendarImportService {
       ...await _nativeSource.loadEvents(nativeCalendars),
       ...await _googleSource.loadEvents(googleCalendars),
     ];
+    _checkNotBlocked();
 
     var skipped = 0;
     final now = DateTime.now();
@@ -103,7 +119,12 @@ class CalendarImportService {
         // Invalid source records are counted after the valid batch is saved.
       }
     }
-    final importedIds = await _eventCommandService.importBatch(pending);
+    _checkNotBlocked();
+    final importedIds = await _eventCommandService.importBatch(
+      pending,
+      isCurrent: () => !_isBlocked,
+    );
+    _checkNotBlocked();
     final invalid = events.length - skipped - pending.length;
     return CalendarImportResult(
       imported: importedIds.length,

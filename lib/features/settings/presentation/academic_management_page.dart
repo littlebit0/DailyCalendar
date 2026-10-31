@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/update/update_required_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/academic/academic_profile.dart';
@@ -24,67 +25,69 @@ class AcademicManagementPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: DailyUi.pageBackground(context),
       appBar: DailyNavigationBar(title: context.tr('학사 관리')),
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
-          child: ListView(
-            padding: EdgeInsets.fromLTRB(
-              DailyUi.isDesktop || androidTablet ? 24 : 16,
-              10,
-              DailyUi.isDesktop || androidTablet ? 24 : 16,
-              28,
-            ),
-            children: [
-              Material(
-                color: DailyUi.groupedSurface(context),
-                shape: RoundedRectangleBorder(
-                  side: BorderSide(
-                    color: DailyUi.separator(context).withValues(alpha: 0.78),
-                  ),
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                clipBehavior: Clip.antiAlias,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 3,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _AcademicDestination(
-                        key: const ValueKey('academic-profile-settings'),
-                        icon: Icons.school_outlined,
-                        title: context.tr('학사 정보'),
-                        subtitle: _AcademicProfileSummary(profile: profile),
-                        page: const AcademicProfilePage(),
-                      ),
-                      const Divider(height: 1),
-                      _AcademicDestination(
-                        key: const ValueKey('academic-lms-connection'),
-                        icon: Icons.link_outlined,
-                        title: context.tr('학교 LMS 연결'),
-                        page: const LmsSettingsPage(),
-                      ),
-                      const Divider(height: 1),
-                      _AcademicDestination(
-                        key: const ValueKey('academic-calendar-settings'),
-                        icon: Icons.event_note_outlined,
-                        title: academicText(context, AcademicText.title),
-                        page: const AcademicCalendarPage(),
-                      ),
-                      const Divider(height: 1),
-                      _AcademicDestination(
-                        key: const ValueKey('timetable-settings-navigation'),
-                        icon: Icons.calendar_view_week_outlined,
-                        title: context.tr('시간표 설정'),
-                        page: const TimetableSettingsPage(),
-                      ),
-                    ],
-                  ),
-                ),
+      body: UpdateRequiredGate(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 900),
+            child: ListView(
+              padding: EdgeInsets.fromLTRB(
+                DailyUi.isDesktop || androidTablet ? 24 : 16,
+                10,
+                DailyUi.isDesktop || androidTablet ? 24 : 16,
+                28,
               ),
-            ],
+              children: [
+                Material(
+                  color: DailyUi.groupedSurface(context),
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: DailyUi.separator(context).withValues(alpha: 0.78),
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 3,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _AcademicDestination(
+                          key: const ValueKey('academic-profile-settings'),
+                          icon: Icons.school_outlined,
+                          title: context.tr('학사 정보'),
+                          subtitle: _AcademicProfileSummary(profile: profile),
+                          page: const AcademicProfilePage(),
+                        ),
+                        const Divider(height: 1),
+                        _AcademicDestination(
+                          key: const ValueKey('academic-lms-connection'),
+                          icon: Icons.link_outlined,
+                          title: context.tr('학교 LMS 연결'),
+                          page: const LmsSettingsPage(),
+                        ),
+                        const Divider(height: 1),
+                        _AcademicDestination(
+                          key: const ValueKey('academic-calendar-settings'),
+                          icon: Icons.event_note_outlined,
+                          title: academicText(context, AcademicText.title),
+                          page: const AcademicCalendarPage(),
+                        ),
+                        const Divider(height: 1),
+                        _AcademicDestination(
+                          key: const ValueKey('timetable-settings-navigation'),
+                          icon: Icons.calendar_view_week_outlined,
+                          title: context.tr('시간표 설정'),
+                          page: const TimetableSettingsPage(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

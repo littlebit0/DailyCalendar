@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../core/update/update_required_view.dart';
 import '../../../core/academic/university_support_policy.dart';
 import '../../../core/widgets/smooth_mouse_wheel_scroll_controller.dart';
 import '../domain/course_organization.dart';
@@ -38,6 +39,7 @@ class UniversityCoursePage extends StatelessWidget {
         initialCampus: initialCampus,
         university: university,
         onAdd: (course, mode) async {
+          if (blockedByRequiredUpdateIn(context)) return false;
           await store.save(
             TimetableClass.fromJson({
               ...course.toTimetable(id: const Uuid().v4(), mode: mode).toJson(),

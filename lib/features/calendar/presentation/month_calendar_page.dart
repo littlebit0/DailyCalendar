@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../core/update/update_required_view.dart';
 import 'dart:math' as math;
 import 'dart:ui' as ui show ImageFilter, TextDirection;
 
@@ -262,9 +263,11 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                     viewMode,
                                   ),
                             child: _timetableSelected
-                                ? const AcademicFeatureGate(
+                                ? const UpdateRequiredGate(
                                     key: ValueKey<int>(-1),
-                                    child: TimetablePage(),
+                                    child: AcademicFeatureGate(
+                                      child: TimetablePage(),
+                                    ),
                                   )
                                 : _AndroidTabletCalendarFrame(
                                     key: ValueKey<int>(
@@ -282,31 +285,35 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                               children: [
                                                 Positioned.fill(
                                                   child: _QuickMonthPageView(
-                                              month: month,
-                                              onMonthChanged: (target) =>
-                                                  _setVisibleMonth(
-                                                    ref,
-                                                    target,
-                                                    ref.read(
-                                                      selectedDateProvider,
-                                                    ),
+                                                    month: month,
+                                                    onMonthChanged: (target) =>
+                                                        _setVisibleMonth(
+                                                          ref,
+                                                          target,
+                                                          ref.read(
+                                                            selectedDateProvider,
+                                                          ),
+                                                        ),
+                                                    pageBuilder:
+                                                        (
+                                                          context,
+                                                          pageMonth,
+                                                        ) => Consumer(
+                                                          builder:
+                                                              (
+                                                                context,
+                                                                pageRef,
+                                                                _,
+                                                              ) =>
+                                                                  _buildQuickAccessPage(
+                                                                    context,
+                                                                    pageRef,
+                                                                    settings,
+                                                                    searchQuery,
+                                                                    pageMonth,
+                                                                  ),
+                                                        ),
                                                   ),
-                                              pageBuilder:
-                                                  (
-                                                    context,
-                                                    pageMonth,
-                                                  ) => Consumer(
-                                                    builder:
-                                                        (context, pageRef, _) =>
-                                                            _buildQuickAccessPage(
-                                                              context,
-                                                              pageRef,
-                                                              settings,
-                                                              searchQuery,
-                                                              pageMonth,
-                                                            ),
-                                                  ),
-                                            ),
                                                 ),
                                                 if (_searchOpen)
                                                   // The search button also works
@@ -497,18 +504,17 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   /// Height the search field, its padding and a loading/empty row need.
   static const _inlineSearchChromeHeight = 110.0;
 
-  _InlineSearchPanel _buildInlineSearchPanel({
-    double maxResultsHeight = 260,
-  }) => _InlineSearchPanel(
-    maxResultsHeight: maxResultsHeight,
-    controller: _searchController,
-    focusNode: _searchFocusNode,
-    results: _searchResults,
-    onChanged: _handleSearchChanged,
-    onSubmitted: _runSearch,
-    onClose: _closeSearch,
-    onEventSelected: _selectSearchResult,
-  );
+  _InlineSearchPanel _buildInlineSearchPanel({double maxResultsHeight = 260}) =>
+      _InlineSearchPanel(
+        maxResultsHeight: maxResultsHeight,
+        controller: _searchController,
+        focusNode: _searchFocusNode,
+        results: _searchResults,
+        onChanged: _handleSearchChanged,
+        onSubmitted: _runSearch,
+        onClose: _closeSearch,
+        onEventSelected: _selectSearchResult,
+      );
 
   void _toggleSearch() {
     final opening = !_searchOpen;
@@ -1204,21 +1210,29 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                             index.toDouble(),
                                           ),
                                           child: _QuickTodoCategoryCard(
-                                          group: groups[index],
-                                          onCompletedChanged:
-                                              (event, completed) => ref
-                                                  .read(
-                                                    eventCommandServiceProvider,
-                                                  )
-                                                  .setCompleted(
-                                                    event,
-                                                    completed,
-                                                  ),
-                                          onOpen: (event) =>
-                                              _showQuickEventDetails(
-                                                context,
-                                                event,
-                                              ),
+                                            group: groups[index],
+                                            onCompletedChanged:
+                                                (event, completed) async {
+                                                  if (blockedByRequiredUpdate(
+                                                    context,
+                                                    ref,
+                                                  )) {
+                                                    return;
+                                                  }
+                                                  await ref
+                                                      .read(
+                                                        eventCommandServiceProvider,
+                                                      )
+                                                      .setCompleted(
+                                                        event,
+                                                        completed,
+                                                      );
+                                                },
+                                            onOpen: (event) =>
+                                                _showQuickEventDetails(
+                                                  context,
+                                                  event,
+                                                ),
                                           ),
                                         ),
                                       ],
@@ -2940,7 +2954,7 @@ class _CalendarWeekPage extends ConsumerWidget {
             days: days,
             events: visibleEvents,
             builder: (scheduleEvents, classActions) => ScheduleTimelineView(
-              eventActions: classActions,
+              eventActions: _gatedClassActions(context, ref, classActions),
               days: days,
               holidayDates: {
                 for (final day in days)
@@ -3303,7 +3317,7 @@ class _CalendarDayPage extends ConsumerWidget {
             days: [date],
             events: visibleEvents,
             builder: (scheduleEvents, classActions) => ScheduleTimelineView(
-              eventActions: classActions,
+              eventActions: _gatedClassActions(context, ref, classActions),
               days: [date],
               showDateHeader: false,
               events: scheduleEvents,
@@ -4576,6 +4590,7 @@ class _CalendarMonthPage extends ConsumerWidget {
     if (event.readOnly || event.systemEvent || event.holiday) {
       return;
     }
+    if (blockedByRequiredUpdate(context, ref)) return;
     final sourceDate = _dateOnly(event.startAt);
     final normalizedTarget = _dateOnly(targetDate);
     var movedEvent = event;
@@ -4584,6 +4599,10 @@ class _CalendarMonthPage extends ConsumerWidget {
       if (event.isRecurring) {
         final scope = await _showRecurringDragScopeDialog(context);
         if (scope == null || !context.mounted) {
+          return;
+        }
+        if (updateRequired(ref)) {
+          if (context.mounted) showUpdateRequiredNotice(context, ref);
           return;
         }
         final result = await _moveRecurringEvent(
@@ -4736,6 +4755,7 @@ Future<void> _handleCalendarEventDrop(
   if (!calendarEventCanMove(event)) {
     return;
   }
+  if (blockedByRequiredUpdate(context, ref)) return;
   final sourceDate = _dateOnly(event.startAt);
   final normalizedTarget = _dateOnly(targetDate);
   final rangeStart = sourceDate.isBefore(normalizedTarget)
@@ -4763,12 +4783,20 @@ Future<void> _handleCalendarEventDrop(
   if (!context.mounted) {
     return;
   }
+  if (updateRequired(ref)) {
+    if (context.mounted) showUpdateRequiredNotice(context, ref);
+    return;
+  }
 
   var movedEvent = event;
   if (!_sameDay(sourceDate, normalizedTarget)) {
     if (event.isRecurring) {
       final scope = await _showCalendarRecurringDragScopeDialog(context);
       if (scope == null || !context.mounted) {
+        return;
+      }
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
         return;
       }
       final result = await _moveRecurringCalendarEvent(
@@ -4808,6 +4836,7 @@ Future<void> _handleCalendarEventTimeDrop(
   if (!calendarEventCanMove(event) || event.allDay) {
     return;
   }
+  if (blockedByRequiredUpdate(context, ref)) return;
   final sourceDate = _dateOnly(event.startAt);
   final targetDate = _dateOnly(targetStart);
   final rangeStart = sourceDate.isBefore(targetDate) ? sourceDate : targetDate;
@@ -4833,12 +4862,20 @@ Future<void> _handleCalendarEventTimeDrop(
   if (!context.mounted) {
     return;
   }
+  if (updateRequired(ref)) {
+    if (context.mounted) showUpdateRequiredNotice(context, ref);
+    return;
+  }
 
   var movedEvent = event;
   if (event.startAt != targetStart) {
     if (event.isRecurring) {
       final scope = await _showCalendarRecurringDragScopeDialog(context);
       if (scope == null || !context.mounted) {
+        return;
+      }
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
         return;
       }
       final result = await _moveRecurringCalendarEventToStart(
@@ -4905,6 +4942,10 @@ Future<CalendarEvent?> _moveRecurringCalendarEventToStart(
   final commandService = ref.read(eventCommandServiceProvider);
   final base = await repository.findById(occurrence.id);
   if (base == null) {
+    return null;
+  }
+  if (updateRequired(ref)) {
+    if (ref.context.mounted) showUpdateRequiredNotice(ref.context, ref);
     return null;
   }
   switch (scope) {
@@ -5103,6 +5144,7 @@ Future<void> _openRangeEventEditor(
   List<EventCategory> categories,
   List<int> defaultReminderMinutesList,
 ) async {
+  if (blockedByRequiredUpdate(context, ref)) return;
   final analytics = ref.read(productAnalyticsProvider);
   final stopwatch = Stopwatch()..start();
   unawaited(
@@ -5145,6 +5187,10 @@ Future<void> _openRangeEventEditor(
         .catchError((_) {}),
   );
   if (draft != null) {
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
+      return;
+    }
     await ref.read(eventCommandServiceProvider).create(draft);
   }
 }
@@ -5270,10 +5316,7 @@ class _CalendarHeader extends ConsumerWidget {
                               20 -
                               actionSize * (4 + lmsActions.length) -
                               44)
-                          .clamp(
-                        40.0,
-                        periodLabelMaxWidth,
-                      )
+                          .clamp(40.0, periodLabelMaxWidth)
                     : periodLabelMaxWidth)
               : double.infinity,
         ),
@@ -5570,9 +5613,9 @@ class _CalendarHeader extends ConsumerWidget {
     // The refresh can outlast this screen (for example local data was reset).
     if (!context.mounted) return;
     final failed =
-        controller.needsLogin ||
-        controller.sync.state == LmsSyncState.fallback;
-    final partial = controller.sync.lastResult?.hasUnverifiedInformation == true;
+        controller.needsLogin || controller.sync.state == LmsSyncState.fallback;
+    final partial =
+        controller.sync.lastResult?.hasUnverifiedInformation == true;
     final message = failed
         ? (controller.lastLoginFailure?.message ??
               '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.')
@@ -8150,3 +8193,38 @@ String _weekEventMeasureKey(CalendarEvent event, DateTime date) {
 DateTime _dateOnly(DateTime date) {
   return DateTime(date.year, date.month, date.day);
 }
+
+Map<String, VoidCallback> _gatedClassActions(
+  BuildContext context,
+  WidgetRef ref,
+  Map<String, VoidCallback> actions,
+) => {
+  for (final entry in actions.entries)
+    entry.key: () {
+      if (blockedByRequiredUpdate(context, ref)) return;
+      entry.value();
+    },
+};
+
+@visibleForTesting
+Map<String, VoidCallback> debugGatedClassActions(
+  BuildContext context,
+  WidgetRef ref,
+  Map<String, VoidCallback> actions,
+) => _gatedClassActions(context, ref, actions);
+
+@visibleForTesting
+Future<void> debugDropCalendarEventAtTime(
+  BuildContext context,
+  WidgetRef ref,
+  CalendarEvent event,
+  DateTime targetStart,
+) => _handleCalendarEventTimeDrop(context, ref, event, targetStart);
+
+@visibleForTesting
+Future<void> debugDropCalendarEventOnDate(
+  BuildContext context,
+  WidgetRef ref,
+  CalendarEvent event,
+  DateTime targetDate,
+) => _handleCalendarEventDrop(context, ref, event, targetDate, 0);

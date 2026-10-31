@@ -813,6 +813,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
       _widgetTodoRunner.request();
 
   Future<void> _processPendingWidgetTodoActionsImpl() async {
+    // Unacknowledged requests stay queued and apply once the app is updated.
+    if (ref.read(requiredUpdateVersionProvider).value != null) return;
     final widgetService = ref.read(calendarWidgetServiceProvider);
     final actions = await widgetService.pendingTodoActions();
     if (actions.isEmpty) return;
@@ -831,6 +833,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
         continue;
       }
       final event = await repository.findById(action.eventId);
+      if (ref.read(requiredUpdateVersionProvider).value != null) break;
       if (event == null || event.isDeleted) {
         acknowledged.add(action.token);
         continue;
@@ -985,6 +988,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     switch (state) {
       case AppLifecycleState.resumed:
         ref.read(lmsControllerProvider).setForeground(true);
+        unawaited(ref.read(updateRequirementControllerProvider)?.check());
         _syncRestoreRetryTimer?.cancel();
         _syncRestoreRetryIndex = 0;
         // App Intents update the shared SQLite file outside Drift's active
@@ -1181,6 +1185,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
       }
     }
     if (!mounted) return;
+    if (ref.read(requiredUpdateVersionProvider).value != null) return;
     // Do not instantiate network/import services for users without a subscription.
     try {
       final store = ref.read(settingsRepositoryProvider).academicStore;

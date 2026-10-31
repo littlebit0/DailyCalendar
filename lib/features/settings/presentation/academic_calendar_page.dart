@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/update/update_required_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -98,6 +99,8 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
   }
 
   Future<void> _perform(Future<void> Function() action) async {
+    // A dialog can outlive the gate that replaced this page underneath it.
+    if (blockedByRequiredUpdate(context, ref)) return;
     setState(() => _localError = false);
     try {
       await action();
@@ -121,24 +124,82 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
     final profile = settings.academicProfile;
     final sourceId = ref.watch(academicSourceIdProvider);
     final service = ref.watch(academicCalendarServiceProvider);
-    return ListenableBuilder(
-      listenable: service,
-      builder: (context, _) {
-        final source = service.sources
-            .where((s) => s.id == sourceId)
-            .firstOrNull;
-        if (source == null) {
-          if (!service.subscriptions.keys.any(service.canManage)) {
+    return UpdateRequiredPageGate(
+      title: text(AcademicText.title),
+      child: ListenableBuilder(
+        listenable: service,
+        builder: (context, _) {
+          final source = service.sources
+              .where((s) => s.id == sourceId)
+              .firstOrNull;
+          if (source == null) {
+            if (!service.subscriptions.keys.any(service.canManage)) {
+              return Scaffold(
+                appBar: DailyNavigationBar(title: text(AcademicText.title)),
+                body: sourceId == null
+                    ? const UpdateRequiredGate(
+                        child: AcademicFeatureGate(
+                          calendar: true,
+                          child: SizedBox.shrink(),
+                        ),
+                      )
+                    : Center(child: Text(text(AcademicText.unavailable))),
+              );
+            }
             return Scaffold(
+              backgroundColor: DailyUi.pageBackground(context),
               appBar: DailyNavigationBar(title: text(AcademicText.title)),
-              body: sourceId == null
-                  ? const AcademicFeatureGate(
-                      calendar: true,
-                      child: SizedBox.shrink(),
-                    )
-                  : Center(child: Text(text(AcademicText.unavailable))),
+              body: DailyAdaptiveBody(
+                child: ListView(
+                  children: [
+                    if (service.busy) const LinearProgressIndicator(),
+                    Padding(
+                      key: const ValueKey('academic-source-missing'),
+                      padding: const EdgeInsets.only(top: 16),
+                      child: Text(
+                        text(
+                          sourceId == null
+                              ? AcademicText.notSupported
+                              : AcademicText.unavailable,
+                        ),
+                      ),
+                    ),
+                    // Disconnect or removal failures must stay visible here too.
+                    if (service.unavailable || _localError)
+                      Padding(
+                        key: const ValueKey('academic-operation-failed'),
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Text(
+                          text(AcademicText.unavailable),
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                        ),
+                      ),
+                    ..._subscriptionSection(service, settings),
+                    const SizedBox(height: 32),
+                  ],
+                ),
+              ),
             );
           }
+          final preview = _preview;
+          final currentPreview =
+              preview != null &&
+                  _isCurrentPreview(preview.source.id, _previewAccount)
+              ? preview
+              : null;
+          final color =
+              settings.categories
+                  .where(
+                    (c) =>
+                        c.id == AcademicCalendarService.categoryId(source.id),
+                  )
+                  .firstOrNull
+                  ?.colorValue ??
+              _draftColors[source.id] ??
+              EventCategory.basic.colorValue;
+          final result = service.result;
           return Scaffold(
             backgroundColor: DailyUi.pageBackground(context),
             appBar: DailyNavigationBar(title: text(AcademicText.title)),
@@ -146,22 +207,130 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
               child: ListView(
                 children: [
                   if (service.busy) const LinearProgressIndicator(),
-                  Padding(
-                    key: const ValueKey('academic-source-missing'),
-                    padding: const EdgeInsets.only(top: 16),
-                    child: Text(
-                      text(
-                        sourceId == null
-                            ? AcademicText.notSupported
-                            : AcademicText.unavailable,
+                  ListTile(
+                    key: const ValueKey('academic-school'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(profile!.displayName),
+                    subtitle: Text(context.tr('저장된 학사 정보')),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: service.busy
+                        ? null
+                        : () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute<bool>(
+                                builder: (_) => const AcademicProfilePage(),
+                              ),
+                            );
+                            if (mounted) setState(_clearPreview);
+                          },
+                  ),
+                  const SizedBox(height: 16),
+                  DropdownButtonFormField<int>(
+                    key: const ValueKey('academic-year'),
+                    initialValue: _year,
+                    decoration: InputDecoration(
+                      labelText: text(AcademicText.year),
+                    ),
+                    items: [
+                      for (
+                        var year = DateTime.now().year - 1;
+                        year <= DateTime.now().year + 1;
+                        year++
+                      )
+                        DropdownMenuItem(value: year, child: Text('$year')),
+                    ],
+                    onChanged: service.busy
+                        ? null
+                        : (value) => setState(() {
+                            _year = value!;
+                            _clearPreview();
+                          }),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    text(AcademicText.yearRange, {'year': _year}),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                  const SizedBox(height: 16),
+                  ListTile(
+                    key: ValueKey('academic-color-${source.id}'),
+                    contentPadding: EdgeInsets.zero,
+                    title: Text(text(AcademicText.categoryColor)),
+                    trailing: IconButton(
+                      tooltip: text(AcademicText.categoryColor),
+                      onPressed: service.busy
+                          ? null
+                          : () => _pickColor(source, color),
+                      icon: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: Color(color),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.outline,
+                          ),
+                        ),
                       ),
                     ),
+                    onTap: service.busy
+                        ? null
+                        : () => _pickColor(source, color),
                   ),
-                  // Disconnect or removal failures must stay visible here too.
+                  const SizedBox(height: 8),
+                  DailyPrimaryButton(
+                    key: const ValueKey('academic-preview'),
+                    label: text(AcademicText.preview),
+                    icon: Icons.school_outlined,
+                    onPressed: service.busy
+                        ? null
+                        : () => _perform(() async {
+                            final account = _currentAccount;
+                            final request = ++_previewRequest;
+                            final preview = await service.preview(
+                              source,
+                              _year,
+                            );
+                            if (!mounted ||
+                                request != _previewRequest ||
+                                !_isCurrentPreview(source.id, account)) {
+                              return;
+                            }
+                            setState(() {
+                              _preview = preview;
+                              _previewAccount = account;
+                              _selected
+                                ..clear()
+                                ..addAll(
+                                  preview.events
+                                      .map((e) => e.sourceId)
+                                      .toSet()
+                                      .difference(
+                                        service.excludedSourceIds(
+                                          source.id,
+                                          preview.events,
+                                        ),
+                                      ),
+                                );
+                            });
+                          }),
+                  ),
+                  TextButton.icon(
+                    onPressed: () => _perform(() async {
+                      if (!await launchUrl(
+                        source.website,
+                        mode: LaunchMode.externalApplication,
+                      )) {
+                        throw StateError('Cannot open source');
+                      }
+                    }),
+                    icon: const Icon(Icons.open_in_new),
+                    label: Text(text(AcademicText.source)),
+                  ),
                   if (service.unavailable || _localError)
                     Padding(
-                      key: const ValueKey('academic-operation-failed'),
-                      padding: const EdgeInsets.only(top: 12),
+                      padding: const EdgeInsets.symmetric(vertical: 12),
                       child: Text(
                         text(AcademicText.unavailable),
                         style: TextStyle(
@@ -169,273 +338,122 @@ class _AcademicCalendarPageState extends ConsumerState<AcademicCalendarPage> {
                         ),
                       ),
                     ),
-                  ..._subscriptionSection(service, settings),
+                  if (result != null) ...[
+                    Text(
+                      text(AcademicText.result, {
+                        'added': result.added,
+                        'updated': result.updated,
+                      }),
+                    ),
+                    if (result.preserved > 0)
+                      Text(
+                        text(AcademicText.preserved, {
+                          'count': result.preserved,
+                        }),
+                      ),
+                    if (result.failed > 0)
+                      Text(text(AcademicText.failed, {'count': result.failed})),
+                  ],
+                  if (currentPreview case final preview?) ...[
+                    const Divider(height: 32),
+                    Text(
+                      text(AcademicText.selection, {'count': _selected.length}),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    Text(
+                      text(AcademicText.selectionNote),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(text(AcademicText.selectAll)),
+                      value: _selected.length == preview.events.length,
+                      onChanged: service.busy
+                          ? null
+                          : (value) => setState(() {
+                              _selected.clear();
+                              if (value == true) {
+                                _selected.addAll(
+                                  preview.events.map((e) => e.sourceId),
+                                );
+                              }
+                            }),
+                    ),
+                    for (final event in preview.events)
+                      CheckboxListTile(
+                        key: ValueKey('academic-event-${event.sourceId}'),
+                        contentPadding: EdgeInsets.zero,
+                        title: Text(event.title),
+                        secondary: Icon(
+                          Icons.circle,
+                          size: 12,
+                          color: Color(color),
+                        ),
+                        subtitle: Text(
+                          '${date(event.start)} – ${date(DateTime(event.end.year, event.end.month, event.end.day - 1))}',
+                        ),
+                        value: _selected.contains(event.sourceId),
+                        onChanged: service.busy
+                            ? null
+                            : (value) => setState(() {
+                                if (value == true) {
+                                  _selected.add(event.sourceId);
+                                } else {
+                                  _selected.remove(event.sourceId);
+                                }
+                              }),
+                      ),
+                  ],
+                  if (service.subscriptions.keys.any(service.canManage))
+                    ..._subscriptionSection(service, settings),
                   const SizedBox(height: 32),
                 ],
               ),
             ),
+            bottomNavigationBar: currentPreview == null
+                ? null
+                : SafeArea(
+                    top: false,
+                    child: Align(
+                      heightFactor: 1,
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 720),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(18, 10, 18, 12),
+                          child: DailyPrimaryButton(
+                            key: const ValueKey('academic-import'),
+                            label: text(AcademicText.importSelected),
+                            icon: Icons.download_outlined,
+                            busy: service.busy,
+                            onPressed: service.busy || _selected.isEmpty
+                                ? null
+                                : () => _perform(() async {
+                                    if (!identical(_preview, currentPreview) ||
+                                        !_isCurrentPreview(
+                                          currentPreview.source.id,
+                                          _previewAccount,
+                                        )) {
+                                      setState(_clearPreview);
+                                      return;
+                                    }
+                                    await service.importSelection(
+                                      currentPreview,
+                                      Set.of(_selected),
+                                      colorValue:
+                                          _draftColors[currentPreview
+                                              .source
+                                              .id],
+                                    );
+                                    if (mounted) setState(_clearPreview);
+                                  }),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
           );
-        }
-        final preview = _preview;
-        final currentPreview =
-            preview != null &&
-                _isCurrentPreview(preview.source.id, _previewAccount)
-            ? preview
-            : null;
-        final color =
-            settings.categories
-                .where(
-                  (c) => c.id == AcademicCalendarService.categoryId(source.id),
-                )
-                .firstOrNull
-                ?.colorValue ??
-            _draftColors[source.id] ??
-            EventCategory.basic.colorValue;
-        final result = service.result;
-        return Scaffold(
-          backgroundColor: DailyUi.pageBackground(context),
-          appBar: DailyNavigationBar(title: text(AcademicText.title)),
-          body: DailyAdaptiveBody(
-            child: ListView(
-              children: [
-                if (service.busy) const LinearProgressIndicator(),
-                ListTile(
-                  key: const ValueKey('academic-school'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(profile!.displayName),
-                  subtitle: Text(context.tr('저장된 학사 정보')),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: service.busy
-                      ? null
-                      : () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute<bool>(
-                              builder: (_) => const AcademicProfilePage(),
-                            ),
-                          );
-                          if (mounted) setState(_clearPreview);
-                        },
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<int>(
-                  key: const ValueKey('academic-year'),
-                  initialValue: _year,
-                  decoration: InputDecoration(
-                    labelText: text(AcademicText.year),
-                  ),
-                  items: [
-                    for (
-                      var year = DateTime.now().year - 1;
-                      year <= DateTime.now().year + 1;
-                      year++
-                    )
-                      DropdownMenuItem(value: year, child: Text('$year')),
-                  ],
-                  onChanged: service.busy
-                      ? null
-                      : (value) => setState(() {
-                          _year = value!;
-                          _clearPreview();
-                        }),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  text(AcademicText.yearRange, {'year': _year}),
-                  style: Theme.of(context).textTheme.bodySmall,
-                ),
-                const SizedBox(height: 16),
-                ListTile(
-                  key: ValueKey('academic-color-${source.id}'),
-                  contentPadding: EdgeInsets.zero,
-                  title: Text(text(AcademicText.categoryColor)),
-                  trailing: IconButton(
-                    tooltip: text(AcademicText.categoryColor),
-                    onPressed: service.busy
-                        ? null
-                        : () => _pickColor(source, color),
-                    icon: Container(
-                      width: 28,
-                      height: 28,
-                      decoration: BoxDecoration(
-                        color: Color(color),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                      ),
-                    ),
-                  ),
-                  onTap: service.busy ? null : () => _pickColor(source, color),
-                ),
-                const SizedBox(height: 8),
-                DailyPrimaryButton(
-                  key: const ValueKey('academic-preview'),
-                  label: text(AcademicText.preview),
-                  icon: Icons.school_outlined,
-                  onPressed: service.busy
-                      ? null
-                      : () => _perform(() async {
-                          final account = _currentAccount;
-                          final request = ++_previewRequest;
-                          final preview = await service.preview(source, _year);
-                          if (!mounted ||
-                              request != _previewRequest ||
-                              !_isCurrentPreview(source.id, account)) {
-                            return;
-                          }
-                          setState(() {
-                            _preview = preview;
-                            _previewAccount = account;
-                            _selected
-                              ..clear()
-                              ..addAll(
-                                preview.events
-                                    .map((e) => e.sourceId)
-                                    .toSet()
-                                    .difference(
-                                      service.excludedSourceIds(
-                                        source.id,
-                                        preview.events,
-                                      ),
-                                    ),
-                              );
-                          });
-                        }),
-                ),
-                TextButton.icon(
-                  onPressed: () => _perform(() async {
-                    if (!await launchUrl(
-                      source.website,
-                      mode: LaunchMode.externalApplication,
-                    )) {
-                      throw StateError('Cannot open source');
-                    }
-                  }),
-                  icon: const Icon(Icons.open_in_new),
-                  label: Text(text(AcademicText.source)),
-                ),
-                if (service.unavailable || _localError)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Text(
-                      text(AcademicText.unavailable),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                  ),
-                if (result != null) ...[
-                  Text(
-                    text(AcademicText.result, {
-                      'added': result.added,
-                      'updated': result.updated,
-                    }),
-                  ),
-                  if (result.preserved > 0)
-                    Text(
-                      text(AcademicText.preserved, {'count': result.preserved}),
-                    ),
-                  if (result.failed > 0)
-                    Text(text(AcademicText.failed, {'count': result.failed})),
-                ],
-                if (currentPreview case final preview?) ...[
-                  const Divider(height: 32),
-                  Text(
-                    text(AcademicText.selection, {'count': _selected.length}),
-                    style: Theme.of(context).textTheme.titleMedium,
-                  ),
-                  Text(
-                    text(AcademicText.selectionNote),
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  CheckboxListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(text(AcademicText.selectAll)),
-                    value: _selected.length == preview.events.length,
-                    onChanged: service.busy
-                        ? null
-                        : (value) => setState(() {
-                            _selected.clear();
-                            if (value == true) {
-                              _selected.addAll(
-                                preview.events.map((e) => e.sourceId),
-                              );
-                            }
-                          }),
-                  ),
-                  for (final event in preview.events)
-                    CheckboxListTile(
-                      key: ValueKey('academic-event-${event.sourceId}'),
-                      contentPadding: EdgeInsets.zero,
-                      title: Text(event.title),
-                      secondary: Icon(
-                        Icons.circle,
-                        size: 12,
-                        color: Color(color),
-                      ),
-                      subtitle: Text(
-                        '${date(event.start)} – ${date(DateTime(event.end.year, event.end.month, event.end.day - 1))}',
-                      ),
-                      value: _selected.contains(event.sourceId),
-                      onChanged: service.busy
-                          ? null
-                          : (value) => setState(() {
-                              if (value == true) {
-                                _selected.add(event.sourceId);
-                              } else {
-                                _selected.remove(event.sourceId);
-                              }
-                            }),
-                    ),
-                ],
-                if (service.subscriptions.keys.any(service.canManage))
-                  ..._subscriptionSection(service, settings),
-                const SizedBox(height: 32),
-              ],
-            ),
-          ),
-          bottomNavigationBar: currentPreview == null
-              ? null
-              : SafeArea(
-                  top: false,
-                  child: Align(
-                    heightFactor: 1,
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 720),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 10, 18, 12),
-                        child: DailyPrimaryButton(
-                          key: const ValueKey('academic-import'),
-                          label: text(AcademicText.importSelected),
-                          icon: Icons.download_outlined,
-                          busy: service.busy,
-                          onPressed: service.busy || _selected.isEmpty
-                              ? null
-                              : () => _perform(() async {
-                                  if (!identical(_preview, currentPreview) ||
-                                      !_isCurrentPreview(
-                                        currentPreview.source.id,
-                                        _previewAccount,
-                                      )) {
-                                    setState(_clearPreview);
-                                    return;
-                                  }
-                                  await service.importSelection(
-                                    currentPreview,
-                                    Set.of(_selected),
-                                    colorValue:
-                                        _draftColors[currentPreview.source.id],
-                                  );
-                                  if (mounted) setState(_clearPreview);
-                                }),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-        );
-      },
+        },
+      ),
     );
   }
 

@@ -35,6 +35,14 @@ class RunnerTests: XCTestCase {
     XCTAssertEqual(calendar.component(.day, from: endAt), 11)
   }
 
+  func testSiriUpdateRequirementComparesVersionsLikeFlutter() {
+    XCTAssertTrue(DailySiriUpdateRequirement.isNewer("4.1.0", than: "4.0.9"))
+    XCTAssertTrue(DailySiriUpdateRequirement.isNewer("4.10", than: "4.9.9"))
+    XCTAssertFalse(DailySiriUpdateRequirement.isNewer("4.1.0", than: "4.1"))
+    XCTAssertFalse(DailySiriUpdateRequirement.isNewer("4.0.9", than: "4.1.0"))
+    XCTAssertFalse(DailySiriUpdateRequirement.isNewer("4.1.0-beta", than: "4.1.0"))
+  }
+
   func testSiriLanguageFollowsSupportedSystemLanguage() {
     XCTAssertEqual(DailySiriLanguage.resolve("ko-KR"), .korean)
     XCTAssertEqual(DailySiriLanguage.resolve("en-US"), .english)

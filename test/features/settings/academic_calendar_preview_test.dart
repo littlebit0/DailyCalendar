@@ -100,8 +100,10 @@ class _CalendarService extends ChangeNotifier
 
   /// Fails like a storage or database error part-way through removal.
   bool failRemoval = false;
+  int removals = 0;
   @override
   Future<void> removeImported(String universityId) async {
+    removals++;
     if (failRemoval) {
       unavailable = true;
       notifyListeners();
@@ -121,6 +123,7 @@ void main() {
   late _Source smu;
   late _Source jnu;
   late _CalendarService service;
+  late ValueNotifier<String?> updateVersion;
 
   setUp(() async {
     SharedPreferences.setMockInitialValues({
@@ -137,8 +140,10 @@ void main() {
     smu = _Source('smu', '상명대학교');
     jnu = _Source('jnu', '전남대학교');
     service = _CalendarService([smu, jnu]);
+    updateVersion = ValueNotifier<String?>(null);
     container = ProviderContainer(
       overrides: [
+        requiredUpdateVersionProvider.overrideWithValue(updateVersion),
         settingsRepositoryProvider.overrideWithValue(settings),
         academicCalendarServiceProvider.overrideWithValue(service),
         academicSourceRegistrationsProvider.overrideWithValue([
@@ -194,6 +199,27 @@ void main() {
     });
     container.read(appSettingsProvider.notifier).state = settings.load();
   }
+
+  testWidgets('a release found while the screen is open replaces it', (
+    tester,
+  ) async {
+    service.retained = {
+      'smu': AcademicSubscription(universityId: 'smu', year: 2026),
+    };
+    await mount(tester);
+    expect(find.text('상명대학교 · 2026'), findsOneWidget);
+    expect(find.byIcon(Icons.refresh), findsOneWidget);
+
+    updateVersion.value = '4.1.0';
+    await tester.pumpAndSettle();
+    expect(find.text('업데이트가 필요합니다'), findsOneWidget);
+    expect(find.text('상명대학교 · 2026'), findsNothing);
+    expect(find.byIcon(Icons.refresh), findsNothing);
+
+    updateVersion.value = null;
+    await tester.pumpAndSettle();
+    expect(find.text('상명대학교 · 2026'), findsOneWidget);
+  });
 
   testWidgets(
     'retained subscription without a registered adapter renders without refresh',
@@ -254,6 +280,23 @@ void main() {
       expect(find.byKey(const ValueKey('academic-preview')), findsNothing);
     },
   );
+
+  testWidgets('a release found while removal is confirmed removes nothing', (
+    tester,
+  ) async {
+    service.retained = {
+      'smu': AcademicSubscription(universityId: 'smu', year: 2026),
+    };
+    await mount(tester);
+    await tester.tap(find.byIcon(Icons.delete_outline));
+    await tester.pumpAndSettle();
+    updateVersion.value = '4.1.0';
+    await tester.pump();
+    await tester.tap(find.widgetWithText(TextButton, '가져온 일정 제거').last);
+    await tester.pumpAndSettle();
+    expect(service.removals, 0);
+    expect(find.text('업데이트가 필요합니다'), findsWidgets);
+  });
 
   testWidgets('failed removal without an adapter shows the failure', (
     tester,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../core/update/update_required_view.dart';
 import '../data/timetable_store.dart';
 import '../domain/timetable_term.dart';
 
@@ -276,6 +277,7 @@ class _TimetablePickerState extends State<_TimetablePicker> {
     String semester,
     TimetableTerm? existing,
   ) async {
+    if (blockedByRequiredUpdateIn(context)) return;
     setState(() => _busy = true);
     try {
       if (existing != null) {
@@ -529,6 +531,7 @@ class _TermFormState extends State<_TermForm> {
   }
 
   Future<void> _save() async {
+    if (blockedByRequiredUpdateIn(context)) return;
     final valid = _form.currentState!.validate();
     setState(() => _periodError = _period == null);
     if (!valid || _period == null) return;
