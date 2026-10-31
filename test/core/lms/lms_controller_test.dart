@@ -869,6 +869,42 @@ void main() {
   );
 
   test(
+    'a required update stops completing a login and saving a login',
+    () async {
+      var blocked = false;
+      final local = LmsController(
+        automaticLoginRetryDelays: const [Duration.zero, Duration.zero],
+        settings: settings,
+        repository: repository,
+        commands: commands,
+        blocked: () => blocked,
+        createSession: (owner, school) {
+          final session = _Session(owner, school);
+          sessions.add(session);
+          return session;
+        },
+      );
+      addTearDown(local.dispose);
+      await local.refresh();
+      await local.disconnect();
+      final login = await local.prepareLogin() as _Session;
+      login.authenticated = true;
+      final store = LmsCredentialsStore();
+
+      blocked = true;
+      await local.loginCompleted(login);
+      await local.saveAutomaticLogin('fixture-student', 'synthetic');
+
+      expect(settings.load().academicProfile?.lmsIntegrationEnabled, isFalse);
+      expect(await store.read('student@example.com', 'smu'), isNull);
+
+      blocked = false;
+      await local.loginCompleted(login);
+      expect(settings.load().academicProfile?.lmsIntegrationEnabled, isTrue);
+    },
+  );
+
+  test(
     'Drive-selected principal blocks an already authenticated previous school account',
     () async {
       await controller.refresh();

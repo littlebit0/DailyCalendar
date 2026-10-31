@@ -179,6 +179,15 @@ class _LmsLoginPageState extends State<LmsLoginPage> {
         widget.session.finishLogin(authenticated: false).catchError((_) {}),
       );
     }
+    // An update gate can replace this page while an SSO popup is above it.
+    final popups = _popupRoutes.toList();
+    if (popups.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        for (final popup in popups) {
+          if (popup.isActive) popup.navigator?.removeRoute(popup);
+        }
+      });
+    }
     super.dispose();
   }
 

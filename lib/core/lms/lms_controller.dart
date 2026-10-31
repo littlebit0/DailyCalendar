@@ -261,7 +261,12 @@ class LmsController extends ChangeNotifier {
   Future<void> saveAutomaticLogin(String username, String password) async {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
     final school = schoolId;
-    if (owner == null || !supported || school == null) return;
+    if (owner == null ||
+        !supported ||
+        school == null ||
+        (_blocked?.call() ?? false)) {
+      return;
+    }
     lastLoginFailure = null;
     try {
       await _credentials.save(
@@ -740,7 +745,8 @@ class LmsController extends ChangeNotifier {
     if (_disposed ||
         !identical(loginSession, _session) ||
         _key != _desiredKey ||
-        !loginSession.isAuthenticated) {
+        !loginSession.isAuthenticated ||
+        (_blocked?.call() ?? false)) {
       return;
     }
     lastLoginFailure = null;

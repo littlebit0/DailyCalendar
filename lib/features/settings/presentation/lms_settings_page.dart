@@ -58,9 +58,12 @@ class _LmsSettingsPageState extends ConsumerState<LmsSettingsPage> {
       if (session == null) throw StateError('School changed');
       final connected = await Navigator.of(context).push<bool>(
         MaterialPageRoute(
-          builder: (_) => LmsLoginPage(
-            session: session,
-            analytics: ref.read(productAnalyticsProvider),
+          builder: (routeContext) => UpdateRequiredPageGate(
+            title: routeContext.tr('학교 LMS 연결'),
+            child: LmsLoginPage(
+              session: session,
+              analytics: ref.read(productAnalyticsProvider),
+            ),
           ),
         ),
       );
