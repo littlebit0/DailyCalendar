@@ -330,6 +330,55 @@ void main() {
       expect(find.text('업데이트가 필요합니다'), findsOneWidget);
     });
 
+    group('found while the service is waiting on its lookup', () {
+      Future<(EventCommandService, _SingleEventRepository, Completer<void>)>
+      waitingService(CalendarEvent event) async {
+        SharedPreferences.setMockInitialValues({});
+        final repository = _SingleEventRepository(event);
+        final gate = Completer<void>();
+        repository.lookupGate = gate;
+        var blocked = false;
+        final service = EventCommandService(
+          repository: repository,
+          settingsRepository: SettingsRepository(
+            preferences: await SharedPreferences.getInstance(),
+          ),
+          notificationService: _NoopNotificationService(),
+          syncService: _NoopSyncService(),
+          blocked: () => blocked,
+        );
+        gate.future.then((_) => blocked = true);
+        return (service, repository, gate);
+      }
+
+      test('stores no completion', () async {
+        final event = _event();
+        final (service, repository, gate) = await waitingService(event);
+        final saving = service.setCompleted(event, true);
+        gate.complete();
+        await expectLater(saving, throwsA(isA<EventWritesBlocked>()));
+        expect(repository.writes, 0);
+      });
+
+      test('stores no edit', () async {
+        final event = _event();
+        final (service, repository, gate) = await waitingService(event);
+        final saving = service.save(event.copyWith(title: '바뀐 제목'));
+        gate.complete();
+        await expectLater(saving, throwsA(isA<EventWritesBlocked>()));
+        expect(repository.writes, 0);
+      });
+
+      test('deletes nothing', () async {
+        final event = _event();
+        final (service, repository, gate) = await waitingService(event);
+        final deleting = service.delete(event.id);
+        gate.complete();
+        await expectLater(deleting, throwsA(isA<EventWritesBlocked>()));
+        expect(repository.writes, 0);
+      });
+    });
+
     testWidgets('refuses the completion checkbox', (tester) async {
       final event = _event();
       await tester.binding.setSurfaceSize(const Size(800, 1000));

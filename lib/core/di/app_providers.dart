@@ -241,6 +241,7 @@ final eventCommandServiceProvider = Provider<EventCommandService>((ref) {
     onFollowUpFailure: () =>
         ref.read(eventFollowUpFailureProvider.notifier).state++,
     onEventsChanged: ref.watch(calendarWidgetServiceProvider).refresh,
+    blocked: () => ref.read(requiredUpdateVersionProvider).value != null,
   );
 });
 

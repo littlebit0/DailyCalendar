@@ -44,6 +44,7 @@ class UpdateRequirementController {
   final ValueNotifier<String?> requiredVersion = ValueNotifier<String?>(null);
 
   Timer? _timer;
+  bool _started = false;
   Future<void>? _checking;
   DateTime? _lastAttempt;
 
@@ -51,12 +52,13 @@ class UpdateRequirementController {
 
   /// Starts the periodic check for an app that stays open all day.
   void start() {
-    if (!enabled || _timer != null) return;
-    _timer = Timer.periodic(interval, (_) => unawaited(check()));
+    if (!enabled || _started) return;
+    _started = true;
     unawaited(check());
   }
 
   void dispose() {
+    _started = false;
     _timer?.cancel();
     _timer = null;
     requiredVersion.dispose();
@@ -65,7 +67,27 @@ class UpdateRequirementController {
   /// Re-checks on resume; the stored interval keeps this from polling.
   Future<void> check() {
     if (!enabled) return Future.value();
-    return _checking ??= _check().whenComplete(() => _checking = null);
+    return _checking ??= _check().whenComplete(() {
+      _checking = null;
+      _scheduleNext();
+    });
+  }
+
+  /// The next check is due one interval after the last answered one, which a
+  /// restart or a resume may have moved. A lookup that failed waits a full
+  /// interval here; resuming the app can still retry it sooner.
+  void _scheduleNext() {
+    if (!_started) return;
+    _timer?.cancel();
+    final checkedMs = _preferences.getInt(lastCheckedKey);
+    var delay = interval;
+    if (checkedMs != null) {
+      final due = DateTime.fromMillisecondsSinceEpoch(
+        checkedMs,
+      ).add(interval).difference(_now());
+      if (due > Duration.zero && due < interval) delay = due;
+    }
+    _timer = Timer(delay, () => unawaited(check()));
   }
 
   Future<void> _check() async {

@@ -23,6 +23,7 @@ class AppUpdateService {
     Future<void> Function(File, String)? prepareAfterExit,
     Future<Directory> Function()? temporaryDirectory,
     bool? enabled,
+    this.releaseLookupTimeout = const Duration(seconds: 30),
   }) : _client = client ?? http.Client(),
        _currentVersion =
            currentVersion ??
@@ -53,6 +54,8 @@ class AppUpdateService {
   Future<void>? _operation;
   bool _prepared = false;
 
+  final Duration releaseLookupTimeout;
+
   bool get installationPrepared => _prepared;
 
   Future<void> checkAndInstallIfAvailable() {
@@ -66,13 +69,16 @@ class AppUpdateService {
   /// reads the release feed; it never downloads or installs anything.
   Future<String?> latestReleaseVersion() async {
     try {
-      final response = await _client.get(
-        _latestReleaseUri,
-        headers: const {
-          'Accept': 'application/vnd.github+json',
-          'User-Agent': 'Daily-Update-Check',
-        },
-      );
+      // An unanswered request must not hold every later check behind it.
+      final response = await _client
+          .get(
+            _latestReleaseUri,
+            headers: const {
+              'Accept': 'application/vnd.github+json',
+              'User-Agent': 'Daily-Update-Check',
+            },
+          )
+          .timeout(releaseLookupTimeout);
       if (response.statusCode != HttpStatus.ok) return null;
       final release = jsonDecode(response.body) as Map<String, dynamic>;
       final version = (release['tag_name'] as String? ?? '').replaceFirst(

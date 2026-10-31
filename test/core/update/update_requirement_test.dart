@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:daily/core/di/app_providers.dart';
@@ -166,6 +167,143 @@ void main() {
       expect(controller.requiredVersion.value, '4.1.0');
       controller.dispose();
     });
+  });
+
+  group('check schedule', () {
+    Future<(UpdateRequirementController, List<int>)> restartedAfter(
+      Duration sinceLastCheck,
+      DateTime Function() now,
+    ) async {
+      final prefs = await _prefs({
+        UpdateRequirementController.lastCheckedKey: now()
+            .subtract(sinceLastCheck)
+            .millisecondsSinceEpoch,
+      });
+      final lookups = <int>[];
+      final controller = UpdateRequirementController(
+        preferences: prefs,
+        interval: const Duration(hours: 6),
+        latestVersion: () async {
+          lookups.add(1);
+          return '4.0.0';
+        },
+        currentVersion: () async => '4.0.0',
+        now: now,
+      );
+      return (controller, lookups);
+    }
+
+    testWidgets('a restart keeps the time left since the last check', (
+      tester,
+    ) async {
+      var now = DateTime.utc(2026, 10, 27, 14);
+      final (controller, lookups) = await restartedAfter(
+        const Duration(hours: 5),
+        () => now,
+      );
+      controller.start();
+      await tester.pump();
+      expect(lookups, isEmpty);
+
+      now = now.add(const Duration(minutes: 59));
+      await tester.pump(const Duration(minutes: 59));
+      expect(lookups, isEmpty);
+
+      now = now.add(const Duration(minutes: 1));
+      await tester.pump(const Duration(minutes: 1));
+      expect(lookups, hasLength(1));
+      controller.dispose();
+    });
+
+    testWidgets('a check on resume moves the next scheduled one', (
+      tester,
+    ) async {
+      var now = DateTime.utc(2026, 10, 27, 9);
+      final (controller, lookups) = await restartedAfter(
+        const Duration(hours: 7),
+        () => now,
+      );
+      controller.start();
+      await tester.pump();
+      expect(lookups, hasLength(1));
+
+      // Nothing is due yet, so this resume leaves the 15:00 check in place.
+      now = now.add(const Duration(hours: 3));
+      await tester.pump(const Duration(hours: 3));
+      await controller.check();
+      await tester.pump();
+      expect(lookups, hasLength(1));
+
+      now = now.add(const Duration(hours: 3));
+      await tester.pump(const Duration(hours: 3));
+      expect(lookups, hasLength(2));
+
+      // A resume past the due time answers, then the next waits a full interval.
+      now = now.add(const Duration(hours: 5));
+      await tester.pump(const Duration(hours: 5));
+      expect(lookups, hasLength(2));
+      now = now.add(const Duration(minutes: 59));
+      await tester.pump(const Duration(minutes: 59));
+      expect(lookups, hasLength(2));
+      now = now.add(const Duration(minutes: 1));
+      await tester.pump(const Duration(minutes: 1));
+      expect(lookups, hasLength(3));
+      controller.dispose();
+    });
+
+    testWidgets('a failed lookup waits for the next interval', (tester) async {
+      final prefs = await _prefs();
+      var lookups = 0;
+      var now = DateTime.utc(2026, 10, 27);
+      final controller = UpdateRequirementController(
+        preferences: prefs,
+        interval: const Duration(hours: 6),
+        latestVersion: () async {
+          lookups++;
+          return null;
+        },
+        currentVersion: () async => '4.0.0',
+        now: () => now,
+      );
+      controller.start();
+      await tester.pump();
+      expect(lookups, 1);
+      now = now.add(const Duration(hours: 5, minutes: 59));
+      await tester.pump(const Duration(hours: 5, minutes: 59));
+      expect(lookups, 1);
+      now = now.add(const Duration(minutes: 1));
+      await tester.pump(const Duration(minutes: 1));
+      expect(lookups, 2);
+      controller.dispose();
+    });
+  });
+
+  test('an unanswered release lookup ends and lets the next check run', () async {
+    final prefs = await _prefs();
+    var requests = 0;
+    final service = AppUpdateService(
+      enabled: false,
+      releaseLookupTimeout: const Duration(milliseconds: 10),
+      client: MockClient((_) {
+        requests++;
+        return Completer<http.Response>().future;
+      }),
+    );
+    expect(await service.latestReleaseVersion(), isNull);
+
+    var now = DateTime.utc(2026, 10, 27);
+    final controller = UpdateRequirementController(
+      preferences: prefs,
+      latestVersion: service.latestReleaseVersion,
+      currentVersion: () async => '4.0.0',
+      now: () => now,
+    );
+    await controller.check();
+    now = now.add(const Duration(minutes: 5));
+    await controller.check();
+    expect(requests, 3);
+    expect(prefs.getInt(UpdateRequirementController.lastCheckedKey), isNull);
+    controller.dispose();
   });
 
   test('latestReleaseVersion reads only a plain release tag', () async {

@@ -28,6 +28,11 @@ class RecurringMoveResult {
   final bool followUpFailed;
 }
 
+/// A required update was detected before this event change was written.
+class EventWritesBlocked implements Exception {
+  const EventWritesBlocked();
+}
+
 class EventCommandService {
   EventCommandService({
     required EventRepository repository,
@@ -38,6 +43,7 @@ class EventCommandService {
     ProductAnalytics analytics = const NoopProductAnalytics(),
     Future<void> Function()? onEventsChanged,
     void Function()? onFollowUpFailure,
+    bool Function()? blocked,
     KoreaTime? clock,
     Uuid? uuid,
   }) : _repository = repository,
@@ -48,6 +54,7 @@ class EventCommandService {
        _analytics = analytics,
        _onEventsChanged = onEventsChanged,
        _onFollowUpFailure = onFollowUpFailure,
+       _blocked = blocked,
        _clock = clock ?? const KoreaTime(),
        _uuid = uuid ?? const Uuid();
 
@@ -59,10 +66,17 @@ class EventCommandService {
   final ProductAnalytics _analytics;
   final Future<void> Function()? _onEventsChanged;
   final void Function()? _onFollowUpFailure;
+  final bool Function()? _blocked;
   final KoreaTime _clock;
   final Uuid _uuid;
   Future<void> _categoryUpdateTail = Future<void>.value();
   static final _recurringEffectTails = Expando<Future<void>>();
+
+  /// Screens check before they start; this covers a release found while a
+  /// change is already waiting on a lookup, right before the database write.
+  void _requireWritable() {
+    if (_blocked?.call() ?? false) throw const EventWritesBlocked();
+  }
 
   Future<T> _serializeRecurringEffects<T>(Future<T> Function() action) {
     final previous = _recurringEffectTails[_repository] ?? Future<void>.value();
@@ -103,6 +117,7 @@ class EventCommandService {
         );
       }
       if (!_isCurrentOwner(existing?.lms != null ? existing! : updated)) return;
+      _requireWritable();
       // Persist intent before the database write so process termination cannot
       // lose recovery. Replay always rereads the database, never the draft.
       await _settingsRepository.stageEventFollowUp(
@@ -116,6 +131,7 @@ class EventCommandService {
             !_isCurrentOwner(existing)) {
           return;
         }
+        _requireWritable();
         final mutations = await _repository.mergeRestoredEventsAtomically(
           [updated],
           resolve: (latest, edited) {
@@ -147,6 +163,7 @@ class EventCommandService {
         updated = mutations.single.current;
       } else {
         if (!_isCurrentOwner(updated)) return;
+        _requireWritable();
         await _repository.save(updated);
       }
     } on Object catch (error) {
@@ -319,6 +336,7 @@ class EventCommandService {
       id: movedId,
       clearOccurrenceId: true,
     );
+    _requireWritable();
     await _repository.mergeRestoredEventsAtomically(
       [occurrence, placeholder],
       resolve: (latest, incoming) {
@@ -476,6 +494,7 @@ class EventCommandService {
     }
     CalendarEvent? previous;
     CalendarEvent? saved;
+    _requireWritable();
     await _repository.mergeRestoredEventsAtomically(
       [occurrence],
       resolve: (latest, _) {
@@ -530,11 +549,13 @@ class EventCommandService {
         updatedAt: _clock.now(),
         syncStatus: 'pending',
       );
+      _requireWritable();
       await _settingsRepository.stageEventFollowUp(
         updated.id,
         _uuid.v4(),
         _combinedReminderMinutes(source, updated),
       );
+      _requireWritable();
       if (source.lms == null) {
         await _repository.save(updated);
       } else {
@@ -590,6 +611,7 @@ class EventCommandService {
     CalendarEvent? updatedSeries;
     CalendarEvent? detachedOccurrence;
     var available = false;
+    _requireWritable();
     await _settingsRepository.stageEventFollowUp(
       source.id,
       _uuid.v4(),
@@ -600,6 +622,7 @@ class EventCommandService {
       _uuid.v4(),
       occurrence.reminderMinutesBeforeList,
     );
+    _requireWritable();
     await _repository.mergeRestoredEventsAtomically(
       [source, occurrence.copyWith(id: detachedID, clearOccurrenceId: true)],
       resolve: (latest, incoming) {
@@ -844,6 +867,7 @@ class EventCommandService {
           (existing == null || _isCurrentOwner(existing));
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
+      _requireWritable();
       await _repository.delete(eventId);
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
@@ -894,6 +918,7 @@ class EventCommandService {
     if (isCurrent != null && !isCurrent()) {
       throw StateError('Category update cancelled');
     }
+    _requireWritable();
     final affected = await _repository.updateCategoryReferences(
       previous: previous,
       updated: updated,
