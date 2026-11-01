@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:daily/core/update/update_requirement.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<String> _readNormalized(String path) async {
@@ -154,6 +155,16 @@ void main() {
       expect(source, contains('WidgetCenter.shared.reloadAllTimelines()'));
       expect(source, isNot(contains('reloadTimelines(ofKind:')));
     }
+  });
+
+  test('Siri reads the update requirement Flutter stores', () async {
+    final source = await _readNormalized('apple_siri/DailySiriIntents.swift');
+
+    expect(
+      source,
+      contains('"flutter.${UpdateRequirementController.requiredVersionKey}"'),
+    );
+    expect(RegExp(r'try requireNoUpdate\(\)').allMatches(source), hasLength(4));
   });
 
   test(

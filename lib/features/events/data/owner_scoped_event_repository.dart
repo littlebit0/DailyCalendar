@@ -41,10 +41,12 @@ class OwnerScopedEventRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) => delegate.updateCategoryReferences(
     previous: previous,
     updated: updated,
     updatedAt: updatedAt,
+    beforeWrite: beforeWrite,
   );
   @override
   Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
@@ -59,7 +61,8 @@ class OwnerScopedEventRepository implements EventRepository {
   @override
   Future<void> markSynced(String id) => delegate.markSynced(id);
   @override
-  Future<void> delete(String id) => delegate.delete(id);
+  Future<void> delete(String id, {void Function()? beforeWrite}) =>
+      delegate.delete(id, beforeWrite: beforeWrite);
   @override
   Future<void> hardDelete(String id) => delegate.hardDelete(id);
   @override

@@ -1,5 +1,52 @@
 # Daily Agent Memory — current handoff
 
+## #698 / PR #699 Update-required restriction — 2026-11-01
+
+- Changed (shared Dart, all platforms, plus iOS/macOS Siri Swift): once a newer
+  GitHub release is found, this build only lets the user view events. Detection:
+  `UpdateRequirementController` asks `releases/latest` every 6 h counted from the
+  last answered check (30 s lookup timeout) and keeps `update.requiredVersion` in
+  SharedPreferences only (never in Drive settings); it clears when the running
+  build is new enough. Debug builds are exempt; Windows installer preparation on
+  detection is unchanged.
+- Blocked while required: timetable tab and settings, academic management /
+  profile / calendar and LMS connection screens (also routes already open), event
+  create / edit / delete / complete / drag / range editor, category edits that
+  rewrite events, calendar import, LMS and academic auto refresh, Siri add / update
+  / delete (read intents stay). Widget completion requests stay queued
+  unacknowledged and apply after the update.
+- Enforcement: screens re-check after every await and dialog;
+  `EventCommandService(blocked:)` refuses each write just before it happens, also
+  inside atomic resolvers. `importBatch` separates `writable()` (block + account,
+  before a write) from `current()` (account only, after it), so an event already
+  saved still gets its reminder, alarm and upload; academic, LMS and import callers
+  pass `isCurrent` without the block. Academic baselines and pending removals of
+  saved rows are still persisted.
+- Native: `DailySiriUpdateRequirement` (`apple_siri/DailySiriIntents.swift`) reads
+  UserDefaults `flutter.update.requiredVersion`, compares it with
+  `CFBundleShortVersionString` like `isNewerVersion`, and `DailySiriDatabase`
+  `add` / `requireEditable` / `update` / `delete` throw `updateRequired`. DEBUG is
+  exempt. Android Kotlin alarm and widget code was searched, not audited for event
+  writes.
+- Verified (macOS host): `flutter analyze` clean, full suite 2201 passed, remote CI
+  (analyze + test, Apple LMS session tests, Android debug, Windows debug) passed on
+  e7103722e, `tool/tests/test_siri_occurrence_mutation.py` passes with the new
+  update check, Codex review of e7103722e found nothing.
+- NOT verified: macOS / iOS app builds and `RunnerTests` (this host's CocoaPods
+  1.12.1 makes Xcode reject the Pods deployment targets, so
+  `testSiriUpdateRequirementComparesVersionsLikeFlutter` never ran), real devices,
+  and the SSO popup removal in `LmsLoginPage` on iOS / macOS.
+- Remaining Mac/iPhone acceptance: (1) build both with working Pods and run
+  `RunnerTests`; (2) set `flutter.update.requiredVersion` above the app version:
+  Siri add / update / delete are refused with the update message, lookups still
+  work, and all work again after updating; (3) with the requirement on, timetable /
+  academic / LMS screens show the update notice, event editing is refused and
+  viewing still works; (4) a widget completion tapped meanwhile stays pending and
+  applies after the update.
+- Release: not released. It must ship with the #692 release-note text (old clients
+  stop timetable and event / settings restore) and all-platform artifacts (#676).
+  PR #699 stays open for the user to merge.
+
 ## #679 Academic correction linking — 2026-10-25
 
 - Shared `AcademicCalendarService` now links a school-corrected record whose
