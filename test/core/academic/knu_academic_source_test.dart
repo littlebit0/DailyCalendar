@@ -85,6 +85,22 @@ void main() {
       }
     }
   });
+  test('KNU reads a title period written with spaces', () {
+    // The 2027 page publishes "1학기 수강신청 (2.11.~2. 15.)".
+    final plain = KnuAcademicSource.parse(fixture(2026), 2026);
+    final spaced = KnuAcademicSource.parse(
+      fixture(2026).replaceFirst('(2.10.~2.12.)', '(2.10.~2. 12.)'),
+      2026,
+    );
+    final row = spaced.singleWhere((e) => e.title == '1학기 수강신청');
+    expect(row.start, DateTime(2026, 2, 10));
+    expect(row.end, DateTime(2026, 2, 13));
+    expect(
+      row.sourceId,
+      plain.singleWhere((e) => e.title == '1학기 수강신청').sourceId,
+    );
+  });
+
   test('KNU profile resolves to its registered calendar', () {
     for (final id in [
       'institution:academyinfo:0000005',

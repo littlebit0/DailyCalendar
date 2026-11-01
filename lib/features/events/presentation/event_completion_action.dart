@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
+import '../../../core/update/update_required_view.dart';
 import '../domain/calendar_event.dart';
 
 /// Shares completion behavior while each surface keeps its own tap/drag UI.
@@ -31,7 +32,11 @@ class _EventCompletionActionState extends State<EventCompletionAction> {
       !event.readOnly && !event.holiday && !event.systemEvent;
 
   Future<void> _toggle() async {
-    if (_updating || !_canComplete(widget.event)) return;
+    if (_updating ||
+        !_canComplete(widget.event) ||
+        blockedByRequiredUpdateIn(context)) {
+      return;
+    }
     _updating = true;
     final event = widget.event;
     try {
@@ -40,7 +45,10 @@ class _EventCompletionActionState extends State<EventCompletionAction> {
       final source = await container
           .read(eventRepositoryProvider)
           .findById(event.id);
-      if (source == null || !_canComplete(source) || source.deletedAt != null) {
+      if (source == null ||
+          !_canComplete(source) ||
+          source.deletedAt != null ||
+          container.read(requiredUpdateVersionProvider).value != null) {
         return;
       }
       if ((source.lms != null || source.id.startsWith('lms:')) &&

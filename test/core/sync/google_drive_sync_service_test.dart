@@ -3033,6 +3033,7 @@ class _MemoryEventRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     final affected = <CalendarEvent>[];
     for (final entry in _events.entries.toList()) {
@@ -3074,7 +3075,7 @@ class _MemoryEventRepository implements EventRepository {
   }
 
   @override
-  Future<void> delete(String eventId) async {
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {
     final event = _events[eventId];
     if (event != null) {
       _events[eventId] = event.copyWith(
