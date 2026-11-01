@@ -47,7 +47,9 @@ abstract interface class EventRepository {
 
   Future<void> markSynced(String eventId);
 
-  Future<void> delete(String eventId);
+  /// [beforeWrite] runs after the stored row is read and before it is
+  /// written, inside the same transaction; throwing aborts the delete.
+  Future<void> delete(String eventId, {void Function()? beforeWrite});
 
   Future<void> hardDelete(String eventId);
 

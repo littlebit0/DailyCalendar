@@ -390,6 +390,16 @@ void main() {
         expect(repository.resolved, 0);
       }
 
+      test('deletes no event', () async {
+        final event = _event();
+        final (service, repository) = await atomicService(event);
+        await expectLater(
+          service.delete(event.id),
+          throwsA(isA<EventWritesBlocked>()),
+        );
+        expect(repository.writes, 0);
+      });
+
       test('moves no occurrence', () async {
         final event = repeating();
         final (service, repository) = await atomicService(event);
@@ -1340,7 +1350,10 @@ class _SingleEventRepository implements EventRepository {
   Future<void> clearAll() async {}
 
   @override
-  Future<void> delete(String eventId) async {
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {
+    await findById(eventId);
+    beforeResolve?.call();
+    beforeWrite?.call();
     writes++;
   }
 

@@ -56,7 +56,7 @@ class _Repository implements EventRepository {
   }
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> delete(String id, {void Function()? beforeWrite}) async {
     events[id] = events[id]!.copyWith(deletedAt: DateTime.utc(2026, 9, 26));
   }
 

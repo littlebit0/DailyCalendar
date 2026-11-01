@@ -3074,7 +3074,7 @@ class _MemoryEventRepository implements EventRepository {
   }
 
   @override
-  Future<void> delete(String eventId) async {
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {
     final event = _events[eventId];
     if (event != null) {
       _events[eventId] = event.copyWith(

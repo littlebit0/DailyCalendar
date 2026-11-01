@@ -59,7 +59,8 @@ class OwnerScopedEventRepository implements EventRepository {
   @override
   Future<void> markSynced(String id) => delegate.markSynced(id);
   @override
-  Future<void> delete(String id) => delegate.delete(id);
+  Future<void> delete(String id, {void Function()? beforeWrite}) =>
+      delegate.delete(id, beforeWrite: beforeWrite);
   @override
   Future<void> hardDelete(String id) => delegate.hardDelete(id);
   @override

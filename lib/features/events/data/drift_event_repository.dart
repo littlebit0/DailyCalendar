@@ -302,17 +302,19 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   }
 
   @override
-  Future<void> delete(String eventId) => _database.transaction(() async {
-    final event = await findById(eventId);
-    if (event != null) {
-      await save(
-        event.copyWith(
-          deletedAt: DateTime.now().toUtc(),
-          syncStatus: 'pending_delete',
-        ),
-      );
-    }
-  });
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) =>
+      _database.transaction(() async {
+        final event = await findById(eventId);
+        beforeWrite?.call();
+        if (event != null) {
+          await save(
+            event.copyWith(
+              deletedAt: DateTime.now().toUtc(),
+              syncStatus: 'pending_delete',
+            ),
+          );
+        }
+      });
 
   @override
   Future<void> hardDelete(String eventId) {

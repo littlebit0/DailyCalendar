@@ -1303,7 +1303,7 @@ class _CategoryUpdateRepository implements EventRepository {
   Future<void> clearAll() async {}
 
   @override
-  Future<void> delete(String eventId) async {}
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {}
 
   @override
   Future<List<CalendarEvent>> eventsInRange(
@@ -1433,7 +1433,7 @@ class _CompletionRepository implements EventRepository {
   Future<void> clearAll() async {}
 
   @override
-  Future<void> delete(String eventId) async {}
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {}
 
   @override
   Future<List<CalendarEvent>> eventsInRange(
@@ -1494,7 +1494,7 @@ class _GuardedRepository extends _CompletionRepository {
   }
 
   @override
-  Future<void> delete(String eventId) async {
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {
     deleteCalls++;
     afterDelete?.call();
   }
@@ -1545,7 +1545,7 @@ class _MultiCompletionRepository implements EventRepository {
   Future<void> clearAll() async => events.clear();
 
   @override
-  Future<void> delete(String eventId) async => events.remove(eventId);
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async => events.remove(eventId);
 
   @override
   Future<List<CalendarEvent>> eventsInRange(

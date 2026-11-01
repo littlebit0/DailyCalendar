@@ -879,7 +879,7 @@ class EventCommandService {
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
       _requireWritable();
-      await _repository.delete(eventId);
+      await _repository.delete(eventId, beforeWrite: _requireWritable);
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
       await _notificationService.cancelEventReminder(

@@ -147,7 +147,7 @@ class Repository implements EventRepository, EventSyncMaintenance {
   }
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> delete(String id, {void Function()? beforeWrite}) async {
     events[id] = events[id]!.copyWith(deletedAt: DateTime(2026, 9, 16));
     afterDelete?.call();
   }
