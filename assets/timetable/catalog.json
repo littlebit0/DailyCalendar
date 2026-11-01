@@ -38,5 +38,8 @@
   "assets/timetable/gnu-tongyeong-2026-2.json",
   "assets/timetable/gnu-changwon-2026-2.json",
   "assets/timetable/gnu-naedong-2026-2.json",
-  "assets/timetable/gnu-unknown-2026-2.json"
+  "assets/timetable/gnu-unknown-2026-2.json",
+  "assets/timetable/kmu-seongseo-2026-2.json",
+  "assets/timetable/kmu-daemyeong-2026-2.json",
+  "assets/timetable/kmu-other-2026-2.json"
 ]
