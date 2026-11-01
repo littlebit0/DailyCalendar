@@ -16,15 +16,12 @@ class DongaAcademicSource implements AcademicSource {
   Uri get website =>
       Uri.https('www.donga.ac.kr', '/community/academic-calendar');
 
-  /// The redesigned site dropped earlier academic years; the university's
-  /// shared legacy CMS still serves them on its department hosts.
-  static Uri legacyYear(int year) =>
-      Uri.https('computer.donga.ac.kr', '/kor/CMS/ScheduleMgr/YearList.do', {
-        'calendar_month': '12',
-        'calendar_year': '$year',
-        'mCode': 'MN173',
-        'part': 'false',
-      });
+  /// The month feed behind the page's own calendar. Unlike the page, it keeps
+  /// earlier academic years and the add/drop, enrolment and event rows.
+  static Uri monthFeed(int year, int month) => Uri.https(
+    'www.donga.ac.kr',
+    '/api/v2/cms/donga_kor/schedule/public/$year/$month',
+  );
 
   Future<String> _get(Uri uri) async {
     final response = await _client
@@ -53,11 +50,8 @@ class DongaAcademicSource implements AcademicSource {
 
     // The page publishes one academic year (March to the next February).
     add(parseAnnual(await _get(website)));
-    // Earlier academic years (e.g. January/February of this year, or a past
-    // year) come from the legacy yearly lists; December rows may run into
-    // this year.
-    for (final selected in [year - 1, year]) {
-      add(parseLegacy(await _get(legacyYear(selected)), selected));
+    for (var month = 1; month <= 12; month++) {
+      add(parseMonth(await _get(monthFeed(year, month))));
     }
     if (events.isEmpty) {
       throw const FormatException('No published Donga calendar');
@@ -246,39 +240,31 @@ class DongaAcademicSource implements AcademicSource {
     return events;
   }
 
-  /// Every listed row of one legacy yearly list (rows sit in their start month).
-  static List<AcademicEvent> parseLegacy(String body, int year) {
-    final doc = html.parse(body);
-    final sections = doc.querySelectorAll('.sch-monlist-wr.yearly');
-    if (doc.querySelector('.sch-date .year')?.text.trim() != '$year' ||
-        sections.length != 12) {
-      throw const FormatException('Incomplete Donga legacy year');
-    }
-    final url = legacyYear(year).toString();
-    final result = <AcademicEvent>[];
-    for (final (i, s) in sections.indexed) {
-      if (s.attributes['data-month'] != '${i + 1}'.padLeft(2, '0')) {
-        throw const FormatException('Invalid Donga legacy month');
-      }
-      for (final item in s.querySelectorAll('.daily-li:not(.hasNoData)')) {
-        final (start, last) = _range(
-          item.querySelector('.date-core')?.text ?? '',
-          year,
-        );
-        if (start.month != i + 1) {
-          throw const FormatException('Invalid Donga legacy scope');
-        }
-        result.add(
+  /// Every active row of one month of the calendar feed.
+  static List<AcademicEvent> parseMonth(String body) {
+    final decoded = jsonDecode(body);
+    final data = decoded is Map && decoded['success'] == true
+        ? decoded['data']
+        : null;
+    final schedules = data is Map ? data['schedules'] : null;
+    if (schedules is! List) throw const FormatException('Invalid Donga feed');
+    final url = 'https://www.donga.ac.kr/community/academic-calendar';
+    return [
+      for (final row in schedules)
+        if (row['status'] == 'ACTIVE')
           _event(
-            _clean(item.querySelector('.body-core')?.text ?? ''),
-            start,
-            last,
+            _clean(row['title'] as String? ?? ''),
+            _day(row['startDate']),
+            _day(row['endDate']),
             url,
           ),
-        );
-      }
-    }
-    return result;
+    ];
+  }
+
+  static DateTime _day(Object? value) {
+    if (value is! String) throw const FormatException('Invalid Donga date');
+    final parsed = DateTime.parse(value);
+    return DateTime(parsed.year, parsed.month, parsed.day);
   }
 
   @override

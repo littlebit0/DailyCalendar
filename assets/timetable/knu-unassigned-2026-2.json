@@ -1,0 +1,6288 @@
+{
+  "schemaVersion": 2,
+  "universityId": "knu",
+  "campus": "unassigned",
+  "campusName": "캠퍼스 미게시",
+  "academicYear": 2026,
+  "semester": "2",
+  "completionClaim": false,
+  "publishedDate": "2026-10-07",
+  "sourceCollectedDate": "2026-10-23",
+  "sourceUrl": "https://knuin.knu.ac.kr/public/stddm/lectPlnInqr.knu",
+  "period": {
+    "startDate": "2026-09-01",
+    "endDate": "2026-12-18"
+  },
+  "courses": [
+    {
+      "sourceId": "knu/unassigned/2026/2/CLTR0553/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0553",
+      "section": "001",
+      "courseName": "비즈니스 독일어",
+      "professor": "김남희",
+      "credits": 3.0,
+      "sourceSchedule": "금 13:30 ~ 15:00,금 15:00 ~ 16:30",
+      "sourceClassroom": " 대구테크노파크 지역대학협력센터",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 810,
+          "endMinute": 900,
+          "classroom": " 대구테크노파크 지역대학협력센터"
+        },
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 990,
+          "classroom": " 대구테크노파크 지역대학협력센터"
+        }
+      ],
+      "departments": [
+        "독어독문학과"
+      ],
+      "departmentCredits": {
+        "독어독문학과": 3.0
+      },
+      "departmentClassifications": {
+        "독어독문학과": "교양"
+      },
+      "departmentRemarks": {
+        "독어독문학과": "전학년선택\nSDG교과목\n\n학년: *"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0209/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0209",
+      "section": "001",
+      "courseName": "농장경영 및 실습2",
+      "professor": "이기환",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00 ~ 10:00,화 10:00 ~ 11:00,화 11:00 ~ 12:00,화 12:00 ~ 13:00,화 14:00 ~ 15:00,화 15:00 ~ 16:00,화 16:00 ~ 17:00,화 17:00 ~ 18:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "SU평가강좌\n\n학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0237/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0237",
+      "section": "001",
+      "courseName": "농장경영 및 실습4",
+      "professor": "이기환",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00 ~ 10:00,화 10:00 ~ 11:00,화 11:00 ~ 12:00,화 12:00 ~ 13:00,화 14:00 ~ 15:00,화 15:00 ~ 16:00,화 16:00 ~ 17:00,화 17:00 ~ 18:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "SU평가강좌\n\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0251/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0251",
+      "section": "001",
+      "courseName": "농촌관광학 및 실습",
+      "professor": "손태권",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00 ~ 10:00,월 10:00 ~ 11:00,월 11:00 ~ 12:00,월 12:00 ~ 13:00,월 14:00 ~ 15:00,월 15:00 ~ 16:00,월 16:00 ~ 17:00,월 17:00 ~ 18:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0280/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0280",
+      "section": "001",
+      "courseName": "농산물전자상거래 및 실습",
+      "professor": "이유락",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00 ~ 10:00,화 10:00 ~ 11:00,화 11:00 ~ 12:00,화 12:00 ~ 13:00,화 14:00 ~ 15:00,화 15:00 ~ 16:00,화 16:00 ~ 17:00,화 17:00 ~ 18:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204"
+        }
+      ],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0287/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0287",
+      "section": "001",
+      "courseName": "과수재배신기술",
+      "professor": "김대현",
+      "credits": 3.0,
+      "sourceSchedule": "수 13:00 ~ 14:00,수 14:00 ~ 15:00,수 15:00 ~ 16:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208"
+        }
+      ],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0288/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0288",
+      "section": "001",
+      "courseName": "농작물 영양관리",
+      "professor": "박용성",
+      "credits": 3.0,
+      "sourceSchedule": "수 09:00 ~ 10:00,수 10:00 ~ 11:00,수 11:00 ~ 12:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 208"
+        }
+      ],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0292/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0292",
+      "section": "001",
+      "courseName": "선진농장체험 및 실습2",
+      "professor": "이기환",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00 ~ 10:00,월 10:00 ~ 11:00,월 11:00 ~ 12:00,월 12:00 ~ 13:00,월 14:00 ~ 15:00,월 15:00 ~ 16:00,월 16:00 ~ 17:00,월 17:00 ~ 18:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 204",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0296/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0296",
+      "section": "001",
+      "courseName": "농축산물브랜드화",
+      "professor": "김세혁",
+      "credits": 3.0,
+      "sourceSchedule": "수 13:00 ~ 14:00,수 14:00 ~ 15:00,수 15:00 ~ 16:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205"
+        }
+      ],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 4"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0302/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0302",
+      "section": "001",
+      "courseName": "수도작 이론 및 실무",
+      "professor": "이기환",
+      "credits": 3.0,
+      "sourceSchedule": "수 09:00 ~ 10:00,수 10:00 ~ 11:00,수 11:00 ~ 12:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 205"
+        }
+      ],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 3"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AGIN0304/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AGIN0304",
+      "section": "001",
+      "courseName": "농장경영 및 실습6",
+      "professor": "이기환",
+      "credits": 3.0,
+      "sourceSchedule": "월 09:00 ~ 10:00,월 10:00 ~ 11:00,월 11:00 ~ 12:00,월 12:00 ~ 13:00,월 14:00 ~ 15:00,월 15:00 ~ 16:00,월 16:00 ~ 17:00,월 17:00 ~ 18:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "전공"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CLTR0045/004",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0045",
+      "section": "004",
+      "courseName": "논리와 비판적 사고",
+      "professor": "이향연",
+      "credits": 3.0,
+      "sourceSchedule": "수 13:00 ~ 14:00,수 14:00 ~ 15:00,수 15:00 ~ 16:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413"
+        }
+      ],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "교양"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CLTR0133/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0133",
+      "section": "001",
+      "courseName": "국악의 이해",
+      "professor": "홍순욱",
+      "credits": 3.0,
+      "sourceSchedule": "수 09:00 ~ 10:00,수 10:00 ~ 11:00,수 11:00 ~ 12:00",
+      "sourceClassroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413"
+        },
+        {
+          "weekday": 3,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": "농업생명과학대학 부속 실습장 친환경농업교육및연구센터 / 413"
+        }
+      ],
+      "departments": [
+        "농산업학과"
+      ],
+      "departmentCredits": {
+        "농산업학과": 3.0
+      },
+      "departmentClassifications": {
+        "농산업학과": "교양"
+      },
+      "departmentRemarks": {
+        "농산업학과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/KMUS0272/005",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "KMUS0272",
+      "section": "005",
+      "courseName": "국악개인전공실기2",
+      "professor": "김진욱",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "국악학과"
+      ],
+      "departmentCredits": {
+        "국악학과": 1.0
+      },
+      "departmentClassifications": {
+        "국악학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "국악학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/TCHR0551/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TCHR0551",
+      "section": "001",
+      "courseName": "교육봉사활동 1",
+      "professor": "이문규",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "교육학과"
+      ],
+      "departmentCredits": {
+        "교육학과": 1.0
+      },
+      "departmentClassifications": {
+        "교육학과": "교직"
+      },
+      "departmentRemarks": {
+        "교육학과": "전학년선택\n(한국어)\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/TCHR0552/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TCHR0552",
+      "section": "002",
+      "courseName": "교육봉사활동 2",
+      "professor": "이문규",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "교육학과"
+      ],
+      "departmentCredits": {
+        "교육학과": 2.0
+      },
+      "departmentClassifications": {
+        "교육학과": "교직"
+      },
+      "departmentRemarks": {
+        "교육학과": "전학년선택\n(한국어)\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/BIED0461/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BIED0461",
+      "section": "001",
+      "courseName": "생명과학 연구실습 2",
+      "professor": "양서영",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "생물교육과"
+      ],
+      "departmentCredits": {
+        "생물교육과": 1.0
+      },
+      "departmentClassifications": {
+        "생물교육과": "전공"
+      },
+      "departmentRemarks": {
+        "생물교육과": "SU평가강좌\n\n학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/FSNU0545/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FSNU0545",
+      "section": "001",
+      "courseName": "영양사현장실습",
+      "professor": "권은영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "식품영양학과"
+      ],
+      "departmentCredits": {
+        "식품영양학과": 2.0
+      },
+      "departmentClassifications": {
+        "식품영양학과": "전공"
+      },
+      "departmentRemarks": {
+        "식품영양학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CHFA0273/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CHFA0273",
+      "section": "002",
+      "courseName": "건강가정현장실습",
+      "professor": "전세송",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "아동학부 아동가족학전공"
+      ],
+      "departmentCredits": {
+        "아동학부 아동가족학전공": 3.0
+      },
+      "departmentClassifications": {
+        "아동학부 아동가족학전공": "전공"
+      },
+      "departmentRemarks": {
+        "아동학부 아동가족학전공": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0298/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0298",
+      "section": "001",
+      "courseName": "성인건강간호학실습3",
+      "professor": "김경진,박다인,이유영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0298/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0298",
+      "section": "002",
+      "courseName": "성인건강간호학실습3",
+      "professor": "김경진,박다인,이유영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0298/003",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0298",
+      "section": "003",
+      "courseName": "성인건강간호학실습3",
+      "professor": "김경진,박다인,이유영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0298/004",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0298",
+      "section": "004",
+      "courseName": "성인건강간호학실습3",
+      "professor": "김경진,박다인,이유영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0299/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0299",
+      "section": "001",
+      "courseName": "여성건강간호학실습",
+      "professor": "최현경,이성희,이정은,임나영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0299/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0299",
+      "section": "002",
+      "courseName": "여성건강간호학실습",
+      "professor": "최현경,이성희,이정은,임나영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0299/003",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0299",
+      "section": "003",
+      "courseName": "여성건강간호학실습",
+      "professor": "최현경,이성희,이정은,임나영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0299/004",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0299",
+      "section": "004",
+      "courseName": "여성건강간호학실습",
+      "professor": "최현경,이성희,이정은,임나영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0308/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0308",
+      "section": "001",
+      "courseName": "통합간호실습",
+      "professor": "송영숙,김다은,박선영,육미경",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0308/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0308",
+      "section": "002",
+      "courseName": "통합간호실습",
+      "professor": "박완주,김다은,박선영,육미경",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0308/003",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0308",
+      "section": "003",
+      "courseName": "통합간호실습",
+      "professor": "권소희,김다은,박선영,육미경",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0308/004",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0308",
+      "section": "004",
+      "courseName": "통합간호실습",
+      "professor": "차지은,김다은,박선영,육미경",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0309/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0309",
+      "section": "001",
+      "courseName": "지역정신건강간호 및 실습",
+      "professor": "정현옥,허영진,박경란,이호진",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "이론은 금 6교시 강의, 실습은 지역사회 정신건강복지센터에서의 임상실습으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0309/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0309",
+      "section": "002",
+      "courseName": "지역정신건강간호 및 실습",
+      "professor": "정현옥,허영진,박경란,이호진",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "이론은 금 7교시 강의, 실습은 지역사회 정신건강복지센터에서의 임상실습으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0311/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0311",
+      "section": "001",
+      "courseName": "아동건강간호학실습",
+      "professor": "박부경",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0311/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0311",
+      "section": "002",
+      "courseName": "아동건강간호학실습",
+      "professor": "장민기,김도녕",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0311/003",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0311",
+      "section": "003",
+      "courseName": "아동건강간호학실습",
+      "professor": "박부경",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0311/004",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0311",
+      "section": "004",
+      "courseName": "아동건강간호학실습",
+      "professor": "장민기,김도녕",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0423/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0423",
+      "section": "001",
+      "courseName": "간호관리학실습",
+      "professor": "이은주,문미경,김소연,여동은",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0423/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0423",
+      "section": "002",
+      "courseName": "간호관리학실습",
+      "professor": "이은주,문미경,김소연,여동은",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0423/003",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0423",
+      "section": "003",
+      "courseName": "간호관리학실습",
+      "professor": "이은주,문미경,김소연,여동은",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0423/004",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0423",
+      "section": "004",
+      "courseName": "간호관리학실습",
+      "professor": "이은주,문미경,김소연,여동은",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 2.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "병원 임상실습 과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0606/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0606",
+      "section": "001",
+      "courseName": "노인건강간호실습",
+      "professor": "김수현",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "노인장기요양시설(노인요양원과 주간보호센터 등) 실습지에서의 임상실습과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0606/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0606",
+      "section": "002",
+      "courseName": "노인건강간호실습",
+      "professor": "김수현",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "노인장기요양시설(노인요양원과 주간보호센터 등) 실습지에서의 임상실습과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0606/003",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0606",
+      "section": "003",
+      "courseName": "노인건강간호실습",
+      "professor": "김수현",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "노인장기요양시설(노인요양원과 주간보호센터 등) 실습지에서의 임상실습과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/NURS0606/004",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "NURS0606",
+      "section": "004",
+      "courseName": "노인건강간호실습",
+      "professor": "김수현",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "간호학과"
+      ],
+      "departmentCredits": {
+        "간호학과": 1.0
+      },
+      "departmentClassifications": {
+        "간호학과": "전공"
+      },
+      "departmentRemarks": {
+        "간호학과": "노인장기요양시설(노인요양원과 주간보호센터 등) 실습지에서의 임상실습과목으로 별도계획에 의함\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0229/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0229",
+      "section": "001",
+      "courseName": "호흡기·알레르기 병학",
+      "professor": "이재희,최선하,정지웅,김창호,차승익,이신엽,유승수,서혜원,박태인,김문식,이덕헌,도영우,이상우,박준희,최봉석,김동섭,서인철,하남경,김정수,박한기",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0230/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0230",
+      "section": "001",
+      "courseName": "정신건강의학    ",
+      "professor": "장성만,이승재,정운선,이태영,우정민,이상원,이지민,김경민",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0234/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0234",
+      "section": "001",
+      "courseName": "신장·요로계병학",
+      "professor": "김찬덕,정희연,정재욱,박선희,조장희,전유현,조민현,백희선,박민지,권태균,유은상,김태환,김현태,김범수,최석환,하윤석,강준구,허승,김형기,황덕비,김시형,이난영,윤길숙,한만훈,정신영",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0236/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0236",
+      "section": "001",
+      "courseName": "생식·성장·발달 I",
+      "professor": "차현화,김혜민,성원준,정근오,이윤희,이현정,박준철,장원규,이주헌,김현미,이종걸,박서영,김재철,박지영,박지영,곽경화,박호용,이지연,강병주,문준석,양정덕,채의수,이지선,김종미,김민주",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0237/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0237",
+      "section": "001",
+      "courseName": "생식·성장·발달 II",
+      "professor": "최병호,김지숙,조민현,강빈,이윤정,장경미,문정은,백희선,김동섭,이상윤,배현우,최수진,성원준,차현화,장원규,정운선,이지민,윤영란,김하정,송지은,박진영",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0238/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0238",
+      "section": "001",
+      "courseName": "피부·감각계병학",
+      "professor": "전보영,김준영,유명훈,허성재,김정수,이규엽,곽지혜,이정은,이원주,하대룡,하남경,김홍균,박동호,안동빈,김대우,강용구,도재록",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0241/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0241",
+      "section": "001",
+      "courseName": "*내과 임상실습",
+      "professor": "박근규,김성국,손상균,강영모,권영오,조용근,김창호,박헌식,김정국,탁원영,김신우,차승익,김종광,양동헌,강병욱,이재희,김찬덕,이신엽,남언정,김은수,정민규,이장훈,박선희,채의수,유승수,조장희,이현석,조창민,전성우,백진호,박수영,문준호,전재한,권기태,최선하,김남균,김윤정,이상진,장세영,이수정,권용환,정희연,백동원,서혜원,허준,최연경,이동욱,황소윤,김홍년,한승우,박지은,박윤정,박보은,이인희,전유현,정지웅,김민지,박종성,배소현,조희정,진종화,이정민,임승진,정지윤,박낭운,최제용,권태환,이병헌,허근,이재만,김균후,김정민,이제철,신민상,김석호,이충용,김성준,장용민,윤영란,부용출,유정수,백문창,김정은,남성욱,하은지,이원주,김준영,하대룡,하남경,남수연,성숙진,정현준,박한기",
+      "credits": 12.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 12.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0243/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0243",
+      "section": "001",
+      "courseName": "*소아과 임상실습",
+      "professor": "최봉석,이윤정,조민현,김여향,김지윤,강빈,최재영,심예지,김지숙,김동섭,문정은,권정은,이상윤,임영태,배현우,김성은,박민지,장경미,백희선,최수진,추미애,문은지,서인철,김예리,이종걸,최지웅,최병호",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0244/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0244",
+      "section": "001",
+      "courseName": "*산부인과 임상실습",
+      "professor": "이현정,김현미,성원준,차현화,정근오,박준철,이윤희,이지선,이주헌,김민주,김종미,장원규,김혜민,권태균,김태환,유은상,김현태,김범수,최석환,하윤석,정재욱,강준구",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0245/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0245",
+      "section": "001",
+      "courseName": "*정신건강의학과 임상실습",
+      "professor": "장성만,이승재,정운선,우정민,이상원,이태영,이지민,김경민,최은경,여상희,강지연",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0246/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0246",
+      "section": "001",
+      "courseName": "*응급의학과 임상실습",
+      "professor": "김종근,정해원,류현욱,안재윤,이동언,박정배,김윤정,김창호",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0247/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0247",
+      "section": "001",
+      "courseName": "*신경과 임상실습",
+      "professor": "황양하,고판우,은미연,이호원,강경훈,김용원,서종근,박진성,석흥열,최우찬,전지예,박형종,김홍균,전보영,박동호,김대우,강용구,도재록",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0248/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0248",
+      "section": "001",
+      "courseName": "*영상의학과 임상실습",
+      "professor": "이희중,이소미,염헌규,이종민,김혜정,김시형,윤성원,김원화,홍지훈,윤유성,박서영,김재철,강민규,이정은,박신형,박종무,배봉경,박준희,안병철,이상우,정신영,김춘영",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0249/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0249",
+      "section": "001",
+      "courseName": "*진단검사의학과 임상실습",
+      "professor": "김유경,함지연,원동일,이난영,장순희,박태인,윤길숙,박지영,서안나,박지영,한만훈,김문식",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0251/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0251",
+      "section": "001",
+      "courseName": "임상의학영양학",
+      "professor": "전재한,김민지,조용근,전성우,김찬덕,김윤정,정지윤,김균후,권영오,윤영란,박지연,이승수,홍장원,이재만",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0252/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0252",
+      "section": "001",
+      "courseName": "임상약리학 개요",
+      "professor": "윤영란,성숙진",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0256/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0256",
+      "section": "001",
+      "courseName": "*예방의학·지역사회의학 임상실습",
+      "professor": "이덕희,신지연,감신,김건엽,홍남수,이유미,김종연,김동자,강유나,홍연철,구윤경",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0257/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0257",
+      "section": "001",
+      "courseName": "*가정의학과 임상실습",
+      "professor": "고혜진,송지은,박지연,양은경,한형수,배재성,김하정,홍장원",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0276/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0276",
+      "section": "001",
+      "courseName": "죽음학 개요",
+      "professor": "최은경,이상원,강지연,김남균,백진호,권정은,안재윤,이승재,박지연",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0277/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0277",
+      "section": "001",
+      "courseName": "의학교육학 개요",
+      "professor": "여상희,장봉현",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0291/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0291",
+      "section": "001",
+      "courseName": "*정형외과 임상실습",
+      "professor": "백승훈,김동현,경희수,민우기,윤종필,이현주,김희준,김준우,이양수,정태두,민유선,박은희,김명남,이정현,성기웅",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0292/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0292",
+      "section": "001",
+      "courseName": "*흉부외과 임상실습",
+      "professor": "이덕헌,정한나,이응배,조준용,김근직,이영옥,도영우,오탁혁,손신아,김동선,박권무,이경민,남용석",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0293/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0293",
+      "section": "001",
+      "courseName": "*신경외과 임상실습",
+      "professor": "박성현,조대철,황정현,박재찬,박기수,손원수,김명수,고용산,이채진,강동훈,김인겸,석경호,김상현,이화림",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0294/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0294",
+      "section": "001",
+      "courseName": "*성형외과 임상실습",
+      "professor": "최강영,이준석,정호윤,양정덕",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0297/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0297",
+      "section": "001",
+      "courseName": "기본의학종합평가",
+      "professor": "박지영,정민규,김은수",
+      "credits": 5.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 5.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0298/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0298",
+      "section": "001",
+      "courseName": "임상수행능력종합평가",
+      "professor": "고혜진",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0316/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0316",
+      "section": "001",
+      "courseName": "진단의 기본",
+      "professor": "안병철,고혜진,여상희,민유선,이장훈,최선하,이호원,안재윤,김홍년,정민규,송지은,김남균,박지연,고판우,황양하,석흥열,곽지혜,이현석,김혜정,이소미,염헌규,윤성원,이종민,김원화,이상우,정신영,원동일,이난영,김신우",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0317/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0317",
+      "section": "001",
+      "courseName": "치료의 기본",
+      "professor": "권오경,박지연,강병주,권형준,김은지,김주동,김혜진,문준석,박기범,박준석,송승호,이승수,이지연,전현정,황덕비,유병혁,임경훈,조성훈,곽경화,박성식,박준모,변성혜,여진석,오진영,이수현,이정은,임동건,임정아,전영훈,정훈,홍성욱,김윤정,김종근,김창호,류현욱,안재윤,이동언,정해원,최재영,이준석,정호윤,최강영",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0325/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0325",
+      "section": "001",
+      "courseName": "신경학",
+      "professor": "박성현,김명수,황정현,박재찬,조대철,박기수,손원수,고용산,이채진,황양하,이호원,강경훈,김용원,서종근,박진성,석흥열,고판우,은미연,최우찬,전지예,이양수,정태두,민유선,박은희,박지영,이윤정,이상우,윤성원,박신형,이규엽,전보영",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0326/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0326",
+      "section": "001",
+      "courseName": "사례바탕의료인문 1",
+      "professor": "장성만,최은경,고혜진,정운선,성원준,김신우,정민규,류현욱,이상진,우정민,김종연,이태영,민유선",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "SU평가강좌\n\n학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0328/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0328",
+      "section": "001",
+      "courseName": "사례바탕의료인문 3",
+      "professor": "김준영,여상희,권정은,이인희,차현화,배현우",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "SU평가강좌\n\n학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0329/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0329",
+      "section": "001",
+      "courseName": "임상의학종합 및 평가 1",
+      "professor": "이장훈,김홍년,이유미,신지연,홍남수,김종연,이현석,장세영,박지은,진종화,이인희,한승우,백동원,정지웅,황소윤,전유현,이상윤,김종미,김혜민,김경민,은미연,전현정",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0331/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0331",
+      "section": "001",
+      "courseName": "임상의학종합 및 평가 2",
+      "professor": "고혜진",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 2.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0332/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0332",
+      "section": "001",
+      "courseName": "미래의학",
+      "professor": "권태환,강지연,정성문,하은지,김희경,전성우",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0333/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0333",
+      "section": "001",
+      "courseName": "환자-의사-사회 2",
+      "professor": "류현욱,강지연,김신우,최은경",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0339/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0339",
+      "section": "001",
+      "courseName": "인체감염학",
+      "professor": "황소윤,배소현,김신우,권기태,김윤정,임승진,김유경,최병호,김동섭,배현우",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 3.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0340/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0340",
+      "section": "001",
+      "courseName": "의학 연구 1",
+      "professor": "황소윤,최은경,신지연,강민규,강병주,고판우,고혜진,김경민,김상욱,김성준,김예리,김정민,김준영,남성욱,남수연,박기범,박기수,박보은,박은희,박진성,배봉경,배현우,변성혜,서안나,서종근,송지은,여상희,은미연,이덕헌,이상윤,이수현,이윤정,이채진,이태영,이화림,전유현,전현정,정지웅,정지윤,조성훈",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDI0206/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDI0206",
+      "section": "001",
+      "courseName": "의공학",
+      "professor": "김명남,이정현,성기웅",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDI0261/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDI0261",
+      "section": "001",
+      "courseName": "의료정보학",
+      "professor": "정성문,양수,김상욱",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDI0416/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDI0416",
+      "section": "001",
+      "courseName": "법의학",
+      "professor": "김동자,강유나,채종민,김지락",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 1.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDI0452/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDI0452",
+      "section": "001",
+      "courseName": "*외과학실습",
+      "professor": "김형기,황덕비,최규석,허승,박호용,김상걸,박진영,박준석,정진향,권오경,김주동,김혜진,이승수,박지연,이지연,권형준,박기범,송승호,강병주,전현정,김은지,문준석,임경훈,조성훈,이원기,정성문,양수,임동건,박성식,곽경화,전영훈,여진석,박준모,정훈,김현지,변성혜,이정은,홍성욱,오진영,이수현,임정아,김정수,이규엽,안동빈,허성재,유명훈,정다정,곽지혜,유병혁,김상욱,김건우,황수영",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "의학과"
+      ],
+      "departmentCredits": {
+        "의학과": 4.0
+      },
+      "departmentClassifications": {
+        "의학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0212/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0212",
+      "section": "001",
+      "courseName": "인체 해부학 II",
+      "professor": "남용석,이경민,고판우,김범수,박동호,박재찬,이규엽,이희중,조대철,최강영,하윤석",
+      "credits": 3.0,
+      "sourceSchedule": "금 09:00 ~ 10:00,금 10:00 ~ 11:00,화 11:00 ~ 12:00,화 12:00 ~ 13:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": " "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": " "
+        },
+        {
+          "weekday": 2,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": " "
+        },
+        {
+          "weekday": 2,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": " "
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0212/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0212",
+      "section": "002",
+      "courseName": "인체 해부학 II",
+      "professor": "이경민,남용석,고판우,김범수,박동호,박재찬,이규엽,이희중,조대철,최강영,하윤석",
+      "credits": 3.0,
+      "sourceSchedule": "화 09:00 ~ 10:00,화 10:00 ~ 11:00,금 11:00 ~ 12:00,금 12:00 ~ 13:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": " "
+        },
+        {
+          "weekday": 2,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": " "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": " "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": " "
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 3.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0213/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0213",
+      "section": "001",
+      "courseName": "인체 조직학",
+      "professor": "김동선,이경민,박권무",
+      "credits": 4.0,
+      "sourceSchedule": "목 14:00 ~ 15:00,목 15:00 ~ 16:00,목 16:00 ~ 17:00,목 17:00 ~ 18:00,목 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 1080,
+          "endMinute": 1140,
+          "classroom": " "
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 4.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/MEDE0213/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "MEDE0213",
+      "section": "002",
+      "courseName": "인체 조직학",
+      "professor": "이경민,김동선,박권무",
+      "credits": 4.0,
+      "sourceSchedule": "목 09:00 ~ 10:00,목 10:00 ~ 11:00,목 11:00 ~ 12:00,목 12:00 ~ 13:00,목 13:00 ~ 14:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 540,
+          "endMinute": 600,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 600,
+          "endMinute": 660,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 660,
+          "endMinute": 720,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 720,
+          "endMinute": 780,
+          "classroom": " "
+        },
+        {
+          "weekday": 4,
+          "startMinute": 780,
+          "endMinute": 840,
+          "classroom": " "
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 4.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/PREM0226/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0226",
+      "section": "001",
+      "courseName": "의생명과학실험Ⅰ",
+      "professor": "백문창,부용출,김정은,장용민,구윤경,남성욱,하은지",
+      "credits": 2.0,
+      "sourceSchedule": "수 14:00 ~ 15:00,수 15:00 ~ 16:00,수 16:00 ~ 17:00,수 17:00 ~ 18:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": " "
+        },
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " "
+        },
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " "
+        },
+        {
+          "weekday": 3,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": " "
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 2.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/PREM0226/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PREM0226",
+      "section": "002",
+      "courseName": "의생명과학실험Ⅰ",
+      "professor": "백문창,부용출,김정은,장용민,구윤경,남성욱,하은지",
+      "credits": 2.0,
+      "sourceSchedule": "화 14:00 ~ 15:00,화 15:00 ~ 16:00,화 16:00 ~ 17:00,화 17:00 ~ 18:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 840,
+          "endMinute": 900,
+          "classroom": " "
+        },
+        {
+          "weekday": 2,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " "
+        },
+        {
+          "weekday": 2,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " "
+        },
+        {
+          "weekday": 2,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": " "
+        }
+      ],
+      "departments": [
+        "의예과"
+      ],
+      "departmentCredits": {
+        "의예과": 2.0
+      },
+      "departmentClassifications": {
+        "의예과": "전공필수"
+      },
+      "departmentRemarks": {
+        "의예과": "학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0202/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0202",
+      "section": "001",
+      "courseName": "치아질환",
+      "professor": "최연희,하정홍,최제용,송근배,김영경,안서영",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0203/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0203",
+      "section": "001",
+      "courseName": "성장발육학",
+      "professor": "박효상,이제식,조우형,홍미희,권영은,안창현",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0210/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0210",
+      "section": "001",
+      "courseName": "치의학연구방법론",
+      "professor": "최연희,김은경,박효상,안동국",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0211/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0211",
+      "section": "001",
+      "courseName": "구강안면통증",
+      "professor": "정재광,최재갑,안동국,장일성,박은희,심규조,김지락,권영은,변진석,김도형,안재윤,전영훈,곽경화,홍성욱,정훈,이정은,임동건,오진영,박준모,여진석,김현지",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 3.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0212/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0212",
+      "section": "001",
+      "courseName": "구강악안면손상",
+      "professor": "김진욱,최소영,김도형,심규조,하정홍,권영은,권대근",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0213/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0213",
+      "section": "001",
+      "courseName": "소아고정성수복실습",
+      "professor": "이제식,김소현,장은영,이수지",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0214/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0214",
+      "section": "001",
+      "courseName": "부정교합",
+      "professor": "박효상,이제식,김용건,심규조,권대근,홍미희,조우형",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 4.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0215/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0215",
+      "section": "001",
+      "courseName": "교정실습",
+      "professor": "박효상,홍미희,조우형,이영규,심지영,이수경,배은주,배수근,김지용",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 3.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0217/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0217",
+      "section": "001",
+      "courseName": "의료법학과 윤리",
+      "professor": "최연희,김지락,김은경",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0219/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0219",
+      "section": "001",
+      "courseName": "치과의료관리학과 의료산업창업",
+      "professor": "최연희,김은경",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0222/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0222",
+      "section": "001",
+      "courseName": "영상치의학",
+      "professor": "안창현,권영은,안서영",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0231/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0231",
+      "section": "001",
+      "courseName": "인체병리학 및 실습",
+      "professor": "김미선",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 4.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0232/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0232",
+      "section": "001",
+      "courseName": "인체미생물학 및 실습",
+      "professor": "이헌진,곽소영,홍수형",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 3.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0233/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0233",
+      "section": "001",
+      "courseName": "치근관치료학",
+      "professor": "하정홍,조효진,안창현,김미선,김성교,김용건",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 3.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0234/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0234",
+      "section": "001",
+      "courseName": "인체약리학 및 실습",
+      "professor": "장일성,김도연,이만기",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 4.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0236/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0236",
+      "section": "001",
+      "courseName": "임상실습입문 A ",
+      "professor": "황성민,정재광,변진석,김지락,권대근,김진욱,전영훈,최소영,김도형,심규조,이청희,이규복,김소연,김영경,진명욱,하정홍,조효진,박효상,홍미희,조우형,이재목,박진우,김용건,이제식,안창현,안서영,권영은,황일광",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "SU평가강좌\n\n학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0237/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0237",
+      "section": "001",
+      "courseName": "치과고정성수복학",
+      "professor": "이규복,김영경,진명욱,손큰바다,박찬호",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 4.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0244/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0244",
+      "section": "001",
+      "courseName": "임상증례토론A",
+      "professor": "진명욱,정재광,변진석,김지락,권대근,김진욱,최소영,전영훈,김도형,심규조,이청희,이규복,김소연,김영경,하정홍,조효진,박효상,홍미희,조우형,이재목,박진우,김용건,황성민,이제식,안창현,안서영,권영은,황일광",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0249/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0249",
+      "section": "001",
+      "courseName": "임상증례토론C",
+      "professor": "안서영,정재광,변진석,김지락,권대근,김진욱,최소영,전영훈,김도형,심규조,이청희,이규복,김소연,김영경,진명욱,하정홍,조효진,박효상,홍미희,조우형,이재목,박진우,김용건,황성민,이제식,안창현,권영은,황일광",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 2.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0251/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0251",
+      "section": "001",
+      "courseName": "치의학종합이해실습",
+      "professor": "김용건,안서영,진명욱,정재광,변진석,김지락,권대근,김진욱,최소영,김도형,심규조,이청희,이규복,김영경,하정홍,조효진,박효상,김소연,홍미희,김호진,이재목,박진우,황성민,이제식,안창현,권영은,홍수형,이헌진,박의균,김미선,안동국,윤동호,김재영,이영균,김윤숙,최연희,김은경,박찬호,이정훈,장일성,김도연,조우형,황일광,곽소영",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 4.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0255/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0255",
+      "section": "001",
+      "courseName": "통합임상전단계실습",
+      "professor": "김진욱,김도형,황성민,박진우,안창현,안서영,권영은,김용건,이재목,정재광,변진석,김지락",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0258/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0258",
+      "section": "001",
+      "courseName": "인문사회와자원봉사Ⅱ",
+      "professor": "안서영,김용건,진명욱,정재광,변진석,김지락,권대근,김진욱,최소영,김도형,심규조,이청희,이규복,김영경,하정홍,조효진,박효상,김소연,홍미희,김호진,이재목,박진우,황성민,이제식,안창현,권영은,홍수형,이헌진,박의균,김미선,안동국,윤동호,김재영,이영균,김윤숙,최연희,김은경,박찬호,이정훈,장일성,김도연,조우형,황일광,곽소영",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "SU평가강좌\n\n학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0263/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0263",
+      "section": "001",
+      "courseName": "인문사회치의학1",
+      "professor": "정재광,변진석,권대근",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 1\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0265/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0265",
+      "section": "001",
+      "courseName": "가철성보철수복Ⅱ및실습",
+      "professor": "이청희,심규조,김소연,박경순,권재욱,박진욱,서정교,신윤정",
+      "credits": 7.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 7.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0267/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0267",
+      "section": "001",
+      "courseName": "인문사회치의학2",
+      "professor": "김은경,최연희,전영훈,김지락,변진석",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 2\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0268/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0268",
+      "section": "001",
+      "courseName": "임상행동조절및의사소통",
+      "professor": "변진석,정재광,김은경,이제식",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0269/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0269",
+      "section": "001",
+      "courseName": "최신치의학강의 Ⅰ",
+      "professor": "홍미희,조효진,이규복,정재광",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0270/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0270",
+      "section": "001",
+      "courseName": "최신치의학강의 Ⅱ",
+      "professor": "이영균,하정홍,김소연,윤동호",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0271/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0271",
+      "section": "001",
+      "courseName": "치과임플란트학",
+      "professor": "이청희,박진우,최소영,이재목,김소연,황성민,이규복",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0272/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0272",
+      "section": "001",
+      "courseName": "치과임플란트학실습",
+      "professor": "이청희,우현욱,최소영,이규복",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 1.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 4\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0274/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0274",
+      "section": "001",
+      "courseName": "치의학임상실습 Ⅱ",
+      "professor": "김지락,정재광,변진석,권대근,김진욱,최소영,전영훈,김도형,심규조,이청희,이규복,김소연,김영경,진명욱,하정홍,조효진,박효상,홍미희,조우형,이재목,박진우,김용건,황성민,이제식,안창현,안서영,권영은,손가은,박영인,박지훈,이승훈,이재욱,전은규,김상범,이학준,이준명,손상준,이승환,최수정,서장원,빈수겸,황도희,배장규,민경곤,조영준,정용탁,한상협,남순신,윤용,김미루,심재용,황일광",
+      "credits": 13.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "치의학과"
+      ],
+      "departmentCredits": {
+        "치의학과": 13.0
+      },
+      "departmentClassifications": {
+        "치의학과": "전공"
+      },
+      "departmentRemarks": {
+        "치의학과": "학년: 3\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CLTR0210/019",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0210",
+      "section": "019",
+      "courseName": "명저읽기와 토론",
+      "professor": "안동국,김미선,윤동호,김은경",
+      "credits": 3.0,
+      "sourceSchedule": "금 15:00 ~ 16:00,금 16:00 ~ 17:00,금 17:00 ~ 18:00",
+      "sourceClassroom": " 치과대학 복지후생동 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": " 치과대학 복지후생동 "
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 3.0
+      },
+      "departmentClassifications": {
+        "치의예과": "교양"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CLTR0210/020",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0210",
+      "section": "020",
+      "courseName": "명저읽기와 토론",
+      "professor": "윤동호,김은경,정재광,이정훈",
+      "credits": 3.0,
+      "sourceSchedule": "금 15:00 ~ 16:00,금 16:00 ~ 17:00,금 17:00 ~ 18:00",
+      "sourceClassroom": " 치과대학 복지후생동 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": " 치과대학 복지후생동 "
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 3.0
+      },
+      "departmentClassifications": {
+        "치의예과": "교양"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CLTR0210/021",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CLTR0210",
+      "section": "021",
+      "courseName": "명저읽기와 토론",
+      "professor": "박찬호,정재광,안동국,김미선",
+      "credits": 3.0,
+      "sourceSchedule": "금 15:00 ~ 16:00,금 16:00 ~ 17:00,금 17:00 ~ 18:00",
+      "sourceClassroom": " 치과대학 복지후생동 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 5,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 5,
+          "startMinute": 1020,
+          "endMinute": 1080,
+          "classroom": " 치과대학 복지후생동 "
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 3.0
+      },
+      "departmentClassifications": {
+        "치의예과": "교양"
+      },
+      "departmentRemarks": {
+        "치의예과": "학년: 1"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0257/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0257",
+      "section": "002",
+      "courseName": "인문사회와자원봉사Ⅰ",
+      "professor": "이영균",
+      "credits": 1.0,
+      "sourceSchedule": "수 15:00 ~ 16:00,수 16:00 ~ 17:00",
+      "sourceClassroom": " 치과대학 복지후생동 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " 치과대학 복지후생동 "
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 1.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "SU평가강좌\n\n학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/DETI0257/003",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DETI0257",
+      "section": "003",
+      "courseName": "인문사회와자원봉사Ⅰ",
+      "professor": "김도연",
+      "credits": 1.0,
+      "sourceSchedule": "수 15:00 ~ 16:00,수 16:00 ~ 17:00",
+      "sourceClassroom": " 치과대학 복지후생동 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 3,
+          "startMinute": 900,
+          "endMinute": 960,
+          "classroom": " 치과대학 복지후생동 "
+        },
+        {
+          "weekday": 3,
+          "startMinute": 960,
+          "endMinute": 1020,
+          "classroom": " 치과대학 복지후생동 "
+        }
+      ],
+      "departments": [
+        "치의예과"
+      ],
+      "departmentCredits": {
+        "치의예과": 1.0
+      },
+      "departmentClassifications": {
+        "치의예과": "전공"
+      },
+      "departmentRemarks": {
+        "치의예과": "SU평가강좌\n\n학년: 2"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/PHAR0325/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PHAR0325",
+      "section": "001",
+      "courseName": "심화약학실무실습 2",
+      "professor": "권미정,권진원,김동욱",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "약학과"
+      ],
+      "departmentCredits": {
+        "약학과": 4.0
+      },
+      "departmentClassifications": {
+        "약학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "약학과": "SU평가강좌\n\n학년: 6\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/PHAR0326/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "PHAR0326",
+      "section": "001",
+      "courseName": "심화약학실무실습 3",
+      "professor": "류주희,권윤,변준규,신광희",
+      "credits": 4.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "약학과"
+      ],
+      "departmentCredits": {
+        "약학과": 4.0
+      },
+      "departmentClassifications": {
+        "약학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "약학과": "SU평가강좌\n\n학년: 6\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/STUP0301/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "STUP0301",
+      "section": "001",
+      "courseName": "창업준비실습",
+      "professor": "정병성",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "연구산학처"
+      ],
+      "departmentCredits": {
+        "연구산학처": 3.0
+      },
+      "departmentClassifications": {
+        "연구산학처": "일반선택"
+      },
+      "departmentRemarks": {
+        "연구산학처": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/STUP0303/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "STUP0303",
+      "section": "001",
+      "courseName": "창업활동실습1",
+      "professor": "정병성",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "연구산학처"
+      ],
+      "departmentCredits": {
+        "연구산학처": 3.0
+      },
+      "departmentClassifications": {
+        "연구산학처": "일반선택"
+      },
+      "departmentRemarks": {
+        "연구산학처": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/STUP0304/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "STUP0304",
+      "section": "001",
+      "courseName": "창업활동실습2",
+      "professor": "정병성",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "연구산학처"
+      ],
+      "departmentCredits": {
+        "연구산학처": 3.0
+      },
+      "departmentClassifications": {
+        "연구산학처": "일반선택"
+      },
+      "departmentRemarks": {
+        "연구산학처": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/STUP0311/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "STUP0311",
+      "section": "001",
+      "courseName": "창업현장실습",
+      "professor": "정병성",
+      "credits": 18.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "연구산학처"
+      ],
+      "departmentCredits": {
+        "연구산학처": 18.0
+      },
+      "departmentClassifications": {
+        "연구산학처": "일반선택"
+      },
+      "departmentRemarks": {
+        "연구산학처": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/TCHR0552/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "TCHR0552",
+      "section": "001",
+      "courseName": "교육봉사활동 2",
+      "professor": "이문규",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "교육연수원"
+      ],
+      "departmentCredits": {
+        "교육연수원": 2.0
+      },
+      "departmentClassifications": {
+        "교육연수원": "교직"
+      },
+      "departmentRemarks": {
+        "교육연수원": "상주캠퍼스\nSU평가강좌\n\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0101/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0101",
+      "section": "001",
+      "courseName": "다문화사회의 이해",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00 ~ 11:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0103/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0103",
+      "section": "001",
+      "courseName": "여행과 문화",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00 ~ 11:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0105/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0105",
+      "section": "001",
+      "courseName": "컴퓨팅사고력(일반)",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00 ~ 11:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0106/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0106",
+      "section": "001",
+      "courseName": "전염병과 인류의 역사",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00 ~ 11:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0107/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0107",
+      "section": "001",
+      "courseName": "글로벌시대의 세계시민",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 10:00 ~ 11:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0201/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0201",
+      "section": "001",
+      "courseName": "국제화시대의언어",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 12:00 ~ 13:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0202/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0202",
+      "section": "001",
+      "courseName": "평화사상과통일의길",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 12:00 ~ 13:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0203/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0203",
+      "section": "001",
+      "courseName": "고사와 성어의 탐구",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 12:00 ~ 13:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0204/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0204",
+      "section": "001",
+      "courseName": "산업경영의 이해 ",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 12:00 ~ 13:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0301/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0301",
+      "section": "001",
+      "courseName": "위험사회와 미래직업",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 13:00 ~ 14:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0303/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0303",
+      "section": "001",
+      "courseName": "AI와 인간 – 거울 속의 기계가 던지는 윤리적 질문들",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 13:00 ~ 14:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0402/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0402",
+      "section": "001",
+      "courseName": "분쟁의 세계지리",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00 ~ 16:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0403/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0403",
+      "section": "001",
+      "courseName": "에듀테크의 이해",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00 ~ 16:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0405/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0405",
+      "section": "001",
+      "courseName": "디지털시대 로컬문화 큐레이팅",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00 ~ 16:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0406/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0406",
+      "section": "001",
+      "courseName": "예술 감성과 미학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 15:00 ~ 16:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0501/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0501",
+      "section": "001",
+      "courseName": "리더십",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0502/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0502",
+      "section": "001",
+      "courseName": "한옥개론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0503/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0503",
+      "section": "001",
+      "courseName": "중국고대철학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0505/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0505",
+      "section": "001",
+      "courseName": "화훼산업론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0506/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0506",
+      "section": "001",
+      "courseName": "도시개발론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0508/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0508",
+      "section": "001",
+      "courseName": "빅데이터 이해 및 활용",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0510/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0510",
+      "section": "001",
+      "courseName": "능력검정 한국사 따라가기",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0512/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0512",
+      "section": "001",
+      "courseName": "SNS와 유튜브론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0513/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0513",
+      "section": "001",
+      "courseName": "탄소중립을 실현하기 위한 화학, 공학 및 경제학의 융합",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0602/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0602",
+      "section": "001",
+      "courseName": "환경문제와 윤리",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 17:00 ~ 18:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0604/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0604",
+      "section": "001",
+      "courseName": "무역실무",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 17:00 ~ 18:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0608/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0608",
+      "section": "001",
+      "courseName": "마이클샌델이 다시 쓰는 정의란 무엇인가",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "토 17:00 ~ 18:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0611/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0611",
+      "section": "001",
+      "courseName": "간호학개론",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 17:00 ~ 18:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0612/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0612",
+      "section": "001",
+      "courseName": "평화공공외교론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 17:00 ~ 18:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0702/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0702",
+      "section": "001",
+      "courseName": "심리학 START",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0703/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0703",
+      "section": "001",
+      "courseName": "트랜스미디어 스토리텔링",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0704/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0704",
+      "section": "001",
+      "courseName": "세계의문화유산",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0705/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0705",
+      "section": "001",
+      "courseName": "양명학, 돌봄과 공생의 길",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0706/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0706",
+      "section": "001",
+      "courseName": "자기조절",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0707/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0707",
+      "section": "001",
+      "courseName": "공대생을 위한 기초물리학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0708/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0708",
+      "section": "001",
+      "courseName": "사회적 가치와 개인의 자유",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0802/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0802",
+      "section": "001",
+      "courseName": "우주로의 여행",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0803/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0803",
+      "section": "001",
+      "courseName": "한국지형여행",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0804/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0804",
+      "section": "001",
+      "courseName": "불교가 묻고 내가 답한다",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0805/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0805",
+      "section": "001",
+      "courseName": "로마 문화와 함께 배우는 교양 라틴어",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0806/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0806",
+      "section": "001",
+      "courseName": "알기 쉬운 기업 살림살이",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0807/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0807",
+      "section": "001",
+      "courseName": "비유와 우화로 보는 철학 산책",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0809/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0809",
+      "section": "001",
+      "courseName": "스포츠인문학",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0901/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0901",
+      "section": "001",
+      "courseName": "디지털 스토리텔링과 게임",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "토 14:00 ~ 15:00,목 17:00 ~ 18:00,목 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-03",
+          "weekday": 4,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-09-17",
+          "weekday": 4,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-10-15",
+          "weekday": 4,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-10-29",
+          "weekday": 4,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-12-10",
+          "weekday": 4,
+          "startMinute": 1050,
+          "endMinute": 1100,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        }
+      ],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0906/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0906",
+      "section": "001",
+      "courseName": "동양의 고전",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 14:00 ~ 15:00,수 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0907/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0907",
+      "section": "001",
+      "courseName": "세계종교입문",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "목 14:00 ~ 15:00,토 14:00 ~ 15:00,목 15:00 ~ 16:00,목 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0908/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0908",
+      "section": "001",
+      "courseName": "빅데이터, 인공지능과 예술",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "토 14:00 ~ 15:00,금 18:00 ~ 19:00,금 19:00 ~ 20:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0910/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0910",
+      "section": "001",
+      "courseName": "디지털 리터러시와 인문적 사고",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 14:00 ~ 15:00,화 14:00 ~ 15:00,화 15:00 ~ 16:00,화 16:00 ~ 17:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0911/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0911",
+      "section": "001",
+      "courseName": "생활구강건강관리",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "금 10:00 ~ 11:00,토 14:00 ~ 15:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/AAAA0912/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "AAAA0912",
+      "section": "001",
+      "courseName": "음성데이터의 특성과 처리: 기초 음성학과 음향 분석",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "토 14:00 ~ 15:00,목 17:00 ~ 18:00,수 17:00 ~ 18:00,목 18:00 ~ 19:00,수 18:00 ~ 19:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "date": "2026-09-10",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1095,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-10-08",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1095,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-10-22",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1095,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-11-12",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1095,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-12-03",
+          "weekday": 4,
+          "startMinute": 1020,
+          "endMinute": 1095,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        },
+        {
+          "date": "2026-09-23",
+          "weekday": 3,
+          "startMinute": 1020,
+          "endMinute": 1095,
+          "classroom": "",
+          "deliveryMode": "liveOnline"
+        }
+      ],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n거점국립대원격강좌\n거점국립대 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CCCC0202/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CCCC0202",
+      "section": "001",
+      "courseName": "모빌리티 기술의 이해",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "토 11:00 ~ 12:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n대구라이즈공유대학강좌\n대구라이즈공유대학 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CCCC0404/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CCCC0404",
+      "section": "001",
+      "courseName": "휴먼 케어",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "토 09:00 ~ 10:00,토 10:00 ~ 11:00,토 11:00 ~ 12:00,토 12:00 ~ 13:00,토 13:00 ~ 14:00,토 14:00 ~ 15:00,토 15:00 ~ 16:00,토 16:00 ~ 17:00,토 17:00 ~ 18:00,토 18:00 ~ 19:00,토 19:00 ~ 20:00,토 20:00 ~ 21:00,토 21:00 ~ 22:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n대구라이즈공유대학강좌\n대구라이즈공유대학 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CCCC0502/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CCCC0502",
+      "section": "001",
+      "courseName": "창의 및 융합적 사고",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "금 10:00 ~ 11:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "교양"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n대구라이즈공유대학강좌\n대구라이즈공유대학 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CCCC0601/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CCCC0601",
+      "section": "001",
+      "courseName": "업무 자동화를 위한 AI 비서 만들기",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "토 10:00 ~ 11:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 1.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n대구라이즈공유대학강좌\n대구라이즈공유대학 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CCCC0703/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CCCC0703",
+      "section": "001",
+      "courseName": "소비자행동론",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "금 09:00 ~ 10:00,금 10:00 ~ 11:00,금 11:00 ~ 12:00,금 12:00 ~ 13:00,금 13:00 ~ 14:00,금 14:00 ~ 15:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 3.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n대구라이즈공유대학강좌\n대구라이즈공유대학 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CCCC0803/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CCCC0803",
+      "section": "001",
+      "courseName": "AI뷰티마케팅",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "금 14:00 ~ 15:00",
+      "sourceClassroom": " ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "학사과"
+      ],
+      "departmentCredits": {
+        "학사과": 2.0
+      },
+      "departmentClassifications": {
+        "학사과": "일반선택"
+      },
+      "departmentRemarks": {
+        "학사과": "전학년선택\n원격강좌\n대구라이즈공유대학강좌\n대구라이즈공유대학 원격수업 학점교류 교과목, 반드시 학사공지 및 LMS 공지확인\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CEPP0211/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CEPP0211",
+      "section": "001",
+      "courseName": "진로탐색1 (학생자율프로젝트)",
+      "professor": "",
+      "credits": 1.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "대학"
+      ],
+      "departmentCredits": {
+        "대학": 1.0
+      },
+      "departmentClassifications": {
+        "대학": "일반선택"
+      },
+      "departmentRemarks": {
+        "대학": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CEPP0212/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CEPP0212",
+      "section": "001",
+      "courseName": "진로탐색2 (학생자율프로젝트)",
+      "professor": "",
+      "credits": 2.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "대학"
+      ],
+      "departmentCredits": {
+        "대학": 2.0
+      },
+      "departmentClassifications": {
+        "대학": "일반선택"
+      },
+      "departmentRemarks": {
+        "대학": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CEPP0213/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CEPP0213",
+      "section": "001",
+      "courseName": "진로탐색3 (학생자율프로젝트)",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "대학"
+      ],
+      "departmentCredits": {
+        "대학": 3.0
+      },
+      "departmentClassifications": {
+        "대학": "일반선택"
+      },
+      "departmentRemarks": {
+        "대학": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/CEPP0217/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CEPP0217",
+      "section": "001",
+      "courseName": " 진로탐색7 (학생자율프로젝트)",
+      "professor": "",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "대학"
+      ],
+      "departmentCredits": {
+        "대학": 3.0
+      },
+      "departmentClassifications": {
+        "대학": "일반선택"
+      },
+      "departmentRemarks": {
+        "대학": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/FLEX0207/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FLEX0207",
+      "section": "001",
+      "courseName": "현장실습5",
+      "professor": "이안수",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "진로취업과"
+      ],
+      "departmentCredits": {
+        "진로취업과": 3.0
+      },
+      "departmentClassifications": {
+        "진로취업과": "일반선택"
+      },
+      "departmentRemarks": {
+        "진로취업과": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/FLEX0207/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FLEX0207",
+      "section": "002",
+      "courseName": "현장실습5",
+      "professor": "이안수",
+      "credits": 3.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "진로취업과"
+      ],
+      "departmentCredits": {
+        "진로취업과": 3.0
+      },
+      "departmentClassifications": {
+        "진로취업과": "일반선택"
+      },
+      "departmentRemarks": {
+        "진로취업과": "전학년선택\n상주캠퍼스\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/FLEX0208/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FLEX0208",
+      "section": "001",
+      "courseName": "현장실습6",
+      "professor": "이안수",
+      "credits": 6.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "진로취업과"
+      ],
+      "departmentCredits": {
+        "진로취업과": 6.0
+      },
+      "departmentClassifications": {
+        "진로취업과": "일반선택"
+      },
+      "departmentRemarks": {
+        "진로취업과": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/FLEX0208/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FLEX0208",
+      "section": "002",
+      "courseName": "현장실습6",
+      "professor": "이안수",
+      "credits": 6.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "진로취업과"
+      ],
+      "departmentCredits": {
+        "진로취업과": 6.0
+      },
+      "departmentClassifications": {
+        "진로취업과": "일반선택"
+      },
+      "departmentRemarks": {
+        "진로취업과": "전학년선택\n상주캠퍼스\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/FLEX0209/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FLEX0209",
+      "section": "001",
+      "courseName": "현장실습7",
+      "professor": "이안수",
+      "credits": 9.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "진로취업과"
+      ],
+      "departmentCredits": {
+        "진로취업과": 9.0
+      },
+      "departmentClassifications": {
+        "진로취업과": "일반선택"
+      },
+      "departmentRemarks": {
+        "진로취업과": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/FLEX0209/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "FLEX0209",
+      "section": "002",
+      "courseName": "현장실습7",
+      "professor": "이안수",
+      "credits": 9.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "진로취업과"
+      ],
+      "departmentCredits": {
+        "진로취업과": 9.0
+      },
+      "departmentClassifications": {
+        "진로취업과": "일반선택"
+      },
+      "departmentRemarks": {
+        "진로취업과": "전학년선택\n상주캠퍼스\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/OVIN0210/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OVIN0210",
+      "section": "001",
+      "courseName": "해외인턴십2",
+      "professor": "최희경",
+      "credits": 18.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "국제교류과"
+      ],
+      "departmentCredits": {
+        "국제교류과": 18.0
+      },
+      "departmentClassifications": {
+        "국제교류과": "일반선택"
+      },
+      "departmentRemarks": {
+        "국제교류과": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/OVIN0210/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OVIN0210",
+      "section": "002",
+      "courseName": "해외인턴십2",
+      "professor": "최희경",
+      "credits": 18.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "국제교류과"
+      ],
+      "departmentCredits": {
+        "국제교류과": 18.0
+      },
+      "departmentClassifications": {
+        "국제교류과": "일반선택"
+      },
+      "departmentRemarks": {
+        "국제교류과": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/OVIN0212/001",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OVIN0212",
+      "section": "001",
+      "courseName": "해외인턴십4",
+      "professor": "최희경",
+      "credits": 12.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "국제교류과"
+      ],
+      "departmentCredits": {
+        "국제교류과": 12.0
+      },
+      "departmentClassifications": {
+        "국제교류과": "일반선택"
+      },
+      "departmentRemarks": {
+        "국제교류과": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    },
+    {
+      "sourceId": "knu/unassigned/2026/2/OVIN0212/002",
+      "universityId": "knu",
+      "campus": "unassigned",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "OVIN0212",
+      "section": "002",
+      "courseName": "해외인턴십4",
+      "professor": "최희경",
+      "credits": 12.0,
+      "sourceSchedule": "",
+      "sourceClassroom": "",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "departments": [
+        "국제교류과"
+      ],
+      "departmentCredits": {
+        "국제교류과": 12.0
+      },
+      "departmentClassifications": {
+        "국제교류과": "일반선택"
+      },
+      "departmentRemarks": {
+        "국제교류과": "전학년선택\nSU평가강좌\n\n학년: *\n실제 수업시간·적용일자 또는 진행 방식 미확인: 시간표 추가 불가"
+      }
+    }
+  ],
+  "researchOnly": false,
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}
