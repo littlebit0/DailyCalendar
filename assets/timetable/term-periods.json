@@ -577,6 +577,19 @@
           "note": "Full academic bounds; ordinary course dates end Dec7 before explicit makeup/exam windows. Actual school closures excluded; unknown exam or clinical dates not invented."
         }
       ]
+    },
+    {
+      "university": "pknu",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://www.pknu.ac.kr/main/163?action=view&no=725810&cd=10003",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-20"
+        }
+      ]
     }
   ]
 }
