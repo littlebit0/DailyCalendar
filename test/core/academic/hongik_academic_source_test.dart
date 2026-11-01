@@ -11,11 +11,9 @@ String fixture(int year) =>
 List<Map<String, dynamic>> rows(int year) =>
     ((jsonDecode(fixture(year)) as Map)['data'] as List)
         .cast<Map<String, dynamic>>();
-bool monthOnly(Map<String, dynamic> row) =>
-    row['START'].length == 7 || row['END'].length == 7;
 
 void main() {
-  test('Hongik public JSON excludes month-only imprecise notices', () {
+  test('Hongik month-only notices span their whole months', () {
     final events = HongikAcademicSource.parse(fixture(2026), 2026);
     expect(events.length, greaterThan(40));
     expect(
@@ -24,15 +22,20 @@ void main() {
       ),
       isTrue,
     );
-    expect(events.any((e) => e.title == '2027학년도 신입생 수시모집 입학전형'), isFalse);
+    final monthly = events.singleWhere(
+      (e) => e.title == '2027학년도 신입생 수시모집 입학전형',
+    );
+    expect(monthly.start, DateTime(2026, 9));
+    expect(monthly.end, DateTime(2027));
   });
 
-  test('every exactly dated Hongik row is imported for each year', () {
-    for (final (year, total, dated) in [(2025, 76, 66), (2026, 76, 67)]) {
-      final published = rows(year);
-      expect(published, hasLength(total));
-      expect(published.where((r) => !monthOnly(r)), hasLength(dated));
-      expect(HongikAcademicSource.parse(fixture(year), year), hasLength(dated));
+  test('every Hongik row is imported for each year', () {
+    for (final (year, unique) in [(2025, 76), (2026, 76)]) {
+      expect(rows(year), hasLength(76));
+      expect(
+        HongikAcademicSource.parse(fixture(year), year),
+        hasLength(unique),
+      );
     }
   });
 
@@ -69,7 +72,7 @@ void main() {
     final events = await source.fetch(2026);
     source.close();
     expect(requested, ['2025', '2026']);
-    expect(events, hasLength(60));
+    expect(events, hasLength(69));
     final winter = events.singleWhere((e) => e.title == '2025학년도 동계 계절학기');
     expect(winter.start, DateTime(2025, 12, 23));
     expect(winter.end, DateTime(2026, 1, 16));

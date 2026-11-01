@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/update/update_required_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -126,6 +127,7 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
         return;
       }
 
+      if (blockedByRequiredUpdate(context, ref)) return;
       final confirmed = await showModalBottomSheet<bool>(
         context: context,
         showDragHandle: true,
@@ -133,6 +135,10 @@ class _ChatInputBarState extends ConsumerState<ChatInputBar> {
       );
       if (confirmed == true) {
         if (!mounted) return;
+        if (updateRequired(ref)) {
+          showUpdateRequiredNotice(context, ref);
+          return;
+        }
         await ref.read(eventCommandServiceProvider).create(result.draft!);
         if (!mounted) return;
         _controller.clear();
