@@ -3033,6 +3033,7 @@ class _MemoryEventRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     final affected = <CalendarEvent>[];
     for (final entry in _events.entries.toList()) {

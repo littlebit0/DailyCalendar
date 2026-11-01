@@ -10329,6 +10329,7 @@ class _FakeEventRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     if (failCategoryUpdate) throw StateError('event rows were not updated');
     final affected = <CalendarEvent>[];

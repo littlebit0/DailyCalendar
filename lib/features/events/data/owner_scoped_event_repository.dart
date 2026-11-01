@@ -41,10 +41,12 @@ class OwnerScopedEventRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) => delegate.updateCategoryReferences(
     previous: previous,
     updated: updated,
     updatedAt: updatedAt,
+    beforeWrite: beforeWrite,
   );
   @override
   Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(

@@ -400,6 +400,18 @@ void main() {
         expect(repository.writes, 0);
       });
 
+      test('changes no category rows', () async {
+        final (service, repository) = await atomicService(_event());
+        await expectLater(
+          service.updateCategoryUsage(
+            previous: EventCategory.basic,
+            updated: EventCategory.holiday,
+          ),
+          throwsA(isA<EventWritesBlocked>()),
+        );
+        expect(repository.writes, 0);
+      });
+
       test('moves no occurrence', () async {
         final event = repeating();
         final (service, repository) = await atomicService(event);
@@ -1414,7 +1426,14 @@ class _SingleEventRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
-  }) async => const [];
+    void Function()? beforeWrite,
+  }) async {
+    await findById(previous.id);
+    beforeResolve?.call();
+    beforeWrite?.call();
+    writes++;
+    return const [];
+  }
 
   @override
   Stream<List<CalendarEvent>> watchEventsInRange(

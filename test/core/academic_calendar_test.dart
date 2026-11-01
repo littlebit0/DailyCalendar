@@ -96,6 +96,7 @@ class Repository implements EventRepository, EventSyncMaintenance {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     if (failCategoryUpdate) throw StateError('category write failed');
     final affected = [

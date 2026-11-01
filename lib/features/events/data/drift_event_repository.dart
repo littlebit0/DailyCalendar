@@ -242,6 +242,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     final previousStoredValues = {
       previous.id,
@@ -261,6 +262,8 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     if (affectedRows.isEmpty) {
       return const [];
     }
+
+    beforeWrite?.call();
 
     final affected = affectedRows
         .map((record) {

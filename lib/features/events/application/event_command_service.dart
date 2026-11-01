@@ -934,6 +934,7 @@ class EventCommandService {
       previous: previous,
       updated: updated,
       updatedAt: _clock.now(),
+      beforeWrite: _requireWritable,
     );
     if (affected.isEmpty) {
       return;

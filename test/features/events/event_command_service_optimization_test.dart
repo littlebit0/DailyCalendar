@@ -1284,6 +1284,7 @@ class _CategoryUpdateRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     return affected
         .map(
@@ -1464,6 +1465,7 @@ class _CompletionRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async => const [];
 
   @override
@@ -1591,6 +1593,7 @@ class _MultiCompletionRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async => const [];
 
   @override
