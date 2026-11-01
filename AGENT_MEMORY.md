@@ -1,5 +1,32 @@
 # Daily Agent Memory — current handoff
 
+## #675 / PR #676 Untimed courses under the timetable — 2026-11-01
+
+- Changed behavior: a school course with no weekday or time (`scheduleStatus:
+  unscheduled`) can be added from search and is listed in a "원격·시간 미정 강좌"
+  section right under the weekly grid (hidden when there are none). Direct
+  entries still need a weekday and time; `unrecognized` courses still cannot be
+  added. Editing an untimed course keeps its empty `meetings` (no invented
+  Monday 09:00); the section scrolls inside a bounded height on small screens.
+- Sync: a timetable document with any empty-`meetings` course is written as
+  `schemaVersion` 2 (existing gate reused). Current-main clients already accept
+  v2 but reject an empty-`meetings` course as `Invalid synced course` and then
+  cannot read the whole timetable document. This PR changes no sync format.
+- Decision (user, 2026-10-26): no separate storage for old clients. Force an
+  update instead. Rejecting, preserving and announcing the update for old
+  clients, and any new `schemaVersion`, belong to #692, not this PR.
+- Open Codex finding (`timetable_sync_document.dart:110`, P2): deliberately not
+  fixed here because of the decision above. Do not re-raise it as a defect of
+  this PR. A reviewer who wants it closed should point to #692.
+- Release condition: ship this PR together with #692 (otherwise old devices
+  lose timetable sync) and with Windows, Android, Mac and iPhone artifacts
+  (AGENTS.md section 6).
+- Verified: analyze 0 issues and the full test suite (1,699) before the last
+  review fix. Not verified: remote CI on this branch tip, a real mixed-version
+  Drive scenario, device layout (dark theme, large text, small screens), a
+  test-app install.
+- Mac/iPhone: Dart-only change, no native counterpart; not device-verified.
+
 ## #679 Academic correction linking — 2026-10-25
 
 - Shared `AcademicCalendarService` now links a school-corrected record whose
