@@ -22,6 +22,7 @@ class LmsController extends ChangeNotifier {
     required EventCommandService commands,
     LmsWebSession Function(String owner, String school)? createSession,
     FutureOr<void> Function()? onIntegrationChanged,
+    bool Function()? blocked,
     LmsCredentialsStore? credentialsStore,
     ProductAnalytics analytics = const NoopProductAnalytics(),
     List<Duration> automaticLoginRetryDelays = const [
@@ -33,6 +34,7 @@ class LmsController extends ChangeNotifier {
        _loginReporter = LmsLoginReporter(analytics),
        _settings = settings,
        _onIntegrationChanged = onIntegrationChanged,
+       _blocked = blocked,
        _createSession =
            createSession ??
            ((owner, school) =>
@@ -51,6 +53,7 @@ class LmsController extends ChangeNotifier {
         return active.fetchHtml(uri);
       },
       readSession: _readIdentity,
+      blocked: blocked,
       isAuthenticationError: (error) =>
           error is LmsWebSessionException &&
           error.code == LmsWebSessionError.authenticationRequired,
@@ -108,6 +111,8 @@ class LmsController extends ChangeNotifier {
 
   final SettingsRepository _settings;
   final FutureOr<void> Function()? _onIntegrationChanged;
+  final bool Function()? _blocked;
+  bool get _isBlocked => _blocked?.call() ?? false;
   final LmsWebSession Function(String, String) _createSession;
   late final LmsSyncService sync;
   LmsWebSession? _session;
@@ -215,7 +220,9 @@ class LmsController extends ChangeNotifier {
   }
 
   Future<void> refresh({bool force = false}) {
-    if (_disposed || _disconnecting) return Future.value();
+    if (_disposed || _disconnecting || _isBlocked) {
+      return Future.value();
+    }
     final running = _operation;
     if (running != null) {
       // A force request before collection starts belongs to the upcoming
@@ -256,7 +263,9 @@ class LmsController extends ChangeNotifier {
   Future<void> saveAutomaticLogin(String username, String password) async {
     final owner = _settings.dailyAccount()?.googleAccount?.email;
     final school = schoolId;
-    if (owner == null || !supported || school == null) return;
+    if (owner == null || !supported || school == null || _isBlocked) {
+      return;
+    }
     lastLoginFailure = null;
     try {
       await _credentials.save(
@@ -564,7 +573,7 @@ class LmsController extends ChangeNotifier {
 
   Future<void> _refresh({required bool force}) async {
     await loadLocalLoginInfo();
-    if (_disposed || _disconnecting) return;
+    if (_disposed || _disconnecting || _isBlocked) return;
     await sync.applyConfiguredCategory();
     final desired = _desiredKey;
     if (_key != desired) {
@@ -611,7 +620,8 @@ class LmsController extends ChangeNotifier {
         !_disposed &&
         generation == _generation &&
         identical(current, _session) &&
-        _key == _desiredKey;
+        _key == _desiredKey &&
+        !_isBlocked;
     _restoring = !current.isAuthenticated;
     _notify();
     try {
@@ -672,7 +682,7 @@ class LmsController extends ChangeNotifier {
         }
       }
     } finally {
-      if (valid()) {
+      if (valid() || _isBlocked) {
         _restoring = false;
         _notify();
       }
@@ -735,7 +745,8 @@ class LmsController extends ChangeNotifier {
     if (_disposed ||
         !identical(loginSession, _session) ||
         _key != _desiredKey ||
-        !loginSession.isAuthenticated) {
+        !loginSession.isAuthenticated ||
+        _isBlocked) {
       return;
     }
     lastLoginFailure = null;

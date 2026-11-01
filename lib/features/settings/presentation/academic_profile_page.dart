@@ -11,6 +11,7 @@ import 'university_region_map.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/theme/daily_ui.dart';
+import '../../../core/update/update_required_view.dart';
 import 'settings_page.dart';
 import '../../../core/lms/lms_controller.dart';
 import '../../../core/widgets/smooth_mouse_wheel_scroll_controller.dart';
@@ -27,6 +28,7 @@ Future<void> offerAcademicProfile(BuildContext context, WidgetRef ref) async {
   final repository = ref.read(settingsRepositoryProvider);
   if (repository.dailyAccount()?.googleAccount == null ||
       repository.load().academicProfile != null ||
+      updateRequired(ref) ||
       !context.mounted) {
     return;
   }
@@ -67,6 +69,7 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
     University? campus,
   ) async {
     if (_saving || _editingEmail == null) return;
+    if (blockedByRequiredUpdate(context, ref)) return;
     setState(() {
       _saving = true;
       _error = false;
@@ -614,262 +617,271 @@ class _AcademicProfilePageState extends ConsumerState<AcademicProfilePage> {
         ? ''
         : regionDirectory.asData?.value.captionFor(selectedInstitution.id) ??
               selectedInstitution.campusSummary;
-    return Scaffold(
-      appBar: DailyNavigationBar(
-        title: context.tr('학사 정보'),
-        actions: [
-          if (widget.onboarding)
-            TextButton(
-              onPressed: _saving ? null : () => Navigator.pop(context),
-              child: Text(context.tr('나중에')),
-            ),
-        ],
-      ),
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 1400),
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
-                final minHeight = 520.0 + (scale > 1 ? scale - 1 : 0) * 340;
-                return SingleChildScrollView(
-                  primary: false,
-                  child: SizedBox(
-                    height: constraints.maxHeight < minHeight
-                        ? minHeight
-                        : constraints.maxHeight,
-                    child: email == null
-                        ? Center(
-                            child: Padding(
-                              padding: const EdgeInsets.all(24),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  if (current != null)
+    return UpdateRequiredPageGate(
+      title: context.tr('학사 정보'),
+      child: Scaffold(
+        appBar: DailyNavigationBar(
+          title: context.tr('학사 정보'),
+          actions: [
+            if (widget.onboarding)
+              TextButton(
+                onPressed: _saving ? null : () => Navigator.pop(context),
+                child: Text(context.tr('나중에')),
+              ),
+          ],
+        ),
+        body: SafeArea(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1400),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final scale = MediaQuery.textScalerOf(context).scale(14) / 14;
+                  final minHeight = 520.0 + (scale > 1 ? scale - 1 : 0) * 340;
+                  return SingleChildScrollView(
+                    primary: false,
+                    child: SizedBox(
+                      height: constraints.maxHeight < minHeight
+                          ? minHeight
+                          : constraints.maxHeight,
+                      child: email == null
+                          ? Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    if (current != null)
+                                      Text(
+                                        current.displayName,
+                                        style: Theme.of(
+                                          context,
+                                        ).textTheme.titleMedium,
+                                      ),
                                     Text(
-                                      current.displayName,
-                                      style: Theme.of(
-                                        context,
-                                      ).textTheme.titleMedium,
-                                    ),
-                                  Text(
-                                    context.tr(
-                                      'Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.',
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  FilledButton(
-                                    onPressed: () => Navigator.push(
-                                      context,
-                                      MaterialPageRoute<void>(
-                                        builder: (_) =>
-                                            const SettingsPage.account(),
+                                      context.tr(
+                                        'Google 계정을 연결하면 학사 정보를 저장하고 다른 기기에서도 사용할 수 있습니다.',
                                       ),
                                     ),
-                                    child: Text(context.tr('Google 계정 연결')),
-                                  ),
-                                ],
+                                    const SizedBox(height: 16),
+                                    FilledButton(
+                                      onPressed: () => Navigator.push(
+                                        context,
+                                        MaterialPageRoute<void>(
+                                          builder: (_) =>
+                                              const SettingsPage.account(),
+                                        ),
+                                      ),
+                                      child: Text(context.tr('Google 계정 연결')),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          )
-                        : Column(
-                            children: [
-                              Expanded(
-                                child: directory.when(
-                                  loading: () => const Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                  error: (_, _) => _loadError(),
-                                  data: (data) => regionDirectory.when(
+                            )
+                          : Column(
+                              children: [
+                                Expanded(
+                                  child: directory.when(
                                     loading: () => const Center(
                                       child: CircularProgressIndicator(),
                                     ),
                                     error: (_, _) => _loadError(),
-                                    data: (regions) => _picker(
-                                      data,
-                                      regions,
-                                      selectedInstitution,
+                                    data: (data) => regionDirectory.when(
+                                      loading: () => const Center(
+                                        child: CircularProgressIndicator(),
+                                      ),
+                                      error: (_, _) => _loadError(),
+                                      data: (regions) => _picker(
+                                        data,
+                                        regions,
+                                        selectedInstitution,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                key: const ValueKey(
-                                  'academic-profile-selection-footer',
-                                ),
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                      color: DailyUi.separator(context),
-                                      width: 1.2,
+                                Container(
+                                  key: const ValueKey(
+                                    'academic-profile-selection-footer',
+                                  ),
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      top: BorderSide(
+                                        color: DailyUi.separator(context),
+                                        width: 1.2,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    final details = Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        if (selectedInstitution != null) ...[
-                                          Text(
-                                            context.tr('선택한 학사 정보'),
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.labelSmall,
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            selectedInstitution.name,
-                                            style: Theme.of(
-                                              context,
-                                            ).textTheme.titleSmall,
-                                          ),
-                                          if (selectedInstitution
-                                                  .campusSelectionRequired &&
-                                              selectedCampus != null)
-                                            ListTile(
-                                              key: const ValueKey(
-                                                'academic-profile-campus',
-                                              ),
-                                              contentPadding: EdgeInsets.zero,
-                                              title: Text(context.tr('캠퍼스')),
-                                              subtitle: Text(
-                                                [
-                                                      selectedCampus.campus ??
-                                                          selectedCampus.name,
-                                                      selectedCampus.region,
-                                                    ]
-                                                    .whereType<String>()
-                                                    .where(
-                                                      (value) =>
-                                                          value.isNotEmpty,
-                                                    )
-                                                    .join(' · '),
-                                              ),
-                                              trailing: const Icon(
-                                                Icons.expand_more,
-                                              ),
-                                              onTap: _saving
-                                                  ? null
-                                                  : () => _chooseCampus(
-                                                      selectedInstitution,
-                                                    ),
+                                  child: LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      final details = Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          if (selectedInstitution != null) ...[
+                                            Text(
+                                              context.tr('선택한 학사 정보'),
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.labelSmall,
                                             ),
-                                          if (!selectedInstitution
-                                                  .campusSelectionRequired &&
-                                              selectedCaption.isNotEmpty)
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                top: 4,
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              selectedInstitution.name,
+                                              style: Theme.of(
+                                                context,
+                                              ).textTheme.titleSmall,
+                                            ),
+                                            if (selectedInstitution
+                                                    .campusSelectionRequired &&
+                                                selectedCampus != null)
+                                              ListTile(
+                                                key: const ValueKey(
+                                                  'academic-profile-campus',
+                                                ),
+                                                contentPadding: EdgeInsets.zero,
+                                                title: Text(context.tr('캠퍼스')),
+                                                subtitle: Text(
+                                                  [
+                                                        selectedCampus.campus ??
+                                                            selectedCampus.name,
+                                                        selectedCampus.region,
+                                                      ]
+                                                      .whereType<String>()
+                                                      .where(
+                                                        (value) =>
+                                                            value.isNotEmpty,
+                                                      )
+                                                      .join(' · '),
+                                                ),
+                                                trailing: const Icon(
+                                                  Icons.expand_more,
+                                                ),
+                                                onTap: _saving
+                                                    ? null
+                                                    : () => _chooseCampus(
+                                                        selectedInstitution,
+                                                      ),
                                               ),
-                                              child: Text(
-                                                selectedCaption,
+                                            if (!selectedInstitution
+                                                    .campusSelectionRequired &&
+                                                selectedCaption.isNotEmpty)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 4,
+                                                ),
+                                                child: Text(
+                                                  selectedCaption,
+                                                  style: Theme.of(
+                                                    context,
+                                                  ).textTheme.bodySmall,
+                                                ),
+                                              ),
+                                            if (AcademicProfile(
+                                                  universityId:
+                                                      selectedInstitution.id,
+                                                  universityName:
+                                                      selectedInstitution.name,
+                                                  schoolKind:
+                                                      selectedInstitution
+                                                          .kind
+                                                          .name,
+                                                  // Same campus as the save, so a
+                                                  // main-campus adapter never hides
+                                                  // an unsupported chosen campus.
+                                                  campusId:
+                                                      selectedInstitution
+                                                          .campusSelectionRequired
+                                                      ? selectedCampus?.id
+                                                      : null,
+                                                ).supported ==
+                                                false)
+                                              Text(
+                                                context.tr(
+                                                  '학사 정보는 저장할 수 있습니다. 이 대학의 학사일정·시간표 연동은 준비 중입니다.',
+                                                ),
                                                 style: Theme.of(
                                                   context,
                                                 ).textTheme.bodySmall,
                                               ),
-                                            ),
-                                          if (AcademicProfile(
-                                                universityId:
-                                                    selectedInstitution.id,
-                                                universityName:
-                                                    selectedInstitution.name,
-                                                schoolKind: selectedInstitution
-                                                    .kind
-                                                    .name,
-                                                // Same campus as the save, so a
-                                                // main-campus adapter never hides
-                                                // an unsupported chosen campus.
-                                                campusId:
-                                                    selectedInstitution
-                                                        .campusSelectionRequired
-                                                    ? selectedCampus?.id
-                                                    : null,
-                                              ).supported ==
-                                              false)
+                                            const SizedBox(height: 8),
+                                          ],
+                                          if (_error)
                                             Text(
                                               context.tr(
-                                                '학사 정보는 저장할 수 있습니다. 이 대학의 학사일정·시간표 연동은 준비 중입니다.',
+                                                '학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.',
                                               ),
-                                              style: Theme.of(
-                                                context,
-                                              ).textTheme.bodySmall,
+                                              style: TextStyle(
+                                                color: Theme.of(
+                                                  context,
+                                                ).colorScheme.error,
+                                              ),
                                             ),
-                                          const SizedBox(height: 8),
-                                        ],
-                                        if (_error)
-                                          Text(
-                                            context.tr(
-                                              '학사 정보를 저장하지 못했습니다. 계정 연결을 확인하고 다시 시도해 주세요.',
-                                            ),
-                                            style: TextStyle(
-                                              color: Theme.of(
-                                                context,
-                                              ).colorScheme.error,
-                                            ),
-                                          ),
-                                      ],
-                                    );
-                                    final save = Align(
-                                      alignment: Alignment.centerRight,
-                                      child: SizedBox(
-                                        width:
-                                            MediaQuery.sizeOf(context).width >=
-                                                900
-                                            ? 160
-                                            : double.infinity,
-                                        child: FilledButton(
-                                          key: const ValueKey(
-                                            'academic-profile-save',
-                                          ),
-                                          onPressed:
-                                              _saving ||
-                                                  selectedInstitution == null ||
-                                                  !selectedInstitution
-                                                      .selectable ||
-                                                  (selectedInstitution
-                                                          .campusSelectionRequired &&
-                                                      selectedCampus == null)
-                                              ? null
-                                              : () => _save(
-                                                  selectedInstitution,
-                                                  selectedCampus,
-                                                ),
-                                          child: Text(
-                                            context.tr(_saving ? '저장 중' : '저장'),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                    if (constraints.maxWidth >= 900 &&
-                                        MediaQuery.textScalerOf(
-                                              context,
-                                            ).scale(14) <=
-                                            21) {
-                                      return Row(
-                                        children: [
-                                          Expanded(child: details),
-                                          const SizedBox(width: 16),
-                                          SizedBox(width: 160, child: save),
                                         ],
                                       );
-                                    }
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [details, save],
-                                    );
-                                  },
+                                      final save = Align(
+                                        alignment: Alignment.centerRight,
+                                        child: SizedBox(
+                                          width:
+                                              MediaQuery.sizeOf(
+                                                    context,
+                                                  ).width >=
+                                                  900
+                                              ? 160
+                                              : double.infinity,
+                                          child: FilledButton(
+                                            key: const ValueKey(
+                                              'academic-profile-save',
+                                            ),
+                                            onPressed:
+                                                _saving ||
+                                                    selectedInstitution ==
+                                                        null ||
+                                                    !selectedInstitution
+                                                        .selectable ||
+                                                    (selectedInstitution
+                                                            .campusSelectionRequired &&
+                                                        selectedCampus == null)
+                                                ? null
+                                                : () => _save(
+                                                    selectedInstitution,
+                                                    selectedCampus,
+                                                  ),
+                                            child: Text(
+                                              context.tr(
+                                                _saving ? '저장 중' : '저장',
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                      if (constraints.maxWidth >= 900 &&
+                                          MediaQuery.textScalerOf(
+                                                context,
+                                              ).scale(14) <=
+                                              21) {
+                                        return Row(
+                                          children: [
+                                            Expanded(child: details),
+                                            const SizedBox(width: 16),
+                                            SizedBox(width: 160, child: save),
+                                          ],
+                                        );
+                                      }
+                                      return Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [details, save],
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                  ),
-                );
-              },
+                              ],
+                            ),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
