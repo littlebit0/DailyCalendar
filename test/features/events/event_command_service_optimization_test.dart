@@ -1284,6 +1284,7 @@ class _CategoryUpdateRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     return affected
         .map(
@@ -1303,7 +1304,7 @@ class _CategoryUpdateRepository implements EventRepository {
   Future<void> clearAll() async {}
 
   @override
-  Future<void> delete(String eventId) async {}
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {}
 
   @override
   Future<List<CalendarEvent>> eventsInRange(
@@ -1433,7 +1434,7 @@ class _CompletionRepository implements EventRepository {
   Future<void> clearAll() async {}
 
   @override
-  Future<void> delete(String eventId) async {}
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {}
 
   @override
   Future<List<CalendarEvent>> eventsInRange(
@@ -1464,6 +1465,7 @@ class _CompletionRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async => const [];
 
   @override
@@ -1494,7 +1496,7 @@ class _GuardedRepository extends _CompletionRepository {
   }
 
   @override
-  Future<void> delete(String eventId) async {
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {
     deleteCalls++;
     afterDelete?.call();
   }
@@ -1545,7 +1547,7 @@ class _MultiCompletionRepository implements EventRepository {
   Future<void> clearAll() async => events.clear();
 
   @override
-  Future<void> delete(String eventId) async => events.remove(eventId);
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async => events.remove(eventId);
 
   @override
   Future<List<CalendarEvent>> eventsInRange(
@@ -1591,6 +1593,7 @@ class _MultiCompletionRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async => const [];
 
   @override

@@ -28,6 +28,11 @@ class RecurringMoveResult {
   final bool followUpFailed;
 }
 
+/// A required update was detected before this event change was written.
+class EventWritesBlocked implements Exception {
+  const EventWritesBlocked();
+}
+
 class EventCommandService {
   EventCommandService({
     required EventRepository repository,
@@ -38,6 +43,7 @@ class EventCommandService {
     ProductAnalytics analytics = const NoopProductAnalytics(),
     Future<void> Function()? onEventsChanged,
     void Function()? onFollowUpFailure,
+    bool Function()? blocked,
     KoreaTime? clock,
     Uuid? uuid,
   }) : _repository = repository,
@@ -48,6 +54,7 @@ class EventCommandService {
        _analytics = analytics,
        _onEventsChanged = onEventsChanged,
        _onFollowUpFailure = onFollowUpFailure,
+       _blocked = blocked,
        _clock = clock ?? const KoreaTime(),
        _uuid = uuid ?? const Uuid();
 
@@ -59,10 +66,19 @@ class EventCommandService {
   final ProductAnalytics _analytics;
   final Future<void> Function()? _onEventsChanged;
   final void Function()? _onFollowUpFailure;
+  final bool Function()? _blocked;
   final KoreaTime _clock;
   final Uuid _uuid;
   Future<void> _categoryUpdateTail = Future<void>.value();
   static final _recurringEffectTails = Expando<Future<void>>();
+
+  /// Screens check before they start; this covers a release found while a
+  /// change is already waiting on a lookup, right before the database write.
+  /// Resolvers call it too: an atomic merge reads its rows before resolving,
+  /// and throwing there rolls that transaction back.
+  void _requireWritable() {
+    if (_blocked?.call() ?? false) throw const EventWritesBlocked();
+  }
 
   Future<T> _serializeRecurringEffects<T>(Future<T> Function() action) {
     final previous = _recurringEffectTails[_repository] ?? Future<void>.value();
@@ -103,6 +119,7 @@ class EventCommandService {
         );
       }
       if (!_isCurrentOwner(existing?.lms != null ? existing! : updated)) return;
+      _requireWritable();
       // Persist intent before the database write so process termination cannot
       // lose recovery. Replay always rereads the database, never the draft.
       await _settingsRepository.stageEventFollowUp(
@@ -116,9 +133,11 @@ class EventCommandService {
             !_isCurrentOwner(existing)) {
           return;
         }
+        _requireWritable();
         final mutations = await _repository.mergeRestoredEventsAtomically(
           [updated],
           resolve: (latest, edited) {
+            _requireWritable();
             if (latest == null) {
               throw StateError('LMS 일정이 삭제되었습니다. 다시 확인해 주세요.');
             }
@@ -147,6 +166,7 @@ class EventCommandService {
         updated = mutations.single.current;
       } else {
         if (!_isCurrentOwner(updated)) return;
+        _requireWritable();
         await _repository.save(updated);
       }
     } on Object catch (error) {
@@ -319,9 +339,11 @@ class EventCommandService {
       id: movedId,
       clearOccurrenceId: true,
     );
+    _requireWritable();
     await _repository.mergeRestoredEventsAtomically(
       [occurrence, placeholder],
       resolve: (latest, incoming) {
+        _requireWritable();
         if (incoming.id == occurrence.id) {
           if (latest == null ||
               latest.isDeleted ||
@@ -476,9 +498,11 @@ class EventCommandService {
     }
     CalendarEvent? previous;
     CalendarEvent? saved;
+    _requireWritable();
     await _repository.mergeRestoredEventsAtomically(
       [occurrence],
       resolve: (latest, _) {
+        _requireWritable();
         if (latest == null ||
             latest.isDeleted ||
             !calendarEventCanMove(latest) ||
@@ -530,17 +554,20 @@ class EventCommandService {
         updatedAt: _clock.now(),
         syncStatus: 'pending',
       );
+      _requireWritable();
       await _settingsRepository.stageEventFollowUp(
         updated.id,
         _uuid.v4(),
         _combinedReminderMinutes(source, updated),
       );
+      _requireWritable();
       if (source.lms == null) {
         await _repository.save(updated);
       } else {
         final mutations = await _repository.mergeRestoredEventsAtomically(
           [updated],
           resolve: (latest, _) {
+            _requireWritable();
             if (latest == null) {
               throw StateError('LMS 일정이 삭제되었습니다. 다시 확인해 주세요.');
             }
@@ -590,6 +617,7 @@ class EventCommandService {
     CalendarEvent? updatedSeries;
     CalendarEvent? detachedOccurrence;
     var available = false;
+    _requireWritable();
     await _settingsRepository.stageEventFollowUp(
       source.id,
       _uuid.v4(),
@@ -600,9 +628,11 @@ class EventCommandService {
       _uuid.v4(),
       occurrence.reminderMinutesBeforeList,
     );
+    _requireWritable();
     await _repository.mergeRestoredEventsAtomically(
       [source, occurrence.copyWith(id: detachedID, clearOccurrenceId: true)],
       resolve: (latest, incoming) {
+        _requireWritable();
         if (incoming.id == source.id) {
           if (latest == null ||
               latest.isDeleted ||
@@ -679,9 +709,14 @@ class EventCommandService {
     bool Function()? isCurrent,
     Set<String>? skippedDeleted,
   }) async {
+    // A batch stops, keeping what it already saved, when a required update appears.
+    bool current() => isCurrent == null || isCurrent();
+    // A required update stops the next write, never the follow-up of an event
+    // that was already saved: its reminder, alarm and upload still complete.
+    bool writable() => !(_blocked?.call() ?? false) && current();
     final importedIds = <String>{};
     for (final event in events) {
-      if (isCurrent != null && !isCurrent()) break;
+      if (!writable()) break;
       CalendarEvent imported;
       try {
         if (resolveLatest != null) {
@@ -690,7 +725,7 @@ class EventCommandService {
           // overwritten by an older snapshot. Returning null keeps the row.
           CalendarEvent? decided;
           CalendarEvent resolve(CalendarEvent? latest, CalendarEvent incoming) {
-            if (isCurrent != null && !isCurrent()) {
+            if (!writable()) {
               throw StateError('가져오기 대상이 변경되었습니다.');
             }
             final result = resolveLatest(latest, incoming);
@@ -718,12 +753,12 @@ class EventCommandService {
               : await _repository.mergeRestoredEventsAtomically([
                   event,
                 ], resolve: resolve);
-          if (isCurrent != null && !isCurrent()) break;
+          if (!current()) break;
           if (mutations.isEmpty || decided == null) continue;
           imported = decided!;
         } else {
           final prepared = prepare == null ? event : await prepare(event);
-          if (isCurrent != null && !isCurrent()) break;
+          if (!writable()) break;
           if (prepared == null) continue;
           imported = prepared
               .copyWith(updatedAt: _clock.now(), syncStatus: 'pending')
@@ -735,8 +770,7 @@ class EventCommandService {
             await _repository.mergeRestoredEventsAtomically(
               [imported],
               resolve: (latest, source) {
-                if (isCurrent != null && !isCurrent() ||
-                    !_isCurrentOwner(source)) {
+                if (!writable() || !_isCurrentOwner(source)) {
                   throw StateError('LMS 계정이 변경되었습니다.');
                 }
                 final destination = lmsCategory?.call();
@@ -793,7 +827,7 @@ class EventCommandService {
       }
 
       importedIds.add(imported.id);
-      if (isCurrent != null && !isCurrent()) break;
+      if (!current()) break;
       if (imported.isDeleted || !_isCurrentOwner(imported)) continue;
       try {
         if (imported.lms != null && imported.completed) {
@@ -807,7 +841,7 @@ class EventCommandService {
       } on Object {
         // Import must preserve the event even if notification scheduling fails.
       }
-      if (isCurrent != null && !isCurrent()) break;
+      if (!current()) break;
       if (!_isCurrentOwner(imported)) break;
       try {
         if (imported.lms != null && imported.completed) {
@@ -818,7 +852,7 @@ class EventCommandService {
       } on Object {
         // Imported events do not enable alarms by default; keep this best-effort.
       }
-      if (isCurrent != null && !isCurrent()) break;
+      if (!current()) break;
       if (!_isCurrentOwner(imported)) break;
       try {
         await _syncService.queueEventUpsert(imported);
@@ -844,7 +878,8 @@ class EventCommandService {
           (existing == null || _isCurrentOwner(existing));
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
-      await _repository.delete(eventId);
+      _requireWritable();
+      await _repository.delete(eventId, beforeWrite: _requireWritable);
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
       await _notificationService.cancelEventReminder(
@@ -894,10 +929,12 @@ class EventCommandService {
     if (isCurrent != null && !isCurrent()) {
       throw StateError('Category update cancelled');
     }
+    _requireWritable();
     final affected = await _repository.updateCategoryReferences(
       previous: previous,
       updated: updated,
       updatedAt: _clock.now(),
+      beforeWrite: _requireWritable,
     );
     if (affected.isEmpty) {
       return;
