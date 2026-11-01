@@ -242,6 +242,7 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     final previousStoredValues = {
       previous.id,
@@ -261,6 +262,8 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     if (affectedRows.isEmpty) {
       return const [];
     }
+
+    beforeWrite?.call();
 
     final affected = affectedRows
         .map((record) {
@@ -302,17 +305,19 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
   }
 
   @override
-  Future<void> delete(String eventId) => _database.transaction(() async {
-    final event = await findById(eventId);
-    if (event != null) {
-      await save(
-        event.copyWith(
-          deletedAt: DateTime.now().toUtc(),
-          syncStatus: 'pending_delete',
-        ),
-      );
-    }
-  });
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) =>
+      _database.transaction(() async {
+        final event = await findById(eventId);
+        beforeWrite?.call();
+        if (event != null) {
+          await save(
+            event.copyWith(
+              deletedAt: DateTime.now().toUtc(),
+              syncStatus: 'pending_delete',
+            ),
+          );
+        }
+      });
 
   @override
   Future<void> hardDelete(String eventId) {
