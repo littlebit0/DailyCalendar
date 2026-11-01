@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../../core/update/update_required_view.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -316,6 +317,7 @@ class EventDetailsPanel extends ConsumerWidget {
     List<EventCategory> categories,
     List<int> defaultReminderMinutesList,
   ) async {
+    if (blockedByRequiredUpdate(context, ref)) return;
     final analytics = ref.read(productAnalyticsProvider);
     final stopwatch = Stopwatch()..start();
     unawaited(
@@ -356,6 +358,10 @@ class EventDetailsPanel extends ConsumerWidget {
           .catchError((_) {}),
     );
     if (draft != null) {
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
+        return;
+      }
       await ref.read(eventCommandServiceProvider).create(draft);
     }
   }
@@ -367,6 +373,7 @@ class EventDetailsPanel extends ConsumerWidget {
     List<EventCategory> categories,
     List<int> defaultReminderMinutesList,
   ) async {
+    if (blockedByRequiredUpdate(context, ref)) return;
     final commandService = ref.read(eventCommandServiceProvider);
     final settingsRepository = ref.read(settingsRepositoryProvider);
     final analytics = ref.read(productAnalyticsProvider);
@@ -413,6 +420,10 @@ class EventDetailsPanel extends ConsumerWidget {
     if (draft == null) {
       return;
     }
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
+      return;
+    }
 
     if (!event.isRecurring) {
       await commandService.save(
@@ -431,6 +442,10 @@ class EventDetailsPanel extends ConsumerWidget {
       actionLabel: context.tr('수정'),
     );
     if (scope == null) {
+      return;
+    }
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
       return;
     }
 
@@ -457,7 +472,7 @@ class EventDetailsPanel extends ConsumerWidget {
     WidgetRef ref,
     CalendarEvent event,
   ) async {
-    if (event.lms != null) return;
+    if (event.lms != null || blockedByRequiredUpdate(context, ref)) return;
     final commandService = ref.read(eventCommandServiceProvider);
     final confirmed = await showDialog<bool>(
       context: context,
@@ -482,6 +497,10 @@ class EventDetailsPanel extends ConsumerWidget {
     if (confirmed != true) {
       return;
     }
+    if (updateRequired(ref)) {
+      if (context.mounted) showUpdateRequiredNotice(context, ref);
+      return;
+    }
 
     if (event.isRecurring) {
       if (!context.mounted) {
@@ -496,9 +515,17 @@ class EventDetailsPanel extends ConsumerWidget {
       if (scope == null) {
         return;
       }
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
+        return;
+      }
       final base =
           await ref.read(visibleEventRepositoryProvider).findById(event.id) ??
           event;
+      if (updateRequired(ref)) {
+        if (context.mounted) showUpdateRequiredNotice(context, ref);
+        return;
+      }
       switch (scope) {
         case _RecurringChangeScope.onlyThis:
           await commandService.save(_excludeOccurrence(base, event.startAt));
@@ -1509,7 +1536,9 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   }
 
   Future<void> _setCompleted(bool completed) async {
-    if (_updatingCompletion || completed == _completed) {
+    if (_updatingCompletion ||
+        completed == _completed ||
+        blockedByRequiredUpdate(context, ref)) {
       return;
     }
     final previous = _completed;
