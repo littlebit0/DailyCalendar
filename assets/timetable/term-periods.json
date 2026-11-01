@@ -385,6 +385,19 @@
           "note": "Regular recurrence stops before the published Dec15-Dec21 makeup window. Dec21 remains the academic end; individual verified makeup dates require separate meetings."
         }
       ]
+    },
+    {
+      "university": "kyonggi",
+      "sourceUrl": "https://www.kyonggi.ac.kr/www/selectTnSchafsSchdulListUS.do?key=5819&sc1=10&sc3=2026",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14"
+        }
+      ]
     }
   ]
 }
