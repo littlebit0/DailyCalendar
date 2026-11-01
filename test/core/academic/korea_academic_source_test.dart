@@ -67,7 +67,11 @@ void main() {
   });
 
   test('KU profile resolves to its registered calendar on both campuses', () {
-    for (final campus in [null, 'academyinfo:0000069', 'academyinfo:0000070']) {
+    for (final (campus, source) in [
+      (null, 'korea'),
+      ('academyinfo:0000069', 'korea'),
+      ('academyinfo:0000070', 'korea-sejong'),
+    ]) {
       expect(
         AcademicProfile(
           universityId: 'institution:academyinfo:0000069',
@@ -75,19 +79,55 @@ void main() {
           schoolKind: 'fourYear',
           campusId: campus,
         ).academicSourceId,
-        'korea',
+        source,
       );
     }
-    for (final legacy in ['academyinfo:0000069', 'academyinfo:0000070']) {
+    for (final (legacy, source) in [
+      ('academyinfo:0000069', 'korea'),
+      ('academyinfo:0000070', 'korea-sejong'),
+    ]) {
       expect(
         AcademicProfile(
           universityId: legacy,
           universityName: '고려대학교',
           schoolKind: 'fourYear',
         ).academicSourceId,
-        'korea',
+        source,
       );
     }
+  });
+
+  test('KU Sejong reads its own calendar for the whole year', () async {
+    final requested = <String>[];
+    final source = KoreaAcademicSource.sejong(
+      client: MockClient((r) async {
+        expect(r.url.host, 'sejong.korea.ac.kr');
+        expect(r.url.path, '/schdulMng/koreaSejong/2/monthSchdul.do');
+        final q = Uri.splitQueryString(r.body);
+        final y = q['year']!, m = q['month']!.padLeft(2, '0');
+        requested.add('$y-$m');
+        return http.Response.bytes(
+          File(
+            'test/fixtures/academic/korea-sejong-$y-$m.html',
+          ).readAsBytesSync(),
+          200,
+        );
+      }),
+    );
+    addTearDown(source.close);
+    final events = await source.fetch(2026);
+    expect(requested, [
+      '2025-12',
+      for (var m = 1; m <= 12; m++) '2026-${'$m'.padLeft(2, '0')}',
+    ]);
+    expect(source.id, 'korea-sejong');
+    // Sejong publishes its own date for the rivalry games.
+    final rivalry = events.singleWhere((e) => e.title == '정기 고·연전');
+    expect(rivalry.start, DateTime(2026, 9, 18));
+    expect(rivalry.end, DateTime(2026, 9, 20));
+    expect(events.every((e) => e.url == source.website.toString()), isTrue);
+    expect(events.map((e) => e.sourceId).toSet(), hasLength(events.length));
+    expect(events.first.start.isBefore(DateTime(2026, 2)), isTrue);
   });
 
   test(

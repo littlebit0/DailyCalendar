@@ -58,7 +58,7 @@ class HongikAcademicSource implements AcademicSource {
     return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  /// Every exactly dated row of the [year] feed, which spans into next year.
+  /// Every row of the [year] feed, which spans into next year.
   static List<AcademicEvent> parse(String body, int year) {
     final data = jsonDecode(body);
     if (data is! Map || data['result'] != 'Y' || data['data'] is! List) {
@@ -74,12 +74,9 @@ class HongikAcademicSource implements AcademicSource {
         throw const FormatException('Invalid Hongik record');
       }
       final start = row['START'] as String, end = row['END'] as String;
-      // Month-only notices do not specify dates; do not manufacture day 1.
-      if (RegExp(r'^\d{4}-\d{2}$').hasMatch(start) ||
-          RegExp(r'^\d{4}-\d{2}$').hasMatch(end)) {
-        continue;
-      }
-      final first = _date(start), last = _date(end);
+      // Month-only notices name no day, so they span the whole month instead of
+      // pretending to happen on day 1.
+      final first = _date(start), last = _date(end, lastDayOfMonth: true);
       if (last.isBefore(first)) {
         throw const FormatException('Invalid Hongik range');
       }
@@ -104,10 +101,13 @@ class HongikAcademicSource implements AcademicSource {
     return events.values.toList()..sort((a, b) => a.start.compareTo(b.start));
   }
 
-  static DateTime _date(String value) {
-    final m = RegExp(r'^(\d{4})-(\d{2})-(\d{2})$').firstMatch(value);
+  static DateTime _date(String value, {bool lastDayOfMonth = false}) {
+    final m = RegExp(r'^(\d{4})-(\d{2})(?:-(\d{2}))?$').firstMatch(value);
     if (m == null) throw const FormatException('Invalid Hongik date');
-    final y = int.parse(m[1]!), mo = int.parse(m[2]!), d = int.parse(m[3]!);
+    final y = int.parse(m[1]!), mo = int.parse(m[2]!);
+    final d = m[3] != null
+        ? int.parse(m[3]!)
+        : (lastDayOfMonth ? DateTime(y, mo + 1, 0).day : 1);
     final date = DateTime(y, mo, d);
     if (date.year != y || date.month != mo || date.day != d) {
       throw const FormatException('Invalid Hongik date');

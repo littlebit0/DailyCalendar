@@ -368,6 +368,197 @@
       ]
     },
     {
+      "university": "kangwon",
+      "sourceUrl": "https://www.kangwon.ac.kr/ko/conts/713/directory.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14",
+          "sourceTitles": [
+            "2학기 개강",
+            "강의보충기간 12월 15~21일",
+            "기말시험 종료일 및 종강 12월 21일"
+          ],
+          "note": "Regular recurrence stops before the published Dec15-Dec21 makeup window. Dec21 remains the academic end; individual verified makeup dates require separate meetings."
+        }
+      ]
+    },
+    {
+      "university": "kyonggi",
+      "sourceUrl": "https://www.kyonggi.ac.kr/www/selectTnSchafsSchdulListUS.do?key=5819&sc1=10&sc3=2026",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-14"
+        }
+      ]
+    },
+    {
+      "university": "knu",
+      "sourceUrl": "https://www.knu.ac.kr/wbbs/wbbs/user/yearSchedule/index.action?menu_idx=43",
+      "checkedAt": "2026-10-07",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18",
+          "sourceTitles": [
+            "2학기 개강",
+            "보강 및 기말고사",
+            "동계 방학 시작"
+          ]
+        }
+      ]
+    },
+    {
+      "university": "catholic",
+      "sourceUrl": "https://www.anyang.ac.kr/main/communication/notice.do?articleNo=40671&mode=view",
+      "checkedAt": "2026-10-08",
+      "boundaryScope": "Catholic-issued current-semester exchange guide; public regular timetable is a planned schedule, individual exceptions and dated meetings take precedence.",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-18"
+        }
+      ]
+    },
+    {
+      "university": "gnu",
+      "sourceUrl": "https://www.gnu.ac.kr/main/ps/schdul/selectSchdulMainList.do?mi=1084",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
+    },
+    {
+      "university": "kmu",
+      "sourceUrl": "https://www.kmu.ac.kr/uni/main/page.jsp?mnu_uid=3373&parm_doc_year=2026",
+      "checkedAt": "2026-10-07",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18",
+          "sourceTitles": [
+            "2학기 개시일(개강일)",
+            "2학기 정기시험",
+            "동계방학 및 계절학기 시작"
+          ]
+        }
+      ]
+    },
+    {
+      "university": "khu",
+      "sourceUrl": "https://haksa.khu.ac.kr/nhaksa/user/contents/view.do?menuNo=21200042",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
+    },
+    {
+      "university": "kwangwoon",
+      "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_calendar.jsp",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-21"
+        }
+      ]
+    },
+    {
+      "university": "gknu",
+      "sourceUrl": "https://www.gknu.ac.kr/main/module/schedule/index.do?menu_idx=300&category1=101",
+      "checkedAt": "2026-10-08",
+      "periodBoundaryMeaning": "Day before published winter vacation December21; not a printed last teaching date",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-20"
+        }
+      ]
+    },
+    {
+      "university": "kongju",
+      "sourceUrl": "https://www.kongju.ac.kr/KNU/16834/subview.do",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18"
+        }
+      ]
+    },
+    {
+      "university": "konkuk",
+      "sourceUrl": "https://www.konkuk.ac.kr/konkuk/2161/subview.do",
+      "checkedAt": "2026-10-23",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-18",
+          "sourceTitles": [
+            "2026학년도 2학기 개강",
+            "2학기 기말고사"
+          ]
+        }
+      ]
+    },
+    {
+      "university": "kunsan",
+      "sourceUrl": "https://www.kunsan.ac.kr/index.kunsan?menuCd=DOM_000000103001001000&sYear=2026&sso=ok",
+      "checkedAt": "2026-10-08",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-08-31",
+          "end": "2026-12-17"
+        }
+      ]
+    },
+    {
+      "university": "scnu",
+      "checkedAt": "2026-10-08",
+      "sourceUrl": "https://www.scnu.ac.kr/elec/sv/schdulView/schdulCalendarView.do?mi=3878",
+      "terms": [
+        {
+          "year": 2026,
+          "semester": "2",
+          "start": "2026-09-01",
+          "end": "2026-12-18"
+        }
+      ]
+    },
+    {
       "university": "mokpo",
       "sourceUrl": "https://www.mokpo.ac.kr/www/148/subview.do",
       "checkedAt": "2026-10-08",

@@ -96,6 +96,7 @@ class Repository implements EventRepository, EventSyncMaintenance {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     if (failCategoryUpdate) throw StateError('category write failed');
     final affected = [
@@ -127,6 +128,7 @@ class Repository implements EventRepository, EventSyncMaintenance {
   /// Runs just before a merge reads its rows, like an editor save that
   /// finished while the import was still preparing.
   void Function()? beforeMerge;
+  void Function()? afterDelete;
   @override
   Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
     Iterable<CalendarEvent> remoteEvents, {
@@ -146,8 +148,9 @@ class Repository implements EventRepository, EventSyncMaintenance {
   }
 
   @override
-  Future<void> delete(String id) async {
+  Future<void> delete(String id, {void Function()? beforeWrite}) async {
     events[id] = events[id]!.copyWith(deletedAt: DateTime(2026, 9, 16));
+    afterDelete?.call();
   }
 
   @override
@@ -274,6 +277,107 @@ void main() {
       preview.events.map((e) => e.sourceId).toSet(),
     );
   }
+
+  test('a required update found during an import writes no event', () async {
+    var blocked = false;
+    final local = AcademicCalendarService(
+      sources: [source],
+      store: settings.academicStore,
+      settings: settings,
+      repository: repository,
+      commands: commands,
+      sync: sync,
+      now: () => now,
+      blocked: () => blocked,
+    );
+    addTearDown(local.dispose);
+    final preview = await local.preview(source, 2026);
+    blocked = true;
+    await expectLater(
+      local.importSelection(
+        preview,
+        preview.events.map((e) => e.sourceId).toSet(),
+      ),
+      throwsStateError,
+    );
+    expect(repository.events, isEmpty);
+    expect(local.unavailable, isFalse);
+  });
+
+  test('rows saved before a required update keep their baselines', () async {
+    var blocked = false;
+    var merges = 0;
+    repository.beforeMerge = () {
+      if (++merges == 2) blocked = true;
+    };
+    final local = AcademicCalendarService(
+      sources: [source],
+      store: settings.academicStore,
+      settings: settings,
+      repository: repository,
+      commands: commands,
+      sync: sync,
+      now: () => now,
+      blocked: () => blocked,
+    );
+    addTearDown(local.dispose);
+    source.events = [
+      remote(id: 'first', title: '첫 일정', day: 1, end: 2),
+      remote(id: 'second', title: '둘째 일정', day: 3, end: 4),
+    ];
+    final preview = await local.preview(source, 2026);
+    await local.importSelection(
+      preview,
+      preview.events.map((e) => e.sourceId).toSet(),
+    );
+    expect(repository.events.values.map((e) => e.title), ['첫 일정']);
+    expect(local.result?.failed, 1);
+
+    // After the update the school corrects the saved row: it follows the
+    // school instead of reading as a user edit, and nothing is duplicated.
+    blocked = false;
+    repository.beforeMerge = null;
+    source.events = [
+      remote(id: 'first', title: '첫 일정 정정', day: 5, end: 6),
+      remote(id: 'second', title: '둘째 일정', day: 3, end: 4),
+    ];
+    await local.refresh('smu');
+    expect(repository.events.values.map((e) => e.title).toSet(), {
+      '첫 일정 정정',
+      '둘째 일정',
+    });
+    expect(repository.events, hasLength(2));
+  });
+
+  test('deletions finished before a required update stay recorded', () async {
+    source.events = [
+      remote(id: 'first', title: '첫 일정', day: 1, end: 2),
+      remote(id: 'second', title: '둘째 일정', day: 3, end: 4),
+    ];
+    await importAll();
+    var blocked = false;
+    repository.afterDelete = () => blocked = true;
+    final local = AcademicCalendarService(
+      sources: [source],
+      store: settings.academicStore,
+      settings: settings,
+      repository: repository,
+      commands: EventCommandService(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: Notifications(),
+        syncService: sync,
+        blocked: () => blocked,
+      ),
+      sync: sync,
+      now: () => now,
+      blocked: () => blocked,
+    );
+    addTearDown(local.dispose);
+    await expectLater(local.removeImported('smu'), throwsStateError);
+    expect(repository.events.values.where((e) => e.isDeleted), hasLength(1));
+    expect(settings.academicStore.load()['smu']!.pendingRemovals, hasLength(1));
+  });
 
   test(
     'initial color persists on import and existing color wins on refresh',
