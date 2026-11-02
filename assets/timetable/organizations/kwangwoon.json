@@ -1,0 +1,771 @@
+{
+  "schemaVersion": 1,
+  "university": "kwangwoon",
+  "mappings": [
+    {
+      "college": "공과대학",
+      "department": "건축공학과",
+      "sourceLabel": "건축공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "건축학과",
+      "sourceLabel": "건축학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "참빛인재대학",
+      "department": "게임콘텐츠학과",
+      "sourceLabel": "게임콘텐츠학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "경영대학",
+      "department": "경영학부",
+      "sourceLabel": "경영학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인문사회과학대학",
+      "department": "국어국문학과",
+      "sourceLabel": "국어국문학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "경영대학",
+      "department": "국제통상학부",
+      "sourceLabel": "국제통상학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "정책법학대학",
+      "department": "국제학부",
+      "sourceLabel": "국제학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "정책법학대학",
+      "department": "글로벌지속가능융합학과",
+      "sourceLabel": "글로벌지속가능융합학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+      "evidence": "Original public timetable departments retain this named department; the same official workbook rows publish its opening college (개설대학 정책법학대학).",
+      "sourceFile": "assets/timetable/kwangwoon-unknown-2026-2.json",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true,
+      "affiliationSourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+      "affiliationSourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+      "affiliationEvidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀(강의시간표 시트) F060-2-6120-01·F060-2-6812-01 행: 개설대학 \"정책법학대학\", 개설학과 \"글로벌지속가능융합학과\""
+    },
+    {
+      "college": "참빛인재대학",
+      "department": "금융부동산법무학과",
+      "sourceLabel": "금융부동산법무학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인문사회과학대학",
+      "department": "동북아문화산업학부",
+      "sourceLabel": "동북아문화산업학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인공지능융합대학",
+      "department": "로봇학부",
+      "sourceLabel": "로봇학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인문사회과학대학",
+      "department": "미디어커뮤니케이션학부",
+      "sourceLabel": "미디어커뮤니케이션학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "전자정보공과대학",
+      "department": "반도체시스템공학부",
+      "sourceLabel": "반도체시스템공학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "정책법학대학",
+      "department": "법학부",
+      "sourceLabel": "법학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인문사회과학대학",
+      "department": "산업심리학과",
+      "sourceLabel": "산업심리학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인공지능융합대학",
+      "department": "소프트웨어학부",
+      "sourceLabel": "소프트웨어학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "자연과학대학",
+      "department": "수학과",
+      "sourceLabel": "수학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "참빛인재대학",
+      "department": "스마트전기전자학과",
+      "sourceLabel": "스마트전기전자학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "참빛인재대학",
+      "department": "스포츠상담재활학과",
+      "sourceLabel": "스포츠상담재활학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "자연과학대학",
+      "department": "스포츠융합과학과",
+      "sourceLabel": "스포츠융합과학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인문사회과학대학",
+      "department": "영어산업학과",
+      "sourceLabel": "영어산업학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "정책법학대학",
+      "department": "자산관리학과",
+      "sourceLabel": "자산관리학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "전자정보공과대학",
+      "department": "전기공학과",
+      "sourceLabel": "전기공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "전자정보공과대학",
+      "department": "전자공학과",
+      "sourceLabel": "전자공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "자연과학대학",
+      "department": "전자바이오물리학과",
+      "sourceLabel": "전자바이오물리학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "전자정보공과대학",
+      "department": "전자융합공학과",
+      "sourceLabel": "전자융합공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "전자정보공과대학",
+      "department": "전자재료공학과",
+      "sourceLabel": "전자재료공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "전자정보공과대학",
+      "department": "전자통신공학과",
+      "sourceLabel": "전자통신공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인공지능융합대학",
+      "department": "정보융합학부",
+      "sourceLabel": "정보융합학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "자연과학대학",
+      "department": "정보콘텐츠학과",
+      "sourceLabel": "정보콘텐츠학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인공지능융합대학",
+      "department": "지능형로봇학과",
+      "sourceLabel": "지능형로봇학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "인공지능융합대학",
+      "department": "컴퓨터정보공학부",
+      "sourceLabel": "컴퓨터정보공학부",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "정책법학대학",
+      "department": "행정학과",
+      "sourceLabel": "행정학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "화학공학과",
+      "sourceLabel": "화학공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "자연과학대학",
+      "department": "화학과",
+      "sourceLabel": "화학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    },
+    {
+      "college": "공과대학",
+      "department": "환경공학과",
+      "sourceLabel": "환경공학과",
+      "sourceUrl": "https://www.kw.ac.kr/ko/univ/glance.jsp",
+      "evidence": "Current official university overview/course curriculum heading explicitly lists department under college; HTML comments excluded.",
+      "sourceFile": "work/course-owner-filter-20261012/kwangwoon-official-organization.html",
+      "isOfferingUnit": false,
+      "campus": "unknown",
+      "collegeKnown": true
+    }
+  ],
+  "courseOwners": [
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/1000-3-3270-01",
+      "units": [
+        {
+          "college": "공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 1000-3-3270-01 행: 개설대학 \"공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-1-2957-01",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-1-2957-01 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-1-2957-02",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-1-2957-02 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-1-2957-03",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-1-2957-03 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-1-2957-04",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-1-2957-04 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-1-2957-05",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-1-2957-05 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-1-2957-06",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-1-2957-06 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-2-5461-01",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-2-5461-01 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-4-5056-01",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-4-5056-01 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/7000-4-8478-01",
+      "units": [
+        {
+          "college": "전자정보공과대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 7000-4-8478-01 행: 개설대학 \"전자정보공과대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-1-2957-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-1-2957-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-1-2957-02",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-1-2957-02 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-1-2957-03",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-1-2957-03 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-1-3674-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-1-3674-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-1-6241-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-1-6241-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-2-1186-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-2-1186-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-2-1186-02",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-2-1186-02 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-2-1186-03",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-2-1186-03 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-2-5700-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-2-5700-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-2-5702-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-2-5702-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-2-5715-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-2-5715-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-2-5717-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-2-5717-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-3-0875-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-3-0875-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-3-0875-02",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-3-0875-02 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/I000-3-6618-01",
+      "units": [
+        {
+          "college": "인공지능융합대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 I000-3-6618-01 행: 개설대학 \"인공지능융합대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    },
+    {
+      "sourceId": "kwangwoon/unknown/2026/2/J000-1-5773-01",
+      "units": [
+        {
+          "college": "참빛인재대학",
+          "department": null,
+          "sourceLabel": "공통",
+          "sourceUrl": "https://www.kw.ac.kr/ko/life/bachelor_info13.jsp",
+          "evidence": "공식 학부 강의시간표 2026학년도 2학기 엑셀 J000-1-5773-01 행: 개설대학 \"참빛인재대학\", 개설학과 \"공통\", 개설전공 \"공통\"",
+          "sourceFile": "work/issue-568-kwangwoon-timetable/kw-2026-2-timetable-20261023.xlsx",
+          "isOfferingUnit": true
+        }
+      ]
+    }
+  ]
+}

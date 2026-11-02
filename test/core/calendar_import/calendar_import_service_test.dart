@@ -196,6 +196,63 @@ void main() {
       );
     },
   );
+
+  test('업데이트가 필요해지면 불러온 일정을 저장하지 않고 가져오기를 취소한다', () async {
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    // Touching this repository throws: nothing may be looked up or written.
+    final eventRepository = _UnusedEventRepository();
+    var blocked = false;
+    final service = CalendarImportService(
+      nativeSource: _OneEventNativeCalendarSource(() => blocked = true),
+      googleSource: GoogleCalendarSource(
+        authService: GoogleDriveAuthService(useDesktopOAuth: false),
+      ),
+      eventRepository: eventRepository,
+      eventCommandService: EventCommandService(
+        repository: eventRepository,
+        settingsRepository: settingsRepository,
+        notificationService: _UnusedNotificationService(),
+        syncService: _UnusedSyncService(),
+      ),
+      settingsRepository: settingsRepository,
+      blocked: () => blocked,
+    );
+    const calendar = ImportableCalendar(
+      id: 'work-calendar',
+      title: 'Work',
+      provider: CalendarImportProvider.samsung,
+      colorValue: 0xff123456,
+    );
+
+    await expectLater(
+      service.importCalendars(const [calendar]),
+      throwsA(isA<CalendarImportCancelled>()),
+    );
+  });
+}
+
+class _OneEventNativeCalendarSource extends NativeCalendarSource {
+  _OneEventNativeCalendarSource(this.onLoad);
+  final void Function() onLoad;
+  @override
+  Future<List<ExternalCalendarEvent>> loadEvents(
+    Iterable<ImportableCalendar> calendars,
+  ) async {
+    onLoad();
+    return [
+      ExternalCalendarEvent(
+        sourceId: 'one',
+        calendarId: 'work-calendar',
+        provider: CalendarImportProvider.samsung,
+        title: '회의',
+        startAt: DateTime(2026, 11, 2, 9),
+        endAt: DateTime(2026, 11, 2, 10),
+        allDay: false,
+      ),
+    ];
+  }
 }
 
 class _EmptyNativeCalendarSource extends NativeCalendarSource {
