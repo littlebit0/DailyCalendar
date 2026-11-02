@@ -18,6 +18,7 @@ import '../../../core/auth/apple_sign_in_service.dart';
 import '../../../core/auth/daily_account.dart';
 import '../../../core/auth/google_account.dart';
 import '../../../core/di/app_providers.dart';
+import '../../../core/update/update_required_view.dart';
 import '../../../core/security/biometric_auth_service.dart';
 import '../../../core/security/app_lock_privacy_service.dart';
 import '../../../core/siri/siri_shortcut_installer.dart';
@@ -1986,6 +1987,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     AppSettings settings,
     EventCategory category,
   ) async {
+    if (blockedByRequiredUpdate(context, ref)) return;
     final updatedCategory = await _showCategoryDialog(
       context,
       initialCategory: category,
@@ -2004,6 +2006,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       categories: _normalizeCategories(categories),
       hiddenCategoryIds: hiddenCategoryIds,
     );
+    if (!mounted || blockedByRequiredUpdate(context, ref)) return;
     await _save(updatedSettings, changedFrom: settings, backup: false);
     try {
       await ref
