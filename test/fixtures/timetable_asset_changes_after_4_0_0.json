@@ -294,5 +294,9 @@
   "assets/timetable/organizations/dongguk.json": {
     "sha256": "5aa5af4e030bca6f4f76a23ac62f53873e7243f5431d327511616ec36b29498e",
     "reason": "#596 동국대 소속 없던 학과·전공 10개와 원자료 개설 라벨 24개를 공식 종합강의시간표 개설대학·개설학과 코드 트리와 2026-2 다전공 신청가능 목록 기준 단과대·연계전공·융합전공에 배정"
+  },
+  "assets/timetable/organizations/baekseok.json": {
+    "sha256": "9266dd7454a4a26beda8b996cd33f5b34c794b64bc51f771f1b7021eb5d019b8",
+    "reason": "#603 백석대 공식 '학부 전체보기' 기준 학부(과)·혁신교육플랫폼대학 18개를 최상위 개설 단위로 등록(상위 단과대 없음)"
   }
 }
