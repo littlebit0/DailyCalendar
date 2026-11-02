@@ -86,6 +86,7 @@ class LmsSyncService extends ChangeNotifier {
     required EventCommandService commands,
     required LmsFetchHtml fetchHtml,
     required LmsSyncSession? Function() readSession,
+    bool Function()? blocked,
     bool Function(Object error)? isAuthenticationError,
     DateTime Function()? now,
     Future<void> Function(Duration duration)? wait,
@@ -96,6 +97,7 @@ class LmsSyncService extends ChangeNotifier {
        _commands = commands,
        _fetchHtml = fetchHtml,
        _readSession = readSession,
+       _blocked = blocked,
        _isAuthenticationError = isAuthenticationError ?? ((_) => false),
        _now = now ?? DateTime.now,
        _wait = wait ?? Future<void>.delayed,
@@ -107,6 +109,7 @@ class LmsSyncService extends ChangeNotifier {
   final EventCommandService _commands;
   final LmsFetchHtml _fetchHtml;
   final LmsSyncSession? Function() _readSession;
+  final bool Function()? _blocked;
   final bool Function(Object) _isAuthenticationError;
   final DateTime Function() _now;
   final Future<void> Function(Duration) _wait;
@@ -142,6 +145,12 @@ class LmsSyncService extends ChangeNotifier {
           session.ownerId;
 
   bool _current(LmsSyncSession session, int epoch) =>
+      !(_blocked?.call() ?? false) && _currentIgnoringBlock(session, epoch);
+
+  /// What event writes check for account validity. A required update is
+  /// enforced by the event service before each write, so an event already
+  /// saved still gets its reminder, alarm and upload.
+  bool _currentIgnoringBlock(LmsSyncSession session, int epoch) =>
       !_disposed &&
       epoch == _epoch &&
       session.sameAs(_readSession()) &&
@@ -266,7 +275,7 @@ class LmsSyncService extends ChangeNotifier {
   }
 
   Future<LmsSyncResult?> refresh({bool force = false}) {
-    if (_disposed) return Future.value();
+    if (_disposed || (_blocked?.call() ?? false)) return Future.value();
     final session = _readSession();
     final running = _inFlight;
     if (running != null) {
@@ -571,13 +580,15 @@ class LmsSyncService extends ChangeNotifier {
     if (owner.isEmpty || school == null || _configuredCategory() == null) {
       return;
     }
-    bool valid() =>
+    bool validAccount() =>
         !_disposed &&
         normalizeLmsOwner(
               _settings.dailyAccount()?.googleAccount?.email ?? '',
             ) ==
             owner &&
         _settings.load().academicProfile?.timetableUniversity == school;
+    bool valid() => !(_blocked?.call() ?? false) && validAccount();
+    if (!valid()) return;
     final events = await _repository.allEventsForSync();
     if (!valid()) return;
     await _commands.importBatch(
@@ -587,7 +598,7 @@ class LmsSyncService extends ChangeNotifier {
             e.lms?.ownerId == owner &&
             e.lms?.schoolId == school,
       ),
-      isCurrent: valid,
+      isCurrent: validAccount,
       lmsCategory: _configuredCategory,
       preserveLmsSource: true,
       prepare: (event) async {
@@ -715,7 +726,7 @@ class LmsSyncService extends ChangeNotifier {
     final saved = await _commands.importBatch(
       candidates,
       lmsCategory: _configuredCategory,
-      isCurrent: () => _current(session, epoch),
+      isCurrent: () => _currentIgnoringBlock(session, epoch),
       prepare: (incoming) async {
         _check(session, epoch);
         final local = await _repository.findById(incoming.id);
@@ -788,7 +799,7 @@ class LmsSyncService extends ChangeNotifier {
         _check(session, epoch);
         await _commands.delete(
           event.id,
-          isCurrent: () => _current(session, epoch),
+          isCurrent: () => _currentIgnoringBlock(session, epoch),
         );
         _check(session, epoch);
         deleted++;

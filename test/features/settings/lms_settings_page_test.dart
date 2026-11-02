@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:daily/app/daily_theme.dart';
@@ -13,6 +14,8 @@ import 'package:daily/core/lms/lms_web_session.dart';
 import 'package:daily/core/settings/settings_repository.dart';
 import 'package:daily/features/events/application/event_command_service.dart';
 import 'package:daily/features/events/domain/event_repository.dart';
+import 'package:daily/core/update/update_required_view.dart';
+import 'package:daily/features/settings/presentation/lms_login_page.dart';
 import 'package:daily/features/settings/presentation/lms_settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -58,6 +61,16 @@ class _NoSession extends LmsWebSession {
 
   @override
   Future<void> close() async {}
+}
+
+class _PendingLoginSession extends _NoSession {
+  _PendingLoginSession(super.owner, super.school);
+  final canceled = <bool>[];
+  @override
+  Future<void> beginLogin() => Completer<void>().future;
+  @override
+  Future<void> finishLogin({required bool authenticated}) async =>
+      canceled.add(!authenticated);
 }
 
 void main() {
@@ -117,6 +130,68 @@ void main() {
     expect(sessions.last.submittedCredentials?.paused, isFalse);
   });
 
+  testWidgets('a required update closes an open school login page', (
+    tester,
+  ) async {
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    await settings.saveGoogleAccount(
+      const GoogleAccount(email: 'student@example.com'),
+    );
+    await settings.saveAcademicProfile(
+      const AcademicProfile(
+        universityId: 'institution:academyinfo:0000117',
+        universityName: '상명대학교',
+        schoolKind: 'fourYear',
+      ),
+      expectedGoogleEmail: 'student@example.com',
+    );
+    final sessions = <_PendingLoginSession>[];
+    final required = ValueNotifier<String?>(null);
+    addTearDown(required.dispose);
+    final controller = LmsController(
+      settings: settings,
+      repository: _Repository(),
+      commands: _Commands(),
+      createSession: (owner, school) {
+        final session = _PendingLoginSession(owner, school);
+        sessions.add(session);
+        return session;
+      },
+    );
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          lmsControllerProvider.overrideWith((ref) => controller),
+          requiredUpdateVersionProvider.overrideWithValue(required),
+        ],
+        child: MaterialApp(home: const LmsSettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final connect = find.byKey(const ValueKey('lms-connect'));
+    await tester.dragUntilVisible(
+      connect,
+      find.byType(ListView),
+      const Offset(0, -200),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(connect);
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 500));
+    expect(find.byType(LmsLoginPage), findsOneWidget);
+
+    required.value = '9.9.9';
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.byType(LmsLoginPage), findsNothing);
+    expect(find.byType(UpdateRequiredView), findsWidgets);
+    expect(sessions.last.canceled, [true]);
+  });
+
   testWidgets('the re-login button is hidden while the school is connected', (
     tester,
   ) async {
@@ -157,7 +232,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byKey(const ValueKey('lms-local-login-retry')), findsNothing);
     // Deleting the saved login stays available.
-    expect(find.byKey(const ValueKey('lms-local-login-remove')), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('lms-local-login-remove')),
+      findsOneWidget,
+    );
   });
 
   testWidgets(
