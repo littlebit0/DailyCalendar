@@ -828,10 +828,14 @@ void main() {
       expect(find.text('학과에 수강 가능 여부 확인'), findsOneWidget);
       final add = find.byKey(const ValueKey('course-add-dku-untimed'));
       await tester.ensureVisible(add);
-      expect(tester.widget<FilledButton>(add).onPressed, isNull);
+      expect(tester.widget<FilledButton>(add).onPressed, isNotNull);
+      expect(
+        find.byKey(const ValueKey('course-untimed-dku-untimed')),
+        findsOneWidget,
+      );
       expect(
         find.byKey(const ValueKey('course-mode-dku-untimed')),
-        findsNothing,
+        findsOneWidget,
       );
       expect(additions, 0);
       expect(tester.takeException(), isNull);

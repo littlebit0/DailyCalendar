@@ -279,6 +279,11 @@ class UniversityCourse {
   final String sourceClassificationGroup;
   final TimetablePeriod? period;
   bool get hasSchedulableMeetings => meetings.isNotEmpty;
+
+  /// Courses the school publishes without weekday or time can still be added;
+  /// the timetable lists them separately. Unparsed schedules stay unaddable.
+  bool get canAddToTimetable =>
+      hasSchedulableMeetings || scheduleStatus == 'unscheduled';
   final int academicYear;
   final double? credits;
   final Map<String, num> departmentCredits;

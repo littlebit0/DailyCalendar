@@ -547,4 +547,34 @@ void main() {
       expect(() => _one(invalid), throwsFormatException);
     },
   );
+
+  group('untimed school courses', () {
+    final untimed = TimetableClass(
+      id: 'u',
+      title: '녹화 강의',
+      academicYear: 2026,
+      semester: '2',
+      sourceId: 'src-u',
+      sourceType: 'universityDataset',
+      meetings: const [],
+    );
+
+    test('require sync version 2 so older clients do not read them', () {
+      final document = _one(untimed);
+      expect(document.schemaVersion, 2);
+      final json = document.toJson();
+      expect(
+        () => TimetableSyncDocument.fromJson({...json, 'schemaVersion': 1}),
+        throwsFormatException,
+      );
+      expect(
+        TimetableSyncDocument.fromJson(json).courses.keys,
+        document.courses.keys,
+      );
+    });
+
+    test('ordinary weekly documents stay on version 1', () {
+      expect(_one(_course('w', sourceId: 'src-w')).schemaVersion, 1);
+    });
+  });
 }

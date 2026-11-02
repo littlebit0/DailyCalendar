@@ -106,6 +106,24 @@ void main() {
     expect(problems, isEmpty);
   });
 
+  test('the untimed courses section is named in every language', () {
+    const title = '원격·시간 미정 강좌';
+    expect(
+      AppLocalizations(const Locale('en')).text(title),
+      'Remote & untimed courses',
+    );
+    expect(
+      AppLocalizations(const Locale('ja')).text(title),
+      '遠隔・時間未定の講座',
+    );
+    expect(
+      AppLocalizations(
+        const Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
+      ).text(title),
+      '遠距・時間未定課程',
+    );
+  });
+
   test('university counts read naturally for one and many in English', () {
     final en = AppLocalizations(const Locale('en'));
     expect(en.text('대학 1개'), '1 university');
