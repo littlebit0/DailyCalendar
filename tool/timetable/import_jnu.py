@@ -128,7 +128,8 @@ def table_rows(markup):
     return result
 
 def meetings(schedule, classroom):
-    """Retain real 50/75-minute module ends; the app rounds display separately."""
+    """A period slot is class time plus the break after it (MWF/Sat 50+10, Tue/Thu 75+15);
+    same-day same-room meetings less than 60 minutes apart are stored as one block."""
     compact = re.sub(r'\s+', '', schedule)
     if not compact:
         return [], 'unscheduled'
@@ -153,22 +154,22 @@ def meetings(schedule, classroom):
             # period 9. Preserve that raw notation instead of guessing a time.
             if period not in (*range(9), 10):
                 return [], 'unrecognized'
-            start, duration, break_minutes = 450 + period * 90, 75, 15
+            start, slot = 450 + period * 90, 90
         elif day in '월수금':
             if period not in (*range(13), 14, 15):
                 return [], 'unrecognized'
-            start, duration, break_minutes = 480 + period * 60, 50, 10
+            start, slot = 480 + period * 60, 60
         elif day == '토':
             # 2026 official freshman handbook, page 5, defines Saturday.
             if not 0 <= period <= 15:
                 return [], 'unrecognized'
-            start, duration, break_minutes = 480 + period * 60, 50, 10
+            start, slot = 480 + period * 60, 60
         else:
             return [], 'unrecognized'  # Neither official module defines Sunday.
-        entries.append((weekday, start, start + duration, rooms[index] if len(rooms) > 1 else rooms[0] if rooms else '', break_minutes))
+        entries.append((weekday, start, start + slot, rooms[index] if len(rooms) > 1 else rooms[0] if rooms else ''))
     result = []
-    for weekday, start, end, room, gap in sorted(set(entries)):
-        if result and result[-1]['weekday'] == weekday and result[-1]['classroom'] == room and result[-1]['endMinute'] + gap == start:
+    for weekday, start, end, room in sorted(set(entries)):
+        if result and result[-1]['weekday'] == weekday and result[-1]['classroom'] == room and start - result[-1]['endMinute'] < 60:
             result[-1]['endMinute'] = end
         else:
             result.append({'weekday': weekday, 'startMinute':start, 'endMinute':end, 'classroom':room})

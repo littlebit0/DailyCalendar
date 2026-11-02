@@ -18,6 +18,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
+  test('JNU summer term runs through the last Friday of the notice', () {
+    // 2026학년도 하계 계절학기 운영 계획 안내: 수업기간 6. 29.(월) ~ 7. 24.(금).
+    final document =
+        jsonDecode(
+              File('assets/timetable/term-periods.json').readAsStringSync(),
+            )
+            as Map<String, dynamic>;
+    final jnu = (document['additionalUniversities'] as List).singleWhere(
+      (u) => u['university'] == 'jnu',
+    );
+    final summer = (jnu['terms'] as List).singleWhere(
+      (t) => t['year'] == 2026 && t['semester'] == '여름',
+    );
+    expect(summer['start'], '2026-06-29');
+    expect(summer['end'], '2026-07-24');
+    final period = TimetablePeriod(
+      start: DateTime.parse(summer['start'] as String),
+      end: DateTime.parse(summer['end'] as String),
+    );
+    expect(period.contains(DateTime(2026, 7, 24, 23, 59)), isTrue);
+    expect(period.contains(DateTime(2026, 7, 25)), isFalse);
+  });
+
   test(
     'dated occurrences include both endpoints and exclude adjacent days',
     () {
