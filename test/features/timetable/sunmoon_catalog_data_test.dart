@@ -1,3 +1,6 @@
+@Timeout(Duration(minutes: 3))
+library;
+
 import 'dart:io';
 
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';

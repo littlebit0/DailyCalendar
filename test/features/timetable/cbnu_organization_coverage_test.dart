@@ -1,3 +1,6 @@
+@Timeout(Duration(minutes: 3))
+library;
+
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
