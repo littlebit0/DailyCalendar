@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 """Validate Seoultech's published regular clock; never infer half periods.
 
-The current official guide confirms periods 0..14 at 08:00..22:50.
+Basis: 서울과학기술대학교 학사관리 규정(2026. 7. 27. 개정, 2026학년도 2학기부터
+시행) 제4조·[별표 1] 교시별 수업시간표 — 50분 수업은 제0교시 08:00~08:50부터
+제14교시 22:00~22:50까지 매 정시 시작(교시 사이 10분 휴식은 표의 시각에 포함).
+75분 수업은 별표가 제4~10교시에 10:00~11:15 등 별도 시각을 주지만, 공식 시간표
+행에는 50분/75분 구분이 없어 교시 번호만으로 고를 수 없으므로 50분 수업 시각만
+쓰고(학점 수와 교시 수가 일치), A/B 반교시 표기는 시각을 만들지 않는다.
+https://www.seoultech.ac.kr/intro/uvstat/rules/ (조회 2026-10-24)
 Dated future-faculty schedules must use their separately published clocks.
 This helper alone does not establish exception dates or per-meeting classrooms.
 """

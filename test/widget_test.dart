@@ -10295,7 +10295,7 @@ class _FakeEventRepository implements EventRepository {
   var searchCalls = 0;
 
   @override
-  Future<void> delete(String eventId) async {}
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {}
 
   @override
   Future<void> save(CalendarEvent event) async {}
@@ -10329,6 +10329,7 @@ class _FakeEventRepository implements EventRepository {
     required EventCategory previous,
     required EventCategory updated,
     required DateTime updatedAt,
+    void Function()? beforeWrite,
   }) async {
     if (failCategoryUpdate) throw StateError('event rows were not updated');
     final affected = <CalendarEvent>[];

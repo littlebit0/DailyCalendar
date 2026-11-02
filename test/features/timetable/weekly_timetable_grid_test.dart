@@ -485,4 +485,232 @@ void main() {
       },
     );
   }
+
+  group('연속 수업 합치기', () {
+    // 한 과목의 여러 저장 구간을 같은 날짜에 만든다.
+    List<ClassOccurrence> split(
+      String id,
+      List<(int, int)> spans, {
+      List<String>? rooms,
+      List<int>? weekdaysOf,
+    }) {
+      final meetings = [
+        for (var i = 0; i < spans.length; i++)
+          ClassMeeting(
+            id: 'm$i',
+            weekday: weekdaysOf?[i] ?? 1,
+            startMinute: spans[i].$1,
+            endMinute: spans[i].$2,
+            classroom: rooms?[i] ?? '공학관 201',
+          ),
+      ];
+      final course = TimetableClass(
+        id: id,
+        title: '자료구조 $id',
+        meetings: meetings,
+        academicYear: 2026,
+        semester: '2',
+        colorValue: 0xff2563eb,
+      );
+      return [
+        for (final meeting in meetings)
+          ClassOccurrence(
+            course,
+            meeting,
+            monday.add(Duration(days: meeting.weekday - 1)),
+            LectureMode.inPerson,
+          ),
+      ];
+    }
+
+    Finder blocks() => find.byWidgetPredicate(
+      (widget) =>
+          widget.key is ValueKey<String> &&
+          (widget.key! as ValueKey<String>).value.startsWith(
+            'timetable-occurrence-',
+          ),
+    );
+
+    testWidgets('광운형 15분 간격 3구간은 1블록이 된다', (tester) async {
+      final parts = split('kw', [(540, 590), (605, 655), (670, 720)]);
+      await tester.pumpWidget(app(courses: parts));
+      await tester.pumpAndSettle();
+      expect(blocks(), findsOneWidget);
+      expect(
+        find.byKey(ValueKey('timetable-occurrence-${parts.first.id}')),
+        findsOneWidget,
+      );
+      expect(tester.getSemantics(blocks()).label, contains('09:00–12:00'));
+    });
+
+    testWidgets('합쳐진 블록을 누르면 구간을 고를 수 있고 각각 눌린다', (tester) async {
+      final parts = split('seg', [(540, 600), (600, 660), (660, 720)]);
+      final tapped = <String>[];
+      await tester.pumpWidget(
+        app(
+          courses: parts,
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsOneWidget);
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      for (final part in parts) {
+        expect(
+          find.byKey(ValueKey('timetable-segment-${part.id}')),
+          findsOneWidget,
+        );
+      }
+      expect(find.text('10:00–11:00'), findsOneWidget);
+      // 가운데 구간도 따로 열 수 있다.
+      await tester.tap(
+        find.byKey(ValueKey('timetable-segment-${parts[1].id}')),
+      );
+      await tester.pumpAndSettle();
+      expect(tapped, [parts[1].id]);
+      // 마지막 구간도 마찬가지다.
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      await tester.tap(
+        find.byKey(ValueKey('timetable-segment-${parts[2].id}')),
+      );
+      await tester.pumpAndSettle();
+      expect(tapped, [parts[1].id, parts[2].id]);
+    });
+
+    testWidgets('낮은 가로 화면에서도 구간 선택 목록을 스크롤해 끝 구간을 고른다', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(720, 260));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final parts = split('low', [
+        (540, 600),
+        (600, 660),
+        (660, 720),
+        (720, 780),
+        (780, 840),
+      ]);
+      final tapped = <String>[];
+      await tester.pumpWidget(
+        app(
+          courses: parts,
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      final last = find.byKey(ValueKey('timetable-segment-${parts.last.id}'));
+      await tester.scrollUntilVisible(
+        last,
+        60,
+        scrollable: find.descendant(
+          of: find.byType(BottomSheet),
+          matching: find.byType(Scrollable),
+        ),
+      );
+      await tester.ensureVisible(last);
+      await tester.pumpAndSettle();
+      await tester.tap(last);
+      await tester.pumpAndSettle();
+      expect(tapped, [parts.last.id]);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('구간 선택을 닫으면 아무 구간도 열리지 않는다', (tester) async {
+      final tapped = <String>[];
+      await tester.pumpWidget(
+        app(
+          courses: split('close', [(540, 600), (600, 660)]),
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
+      expect(tapped, isEmpty);
+    });
+
+    testWidgets('합쳐지지 않은 블록은 바로 열린다', (tester) async {
+      final tapped = <String>[];
+      final single = split('single', [(540, 600)]);
+      await tester.pumpWidget(
+        app(
+          courses: single,
+          onOccurrenceTap: (occurrence) => tapped.add(occurrence.id),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(blocks());
+      await tester.pumpAndSettle();
+      expect(tapped, [single.single.id]);
+    });
+
+    testWidgets('한양형 0분 간격은 1블록이 된다', (tester) async {
+      await tester.pumpWidget(
+        app(courses: split('hy', [(540, 600), (600, 660)])),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsOneWidget);
+    });
+
+    testWidgets('간격이 60분 이상이면 2블록이다', (tester) async {
+      await tester.pumpWidget(
+        app(courses: split('gap', [(540, 590), (650, 700)])),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsNWidgets(2));
+      await tester.pumpWidget(
+        app(courses: split('near', [(540, 590), (649, 700)])),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsOneWidget);
+    });
+
+    testWidgets('강의실이 다르면 연속이어도 2블록이다', (tester) async {
+      await tester.pumpWidget(
+        app(
+          courses: split(
+            'room',
+            [(540, 600), (600, 660)],
+            rooms: ['공학관 201', '공학관 305'],
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsNWidgets(2));
+    });
+
+    testWidgets('요일이 다르면 분리된다', (tester) async {
+      await tester.pumpWidget(
+        app(
+          courses: split('day', [(540, 600), (600, 660)], weekdaysOf: [1, 2]),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsNWidgets(2));
+    });
+
+    testWidgets('겹치는 구간과 뒤섞인 순서도 안전하게 합친다', (tester) async {
+      final parts = split('overlap', [(600, 680), (540, 620)]);
+      await tester.pumpWidget(app(courses: parts));
+      await tester.pumpAndSettle();
+      expect(blocks(), findsOneWidget);
+      expect(tester.getSemantics(blocks()).label, contains('09:00–11:30'));
+    });
+
+    testWidgets('다른 과목은 인접해도 합치지 않는다', (tester) async {
+      await tester.pumpWidget(
+        app(
+          courses: [
+            ...split('a', [(540, 600)]),
+            ...split('b', [(600, 660)]),
+          ],
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(blocks(), findsNWidgets(2));
+    });
+  });
 }
