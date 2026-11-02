@@ -1,0 +1,2891 @@
+{
+  "schemaVersion": 2,
+  "universityId": "donga",
+  "campus": "unknown",
+  "campusName": "캠퍼스 미확인·외부대학 운영",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-09-03",
+  "sourceUrl": "https://wwwnew.donga.ac.kr/article/bbs-62/8464209?from=%2Fcommunity%2Facademic-notices",
+  "researchOnly": false,
+  "completionClaim": false,
+  "wholeSchoolCourseCoverageComplete": false,
+  "wholeOperatingVerified": false,
+  "courses": [
+    {
+      "sourceId": "donga-2026-2-01321825-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01321825",
+      "courseName": "(DSU)텍스타일디자인(Field)",
+      "section": "101",
+      "professor": "동서대 양성원(1~15주)",
+      "credits": 3,
+      "classification": "④무대의상디자인\n과기술",
+      "sourceClassificationAliases": [
+        "④무대의상디자인\n과기술"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "융합디자인"
+      ],
+      "departmentCredits": {
+        "융합디자인": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "융합디자인": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊온라인 LMS\n＊금 7-10교시\n(금 11:00-13:00)",
+      "sourceClassroom": "＊온라인 LMS\n＊뉴밀레니엄관 502호(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "융합디자인",
+          "row": 9,
+          "education": {
+            "교과목명(국문)": "(DSU)텍스타일디자인(Field)",
+            "교과목 코드": "01321825",
+            "분반": "101",
+            "편성모듈": "④무대의상디자인\n과기술",
+            "학년": 4,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "기존",
+            "필드": "○",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온오프라인\n혼합형",
+            "수업요일/시간": "＊온라인 LMS\n＊금 7-10교시\n(금 11:00-13:00)",
+            "수업장소": "＊온라인 LMS\n＊뉴밀레니엄관 502호(주례)",
+            "교강사 및 담당주차": "동서대 양성원(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01321826-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01321826",
+      "courseName": "(DSU)무대의상기획(Field)",
+      "section": "101",
+      "professor": "동서대 황성원(1~15주)\n\n동서대 황성원(1~15주)",
+      "credits": 3,
+      "classification": "④무대의상디자인\n과기술",
+      "sourceClassificationAliases": [
+        "④무대의상디자인\n과기술"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "융합디자인"
+      ],
+      "departmentCredits": {
+        "융합디자인": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "융합디자인": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊월 5-6교시 \n(월 10:00-11:00)\n＊월 7-10교시\n(월 11:00-13:00)",
+      "sourceClassroom": "＊뉴밀레니엄관 503호(주례)\n＊뉴밀레니엄관 512호(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "융합디자인",
+          "row": 11,
+          "education": {
+            "교과목명(국문)": "(DSU)무대의상기획(Field)",
+            "교과목 코드": "01321826",
+            "분반": "101",
+            "편성모듈": "④무대의상디자인\n과기술",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "기존",
+            "필드": "○",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온오프라인\n혼합형",
+            "수업요일/시간": "＊월 5-6교시 \n(월 10:00-11:00)\n＊월 7-10교시\n(월 11:00-13:00)",
+            "수업장소": "＊뉴밀레니엄관 503호(주례)\n＊뉴밀레니엄관 512호(주례)",
+            "교강사 및 담당주차": "동서대 황성원(1~15주)\n\n동서대 황성원(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01322814-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01322814",
+      "courseName": "(DSU)자율주행시스템",
+      "section": "01",
+      "professor": "동서대 지용석(대표교수, 1~15주)\n정인화(8주, 15주)",
+      "credits": 3,
+      "classification": "③응용시스템",
+      "sourceClassificationAliases": [
+        "③응용시스템"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "전력반도체"
+      ],
+      "departmentCredits": {
+        "전력반도체": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "전력반도체": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: ＊동아-동서 \n온라인 팀티칭; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: ＊동아-동서 \n온라인 팀티칭; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊1~7주, 9~14주: 오프라인\n  -금 5-10교시\n  (금 10-13시)\n＊8주, 15주: 중간/기말고사 2시간 + 온라인LMS 1시간\n",
+      "sourceClassroom": "＊전자정보관 2309호(주례)\n\n\n＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "전력반도체",
+          "row": 11,
+          "education": {
+            "교과목명(국문)": "(DSU)자율주행시스템",
+            "교과목 코드": "01322814",
+            "분반": "01",
+            "편성모듈": "③응용시스템",
+            "학년": 3,
+            "학점": 3,
+            "이론": 2,
+            "실습": 1,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온오프라인\n혼합형",
+            "수업요일/시간": "＊1~7주, 9~14주: 오프라인\n  -금 5-10교시\n  (금 10-13시)\n＊8주, 15주: 중간/기말고사 2시간 + 온라인LMS 1시간\n",
+            "수업장소": "＊전자정보관 2309호(주례)\n\n\n＊온라인 LMS",
+            "교강사 및 담당주차": "동서대 지용석(대표교수, 1~15주)\n정인화(8주, 15주)",
+            "비고": "＊동아-동서 \n온라인 팀티칭"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01326084-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01326084",
+      "courseName": "(DSU)피부과학",
+      "section": "101",
+      "professor": "동서대 김동원(1~15주)",
+      "credits": 3,
+      "classification": "②첨단신약",
+      "sourceClassificationAliases": [
+        "②첨단신약"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊온라인 LMS교과임(8.7.)\n＊시험은 대면으로 진행\n(목요일 13-16시, 주례 응용공학관 4204호); 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊온라인 LMS교과임(8.7.)\n＊시험은 대면으로 진행\n(목요일 13-16시, 주례 응용공학관 4204호); 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 16,
+          "education": {
+            "교과목명(국문)": "(DSU)피부과학",
+            "교과목 코드": "01326084",
+            "분반": "101",
+            "편성모듈": "②첨단신약",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "동서대 김동원(1~15주)",
+            "비고": "＊온라인 LMS교과임(8.7.)\n＊시험은 대면으로 진행\n(목요일 13-16시, 주례 응용공학관 4204호)"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01326116-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01326116",
+      "courseName": "(DSU)첨단영상콘텐츠기획제작",
+      "section": "101",
+      "professor": "동서대 황수연(1~15주)",
+      "credits": 3,
+      "classification": "②XR/실감형콘텐츠",
+      "sourceClassificationAliases": [
+        "②XR/실감형콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊수 5-10교시\n(수 10:00-13:00)",
+      "sourceClassroom": "＊뉴밀레니엄관 225(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 12,
+          "education": {
+            "교과목명(국문)": "(DSU)첨단영상콘텐츠기획제작",
+            "교과목 코드": "01326116",
+            "분반": "101",
+            "편성모듈": "②XR/실감형콘텐츠",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊수 5-10교시\n(수 10:00-13:00)",
+            "수업장소": "＊뉴밀레니엄관 225(주례)",
+            "교강사 및 담당주차": "동서대 황수연(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01326173-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "센텀",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01326173",
+      "courseName": "(DSU)영화보기와영화읽기2",
+      "section": "101",
+      "professor": "동서대 송충섭(1~15주)\n동서대 김대승(1~15주)",
+      "credits": 3,
+      "classification": "③서사창작",
+      "sourceClassificationAliases": [
+        "③서사창작"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊수 15-18교시\n(수 15:00-17:00)\n＊수 19-20교시\n(수 17:00-18:00)",
+      "sourceClassroom": "＊센텀캠퍼스 609호\n\n＊센텀캠퍼스 609호",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 16,
+          "education": {
+            "교과목명(국문)": "(DSU)영화보기와영화읽기2",
+            "교과목 코드": "01326173",
+            "분반": "101",
+            "편성모듈": "③서사창작",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊수 15-18교시\n(수 15:00-17:00)\n＊수 19-20교시\n(수 17:00-18:00)",
+            "수업장소": "＊센텀캠퍼스 609호\n\n＊센텀캠퍼스 609호",
+            "교강사 및 담당주차": "동서대 송충섭(1~15주)\n동서대 김대승(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01328110-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "센텀",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01328110",
+      "courseName": "(DSU)영화장르연구",
+      "section": "101",
+      "professor": "동서대 김정선(1~15주)",
+      "credits": 3,
+      "classification": "③서사창작",
+      "sourceClassificationAliases": [
+        "③서사창작"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊화 13-18교시\n(화 14:00-17:00)",
+      "sourceClassroom": "＊센텀캠퍼스 609호",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 15,
+          "education": {
+            "교과목명(국문)": "(DSU)영화장르연구",
+            "교과목 코드": "01328110",
+            "분반": "101",
+            "편성모듈": "③서사창작",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊화 13-18교시\n(화 14:00-17:00)",
+            "수업장소": "＊센텀캠퍼스 609호",
+            "교강사 및 담당주차": "동서대 김정선(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01328192-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "센텀",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01328192",
+      "courseName": "(DSU)공연기획제작",
+      "section": "101",
+      "professor": "동서대 유진선(1~15주)",
+      "credits": 2,
+      "classification": "④엔터테인먼트 엔지니어링",
+      "sourceClassificationAliases": [
+        "④엔터테인먼트 엔지니어링"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 2
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: 매 주차마다 수업방법이 상이하므로 수업계획서 확인바람; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인\n혼합형; 원문 비고: 매 주차마다 수업방법이 상이하므로 수업계획서 확인바람; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊목 7-10교시\n(목 11:00-13:00)",
+      "sourceClassroom": "＊센텀캠퍼스 609호",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 20,
+          "education": {
+            "교과목명(국문)": "(DSU)공연기획제작",
+            "교과목 코드": "01328192",
+            "분반": "101",
+            "편성모듈": "④엔터테인먼트 엔지니어링",
+            "학년": 3,
+            "학점": 2,
+            "이론": 2,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온오프라인\n혼합형",
+            "수업요일/시간": "＊목 7-10교시\n(목 11:00-13:00)",
+            "수업장소": "＊센텀캠퍼스 609호",
+            "교강사 및 담당주차": "동서대 유진선(1~15주)",
+            "비고": "매 주차마다 수업방법이 상이하므로 수업계획서 확인바람"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01328949-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01328949",
+      "courseName": "(DSU)지역연계융합프로젝트2(Field)",
+      "section": "101",
+      "professor": "동서대 정우영(1~15주)\n\n동서대 김형숙(1~15주)",
+      "credits": 3,
+      "classification": "④무대의상디자인\n과기술",
+      "sourceClassificationAliases": [
+        "④무대의상디자인\n과기술"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "융합디자인"
+      ],
+      "departmentCredits": {
+        "융합디자인": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "융합디자인": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊월 13-14교시 \n (월 14:00-15:00)\n＊월 15-18교시\n (월 15:00-17:00)",
+      "sourceClassroom": "＊뉴밀레니엄관 511호(주례)\n＊뉴밀레니엄관 505호(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "융합디자인",
+          "row": 10,
+          "education": {
+            "교과목명(국문)": "(DSU)지역연계융합프로젝트2(Field)",
+            "교과목 코드": "01328949",
+            "분반": "101",
+            "편성모듈": "④무대의상디자인\n과기술",
+            "학년": 4,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "○",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊월 13-14교시 \n (월 14:00-15:00)\n＊월 15-18교시\n (월 15:00-17:00)",
+            "수업장소": "＊뉴밀레니엄관 511호(주례)\n＊뉴밀레니엄관 505호(주례)",
+            "교강사 및 담당주차": "동서대 정우영(1~15주)\n\n동서대 김형숙(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329046-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329046",
+      "courseName": "(DSU)AI애니메이션제작워크숍(Field)",
+      "section": "101",
+      "professor": "동서대 배주현(1~15주)",
+      "credits": 3,
+      "classification": "①AI콘텐츠",
+      "sourceClassificationAliases": [
+        "①AI콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊금 19-24교시\n(금 17:00-20:00)",
+      "sourceClassroom": "＊글로벌빌리지 205호(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 7,
+          "education": {
+            "교과목명(국문)": "(DSU)AI애니메이션제작워크숍(Field)",
+            "교과목 코드": "01329046",
+            "분반": "101",
+            "편성모듈": "①AI콘텐츠",
+            "학년": 4,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊금 19-24교시\n(금 17:00-20:00)",
+            "수업장소": "＊글로벌빌리지 205호(주례)",
+            "교강사 및 담당주차": "동서대 배주현(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329047-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329047",
+      "courseName": "(DSU)AI응용인터렉티브콘텐츠개발(Field)",
+      "section": "101",
+      "professor": "동서대 유병욱(1~15주)",
+      "credits": 3,
+      "classification": "①AI콘텐츠",
+      "sourceClassificationAliases": [
+        "①AI콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊월 19-24교시\n(월 17:00-20:00)",
+      "sourceClassroom": "＊글로벌빌리지 205호(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 6,
+          "education": {
+            "교과목명(국문)": "(DSU)AI응용인터렉티브콘텐츠개발(Field)",
+            "교과목 코드": "01329047",
+            "분반": "101",
+            "편성모듈": "①AI콘텐츠",
+            "학년": 4,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊월 19-24교시\n(월 17:00-20:00)",
+            "수업장소": "＊글로벌빌리지 205호(주례)",
+            "교강사 및 담당주차": "동서대 유병욱(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329048-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "센텀",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329048",
+      "courseName": "(DSU)IP창작실습(Field)",
+      "section": "101",
+      "professor": "동서대 조원희(1~15주)\n\n동서대 박인선(1~15주)",
+      "credits": 4,
+      "classification": "③서사창작",
+      "sourceClassificationAliases": [
+        "③서사창작"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 4
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊수 5-10교시\n(수 10:00-13:00)\n＊목 11-12교시 \n(목 13:00-14:00)",
+      "sourceClassroom": "＊센텀캠퍼스 307호\n\n＊센텀캠퍼스 307호\n",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 18,
+          "education": {
+            "교과목명(국문)": "(DSU)IP창작실습(Field)",
+            "교과목 코드": "01329048",
+            "분반": "101",
+            "편성모듈": "③서사창작",
+            "학년": 4,
+            "학점": 4,
+            "이론": 4,
+            "실습": 0,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊수 5-10교시\n(수 10:00-13:00)\n＊목 11-12교시 \n(목 13:00-14:00)",
+            "수업장소": "＊센텀캠퍼스 307호\n\n＊센텀캠퍼스 307호\n",
+            "교강사 및 담당주차": "동서대 조원희(1~15주)\n\n동서대 박인선(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329049-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329049",
+      "courseName": "(DSU)고급3D그래픽활용(Field)",
+      "section": "101",
+      "professor": "동서대 양창원(1~15주)",
+      "credits": 3,
+      "classification": "①AI콘텐츠",
+      "sourceClassificationAliases": [
+        "①AI콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊화 19-24교시\n(화 17:00-20:00)",
+      "sourceClassroom": "＊글로벌빌리지 205호(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 8,
+          "education": {
+            "교과목명(국문)": "(DSU)고급3D그래픽활용(Field)",
+            "교과목 코드": "01329049",
+            "분반": "101",
+            "편성모듈": "①AI콘텐츠",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊화 19-24교시\n(화 17:00-20:00)",
+            "수업장소": "＊글로벌빌리지 205호(주례)",
+            "교강사 및 담당주차": "동서대 양창원(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329052-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329052",
+      "courseName": "(DSU)무대기술디자인",
+      "section": "101",
+      "professor": "동서대 서자경(1~15주)",
+      "credits": 2,
+      "classification": "④엔터테인먼트 엔지니어링",
+      "sourceClassificationAliases": [
+        "④엔터테인먼트 엔지니어링"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 2
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 실시간 줌; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 실시간 줌; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊금 3-6교시\n(금 9:00-11:00)",
+      "sourceClassroom": "＊실시간 줌",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 22,
+          "education": {
+            "교과목명(국문)": "(DSU)무대기술디자인",
+            "교과목 코드": "01329052",
+            "분반": "101",
+            "편성모듈": "④엔터테인먼트 엔지니어링",
+            "학년": 3,
+            "학점": 2,
+            "이론": 0,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "실시간 줌",
+            "수업요일/시간": "＊금 3-6교시\n(금 9:00-11:00)",
+            "수업장소": "＊실시간 줌",
+            "교강사 및 담당주차": "동서대 서자경(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329055-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329055",
+      "courseName": "(DSU)미디어의이해",
+      "section": "101",
+      "professor": "동서대 박인선(1~15주)",
+      "credits": 3,
+      "classification": "③서사창작",
+      "sourceClassificationAliases": [
+        "③서사창작"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 14,
+          "education": {
+            "교과목명(국문)": "(DSU)미디어의이해",
+            "교과목 코드": "01329055",
+            "분반": "101",
+            "편성모듈": "③서사창작",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "동서대 박인선(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329059-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "센텀",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329059",
+      "courseName": "(DSU)엔터테인먼트엔지니어링2(Field)",
+      "section": "101",
+      "professor": "동서대 오세준(1~15주)",
+      "credits": 2,
+      "classification": "④엔터테인먼트 엔지니어링",
+      "sourceClassificationAliases": [
+        "④엔터테인먼트 엔지니어링"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 2
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊금 11-14교시\n(금 13:00-15:00)",
+      "sourceClassroom": "＊센텀캠퍼스 610호",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 21,
+          "education": {
+            "교과목명(국문)": "(DSU)엔터테인먼트엔지니어링2(Field)",
+            "교과목 코드": "01329059",
+            "분반": "101",
+            "편성모듈": "④엔터테인먼트 엔지니어링",
+            "학년": 3,
+            "학점": 2,
+            "이론": 0,
+            "실습": 2,
+            "신설여부": "기존",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊금 11-14교시\n(금 13:00-15:00)",
+            "수업장소": "＊센텀캠퍼스 610호",
+            "교강사 및 담당주차": "동서대 오세준(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329064-102",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329064",
+      "courseName": "(DSU)초고해상도이미지제작(Field)",
+      "section": "102",
+      "professor": "동서대 황수연(1~15주)",
+      "credits": 3,
+      "classification": "②디지털아카이빙",
+      "sourceClassificationAliases": [
+        "②디지털아카이빙",
+        "②XR/실감형콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠",
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 3,
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊헤리티지콘텐츠전공과 합반; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊헤리티지콘텐츠전공과 합반; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊헤리티지콘텐츠전공과 합반; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊금 13-18교시\n(금 14:00-17:00)",
+      "sourceClassroom": "＊뉴밀레니엄관 341(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 18,
+          "education": {
+            "교과목명(국문)": "(DSU)초고해상도이미지제작(Field)",
+            "교과목 코드": "01329064",
+            "분반": "102",
+            "편성모듈": "②디지털아카이빙",
+            "학년": 4,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊금 13-18교시\n(금 14:00-17:00)",
+            "수업장소": "＊뉴밀레니엄관 341(주례)",
+            "교강사 및 담당주차": "동서대 황수연(1~15주)",
+            "비고": "＊첨단콘텐츠전공과 합반"
+          }
+        },
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 13,
+          "education": {
+            "교과목명(국문)": "(DSU)초고해상도이미지제작(Field)",
+            "교과목 코드": "01329064",
+            "분반": "102",
+            "편성모듈": "②XR/실감형콘텐츠",
+            "학년": 4,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊금 13-18교시\n(금 14:00-17:00)",
+            "수업장소": "＊뉴밀레니엄관 341(주례)",
+            "교강사 및 담당주차": "동서대 황수연(1~15주)",
+            "비고": "＊헤리티지콘텐츠전공과 합반"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329169-108",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329169",
+      "courseName": "(DSU)IFS1(캡스톤디자인)(Field)",
+      "section": "108",
+      "professor": "동서대 박미선(1~15주)",
+      "credits": 4,
+      "classification": "①문화콘텐츠",
+      "sourceClassificationAliases": [
+        "①문화콘텐츠",
+        "②XR/실감형콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠",
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 4,
+        "첨단콘텐츠": 4
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊헤리티지콘텐츠전공과 합반; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊헤리티지콘텐츠전공과 합반; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊헤리티지콘텐츠전공과 합반; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊목 5-8교시\n(목 10:00-12:00)\n＊목 11-14교시\n(목 13:00-15:00)",
+      "sourceClassroom": "＊뉴밀레니엄관 338(주례)\n＊뉴밀레니엄관 338(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 12,
+          "education": {
+            "교과목명(국문)": "(DSU)IFS1(캡스톤디자인)(Field)",
+            "교과목 코드": "01329169",
+            "분반": "108",
+            "편성모듈": "①문화콘텐츠",
+            "학년": 3,
+            "학점": 4,
+            "이론": 2,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊목 5-8교시\n(목 10:00-12:00)\n＊목 11-14교시\n(목 13:00-15:00)",
+            "수업장소": "＊뉴밀레니엄관 338(주례)\n＊뉴밀레니엄관 338(주례)",
+            "교강사 및 담당주차": "동서대 박미선(1~15주)",
+            "비고": "＊첨단콘텐츠전공과 합반"
+          }
+        },
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 10,
+          "education": {
+            "교과목명(국문)": "(DSU)IFS1(캡스톤디자인)(Field)",
+            "교과목 코드": "01329169",
+            "분반": "108",
+            "편성모듈": "②XR/실감형콘텐츠",
+            "학년": 3,
+            "학점": 4,
+            "이론": 2,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊목 5-8교시\n(목 10:00-12:00)\n＊목 11-14교시\n(목 13:00-15:00)",
+            "수업장소": "＊뉴밀레니엄관 338(주례)\n＊뉴밀레니엄관 338(주례)",
+            "교강사 및 담당주차": "동서대 박미선(1~15주)",
+            "비고": "＊헤리티지콘텐츠전공과 합반"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329169-109",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329169",
+      "courseName": "(DSU)IFS1(캡스톤디자인)(Field)",
+      "section": "109",
+      "professor": "동서대 황수연(1~15주)",
+      "credits": 4,
+      "classification": "①문화콘텐츠",
+      "sourceClassificationAliases": [
+        "①문화콘텐츠",
+        "②XR/실감형콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠",
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 4,
+        "첨단콘텐츠": 4
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊강의실 변경: 뉴밀레니엄관 408→ 뉴밀레니엄관 334(8.12.)\n＊헤리티지콘텐츠전공과 합반\n; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊강의실 변경: 뉴밀레니엄관 408→ 뉴밀레니엄관 334(8.12.)\n＊헤리티지콘텐츠전공과 합반\n; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊첨단콘텐츠전공과 합반\n＊강의실 변경: 뉴밀레니엄관 408→ 뉴밀레니엄관 334(8.12.)\n＊헤리티지콘텐츠전공과 합반\n; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊목 5-8교시\n(목 10:00-12:00)\n＊목 11-14교시\n(목 13:00-15:00)",
+      "sourceClassroom": "＊뉴밀레니엄관 334(주례)\n＊뉴밀레니엄관 334(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 13,
+          "education": {
+            "교과목명(국문)": "(DSU)IFS1(캡스톤디자인)(Field)",
+            "교과목 코드": "01329169",
+            "분반": "109",
+            "편성모듈": "①문화콘텐츠",
+            "학년": 3,
+            "학점": 4,
+            "이론": 2,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊목 5-8교시\n(목 10:00-12:00)\n＊목 11-14교시\n(목 13:00-15:00)",
+            "수업장소": "＊뉴밀레니엄관 334(주례)\n＊뉴밀레니엄관 334(주례)",
+            "교강사 및 담당주차": "동서대 황수연(1~15주)",
+            "비고": "＊첨단콘텐츠전공과 합반\n＊강의실 변경: 뉴밀레니엄관 408→ 뉴밀레니엄관 334(8.12.)"
+          }
+        },
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 11,
+          "education": {
+            "교과목명(국문)": "(DSU)IFS1(캡스톤디자인)(Field)",
+            "교과목 코드": "01329169",
+            "분반": "109",
+            "편성모듈": "②XR/실감형콘텐츠",
+            "학년": 3,
+            "학점": 4,
+            "이론": 2,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊목 5-8교시\n(목 10:00-12:00)\n＊목 11-14교시\n(목 13:00-15:00)",
+            "수업장소": "＊뉴밀레니엄관 334(주례)\n＊뉴밀레니엄관 334(주례)",
+            "교강사 및 담당주차": "동서대 황수연(1~15주)",
+            "비고": "＊헤리티지콘텐츠전공과 합반\n"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329346-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "센텀",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329346",
+      "courseName": "(DSU)AI스토리텔링",
+      "section": "101",
+      "professor": "동서대 박인선(1~15주)",
+      "credits": 3,
+      "classification": "③서사창작",
+      "sourceClassificationAliases": [
+        "③서사창작"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊수 15-20교시\n(수 15:00-18:00)",
+      "sourceClassroom": "＊센텀캠퍼스 601호",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 17,
+          "education": {
+            "교과목명(국문)": "(DSU)AI스토리텔링",
+            "교과목 코드": "01329346",
+            "분반": "101",
+            "편성모듈": "③서사창작",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊수 15-20교시\n(수 15:00-18:00)",
+            "수업장소": "＊센텀캠퍼스 601호",
+            "교강사 및 담당주차": "동서대 박인선(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329390-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329390",
+      "courseName": "(DSU)디지털헬스케어현장실무Ⅱ(Field)",
+      "section": "101",
+      "professor": "동서대 제유영(1~15주)",
+      "credits": 3,
+      "classification": "①디지털헬스케어",
+      "sourceClassificationAliases": [
+        "①디지털헬스케어"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊수 15-20교시\n(수 15:00-18:00)",
+      "sourceClassroom": "＊산학협력관 5304(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 6,
+          "education": {
+            "교과목명(국문)": "(DSU)디지털헬스케어현장실무Ⅱ(Field)",
+            "교과목 코드": "01329390",
+            "분반": "101",
+            "편성모듈": "①디지털헬스케어",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊수 15-20교시\n(수 15:00-18:00)",
+            "수업장소": "＊산학협력관 5304(주례)",
+            "교강사 및 담당주차": "동서대 제유영(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329391-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329391",
+      "courseName": "(DSU)디지털헬스케어현장실무Ⅲ(Field)",
+      "section": "101",
+      "professor": "동서대 양우식(1~15주)",
+      "credits": 3,
+      "classification": "①디지털헬스케어",
+      "sourceClassificationAliases": [
+        "①디지털헬스케어"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊월 5-10교시\n(월 10:00-13:00)",
+      "sourceClassroom": "＊산학협력관 5304(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 7,
+          "education": {
+            "교과목명(국문)": "(DSU)디지털헬스케어현장실무Ⅲ(Field)",
+            "교과목 코드": "01329391",
+            "분반": "101",
+            "편성모듈": "①디지털헬스케어",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊월 5-10교시\n(월 10:00-13:00)",
+            "수업장소": "＊산학협력관 5304(주례)",
+            "교강사 및 담당주차": "동서대 양우식(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329407-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329407",
+      "courseName": "(DSU)건강과빅데이터",
+      "section": "101",
+      "professor": "동서대 장원(대표교수)\n김주연",
+      "credits": 3,
+      "classification": "③바이오푸드\n④미래자원디자이닝",
+      "sourceClassificationAliases": [
+        "③바이오푸드\n④미래자원디자이닝"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭\n＊시험은 대면으로 진행\n(금요일 18-21시, 주례 응용공학관 4202호); 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭\n＊시험은 대면으로 진행\n(금요일 18-21시, 주례 응용공학관 4202호); 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 22,
+          "education": {
+            "교과목명(국문)": "(DSU)건강과빅데이터",
+            "교과목 코드": "01329407",
+            "분반": "101",
+            "편성모듈": "③바이오푸드\n④미래자원디자이닝",
+            "학년": 4,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "동서대 장원(대표교수)\n김주연",
+            "비고": "＊동아-동서 온라인 팀티칭\n＊시험은 대면으로 진행\n(금요일 18-21시, 주례 응용공학관 4202호)"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329465-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329465",
+      "courseName": "(DSU)뉴통신사프로젝트2(Field)",
+      "section": "101",
+      "professor": "동서대 박미선(1~15주)",
+      "credits": 3,
+      "classification": "3개모듈 공통편성",
+      "sourceClassificationAliases": [
+        "3개모듈 공통편성"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊집중이수제: 1~10주간 수업\n  (09.04. ~ 11.06.까지 6시간 수업); 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊집중이수제: 1~10주간 수업\n  (09.04. ~ 11.06.까지 6시간 수업); 캠퍼스 원문: 주례; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊금 3-8교시\n(금 09:00-12:00)\n＊금 17-22교시\n(금 16:00-19:00)",
+      "sourceClassroom": "＊뉴밀레니엄관 330(주례)\n＊뉴밀레니엄관 330(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 7,
+          "education": {
+            "교과목명(국문)": "(DSU)뉴통신사프로젝트2(Field)",
+            "교과목 코드": "01329465",
+            "분반": "101",
+            "편성모듈": "3개모듈 공통편성",
+            "학년": 3,
+            "학점": 3,
+            "이론": 0,
+            "실습": 3,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊금 3-8교시\n(금 09:00-12:00)\n＊금 17-22교시\n(금 16:00-19:00)",
+            "수업장소": "＊뉴밀레니엄관 330(주례)\n＊뉴밀레니엄관 330(주례)",
+            "교강사 및 담당주차": "동서대 박미선(1~15주)",
+            "비고": "＊집중이수제: 1~10주간 수업\n  (09.04. ~ 11.06.까지 6시간 수업)"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329468-301",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "센텀",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329468",
+      "courseName": "(DSU)숏폼드라마창작실습",
+      "section": "301",
+      "professor": "동서대 박인선(1~15주)",
+      "credits": 3,
+      "classification": "③서사창작",
+      "sourceClassificationAliases": [
+        "③서사창작"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "첨단콘텐츠"
+      ],
+      "departmentCredits": {
+        "첨단콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "첨단콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 센텀; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊화 21-26교시\n(화 18:00-21:00)",
+      "sourceClassroom": "＊센텀캠퍼스 307호\n",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "첨단콘텐츠",
+          "row": 19,
+          "education": {
+            "교과목명(국문)": "(DSU)숏폼드라마창작실습",
+            "교과목 코드": "01329468",
+            "분반": "301",
+            "편성모듈": "③서사창작",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊화 21-26교시\n(화 18:00-21:00)",
+            "수업장소": "＊센텀캠퍼스 307호\n",
+            "교강사 및 담당주차": "동서대 박인선(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01329469-101",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01329469",
+      "courseName": "(DSU)식품과건강",
+      "section": "101",
+      "professor": "동서대 김종남(대표교수)\n정은우",
+      "credits": 2,
+      "classification": "③바이오푸드",
+      "sourceClassificationAliases": [
+        "③바이오푸드"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 2
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭\n＊시험은 대면으로 진행\n(금요일 12-14시, 주례 응용공학관 4202호); 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭\n＊시험은 대면으로 진행\n(금요일 12-14시, 주례 응용공학관 4202호); 캠퍼스 원문: unknown; 일정 미생성: external Dongseo operation/calendar/instruction-break policy not independently resolved; online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 23,
+          "education": {
+            "교과목명(국문)": "(DSU)식품과건강",
+            "교과목 코드": "01329469",
+            "분반": "101",
+            "편성모듈": "③바이오푸드",
+            "학년": 3,
+            "학점": 2,
+            "이론": 2,
+            "실습": 0,
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "동서대 교과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "동서대 김종남(대표교수)\n정은우",
+            "비고": "＊동아-동서 온라인 팀티칭\n＊시험은 대면으로 진행\n(금요일 12-14시, 주례 응용공학관 4202호)"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01DAB404-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01DAB404",
+      "courseName": "환경과학",
+      "section": "01",
+      "professor": "최백동(1~15주)",
+      "credits": 3,
+      "classification": "④미래자원디자이닝",
+      "sourceClassificationAliases": [
+        "④미래자원디자이닝"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 25,
+          "education": {
+            "교과목명(국문)": "환경과학",
+            "교과목 코드": "01DAB404",
+            "분반": "01",
+            "편성모듈": "④미래자원디자이닝",
+            "학년": 4,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "응용생물공학과",
+            "별도분반": "기존분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "최백동(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01FBT217-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01FBT217",
+      "courseName": "발효식품학",
+      "section": "01",
+      "professor": "손보경(1~15주)",
+      "credits": 3,
+      "classification": "③바이오푸드",
+      "sourceClassificationAliases": [
+        "③바이오푸드"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 19,
+          "education": {
+            "교과목명(국문)": "발효식품학",
+            "교과목 코드": "01FBT217",
+            "분반": "01",
+            "편성모듈": "③바이오푸드",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "식품생명공학과",
+            "별도분반": "기존분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "손보경(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01FBT218-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01FBT218",
+      "courseName": "식품첨가물학",
+      "section": "01",
+      "professor": "황이택(1~15주)",
+      "credits": 3,
+      "classification": "③바이오푸드",
+      "sourceClassificationAliases": [
+        "③바이오푸드"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 18,
+          "education": {
+            "교과목명(국문)": "식품첨가물학",
+            "교과목 코드": "01FBT218",
+            "분반": "01",
+            "편성모듈": "③바이오푸드",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "식품생명공학과",
+            "별도분반": "기존분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "황이택(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01FBT308-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01FBT308",
+      "courseName": "생물반응공학",
+      "section": "01",
+      "professor": "황이택(대표교수,1~10주)\n동서대 김동원(11~15주)",
+      "credits": 3,
+      "classification": "④미래자원디자이닝",
+      "sourceClassificationAliases": [
+        "④미래자원디자이닝"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 24,
+          "education": {
+            "교과목명(국문)": "생물반응공학",
+            "교과목 코드": "01FBT308",
+            "분반": "01",
+            "편성모듈": "④미래자원디자이닝",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "식품생명공학과",
+            "별도분반": "기존분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "황이택(대표교수,1~10주)\n동서대 김동원(11~15주)",
+            "비고": "＊동아-동서 온라인 팀티칭"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01FSN308-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01FSN308",
+      "courseName": "식품가공및저장학",
+      "section": "01",
+      "professor": "정은우(대표교수,1~10주)\n동서대 김종남(11~15주)",
+      "credits": 3,
+      "classification": "③바이오푸드",
+      "sourceClassificationAliases": [
+        "③바이오푸드"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 21,
+          "education": {
+            "교과목명(국문)": "식품가공및저장학",
+            "교과목 코드": "01FSN308",
+            "분반": "01",
+            "편성모듈": "③바이오푸드",
+            "학년": 3,
+            "학점": 3,
+            "이론": "3",
+            "실습": "0",
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "식품영양학과",
+            "별도분반": "기존분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "정은우(대표교수,1~10주)\n동서대 김종남(11~15주)",
+            "비고": "＊동아-동서 온라인 팀티칭"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01HCC307-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01HCC307",
+      "courseName": "전통양식과상징(Field)",
+      "section": "01",
+      "professor": "김지연(대표교수, 1주~15주)\n동서대 김지혜(10주,12주,14주)\n※10주,12주,14주 코티칭(필드주차)",
+      "credits": 3,
+      "classification": "3개모듈 공통편성",
+      "sourceClassificationAliases": [
+        "3개모듈 공통편성"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인병행; 원문 비고: ＊동아-동서 \n온라인 팀티칭\n\n＊집중이수제: 10,12,14주\n수업 각각 6시간 수업(필드)\n-석당박물관,거북이공장에서 진행; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온오프라인병행; 원문 비고: ＊동아-동서 \n온라인 팀티칭\n\n＊집중이수제: 10,12,14주\n수업 각각 6시간 수업(필드)\n-석당박물관,거북이공장에서 진행; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊1~8주: 온라인LMS\n＊10주: 석당박물관\n   12주,14주: 거북이공장\n  - 금 5-10교시\n   (금 10:00-13:00)\n  - 금 13-18교시\n   (금 14:00-17:00)\n→10주차 금13-18교시는\n   B04(B)-0404에서 진행\n＊15주: 온라인LMS",
+      "sourceClassroom": "＊온라인 LMS\n＊동아대 석당박물관\n＊거북이공장\n\n\n\n\n＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 5,
+          "education": {
+            "교과목명(국문)": "전통양식과상징(Field)",
+            "교과목 코드": "01HCC307",
+            "분반": "01",
+            "편성모듈": "3개모듈 공통편성",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "연합전공 신설",
+            "별도분반": "별도분반",
+            "수업운영방식": "온오프라인병행",
+            "수업요일/시간": "＊1~8주: 온라인LMS\n＊10주: 석당박물관\n   12주,14주: 거북이공장\n  - 금 5-10교시\n   (금 10:00-13:00)\n  - 금 13-18교시\n   (금 14:00-17:00)\n→10주차 금13-18교시는\n   B04(B)-0404에서 진행\n＊15주: 온라인LMS",
+            "수업장소": "＊온라인 LMS\n＊동아대 석당박물관\n＊거북이공장\n\n\n\n\n＊온라인 LMS",
+            "교강사 및 담당주차": "김지연(대표교수, 1주~15주)\n동서대 김지혜(10주,12주,14주)\n※10주,12주,14주 코티칭(필드주차)",
+            "비고": "＊동아-동서 \n온라인 팀티칭\n\n＊집중이수제: 10,12,14주\n수업 각각 6시간 수업(필드)\n-석당박물관,거북이공장에서 진행"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01HCC311-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "주례",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01HCC311",
+      "courseName": "내러티브저널리즘과사실적에세이(Field)",
+      "section": "01",
+      "professor": "김대경(1~15주)",
+      "credits": 3,
+      "classification": "②디지털아카이빙",
+      "sourceClassificationAliases": [
+        "②디지털아카이빙"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ; 캠퍼스 원문: 주례; 일정 미생성: 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊금 10-15교시\n(금 12:30-15:30)",
+      "sourceClassroom": "＊뉴밀레니엄관 330(주례)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 17,
+          "education": {
+            "교과목명(국문)": "내러티브저널리즘과사실적에세이(Field)",
+            "교과목 코드": "01HCC311",
+            "분반": "01",
+            "편성모듈": "②디지털아카이빙",
+            "학년": 3,
+            "학점": 3,
+            "이론": 1,
+            "실습": 2,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "연합전공 신설",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊금 10-15교시\n(금 12:30-15:30)",
+            "수업장소": "＊뉴밀레니엄관 330(주례)",
+            "교강사 및 담당주차": "김대경(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01HMC302-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01HMC302",
+      "courseName": "의약품품질관리실무실습(Field)",
+      "section": "01",
+      "professor": "서봉수(2,3,5,9,10,11,13,15주)",
+      "credits": 1,
+      "classification": "②첨단신약",
+      "sourceClassificationAliases": [
+        "②첨단신약"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 1
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊집중이수제\n-2,3,5,9,10,11,13주차 수업\n: 2시간 진행\n-15주차 수업: 1시간 진행; 캠퍼스 원문: unknown; 일정 미생성: 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 오프라인; 원문 비고: ＊집중이수제\n-2,3,5,9,10,11,13주차 수업\n: 2시간 진행\n-15주차 수업: 1시간 진행; 캠퍼스 원문: unknown; 일정 미생성: 50-minute/practice actual instruction and rest split not proved per offering; not the published two different weekday 75-minute format; week-specific/field/intensive operation cannot be expanded as weekly reservation; meeting-specific classroom/campus pair not proved; actual 75-minute clock group not proved",
+      "sourceSchedule": "＊금 13-16교시\n(금 14:00-16:00)",
+      "sourceClassroom": "＊바이넥스(필드산업체)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 11,
+          "education": {
+            "교과목명(국문)": "의약품품질관리실무실습(Field)",
+            "교과목 코드": "01HMC302",
+            "분반": "01",
+            "편성모듈": "②첨단신약",
+            "학년": 3,
+            "학점": 1,
+            "이론": 0,
+            "실습": 1,
+            "신설여부": "신설",
+            "필드": "√",
+            "교과과정 관련": "연합전공 신설",
+            "별도분반": "별도분반",
+            "수업운영방식": "오프라인",
+            "수업요일/시간": "＊금 13-16교시\n(금 14:00-16:00)",
+            "수업장소": "＊바이넥스(필드산업체)",
+            "교강사 및 담당주차": "서봉수(2,3,5,9,10,11,13,15주)",
+            "비고": "＊집중이수제\n-2,3,5,9,10,11,13주차 수업\n: 2시간 진행\n-15주차 수업: 1시간 진행"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01HMC304-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01HMC304",
+      "courseName": "바이오기기분석학",
+      "section": "01",
+      "professor": "이상유(1~15주)",
+      "credits": 3,
+      "classification": "③바이오푸드",
+      "sourceClassificationAliases": [
+        "③바이오푸드"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 20,
+          "education": {
+            "교과목명(국문)": "바이오기기분석학",
+            "교과목 코드": "01HMC304",
+            "분반": "01",
+            "편성모듈": "③바이오푸드",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "연합전공 신설",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "이상유(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01HMC308-01",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01HMC308",
+      "courseName": "첨단재생의학",
+      "section": "01",
+      "professor": "김현주(대표교수 1,3,4,6~11,15주)\n동서대 김동원(2,5,12~14주)",
+      "credits": 3,
+      "classification": "②첨단신약",
+      "sourceClassificationAliases": [
+        "②첨단신약"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "휴먼메타케어"
+      ],
+      "departmentCredits": {
+        "휴먼메타케어": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "휴먼메타케어": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ＊동아-동서 온라인 팀티칭; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "휴먼메타케어",
+          "row": 12,
+          "education": {
+            "교과목명(국문)": "첨단재생의학",
+            "교과목 코드": "01HMC308",
+            "분반": "01",
+            "편성모듈": "②첨단신약",
+            "학년": 3,
+            "학점": 3,
+            "이론": "3",
+            "실습": "0",
+            "신설여부": "신설",
+            "필드": null,
+            "교과과정 관련": "연합전공 신설",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "김현주(대표교수 1,3,4,6~11,15주)\n동서대 김동원(2,5,12~14주)",
+            "비고": "＊동아-동서 온라인 팀티칭"
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01LAN232-02",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01LAN232",
+      "courseName": "서양조경문화사",
+      "section": "02",
+      "professor": "양건석(1~15주)",
+      "credits": 3,
+      "classification": "①문화콘텐츠",
+      "sourceClassificationAliases": [
+        "①문화콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 9,
+          "education": {
+            "교과목명(국문)": "서양조경문화사",
+            "교과목 코드": "01LAN232",
+            "분반": "02",
+            "편성모듈": "①문화콘텐츠",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "조경학과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "양건석(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01LAN423-02",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01LAN423",
+      "courseName": "생태문화관광론",
+      "section": "02",
+      "professor": "반권수(1~15주)",
+      "credits": 3,
+      "classification": "①문화콘텐츠",
+      "sourceClassificationAliases": [
+        "①문화콘텐츠"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "헤리티지콘텐츠"
+      ],
+      "departmentCredits": {
+        "헤리티지콘텐츠": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "헤리티지콘텐츠": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "헤리티지콘텐츠",
+          "row": 11,
+          "education": {
+            "교과목명(국문)": "생태문화관광론",
+            "교과목 코드": "01LAN423",
+            "분반": "02",
+            "편성모듈": "①문화콘텐츠",
+            "학년": 4,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "조경학과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "반권수(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01MSE419-03",
+      "referenceKind": "교과목코드",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "campusEvidence": "Source-specific physical campus retained; candidate institutional scope includes external university/online courses, not a physical main-campus assignment.",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "01MSE419",
+      "courseName": "반도체소자공학",
+      "section": "03",
+      "professor": "최재영(1~15주)",
+      "credits": 3,
+      "classification": "①소자공정",
+      "sourceClassificationAliases": [
+        "①소자공정"
+      ],
+      "classificationGroup": "전공",
+      "departments": [
+        "전력반도체"
+      ],
+      "departmentCredits": {
+        "전력반도체": 3
+      },
+      "departmentClassifications": {},
+      "departmentRemarks": {
+        "전력반도체": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved"
+      },
+      "remarks": "2026-09-03 수정 공개 연합전공 개설교과목 일부입니다. 전체 대학·실시간 시스템 변경 완전성은 확인되지 않았습니다. 신청한 연합전공 모듈 교과목만 수강 가능하며 수업계획서 확인이 필요합니다. 원문 예약표시와 실제 75분 수업 종료를 구분했습니다. 10/20~26 중간시험과 12/12~18 기말시험 일정은 강좌별 미확인으로 제외했습니다. 공식 보강표는 원 수업 교시·기존 강의실을 명시하며 변경된 실제 요일을 보존했습니다. 이수구분(전공필수·전공선택) 미공개이며 분류에는 원문 편성모듈을 보존했습니다. 운영방식: 온라인LMS; 원문 비고: ; 캠퍼스 원문: unknown; 일정 미생성: online/mixed operation needs actual synchronous clock and week/date proof; not the published two different weekday 75-minute format; meeting-specific classroom/campus pair not proved",
+      "sourceSchedule": "＊온라인 LMS",
+      "sourceClassroom": "＊온라인 LMS",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "nativePeriodBlocks": [],
+      "publicEducationRows": [
+        {
+          "sheet": "전력반도체",
+          "row": 9,
+          "education": {
+            "교과목명(국문)": "반도체소자공학",
+            "교과목 코드": "01MSE419",
+            "분반": "03",
+            "편성모듈": "①소자공정",
+            "학년": 3,
+            "학점": 3,
+            "이론": 3,
+            "실습": 0,
+            "신설여부": "기존",
+            "필드": null,
+            "교과과정 관련": "신소재공학과",
+            "별도분반": "별도분반",
+            "수업운영방식": "온라인LMS",
+            "수업요일/시간": "＊온라인 LMS",
+            "수업장소": "＊온라인 LMS",
+            "교강사 및 담당주차": "최재영(1~15주)",
+            "비고": null
+          }
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01COR146-10",
+      "referenceKind": "교과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "sourceOperatingInstitution": "동아대학교 교양대학",
+      "courseCode": "01COR146",
+      "courseName": "여행과삶:느리게,깊게,다르게",
+      "section": "10",
+      "professor": "",
+      "credits": 1,
+      "classification": "중핵교양(1영역)",
+      "classificationGroup": "교양",
+      "sourceClassificationAliases": [
+        "중핵교양",
+        "1영역"
+      ],
+      "departments": [
+        "교양대학"
+      ],
+      "departmentCredits": {
+        "교양대학": 1
+      },
+      "departmentClassifications": {
+        "교양대학": "중핵교양(1영역)"
+      },
+      "departmentRemarks": {
+        "교양대학": "2026-08-04 공식 CELL-집중수업 공개 일부입니다. 전체 대학·실시간 변경 완전성 미확인. 5주 온라인(LMS) 1학점 강좌이며 1주차 개설 10분반입니다. 고정 실시간 강의 clock 미공개로 수업 일정 미생성. 공개 시험 예정일은 2026-09-19, 2026-10-03 각15:00~15:30이나 최종 시험일은 분반 공지에서 확인해야 합니다. 시험을 정규 강의시간으로 사용하지 않았습니다. 전체 재학생 대상, 1차8/7까지4학년 우선; 정원미달시2차8/20~21부터전학년추가모집. 무도와인성(유도 및 태권도) 대체교과목. 강의 물리캠퍼스 미공개."
+      },
+      "remarks": "2026-08-04 공식 CELL-집중수업 공개 일부입니다. 전체 대학·실시간 변경 완전성 미확인. 5주 온라인(LMS) 1학점 강좌이며 1주차 개설 10분반입니다. 고정 실시간 강의 clock 미공개로 수업 일정 미생성. 공개 시험 예정일은 2026-09-19, 2026-10-03 각15:00~15:30이나 최종 시험일은 분반 공지에서 확인해야 합니다. 시험을 정규 강의시간으로 사용하지 않았습니다. 전체 재학생 대상, 1차8/7까지4학년 우선; 정원미달시2차8/20~21부터전학년추가모집. 무도와인성(유도 및 태권도) 대체교과목. 강의 물리캠퍼스 미공개.",
+      "sourceSchedule": "온라인(LMS), 1주차 개설, 5주 진행",
+      "sourceClassroom": "온라인(LMS)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "publishedOperatingWeekStart": 1,
+      "publishedOperatingWeekCount": 5,
+      "publishedExamPlans": [
+        {
+          "date": "2026-09-19",
+          "startMinute": 900,
+          "endMinute": 930,
+          "kind": "중간고사",
+          "finalDateRequiresSectionNotice": true
+        },
+        {
+          "date": "2026-10-03",
+          "startMinute": 900,
+          "endMinute": 930,
+          "kind": "기말고사",
+          "finalDateRequiresSectionNotice": true
+        }
+      ],
+      "publicEducationRows": [
+        {
+          "sourceNotice": "8464186",
+          "nativeSubjectCode": "01COR146",
+          "nativeSection": "10",
+          "credits": 1,
+          "nativeClassification": "중핵교양(1영역)",
+          "nativeWeekStart": 1,
+          "sourceDelivery": "온라인(LMS)",
+          "sourceCapacity": 100
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01COR146-11",
+      "referenceKind": "교과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "sourceOperatingInstitution": "동아대학교 교양대학",
+      "courseCode": "01COR146",
+      "courseName": "여행과삶:느리게,깊게,다르게",
+      "section": "11",
+      "professor": "",
+      "credits": 1,
+      "classification": "중핵교양(1영역)",
+      "classificationGroup": "교양",
+      "sourceClassificationAliases": [
+        "중핵교양",
+        "1영역"
+      ],
+      "departments": [
+        "교양대학"
+      ],
+      "departmentCredits": {
+        "교양대학": 1
+      },
+      "departmentClassifications": {
+        "교양대학": "중핵교양(1영역)"
+      },
+      "departmentRemarks": {
+        "교양대학": "2026-08-04 공식 CELL-집중수업 공개 일부입니다. 전체 대학·실시간 변경 완전성 미확인. 5주 온라인(LMS) 1학점 강좌이며 6주차 개설 11분반입니다. 고정 실시간 강의 clock 미공개로 수업 일정 미생성. 공개 시험 예정일은 2026-10-24, 2026-11-07 각15:00~15:30이나 최종 시험일은 분반 공지에서 확인해야 합니다. 시험을 정규 강의시간으로 사용하지 않았습니다. 전체 재학생 대상, 1차8/7까지4학년 우선; 정원미달시2차8/20~21부터전학년추가모집. 무도와인성(유도 및 태권도) 대체교과목. 강의 물리캠퍼스 미공개."
+      },
+      "remarks": "2026-08-04 공식 CELL-집중수업 공개 일부입니다. 전체 대학·실시간 변경 완전성 미확인. 5주 온라인(LMS) 1학점 강좌이며 6주차 개설 11분반입니다. 고정 실시간 강의 clock 미공개로 수업 일정 미생성. 공개 시험 예정일은 2026-10-24, 2026-11-07 각15:00~15:30이나 최종 시험일은 분반 공지에서 확인해야 합니다. 시험을 정규 강의시간으로 사용하지 않았습니다. 전체 재학생 대상, 1차8/7까지4학년 우선; 정원미달시2차8/20~21부터전학년추가모집. 무도와인성(유도 및 태권도) 대체교과목. 강의 물리캠퍼스 미공개.",
+      "sourceSchedule": "온라인(LMS), 6주차 개설, 5주 진행",
+      "sourceClassroom": "온라인(LMS)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "publishedOperatingWeekStart": 6,
+      "publishedOperatingWeekCount": 5,
+      "publishedExamPlans": [
+        {
+          "date": "2026-10-24",
+          "startMinute": 900,
+          "endMinute": 930,
+          "kind": "중간고사",
+          "finalDateRequiresSectionNotice": true
+        },
+        {
+          "date": "2026-11-07",
+          "startMinute": 900,
+          "endMinute": 930,
+          "kind": "기말고사",
+          "finalDateRequiresSectionNotice": true
+        }
+      ],
+      "publicEducationRows": [
+        {
+          "sourceNotice": "8464186",
+          "nativeSubjectCode": "01COR146",
+          "nativeSection": "11",
+          "credits": 1,
+          "nativeClassification": "중핵교양(1영역)",
+          "nativeWeekStart": 6,
+          "sourceDelivery": "온라인(LMS)",
+          "sourceCapacity": 100
+        }
+      ]
+    },
+    {
+      "sourceId": "donga-2026-2-01COR146-12",
+      "referenceKind": "교과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "unknown",
+      "nativeCampus": "unknown",
+      "sourceOperatingInstitution": "동아대학교 교양대학",
+      "courseCode": "01COR146",
+      "courseName": "여행과삶:느리게,깊게,다르게",
+      "section": "12",
+      "professor": "",
+      "credits": 1,
+      "classification": "중핵교양(1영역)",
+      "classificationGroup": "교양",
+      "sourceClassificationAliases": [
+        "중핵교양",
+        "1영역"
+      ],
+      "departments": [
+        "교양대학"
+      ],
+      "departmentCredits": {
+        "교양대학": 1
+      },
+      "departmentClassifications": {
+        "교양대학": "중핵교양(1영역)"
+      },
+      "departmentRemarks": {
+        "교양대학": "2026-08-04 공식 CELL-집중수업 공개 일부입니다. 전체 대학·실시간 변경 완전성 미확인. 5주 온라인(LMS) 1학점 강좌이며 11주차 개설 12분반입니다. 고정 실시간 강의 clock 미공개로 수업 일정 미생성. 공개 시험 예정일은 2026-11-28, 2026-12-12 각15:00~15:30이나 최종 시험일은 분반 공지에서 확인해야 합니다. 시험을 정규 강의시간으로 사용하지 않았습니다. 전체 재학생 대상, 1차8/7까지4학년 우선; 정원미달시2차8/20~21부터전학년추가모집. 무도와인성(유도 및 태권도) 대체교과목. 강의 물리캠퍼스 미공개."
+      },
+      "remarks": "2026-08-04 공식 CELL-집중수업 공개 일부입니다. 전체 대학·실시간 변경 완전성 미확인. 5주 온라인(LMS) 1학점 강좌이며 11주차 개설 12분반입니다. 고정 실시간 강의 clock 미공개로 수업 일정 미생성. 공개 시험 예정일은 2026-11-28, 2026-12-12 각15:00~15:30이나 최종 시험일은 분반 공지에서 확인해야 합니다. 시험을 정규 강의시간으로 사용하지 않았습니다. 전체 재학생 대상, 1차8/7까지4학년 우선; 정원미달시2차8/20~21부터전학년추가모집. 무도와인성(유도 및 태권도) 대체교과목. 강의 물리캠퍼스 미공개.",
+      "sourceSchedule": "온라인(LMS), 11주차 개설, 5주 진행",
+      "sourceClassroom": "온라인(LMS)",
+      "scheduleStatus": "unrecognized",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-18"
+      },
+      "schedules": [],
+      "publishedOperatingWeekStart": 11,
+      "publishedOperatingWeekCount": 5,
+      "publishedExamPlans": [
+        {
+          "date": "2026-11-28",
+          "startMinute": 900,
+          "endMinute": 930,
+          "kind": "중간고사",
+          "finalDateRequiresSectionNotice": true
+        },
+        {
+          "date": "2026-12-12",
+          "startMinute": 900,
+          "endMinute": 930,
+          "kind": "기말고사",
+          "finalDateRequiresSectionNotice": true
+        }
+      ],
+      "publicEducationRows": [
+        {
+          "sourceNotice": "8464186",
+          "nativeSubjectCode": "01COR146",
+          "nativeSection": "12",
+          "credits": 1,
+          "nativeClassification": "중핵교양(1영역)",
+          "nativeWeekStart": 11,
+          "sourceDelivery": "온라인(LMS)",
+          "sourceCapacity": 100
+        }
+      ]
+    }
+  ],
+  "productionIntegrationEnabled": true
+}
