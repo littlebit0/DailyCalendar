@@ -1,0 +1,3024 @@
+{
+  "schemaVersion": 2,
+  "universityId": "skku",
+  "campus": "icampus",
+  "campusName": "i-Campus",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-10-08",
+  "sourceUrl": "https://kingoinfo.skku.edu/gaia/nxui/outdex.html?menuId=NHSSU030840M",
+  "researchOnly": false,
+  "productionActivationAllowed": true,
+  "completionClaim": false,
+  "allCurrentDetailsFetched": true,
+  "courses": [
+    {
+      "sourceId": "skku-2026-2-BIZ2022-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BIZ2022",
+      "section": "I1",
+      "courseName": "회계원리",
+      "professor": "최영수",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "경영학(글로벌)전공",
+        "경영학과",
+        "경제학과",
+        "국제통상학전공",
+        "글로벌리더학부"
+      ],
+      "departmentCredits": {
+        "경영학(글로벌)전공": 3.0,
+        "경영학과": 3.0,
+        "경제학과": 3.0,
+        "국제통상학전공": 3.0,
+        "글로벌리더학부": 3.0
+      },
+      "departmentClassifications": {
+        "경영학(글로벌)전공": "전공기반",
+        "경영학과": "전공기반",
+        "경제학과": "전공기반",
+        "국제통상학전공": "전공기반",
+        "글로벌리더학부": "전공기반"
+      },
+      "departmentRemarks": {
+        "경영학(글로벌)전공": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: (50%). Examinations Remember that all exams would be held OFFLINE (i.e., in the classroom). If you cannot attend all exams offline, you should not register for this course. There will be one mid-term exam and one final exam during the semester. Each exam may consist of multiple -choice questions, jounalising quest\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "경영학과": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: (50%). Examinations Remember that all exams would be held OFFLINE (i.e., in the classroom). If you cannot attend all exams offline, you should not register for this course. There will be one mid-term exam and one final exam during the semester. Each exam may consist of multiple -choice questions, jounalising quest\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "경제학과": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: (50%). Examinations Remember that all exams would be held OFFLINE (i.e., in the classroom). If you cannot attend all exams offline, you should not register for this course. There will be one mid-term exam and one final exam during the semester. Each exam may consist of multiple -choice questions, jounalising quest\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "국제통상학전공": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: (50%). Examinations Remember that all exams would be held OFFLINE (i.e., in the classroom). If you cannot attend all exams offline, you should not register for this course. There will be one mid-term exam and one final exam during the semester. Each exam may consist of multiple -choice questions, jounalising quest\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌리더학부": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: (50%). Examinations Remember that all exams would be held OFFLINE (i.e., in the classroom). If you cannot attend all exams offline, you should not register for this course. There will be one mid-term exam and one final exam during the semester. Each exam may consist of multiple -choice questions, jounalising quest\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Some educational attachment context is incomplete after size/privacy filtering; current exact context needs review."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공기반",
+        "ISU_NAME2": "전공핵심",
+        "ISU_NAME3": "전공코어",
+        "GWAMOK_ENG_NAME": "Introduction to Financial Accounting",
+        "HYUNGTAE": "중대형온라인강의 + 국제어",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "2",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-BUS2008-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BUS2008",
+      "section": "I1",
+      "courseName": "국제재무관리",
+      "professor": "박영규",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "AI융합운영전공",
+        "경영학과"
+      ],
+      "departmentCredits": {
+        "AI융합운영전공": 3.0,
+        "경영학과": 3.0
+      },
+      "departmentClassifications": {
+        "AI융합운영전공": "전공심화",
+        "경영학과": "전공심화"
+      },
+      "departmentRemarks": {
+        "AI융합운영전공": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반\n수강 대상: 경영학부\n선수과목: 재무관리 및 경제학원론\n수업 비고: <학사관련 주의사항>\n가. 재무관리와 경제학원론 정도는 수강한 후에 수강하는 것이 바람직하나 선수 과목 없이도 열심히 하면 따라올 수 있으니 이는 각자 선택바람.\n나. 마지막 학기인 학생도 취업이나 기타 이유로 수업에 불성실하게 임할 시에 예외를 두지 않고 F처리 함.\n\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "경영학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반\n수강 대상: 경영학부\n선수과목: 재무관리 및 경제학원론\n수업 비고: <학사관련 주의사항>\n가. 재무관리와 경제학원론 정도는 수강한 후에 수강하는 것이 바람직하나 선수 과목 없이도 열심히 하면 따라올 수 있으니 이는 각자 선택바람.\n나. 마지막 학기인 학생도 취업이나 기타 이유로 수업에 불성실하게 임할 시에 예외를 두지 않고 F처리 함.\n\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공심화",
+        "ISU_NAME2": "전공일반",
+        "ISU_NAME3": "전공심화",
+        "GWAMOK_ENG_NAME": "International Financial Management",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "2",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-BUS2011-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BUS2011",
+      "section": "I1",
+      "courseName": "마케팅조사방법",
+      "professor": "이은주",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "경영학과",
+        "미디어커뮤니케이션학과"
+      ],
+      "departmentCredits": {
+        "경영학과": 3.0,
+        "미디어커뮤니케이션학과": 3.0
+      },
+      "departmentClassifications": {
+        "경영학과": "전공기반",
+        "미디어커뮤니케이션학과": "전공기반"
+      },
+      "departmentRemarks": {
+        "경영학과": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n수업 비고: 기말고사, 팀과제 등. \n주어지는 기말고사 스타디 라인을 보며\n단답형, Open ended essay등 다양한 형태의 문제를 풀게 된다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "미디어커뮤니케이션학과": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n수업 비고: 기말고사, 팀과제 등. \n주어지는 기말고사 스타디 라인을 보며\n단답형, Open ended essay등 다양한 형태의 문제를 풀게 된다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공기반",
+        "ISU_NAME2": "전공일반",
+        "ISU_NAME3": "전공심화",
+        "GWAMOK_ENG_NAME": "Marketing Research Methodology",
+        "HYUNGTAE": "중대형온라인강의 + 국제어",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "2",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-BUS3008-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "BUS3008",
+      "section": "I1",
+      "courseName": "경영전략",
+      "professor": "문철우",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "경영학과",
+        "시스템경영공학과",
+        "앙트레프레너십연계전공"
+      ],
+      "departmentCredits": {
+        "경영학과": 3.0,
+        "시스템경영공학과": 3.0,
+        "앙트레프레너십연계전공": 3.0
+      },
+      "departmentClassifications": {
+        "경영학과": "전공심화",
+        "시스템경영공학과": "전공심화",
+        "앙트레프레너십연계전공": "전공심화"
+      },
+      "departmentRemarks": {
+        "경영학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: the Future of Finance (Harvard) (사례 4) Enel: The Future of Energy (Harvard) 사례 구매 하버드 사례 패키지 구매링크는 수강확정 후 공지 (구매필수. 미구매시 기말 총점 100점 만점에서 1점 감점) 성적 산정 기준 중간고사 (없음), 기말고사 (70%), 사례퀴즈 (20%), 강의출석 (10%) 성적평가 방식 상대평가 2. 과제 내용 사례퀴즈 (개인, 20%) · (목적) 글로벌 기업 사례 연구를 통한 경영전략에 대한 실무현실적 / ard) 사례 구매 하버드 사례 패키지 구매링크는 수강확정 후 공지 (구매필수. 미구매시 기말 총점 100점 만점에서 1점 감점) 성적 산정 기준 중간고사 (없음), 기말고사 (70%), 사례퀴즈 (20%), 강의출석 (10%) 성적평가 방식 상대평가 2. 과제 내용 사례퀴즈 (개인, 20%) · (목적) 글로벌 기업 사례 연구를 통한 경영전략에 대한 실무현실적\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "시스템경영공학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: the Future of Finance (Harvard) (사례 4) Enel: The Future of Energy (Harvard) 사례 구매 하버드 사례 패키지 구매링크는 수강확정 후 공지 (구매필수. 미구매시 기말 총점 100점 만점에서 1점 감점) 성적 산정 기준 중간고사 (없음), 기말고사 (70%), 사례퀴즈 (20%), 강의출석 (10%) 성적평가 방식 상대평가 2. 과제 내용 사례퀴즈 (개인, 20%) · (목적) 글로벌 기업 사례 연구를 통한 경영전략에 대한 실무현실적 / ard) 사례 구매 하버드 사례 패키지 구매링크는 수강확정 후 공지 (구매필수. 미구매시 기말 총점 100점 만점에서 1점 감점) 성적 산정 기준 중간고사 (없음), 기말고사 (70%), 사례퀴즈 (20%), 강의출석 (10%) 성적평가 방식 상대평가 2. 과제 내용 사례퀴즈 (개인, 20%) · (목적) 글로벌 기업 사례 연구를 통한 경영전략에 대한 실무현실적\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "앙트레프레너십연계전공": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: the Future of Finance (Harvard) (사례 4) Enel: The Future of Energy (Harvard) 사례 구매 하버드 사례 패키지 구매링크는 수강확정 후 공지 (구매필수. 미구매시 기말 총점 100점 만점에서 1점 감점) 성적 산정 기준 중간고사 (없음), 기말고사 (70%), 사례퀴즈 (20%), 강의출석 (10%) 성적평가 방식 상대평가 2. 과제 내용 사례퀴즈 (개인, 20%) · (목적) 글로벌 기업 사례 연구를 통한 경영전략에 대한 실무현실적 / ard) 사례 구매 하버드 사례 패키지 구매링크는 수강확정 후 공지 (구매필수. 미구매시 기말 총점 100점 만점에서 1점 감점) 성적 산정 기준 중간고사 (없음), 기말고사 (70%), 사례퀴즈 (20%), 강의출석 (10%) 성적평가 방식 상대평가 2. 과제 내용 사례퀴즈 (개인, 20%) · (목적) 글로벌 기업 사례 연구를 통한 경영전략에 대한 실무현실적\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Some educational attachment context is incomplete after size/privacy filtering; current exact context needs review."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공심화",
+        "ISU_NAME2": "전공핵심",
+        "ISU_NAME3": "전공코어",
+        "GWAMOK_ENG_NAME": "Strategic Management",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "2",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-ECO2001-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ECO2001",
+      "section": "I1",
+      "courseName": "경제학원론1",
+      "professor": "김호연",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "경영학과",
+        "경제학과",
+        "공익과법연계전공",
+        "국제통상학전공",
+        "글로벌경제학과",
+        "글로벌리더학부",
+        "법무정책학연계전공"
+      ],
+      "departmentCredits": {
+        "경영학과": 3.0,
+        "경제학과": 3.0,
+        "공익과법연계전공": 3.0,
+        "국제통상학전공": 3.0,
+        "글로벌경제학과": 3.0,
+        "글로벌리더학부": 3.0,
+        "법무정책학연계전공": 3.0
+      },
+      "departmentClassifications": {
+        "경영학과": "전공기반",
+        "경제학과": "전공기반",
+        "공익과법연계전공": "전공기반",
+        "국제통상학전공": "전공기반",
+        "글로벌경제학과": "전공기반",
+        "글로벌리더학부": "전공기반",
+        "법무정책학연계전공": "전공기반"
+      },
+      "departmentRemarks": {
+        "경영학과": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "경제학과": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "공익과법연계전공": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "국제통상학전공": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌경제학과": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌리더학부": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "법무정책학연계전공": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공심화\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Some educational attachment context is incomplete after size/privacy filtering; current exact context needs review."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공기반",
+        "ISU_NAME2": "전공일반",
+        "ISU_NAME3": "전공심화",
+        "GWAMOK_ENG_NAME": "Principles of Economics Ⅰ",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-CHS7004-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CHS7004",
+      "section": "I1",
+      "courseName": "[도전학기] Python활용인문사회과학논문쓰기",
+      "professor": "한옥영",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "건축학과",
+        "경제학과",
+        "고전학연계전공",
+        "공익과법연계전공",
+        "교육학과",
+        "국제통상학전공",
+        "글로벌경제학과",
+        "글로벌리더학부",
+        "데이터사이언스융합전공",
+        "문헌정보학과",
+        "미디어커뮤니케이션학과",
+        "비교문화전공",
+        "사학과",
+        "사회복지학과",
+        "심리학과",
+        "아동·청소년학과",
+        "연기예술학과",
+        "영어영문학과",
+        "융합언어학연계전공",
+        "의상학과",
+        "인공지능융합전공",
+        "일본학전공",
+        "컬처앤테크놀로지융합전공",
+        "컴퓨터교육과",
+        "한국학연계전공",
+        "한문학과"
+      ],
+      "departmentCredits": {
+        "건축학과": 3.0,
+        "경제학과": 3.0,
+        "고전학연계전공": 3.0,
+        "공익과법연계전공": 3.0,
+        "교육학과": 3.0,
+        "국제통상학전공": 3.0,
+        "글로벌경제학과": 3.0,
+        "글로벌리더학부": 3.0,
+        "데이터사이언스융합전공": 3.0,
+        "문헌정보학과": 3.0,
+        "미디어커뮤니케이션학과": 3.0,
+        "비교문화전공": 3.0,
+        "사학과": 3.0,
+        "사회복지학과": 3.0,
+        "심리학과": 3.0,
+        "아동·청소년학과": 3.0,
+        "연기예술학과": 3.0,
+        "영어영문학과": 3.0,
+        "융합언어학연계전공": 3.0,
+        "의상학과": 3.0,
+        "인공지능융합전공": 3.0,
+        "일본학전공": 3.0,
+        "컬처앤테크놀로지융합전공": 3.0,
+        "컴퓨터교육과": 3.0,
+        "한국학연계전공": 3.0,
+        "한문학과": 3.0
+      },
+      "departmentClassifications": {
+        "건축학과": "전공(대학원)",
+        "경제학과": "전공(대학원)",
+        "고전학연계전공": "전공(대학원)",
+        "공익과법연계전공": "전공(대학원)",
+        "교육학과": "전공(대학원)",
+        "국제통상학전공": "전공(대학원)",
+        "글로벌경제학과": "전공(대학원)",
+        "글로벌리더학부": "전공(대학원)",
+        "데이터사이언스융합전공": "전공(대학원)",
+        "문헌정보학과": "전공(대학원)",
+        "미디어커뮤니케이션학과": "전공(대학원)",
+        "비교문화전공": "전공(대학원)",
+        "사학과": "전공(대학원)",
+        "사회복지학과": "전공(대학원)",
+        "심리학과": "전공(대학원)",
+        "아동·청소년학과": "전공(대학원)",
+        "연기예술학과": "전공(대학원)",
+        "영어영문학과": "전공(대학원)",
+        "융합언어학연계전공": "전공(대학원)",
+        "의상학과": "전공(대학원)",
+        "인공지능융합전공": "전공(대학원)",
+        "일본학전공": "전공(대학원)",
+        "컬처앤테크놀로지융합전공": "전공(대학원)",
+        "컴퓨터교육과": "전공(대학원)",
+        "한국학연계전공": "전공(대학원)",
+        "한문학과": "전공(대학원)"
+      },
+      "departmentRemarks": {
+        "건축학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "경제학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "고전학연계전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "공익과법연계전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "교육학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "국제통상학전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌경제학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌리더학부": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "데이터사이언스융합전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "문헌정보학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "미디어커뮤니케이션학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "비교문화전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "사학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "사회복지학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "심리학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "아동·청소년학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "연기예술학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "영어영문학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "융합언어학연계전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "의상학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "인공지능융합전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "일본학전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "컬처앤테크놀로지융합전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "컴퓨터교육과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "한국학연계전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "한문학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수강 대상: 전체학생\n선수과목: 없음\n수업 비고: - 출석 : 동영상 수업 참여에 해당 \n- 기말시험 : 강의 내용 전부를 종합하여 1편의 논문 완성\n- 평소 학습 : 동영상 강의에 대한 학습 내용 점검 활동 \n* 논문을 제출하지 않는 경우 F 처리\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Current Challenge/concentrated individual dates need direct proof.",
+        "Current weekly source contains an operating marker needing semantic review; a topic word alone is not a proved cancellation/change."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "06",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "C",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사/석사/박사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공(대학원)",
+        "ISU_NAME2": "전공(대학원)",
+        "ISU_NAME3": "",
+        "GWAMOK_ENG_NAME": "Thesis writing in humanities and social sciences using Python",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "도전학기",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-ECO2002-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ECO2002",
+      "section": "I1",
+      "courseName": "경제학원론2",
+      "professor": "이준상",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "경제학과",
+        "공익과법연계전공",
+        "국제통상학전공",
+        "글로벌경제학과",
+        "글로벌리더학부",
+        "법무정책학연계전공"
+      ],
+      "departmentCredits": {
+        "경제학과": 3.0,
+        "공익과법연계전공": 3.0,
+        "국제통상학전공": 3.0,
+        "글로벌경제학과": 3.0,
+        "글로벌리더학부": 3.0,
+        "법무정책학연계전공": 3.0
+      },
+      "departmentClassifications": {
+        "경제학과": "전공기반",
+        "공익과법연계전공": "전공기반",
+        "국제통상학전공": "전공기반",
+        "글로벌경제학과": "전공기반",
+        "글로벌리더학부": "전공기반",
+        "법무정책학연계전공": "전공기반"
+      },
+      "departmentRemarks": {
+        "경제학과": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "공익과법연계전공": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "국제통상학전공": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌경제학과": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌리더학부": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "법무정책학연계전공": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Some educational attachment context is incomplete after size/privacy filtering; current exact context needs review."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공기반",
+        "ISU_NAME2": "전공핵심",
+        "ISU_NAME3": "전공코어",
+        "GWAMOK_ENG_NAME": "Principles of Economics Ⅱ",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "글로벌경제학과 진입희망 자유전공생 수강가능/글로별경제 원전공생 수강불가"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-ECO3018-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "ECO3018",
+      "section": "I1",
+      "courseName": "국제통상론",
+      "professor": "김영한",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "경제학과",
+        "공익과법연계전공",
+        "국제통상학전공",
+        "글로벌리더학부",
+        "법무정책학연계전공",
+        "유라시아지역문화경제전공",
+        "중국학전공"
+      ],
+      "departmentCredits": {
+        "경제학과": 3.0,
+        "공익과법연계전공": 3.0,
+        "국제통상학전공": 3.0,
+        "글로벌리더학부": 3.0,
+        "법무정책학연계전공": 3.0,
+        "유라시아지역문화경제전공": 3.0,
+        "중국학전공": 3.0
+      },
+      "departmentClassifications": {
+        "경제학과": "전공심화",
+        "공익과법연계전공": "전공심화",
+        "국제통상학전공": "전공심화",
+        "글로벌리더학부": "전공심화",
+        "법무정책학연계전공": "전공심화",
+        "유라시아지역문화경제전공": "전공심화",
+        "중국학전공": "전공심화"
+      },
+      "departmentRemarks": {
+        "경제학과": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n선수과목: Microeconomics & International Economics\n수업 비고: We will have two exams, a mid-term exam and the final exam, which will be managed by the University Administration. The details of the two exams will provided during the lectures.\nQuestions and answers and discussions on the class topics will be given in English in the Q&A section. \nExams not written in English will get discounts by 30%. All students are strongly encouraged to write the exam in English.\nWhen you miss the Final Exam, F grade will be given automatically.\n계획서 수강 조건 원문: The course offers on-line lectures with the supplementary materials provided. Students are required to take each lecture within the assigned time everyweek. Two exams will be given, and the active class participation is recommended through Q&A section discuss\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "공익과법연계전공": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n선수과목: Microeconomics & International Economics\n수업 비고: We will have two exams, a mid-term exam and the final exam, which will be managed by the University Administration. The details of the two exams will provided during the lectures.\nQuestions and answers and discussions on the class topics will be given in English in the Q&A section. \nExams not written in English will get discounts by 30%. All students are strongly encouraged to write the exam in English.\nWhen you miss the Final Exam, F grade will be given automatically.\n계획서 수강 조건 원문: The course offers on-line lectures with the supplementary materials provided. Students are required to take each lecture within the assigned time everyweek. Two exams will be given, and the active class participation is recommended through Q&A section discuss\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "국제통상학전공": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n선수과목: Microeconomics & International Economics\n수업 비고: We will have two exams, a mid-term exam and the final exam, which will be managed by the University Administration. The details of the two exams will provided during the lectures.\nQuestions and answers and discussions on the class topics will be given in English in the Q&A section. \nExams not written in English will get discounts by 30%. All students are strongly encouraged to write the exam in English.\nWhen you miss the Final Exam, F grade will be given automatically.\n계획서 수강 조건 원문: The course offers on-line lectures with the supplementary materials provided. Students are required to take each lecture within the assigned time everyweek. Two exams will be given, and the active class participation is recommended through Q&A section discuss\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌리더학부": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n선수과목: Microeconomics & International Economics\n수업 비고: We will have two exams, a mid-term exam and the final exam, which will be managed by the University Administration. The details of the two exams will provided during the lectures.\nQuestions and answers and discussions on the class topics will be given in English in the Q&A section. \nExams not written in English will get discounts by 30%. All students are strongly encouraged to write the exam in English.\nWhen you miss the Final Exam, F grade will be given automatically.\n계획서 수강 조건 원문: The course offers on-line lectures with the supplementary materials provided. Students are required to take each lecture within the assigned time everyweek. Two exams will be given, and the active class participation is recommended through Q&A section discuss\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "법무정책학연계전공": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n선수과목: Microeconomics & International Economics\n수업 비고: We will have two exams, a mid-term exam and the final exam, which will be managed by the University Administration. The details of the two exams will provided during the lectures.\nQuestions and answers and discussions on the class topics will be given in English in the Q&A section. \nExams not written in English will get discounts by 30%. All students are strongly encouraged to write the exam in English.\nWhen you miss the Final Exam, F grade will be given automatically.\n계획서 수강 조건 원문: The course offers on-line lectures with the supplementary materials provided. Students are required to take each lecture within the assigned time everyweek. Two exams will be given, and the active class participation is recommended through Q&A section discuss\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "유라시아지역문화경제전공": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n선수과목: Microeconomics & International Economics\n수업 비고: We will have two exams, a mid-term exam and the final exam, which will be managed by the University Administration. The details of the two exams will provided during the lectures.\nQuestions and answers and discussions on the class topics will be given in English in the Q&A section. \nExams not written in English will get discounts by 30%. All students are strongly encouraged to write the exam in English.\nWhen you miss the Final Exam, F grade will be given automatically.\n계획서 수강 조건 원문: The course offers on-line lectures with the supplementary materials provided. Students are required to take each lecture within the assigned time everyweek. Two exams will be given, and the active class participation is recommended through Q&A section discuss\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "중국학전공": "중대형온라인강의 + 국제어\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n선수과목: Microeconomics & International Economics\n수업 비고: We will have two exams, a mid-term exam and the final exam, which will be managed by the University Administration. The details of the two exams will provided during the lectures.\nQuestions and answers and discussions on the class topics will be given in English in the Q&A section. \nExams not written in English will get discounts by 30%. All students are strongly encouraged to write the exam in English.\nWhen you miss the Final Exam, F grade will be given automatically.\n계획서 수강 조건 원문: The course offers on-line lectures with the supplementary materials provided. Students are required to take each lecture within the assigned time everyweek. Two exams will be given, and the active class participation is recommended through Q&A section discuss\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Some educational attachment context is incomplete after size/privacy filtering; current exact context needs review."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공심화",
+        "ISU_NAME2": "전공일반",
+        "ISU_NAME3": "전공코어",
+        "GWAMOK_ENG_NAME": "International Trade Negotiations",
+        "HYUNGTAE": "중대형온라인강의 + 국제어",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-CHS7008-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CHS7008",
+      "section": "I1",
+      "courseName": "[도전학기] AI기반전략적의사결정",
+      "professor": "한옥영",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "건축학과",
+        "교육학과",
+        "국제통상학전공",
+        "글로벌리더학부",
+        "나노공학과",
+        "문헌정보학과",
+        "미디어커뮤니케이션학과",
+        "사회복지학과",
+        "심리학과",
+        "의상학과",
+        "인공지능융합전공",
+        "컬처앤테크놀로지융합전공",
+        "컴퓨터교육과"
+      ],
+      "departmentCredits": {
+        "건축학과": 3.0,
+        "교육학과": 3.0,
+        "국제통상학전공": 3.0,
+        "글로벌리더학부": 3.0,
+        "나노공학과": 3.0,
+        "문헌정보학과": 3.0,
+        "미디어커뮤니케이션학과": 3.0,
+        "사회복지학과": 3.0,
+        "심리학과": 3.0,
+        "의상학과": 3.0,
+        "인공지능융합전공": 3.0,
+        "컬처앤테크놀로지융합전공": 3.0,
+        "컴퓨터교육과": 3.0
+      },
+      "departmentClassifications": {
+        "건축학과": "전공(대학원)",
+        "교육학과": "전공(대학원)",
+        "국제통상학전공": "전공(대학원)",
+        "글로벌리더학부": "전공(대학원)",
+        "나노공학과": "전공(대학원)",
+        "문헌정보학과": "전공(대학원)",
+        "미디어커뮤니케이션학과": "전공(대학원)",
+        "사회복지학과": "전공(대학원)",
+        "심리학과": "전공(대학원)",
+        "의상학과": "전공(대학원)",
+        "인공지능융합전공": "전공(대학원)",
+        "컬처앤테크놀로지융합전공": "전공(대학원)",
+        "컴퓨터교육과": "전공(대학원)"
+      },
+      "departmentRemarks": {
+        "건축학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "교육학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "국제통상학전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌리더학부": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "나노공학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "문헌정보학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "미디어커뮤니케이션학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "사회복지학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "심리학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "의상학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "인공지능융합전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "컬처앤테크놀로지융합전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "컴퓨터교육과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n수업 비고: - 출석 (20): icampu 동영상 수업 시청\n- 평소 학습 (30): 동영상 내용에 대한 퀴즈\n- 과제 (30): 학습 주제 활용 문제 해결 \n- 기말 (20):  AI를 활용한 전략적 의사결정을 통한 문제 해결 \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Current Challenge/concentrated individual dates need direct proof.",
+        "Current weekly source contains an operating marker needing semantic review; a topic word alone is not a proved cancellation/change."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "06",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "C",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사/석사/박사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공(대학원)",
+        "ISU_NAME2": "전공(대학원)",
+        "ISU_NAME3": "",
+        "GWAMOK_ENG_NAME": "Strategic Decision-Making with AI",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "도전학기",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-CHS7006-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "CHS7006",
+      "section": "I1",
+      "courseName": "[도전학기] 신인류AI사피엔스경험디자인",
+      "professor": "최재붕",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "건축학과",
+        "글로벌리더학부",
+        "글로컬문화콘텐츠전공",
+        "기계공학부",
+        "나노공학과",
+        "문헌정보학과",
+        "미디어커뮤니케이션학과",
+        "연기예술학과",
+        "영상학과",
+        "의상학과",
+        "인공지능융합전공",
+        "컬처앤테크놀로지융합전공",
+        "한국학연계전공"
+      ],
+      "departmentCredits": {
+        "건축학과": 3.0,
+        "글로벌리더학부": 3.0,
+        "글로컬문화콘텐츠전공": 3.0,
+        "기계공학부": 3.0,
+        "나노공학과": 3.0,
+        "문헌정보학과": 3.0,
+        "미디어커뮤니케이션학과": 3.0,
+        "연기예술학과": 3.0,
+        "영상학과": 3.0,
+        "의상학과": 3.0,
+        "인공지능융합전공": 3.0,
+        "컬처앤테크놀로지융합전공": 3.0,
+        "한국학연계전공": 3.0
+      },
+      "departmentClassifications": {
+        "건축학과": "전공(대학원)",
+        "글로벌리더학부": "전공(대학원)",
+        "글로컬문화콘텐츠전공": "전공(대학원)",
+        "기계공학부": "전공(대학원)",
+        "나노공학과": "전공(대학원)",
+        "문헌정보학과": "전공(대학원)",
+        "미디어커뮤니케이션학과": "전공(대학원)",
+        "연기예술학과": "전공(대학원)",
+        "영상학과": "전공(대학원)",
+        "의상학과": "전공(대학원)",
+        "인공지능융합전공": "전공(대학원)",
+        "컬처앤테크놀로지융합전공": "전공(대학원)",
+        "한국학연계전공": "전공(대학원)"
+      },
+      "departmentRemarks": {
+        "건축학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로벌리더학부": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "글로컬문화콘텐츠전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "기계공학부": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "나노공학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "문헌정보학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "미디어커뮤니케이션학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "연기예술학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "영상학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "의상학과": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "인공지능융합전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "컬처앤테크놀로지융합전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "한국학연계전공": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가\n중대형온라인강의\n계획서 수강 조건 원문: 2026/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / 26/도전 학수번호-분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회) / -분반 CHS7006-I1 이수구분 교과목명 신인류AI사피엔스경험디자인 A new human AI Sapiens Experience Design 성명 최재붕 수강대상학과 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 교수자 제공 강의자료 강좌관련자료 - 강좌진행방법 - 전체 강의는 100% 온라인으로 진행되며 오프라인 수업이나 시험은 없습니다. - 성적은 아래와 같은 기준으로 평가합니다. 출석 10% 과제(2회)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Current Challenge/concentrated individual dates need direct proof."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "06",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "C",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사/석사/박사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공(대학원)",
+        "ISU_NAME2": "전공(대학원)",
+        "ISU_NAME3": "",
+        "GWAMOK_ENG_NAME": "A new human AI Sapiens Experience Design",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "도전학기",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "[도전학기] 도전학기 교과목으로 현재 수강신청 불가"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-USS2002-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "USS2002",
+      "section": "I1",
+      "courseName": "통계분석원론",
+      "professor": "정종현",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "글로벌리더학부",
+        "미디어커뮤니케이션학과",
+        "사회복지학과",
+        "사회학과",
+        "소비자학과",
+        "심리학과",
+        "아동·청소년학과",
+        "인포매틱스융합전공",
+        "정치외교학과",
+        "행정학과"
+      ],
+      "departmentCredits": {
+        "글로벌리더학부": 3.0,
+        "미디어커뮤니케이션학과": 3.0,
+        "사회복지학과": 3.0,
+        "사회학과": 3.0,
+        "소비자학과": 3.0,
+        "심리학과": 3.0,
+        "아동·청소년학과": 3.0,
+        "인포매틱스융합전공": 3.0,
+        "정치외교학과": 3.0,
+        "행정학과": 3.0
+      },
+      "departmentClassifications": {
+        "글로벌리더학부": "전공기반",
+        "미디어커뮤니케이션학과": "전공기반",
+        "사회복지학과": "전공기반",
+        "사회학과": "전공기반",
+        "소비자학과": "전공기반",
+        "심리학과": "전공기반",
+        "아동·청소년학과": "전공기반",
+        "인포매틱스융합전공": "전공기반",
+        "정치외교학과": "전공기반",
+        "행정학과": "전공기반"
+      },
+      "departmentRemarks": {
+        "글로벌리더학부": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "미디어커뮤니케이션학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "사회복지학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "사회학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "소비자학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "심리학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "아동·청소년학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "인포매틱스융합전공": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "정치외교학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "행정학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Some educational attachment context is incomplete after size/privacy filtering; current exact context needs review."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공기반",
+        "ISU_NAME2": "전공핵심",
+        "ISU_NAME3": "전공코어",
+        "GWAMOK_ENG_NAME": "Principles of Statistical Analysis",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-USS2005-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "USS2005",
+      "section": "I1",
+      "courseName": "사회과학입문",
+      "professor": "이재국",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "미디어커뮤니케이션학과",
+        "사회복지학과",
+        "사회학과",
+        "소비자학과",
+        "심리학과",
+        "아동·청소년학과",
+        "정치외교학과",
+        "행정학과"
+      ],
+      "departmentCredits": {
+        "미디어커뮤니케이션학과": 3.0,
+        "사회복지학과": 3.0,
+        "사회학과": 3.0,
+        "소비자학과": 3.0,
+        "심리학과": 3.0,
+        "아동·청소년학과": 3.0,
+        "정치외교학과": 3.0,
+        "행정학과": 3.0
+      },
+      "departmentClassifications": {
+        "미디어커뮤니케이션학과": "전공기반",
+        "사회복지학과": "전공기반",
+        "사회학과": "전공기반",
+        "소비자학과": "전공기반",
+        "심리학과": "전공기반",
+        "아동·청소년학과": "전공기반",
+        "정치외교학과": "전공기반",
+        "행정학과": "전공기반"
+      },
+      "departmentRemarks": {
+        "미디어커뮤니케이션학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "사회복지학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "사회학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "소비자학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "심리학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "아동·청소년학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "정치외교학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "행정학과": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다.\n중대형온라인강의\n이수 구분 원문 보조 표기: 전공핵심 / 전공코어\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공기반",
+        "ISU_NAME2": "전공핵심",
+        "ISU_NAME3": "전공코어",
+        "GWAMOK_ENG_NAME": "Introduction to Social Sciences",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "사회과학계열제 학생들은 18일 14시부터 수강신청 가능합니다."
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-SOA2004-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "SOA2004",
+      "section": "I1",
+      "courseName": "공연예술미학",
+      "professor": "임성민",
+      "credits": 2.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "디자인학과",
+        "무용학과",
+        "미술학과",
+        "연기예술학과",
+        "영상학과",
+        "의상학과"
+      ],
+      "departmentCredits": {
+        "디자인학과": 2.0,
+        "무용학과": 2.0,
+        "미술학과": 2.0,
+        "연기예술학과": 2.0,
+        "영상학과": 2.0,
+        "의상학과": 2.0
+      },
+      "departmentClassifications": {
+        "디자인학과": "전공기반",
+        "무용학과": "전공기반",
+        "미술학과": "전공기반",
+        "연기예술학과": "전공기반",
+        "영상학과": "전공기반",
+        "의상학과": "전공기반"
+      },
+      "departmentRemarks": {
+        "디자인학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n계획서 수강 조건 원문: 강 의 계 획 서학년도/학기2026/2학수번호-분반SOA2004-I1이수구분전공교과목명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주 / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주차 수업 내용에 대한 간략한 정리(기한 외 제출 불가, 반드시 종결어미(예: ~다.)를 갖춘 완성된 문장으로 기술할 것, 키워드 나열이나 교안 내용을 그대로 옮기는\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "무용학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n계획서 수강 조건 원문: 강 의 계 획 서학년도/학기2026/2학수번호-분반SOA2004-I1이수구분전공교과목명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주 / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주차 수업 내용에 대한 간략한 정리(기한 외 제출 불가, 반드시 종결어미(예: ~다.)를 갖춘 완성된 문장으로 기술할 것, 키워드 나열이나 교안 내용을 그대로 옮기는\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "미술학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n계획서 수강 조건 원문: 강 의 계 획 서학년도/학기2026/2학수번호-분반SOA2004-I1이수구분전공교과목명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주 / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주차 수업 내용에 대한 간략한 정리(기한 외 제출 불가, 반드시 종결어미(예: ~다.)를 갖춘 완성된 문장으로 기술할 것, 키워드 나열이나 교안 내용을 그대로 옮기는\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "연기예술학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n계획서 수강 조건 원문: 강 의 계 획 서학년도/학기2026/2학수번호-분반SOA2004-I1이수구분전공교과목명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주 / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주차 수업 내용에 대한 간략한 정리(기한 외 제출 불가, 반드시 종결어미(예: ~다.)를 갖춘 완성된 문장으로 기술할 것, 키워드 나열이나 교안 내용을 그대로 옮기는\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "영상학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n계획서 수강 조건 원문: 강 의 계 획 서학년도/학기2026/2학수번호-분반SOA2004-I1이수구분전공교과목명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주 / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주차 수업 내용에 대한 간략한 정리(기한 외 제출 불가, 반드시 종결어미(예: ~다.)를 갖춘 완성된 문장으로 기술할 것, 키워드 나열이나 교안 내용을 그대로 옮기는\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요.",
+        "의상학과": "중대형온라인강의\n이수 구분 원문 보조 표기: 전공일반 / 전공코어\n계획서 수강 조건 원문: 강 의 계 획 서학년도/학기2026/2학수번호-분반SOA2004-I1이수구분전공교과목명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 명공연예술미학성명임성민수강대상학과예술대학선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사참고도서공연예술산책미라 펠너2014시그마프레스예술의 탄생래리 쉬너2007들녘예술의 사회 경제사이미혜2012열린책들시학아리스토텔레스2002문예출판사수행성의 미학에리카 피셔 리히테2017문학과지성사강좌관련자료 PPT & V / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주 / 10%40%30%100% 평가방법 - 출석: 결석 –4점(성균관대학교 규정에 따라 수업 영상의 95% 이상 미재생 시 결석, 출석 마감일 23시 59분 0초까지 출석 인정 분량을 수강 완료해야 함). 출석 대상은 1주차부터 기말고사까지 전체 주차. - 과제: 공연 감상비평문(기한 외 제출, 분량 미달 감점) - 평소학습: 해당 주차 수업 내용에 대한 간략한 정리(기한 외 제출 불가, 반드시 종결어미(예: ~다.)를 갖춘 완성된 문장으로 기술할 것, 키워드 나열이나 교안 내용을 그대로 옮기는\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": "학사",
+        "GRADE_NAME": "",
+        "ISU_NAME": "전공기반",
+        "ISU_NAME2": "전공일반",
+        "ISU_NAME3": "전공코어",
+        "GWAMOK_ENG_NAME": "Esthetics of Performing Arts",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": "",
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDC010-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDC010",
+      "section": "I1",
+      "courseName": "성균논어",
+      "professor": "이천승",
+      "credits": 2.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 2.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 성균인성.리더십[2020학번이후] /  인성[2019학번이전]  \n중대형온라인강의\n수업 비고: o 과제 (15%)는  논어를 중심으로 '智[지혜]' 고전명구를 선정하여 그 의미와 자신의 체험이 담긴 에세이 형식으로 작성   * 구체적인 내용과 방법은 추후 재공지  \n\no   평소학습(10%)은 성균관탐방 영상 (유튜브에  '이천승교수와 함께하는 성균관 탐방' 클릭) 시청 후, 개별적으로 참관한 다음 감상문 제출 \n  *직접 성균관 탐방이 어려울 경우에는, 먼저 제시된 성균관 탐방 영상을 시청한 다음에 자기 지역과 가까운 유교 문화와 관련된 문화유산(ex:향교, 서원)을 참관하여 감상문 제출 가능\n\no 기타(20%)는 매 강의 시청 이후에 제시된 주차별 퀴즈 풀기로 대체           \n \n* 기말고사는 학교에 나와서 오프라인으로 진행되며, 일시는 14주차 주말로 예상\n\n* 기타 자세한 내용은 아이캠퍼스 공지란  참조\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "The Analects of Confucius",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 성균인성.리더십[2020학번이후] /  인성[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDI010-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDI010",
+      "section": "I1",
+      "courseName": "경제학입문",
+      "professor": "박민수",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  \n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다. / 부정행위❍대체시험은 허용하지 않는 것이 원칙이나, 질병, 군복무 등 부득이한 사유로 시험에 응할 수 없는 경우에 한해 예외적으로 허용. 이 경우, 증빙서류를 첨부하여 시험일 전에 교강사의 승인을 얻어야 하고, 오프라인 출석시험으로만 실시.기억해야 할 일정 - 온라인 수업의 출석과 평소학습(주차별 연습문제 풀이)은 매주 일요일 자정까지 완료 시 인정. 단, 1주차는 2주차 일요일 자정까지 완료하면 인정 - 과제 제출 일정 - 오프라인 출석 중간고사 및 기말고사(교무처 주관), 확정 후 별도 공지 / 용하지 않는 것이 원칙이나, 질병, 군복무 등 부득이한 사유로 시험에 응할 수 없는 경우에 한해 예외적으로 허용. 이 경우, 증빙서류를 첨부하여 시험일 전에 교강사의 승인을 얻어야 하고, 오프라인 출석시험으로만 실시.기억해야 할 일정 - 온라인 수업의 출석과 평소학습(주차별 연습문제 풀이)은 매주 일요일 자정까지 완료 시 인정. 단, 1주차는 2주차 일요일 자정까지 완료하면 인정 - 과제 제출 일정 - 오프라인 출석 중간고사 및 기말고사(교무처 주관), 확정 후 별도 공지\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Elementary Economics",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDI001-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDI001",
+      "section": "I1",
+      "courseName": "동양사상입문",
+      "professor": "신정근",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  \n중대형온라인강의\n수강 대상: 전체\n수업 비고: 중간고 기말 시험 위주로 평가된다 기타 항복도 있다 수강생의 다양한 능력을 측정하려고 한다\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Introduction to Eastern Thoughts",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDI008-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDI008",
+      "section": "I1",
+      "courseName": "심리학입문",
+      "professor": "장승민",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  \n중대형온라인강의 + 국제어\n수업 비고: * Policy on online quiz session: there will be two online quiz sessions (5% each, belonging to daily learning component) one week prior to midterm and final exams, respectively. Because the examinations are usually given either Saturday or Sunday, the quiz session will be held either Saturday or Sunday, but the sessions are available for an extended period. Make sure that those hours should be spared.\n\n* Policy for those enrolled in the course during the military service: they will take online examinations on the same date as the offline examination. However, the exam questions and grading policies are different from other students. In particular, the letter grade of a student is determined by the relative position of the students in military service.\n\n* Policies on the alternative assignments for the psychology experiment participation: Students will participate in psychology experiments for two credit amounts through sona-systems. This will contribute 5% of the total score. If they are unable to participate in (e.g. military service or no available experiment), they need to turn in alternative assignments. \n\n* Policies on the alternative examinations, quiz sessions: those who are unable to take the examinations can take alternative examinations only with reasons granted by Sungkyunkwan University. The format of the examination is likely to be different from the regular one. Students need to submit proper documents within a reasonable time. In addition, there will be no alternative quiz session even for the students in military service considering that the quiz session is held for an extended period.\n\n* Students must take final exams. Students must also meet the university's attendance requirements.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Current weekly source contains an operating marker needing semantic review; a topic word alone is not a proved cancellation/change."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Introduction to Psychology",
+        "HYUNGTAE": "중대형온라인강의 + 국제어",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDI007-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDI007",
+      "section": "I1",
+      "courseName": "정치학입문",
+      "professor": "조원빈",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  \n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다. / 접근법들을 소개하여 학생들이 마주하는 정치현상들을 이해하고 비판적으로 분석할 수 있도록 하는데 그 목표를 둔다. 강의 형식은 정치학의 각 분야 혹은 주제에 전문가인 정치외교학과 교수님들이 1주 혹은 2 주씩 강의를 맡는다. 학생들은 매주 녹화된 강의를 수강하고 강의 내용과 관련된 주제에 대해 본인의 생각을 icampus에 준비된 토론방에 제시하고 다른 학생들과 의견을 교환하게 된다. 주차 강의 내용 및 담당 교수 1주, 정치학 입문 강의 / 접근법들을 소개하여 학생들이 마주하는 정치현상들을 이해하고 비판적으로 분석할 수 있도록 하는데 그 목표를 둔다. 강의 형식은 정치학의 각 분야 혹은 주제에 전문가인 정치외교학과 교수님들이 1주 혹은 2 주씩 강의를 맡는다. 학생들은 매주 녹화된 강의를 수강하고 강의 내용과 관련된 주제에 대해 본인의 생각을 icampus에 준비된 토론방에 제시하고 다른 학생들과 의견을 교환하게 된다. 주차 강의 내용 및 담당 교수 1주, 정치학 입문 강의 개요 ठ Ā - 조원빈 교수 2주, 비교정치경제 - 권예소라 교수 3주, 정치대표성 - 권예소라 교수 4주, / 토론 참여(10%)* * 토론 참여시, AI를 사용하거나 타인의 주장을 수정 없이 인용한 게 발각되면 토론 참여 점수는 ‘0’점이 될 수 있음. 강의 교재 매주 강의를 담당하는 교수님께서 담당조교를 통해 본인의 강의 노트 파일을 수강 학생들에게 전달한다. / 접근법들을 소개하여 학생들이 마주하는 정치현상들을 이해하고 비판적으로 분석할 수 있도록 하는데 그 목표를 둔다. 강의 형식은 정치학의 각 분야 혹은 주제에 전문가인 정치외교학과 교수님들이 1주 혹은 2 주씩 강의를 맡는다. 학생들은 매주 녹화된 강의를 수강하고 강의 내용과 관련된 주제에 대해 본인의 생각을 icampus에 준비된 토론방에 제시하고 다른 학생들과 의견을 교환하게 된다. 주차 강의 내용 및 담당 교수 1주, 정치학 입문 강의 개요 ठ Ā\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Introduction to Political Science",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인문사회과학/자연과학기반[2020학번이후] /  기초인문사회과학[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDH027-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDH027",
+      "section": "I1",
+      "courseName": "그리스로마신화의이해",
+      "professor": "이형구",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  \n중대형온라인강의\n계획서 수강 조건 원문: 르지 않으며, 8주차에도 정규 온라인수업 진행됩니다.5) 군 복무 중 수강 학생 – 일반 수강 학생과 분리하여, 군 복무 학생끼리 별도로 상대평가하고 성적 부여합니다.- 군 복무 학생도 오프라인 기말시험 참석이 원칙이나, 군부대의 불가피한 사정으로 참석이 어려운 경우 대체 온라인 과제/시험도 가능합니다.참고문헌:피에르 그리말. 최애리 역. 그리스로마신화사전. 2003. 열린책들.헤시오도스. 천병희 역. 신통기. 2004. 한길사.오비디우스. 이윤기 역. 변신이야기 1-2. 2003. 민음사.호메로스. 일리아스. 천병\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Some educational attachment context is incomplete after size/privacy filtering; current exact context needs review."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Understanding of Greek and Roma Mythology",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDH065-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDH065",
+      "section": "I1",
+      "courseName": "연극과문화",
+      "professor": "김유",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  \n중대형온라인강의\n수업 비고: 출석 - 10 % (자동 산출)\n과제 - 30% (아이캠퍼스에 파일 탑재)\n기말 - 60% (출석 시험)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Culture and Theatre Art",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDH019-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDH019",
+      "section": "I1",
+      "courseName": "예술사",
+      "professor": "이진민",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "※ 오프라인 중간/기말고사 참석 필수/강의계획서 필독※ \n**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  \n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다. / 강 의 계 획 서학년도/학기2026학년도 2학기학수번호-분반GEDH019_I1이수구분교과목명예술사성명이진민수강대상학과예술대학선이수과목(권장)관련도서및참고자료구분제목저자발행년도출판사교재별도 교재강좌관련자료 강의 ppt, 주차별 강의 내용을 요약한 핸드아웃, 주차별 읽기 자료강좌진행방법 ppt를 기본으로 한 온라인 이론 강의, 주차별 퀴즈 수행.교과목목표 서양 예술의 역사를 시대별로 조망하고 다양한\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "History of Art",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  ",
+        "BIGO": "※ 오프라인 중간/기말고사 참석 필수/강의계획서 필독※ "
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDH018-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDH018",
+      "section": "I1",
+      "courseName": "음악의이해",
+      "professor": "이지현",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  \n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다. / 捤獥 汤捯 氠瑢 강 의 계 획 서 학년도/학기 2026학년도 2학기 학수번호-분반 GEDH018-I1 이수구분 교과목명 음악의 이해 성명 이지현 수강대상학과 전체 선이수과목 (권장) 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 서양음악사 그라우트 2007 엔앤비플러스 강좌관련자료 시대별 음악 및 관련 예술 자료를 담은 자체제작 PPT, DVD 및 mp3 음원은 물론 YouTube 영상자료 강좌진행방법 서양고전음악사를 기\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Understanding of Music",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 인간/문화[2020학번이후] /  인간/문화의이해[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDS060-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDS060",
+      "section": "I1",
+      "courseName": "기업과증권시장의이해",
+      "professor": "박영규",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "※ 경영학&경제학 전공생(복수전공 포함) 수강불가 ※\n**영역구분: 사회/역사[2020학번이후] /  사회/역사의이해[2019학번이전]  \n중대형온라인강의\n수강 대상: 전체(경영 및 경제학부 제외)\n수업 비고: ***** 주의 ****** \n\n본 과목은 일반교양기초과목이므로 경영학 및 경제학전공(복수전공포함) 학생들은 대신 경영학과의 재무관리나 투자론을 수강하기 바라며 본 과목의 수강을 금합니다. \n\n\n또한 경영전공이 아니라도 이미 경영학과의 재무관리나 투자론을 수강한 학생은 비슷한 과목이면서 내용상 오히려 기초가 되는 본 과목을 수강해서는 안 될 것입니다. \n\n만일 이를 무시하고 수강하더라도 해당 수강생은 C학점 이상의 학점이 부여되지 않으니 이점 반드시 유의하시기 바랍니다.\n\n가. 수업과 관련된 중요한 사항들은 모두 icampus를 통해 이루어지므로 학기초 icampus에서 수업운영과 관련된 공지사항을 빠짐없이 확인하여 수업방식이나 과제물 작성방법, 취업시에 성적평가방법 등에 대하여 상세히 파악해야 할 책임이 있음. \n\n나. 마지막 학기인 학생도 취업이나 기타 이유로 수업에 불성실하게 임할 시에 예외를 두지 않고 F 처리 함.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Understanding Corporations and Stock Market",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 사회/역사[2020학번이후] /  사회/역사의이해[2019학번이전]  ",
+        "BIGO": "※ 경영학&경제학 전공생(복수전공 포함) 수강불가 ※"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDN012-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDN012",
+      "section": "I1",
+      "courseName": "생명의과학",
+      "professor": "이우성",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  \n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Science of Life",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDN030-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDN030",
+      "section": "I1",
+      "courseName": "스포츠마케팅과미디어",
+      "professor": "장경로",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "스포츠과학과 학생 수강신청불가\n**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  \n중대형온라인강의\n수강 대상: 스포츠과학대학 전공학생 수강불가\n수업 비고: 출석, 시험(중간고사, 기말고사), 레포트 등으로 구성됩니다. 시험은 offline으로 실시되며, 과제는 추후 공지합니다. \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Sports Marketing and Media",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  ",
+        "BIGO": "스포츠과학과 학생 수강신청불가"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDN029-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDN029",
+      "section": "I1",
+      "courseName": "운동과건강",
+      "professor": "강현식",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  \n중대형온라인강의\n수강 대상: 전학부\n수업 비고: 출석 20%, 과제(10%), 중간 시험(오프라인) 30%, 기말 시험(오프라인) 40%의 총점으로  평가한다.  **다만, 군복무 수강생은 중간고사 및 기말고사를 온라인으로 실시, 학기말 성적은 출석 30%, 중간 30%, 기말 40% 별도 평가한다** \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Exercise and Health",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GEDN005-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GEDN005",
+      "section": "I1",
+      "courseName": "현대천문학개론",
+      "professor": "박일흥",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "교양"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  \n중대형온라인강의\n수강 대상: 인문, 사회, 예체능 계열\n선수과목: 없음\n수업 비고: 중간, 기말고사와 함께 출석점수 그리고 수시로 부과될 수 있는 과제물로 평가합니다.  \n계획서 수강 조건 원문: 捤獥 汤捯 氠瑢 강 의 계 획 서 학년도/학기 2026-2학기 학수번호-분반 GEDN005-I1 이수구분 교양 교과목명 현대천문학개론 (GEDN005-I1) 성명 박일흥 수강대상학과 인문, 사회, 예체능 계열 선이수과목 (권장) 없음 관련 도서 및 참고자료 구분 제목 저자 발행년도 출판사 교재 (주교재) 본 강의의 강의록 강좌자료 (부교재) 스페이스 (BBC) 강좌진행 파워포인트를 사용한 녹화된 자료로 강의. 일주일에 한번 줌회의를 통한 질문과 토의를 계획함.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "교양",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Introduction to Modern Astronomy",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 자연/과학/기술[2020학번이후] /  자연/과학/기술의이해[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT066-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT066",
+      "section": "I1",
+      "courseName": "4차산업혁명의이해와진로탐색",
+      "professor": "이준상",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n수업 비고: 성적처리 : Pass/Fail\n\n -  총 수업시간 수의 4분의3 이상 출석하여야 함\n \n - 기말고사는 ‘과제’로 대체 (시험 없음)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "The Fourth Industrial Revolution and Career Exploration",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT068-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT068",
+      "section": "I1",
+      "courseName": "논리적사고",
+      "professor": "홍지호",
+      "credits": 2.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 2.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 일반선택[2020학번이후] /  일반선택[2019학번이전]  \n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Theoretical Thinking",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 일반선택[2020학번이후] /  일반선택[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT074-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT074",
+      "section": "I1",
+      "courseName": "성균인성수양",
+      "professor": "이천승",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 일반선택[2020학번이후] /  일반선택[2019학번이전]  \n중대형온라인강의\n수강 대상: 전교생\n수업 비고: ○ 수업 개요: 1학점, 온라인 전용강좌  / 학점 산정 방식: PASS & FAIL\n○ 평가 요소: 출석 / 주차별 퀴즈 / 과제 1개\n○ 퀴즈: 매주 3문항. 영상 수강 학생은 누구나 풀 수 있는 간단한 퀴즈\n○ FAIL: 학4주 이상 결석 / 기 전체 퀴즈의 30% 이상 틀린 경우 / 과제 미제출\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "SKKU Personality Cultivation",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 일반선택[2020학번이후] /  일반선택[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT043-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT043",
+      "section": "I1",
+      "courseName": "언어논리입문",
+      "professor": "홍지호",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Linguistic Analysis",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT035-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT035",
+      "section": "I1",
+      "courseName": "여성커리어개발",
+      "professor": "이준상",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n수업 비고: 성적처리 : Pass/Fail\n\n - 총 수업시간 수의 4분의3 이상 출석하여야 함\n\n - 기말고사는 ‘과제’로 대체 (시험 없음)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Career Development and Entrepreneurship for Female Students",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT044-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT044",
+      "section": "I1",
+      "courseName": "자료해석과상황판단",
+      "professor": "박정하",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n수강 대상: 전체\n수업 비고: 온라인 강의이므로 수강이 일차적으로 중요하다.\n중간고사는 수강내용을 제대로 숙지하고 있는지 평가한다. 과제물로 대체할 수도 있다. \n기말고사는 모의PSAT 문제로 평가한다.\n과제는 PSAT 관련 자료를 찾아서 정리하는 것으로 수업 중 제시될 것이다.  \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Data Analysis and Situational Judgement",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT031-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT031",
+      "section": "I1",
+      "courseName": "진로탐색및경력개발",
+      "professor": "이준상",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n수업 비고: 성적처리 : Pass/Fail\n\n - 총 수업시간 수의 4분의3 이상 출석하여야 함\n\n - 기말고사는 ‘과제’로 대체 (시험 없음)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Career Exploration and Development with Entrepreneurship",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT030-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT030",
+      "section": "I1",
+      "courseName": "창의인성교육의이해",
+      "professor": "양정호",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n수강 대상: 모든 학부생(교육부의 창의인성 선도대학 사업의 특별 개설과목)\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n수업 비고:  - 본 강의는 100% 온라인강의로 진행됨 \n - 시험은 중간고사와 기말고사 모두 없으며, 과제 제출로 평가가 이루어짐\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Knowing Creativity and Character Education",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT011-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT011",
+      "section": "I1",
+      "courseName": "핵심취업전략",
+      "professor": "이준상",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n수업 비고: 성적처리 : Pass/Fail\n\n - 총 수업시간 수의 4분의3 이상 출석하여야 함\n\n - 기말고사는 ‘과제’로 대체 (시험 없음)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Core Strategy for Employment and Startup",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT011-I2",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT011",
+      "section": "I2",
+      "courseName": "핵심취업전략",
+      "professor": "이준상",
+      "credits": 1.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 1.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "중대형온라인강의\n수업 비고: 성적처리 : Pass/Fail\n\n - 총 수업시간 수의 4분의3 이상 출석하여야 함\n\n - 기말고사는 ‘과제’로 대체 (시험 없음)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Core Strategy for Employment and Startup",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-GELT069-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "GELT069",
+      "section": "I1",
+      "courseName": "형식적논리학",
+      "professor": "박성수",
+      "credits": 2.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 2.0
+      },
+      "departmentClassifications": {
+        "공통교양": "기타"
+      },
+      "departmentRemarks": {
+        "공통교양": "**영역구분: 일반선택[2020학번이후] /  일반선택[2019학번이전]  \n중대형온라인강의\n수강 대상: 교양\n선수과목: 처음 논리학 기초를 쌓고자 하는 사람이라면 누구나 환영합니다.\n수업 비고: 평가는 중간 40, 기말 60으로 이루어집니다. 기말범위에는 중간범위의 기초 지식 역시 들어가므로 기말의 비중이 조금 더 큽니다. \n\nAI사용관련: 공부를 하는 데 있어 보조수단으로 AI의 도움을 받으셔도 되나, 이로부터 발생하는 결과에 대해서는 학생 본인에게 책임이 있습니다. 시험의 경우에는 AI 사용이 불가하며, 이를 어길 시 치팅과 동일한 수준의 제제가 이뤄집니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "기타",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Formative Thinking",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "**영역구분: 일반선택[2020학번이후] /  일반선택[2019학번이전]  ",
+        "BIGO": ""
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF008-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF008",
+      "section": "I1",
+      "courseName": "데이터분석과AI기초",
+      "professor": "민무홍",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "인사캠 전용/문컴(컴사/문알/문해컴) 선이수 필수\n중대형온라인강의\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Introduction to Data Analysis and AI",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "인사캠 전용/문컴(컴사/문알/문해컴) 선이수 필수"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF008-I2",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF008",
+      "section": "I2",
+      "courseName": "데이터분석과AI기초",
+      "professor": "한옥영",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "문컴(컴사/문알) 선이수 필수\n중대형온라인강의\n수강 대상: 인문사회과학\n선수과목: 문제해결과컴퓨팅사고 / 컴퓨팅사고와SW코딩 / 문제해결과알고리즘\n수업 비고: 본 과목의 평가는 온라인 수업의 특성을 반영하여, 학습 참여도와 실습·이해도를 종합적으로 평가하는 방식으로 운영됩니다.\n1. 출석(20%)\n온라인 강의 시청 여부, 학습 진도 이수 현황, 출결 기준 충족 여부를 바탕으로 평가합니다. 정해진 기간 내 강의를 성실히 수강하는 것이 중요합니다.\n2. 과제 – Python Coding(20%)\nPython을 활용한 데이터 분석 및 AI 관련 실습 과제를 수행하여 제출합니다.\n코드 작성 능력, 문제 해결 과정, 결과의 정확성을 종합적으로 평가합니다.\n3. 기말시험(20%)\n한 학기 동안 학습한 주요 개념과 분석 방법에 대한 이해도를 대면 시험으로 평가합니다. 이론과 실습 내용을 균형 있게 반영하여 출제됩니다.\n4. 평소 학습 – Quiz(20%)\n주차별 또는 단원별 퀴즈를 통해 학습 이해도를 점검합니다.\n꾸준한 학습 참여와 복습 여부를 평가하는 항목입니다.\n5. 발표 – Project(20%)\n데이터 분석 및 AI 활용 프로젝트를 수행하고 결과를 발표합니다.\n문제 정의, 분석 과정, 결과 해석, 발표 내용 등을 종합적으로 평가합니다.\n\n5가지 항목 중 1개라도 0점이 있는 경우, 학점은 F 처리되므로 각 영역에 모두 참여하는 것이 중요합니다. \n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Current weekly source contains an operating marker needing semantic review; a topic word alone is not a proved cancellation/change."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Introduction to Data Analysis and AI",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "문컴(컴사/문알) 선이수 필수"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF008-I3",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF008",
+      "section": "I3",
+      "courseName": "데이터분석과AI기초",
+      "professor": "김유성",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "공컴프 or 프기실 선이수 필수\n중대형온라인강의\n선수과목: 공학컴퓨터 프로그래밍\n수업 비고: 매주 월요일 이론영상과 온라인 실습 문제가 오픈됩니다. 일요알 23:59 까지 이론 영상은 시청 완료해야 하며, 실습 솔루션을 제출해야 합니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Introduction to Data Analysis and AI",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "공컴프 or 프기실 선이수 필수"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF007-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF007",
+      "section": "I1",
+      "courseName": "문제해결과컴퓨팅사고",
+      "professor": "황숙희",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "신입생 전용반(수강삭제/철회불가)\n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다.\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Problem Solving and Computational Thinking",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "신입생 전용반(수강삭제/철회불가)"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF007-I2",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF007",
+      "section": "I2",
+      "courseName": "문제해결과컴퓨팅사고",
+      "professor": "원명주",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "신입생 전용반(수강삭제/철회불가)\n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다. / 강 의 계 획 서학년도/학기2026-2학기학수번호-분반DASF007-I2,I3이수구분DS교과목명문제해결과컴퓨팅사고성명원명주수강대상학과선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사교재컴퓨팅사고와 문제해결(비매품) 황숙희2024성균관대학교 소프트웨어중심대학사업단강좌관련자료강좌진행방법i-campus 중대형 온라인 수업으로 진행- 온라인 강의 동영상 학습- 학습 내용 확인을 위한 평소학습- 개별 과제 및 실 / 의 계 획 서학년도/학기2026-2학기학수번호-분반DASF007-I2,I3이수구분DS교과목명문제해결과컴퓨팅사고성명원명주수강대상학과선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사교재컴퓨팅사고와 문제해결(비매품) 황숙희2024성균관대학교 소프트웨어중심대학사업단강좌관련자료강좌진행방법i-campus 중대형 온라인 수업으로 진행- 온라인 강의 동영상 학습- 학습 내용 확인을 위한 평소학습- 개별 과제 및 실\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Problem Solving and Computational Thinking",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "신입생 전용반(수강삭제/철회불가)"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF007-I3",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF007",
+      "section": "I3",
+      "courseName": "문제해결과컴퓨팅사고",
+      "professor": "원명주",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "신입생 전용반(수강삭제/철회불가)\n중대형온라인강의\n계획서 수강 조건 원문: * 현재 교강사가 수업계획서를 작성중입니다. 수업계획서의 정보는 추후 입력되어 제공될 예정입니다. 참고 부탁드립니다. / 강 의 계 획 서학년도/학기2026-2학기학수번호-분반DASF007-I2,I3이수구분DS교과목명문제해결과컴퓨팅사고성명원명주수강대상학과선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사교재컴퓨팅사고와 문제해결(비매품) 황숙희2024성균관대학교 소프트웨어중심대학사업단강좌관련자료강좌진행방법i-campus 중대형 온라인 수업으로 진행- 온라인 강의 동영상 학습- 학습 내용 확인을 위한 평소학습- 개별 과제 및 실 / 의 계 획 서학년도/학기2026-2학기학수번호-분반DASF007-I2,I3이수구분DS교과목명문제해결과컴퓨팅사고성명원명주수강대상학과선이수과목(권장) 관련도서및참고자료구분제목저자발행년도출판사교재컴퓨팅사고와 문제해결(비매품) 황숙희2024성균관대학교 소프트웨어중심대학사업단강좌관련자료강좌진행방법i-campus 중대형 온라인 수업으로 진행- 온라인 강의 동영상 학습- 학습 내용 확인을 위한 평소학습- 개별 과제 및 실\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Problem Solving and Computational Thinking",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "신입생 전용반(수강삭제/철회불가)"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF007-I4",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF007",
+      "section": "I4",
+      "courseName": "문제해결과컴퓨팅사고",
+      "professor": "허진석",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "신입생 전용반(수강삭제/철회불가)\n중대형온라인강의\n수업 비고: 출석: 동영상 강의 수강 출결 (10%)\n과제: 프로젝트 보고서 (20%)\n중간시험  : 대체 과제(15%)\n기말시험  : 대면 시험 ( 25%)\n평소학습: 파이썬 실습 (30%)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Current weekly source contains an operating marker needing semantic review; a topic word alone is not a proved cancellation/change."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Problem Solving and Computational Thinking",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "신입생 전용반(수강삭제/철회불가)"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF007-I5",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF007",
+      "section": "I5",
+      "courseName": "문제해결과컴퓨팅사고",
+      "professor": "노해선",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "재학생(재수강)/수강삭제 불가/공학계열,반도체,글바메,에너지 수강금지\n중대형온라인강의\n수업 비고: 출석: 동영상 강의 수강 출결 (10%)\n과제: 과제형식의 문제 (15%)\n중간시험 : 대체과제(15%)\n기말시험: 대면 시험 (30%)\n평소학습: Quiz (10%)\n발표: Team Project (20%)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [
+        "Current weekly source contains an operating marker needing semantic review; a topic word alone is not a proved cancellation/change."
+      ],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Problem Solving and Computational Thinking",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "재학생(재수강)/수강삭제 불가/공학계열,반도체,글바메,에너지 수강금지"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    },
+    {
+      "sourceId": "skku-2026-2-DASF004-I1",
+      "universityId": "skku",
+      "campus": "icampus",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "DASF004",
+      "section": "I1",
+      "courseName": "프로그래밍기초와실습",
+      "professor": "정호현",
+      "credits": 3.0,
+      "sourceSchedule": "【iCampus 수업】",
+      "sourceClassroom": "",
+      "scheduleStatus": "unscheduled",
+      "schedules": [],
+      "departments": [
+        "공통교양"
+      ],
+      "departmentCredits": {
+        "공통교양": 3.0
+      },
+      "departmentClassifications": {
+        "공통교양": "DS"
+      },
+      "departmentRemarks": {
+        "공통교양": "신입생 전용\n중대형온라인강의\n수업 비고: ▶ 출석 평가 — 온라인 강의 영상의 시청 여부를 기본으로 판단\n▶ 과제 평가 - 상세한 평가 요소는 과제 게시물을 통해 안내 예정\n  1. 심화실습: 10%(= 5% × 2회, 2주 & 15주차)\n     - 제출항목: 코드, 보고서\n  2. 프로젝트: 10%(= 10% × 1회(실습#5), 13주차)\n     - 제출항목: 코드\n     - ＊개인 프로젝트이며, 기존 실습(#1 ~ #4)을 쌓아올려 만든 최종 프로그램을 제출\n▶ 평소학습 평가\n  - 실습: 10%(= 2.5% × 4회, 3주 & 5주 & 9주 & 11주차)\n    - 제출항목: 코드\n    - ＊실습은 학기 중 총 5회 진행되며, 5회차(13주차 개시분)는 위 프로젝트 항목으로 평가합니다.\n▶ 오피스아워\n  - 매주 금요일 14시 ~ 16시(2시간), 예약제로 운영(변동 시 i-Campus 공지)\n▶ 중간/기말시험 평가\n  - 감독관의 감독하에 오프라인 대면시험으로 진행\n  - 중간/기말시험 범위: 1-7주차/1-15주차 학습내용\n  - i-Campus 기반 온라인 강의임에따라 학사일정 상 중간/기말고사 기간 이전에 시행될 수 있음. i-Campus 공지사항 참조. (일정에 따라 시험범위 조정 가능)\n    2025년 2학기 기준: 중간고사 7주차 주말, 기말고사 14주차 주말에 각기 시행됨 (각 주차는 월요일부터 시작)\n공개 시간표에 정해진 수업 시각이 게시되어 있지 않습니다. 학교가 공지하는 세부 일정을 확인하세요."
+      },
+      "researchOnly": true,
+      "unresolvedReasons": [],
+      "rawMeetingFrameForReviewOnly": [],
+      "sourceDegreeCode": "01",
+      "sourceTeachingTypeCode": "",
+      "sourceConcentratedType": "N",
+      "sourceEducationalMetadata": {
+        "HAKWI_NAME": null,
+        "GRADE_NAME": "",
+        "ISU_NAME": "DS",
+        "ISU_NAME2": null,
+        "ISU_NAME3": null,
+        "GWAMOK_ENG_NAME": "Basis and Practice in Programming",
+        "HYUNGTAE": "중대형온라인강의",
+        "SUUP_TYPE_NM": "",
+        "BOKSUJUNGONG_YN_NAME": null,
+        "ABEEK_YN": "",
+        "HAKBU_JIBJUNG_GB_NM": "해당없음",
+        "LECTURE_PLAN_TYPE": "1",
+        "INFORM": "",
+        "BIGO": "신입생 전용"
+      },
+      "ordinaryTermFrameForReviewOnly": {
+        "startDate": "2026-08-31",
+        "endDate": "2026-12-18"
+      }
+    }
+  ],
+  "wholeOperatingAuditFinished": false,
+  "wholeCurrentDetailsFetched": true,
+  "wholeCurrentCensusStable": true,
+  "wholeCurrentCensusCheckedAt": "2026-10-07T19:24:23.836418+00:00",
+  "actualAttendanceConfirmed": false,
+  "partialOperatingRegistration": true,
+  "commonClosurePolicySource": {
+    "researchOnly": true,
+    "completionClaim": false,
+    "universityId": "skku",
+    "academicYear": 2026,
+    "semester": "2",
+    "term": {
+      "startDate": "2026-08-31",
+      "endDate": "2026-12-18",
+      "sourceUrl": "https://www.skku.edu/skku/edu/bachelor/ca_de_schedule.do?mode=view&srBachelorYear=2026",
+      "currentPageRechecked": true,
+      "actualCurrentCalendarPdf": "https://www.skku.edu/skku/edu/bachelor/ca_de_schedule.do?articleNo=132072&attachNo=115877&mode=download",
+      "actualPdfPage": 2,
+      "currentPdfDatesRechecked": true
+    },
+    "closureRule": {
+      "sourceUrl": "https://rules.skku.edu/state/current/recent.do?articleNo=132269&mode=view&no=784",
+      "revisionDate": "2026-03-01",
+      "article": 15,
+      "schoolSpecificClosures": [
+        "2026-09-25",
+        "2026-09-28"
+      ],
+      "sundayClosed": true,
+      "nationalHolidaysClosed": true,
+      "holidayLaboratoryExceptionRequiresIndividualEvidence": true,
+      "temporaryClosuresNeedActualPresidentNotice": true
+    },
+    "nationalHolidayDates": {
+      "state": "Fall term date facts directly confirmed in official KASA2026 almanac release; total annual count is not used as proof of later legal amendments or temporary closures.",
+      "sourceUrl": "https://www.kasa.go.kr/bbs/BBSMSTR_000000000010/view.do?nttId=B000000001860Pe2zT3",
+      "dates": [
+        "2026-09-24",
+        "2026-09-25",
+        "2026-09-26",
+        "2026-10-03",
+        "2026-10-05",
+        "2026-10-09"
+      ],
+      "sept28IsNationalHoliday": false,
+      "schoolSpecificSeptember28ClosureIsIndependent": true
+    },
+    "moduleEvidence": {
+      "sourceUrl": "https://ai.skku.ac.kr/ai/community/notice.do?articleNo=168089&attachNo=137647&mode=download",
+      "sourceIsPreviousGuide": true,
+      "meaning": "Six modules across an academic year; each module8weeks. Ordinary16week semester recurrence is not a correct fallback for current moduleA/B offerings. Current2026 actual module dates must be verified separately."
+    },
+    "productionActivationAllowed": false
+  },
+  "registrationBoundaries": "Preserved r25 scheduled1180 exact objects and individually reviewed422; repaired normal school-published planned clocks only. No actual attendance or exact individual exam/makeup claim. Prerecorded82 classification is untimed, not implemented timetable import.",
+  "source32ClassificationOnlyNotTimetableImportCompletion": true,
+  "all548EducationalRepairRequestsFinished": true,
+  "productionIntegrationEnabled": true,
+  "wholeOperatingVerified": false
+}

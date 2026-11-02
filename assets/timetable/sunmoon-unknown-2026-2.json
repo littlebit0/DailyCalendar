@@ -1,0 +1,758 @@
+{
+  "schemaVersion": 1,
+  "universityId": "sunmoon",
+  "campus": "unknown",
+  "campusName": "캠퍼스 미구분",
+  "academicYear": 2026,
+  "semester": "2",
+  "sourceUrl": "https://huss.kw.ac.kr/bulletin/notice.php?BoardMode=view&UID=293",
+  "publishedDate": "2026-07-13",
+  "publishedDateUnavailable": false,
+  "sourceSha256": "1ef54a89ed0ae92185e5d5b7efbcc7636015a0c9ea2941df23e819de1ed4bb48",
+  "sourceDigests": {
+    "sunmoon-huss-1.zip": "665fd906d59e8b2d5a6d20e898988af0b291fd4f20a94f94f977642ba0742419",
+    "sunmoon-huss-0.zip": "7540c53b41c17729703e05be977489f7a601437656621f3c326bf451424a18a0",
+    "sunmoon-dla-fall.html": "0d206642096fd8cfbac041df5214481ef5568003814628419d9c93ce1cfbc37b",
+    "[선문대] 2026-2학기 미래자동차융합전공 학점교류 교과목 목록.xlsx": "ad13f00ad23f8d4964813d7495b06f0127891be6ab6e6ff5976abcd779dadb56",
+    "[선문대] 2026-2학기 미래자동차융합전공 학점교류 안내.hwp": "3d5725e6829b040ce4c2c367e40e2dd82b36e7a15c97f1ac41ee88a9d8eddb1a",
+    "sunmoon-mgt-fall.hwp": "6588a160abaf2710b6cd94566c64ff4b691a2d023ed0c0655f7e3f86df87f21c"
+  },
+  "sourceRowCount": 10,
+  "scope": "공개 교양 변경1·미래자동차4·HUSS위험사회2·녹화전용3; 전체 목록 아님",
+  "courses": [
+    {
+      "sourceId": "sunmoon/unknown/2026/2/4d9c9942b3e64b5a295fbabf",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "053510",
+      "courseName": "English Reading and Writing Ⅰ",
+      "section": "14",
+      "professor": "원지우",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 750,
+          "endMinute": 870,
+          "classroom": ""
+        }
+      ],
+      "scheduleStatus": "scheduled",
+      "departments": [
+        "교양학부"
+      ],
+      "departmentCredits": {},
+      "departmentClassifications": {
+        "교양학부": "교필영어"
+      },
+      "departmentRemarks": {
+        "교양학부": "컴퓨터공학부 전용반 → 전체 재학생 대상. 학점·강의실 원문 미표기"
+      },
+      "sourceSchedule": "목 4,5",
+      "sourceClassroom": "",
+      "sourceUrl": "https://dla.sunmoon.ac.kr/dla/na/ntt/selectNttInfo.do?bbsId=1256&mi=41117&nttSn=1324974",
+      "sourceCells": [
+        "교필영어",
+        "053510",
+        "English Reading and Writing Ⅰ",
+        "14",
+        "목 4,5",
+        "원지우"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "공식2026-2 수강안내 HWP 연간학사달력",
+        "literal": "9/1 개강, 12/8–14 기말고사, 12/15 동계방학"
+      },
+      "rowEvidence": "공식1324974 공지 두번째표(수정사항)행2; 첫표 폐강과목3개제외"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/f03701beffb23321ac0db50e",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "210116",
+      "courseName": "객체지향프로그래밍",
+      "section": "11",
+      "professor": "김근식",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 570,
+          "endMinute": 630,
+          "classroom": ""
+        },
+        {
+          "weekday": 4,
+          "startMinute": 570,
+          "endMinute": 690,
+          "classroom": ""
+        }
+      ],
+      "scheduleStatus": "scheduled",
+      "departments": [
+        "미래자동차융합전공"
+      ],
+      "departmentCredits": {
+        "미래자동차융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "미래자동차융합전공": ""
+      },
+      "departmentRemarks": {
+        "미래자동차융합전공": "대면/비대면 혼합; 객체 지향프로그래밍                강의2시간+kmooc1시간 ; 이수구분·강의실 원문 미표기"
+      },
+      "sourceSchedule": "화 1 / 목 1,2",
+      "sourceClassroom": "",
+      "sourceUrl": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+      "sourceCells": [
+        null,
+        "중급",
+        2,
+        "객체지향프로그래밍",
+        "210116",
+        "선문대학교",
+        null,
+        null,
+        null,
+        "3",
+        "11",
+        "김근식",
+        "대면/비대면 혼합",
+        "화 1 / 목 1,2",
+        null,
+        "객체 지향프로그래밍                강의2시간+kmooc1시간 "
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "[선문대] 2026-2학기 미래자동차융합전공 학점교류 안내.hwp",
+        "literal": "2. 수업기간: 2026. 9. 1.(화) ~ 2026. 12. 14.(월)"
+      },
+      "rowEvidence": "미래자동차 개설교과목 XLSX 26-2 시트 데이터행4–7, native표시 그대로"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/ff731cf37388dc93a2ce988c",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "210138",
+      "courseName": "모터이론및제어",
+      "section": "11",
+      "professor": "김근식",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 750,
+          "endMinute": 870,
+          "classroom": ""
+        },
+        {
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 930,
+          "classroom": ""
+        }
+      ],
+      "scheduleStatus": "scheduled",
+      "departments": [
+        "미래자동차융합전공"
+      ],
+      "departmentCredits": {
+        "미래자동차융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "미래자동차융합전공": ""
+      },
+      "departmentRemarks": {
+        "미래자동차융합전공": "대면/비대면 혼합; 이수구분·강의실 원문 미표기"
+      },
+      "sourceSchedule": "화 4,5 / 목 6",
+      "sourceClassroom": "",
+      "sourceUrl": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+      "sourceCells": [
+        null,
+        "고급",
+        3,
+        "모터이론및제어",
+        "210138",
+        "선문대학교",
+        null,
+        null,
+        null,
+        "3",
+        "11",
+        "김근식",
+        "대면/비대면 혼합",
+        "화 4,5 / 목 6",
+        null,
+        null
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "[선문대] 2026-2학기 미래자동차융합전공 학점교류 안내.hwp",
+        "literal": "2. 수업기간: 2026. 9. 1.(화) ~ 2026. 12. 14.(월)"
+      },
+      "rowEvidence": "미래자동차 개설교과목 XLSX 26-2 시트 데이터행4–7, native표시 그대로"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/97de12b88e4289f91a186bb6",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "210142",
+      "courseName": "자율주행V2X통신",
+      "section": "11",
+      "professor": "오인열",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 570,
+          "endMinute": 690,
+          "classroom": ""
+        },
+        {
+          "weekday": 3,
+          "startMinute": 570,
+          "endMinute": 630,
+          "classroom": ""
+        }
+      ],
+      "scheduleStatus": "scheduled",
+      "departments": [
+        "미래자동차융합전공"
+      ],
+      "departmentCredits": {
+        "미래자동차융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "미래자동차융합전공": ""
+      },
+      "departmentRemarks": {
+        "미래자동차융합전공": "대면/비대면 혼합; 이수구분·강의실 원문 미표기"
+      },
+      "sourceSchedule": "월 1,2 / 수 1",
+      "sourceClassroom": "",
+      "sourceUrl": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+      "sourceCells": [
+        null,
+        null,
+        4,
+        "자율주행V2X통신",
+        "210142",
+        "선문대학교",
+        null,
+        null,
+        null,
+        "3",
+        "11",
+        "오인열",
+        "대면/비대면 혼합",
+        "월 1,2 / 수 1",
+        null,
+        null
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "[선문대] 2026-2학기 미래자동차융합전공 학점교류 안내.hwp",
+        "literal": "2. 수업기간: 2026. 9. 1.(화) ~ 2026. 12. 14.(월)"
+      },
+      "rowEvidence": "미래자동차 개설교과목 XLSX 26-2 시트 데이터행4–7, native표시 그대로"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/814f7cfc89798e0852229668",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "210113",
+      "courseName": "차량센서공학",
+      "section": "11",
+      "professor": "윤재학",
+      "schedules": [
+        {
+          "weekday": 1,
+          "startMinute": 630,
+          "endMinute": 690,
+          "classroom": ""
+        },
+        {
+          "weekday": 3,
+          "startMinute": 570,
+          "endMinute": 690,
+          "classroom": ""
+        }
+      ],
+      "scheduleStatus": "scheduled",
+      "departments": [
+        "미래자동차융합전공"
+      ],
+      "departmentCredits": {
+        "미래자동차융합전공": 3.0
+      },
+      "departmentClassifications": {
+        "미래자동차융합전공": ""
+      },
+      "departmentRemarks": {
+        "미래자동차융합전공": "대면/비대면 혼합; 이수구분·강의실 원문 미표기"
+      },
+      "sourceSchedule": "월 2 / 수 1.2",
+      "sourceClassroom": "",
+      "sourceUrl": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+      "sourceCells": [
+        null,
+        null,
+        3,
+        "차량센서공학",
+        "210113",
+        "선문대학교",
+        null,
+        null,
+        null,
+        "3",
+        "11",
+        "윤재학",
+        "대면/비대면 혼합",
+        "월 2 / 수 1.2",
+        null,
+        null
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "[선문대] 2026-2학기 미래자동차융합전공 학점교류 안내.hwp",
+        "literal": "2. 수업기간: 2026. 9. 1.(화) ~ 2026. 12. 14.(월)"
+      },
+      "rowEvidence": "미래자동차 개설교과목 XLSX 26-2 시트 데이터행4–7, native표시 그대로"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/cc91584921d28c31d768409a",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "디지털 사회와 범죄",
+      "section": "",
+      "professor": "곽관훈",
+      "schedules": [
+        {
+          "weekday": 4,
+          "startMinute": 870,
+          "endMinute": 1040,
+          "classroom": ""
+        }
+      ],
+      "scheduleStatus": "scheduled",
+      "departments": [
+        "HUSS 위험사회"
+      ],
+      "departmentCredits": {
+        "HUSS 위험사회": 3
+      },
+      "departmentClassifications": {
+        "HUSS 위험사회": "전선"
+      },
+      "departmentRemarks": {
+        "HUSS 위험사회": "ZOOM+녹화강의; HUSS 컨소시엄 공통; 과목코드·분반 원문 미표기"
+      },
+      "sourceSchedule": "목 6,7,8교시 / 14:30 ~ 17:20",
+      "sourceClassroom": "",
+      "sourceUrl": "https://huss.kw.ac.kr/bulletin/notice.php?BoardMode=view&UID=293",
+      "sourceCells": [
+        1.0,
+        "전선",
+        "없음",
+        "디지털 사회와 범죄",
+        "곽관훈",
+        "26.9.1.(화) ~ 12.14.(월)",
+        "목 6,7,8교시 / 14:30 ~ 17:20",
+        "ZOOM+녹화강의",
+        "HUSS 컨소시엄 공통"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "sunmoon-huss-1.zip / 위험사회 교과목 목록.xls",
+        "literal": "26.9.1.(화) ~ 12.14.(월)"
+      },
+      "rowEvidence": "위험사회 XLS 행3–4 정확시각+학기; PDF계획서1쪽 실제학점3 및 데이터리터러시920418-11"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/13897b69eb2156f69e404ff2",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "920418",
+      "courseName": "데이터와 미디어 리터러시",
+      "section": "11",
+      "professor": "송종현",
+      "schedules": [
+        {
+          "weekday": 2,
+          "startMinute": 930,
+          "endMinute": 1100,
+          "classroom": ""
+        }
+      ],
+      "scheduleStatus": "scheduled",
+      "departments": [
+        "HUSS 위험사회"
+      ],
+      "departmentCredits": {
+        "HUSS 위험사회": 3
+      },
+      "departmentClassifications": {
+        "HUSS 위험사회": "전선"
+      },
+      "departmentRemarks": {
+        "HUSS 위험사회": "ZOOM; HUSS 컨소시엄 공통"
+      },
+      "sourceSchedule": "화 7,8,9교시 / 15:30 ~ 18:20",
+      "sourceClassroom": "",
+      "sourceUrl": "https://huss.kw.ac.kr/bulletin/notice.php?BoardMode=view&UID=293",
+      "sourceCells": [
+        2.0,
+        "전선",
+        "없음",
+        "데이터와 미디어 리터러시",
+        "송종현",
+        "26.9.1.(화) ~ 12.14.(월)",
+        "화 7,8,9교시 / 15:30 ~ 18:20",
+        "ZOOM",
+        "HUSS 컨소시엄 공통"
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "sunmoon-huss-1.zip / 위험사회 교과목 목록.xls",
+        "literal": "26.9.1.(화) ~ 12.14.(월)"
+      },
+      "rowEvidence": "위험사회 XLS 행3–4 정확시각+학기; PDF계획서1쪽 실제학점3 및 데이터리터러시920418-11"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/59732a5f579d2c3ae43b5330",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "이머징마켓 리터러시(러시아)",
+      "section": "11",
+      "professor": "권정임",
+      "schedules": [],
+      "scheduleStatus": "unscheduled",
+      "departments": [
+        "HUSS 글로벌공생"
+      ],
+      "departmentCredits": {
+        "HUSS 글로벌공생": 3
+      },
+      "departmentClassifications": {
+        "HUSS 글로벌공생": ""
+      },
+      "departmentRemarks": {
+        "HUSS 글로벌공생": "비대면(동영상) 100; 과목코드 원문 미표기"
+      },
+      "sourceSchedule": "비대면(동영상) 100",
+      "sourceClassroom": "",
+      "sourceUrl": "https://huss.kw.ac.kr/bulletin/notice.php?BoardMode=view&UID=293",
+      "sourceCells": [
+        1,
+        "선문대학교",
+        "기초",
+        "통합사고입문",
+        "이머징마켓 리터러시(러시아)",
+        "권정임",
+        3,
+        3,
+        11,
+        "비대면(동영상) 100",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "sunmoon-huss-0.zip / 글로벌공생 학점교류 안내.hwp",
+        "literal": "2. 수업기간: 2026.9.1.(화) ~ 12.14.(월)"
+      },
+      "rowEvidence": "글로벌공생 XLSX 본문1행2026-2, 데이터행3–5; 녹화100% 시각없음"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/789e03e8f32828281b319ed0",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "이머징마켓 리터러시(중국)",
+      "section": "11",
+      "professor": "전기정",
+      "schedules": [],
+      "scheduleStatus": "unscheduled",
+      "departments": [
+        "HUSS 글로벌공생"
+      ],
+      "departmentCredits": {
+        "HUSS 글로벌공생": 3
+      },
+      "departmentClassifications": {
+        "HUSS 글로벌공생": ""
+      },
+      "departmentRemarks": {
+        "HUSS 글로벌공생": "비대면(동영상) 100; 과목코드 원문 미표기"
+      },
+      "sourceSchedule": "비대면(동영상) 100",
+      "sourceClassroom": "",
+      "sourceUrl": "https://huss.kw.ac.kr/bulletin/notice.php?BoardMode=view&UID=293",
+      "sourceCells": [
+        2,
+        "선문대학교",
+        "기초",
+        "통합사고입문",
+        "이머징마켓 리터러시(중국)",
+        "전기정",
+        3,
+        3,
+        11,
+        "비대면(동영상) 100",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "sunmoon-huss-0.zip / 글로벌공생 학점교류 안내.hwp",
+        "literal": "2. 수업기간: 2026.9.1.(화) ~ 12.14.(월)"
+      },
+      "rowEvidence": "글로벌공생 XLSX 본문1행2026-2, 데이터행3–5; 녹화100% 시각없음"
+    },
+    {
+      "sourceId": "sunmoon/unknown/2026/2/d5f979a8125c072bf63cf426",
+      "universityId": "sunmoon",
+      "campus": "unknown",
+      "campusName": "캠퍼스 미구분",
+      "academicYear": 2026,
+      "semester": "2",
+      "courseCode": "",
+      "courseName": "글로벌문화와관광",
+      "section": "11",
+      "professor": "임형택",
+      "schedules": [],
+      "scheduleStatus": "unscheduled",
+      "departments": [
+        "HUSS 글로벌공생"
+      ],
+      "departmentCredits": {
+        "HUSS 글로벌공생": 3
+      },
+      "departmentClassifications": {
+        "HUSS 글로벌공생": ""
+      },
+      "departmentRemarks": {
+        "HUSS 글로벌공생": "비대면(동영상) 100; 과목코드 원문 미표기"
+      },
+      "sourceSchedule": "비대면(동영상) 100",
+      "sourceClassroom": "",
+      "sourceUrl": "https://huss.kw.ac.kr/bulletin/notice.php?BoardMode=view&UID=293",
+      "sourceCells": [
+        3,
+        "선문대학교",
+        "심화",
+        "지속가능 산업/도시",
+        "글로벌문화와관광",
+        "임형택",
+        3,
+        3,
+        11,
+        "비대면(동영상) 100",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-14"
+      },
+      "periodEvidence": {
+        "file": "sunmoon-huss-0.zip / 글로벌공생 학점교류 안내.hwp",
+        "literal": "2. 수업기간: 2026.9.1.(화) ~ 12.14.(월)"
+      },
+      "rowEvidence": "글로벌공생 XLSX 본문1행2026-2, 데이터행3–5; 녹화100% 시각없음"
+    }
+  ],
+  "excludedClosedCourses": [
+    [
+      "교선",
+      "080168",
+      "인터넷 아랍어",
+      "11",
+      "목 4,5,6",
+      "구미란"
+    ],
+    [
+      "교필영어",
+      "053511",
+      "English Reading and Writing Ⅱ",
+      "28",
+      "금 3,4",
+      "주혜라"
+    ],
+    [
+      "교선",
+      "080167",
+      "아랍어와 아랍여행",
+      "11",
+      "목7,8,9",
+      "구미란"
+    ]
+  ],
+  "periodEvidence": {
+    "url": "https://www.kookmin.ac.kr/user/kmuNews/notice/4/12155/view.do",
+    "file": "[선문대] 2026-2학기 미래자동차융합전공 학점교류 안내.hwp",
+    "literal": "2. 수업기간: 2026. 9. 1.(화) ~ 2026. 12. 14.(월)"
+  },
+  "clockEvidence": {
+    "url": "https://mgt.sunmoon.ac.kr/mgt/na/ntt/selectNttInfo.do?nttSn=1324468&bbsId=1155&mi=40673",
+    "literal": "60분 수업(50분 수업,10분 휴식)",
+    "clocks": [
+      [
+        "08:30",
+        "09:20"
+      ],
+      [
+        "09:30",
+        "10:20"
+      ],
+      [
+        "10:30",
+        "11:20"
+      ],
+      [
+        "11:30",
+        "12:20"
+      ],
+      [
+        "12:30",
+        "13:20"
+      ],
+      [
+        "13:30",
+        "14:20"
+      ],
+      [
+        "14:30",
+        "15:20"
+      ],
+      [
+        "15:30",
+        "16:20"
+      ],
+      [
+        "16:30",
+        "17:20"
+      ],
+      [
+        "17:30",
+        "18:20"
+      ],
+      [
+        "18:30",
+        "19:20"
+      ],
+      [
+        "19:30",
+        "20:20"
+      ],
+      [
+        "20:30",
+        "21:20"
+      ],
+      [
+        "21:30",
+        "22:20"
+      ]
+    ],
+    "slotNote": "교시 슬롯은 수업 50분+휴식 10분을 합친 60분(1교시 09:30~10:30)이며 연속 교시는 한 구간으로 저장한다. 원문에 시계 시각이 있는 강좌는 그대로 둔다"
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 1,
+  "university": "eulji",
+  "mappings": [
+    {
+      "campus": "seongnam",
+      "sourceLabel": "임상병리학과",
+      "department": "임상병리학과",
+      "college": "보건과학대학",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=7778",
+      "evidence": "을지대학교 보건과학대학 페이지(2026-10-23 확인)의 학과 목록 원문: '보건과학대학 … 성남캠퍼스 임상병리학과 의정부캠퍼스 임상병리학과 안경광학과 응급구조학과 방사선학과 치위생학과 물리치료학과 의료경영학과(25학번)'",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/first-tier/eulji-tt/fetch/m7778.html"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "방사선학과",
+      "department": "방사선학과",
+      "college": "보건과학대학",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=7778",
+      "evidence": "을지대학교 보건과학대학 페이지(2026-10-23 확인)의 학과 목록 원문: '보건과학대학 … 성남캠퍼스 임상병리학과 의정부캠퍼스 임상병리학과 안경광학과 응급구조학과 방사선학과 치위생학과 물리치료학과 의료경영학과(25학번)'",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/first-tier/eulji-tt/fetch/m7778.html"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "의료공학과",
+      "department": "의료공학과",
+      "college": "바이오융합대학",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=7779",
+      "evidence": "을지대학교 바이오융합대학(23학번) 페이지(2026-10-23 확인)의 학과 목록 원문: '식품영양학과 식품산업외식학과 보건환경안전학과 의료경영학과 의료IT학과 의료공학과 미용화장품과학과 의료홍보디자인학과 스포츠아웃도어학과 장례지도학과 중독재활복지학과 …'",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/first-tier/eulji-tt/fetch/m7779.html"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "장례지도학과",
+      "department": "장례지도학과",
+      "college": "바이오융합대학",
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=7779",
+      "evidence": "을지대학교 바이오융합대학(23학번) 페이지(2026-10-23 확인)의 학과 목록 원문: '식품영양학과 식품산업외식학과 보건환경안전학과 의료경영학과 의료IT학과 의료공학과 미용화장품과학과 의료홍보디자인학과 스포츠아웃도어학과 장례지도학과 중독재활복지학과 …'",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/first-tier/eulji-tt/fetch/m7779.html"
+    },
+    {
+      "campus": "seongnam",
+      "sourceLabel": "시각디자인전공",
+      "department": "시각디자인전공",
+      "college": "미래융합대학",
+      "officialGroups": [
+        "전공통합학부"
+      ],
+      "sourceUrl": "https://www.eulji.ac.kr/?menuno=7783",
+      "evidence": "을지대학교 미래융합대학(24학번) 페이지(2026-10-23 확인) 원문: '휴먼서비스학부 레저산업전공 뷰티아트전공 시각디자인전공'. 전공통합학부는 대학 첫 화면(https://www.eulji.ac.kr/) 학과 소개 원문: '전공통합학부 자유전공, 첨단, 자연계열, 인문사회계열학부 … 레저산업전공 뷰티아트전공 시각디자인전공'",
+      "isOfferingUnit": false,
+      "collegeKnown": true,
+      "collegeOnlyEligible": false,
+      "affiliationStatus": "verified",
+      "sourceFile": "work/first-tier/eulji-tt/fetch/m7783.html"
+    }
+  ],
+  "courseOwners": []
+}

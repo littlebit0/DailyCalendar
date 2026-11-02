@@ -69,6 +69,43 @@ void main() {
     },
   );
   test(
+    'PNU consecutive same-room meetings under 60 minutes apart are merged',
+    () async {
+      final courses = (await UniversityCatalog.load(
+        bundle: _Files(),
+        university: 'pnu',
+      )).expand((d) => d.courses).toList();
+      final merged = courses.singleWhere(
+        (c) => c.codeAndSection == 'ER2900491-076',
+      );
+      expect(
+        merged.meetings.map((m) => (m.weekday, m.startMinute, m.endMinute)),
+        [(1, 900, 1080)],
+      );
+      // Loader rounds the official 17:45 end to 18:00.
+      // Courses whose source meetings overlap are held unmerged (#686).
+      const held = {'ZF1100922-001', 'ZF1101137-104', 'AC1501344-001'};
+      for (final c in courses.where((c) => !held.contains(c.codeAndSection))) {
+        final byDay = <int, List<ClassMeeting>>{};
+        for (final m in c.meetings) {
+          byDay.putIfAbsent(m.weekday, () => []).add(m);
+        }
+        for (final list in byDay.values) {
+          list.sort((a, b) => a.startMinute.compareTo(b.startMinute));
+          for (var i = 1; i < list.length; i++) {
+            final sameRoom = list[i].classroom == list[i - 1].classroom;
+            final gap = list[i].startMinute - list[i - 1].endMinute;
+            expect(
+              sameRoom && gap < 60,
+              isFalse,
+              reason: '${c.codeAndSection} has unmerged consecutive meetings',
+            );
+          }
+        }
+      }
+    },
+  );
+  test(
     'PNU profile and calendar occurrences respect actual term boundaries',
     () async {
       const profile = AcademicProfile(

@@ -1,0 +1,616 @@
+{
+  "schemaVersion": 2,
+  "universityId": "jbnu",
+  "campus": "saemangeum",
+  "campusName": "새만금캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-10-08",
+  "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+  "courses": [
+    {
+      "sourceId": "jbnu-2026-2-UICM007-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "saemangeum",
+      "nativeCampusAliases": [
+        "새만금"
+      ],
+      "courseCode": "UICM007",
+      "section": "2",
+      "courseName": "기계공작법",
+      "professor": "최장기",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "IT융합기전공학(재)"
+      ],
+      "departmentCredits": {
+        "IT융합기전공학(재)": 3
+      },
+      "departmentClassifications": {
+        "IT융합기전공학(재)": "전공선택"
+      },
+      "departmentRemarks": {
+        "IT융합기전공학(재)": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "목 10-A,목 10-B,목 11-A,목 11-B,목 12-A,목 12-B",
+      "sourceClassroom": "새만금:캠퍼스관 310 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "IT융합기전공학(재)",
+        "YRSA": "2026",
+        "STDTR_NO": "UICM007",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "기계공작법",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최장기",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "목 10-A,목 10-B,목 11-A,목 11-B,목 12-A,목 12-B",
+        "DONG_RMNM_CN": "새만금:캠퍼스관 310 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "융합기술공학부(IT융합기전공학)(재) 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 목 12-A, 목 12-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UICM085-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "saemangeum",
+      "nativeCampusAliases": [
+        "새만금"
+      ],
+      "courseCode": "UICM085",
+      "section": "1",
+      "courseName": "기계시스템요소설계",
+      "professor": "최영하",
+      "credits": 3,
+      "classification": "전공필수",
+      "classificationGroup": "전공",
+      "departments": [
+        "IT융합기전공학(재)"
+      ],
+      "departmentCredits": {
+        "IT융합기전공학(재)": 3
+      },
+      "departmentClassifications": {
+        "IT융합기전공학(재)": "전공필수"
+      },
+      "departmentRemarks": {
+        "IT융합기전공학(재)": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B",
+      "sourceClassroom": "새만금:캠퍼스관 309 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 780,
+          "endMinute": 960,
+          "classroom": "새만금:캠퍼스관 309"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "IT융합기전공학(재)",
+        "YRSA": "2026",
+        "STDTR_NO": "UICM085",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "기계시스템요소설계",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최영하",
+        "CMCRS_DIVCDNM": "전공필수",
+        "DOW_HR_CN": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B",
+        "DONG_RMNM_CN": "새만금:캠퍼스관 309 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "융합기술공학부(IT융합기전공학)(재) 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UICM051-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "saemangeum",
+      "nativeCampusAliases": [
+        "새만금"
+      ],
+      "courseCode": "UICM051",
+      "section": "2",
+      "courseName": "신재생에너지",
+      "professor": "나석찬",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "IT융합기전공학(재)"
+      ],
+      "departmentCredits": {
+        "IT융합기전공학(재)": 3
+      },
+      "departmentClassifications": {
+        "IT융합기전공학(재)": "전공선택"
+      },
+      "departmentRemarks": {
+        "IT융합기전공학(재)": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B",
+      "sourceClassroom": "새만금:캠퍼스관 310 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 540,
+          "endMinute": 720,
+          "classroom": "새만금:캠퍼스관 310"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "IT융합기전공학(재)",
+        "YRSA": "2026",
+        "STDTR_NO": "UICM051",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "신재생에너지",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "나석찬",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 1-A,토 1-B,토 2-A,토 2-B,토 3-A,토 3-B",
+        "DONG_RMNM_CN": "새만금:캠퍼스관 310 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "융합기술공학부(IT융합기전공학)(재) 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UICM026-3",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "saemangeum",
+      "nativeCampusAliases": [
+        "새만금"
+      ],
+      "courseCode": "UICM026",
+      "section": "3",
+      "courseName": "자동제어",
+      "professor": "최영하",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "IT융합기전공학(재)"
+      ],
+      "departmentCredits": {
+        "IT융합기전공학(재)": 3
+      },
+      "departmentClassifications": {
+        "IT융합기전공학(재)": "전공선택"
+      },
+      "departmentRemarks": {
+        "IT융합기전공학(재)": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 8-A,토 8-B,토 9-A,토 9-B,토 10-A,토 10-B",
+      "sourceClassroom": "새만금:캠퍼스관 309 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 960,
+          "endMinute": 1140,
+          "classroom": "새만금:캠퍼스관 309"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "IT융합기전공학(재)",
+        "YRSA": "2026",
+        "STDTR_NO": "UICM026",
+        "DVCLS_NO": 3,
+        "SBJCT_NM": "자동제어",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최영하",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 8-A,토 8-B,토 9-A,토 9-B,토 10-A,토 10-B",
+        "DONG_RMNM_CN": "새만금:캠퍼스관 309 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "융합기술공학부(IT융합기전공학)(재) 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UICM102-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "saemangeum",
+      "nativeCampusAliases": [
+        "새만금"
+      ],
+      "courseCode": "UICM102",
+      "section": "1",
+      "courseName": "제어계측공학",
+      "professor": "최장기",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "IT융합기전공학(재)"
+      ],
+      "departmentCredits": {
+        "IT융합기전공학(재)": 3
+      },
+      "departmentClassifications": {
+        "IT융합기전공학(재)": "전공선택"
+      },
+      "departmentRemarks": {
+        "IT융합기전공학(재)": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "수 10-A,수 10-B,수 11-A,수 11-B,수 12-A,수 12-B",
+      "sourceClassroom": "새만금:캠퍼스관 302 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "IT융합기전공학(재)",
+        "YRSA": "2026",
+        "STDTR_NO": "UICM102",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "제어계측공학",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최장기",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "수 10-A,수 10-B,수 11-A,수 11-B,수 12-A,수 12-B",
+        "DONG_RMNM_CN": "새만금:캠퍼스관 302 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "융합기술공학부(IT융합기전공학)(재) 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 수 12-A, 수 12-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UICM070-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "saemangeum",
+      "nativeCampusAliases": [
+        "새만금"
+      ],
+      "courseCode": "UICM070",
+      "section": "1",
+      "courseName": "차량용임베디드시스템",
+      "professor": "홍영선",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "IT융합기전공학(재)"
+      ],
+      "departmentCredits": {
+        "IT융합기전공학(재)": 3
+      },
+      "departmentClassifications": {
+        "IT융합기전공학(재)": "전공선택"
+      },
+      "departmentRemarks": {
+        "IT융합기전공학(재)": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "화 10-A,화 10-B,화 11-A,화 11-B,화 12-A,화 12-B",
+      "sourceClassroom": "새만금:캠퍼스관 310 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "IT융합기전공학(재)",
+        "YRSA": "2026",
+        "STDTR_NO": "UICM070",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "차량용임베디드시스템",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "홍영선",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "화 10-A,화 10-B,화 11-A,화 11-B,화 12-A,화 12-B",
+        "DONG_RMNM_CN": "새만금:캠퍼스관 310 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "융합기술공학부(IT융합기전공학)(재) 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "블렌디드러닝",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 화 12-A, 화 12-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UICM105-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "saemangeum",
+      "nativeCampusAliases": [
+        "새만금"
+      ],
+      "courseCode": "UICM105",
+      "section": "1",
+      "courseName": "프로젝트랩종합설계 2",
+      "professor": "나석찬",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "IT융합기전공학(재)"
+      ],
+      "departmentCredits": {
+        "IT융합기전공학(재)": 3
+      },
+      "departmentClassifications": {
+        "IT융합기전공학(재)": "전공선택"
+      },
+      "departmentRemarks": {
+        "IT융합기전공학(재)": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다.",
+      "sourceSchedule": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+      "sourceClassroom": "새만금:캠퍼스관 310 ",
+      "scheduleStatus": "scheduled",
+      "schedules": [
+        {
+          "weekday": 6,
+          "startMinute": 780,
+          "endMinute": 1020,
+          "classroom": "새만금:캠퍼스관 310"
+        }
+      ],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "IT융합기전공학(재)",
+        "YRSA": "2026",
+        "STDTR_NO": "UICM105",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "프로젝트랩종합설계 2",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "나석찬",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "토 5-A,토 5-B,토 6-A,토 6-B,토 7-A,토 7-B,토 8-A,토 8-B",
+        "DONG_RMNM_CN": "새만금:캠퍼스관 310 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "융합기술공학부(IT융합기전공학)(재) 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "블렌디드러닝",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    }
+  ],
+  "sourceCatalogFamilies": [
+    "native undergraduate public code-section offerings with source-backed halfslot grid"
+  ],
+  "sourceUniqueActualOfferingCountVerified": false,
+  "completionClaim": false,
+  "researchOnly": false,
+  "wholeUniversityCatalogComplete": false,
+  "wholeOperatingVerified": false,
+  "wholeSchoolCourseCoverageComplete": false,
+  "sourceRowCount": 7,
+  "clockEvidence": {
+    "url": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+    "sha256": "9acfc27e0a122fe120c742412c72e4807558cbc145d6967f90ddfee246f06e80",
+    "page": 16,
+    "officialDistributionYear": 2026,
+    "exampleScreenshotYear": 2024,
+    "gridMinutes": 30,
+    "supportedStartLabels": [
+      "0-A",
+      "0-B",
+      "1-A",
+      "1-B",
+      "10-A",
+      "10-B",
+      "11-A",
+      "11-B",
+      "2-A",
+      "2-B",
+      "3-A",
+      "3-B",
+      "4-A",
+      "4-B",
+      "5-A",
+      "5-B",
+      "6-A",
+      "6-B",
+      "7-A",
+      "7-B",
+      "8-A",
+      "8-B",
+      "9-A",
+      "9-B"
+    ]
+  },
+  "periodEvidence": {
+    "url": "https://www.jbnu.ac.kr/mobile/academic/schedule.do",
+    "sha256": "ed6b29cf13bd2284822b15ad0a1d9724058f8f8efa85cd0afce779c4dcfadbd0",
+    "startTitle": "제2학기 개강",
+    "endTitle": "제2학기 종강, 기말시험 완료"
+  },
+  "coverage": "Native whole-public undergraduate query minus33 medically ambiguous identities held to preserve existing dated document. Unconfirmed late halfslots remain searchable but unscheduled. Whole operating completion not established.",
+  "productionIntegrationEnabled": true
+}

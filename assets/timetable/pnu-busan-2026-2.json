@@ -14092,12 +14092,6 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 975,
-          "classroom": "211-A201"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 990,
           "endMinute": 1065,
           "classroom": "211-A201"
         }
@@ -15338,12 +15332,6 @@
         {
           "weekday": 1,
           "startMinute": 900,
-          "endMinute": 950,
-          "classroom": "706-106"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 960,
           "endMinute": 1010,
           "classroom": "706-106"
         }
@@ -18436,12 +18424,6 @@
         {
           "weekday": 2,
           "startMinute": 540,
-          "endMinute": 640,
-          "classroom": "703-103"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 660,
           "endMinute": 760,
           "classroom": "703-103"
         }
@@ -18897,12 +18879,6 @@
         {
           "weekday": 3,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "703-314"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "703-314"
         }
@@ -19113,12 +19089,6 @@
         {
           "weekday": 1,
           "startMinute": 600,
-          "endMinute": 675,
-          "classroom": "704-109"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 690,
           "endMinute": 765,
           "classroom": "704-109"
         }
@@ -21120,12 +21090,6 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "601-334"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "601-334"
         }
@@ -34753,12 +34717,6 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
-          "classroom": "703-314"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 975,
           "classroom": "703-314"
         }
@@ -34794,12 +34752,6 @@
         {
           "weekday": 2,
           "startMinute": 810,
-          "endMinute": 885,
-          "classroom": "703-312"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 900,
           "endMinute": 975,
           "classroom": "703-312"
         }
@@ -34835,12 +34787,6 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 910,
-          "classroom": "703-314"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 930,
           "endMinute": 1030,
           "classroom": "703-314"
         }
@@ -34876,12 +34822,6 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "703-314"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "703-314"
         }
@@ -34917,12 +34857,6 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "703-515"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "703-515"
         }
@@ -34958,12 +34892,6 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "703-314"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "703-314"
         }
@@ -34999,12 +34927,6 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "703-312"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "703-312"
         }
@@ -35075,12 +34997,6 @@
         {
           "weekday": 4,
           "startMinute": 810,
-          "endMinute": 885,
-          "classroom": "703-312"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 900,
           "endMinute": 975,
           "classroom": "703-312"
         }
@@ -43386,24 +43302,12 @@
         {
           "weekday": 2,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "105-3215"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "105-3215"
         },
         {
           "weekday": 4,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "105-3215"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "105-3215"
         }
@@ -43439,24 +43343,12 @@
         {
           "weekday": 2,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "303-409"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "303-409"
         },
         {
           "weekday": 4,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "303-409"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "303-409"
         }
@@ -43492,24 +43384,12 @@
         {
           "weekday": 2,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "105-3214"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "105-3214"
         },
         {
           "weekday": 4,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "105-3214"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "105-3214"
         }
@@ -43545,24 +43425,12 @@
         {
           "weekday": 2,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "105-3311"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "105-3311"
         },
         {
           "weekday": 4,
           "startMinute": 510,
-          "endMinute": 560,
-          "classroom": "105-3311"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 570,
           "endMinute": 620,
           "classroom": "105-3311"
         }
@@ -43598,24 +43466,12 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "105-3215"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "105-3215"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "105-3215"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "105-3215"
         }
@@ -43651,24 +43507,12 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "105-3214"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "105-3214"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "105-3214"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "105-3214"
         }
@@ -43704,24 +43548,12 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "303-202"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "303-202"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "303-202"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "303-202"
         }
@@ -43757,24 +43589,12 @@
         {
           "weekday": 2,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "105-3311"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "105-3311"
         },
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "105-3311"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "105-3311"
         }
@@ -72136,12 +71956,6 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1130,
-          "classroom": "303-202"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1140,
           "endMinute": 1190,
           "classroom": "303-202"
         },
@@ -72488,12 +72302,6 @@
         {
           "weekday": 3,
           "startMinute": 1020,
-          "endMinute": 1070,
-          "classroom": "303-408"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1080,
           "endMinute": 1130,
           "classroom": "303-408"
         },
@@ -74862,12 +74670,6 @@
         {
           "weekday": 2,
           "startMinute": 1080,
-          "endMinute": 1180,
-          "classroom": "107-8209"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1200,
           "endMinute": 1300,
           "classroom": "107-8209"
         }
@@ -75348,12 +75150,6 @@
         {
           "weekday": 1,
           "startMinute": 1110,
-          "endMinute": 1210,
-          "classroom": "107-8209"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1230,
           "endMinute": 1330,
           "classroom": "107-8209"
         }
@@ -75389,12 +75185,6 @@
         {
           "weekday": 3,
           "startMinute": 1110,
-          "endMinute": 1210,
-          "classroom": "107-8209"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1230,
           "endMinute": 1330,
           "classroom": "107-8209"
         }
@@ -79573,12 +79363,6 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1090,
-          "classroom": "102-204"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1110,
           "endMinute": 1210,
           "classroom": "102-204"
         }
@@ -79614,12 +79398,6 @@
         {
           "weekday": 2,
           "startMinute": 990,
-          "endMinute": 1090,
-          "classroom": "102-210"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1110,
           "endMinute": 1210,
           "classroom": "102-210"
         }
@@ -79655,12 +79433,6 @@
         {
           "weekday": 3,
           "startMinute": 990,
-          "endMinute": 1090,
-          "classroom": "102-204"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 1110,
           "endMinute": 1210,
           "classroom": "102-204"
         }
@@ -79696,12 +79468,6 @@
         {
           "weekday": 4,
           "startMinute": 990,
-          "endMinute": 1090,
-          "classroom": "102-204"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1110,
           "endMinute": 1210,
           "classroom": "102-204"
         }
@@ -81387,12 +81153,6 @@
         {
           "weekday": 4,
           "startMinute": 720,
-          "endMinute": 820,
-          "classroom": "401-1001"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 940,
           "classroom": "401-1001"
         }
@@ -90855,12 +90615,6 @@
         {
           "weekday": 3,
           "startMinute": 900,
-          "endMinute": 975,
-          "classroom": "211-A203"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 990,
           "endMinute": 1065,
           "classroom": "211-A203"
         }
@@ -90937,18 +90691,6 @@
         {
           "weekday": 1,
           "startMinute": 960,
-          "endMinute": 990,
-          "classroom": "211-A303"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 990,
-          "endMinute": 1065,
-          "classroom": "211-A303"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1080,
           "endMinute": 1130,
           "classroom": "211-A303"
         }
@@ -91101,12 +90843,6 @@
         {
           "weekday": 4,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "422-822"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1140,
           "endMinute": 1190,
           "classroom": "422-822"
         }
@@ -91142,12 +90878,6 @@
         {
           "weekday": 4,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "422-412"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 1140,
           "endMinute": 1190,
           "classroom": "422-412"
         }
@@ -91183,12 +90913,6 @@
         {
           "weekday": 2,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "422-822"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1140,
           "endMinute": 1190,
           "classroom": "422-822"
         }
@@ -91265,12 +90989,6 @@
         {
           "weekday": 1,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "422-409"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 1140,
           "endMinute": 1190,
           "classroom": "422-409"
         }
@@ -91470,12 +91188,6 @@
         {
           "weekday": 2,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "422-303"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1140,
           "endMinute": 1190,
           "classroom": "422-303"
         }
@@ -96320,12 +96032,6 @@
         {
           "weekday": 4,
           "startMinute": 780,
-          "endMinute": 830,
-          "classroom": "706-103"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 840,
           "endMinute": 890,
           "classroom": "706-103"
         }
@@ -107742,12 +107448,6 @@
         {
           "weekday": 2,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "707-415"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1140,
           "endMinute": 1240,
           "classroom": "707-415"
         }
@@ -108133,12 +107833,6 @@
         {
           "weekday": 5,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "707-415"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1140,
           "endMinute": 1240,
           "classroom": "707-415"
         }
@@ -108174,12 +107868,6 @@
         {
           "weekday": 2,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "707-415"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 1140,
           "endMinute": 1240,
           "classroom": "707-415"
         }
@@ -108215,12 +107903,6 @@
         {
           "weekday": 5,
           "startMinute": 1020,
-          "endMinute": 1120,
-          "classroom": "707-415"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 1140,
           "endMinute": 1240,
           "classroom": "707-415"
         }
@@ -108717,12 +108399,6 @@
         {
           "weekday": 2,
           "startMinute": 840,
-          "endMinute": 940,
-          "classroom": "703-206"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 960,
           "endMinute": 1060,
           "classroom": "703-206"
         }
@@ -110456,12 +110132,6 @@
         {
           "weekday": 4,
           "startMinute": 600,
-          "endMinute": 675,
-          "classroom": "703-1-101"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 690,
           "endMinute": 765,
           "classroom": "703-1-101"
         }
@@ -110567,12 +110237,6 @@
         {
           "weekday": 1,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "703-523"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "703-523"
         }
@@ -110678,12 +110342,6 @@
         {
           "weekday": 3,
           "startMinute": 840,
-          "endMinute": 915,
-          "classroom": "704-110"
-        },
-        {
-          "weekday": 3,
-          "startMinute": 930,
           "endMinute": 1005,
           "classroom": "704-110"
         }
@@ -110789,12 +110447,6 @@
         {
           "weekday": 4,
           "startMinute": 840,
-          "endMinute": 960,
-          "classroom": "704-111"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 960,
           "endMinute": 1060,
           "classroom": "704-111"
         }
@@ -110935,12 +110587,6 @@
         {
           "weekday": 1,
           "startMinute": 540,
-          "endMinute": 640,
-          "classroom": "704-112"
-        },
-        {
-          "weekday": 1,
-          "startMinute": 660,
           "endMinute": 760,
           "classroom": "704-112"
         }
@@ -110976,12 +110622,6 @@
         {
           "weekday": 4,
           "startMinute": 630,
-          "endMinute": 680,
-          "classroom": "704-110"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 690,
           "endMinute": 740,
           "classroom": "704-110"
         }
@@ -111017,12 +110657,6 @@
         {
           "weekday": 5,
           "startMinute": 810,
-          "endMinute": 885,
-          "classroom": "703-314"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 900,
           "endMinute": 975,
           "classroom": "703-314"
         }
@@ -115072,12 +114706,6 @@
         {
           "weekday": 5,
           "startMinute": 600,
-          "endMinute": 650,
-          "classroom": "601-301"
-        },
-        {
-          "weekday": 5,
-          "startMinute": 660,
           "endMinute": 760,
           "classroom": "601-301"
         }
@@ -115883,12 +115511,6 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
-          "classroom": "601-301"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 990,
           "endMinute": 1065,
           "classroom": "601-301"
         }
@@ -115924,12 +115546,6 @@
         {
           "weekday": 2,
           "startMinute": 630,
-          "endMinute": 705,
-          "classroom": "601-301"
-        },
-        {
-          "weekday": 2,
-          "startMinute": 720,
           "endMinute": 795,
           "classroom": "601-301"
         }
@@ -116175,12 +115791,6 @@
         {
           "weekday": 4,
           "startMinute": 900,
-          "endMinute": 975,
-          "classroom": "601-334"
-        },
-        {
-          "weekday": 4,
-          "startMinute": 990,
           "endMinute": 1065,
           "classroom": "601-334"
         }

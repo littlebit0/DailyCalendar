@@ -14,16 +14,16 @@ class ChonnamTimetableImportTests(unittest.TestCase):
         parsed, status = jnu.meetings('월3월4수3', '진리관205\n진리관205\n진리관205')
         self.assertEqual(status, 'scheduled')
         self.assertEqual(parsed, [
-            {'weekday':1,'startMinute':660,'endMinute':770,'classroom':'진리관205'},
-            {'weekday':3,'startMinute':660,'endMinute':710,'classroom':'진리관205'},
+            {'weekday':1,'startMinute':660,'endMinute':780,'classroom':'진리관205'},
+            {'weekday':3,'startMinute':660,'endMinute':720,'classroom':'진리관205'},
         ])
         parsed, status = jnu.meetings('화2목2', '공6-105\n공6-105')
-        self.assertEqual([(m['startMinute'],m['endMinute']) for m in parsed], [(630,705),(630,705)])
+        self.assertEqual([(m['startMinute'],m['endMinute']) for m in parsed], [(630,720),(630,720)])
 
     def test_source_lexical_period_order_is_sorted_before_coalescing(self):
         parsed, status = jnu.meetings('월10월7월8월9', '공6-420\n공6-420\n공6-420\n공6-420')
         self.assertEqual(status,'scheduled')
-        self.assertEqual(parsed,[{'weekday':1,'startMinute':900,'endMinute':1130,'classroom':'공6-420'}])
+        self.assertEqual(parsed,[{'weekday':1,'startMinute':900,'endMinute':1140,'classroom':'공6-420'}])
 
     def test_unknown_or_conflicting_periods_never_invent_times(self):
         for value,room in [('화9','강의실'),('월13','강의실'),('일1','강의실'),('미정',''),('월3월4','A\nB\nC')]:
@@ -33,12 +33,12 @@ class ChonnamTimetableImportTests(unittest.TestCase):
     def test_unambiguous_late_modules_remain_available(self):
         parsed,status=jnu.meetings('월14월15화10','공6-420')
         self.assertEqual(status,'scheduled')
-        self.assertEqual([(m['weekday'],m['startMinute'],m['endMinute']) for m in parsed],[(1,1320,1430),(2,1350,1425)])
+        self.assertEqual([(m['weekday'],m['startMinute'],m['endMinute']) for m in parsed],[(1,1320,1440),(2,1350,1440)])
 
     def test_saturday_uses_verified_2026_handbook_module(self):
         parsed,status=jnu.meetings('토0토1토2토3','농5-201')
         self.assertEqual(status,'scheduled')
-        self.assertEqual(parsed,[{'weekday':6,'startMinute':480,'endMinute':710,'classroom':'농5-201'}])
+        self.assertEqual(parsed,[{'weekday':6,'startMinute':480,'endMinute':720,'classroom':'농5-201'}])
 
     def test_rooms_and_disconnected_periods_stay_separate(self):
         parsed,_=jnu.meetings('월1월2월4','A\nB\nB')
@@ -48,7 +48,7 @@ class ChonnamTimetableImportTests(unittest.TestCase):
     def test_repeated_multiline_official_room_is_preserved(self):
         parsed,status=jnu.meetings('월1월2월3','연암\n고익배홀(100)\n연암\n고익배홀(100)\n연암\n고익배홀(100)')
         self.assertEqual(status,'scheduled')
-        self.assertEqual(parsed,[{'weekday':1,'startMinute':540,'endMinute':710,'classroom':'연암\n고익배홀(100)'}])
+        self.assertEqual(parsed,[{'weekday':1,'startMinute':540,'endMinute':720,'classroom':'연암\n고익배홀(100)'}])
 
     def test_official_title_annotations_move_to_remarks_without_losing_them(self):
         row=jnu.table_rows((ROOT/'test/fixtures/academic/jnu-course-table.html').read_text())[0]

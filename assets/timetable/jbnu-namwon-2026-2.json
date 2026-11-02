@@ -1,0 +1,1660 @@
+{
+  "schemaVersion": 2,
+  "universityId": "jbnu",
+  "campus": "namwon",
+  "campusName": "남원캠퍼스",
+  "academicYear": 2026,
+  "semester": "2",
+  "publishedDate": "2026-10-08",
+  "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+  "courses": [
+    {
+      "sourceId": "jbnu-2026-2-UREI001-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI001",
+      "section": "2",
+      "courseName": "관리회계",
+      "professor": "이상노",
+      "credits": 3,
+      "classification": "전공필수",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+      "sourceClassroom": "남원:본관 103 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI001",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "관리회계",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "이상노",
+        "CMCRS_DIVCDNM": "전공필수",
+        "DOW_HR_CN": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+        "DONG_RMNM_CN": "남원:본관 103 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 수 12-A, 수 12-B, 수 13-A, 수 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI072-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI072",
+      "section": "1",
+      "courseName": "글로벌마케팅관리",
+      "professor": "한방울",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+      "sourceClassroom": "남원:본관 201 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI072",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "글로벌마케팅관리",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "한방울",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+        "DONG_RMNM_CN": "남원:본관 201 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 수 12-A, 수 12-B, 수 13-A, 수 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI040-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI040",
+      "section": "1",
+      "courseName": "기능성화장품",
+      "professor": "이영아",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+      "sourceClassroom": "남원:본관 101 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI040",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "기능성화장품",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "이영아",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+        "DONG_RMNM_CN": "남원:본관 101 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 수 12-A, 수 12-B, 수 13-A, 수 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI012-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI012",
+      "section": "1",
+      "courseName": "대체의학",
+      "professor": "황경호",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "목 11-A,목 11-B,목 12-A,목 12-B,목 13-A,목 13-B",
+      "sourceClassroom": "남원:본관 103 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI012",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "대체의학",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "황경호",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "목 11-A,목 11-B,목 12-A,목 12-B,목 13-A,목 13-B",
+        "DONG_RMNM_CN": "남원:본관 103 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 목 12-A, 목 12-B, 목 13-A, 목 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI053-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI053",
+      "section": "1",
+      "courseName": "맞춤형화장품조제관리",
+      "professor": "유동진",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+      "sourceClassroom": "남원:본관 203 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI053",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "맞춤형화장품조제관리",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "유동진",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+        "DONG_RMNM_CN": "남원:본관 203 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 월 12-A, 월 12-B, 월 13-A, 월 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI064-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI064",
+      "section": "1",
+      "courseName": "목심칠기",
+      "professor": "박강용",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B,금 14-A,금 14-B",
+      "sourceClassroom": "남원:본관 101 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI064",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "목심칠기",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "박강용",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B,금 14-A,금 14-B",
+        "DONG_RMNM_CN": "남원:본관 101 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 금 12-A, 금 12-B, 금 13-A, 금 13-B, 금 14-A, 금 14-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI008-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI008",
+      "section": "1",
+      "courseName": "목재과학개론",
+      "professor": "오승원",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+      "sourceClassroom": "남원:본관 204 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI008",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "목재과학개론",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "오승원",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+        "DONG_RMNM_CN": "남원:본관 204 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 1",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 화 12-A, 화 12-B, 화 13-A, 화 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI024-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI024",
+      "section": "1",
+      "courseName": "목재표면처리공학",
+      "professor": "황정우",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B",
+      "sourceClassroom": "남원:본관 201 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI024",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "목재표면처리공학",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "황정우",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B",
+        "DONG_RMNM_CN": "남원:본관 201 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 금 12-A, 금 12-B, 금 13-A, 금 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI002-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI002",
+      "section": "1",
+      "courseName": "무역실무",
+      "professor": "최경숙",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+      "sourceClassroom": "남원:본관 201 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI002",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "무역실무",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최경숙",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+        "DONG_RMNM_CN": "남원:본관 201 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 화 12-A, 화 12-B, 화 13-A, 화 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI029-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI029",
+      "section": "1",
+      "courseName": "보험의이해",
+      "professor": "황인섭",
+      "credits": 3,
+      "classification": "전공필수",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+      "sourceClassroom": "남원:본관 103 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI029",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "보험의이해",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "황인섭",
+        "CMCRS_DIVCDNM": "전공필수",
+        "DOW_HR_CN": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+        "DONG_RMNM_CN": "남원:본관 103 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 화 12-A, 화 12-B, 화 13-A, 화 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI037-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI037",
+      "section": "1",
+      "courseName": "스킨케어이론및실습",
+      "professor": "윤수경",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B,월 14-A,월 14-B",
+      "sourceClassroom": "남원:본관 204 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI037",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "스킨케어이론및실습",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "윤수경",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B,월 14-A,월 14-B",
+        "DONG_RMNM_CN": "남원:본관 204 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 1",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 월 12-A, 월 12-B, 월 13-A, 월 13-B, 월 14-A, 월 14-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI060-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI060",
+      "section": "1",
+      "courseName": "전통목칠연구",
+      "professor": "이선주",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+      "sourceClassroom": "남원:본관 101 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI060",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "전통목칠연구",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "이선주",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+        "DONG_RMNM_CN": "남원:본관 101 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 월 12-A, 월 12-B, 월 13-A, 월 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI010-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI010",
+      "section": "1",
+      "courseName": "지역기업경영론",
+      "professor": "이헌상",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "목 11-A,목 11-B,목 12-A,목 12-B,목 13-A,목 13-B",
+      "sourceClassroom": "남원:본관 204 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI010",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "지역기업경영론",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "이헌상",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "목 11-A,목 11-B,목 12-A,목 12-B,목 13-A,목 13-B",
+        "DONG_RMNM_CN": "남원:본관 204 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 1",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 목 12-A, 목 12-B, 목 13-A, 목 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI076-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI076",
+      "section": "1",
+      "courseName": "지역산업의이해",
+      "professor": "임학송",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B",
+      "sourceClassroom": "남원:본관 102 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI076",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "지역산업의이해",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "임학송",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B",
+        "DONG_RMNM_CN": "남원:본관 102 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 금 12-A, 금 12-B, 금 13-A, 금 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI045-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI045",
+      "section": "1",
+      "courseName": "천연물화장품소재",
+      "professor": "신나리",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+      "sourceClassroom": "남원:본관 202 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI045",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "천연물화장품소재",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "신나리",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+        "DONG_RMNM_CN": "남원:본관 202 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 4",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 월 12-A, 월 12-B, 월 13-A, 월 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI071-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI071",
+      "section": "1",
+      "courseName": "콜로이드및화장품제형",
+      "professor": "이영아",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "목 11-A,목 11-B,목 12-A,목 12-B,목 13-A,목 13-B",
+      "sourceClassroom": "남원:본관 201 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI071",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "콜로이드및화장품제형",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "이영아",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "목 11-A,목 11-B,목 12-A,목 12-B,목 13-A,목 13-B",
+        "DONG_RMNM_CN": "남원:본관 201 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 목 12-A, 목 12-B, 목 13-A, 목 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI059-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI059",
+      "section": "1",
+      "courseName": "해외시장조사",
+      "professor": "김민호",
+      "credits": 3,
+      "classification": "전공필수",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공필수"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+      "sourceClassroom": "남원:본관 101 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI059",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "해외시장조사",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "김민호",
+        "CMCRS_DIVCDNM": "전공필수",
+        "DOW_HR_CN": "화 11-A,화 11-B,화 12-A,화 12-B,화 13-A,화 13-B",
+        "DONG_RMNM_CN": "남원:본관 101 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 화 12-A, 화 12-B, 화 13-A, 화 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI074-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI074",
+      "section": "1",
+      "courseName": "화장품제조실습Ⅱ",
+      "professor": "최문희",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B,금 14-A,금 14-B",
+      "sourceClassroom": "남원:본관 203 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI074",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "화장품제조실습Ⅱ",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 4,
+        "STAFFNM": "최문희",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B,금 14-A,금 14-B",
+        "DONG_RMNM_CN": "남원:본관 203 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 3",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 금 12-A, 금 12-B, 금 13-A, 금 13-B, 금 14-A, 금 14-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-UREI004-1",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "UREI004",
+      "section": "1",
+      "courseName": "회계와사회",
+      "professor": "전경민",
+      "credits": 3,
+      "classification": "전공선택",
+      "classificationGroup": "전공",
+      "departments": [
+        "지역산업학과"
+      ],
+      "departmentCredits": {
+        "지역산업학과": 3
+      },
+      "departmentClassifications": {
+        "지역산업학과": "전공선택"
+      },
+      "departmentRemarks": {
+        "지역산업학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+      "sourceClassroom": "남원:본관 204 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "지역산업학과",
+        "YRSA": "2026",
+        "STDTR_NO": "UREI004",
+        "DVCLS_NO": 1,
+        "SBJCT_NM": "회계와사회",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "전경민",
+        "CMCRS_DIVCDNM": "전공선택",
+        "DOW_HR_CN": "수 11-A,수 11-B,수 12-A,수 12-B,수 13-A,수 13-B",
+        "DONG_RMNM_CN": "남원:본관 204 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 1",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": null,
+        "CULT_RLM_DIVCDNM": null,
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 1,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 수 12-A, 수 12-B, 수 13-A, 수 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-LAB2006-6",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "LAB2006",
+      "section": "6",
+      "courseName": "경제학의이해",
+      "professor": "최창곤",
+      "credits": 3,
+      "classification": "교양",
+      "classificationGroup": "교양",
+      "departments": [
+        "경제학부"
+      ],
+      "departmentCredits": {
+        "경제학부": 3
+      },
+      "departmentClassifications": {
+        "경제학부": "교양"
+      },
+      "departmentRemarks": {
+        "경제학부": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+      "sourceClassroom": "남원:본관 201 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "경제학부",
+        "YRSA": "2026",
+        "STDTR_NO": "LAB2006",
+        "DVCLS_NO": 6,
+        "SBJCT_NM": "경제학의이해",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "최창곤",
+        "CMCRS_DIVCDNM": "교양",
+        "DOW_HR_CN": "월 11-A,월 11-B,월 12-A,월 12-B,월 13-A,월 13-B",
+        "DONG_RMNM_CN": "남원:본관 201 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 2",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": "균형교양",
+        "CULT_RLM_DIVCDNM": "삶과사회",
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 2,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 월 12-A, 월 12-B, 월 13-A, 월 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    },
+    {
+      "sourceId": "jbnu-2026-2-LAB2019-2",
+      "referenceKind": "공개 과목번호",
+      "canonicalSubjectCodePublished": true,
+      "nativeSectionPublished": true,
+      "academicYear": 2026,
+      "semester": "2",
+      "campus": "namwon",
+      "nativeCampusAliases": [
+        "남원"
+      ],
+      "courseCode": "LAB2019",
+      "section": "2",
+      "courseName": "행복의심리학",
+      "professor": "김주연",
+      "credits": 3,
+      "classification": "교양",
+      "classificationGroup": "교양",
+      "departments": [
+        "심리학과"
+      ],
+      "departmentCredits": {
+        "심리학과": 3
+      },
+      "departmentClassifications": {
+        "심리학과": "교양"
+      },
+      "departmentRemarks": {
+        "심리학과": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다."
+      },
+      "remarks": "공식 JUMP 공개 개설강좌의 원문 과목코드·분반·교수·강의실·요일/교시입니다. 공식 현재 배포 학부 지침서와 원자료의 30분 단위에 따라 주간 시간표를 표시합니다. 강의실이 여러 개면 원문 전체를 유지하며 교시별 배정은 추정하지 않습니다. 학기 밖 반복은 적용하지 않으며 보강·임상·집중수업 개별 날짜는 생성하지 않습니다. 미확인 교시는 시간표 추가를 보류하고 원문만 표시합니다.",
+      "sourceSchedule": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B",
+      "sourceClassroom": "남원:본관 204 ",
+      "scheduleStatus": "unrecognized",
+      "schedules": [],
+      "publicEducationRow": {
+        "ELSM_DIVCDNM": "학부",
+        "MNG_SCSBJT_CDNM": "심리학과",
+        "YRSA": "2026",
+        "STDTR_NO": "LAB2019",
+        "DVCLS_NO": 2,
+        "SBJCT_NM": "행복의심리학",
+        "ESTBL_PNT": 3,
+        "HR_CNT": 3,
+        "STAFFNM": "김주연",
+        "CMCRS_DIVCDNM": "교양",
+        "DOW_HR_CN": "금 11-A,금 11-B,금 12-A,금 12-B,금 13-A,금 13-B",
+        "DONG_RMNM_CN": "남원:본관 204 ",
+        "LESSN_HR_DIVCDNM": "50분수업(30분단위)",
+        "LESSN_OPER_DRC_CN": null,
+        "SCSBJT_SCYR_NTC_CN": "지역산업학과 1",
+        "ATNLC_TRGT_DIVCDNM": "전체(학부)",
+        "FTF_UNTACT_DIVCDNM": null,
+        "LCTR_LANG_DIVCDNM": "한국어",
+        "RLM_DIVCDNM": "균형교양",
+        "CULT_RLM_DIVCDNM": "삶과사회",
+        "PRVT_DIVCDNM": "학과요청",
+        "OPNLT_DIVCDNM": "일반",
+        "CERT_DIVCDNM": "일반",
+        "RLS_YN": "N"
+      },
+      "publicSourceType": 2,
+      "publishedIndividualOperatingPeriodVerified": false,
+      "sourceMetadataOnly": false,
+      "sourceOperatingHolds": [
+        "Absolute undergraduate halfslot not established: 금 12-A, 금 12-B, 금 13-A, 금 13-B"
+      ],
+      "sourceMedicalIdentityReconciled": false,
+      "sourceUrl": "https://jump.jbnu.ac.kr/link?div=sucrPlan",
+      "period": {
+        "startDate": "2026-09-01",
+        "endDate": "2026-12-22"
+      },
+      "clockSourceUrl": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+      "clockSourcePage": 16
+    }
+  ],
+  "sourceCatalogFamilies": [
+    "native undergraduate public code-section offerings with source-backed halfslot grid"
+  ],
+  "sourceUniqueActualOfferingCountVerified": false,
+  "completionClaim": false,
+  "researchOnly": false,
+  "wholeUniversityCatalogComplete": false,
+  "wholeOperatingVerified": false,
+  "wholeSchoolCourseCoverageComplete": false,
+  "sourceRowCount": 21,
+  "clockEvidence": {
+    "url": "https://top.jbnu.ac.kr/bbs/gsba/842/355632/download.do",
+    "sha256": "9acfc27e0a122fe120c742412c72e4807558cbc145d6967f90ddfee246f06e80",
+    "page": 16,
+    "officialDistributionYear": 2026,
+    "exampleScreenshotYear": 2024,
+    "gridMinutes": 30,
+    "supportedStartLabels": [
+      "0-A",
+      "0-B",
+      "1-A",
+      "1-B",
+      "10-A",
+      "10-B",
+      "11-A",
+      "11-B",
+      "2-A",
+      "2-B",
+      "3-A",
+      "3-B",
+      "4-A",
+      "4-B",
+      "5-A",
+      "5-B",
+      "6-A",
+      "6-B",
+      "7-A",
+      "7-B",
+      "8-A",
+      "8-B",
+      "9-A",
+      "9-B"
+    ]
+  },
+  "periodEvidence": {
+    "url": "https://www.jbnu.ac.kr/mobile/academic/schedule.do",
+    "sha256": "ed6b29cf13bd2284822b15ad0a1d9724058f8f8efa85cd0afce779c4dcfadbd0",
+    "startTitle": "제2학기 개강",
+    "endTitle": "제2학기 종강, 기말시험 완료"
+  },
+  "coverage": "Native whole-public undergraduate query minus33 medically ambiguous identities held to preserve existing dated document. Unconfirmed late halfslots remain searchable but unscheduled. Whole operating completion not established.",
+  "productionIntegrationEnabled": true
+}
