@@ -1,4 +1,8 @@
 {
+  "assets/timetable/ajou-main-2026-2.json": {
+    "sha256": "da0b1c7683fcda67ba62515e62ca9acbb2a33cd0c2179654d96083d80c045a2b",
+    "reason": "#682 아주대 교시 구간을 공식 교시표 기준 쉬는 시간 포함 슬롯(숫자 교시 60분, A~H교시 90분)으로 바꾸고 같은 강의실 연속 구간 합침, 원문 시각 구간은 유지"
+  },
   "assets/timetable/organizations/ajou.json": {
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
     "reason": "#92 아주대 원자료 분류를 공식 학과 목록·학사안내 기준 소속(공과대학·경영대학·연계전공·마이크로전공)으로 배정"

@@ -85,7 +85,7 @@ class ExpandedUniversityCoursesTest(unittest.TestCase):
         rows, status = ajou.meetings('월G(율256) 목H(율256)')
         self.assertEqual(status, 'scheduled')
         self.assertEqual(rows[0]['startMinute'], 1080)
-        self.assertEqual(rows[1]['endMinute'], 1245)
+        self.assertEqual(rows[1]['endMinute'], 1260)
         rows, status = ajou.meetings('수8.5(산825) 수9.5(산825) 수10.5')
         self.assertEqual(status, 'scheduled')
         self.assertEqual(rows[0]['startMinute'], 990)
