@@ -407,6 +407,9 @@ class UniversityCourse {
       // in its major timetable and minimum major-credit requirements.
       ('koreatech' || 'kyonggi', '학필' || '학선') => true,
       ('baekseok', '기초교과군' || '핵심교과군' || '심화교과군' || '응용교과군') => true,
+      // Seokyeong prints 융합 only in the tables titled "<name> 융합전공",
+      // so it is that convergence major's own course classification.
+      ('sku', '융합') => true,
       _ => false,
     };
     // A literal curriculum-stage label can have an official course-wide
