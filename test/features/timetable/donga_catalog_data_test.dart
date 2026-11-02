@@ -93,7 +93,9 @@ void main() {
         ]) {
           final held = c.toTimetable(id: c.sourceId, mode: mode);
           expect(held.meetings, isEmpty);
-          expect(held.isValid, false);
+          // 시각을 해석하지 못한 강좌는 시간 미정 강좌와 달리 시간표에 추가되지 않는다.
+          expect(c.scheduleStatus, 'unrecognized');
+          expect(c.canAddToTimetable, false);
         }
       }
       final subjects =
