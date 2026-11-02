@@ -1,7 +1,11 @@
 {
-  "assets/timetable/ajou-main-2026-2.json": {
-    "sha256": "da0b1c7683fcda67ba62515e62ca9acbb2a33cd0c2179654d96083d80c045a2b",
-    "reason": "#682 아주대 교시 구간을 공식 교시표 기준 쉬는 시간 포함 슬롯(숫자 교시 60분, A~H교시 90분)으로 바꾸고 같은 강의실 연속 구간 합침, 원문 시각 구간은 유지"
+  "assets/timetable/cau-davinci-2026-2.json": {
+    "sha256": "81a4493e33fecc4d7bbfed76ca2395a474390bb79fe0ceba17eb5b839c89c345",
+    "reason": "#683 중앙대 다빈치 교시 구간에 쉬는 시간 포함(숫자 교시 60분·알파벳 교시 90분), 시계 시각 원문 구간은 유지"
+  },
+  "assets/timetable/cau-seoul-2026-2.json": {
+    "sha256": "beeca63ef523368b6af373be99684f5ebef54cfcbeb424f0345e8364e2d3994e",
+    "reason": "#683 중앙대 서울 교시 구간에 쉬는 시간 포함(숫자 교시 60분·알파벳 교시 90분), 시계 시각 원문 구간은 유지"
   },
   "assets/timetable/organizations/ajou.json": {
     "sha256": "04a8389e15f1affebad5ccc31af3ea02314046b323c50e965c769163f58df705",
@@ -30,6 +34,10 @@
   "assets/timetable/organizations/smu.json": {
     "sha256": "aac2068f65d90a430ac0a4453d0660867ff25fb41ef50297980bf99fee149e1e",
     "reason": "#92 상명대 공식 마이크로전공·융합전공 목록 기준 2개 배정, 공식 시간표의 '전체학과' 등록"
+  },
+  "assets/timetable/ajou-main-2026-2.json": {
+    "sha256": "da0b1c7683fcda67ba62515e62ca9acbb2a33cd0c2179654d96083d80c045a2b",
+    "reason": "#682 아주대 교시 구간을 공식 교시표 기준 쉬는 시간 포함 슬롯(숫자 교시 60분, A~H교시 90분)으로 바꾸고 같은 강의실 연속 구간 합침, 원문 시각 구간은 유지"
   },
   "assets/timetable/organizations/gachon.json": {
     "sha256": "b4f1eec7d9bad4ebb55c0aaaf46a2770bdfb541d7be26bab250b6f29b65f0899",
