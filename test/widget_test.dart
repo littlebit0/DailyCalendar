@@ -9079,6 +9079,8 @@ void main() {
       Size size = const Size(1440, 900),
       Completer<void>? refreshWait,
       List<bool>? refreshes,
+      String? savedLogin,
+      List<bool>? driveSyncs,
     }) async {
       tester.view.devicePixelRatio = 1;
       tester.view.physicalSize = size;
@@ -9106,7 +9108,19 @@ void main() {
           expectedGoogleEmail: 'student@example.com',
         );
       }
+      final auth = _FakeGoogleDriveAuthService();
+      final events = _FakeEventRepository();
+      final notifications = _FakeNotification();
+      final drive = _FakeGoogleDriveSyncService(
+        authService: auth,
+        eventRepository: events,
+        notificationService: notifications,
+        settingsRepository: settings,
+        onSyncPending: () async => driveSyncs?.add(true),
+      );
       late _ToolbarLms controller;
+      // A successful school sign-in ends the lost-login state.
+      var loginLost = needsLogin;
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
@@ -9120,21 +9134,25 @@ void main() {
               ),
             ),
             settingsRepositoryProvider.overrideWithValue(settings),
-            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            notificationServiceProvider.overrideWithValue(notifications),
             syncServiceProvider.overrideWithValue(_FakeSync()),
-            eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
-            googleDriveAuthServiceProvider.overrideWithValue(
-              _FakeGoogleDriveAuthService(),
-            ),
+            eventRepositoryProvider.overrideWithValue(events),
+            googleDriveAuthServiceProvider.overrideWithValue(auth),
+            googleDriveSyncServiceProvider.overrideWithValue(drive),
             lmsControllerProvider.overrideWith(
               (ref) => controller = _ToolbarLms(
                 settings: ref.watch(settingsRepositoryProvider),
                 repository: ref.watch(eventRepositoryProvider),
                 commands: ref.watch(eventCommandServiceProvider),
                 isConnected: () => connected,
-                isNeedsLogin: () => needsLogin,
+                isNeedsLogin: () => loginLost,
                 refreshWait: refreshWait,
-                onRefresh: (force) => refreshes?.add(force),
+                onRefresh: (force) {
+                  refreshes?.add(force);
+                  // The startup refresh is not forced and signs in nothing.
+                  if (force) loginLost = false;
+                },
+                savedLogin: savedLogin,
               ),
             ),
           ],
@@ -9152,7 +9170,7 @@ void main() {
 
     testWidgets('is hidden when the school is not connected', (tester) async {
       await pumpToolbar(tester, connected: false);
-      expect(find.byTooltip('학교 LMS 동기화'), findsNothing);
+      expect(find.byTooltip('지금 동기화'), findsNothing);
       await finish(tester);
     });
 
@@ -9165,7 +9183,13 @@ void main() {
         needsLogin: true,
         integrationEnabled: false,
       );
-      expect(find.byTooltip('학교 LMS 동기화'), findsNothing);
+      expect(find.byTooltip('지금 동기화'), findsNothing);
+      await finish(tester);
+    });
+
+    testWidgets('is hidden while the school login holds', (tester) async {
+      await pumpToolbar(tester, connected: true);
+      expect(find.byTooltip('지금 동기화'), findsNothing);
       await finish(tester);
     });
 
@@ -9178,25 +9202,57 @@ void main() {
         needsLogin: true,
         integrationEnabled: true,
       );
-      expect(find.byTooltip('학교 LMS 동기화'), findsOneWidget);
+      expect(find.byTooltip('지금 동기화'), findsOneWidget);
       await finish(tester);
     });
 
     testWidgets('refreshes with force and reports completion', (tester) async {
       final refreshes = <bool>[];
-      await pumpToolbar(tester, connected: true, refreshes: refreshes);
+      await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+        refreshes: refreshes,
+      );
       final before = refreshes.length;
-      await tester.tap(find.byTooltip('학교 LMS 동기화'));
+      await tester.tap(find.byTooltip('지금 동기화'));
       await tester.pumpAndSettle();
       expect(refreshes.skip(before), [true]);
-      expect(find.text('학교 데이터 동기화 완료'), findsOneWidget);
+      expect(find.text('동기화 완료'), findsOneWidget);
+      await finish(tester);
+    });
+
+    testWidgets('signs in with the saved login instead of a plain refresh', (
+      tester,
+    ) async {
+      final refreshes = <bool>[];
+      final driveSyncs = <bool>[];
+      final controller = await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+        savedLogin: 'student',
+        refreshes: refreshes,
+        driveSyncs: driveSyncs,
+      );
+      await tester.tap(find.byTooltip('지금 동기화'));
+      await tester.pumpAndSettle();
+      expect(controller.retries, 1);
+      expect(driveSyncs, [true]);
       await finish(tester);
     });
 
     testWidgets('reports an incomplete refresh instead of success', (
       tester,
     ) async {
-      final controller = await pumpToolbar(tester, connected: true);
+      final controller = await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+      );
       controller.sync.lastResult = const LmsSyncResult(
         courses: 1,
         activities: 1,
@@ -9207,9 +9263,9 @@ void main() {
         unchanged: 1,
         unresolvedQuizStatuses: 1,
       );
-      await tester.tap(find.byTooltip('학교 LMS 동기화'));
+      await tester.tap(find.byTooltip('지금 동기화'));
       await tester.pumpAndSettle();
-      expect(find.text('학교 데이터 동기화 완료'), findsNothing);
+      expect(find.text('동기화 완료'), findsNothing);
       expect(
         find.text('학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.'),
         findsOneWidget,
@@ -9222,12 +9278,14 @@ void main() {
     ) async {
       await pumpToolbar(
         tester,
-        connected: true,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
         platform: TargetPlatform.iOS,
         size: const Size(360, 800),
       );
       expect(find.byKey(const ValueKey('ios-calendar-toolbar')), findsOneWidget);
-      expect(find.byTooltip('학교 LMS 동기화'), findsOneWidget);
+      expect(find.byTooltip('지금 동기화'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await finish(tester);
     });
@@ -9236,8 +9294,14 @@ void main() {
       tester,
     ) async {
       final wait = Completer<void>();
-      await pumpToolbar(tester, connected: true, refreshWait: wait);
-      await tester.tap(find.byTooltip('학교 LMS 동기화'));
+      await pumpToolbar(
+        tester,
+        connected: false,
+        needsLogin: true,
+        integrationEnabled: true,
+        refreshWait: wait,
+      );
+      await tester.tap(find.byTooltip('지금 동기화'));
       await tester.pump();
       await finish(tester);
       wait.complete();
@@ -10748,7 +10812,9 @@ class _ToolbarLms extends LmsController {
     required this.isNeedsLogin,
     required this.onRefresh,
     this.refreshWait,
+    this.savedLogin,
   });
+  final String? savedLogin;
   final bool Function() isConnected;
   final bool Function() isNeedsLogin;
   final void Function(bool force) onRefresh;
@@ -10759,6 +10825,15 @@ class _ToolbarLms extends LmsController {
   bool get connected => isConnected();
   @override
   bool get needsLogin => isNeedsLogin();
+  @override
+  String? get localLoginUsername => savedLogin;
+  @override
+  Future<void> retryAutomaticLogin() async {
+    onRefresh(true);
+    retries += 1;
+  }
+
+  var retries = 0;
   @override
   Future<void> refresh({bool force = false}) async {
     onRefresh(force);
