@@ -14,6 +14,8 @@ import 'package:intl/intl.dart';
 import '../../../core/weather/weather_widgets.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/lms/lms_sync_service.dart';
+import '../../../core/sync/google_drive_auth_service.dart';
+import '../../../core/sync/google_drive_sync_service.dart';
 import '../../../core/analytics/product_analytics.dart';
 import '../../../core/analytics/startup_milestones.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
@@ -5242,16 +5244,14 @@ class _CalendarHeader extends ConsumerWidget {
     final lms = ref.watch(lmsControllerProvider);
     final lmsBusy = lms.restoring || lms.sync.state == LmsSyncState.loading;
     final lmsActions = [
+      // Only a lost school login needs this action; while the login holds,
+      // LMS refreshes by itself.
       if (lms.supported &&
-          (lms.connected ||
-              (lms.needsLogin &&
-                  ref
-                          .watch(appSettingsProvider)
-                          .academicProfile
-                          ?.lmsIntegrationEnabled ==
-                      true)))
+          lms.needsLogin &&
+          ref.watch(appSettingsProvider).academicProfile?.lmsIntegrationEnabled ==
+              true)
         DailyIconAction(
-          tooltip: context.tr('학교 LMS 동기화'),
+          tooltip: context.tr('지금 동기화'),
           onPressed: lmsBusy ? null : () => _syncLms(context, ref),
           icon: Icons.sync_rounded,
           size: actionSize,
@@ -5607,21 +5607,50 @@ class _CalendarHeader extends ConsumerWidget {
 
   /// Same action as "지금 동기화" in the LMS settings: it signs in again with
   /// the saved login when the school session has expired.
+  /// Backs up and pulls Google Drive changes and signs in to the school again
+  /// in one action. A failure of one does not stop the other.
   Future<void> _syncLms(BuildContext context, WidgetRef ref) async {
     final controller = ref.read(lmsControllerProvider);
-    await controller.refresh(force: true);
+    final driveLinked =
+        ref.read(settingsRepositoryProvider).dailyAccount()?.googleAccount !=
+        null;
+    Object? driveError;
+    final drive = driveLinked
+        ? ref
+              .read(googleDriveSyncServiceProvider)
+              .syncPendingChangesNow(
+                promptIfNecessary: false,
+                restoreAfterBackup: true,
+              )
+              .then<void>((_) {}, onError: (Object error) => driveError = error)
+        : Future<void>.value();
+    // A saved login is submitted once on request; without one the refresh
+    // only reports that the school asks for a new login.
+    final school = controller.localLoginUsername != null
+        ? controller.retryAutomaticLogin()
+        : controller.refresh(force: true);
+    await Future.wait([drive, school]);
     // The refresh can outlast this screen (for example local data was reset).
     if (!context.mounted) return;
     final failed =
         controller.needsLogin || controller.sync.state == LmsSyncState.fallback;
     final partial =
         controller.sync.lastResult?.hasUnverifiedInformation == true;
+    final driveMessage = switch (driveError) {
+      GoogleDriveAuthException(:final message) => message,
+      GoogleDriveSyncException(:final message) => message,
+      null => null,
+      _ => '요청을 완료하지 못했습니다. 잠시 후 다시 시도해 주세요.',
+    };
     final message = failed
         ? (controller.lastLoginFailure?.message ??
               '학교 연결을 확인하지 못했습니다. 다시 시도해 주세요.')
-        : partial
-        ? '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.'
-        : '학교 데이터 동기화 완료';
+        : driveMessage ??
+              (partial
+                  ? '학교 데이터를 동기화했습니다. 일부 학교 정보는 확인하지 못했습니다.'
+                  : driveLinked
+                  ? '동기화 완료'
+                  : '학교 데이터 동기화 완료');
     ScaffoldMessenger.maybeOf(
       context,
     )?.showSnackBar(SnackBar(content: Text(context.tr(message))));
