@@ -1,0 +1,31 @@
+# coding: utf-8
+import json,hashlib,copy,datetime
+from pathlib import Path
+import pdfplumber
+base=Path('work/university-research/catalog-c/ut-current-electri-exact-75-block-v2-20261009');base.mkdir(exist_ok=True)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+source=Path('work/university-research/root-ut-current-electri-visual-review-20261009/current-2026-2-electri.pdf');assert sha(source)=='1609eae5a48fa784614ab188a12cfc35336f9903dacf59ee4d00d62fc4d28f9a'
+priorpath=Path('assets/timetable/ut-unknown-2026-2.json');prior=json.loads(priorpath.read_text());assert len(prior['courses'])==29
+(base/'prior-current-29-184-baseline.json').write_text(json.dumps(prior,ensure_ascii=False,indent=2)+'\n')
+(base/'current-2026-2-electri-original.pdf').write_bytes(source.read_bytes())
+p=pdfplumber.open(source).pages[0];t=p.find_tables()[0]
+dates={1:['2026-09-07','2026-09-14','2026-09-21','2026-09-28','2026-10-12','2026-10-19'],2:['2026-09-01','2026-09-08','2026-09-15','2026-09-22','2026-09-29','2026-10-06','2026-10-13'],3:['2026-09-02','2026-09-09','2026-09-16','2026-09-23','2026-09-30','2026-10-07','2026-10-14'],4:['2026-09-03','2026-09-10','2026-09-17','2026-10-01','2026-10-08','2026-10-15']}
+slots=[('A1',76.09,116.94,540,615,[10,11,14,15]),('A2',116.94,165.905,630,705,[5,6,7,10,14,15,17,19,20]),('A4',214.855,263.82,810,885,[4,5,9,10,11,14,15,20]),('A5',263.82,312.78,900,975,[4,6,10,11,16,20]),('A6',312.78,361.745,990,1065,[4])]
+proofs=[];c=copy.deepcopy(prior);c.update(researchOnly=True,productionIntegrationEnabled=False,completionClaim=False,wholeOperatingVerified=False,candidateRevision='electri-exact-undergraduate-75-block-v2',sourceReservationRangeOnly=True)
+for a,y0,y1,start,end,cols in slots:
+ for col in cols:
+  cell=t.rows[3].cells[col];bbox=[cell[0]+.15,y0+.15,cell[2]-.15,y1-.15];raw=p.crop(bbox).extract_text(x_tolerance=2,y_tolerance=2);lines=raw.splitlines();room=lines[-1];prof=lines[-2];title=''.join(lines[:-2]);assert room.isdigit() and len(prof)==3
+  weekday=(col-4)//5+1;grade=(col-4)%5+1;assert grade<=4 and weekday<=4
+  sid=f'ut-document290793-p1-{a}-c{col}';meta={'page':1,'nativeColumnIndex':col,'nativeWeekday':weekday,'nativeStudyColumn':str(grade),'native75Period':a,'publishedClockText':f'{start//60:02}:{start%60:02}~{end//60:02}:{end%60:02}','educationalBlockText':raw,'exactPDFBoundingBox':bbox,'nativeCodePublished':False,'nativeSectionPublished':False,'titleParenthesesPreservedNotSection':True,'clockScope':'current2026-2 electri undergraduate single75-minute block only','modeInferredFromColor':False,'physicalCampusVerified':False}
+  course={'sourceId':sid,'referenceKind':'공개 문서 내부 페이지·셀 위치(공식 과목번호 아님)','canonicalSubjectCodePublished':False,'nativeSectionPublished':False,'academicYear':2026,'semester':'2','campus':'unknown','nativeCampusScope':'전기공학과 시간표 개별 건물/물리 캠퍼스 미공개','courseCode':'','section':'','courseName':title,'professor':prof,'credits':None,'classification':'','classificationGroup':'','departments':['전기공학과 '+str(grade)+'학년'],'departmentCredits':{},'departmentClassifications':{},'departmentRemarks':{},'nativeStudyColumn':str(grade),'sourceEducationCell':meta,'sourceUrl':'https://www.ut.ac.kr/cmm/fms/FileDown.do?atchFileId=FILE_000000000290793&fileSn=0','sourceSHA256':sha(source),'remarks':'2026-2 전기공학과 공식 학부 시간표의 단일75분 블록 공개 예약 계획. 원문 제목 괄호는 그대로 보존하며 공식 과목코드·분반·학점·이수구분 미공개, 내부 문서 셀 식별자는 공식코드가 아닙니다. 실제 학부 학년/요일 열과 자체 A교시 시작·종료·교수·강의실 숫자를 함께 확인했습니다. 색상으로 대면/원격 방식을 추정하지 않으며 사용자 수업방식 선택을 유지합니다. 개별 물리 캠퍼스·건물 미공개로 미확인 유지. 9/1~10/19 범위의 공개 예약이며 중간고사 권장기간 이후·개별 실운영·최신 전체 폐강 및 변경은 미확인입니다. 수강지도 교수 승인 및 타학과·타학년·정원 조건은 개설학과 확인 필요. 동일 제목 문서블록을 공식 고유강좌 수로 주장하지 않습니다.','sourceSchedule':f'{weekday}요일 {a} {meta["publishedClockText"]}','sourceClassroom':room,'period':{'startDate':'2026-09-01','endDate':'2026-10-19'},'scheduleStatus':'scheduled','schedules':[{'date':d,'weekday':weekday,'startMinute':start,'endMinute':end,'classroom':room,'sourcePage':1,'sourceColumn':col,'sourcePeriod':a,'reservationRangeOnly':True} for d in dates[weekday]]}
+  c['courses'].append(course);proofs.append({'sourceId':sid,'expectedTitle':title,'expectedProfessor':prof,'expectedClassroom':room,'expectedStartMinute':start,'expectedEndMinute':end,'literalDates':dates[weekday],'nativeEducation':meta})
+assert len(proofs)==28 and len(c['courses'])==57 and sum(len(x['schedules']) for x in c['courses'])==368
+assert c['courses'][:29]==prior['courses']
+for x in c['courses'][29:]:
+ for m in x['schedules']:assert datetime.date.fromisoformat(m['date']).isoweekday()==m['weekday']
+calendar=Path('work/university-research/catalog-c/ut-current-20261008/calendar-educational-dates.json');cal=json.loads(calendar.read_text());(base/'reused-own-calendar-education-proof.json').write_text(json.dumps(cal,ensure_ascii=False,indent=2)+'\n')
+proof={'researchOnly':True,'completionClaim':False,'sourcePDFSHA256':sha(source),'sourceCurrentTitle':p.crop((200,20,700,55)).extract_text(),'sourcePDFPageDimensions':[p.width,p.height],'priorAssetSHA256':sha(priorpath),'priorObjectsExactlyPreserved':29,'priorDatesExactlyPreserved':184,'additionalDocumentBlocks':28,'additionalLiteralDates':184,'afterDocumentBlocks':57,'afterLiteralDates':368,'officialUniqueOfferingCountClaim':False,'proofs':proofs,'excludedScope':['All graduate columns8/13/18/23/28','50-minute experiments and long ditto repetitions','Evening classes','Unpublished code/section/campus/credits/classification not invented'],'calendarSourceSHA256':sha(calendar),'dateScope':'Sep1 opening throughOct19, beforeOct20-26 recommended midterms; own holidays excluded; no post-midterm extension','literalDatesByWeekday':dates}
+(base/'independent-exact-grid-clock-literal-date-proof.json').write_text(json.dumps(proof,ensure_ascii=False,indent=2)+'\n')
+(base/'ut-unknown-2026-2.electri75-v2.json').write_text(json.dumps(c,ensure_ascii=False,indent=2)+'\n')
+(base/'source_python_validation.json').write_text(json.dumps({'result':'PASS','SDKUsed':False,'wholePriorObjects':29,'wholePriorDates':184,'additionalBlocks':28,'additionalDates':184,'afterBlocks':57,'afterDates':368,'nativeFieldAndBoundingBoxPreserved':True,'noDeliveryOverrides':all('deliveryMode' not in m for x in c['courses'] for m in x['schedules'])},indent=2)+'\n')
+print(base)

@@ -1,0 +1,45 @@
+import sys,io,json,importlib.util,hashlib,re
+from native_vision_education_ocr import recognize
+from pathlib import Path
+import pypdfium2
+P=Path(__file__).resolve().parent
+old=P.parent/'skku-ordinary-reservation-v5-20261008'
+spec=importlib.util.spec_from_file_location('v5',old/'recheck_incomplete_operation.py');v5=importlib.util.module_from_spec(spec);spec.loader.exec_module(v5)
+code=sys.argv[1]
+src=json.loads((P.parent/'skku-ordinary-reservation-v4-20261008/current-flipped-educational-operation-recheck.json').read_text())['records'];row=next(r['sourceRow'] for r in src if r['offeringCode']==code)
+base=v5.old.pdf_evidence
+ocr_tables=[]
+def pdf(body,c,s,prof):
+ r=base(body,c,s,prof)
+ doc=pypdfium2.PdfDocument(body)
+ if len(doc)==10:
+  page=doc.get_page(4);im=page.render(scale=2.5).to_pil();out=io.BytesIO();im.save(out,format='PNG')
+  recognized=recognize(out.getvalue())
+  unsafe=0; uncertainty=[]
+  for item in recognized['observations']:
+   safe,masked,lost=v5.filter_education(v5.mask_contact_context(item['text']))
+   if lost or masked or safe!=item['text'] or re.search(r'contact|phone|\btel\b|연락처|전화|office|e-?mail|비밀번호|암호|https?://', item['text'],re.I):
+    unsafe+=1;uncertainty.append({'box':item['box'],'redactedTokens':masked,'lost':lost,'changedText':safe!=item['text'],'urlOrContactLabel':bool(re.search(r'contact|phone|\btel\b|연락처|전화|office|e-?mail|비밀번호|암호|https?://',item['text'],re.I))})
+  (P/(code+'-image-crop-privacy-uncertainty.json')).write_text(json.dumps({'researchOnly':True,'uncertainCount':unsafe,'observations':uncertainty},indent=2)+'\n')
+  unsafe_inside=[x for x in uncertainty if x['box'][0] < .69]
+  assert not unsafe_inside, 'Education table crop withheld due to privacy uncertainty inside selected education columns'
+  # Page5 operating table/header only: rows were OCR-confirmed educational and contact-free.
+  crop=im.crop((0,int(im.height*.01),int(im.width*.69),int(im.height*.85)))
+  crop.save(P/(code+'-education-operating-table-page5.png'))
+  kept=[];suppressed=0
+  for observation in recognized['observations']:
+   text,masked,lost=v5.filter_education(v5.mask_contact_context(observation['text']))
+   if lost or not text or (re.search(r'contact|phone|tel|연락처|전화|office|e-?mail|비밀번호|암호',text,re.I) and not re.search(r'수업|시간|주차|학기|\d{1,2}:\d{2}',text)):
+    suppressed+=1;continue
+   if not re.search(r'주|수업|오프|온라인|차시|강의|팀|발표|토론|시험|디자인|프로젝트|OT|종강|조편성|학습|피드백|휴강|학수|분반|학기|GEDT|week|class|semester|offline|online|\d',text,re.I):
+    suppressed+=1;continue
+   kept.append({**observation,'text':text})
+  ocr_tables.append({'sourcePDFPage':5,'privacyUncertainObservationCountOutsideCrop':unsafe,'privacyUncertainObservationCountInsideCrop':len(unsafe_inside),'educationalTableCropOnly':True,'sourceImagePDFSHA256':hashlib.sha256(body).hexdigest(),'renderScale':2.5,'engine':recognized['engine'],'languages':recognized['languages'],'educationObservations':kept,'nonEducationalObservationsSuppressedCount':suppressed,'wholeRawPageOrOCRPersisted':False})
+  r['onePageImageSHA256']=hashlib.sha256(body).hexdigest();r['wholeAttachmentOrPagePersisted']=False
+ return r
+v5.old.pdf_evidence=pdf
+record=v5.collect(v5.old.SpacedPublic('KO'),row)
+(P/(code+'-current-education.json')).write_text(json.dumps(record,ensure_ascii=False,indent=2)+'\n')
+assert len(ocr_tables)==1
+(P/(code+'-operating-table-crop-education-ocr.json')).write_text(json.dumps({'researchOnly':True,'completionClaim':False,'offeringCode':code,'tables':ocr_tables},ensure_ascii=False,indent=2)+'\n')
+print({'offeringCode':code,'educationObservations':len(ocr_tables[0]['educationObservations']),'rawImageOutput':False})

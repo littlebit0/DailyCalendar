@@ -1,0 +1,73 @@
+# coding: utf-8
+import json,pathlib,hashlib,re,copy,datetime as dt
+P=pathlib.Path(__file__).parent
+xs=json.load(open(P/'packet007-50-full-source-prepared.json'))
+W=[1,2,3,4,5,6,7,9,10,11,12,13,14,15]
+HH={301:[(5,540,705,'청502')],302:[(1,720,795,'청204'),(3,720,795,'청204')],303:[(1,810,885,'청204'),(3,810,885,'청204')],304:[(1,900,975,'청204'),(3,900,975,'청204')],305:[(2,720,885,'청504')],306:[(1,990,1065,'청204'),(3,990,1065,'청204')],307:[(2,900,975,'청505'),(4,900,975,'청505')],308:[(2,990,1065,'청505'),(4,990,1065,'청505')],309:[(1,540,705,'청502')],310:[(1,900,1065,'청506')],311:[(6,780,945,'호403')],312:[(2,540,705,'청504')],313:[(5,540,705,'청304')],314:[(1,720,885,'청504')],315:[(1,900,1065,'청504')],316:[(2,720,795,'청505'),(4,720,795,'청505')],317:[(2,810,885,'청505'),(4,810,885,'청505')],318:[(2,900,975,'청204'),(4,900,975,'청204')],319:[(3,540,705,'청504')],320:[(4,720,885,'청503')],321:[(1,810,885,'청505'),(3,810,885,'청505')],322:[(1,540,705,'청504')],323:[(1,720,885,'청506')],324:[(2,720,795,'청409'),(4,720,795,'청409')],325:[(1,720,795,'청305'),(3,720,795,'청305')],326:[(5,900,1065,'청308')],328:[(2,810,885,'청501'),(4,810,885,'청501')],329:[(2,630,705,'청509'),(4,630,705,'청509')],330:[(2,720,795,'청301'),(4,720,795,'청301')],331:[(5,900,1065,'청507')],332:[(5,720,885,'청201')],333:[(1,900,975,'청402'),(3,900,975,'청402')],335:[(1,900,975,'청301'),(3,900,975,'청301')],336:[(5,720,885,'청305')],337:[(2,900,1065,'청205')],338:[(1,720,795,'청620'),(3,720,795,'청620')],339:[(1,900,975,'청509'),(3,900,975,'청509')],340:[(1,720,795,'청715'),(3,720,795,'청715')],341:[(2,900,975,'청305'),(4,900,975,'청305')],342:[(1,540,705,'청620')],343:[(5,540,650,'청운관 헬스장')],344:[(2,780,890,'청운관 헬스장')],345:[(1,900,975,'청715'),(3,900,975,'청715')],346:[(3,540,615,'청409'),(5,540,615,'청409')],347:[(3,630,705,'청409'),(5,630,705,'청409')],348:[(2,810,885,'청B117'),(4,810,885,'청B117')],349:[(1,900,1065,'청407')],350:[(5,540,705,'청309')]}
+remove={301:[4,6,14],302:[15],303:[15],304:[15],305:[13],306:[5],307:[4],308:[4],309:[5,10],310:[5,10],312:[5,10],314:[5,7],315:[5,7],319:[8],320:[4,8],326:[4,6],329:[15],331:[4,6],332:[15],333:[14],335:[7,15],337:[15],338:[15],339:[5],340:[5],341:[15],343:[1],344:[1],346:[2,3,7,15],347:[2,3,7,15],348:[2,3,7,15],349:[7,9,15],350:[15]}
+reasons={301:'Own physical default; exact Sep22 alternative lecture lacks end and optional recording, holiday prerecorded6 and field14 excluded. Future possible remote is conditional only.',302:'Own physical default with needed-only live makeup; unallocated15 excluded.',303:'Own physical default with needed-only live makeup; unallocated15 excluded.',304:'Own physical default with needed-only live makeup; unallocated15 excluded.',305:'Own classroom/ordinary group discussion; team report preparation13 excluded, actual team feedback14 and presentations15 retained.',306:'Own physical instruction except entire holiday week5 remote; full exception week excluded.',307:'Own physical instruction except entire holiday week4 remote; full exception week excluded.',308:'Own physical instruction except entire holiday week4 remote; full exception week excluded.',309:'Physical principle; pre-class videos are flipped preparation; unallocated GCP week5/10 individual clinic excluded.',310:'Physical principle; pre-class videos are flipped preparation; unallocated GCP week5/10 individual clinic excluded.',311:'Saturday employed cohort physical; own special no-GCP implementation uses detailed planning rather than off-site. Holidays/exams excluded.',312:'Physical principle; pre-class videos are preparation; GCP individual consultation mixed5/10 excluded.',313:'Own physical default, non-live only possible holiday exception; source materials not recording operation.',314:'Explicit 100 percent physical and classroom weekly text; online is supplemental material. Oct19 midassessment7 excluded.',315:'Explicit 100 percent physical and classroom weekly text; online is supplemental material. Oct19 midassessment7 excluded.',316:'Physical principle; live only possible holiday supplement; films/library readings are pedagogical materials.',317:'Physical principle; live only possible holiday supplement; films/library readings are pedagogical materials.',318:'Physical principle; live only possible holiday supplement; films/library readings are pedagogical materials.',319:'Own physical; Korean-history video is class material, GCP offsite week8 excluded.',320:'Own lecture/team class; holiday online4 and individual-study8 excluded.',321:'Own ordinary classroom lecture/presentations; online absence-cooperation document processing is administration not remote class.',322:'Own ordinary whole workshops/scenario class; flipped preparation and optional future field work not blanket recording.',323:'Own ordinary whole workshops/scenario class; flipped preparation and optional future field work not blanket recording.',324:'Explicit entire-term physical; own weeks8/16 distinguish Tuesday normal class from Thursday exam. Only Oct20/Dec15 Tuesday native HH admitted as source-specific exam-period exception; Biology-major exclusion preserved.',325:'Own ordinary physical lecture and in-class participatory activity; online information/material not alternate class.',326:'Own theoretical PPT lecture; flipped videos are preparation and LMS materials, holiday4/6 unspecified alternative excluded.',327:'Non-live units exist, future own face-to-face versus non-live weekly allocation pending; stale May exam conflict retained; held.',328:'Explicit face-to-face unless stated; online-period remarks conditional, actual16 non-live held. Theory/topic discussions remain physical.',329:'Explicit 100 percent physical default; remote exceptional only, unallocated makeup15 excluded.',330:'Own physical default; exact Oct15 and Dec10 study days excluded; actual exams no reservation.',331:'Explicit face-to-face weekly rows; holiday recordings4/6 excluded; no recording viewing window scheduled.',332:'Whole physical default; short video is material and e-campus is file/homework service; week15 explicitly no class.',333:'Explicit offline; recorded only holiday makeup; tentative holiday14 excluded, source reading examples not actual online modes.',334:'Plan explicitly says individual physical/non-live weeks will be announced later; no fixed current allocation, held.',335:'Own normal lecture/discussion and anthropology topical online-shopping is subject not mode; mid7/final15 excluded. Field research learning goals not actual appointed field window.',336:'Own physical, holiday-only possible recorded exception; ordinary lecture/discussion retained.',337:'Own physical default, future possible asynchronous exception; no actually allocated recording rows; final15 excluded.',338:'Own physical; cinema screening is classroom pedagogical material; final15 and separately announced16 excluded.',339:'Own physical except whole holiday week5 remote; entireweek excluded.',340:'Own physical; E-campus info/homework not mode; actual week5 Wednesday closure conflicts with calendar label, whole5 conservatively excluded.',341:'Own date-by-date ordinary lecture/discussion source literal dates retained; Oct20 topic class separate from Oct22 no-class assignment deadline; Dec8 self-study/Dec10 final excluded.',342:'All physical; PPT/videos are in-class materials; holiday5 excluded.',343:'Own physical group gym practice; OT09:10 lacks end withheld, week2 actual theory room402 and later actual B3 gym preserved per own dated weekly plan.',344:'Own physical group gym practice; OT13:10 lacks end withheld, week2 actual theory neo205 and later actual B3 gym preserved per own dated weekly plan.',345:'Explicit physical; remote-society/remote-shopping are subject matter, not delivery method.',346:'Whole classroom theory/R practice; actual 출장 remote2/3, mid7/final15 excluded; Sep4 explicitly no class. Later online troubleshooting conditional.',347:'Whole classroom theory/R practice; actual 출장 remote2/3, mid7/final15 excluded; Sep4 explicitly no class. Later online troubleshooting conditional.',348:'Own physical theory/computer exercise; actual asynchronous2/3 and online exams7/15 excluded.',349:'Own physical reading/discussion; actualrecording7, mixedoutdoor9 and final15 excluded; makeup methods undecided no new hours.',350:'Own physical; holiday recordings only actual closed dates excluded; final15 and possibleonly makeup16 excluded.'}
+weeks={n:[w for w in W if w not in remove.get(n,[])] for n in HH}
+weeks[324]=list(range(1,17));weeks[341]=list(range(1,15))
+exceptDates={330:{'2026-10-15','2026-12-10'},346:{'2026-09-04'},347:{'2026-09-04'}}
+examExceptions={324:{'2026-10-20','2026-12-15'},341:{'2026-10-20'}}
+explicitDates={341:{'2026-'+s for s in ['09-01','09-03','09-08','09-10','09-15','09-17','09-22','09-29','10-01','10-06','10-08','10-13','10-15','10-20','10-27','10-29','11-03','11-05','11-10','11-12','11-17','11-19','11-24','11-26','12-01','12-03']}}
+roomOverride={343:{2:'청운관 402호'},344:{2:'네오관 205호'}}
+for n in [343,344]:
+ for w in range(3,16):roomOverride[n][w]='청운관 B3 헬스장'
+
+closed={'2026-09-24','2026-09-25','2026-09-26','2026-10-03','2026-10-05','2026-10-09'}
+warning='강좌의 현재 공개 목록은 확인했으나 개별 수업 운영 방식·집중 기간은 아직 검토 중입니다. 시간표 자동 배치는 보류됩니다.'
+slot=re.compile(r'([월화수목금토일])\s*(\d{2}):(\d{2})-(\d{2}):(\d{2})\s*\(((?:[^()]|\([^()]*\))*)\)')
+proof=[];selected={};count=0;shas={}
+for n,ws in sorted(weeks.items()):
+ x=xs[n-301];c=x['originalWholeObject'];plans=[z['originalWholeEducationPlan'] for z in x['plans']];native=list(slot.finditer(c['sourceSchedule']))
+ assert native and not re.sub(r'[\s,]','',slot.sub('',c['sourceSchedule']))
+ assert [('월화수목금토일'.index(m[1])+1,int(m[2])*60+int(m[3]),int(m[4])*60+int(m[5]),m[6].strip()) for m in native]==HH[n] or False,(n,c['sourceSchedule'],HH[n])
+ if False:
+  native=native[1:]
+  assert [('월화수목금토일'.index(m[1])+1,int(m[2])*60+int(m[3]),int(m[4])*60+int(m[5]),m[6].strip()) for m in native]==HH[n]
+ for plan,z in zip(plans,x['plans']):
+  assert c['campus']=='seoul' and plan['campus']=='서울';assert plan['header']==['2026학년도 2학기 강의계획서'] and plan['lectureCode']==c['sourceEducationalVariants'][0]['lecture_cd']
+  assert plan['queriedProfessorName'] in [v['teach_na'] for v in c['sourceEducationalVariants']]
+  basic=next(s['rows'] for s in plan['educationalSections'] if s['section']=='기본정보');assert [r[1] for r in basic if r[0]=='학수번호']==[plan['lectureCode']]
+  normal=re.sub(r'\s+','',next(r[1] for r in basic if r[0]=='강의시간강의실'))
+  for m in native:assert m[1]+m[2]+':'+m[3]+'-'+m[4]+':'+m[5] in normal and re.sub(r'\s+','',m[6]) in normal,(n,normal)
+  shas[z['file']]=hashlib.sha256(pathlib.Path(z['file']).read_bytes()).hexdigest()
+ rows=next(s['rows'] for s in plans[0]['educationalSections'] if s['section']=='주별강의내용');own={int(r[0][:-1]):r for r in rows if r and re.fullmatch(r'\d+주',r[0])};spans=[]
+ for w in ws:
+  r=own[w];a,b,z,d=map(int,re.fullmatch(r'(\d+)/(\d+)\s*~\s*(\d+)/(\d+)',r[1]).groups());spans.append((dt.date(2026,a,b),dt.date(2026,z,d),r))
+ def permitted(day):
+  if day.isoformat() in closed|exceptDates.get(n,set()):return False
+  if n in explicitDates and day.isoformat() not in explicitDates[n]:return False
+  return day.isoformat() in examExceptions.get(n,set()) or (not dt.date(2026,10,20)<=day<=dt.date(2026,10,26) and not dt.date(2026,12,15)<=day<=dt.date(2026,12,21))
+ def actualRoom(r,base):
+  w=int(r[0][:-1]);room=roomOverride.get(n,{}).get(w,base)
+  if n in roomOverride:assert room in ' '.join(r),(n,w,room)
+  return room
+ meetings=[];independent=[]
+ for m in native:
+  wd='월화수목금토일'.index(m[1])+1
+  for a,b,r in spans:
+   day=a
+   while day<=b:
+    if day.isoweekday()==wd and permitted(day):meetings.append({'date':day.isoformat(),'weekday':wd,'startMinute':int(m[2])*60+int(m[3]),'endMinute':int(m[4])*60+int(m[5]),'classroom':actualRoom(r,m[6].strip())})
+    day+=dt.timedelta(days=1)
+ for a,b,r in spans:
+  for wd,st,en,room in HH[n]:
+   day=a+dt.timedelta(days=(wd-a.isoweekday())%7)
+   while day<=b:
+    if permitted(day):independent.append((day.isoformat(),wd,st,en,actualRoom(r,room)))
+    day+=dt.timedelta(days=7)
+ assert len(set(independent))==len(meetings);assert set(independent)=={(r['date'],r['weekday'],r['startMinute'],r['endMinute'],r['classroom']) for r in meetings}
+ selected[c['sourceId']]=meetings;count+=len(meetings)
+ proof.append({'packetOrdinal':n,'sourceId':c['sourceId'],'wholePlans':plans,'nativeClock':c['sourceSchedule'],'ownCampus':'서울','literalNativeHH':HH[n],'allowedPhysicalWeeksLiteral':ws,'physicalRowsLiteral':[r for a,b,r in spans],'semanticReason':reasons[n],'explicitUnscheduledDatesLiteral':sorted(exceptDates.get(n,set())),'independentDates':sorted({k[0] for k in independent}),'literalIndependentMeetings':[list(k) for k in sorted(independent)],'ownExamNormalExceptionsLiteral':sorted(examExceptions.get(n,set())),'ownExplicitDatesLiteral':sorted(explicitDates.get(n,set())),'ownRoomOverridesLiteral':roomOverride.get(n,{}),'newDateCount':len(meetings),'previousResearchDepartmentRemarks':c['departmentRemarks'],'remoteHoursGenerated':0})
+for campus in ['seoul','global']:
+ old=json.load(open(P/f'khu-{campus}-2026-2.packet006-physical-groups-prepared.json'));(P/f'packet007-prior-{campus}-whole.json').write_text(json.dumps(old,ensure_ascii=False,indent=2)+'\n');new=copy.deepcopy(old)
+ for c in new['courses']:
+  if c['sourceId'] not in selected:continue
+  assert not c['schedules'];c['schedules']=selected[c['sourceId']];c['scheduleStatus']='scheduled';c['sourcePartialCoverage']=True
+  note='현재 2026-2 개별 강의계획서의 명시 대면 기본과 원문 날짜를 대조한 부분만 예약합니다. 공휴일·시험·명시 원격·별도 운영은 배치하지 않으며, 자체 원문에서 정상수업으로 확인된 시험기간 중 예외 날짜만 별도 근거로 예약합니다. 원문 전체 운영·이수 제한·과제 및 예외는 별도 기록에 보존합니다. 사용자 강의 방식은 유지하며 실제 출석·최신 폐강/변경 전체 확인 완료는 아닙니다.'
+  c['departmentRemarks']={k:v.replace(warning+'\n','').replace(warning,'')+'\n'+note for k,v in c['departmentRemarks'].items()};c['semanticOperatingReview']={'sourcePartialCoverage':True,'publishedPhysicalWeekScopeOnly':True,'actualAttendanceConfirmed':False,'sourceSnapshot':'2026-10-08','packet':7}
+ oldmap={c['sourceId']:c for c in old['courses']};assert all(c==oldmap[c['sourceId']] for c in new['courses'] if c['sourceId'] not in selected)
+ (P/f'khu-{campus}-2026-2.packet007-physical-groups-prepared.json').write_text(json.dumps(new,ensure_ascii=False,indent=2)+'\n')
+(P/'packet007-independent-proof.json').write_text(json.dumps({'completionClaim':False,'SDKExecutions':0,'addedCount':len(selected),'addedDates':count,'proofs':proof,'originalPlanSHA256':shas,'baselineScheduled':2145,'baselineDates':40283,'rawCampusClockPeriodAndAllOriginalFieldsPreserved':True},ensure_ascii=False,indent=2)+'\n');print({'newCourses':len(selected),'newDates':count,'totalCourses':2145+len(selected),'totalDates':40283+count})

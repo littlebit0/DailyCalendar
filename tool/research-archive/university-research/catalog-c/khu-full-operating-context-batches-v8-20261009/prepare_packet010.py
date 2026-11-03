@@ -1,0 +1,71 @@
+# coding: utf-8
+import json,pathlib,hashlib,re,copy,datetime as dt
+P=pathlib.Path(__file__).parent
+xs=json.load(open(P/'packet010-50-full-source-prepared.json'))
+W=[1,2,3,4,5,6,7,9,10,11,12,13,14,15]
+HH={451:[(1,540,615,'공148호'),(3,540,615,'공148호')],453:[(2,630,705,'공165호'),(4,630,705,'공165호')],454:[(1,900,975,'공371호'),(3,900,975,'공371호')],458:[(1,900,975,'공165호'),(3,900,975,'공165호')],461:[(1,810,885,'공176호'),(3,810,885,'공176호')],463:[(1,630,705,'공371호'),(3,630,705,'공371호')],464:[(2,630,705,'공B104호'),(4,630,705,'공B104호')],465:[(1,720,795,'공365호'),(3,720,795,'공365호')],466:[(1,540,615,'공 b101'),(3,540,615,'공 b101')],467:[(5,810,1040,'공 365호')],468:[(2,810,885,'공365호'),(4,810,885,'공365호')],469:[(1,630,705,'전227'),(3,630,705,'전227')],470:[(2,900,975,'전227'),(4,900,975,'전227')],471:[(1,1200,1365,'바이오메디칼 창의랩')],472:[(6,540,705,'전227')],473:[(6,660,825,'전227')],474:[(2,720,795,'전103'),(4,720,795,'전103')],475:[(2,900,975,'전B09'),(4,900,975,'전B09')],476:[(1,780,890,'전205'),(3,780,890,'전205')],477:[(2,780,890,'전205'),(4,780,890,'전205')],478:[(1,990,1065,'전220'),(3,990,1065,'전220')],479:[(1,900,975,'전220'),(3,900,975,'전220')],480:[(1,990,1065,'전226'),(3,990,1065,'전226')],482:[(2,540,615,'전445'),(4,540,615,'전445')],483:[(5,1140,1305,'전205')],484:[(1,720,795,'B05'),(3,720,795,'B05')],488:[(5,1200,1365,'전205')],489:[(2,540,650,'B06'),(4,540,650,'B06')],490:[(5,540,705,'B01')],491:[(3,810,1040,'B05')],492:[(1,900,975,'전227'),(3,900,975,'전227')],493:[(2,810,885,'전445'),(4,810,885,'전445')],494:[(1,720,795,'B07'),(3,720,795,'B07')],495:[(2,720,795,'전220'),(4,720,795,'전220')],496:[(2,990,1065,'전226'),(4,990,1065,'전226')],498:[(1,810,920,'국경311'),(4,990,1100,'식품가공연구실(생306)')],499:[(1,810,920,'국경311'),(3,810,920,'식품가공연구실(생306)')],500:[(1,990,1065,'국경305'),(3,990,1065,'국경305')]}
+remove={451:[9,15],454:[9,14,15],458:[15],461:[15],464:[15],465:[1,2,7,15],468:[5],469:[15],470:[1,2,15],474:[15],475:[15],476:[15],477:[15],478:[9],479:[5,12,14,15],480:[5,12,14,15],484:[7],489:[15],491:[15],493:[4,6,9],494:[15],496:[15],498:[15],499:[15],500:[7,15]}
+weeks={n:[w for w in W if w not in remove.get(n,[])] for n in HH};weeks[467]=[1,2,3];weeks[483]=[1,7,12];weeks[488]=[1,3,14]
+allowedWeekdays={498:{1}};exceptDates={477:{'2026-09-03'}};examExceptions={};holidayExceptions={};explicitDates={};roomOverride={}
+roomUnconfirmedWeekdays={467:{5},498:{1},499:{1}}
+reasons={451:'Own physical fluid lecture, future remote conditional; mixed exams9/15 held.',452:'Blank weekly thesis and individually allocated mixed guidance; whole held.',453:'Own physical engineering math; recordings only future makeup.',454:'Own physical mechanics; exams9/14 and undescribed project15 held.',455:'Individual independent film research with physical/live/recorded mixture unallocated held.',456:'Actual face-to-face and online mixture without groups allocated held.',457:'Actual physical and online mixture without groups allocated held.',458:'Own physical energy theory and regular14 whole presentation; final15 mixed held.',459:'Hybrid recorded/in-person capstone with individual team lab/advising allocation unresolved held.',460:'Explicit individual mixed meetings independent research held.',461:'Own physical dynamics; mixed final15 held; all cross-listed native education variants preserved.',462:'Individually allocated mixed research guidance held; application restriction retained.',463:'Own physical refrigeration; future holiday asynchronous no HH.',464:'Own physical math; recordings only future makeup, mixed final15 held.',465:'Own physical radiation theory, not clinical. Separately allocated long night/weekend assessment with no HH not reserved; mixed1/2/7/15 held; teaching-material restrictions preserved.',466:'Own physical nuclear security theory; security is subject matter, not authentication boundary.',467:'Only first3 whole reactor theory/intro/safety; later actual individual reactor rotation held. Classroom raw native365 vs source reactorcenter unresolved so attendance classroom blank.',468:'Own physical nuclear engineering math; conditional conference online5 unallocated held. Nuclear major-only restriction preserved.',469:'Own physical physiology theory not clinical; future holiday online unallocated. Mixed final15 held; stale2025 assignment filename preserved.',470:'Own physical biomedical simulation except explicitly online1/2 and mixed final15 held.',471:'Own explicitly physical weekly design discussion/check-in, future Zoom conditional; concurrent graduation thesis eligibility retained.',472:'Own physical weekly research discussion/check-in; future online conditional; application-specific restriction retained without enrollment claim.',473:'Own physical weekly research discussion/check-in; future online conditional; different section and overlapping native clock retained separately.',474:'Own physical networking theory; online is topic/conditional; final15 held.',475:'Own physical CPU theory; remote only holiday makeup; mixed final15 held.',476:'Own physical Python/web lab; Slido classroom quiz and web project are activities/materials not remote delivery; final15 held. Laptop and microdegree restriction preserved.',477:'Own physical Python/web lab; actualSep3 no-class excluded; final15 held; first-year priority restriction preserved.',478:'Own physical circuit theory; mixed mid9 held; future holiday live not assigned.',479:'Own physical probability theory with Python topic; conditional trips/online5/12/14/15 conflicts unallocated held; no date selected.',480:'Own physical digital communication; actual mixed MATLAB/conditional trip groups5/12/14/15 held; online book subscription not delivery.',481:'Weekly individual team advising and mixed online consultation allocation unresolved held.',482:'Own embedded theory/lab; asynchronous UART is topic not delivery.',483:'Only whole physical intro1/midpresentation7/finalpresentation12; individually allocated consultations excluded, staleApril/May text preserved no dates generated.',484:'Own physical robotics; video/Python resources not delivery; mid7 held.',485:'Individual capstone allocation and delivery not fixed; whole held.',486:'Explicit professor discussion needed before individualized operation fixed; whole held.',487:'Own individually planned lab research, native205 classroom not confirmed actual lab; held.',488:'Only explicit whole physical intro1/planpresentation3/finalpresentation14; individual team consultations held.',489:'Own physical theory/programming lab, actual prerequisite pass preserved; staleassessment MMDD held no repair; mixed final15 held.',490:'Own physical digital logic wholeclass and endclass quiz included, not recorded delivery; cross-list fields preserved.',491:'Own primarily physical software theory/lab; audio files are material, unfinished report homework; final15 held.',492:'Own regular electromagnetism; classroom videos/MIT self-study are supplemental topics, not actual recorded delivery.',493:'Own physical SoC theory except explicit nonlive4/6 and online assessment9; onlineEDA clock-domain is topic; regular15 whole presentation preserved; license eligibility ban and prior knowledge preserved.',494:'Own physical logic; online only conditional; mixed final15 held.',495:'Own physical algorithms/Python; unassigned holiday recording no clock generated.',496:'Own physical machine learning/PyTorch lab; holiday remote only conditional; final15 held; all prerequisites preserved.',497:'Actual two weeks real-time online but unspecified which; despite general live classroom note physical allocation unresolved whole held.',498:'Own Monday whole theory confirmed both sources; native/planThursday experiment conflicts Wednesday remarks so wholeThursday group held. Monday room spelling国경311vs国311 unresolved blank; both raw preserved.',499:'Own physical Monday theory and Wednesday experiment agree. Monday rawroom 국경311vs국311 unresolved blank; Wednesday own facility literal preserved.',500:'Own physical fermentation theory; e-campus materials not delivery; mid7/final15 held.'}
+
+closed={'2026-09-24','2026-09-25','2026-09-26','2026-10-03','2026-10-05','2026-10-09'}
+warning='강좌의 현재 공개 목록은 확인했으나 개별 수업 운영 방식·집중 기간은 아직 검토 중입니다. 시간표 자동 배치는 보류됩니다.'
+slot=re.compile(r'([월화수목금토일])\s*(\d{2}):(\d{2})-(\d{2}):(\d{2})\s*\(((?:[^()]|\([^()]*\))*)\)')
+proof=[];selected={};count=0;shas={}
+for n,ws in sorted(weeks.items()):
+ x=xs[n-451];c=x['originalWholeObject'];plans=[z['originalWholeEducationPlan'] for z in x['plans']];native=list(slot.finditer(c['sourceSchedule']))
+ assert native and not re.sub(r'[\s,]','',slot.sub('',c['sourceSchedule']))
+ assert [('월화수목금토일'.index(m[1])+1,int(m[2])*60+int(m[3]),int(m[4])*60+int(m[5]),m[6].strip()) for m in native]==HH[n] or False,(n,c['sourceSchedule'],HH[n])
+ if False:
+  native=native[1:]
+  assert [('월화수목금토일'.index(m[1])+1,int(m[2])*60+int(m[3]),int(m[4])*60+int(m[5]),m[6].strip()) for m in native]==HH[n]
+ for plan,z in zip(plans,x['plans']):
+  assert plan['campus']=={'seoul':'서울','global':'국제'}[c['campus']];assert plan['header']==['2026학년도 2학기 강의계획서'] and plan['lectureCode']==c['sourceEducationalVariants'][0]['lecture_cd']
+  assert plan['queriedProfessorName'] in [v['teach_na'] for v in c['sourceEducationalVariants']]
+  basic=next(s['rows'] for s in plan['educationalSections'] if s['section']=='기본정보');assert [r[1] for r in basic if r[0]=='학수번호']==[plan['lectureCode']]
+  normal=re.sub(r'\s+','',next(r[1] for r in basic if r[0]=='강의시간강의실'))
+  for m in native:assert m[1]+m[2]+':'+m[3]+'-'+m[4]+':'+m[5] in normal and re.sub(r'\s+','',m[6]) in normal,(n,normal)
+  shas[z['file']]=hashlib.sha256(pathlib.Path(z['file']).read_bytes()).hexdigest()
+ rows=next(s['rows'] for s in plans[0]['educationalSections'] if s['section']=='주별강의내용');own={int(r[0][:-1]):r for r in rows if r and re.fullmatch(r'\d+주',r[0])};spans=[]
+ for w in ws:
+  r=own[w];a,b,z,d=map(int,re.fullmatch(r'(\d+)/(\d+)\s*~\s*(\d+)/(\d+)',r[1]).groups());spans.append((dt.date(2026,a,b),dt.date(2026,z,d),r))
+ def permitted(day):
+  if day.isoformat() in exceptDates.get(n,set()) or (day.isoformat() in closed and day.isoformat() not in holidayExceptions.get(n,set())):return False
+  if n in explicitDates and day.isoformat() not in explicitDates[n]:return False
+  return day.isoformat() in examExceptions.get(n,set()) or (not dt.date(2026,10,20)<=day<=dt.date(2026,10,26) and not dt.date(2026,12,15)<=day<=dt.date(2026,12,21))
+ def actualRoom(r,base):
+  w=int(r[0][:-1]);room=roomOverride.get(n,{}).get(w,base)
+  if n in roomOverride:assert room in ' '.join(r),(n,w,room)
+  if any(k[0] in roomUnconfirmedWeekdays.get(n,set()) and k[3]==base for k in HH[n]):room=''
+  return room
+ meetings=[];independent=[]
+ for m in native:
+  if n in allowedWeekdays and ('월화수목금토일'.index(m[1])+1) not in allowedWeekdays[n]:continue
+  wd='월화수목금토일'.index(m[1])+1
+  for a,b,r in spans:
+   day=a
+   while day<=b:
+    if day.isoweekday()==wd and permitted(day):meetings.append({'date':day.isoformat(),'weekday':wd,'startMinute':int(m[2])*60+int(m[3]),'endMinute':int(m[4])*60+int(m[5]),'classroom':actualRoom(r,m[6].strip())})
+    day+=dt.timedelta(days=1)
+ for a,b,r in spans:
+  for wd,st,en,room in HH[n]:
+   if n in allowedWeekdays and wd not in allowedWeekdays[n]:continue
+   day=a+dt.timedelta(days=(wd-a.isoweekday())%7)
+   while day<=b:
+    if permitted(day):independent.append((day.isoformat(),wd,st,en,actualRoom(r,room)))
+    day+=dt.timedelta(days=7)
+ assert len(set(independent))==len(meetings);assert set(independent)=={(r['date'],r['weekday'],r['startMinute'],r['endMinute'],r['classroom']) for r in meetings}
+ selected[c['sourceId']]=meetings;count+=len(meetings)
+ proof.append({'packetOrdinal':n,'sourceId':c['sourceId'],'wholePlans':plans,'nativeClock':c['sourceSchedule'],'ownCampus':plans[0]['campus'],'literalNativeHH':HH[n],'allowedPhysicalWeeksLiteral':ws,'physicalRowsLiteral':[r for a,b,r in spans],'semanticReason':reasons[n],'explicitUnscheduledDatesLiteral':sorted(exceptDates.get(n,set())),'independentDates':sorted({k[0] for k in independent}),'literalIndependentMeetings':[list(k) for k in sorted(independent)],'ownExamNormalExceptionsLiteral':sorted(examExceptions.get(n,set())),'ownHolidayNormalExceptionsLiteral':sorted(holidayExceptions.get(n,set())),'ownExplicitDatesLiteral':sorted(explicitDates.get(n,set())),'ownRoomOverridesLiteral':roomOverride.get(n,{}),'roomUnconfirmedWeekdaysLiteral':sorted(roomUnconfirmedWeekdays.get(n,set())),'allowedWeekdaysLiteral':sorted(allowedWeekdays.get(n,set())),'newDateCount':len(meetings),'previousResearchDepartmentRemarks':c['departmentRemarks'],'remoteHoursGenerated':0})
+for campus in ['seoul','global']:
+ old=json.load(open(P/f'khu-{campus}-2026-2.packet009-physical-groups-prepared.json'));(P/f'packet010-prior-{campus}-whole.json').write_text(json.dumps(old,ensure_ascii=False,indent=2)+'\n');new=copy.deepcopy(old)
+ for c in new['courses']:
+  if c['sourceId'] not in selected:continue
+  assert not c['schedules'];c['schedules']=selected[c['sourceId']];c['scheduleStatus']='scheduled';c['sourcePartialCoverage']=True
+  note='현재 2026-2 개별 강의계획서의 명시 대면 기본과 원문 날짜를 대조한 부분만 예약합니다. 공휴일·시험·명시 원격·별도 운영은 배치하지 않으며, 자체 원문에서 정상수업으로 확인된 시험기간 중 예외 날짜만 별도 근거로 예약합니다. 원문 전체 운영·이수 제한·과제 및 예외는 별도 기록에 보존합니다. 사용자 강의 방식은 유지하며 실제 출석·최신 폐강/변경 전체 확인 완료는 아닙니다.'
+  c['departmentRemarks']={k:v.replace(warning+'\n','').replace(warning,'')+'\n'+note for k,v in c['departmentRemarks'].items()};c['semanticOperatingReview']={'sourcePartialCoverage':True,'publishedPhysicalWeekScopeOnly':True,'actualAttendanceConfirmed':False,'sourceSnapshot':'2026-10-08','packet':10}
+ oldmap={c['sourceId']:c for c in old['courses']};assert all(c==oldmap[c['sourceId']] for c in new['courses'] if c['sourceId'] not in selected)
+ (P/f'khu-{campus}-2026-2.packet010-physical-groups-prepared.json').write_text(json.dumps(new,ensure_ascii=False,indent=2)+'\n')
+(P/'packet010-independent-proof.json').write_text(json.dumps({'completionClaim':False,'SDKExecutions':0,'addedCount':len(selected),'addedDates':count,'proofs':proof,'originalPlanSHA256':shas,'baselineScheduled':2288,'baselineDates':43197,'rawCampusClockPeriodAndAllOriginalFieldsPreserved':True},ensure_ascii=False,indent=2)+'\n');print({'newCourses':len(selected),'newDates':count,'totalCourses':2288+len(selected),'totalDates':43197+count})

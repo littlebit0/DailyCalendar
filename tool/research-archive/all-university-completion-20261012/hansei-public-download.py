@@ -1,0 +1,5 @@
+from pathlib import Path
+import urllib.request,urllib.parse,http.cookiejar,json,hashlib
+from lxml import html
+p=Path(__file__).parent/'a-sources';jar=http.cookiejar.CookieJar();op=urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar));url='https://www.hansei.ac.kr/view.do?no=10226&pgMode=show&pstSn=30623'
+r=op.open(url);b=r.read();d=html.fromstring(b);form=d.xpath('//form[@name="board_form"]')[0];fields={x.get('name'):x.get('value','') for x in form.xpath('.//input[@name]') if x.get('name') not in ['pswd','_csrf']};fields['fileSn']='24171';u='https://www.hansei.ac.kr/wcon/bbs/downFile.do?'+urllib.parse.urlencode(fields);r=op.open(urllib.request.Request(u,headers={'Referer':url,'User-Agent':'Mozilla/5.0'}));b=r.read();f=p/'hansei-2026-full.pdf';f.write_bytes(b);meta={'url':u,'bytes':len(b),'magic':str(b[:8]),'sha256':hashlib.sha256(b).hexdigest(),'sourceRecord':url};(p/'hansei-2026-download-receipt.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2));print(meta)

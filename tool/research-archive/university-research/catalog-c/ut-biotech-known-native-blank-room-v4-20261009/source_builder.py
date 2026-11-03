@@ -1,0 +1,24 @@
+# coding: utf-8
+import json,hashlib,copy,datetime,sys
+from pathlib import Path
+sys.path.insert(0,'/tmp/daily-catalog-xls-read');import xlrd
+b=Path('work/university-research/catalog-c/ut-biotech-known-native-blank-room-v4-20261009');b.mkdir(exist_ok=True)
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+v2=Path('work/university-research/catalog-c/ut-current-electri-exact-75-block-v2-20261009/ut-unknown-2026-2.electri75-v2.json');old=json.loads(v2.read_text());assert len(old['courses'])==57
+src=Path('/tmp/ut-biotech.xls');assert sha(src)=='55ac882f0cb43a1aeda292f579f9f0e6886d8777711250c843e1cfad18d8ebf0';sheet=xlrd.open_workbook(src,formatting_info=True).sheet_by_index(0)
+original=Path('work/university-research/catalog-c/ut-current-20261008/biotech-original-educational-grid.json');grid=json.loads(original.read_text());held=json.loads(Path('work/university-research/catalog-c/ut-current-20261008/held-education-cells.json').read_text());c=copy.deepcopy(old);c['candidateRevision']='biotech-blankroom-ownpublished-range-v4';c.update(researchOnly=True,productionIntegrationEnabled=False)
+proofs=[]
+for r,col,day,start,end,literal in [(7,15,3,630,720,'2026-09-02 2026-09-09 2026-09-16 2026-09-23 2026-09-30 2026-10-07 2026-10-14'),(13,3,1,810,900,'2026-09-07 2026-09-14 2026-09-21 2026-09-28 2026-10-12 2026-10-19'),(13,9,2,810,900,'2026-09-01 2026-09-08 2026-09-15 2026-09-22 2026-09-29 2026-10-06 2026-10-13'),(16,9,2,900,990,'2026-09-01 2026-09-08 2026-09-15 2026-09-22 2026-09-29 2026-10-06 2026-10-13')]:
+ raw=sheet.cell_value(r,col);lines=raw.splitlines();assert len(lines)==2;assert raw==grid['values'][r][col]
+ merge=next(list(m) for m in sheet.merged_cells if m[0]==r and m[2]==col);assert merge[1]-r==3;clock=sheet.cell_value(r,28);assert clock==grid['values'][r][28];hh=[int(x) for x in __import__('re').findall(r'\d+',clock)];assert [start,end]==[hh[0]*60+hh[1],hh[2]*60+hh[3]]
+ header=next(list(m) for m in sheet.merged_cells if m[0]==2 and m[1]==3 and m[2]<=col<m[3]);assert ['월','화','수','목','금'].index(sheet.cell_value(2,header[2]))+1==day
+ sid=f'ut-document290587-r{r}c{col}';assert sid not in {x['sourceId'] for x in old['courses']};oldheld=next(x for x in held if x['row']==r and x['column']==col)
+ row=copy.deepcopy(old['courses'][0]);row.update(sourceId=sid,courseName=lines[0],professor=lines[1],nativeStudyColumn=str(sheet.cell_value(3,col)),departments=['생명공학전공 '+str(sheet.cell_value(3,col))],sourceClassroom='',sourceSchedule=f'{day}요일 {clock}',sourceEducationCell={'row':r,'column':col,'text':raw,'merge':merge,'nativeStudyColumn':str(sheet.cell_value(3,col)),'publishedClockText':clock,'weekday':day,'sourceClassroomPublished':False,'priorHeldWholeReceipt':oldheld},remarks=old['courses'][0]['remarks']+' 강의실은 원문 미게시로 빈값 보존하며 다른 강좌 강의실·건물·실배정을 추정하지 않습니다.',schedules=[{'date':d,'weekday':day,'startMinute':start,'endMinute':end,'classroom':'','sourceRow':r,'sourceColumn':col,'sourceClockColumn':28,'reservationRangeOnly':True} for d in literal.split()]);c['courses'].append(row)
+ proofs.append({'sourceId':sid,'row':r,'column':col,'nativeWholeText':raw,'nativeGradeColumn':sheet.cell_value(3,col),'originalDeclaredMerge':merge,'originalWeekdayHeaderMerge':header,'originalWeekdayHeader':sheet.cell_value(2,header[2]),'nativePublishedClockText':clock,'expectedStartMinute':start,'expectedEndMinute':end,'literalDates':literal.split(),'originalHeldReceipt':oldheld,'soleRemainingOriginalFieldGap':'classroom unpublished; kept empty','noDirectActual75EndClaim':True})
+assert c['courses'][:57]==old['courses'];assert len(c['courses'])==61 and sum(len(x['schedules']) for x in c['courses'])==395
+for x in c['courses'][57:]:
+ assert x['sourceClassroom']=='' and not x['courseCode'] and not x['section']
+ for m in x['schedules']:assert datetime.date.fromisoformat(m['date']).isoweekday()==m['weekday']
+(b/'ut-unknown-2026-2.biotech-blankroom-v4.json').write_text(json.dumps(c,ensure_ascii=False,indent=2)+'\n');(b/'prior-v2-frozen-57-368-baseline.json').write_text(json.dumps(old,ensure_ascii=False,indent=2)+'\n');(b/'current-biotech-original.xls').write_bytes(src.read_bytes())
+(b/'independent-original-merged-clock-literal-date-proof.json').write_text(json.dumps({'sourceOnly':True,'completionClaim':False,'sourceXlsSHA256':sha(src),'sourceExactOriginalGridSHA256':sha(original),'priorV2CandidateSHA256':sha(v2),'previousObjectsDeepPreserved':57,'previousDates':368,'additionalDocumentBlocks':4,'additionalDates':27,'afterObjects':61,'afterDates':395,'proofs':proofs,'purePythonNativeMergedClockLiteralValidation':'PASS','SDKUsed':False,'nativeClockScope':'2026-2 biological major printed75-column 90-minute block reservation ranges only; actual75-minute lecture end/rest unconfirmed','newDepartmentLead':'Observed officialelectri menu→chem.do→actualnotice277 title-time表 search0; no broadercourseclockclaim'},ensure_ascii=False,indent=2)+'\n')
+print(b)

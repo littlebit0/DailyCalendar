@@ -1,0 +1,36 @@
+from pathlib import Path
+import json,copy,hashlib,datetime
+P=Path(__file__).parent;V5=P.parent/'math-current-public-offering-v5-20261009';V6=P.parent/'math-joint-section-public-offering-v6-20261009'
+save=lambda n,d:(P/n).write_text(json.dumps(d,ensure_ascii=False,indent=2)+'\n');sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+base=Path('assets/timetable/kaist-main-2026-2.json');prior=json.loads(base.read_text());assert len(prior['courses'])==66;assert sum(len(c['schedules']) for c in prior['courses'])==2036;save('prior-full-66-course-2036-baseline.json',prior)
+calendar=json.loads((V5/'reused-own-current-calendar-proof.json').read_text());save('reused-own-current-calendar-proof.json',calendar)
+text=(V5/'actual-timetable-text.txt').read_text();joint=json.loads((V5/'joint-section-full-operating-followup-proof.json').read_text());op=next(r for r in joint['rows'] if r['nativeCode']=='102' and r['nativeSectionGroup']=='OP')
+rows=[('480','','수학특강<최적운송, 편미분방정식, 그리고 기계학습>','최범준','창의103','E11 203','MW',540,615),('212','','선형대수학 [kr]','변재형','창의103','E11 203','MW',780,855),('102','O','미적분학Ⅱ','이기선','창의102','E11 202','TT',780,855),('102','P','미적분학Ⅱ','이기선','창의102','E11 202','TT',780,855)]
+proof={'sourcePDFSHA256':sha(V5/'actual-2026-fall-timetable.pdf'),'sourceOriginalV5ManifestSHA256':sha(V5/'SHA256SUMS'),'sourceOriginalV6ManifestSHA256':sha(V6/'SHA256SUMS'),'sourcePDFOriginalPath':str(V5/'actual-2026-fall-timetable.pdf'),'completeOriginalBilingualEducationText':text,'bothOriginalRenderedPagesDirectlyViewedThisReview':True,'campusEvidence':'Same actual currentmathmenufrozenv5 footer Daejeon291→main. Roomconflict two classroomnumberssame own department/main; no crosscampus allocation assumption.','ownCalendarSHA256':sha(V5/'reused-own-current-calendar-proof.json'),'priorFullBaselineSHA256':sha(base),'reviewedRows':[],'heldClockConflict491':{'KR':'MW16:00–17:00explicit','EN':'MW16:00–17:15grid withoutoverride','decision':'held unchanged; no partial time guessed'},'originalOPFullGroup':op,'completionClaim':False,'SDKExecuted':False}
+out=copy.deepcopy(prior);out['researchOnly']=True;out['completionClaim']=False;out['researchRevision']='math-native-conflictroom-blank-confirmed-clock-v7'
+for code,section,title,prof,kr,en,daypair,start,end in rows:
+ group='102OP' if code=='102' else code
+ orig={'nativeShortCode':code,'nativeSection':section,'nativeSectionGroup':'OP' if code=='102' else '', 'nativeTitleKR':title,'nativeProfessorKR':prof,'nativeClassroomKR':kr,'nativeClassroomEN':en,'nativeClockStartMinute':start,'nativeClockEndMinute':end,'nativeDayPair':daypair,'nativeLectureClockAndWeekdaysBilingualAgree':True,'nativeRoomConflictUnresolved':True,'lectureRoomSelected':False,'lectureRoomConfirmed':False,'nativeUndergraduateLabels':['학부','Under-graduate'],'nativeWholeSourceCellsKRandEN':[l for l in text.splitlines() if l.startswith(group+' ')],'English480SecondLineVisuallyClipped':code=='480','nativeEnglishProfessorNotReconstructed':code=='480','practiceNativeRoom':'','practiceNativeProfessor':'','originalPracticeNativeSectionGroups':{'KR':'102ACEGIKMO10–11/102BDFHJLNP13–14','EN':'102ACEGIKMO10–11/102BDFHJLNP13–14'} if code=='102' else {}}
+ ss=[];day=datetime.date(2026,8,31)
+ while day<=datetime.date(2026,12,13):
+  ds=day.isoformat();week=[1,3] if daypair=='MW' else [2,4]
+  if day.isoweekday() in week and ds not in calendar['holidayExclusion'] and not '2026-10-19'<=ds<='2026-10-23':ss.append({'date':ds,'weekday':day.isoweekday(),'startMinute':start,'endMinute':end,'classroom':''})
+  day+=datetime.timedelta(days=1)
+ if code=='102':
+  a=600 if section=='O' else 780
+  for ds in joint['ordinaryFridayPracticeDates']:ss.append({'date':ds,'weekday':5,'startMinute':a,'endMinute':a+60,'classroom':''})
+ ss.sort(key=lambda s:(s['date'],s['startMinute']))
+ note=f'공개 원문 강의실 표기가 한글 {kr} / 영문 {en}로 상충하여 강의실은 미확정·빈 값입니다. 어느 장소도 선택하거나 확정하지 않았습니다. 같은 학부 강좌의 요일·시각은 양쪽 원문이 일치하여 자체 학기 범위의 정규 예약만 생성합니다. 교수는 한글 원문 {prof} 그대로이며 영어의 잘린 글자를 복원하지 않습니다. 전체 공식과목코드·학점·이수구분·실제출석·최신폐강·보강·개별운영일 미확인. 원문 단축코드·실제분반을 그대로 보존합니다.'
+ if code=='102':note+=' 원문 공동강의102OP의 실제 O/P분반 및 금요일O10–11/P13–14연습반은 양원문이 일치합니다. 연습반강의실·교수는 미공개, 빈값유지;9/18학생대제전연습반휴강 제외.'
+ out['courses'].append({'sourceId':f'kaist/main/2026-2/math-185_2/{code}/{section or "unpublished"}','campus':'main','academicYear':2026,'semester':'2','courseCode':code,'courseName':title,'section':section,'professor':prof,'classification':'','credits':None,'departmentCredits':{},'departments':['수리과학과'],'departmentClassifications':{},'sourceSchedule':f'{group} {daypair} {start//60:02}:{start%60:02}~{end//60:02}:{end%60:02}'+(' / Friday10–11연습반' if section=='O' else ' / Friday13–14연습반' if section=='P' else ''),'sourceClassroom':f'KR: {kr} / EN: {en} (상충·미확정)','scheduleStatus':'scheduled','schedules':ss,'period':{'startDate':'2026-08-31','endDate':'2026-12-18'},'remarks':note,'metadata':{'researchOnly':False,'completionClaim':False,'sourceUrl':'https://mathsci.kaist.ac.kr/ko/education/tt_files/185_2.pdf','publishedDate':'2026-09-30','sourceUpdatedDate':'2026-10-01','sourcePDFSHA256':proof['sourcePDFSHA256'],'originalEducationalFields':orig,'nativeShortCodePublished':True,'fullOfficialOfferingCodeUnverified':True,'lectureClassroomStatus':'bilingual-source-conflict-unconfirmed','classroomSelectedFromConflictingSources':False,'actualAttendanceConfirmed':False,'currentActiveStatusVerified':False,'deliveryModeStatus':'unknown-user-choice','ownCalendarSHA256':proof['ownCalendarSHA256'],'campusEvidence':proof['campusEvidence'],'regularReservationEndDerivedFromNextFinalStart':True}})
+ proof['reviewedRows'].append(orig)
+assert out['courses'][:66]==prior['courses'];assert len(out['courses'])==70;assert sum(len(c['schedules']) for c in out['courses'])==2166
+save('kaist-main-2026-2.math-room-unconfirmed-own-clock-v7.json',out);save('native-bilingual-room-conflict-own-clock-proof.json',proof)
+# Independent literal source/calendar dates.
+mw='2026-08-31 2026-09-02 2026-09-07 2026-09-09 2026-09-14 2026-09-16 2026-09-21 2026-09-23 2026-09-28 2026-09-30 2026-10-07 2026-10-12 2026-10-14 2026-10-26 2026-10-28 2026-11-02 2026-11-04 2026-11-09 2026-11-11 2026-11-16 2026-11-18 2026-11-23 2026-11-25 2026-11-30 2026-12-02 2026-12-07 2026-12-09'.split()
+tt='2026-09-01 2026-09-03 2026-09-08 2026-09-10 2026-09-15 2026-09-17 2026-09-22 2026-09-29 2026-10-01 2026-10-06 2026-10-08 2026-10-13 2026-10-15 2026-10-27 2026-10-29 2026-11-03 2026-11-05 2026-11-10 2026-11-12 2026-11-17 2026-11-19 2026-11-24 2026-11-26 2026-12-01 2026-12-03 2026-12-08 2026-12-10'.split()
+fr='2026-09-04 2026-09-11 2026-10-02 2026-10-16 2026-10-30 2026-11-06 2026-11-13 2026-11-20 2026-11-27 2026-12-04 2026-12-11'.split()
+for i,c in enumerate(out['courses'][66:]):
+ assert [s['date'] for s in c['schedules'] if s['weekday']!=5]==(mw if i<2 else tt);assert all(s['classroom']=='' for s in c['schedules'])
+ assert [s['date'] for s in c['schedules'] if s['weekday']==5]==([] if i<2 else fr)
+save('independent-python-validation.json',{'result':'PASS','old66WholeObjectsPreserved':True,'new4Courses130DatedReservations':True,'total70Courses2166DatedReservations':True,'allNewClassroomsUnconfirmedBlank':True,'sourceRoomsBothPreserved':True,'491ClockConflictNotScheduled':True,'SDKExecuted':False})
