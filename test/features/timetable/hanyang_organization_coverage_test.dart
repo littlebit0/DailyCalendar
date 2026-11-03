@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -14,6 +11,7 @@ void main() {
     () async {
       final catalog = await UniversityCatalog.load(
         bundle: SuspendedAssetBundle(),
+        university: 'hanyang',
       );
       final raw = <String>{};
       final orphans = <String>{};

@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +7,7 @@ void main() {
   test(
     'Hoseo bundled 2026-2 datasets keep every official row affiliated',
     () async {
-      final catalog = await UniversityCatalog.load();
+      final catalog = await UniversityCatalog.load(university: 'hoseo');
       final datasets = catalog.where((d) => d.universityId == 'hoseo').toList();
       expect(
         {for (final d in datasets) d.campus: d.courses.length},

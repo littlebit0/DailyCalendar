@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +7,7 @@ void main() {
   test(
     'Koreatech places every major label under an official top-level unit',
     () async {
-      final catalog = await UniversityCatalog.load();
+      final catalog = await UniversityCatalog.load(university: 'koreatech');
       final raw = <String>{};
       final orphans = <String>{};
       final colleges = <String>{};

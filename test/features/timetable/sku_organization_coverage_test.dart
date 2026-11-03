@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -10,7 +7,7 @@ void main() {
   test(
     'SKU convergence-major courses count as major for their department',
     () async {
-      final catalog = await UniversityCatalog.load();
+      final catalog = await UniversityCatalog.load(university: 'sku');
       var checked = 0;
       final byCode = <String, bool>{};
       for (final dataset in catalog.where((d) => d.universityId == 'sku')) {
@@ -38,7 +35,7 @@ void main() {
   test(
     'SKU leaves only user-held labels without an official affiliation',
     () async {
-      final catalog = await UniversityCatalog.load();
+      final catalog = await UniversityCatalog.load(university: 'sku');
       final raw = <String>{};
       final orphans = <String>{};
       for (final dataset in catalog.where((d) => d.universityId == 'sku')) {

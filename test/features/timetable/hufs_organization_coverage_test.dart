@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +5,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('HUFS places every major label under an official affiliation', () async {
-    final catalog = await UniversityCatalog.load();
+    final catalog = await UniversityCatalog.load(university: 'hufs');
     final raw = <String>{};
     final orphans = <String>{};
     var courses = 0;
