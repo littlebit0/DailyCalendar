@@ -1,0 +1,62 @@
+import 'package:flutter_test/flutter_test.dart';
+
+import 'packets/khu_current_conditional_operating.dart' as khu_current_conditional_operating;
+import 'packets/khu_current_empty_room.dart' as khu_current_empty_room;
+import 'packets/khu_current_exact_operating.dart' as khu_current_exact_operating;
+import 'packets/khu_current_fixed_qa_source_dates.dart' as khu_current_fixed_qa_source_dates;
+import 'packets/khu_current_full_native_groups.dart' as khu_current_full_native_groups;
+import 'packets/khu_current_full_plan_operating.dart' as khu_current_full_plan_operating;
+import 'packets/khu_current_individually_scoped_theory.dart' as khu_current_individually_scoped_theory;
+import 'packets/khu_current_instrument_source_dates.dart' as khu_current_instrument_source_dates;
+import 'packets/khu_current_limited_ordinary_dates.dart' as khu_current_limited_ordinary_dates;
+import 'packets/khu_current_literal_physical_rows.dart' as khu_current_literal_physical_rows;
+import 'packets/khu_current_media_whole_live.dart' as khu_current_media_whole_live;
+import 'packets/khu_current_named_holiday_live.dart' as khu_current_named_holiday_live;
+import 'packets/khu_current_neutral_operating.dart' as khu_current_neutral_operating;
+import 'packets/khu_current_note_preservation.dart' as khu_current_note_preservation;
+import 'packets/khu_current_ordinary.dart' as khu_current_ordinary;
+import 'packets/khu_current_physical_groups.dart' as khu_current_physical_groups;
+import 'packets/khu_current_regular_weekly.dart' as khu_current_regular_weekly;
+import 'packets/khu_current_reviewed_context.dart' as khu_current_reviewed_context;
+import 'packets/khu_current_scoped_exception_literal.dart' as khu_current_scoped_exception_literal;
+import 'packets/khu_current_scoped_theory_dates.dart' as khu_current_scoped_theory_dates;
+import 'packets/khu_current_semantic_public.dart' as khu_current_semantic_public;
+import 'packets/khu_current_source_agreed_teacher_dates.dart' as khu_current_source_agreed_teacher_dates;
+import 'packets/khu_current_source_concentrated_and_regular_dates.dart' as khu_current_source_concentrated_and_regular_dates;
+import 'packets/khu_current_source_confirmed_music.dart' as khu_current_source_confirmed_music;
+import 'packets/khu_current_source_library_and_ordinary_dates.dart' as khu_current_source_library_and_ordinary_dates;
+import 'packets/khu_current_source_own_teacher_dates.dart' as khu_current_source_own_teacher_dates;
+import 'packets/khu_current_source_teacher_group_dates.dart' as khu_current_source_teacher_group_dates;
+import 'packets/khu_current_twelve_explicit_live.dart' as khu_current_twelve_explicit_live;
+
+// One process per school: separate test files each cost a compile and start.
+void main() {
+  group('khu_current_conditional_operating', khu_current_conditional_operating.main);
+  group('khu_current_empty_room', khu_current_empty_room.main);
+  group('khu_current_exact_operating', khu_current_exact_operating.main);
+  group('khu_current_fixed_qa_source_dates', khu_current_fixed_qa_source_dates.main);
+  group('khu_current_full_native_groups', khu_current_full_native_groups.main);
+  group('khu_current_full_plan_operating', khu_current_full_plan_operating.main);
+  group('khu_current_individually_scoped_theory', khu_current_individually_scoped_theory.main);
+  group('khu_current_instrument_source_dates', khu_current_instrument_source_dates.main);
+  group('khu_current_limited_ordinary_dates', khu_current_limited_ordinary_dates.main);
+  group('khu_current_literal_physical_rows', khu_current_literal_physical_rows.main);
+  group('khu_current_media_whole_live', khu_current_media_whole_live.main);
+  group('khu_current_named_holiday_live', khu_current_named_holiday_live.main);
+  group('khu_current_neutral_operating', khu_current_neutral_operating.main);
+  group('khu_current_note_preservation', khu_current_note_preservation.main);
+  group('khu_current_ordinary', khu_current_ordinary.main);
+  group('khu_current_physical_groups', khu_current_physical_groups.main);
+  group('khu_current_regular_weekly', khu_current_regular_weekly.main);
+  group('khu_current_reviewed_context', khu_current_reviewed_context.main);
+  group('khu_current_scoped_exception_literal', khu_current_scoped_exception_literal.main);
+  group('khu_current_scoped_theory_dates', khu_current_scoped_theory_dates.main);
+  group('khu_current_semantic_public', khu_current_semantic_public.main);
+  group('khu_current_source_agreed_teacher_dates', khu_current_source_agreed_teacher_dates.main);
+  group('khu_current_source_concentrated_and_regular_dates', khu_current_source_concentrated_and_regular_dates.main);
+  group('khu_current_source_confirmed_music', khu_current_source_confirmed_music.main);
+  group('khu_current_source_library_and_ordinary_dates', khu_current_source_library_and_ordinary_dates.main);
+  group('khu_current_source_own_teacher_dates', khu_current_source_own_teacher_dates.main);
+  group('khu_current_source_teacher_group_dates', khu_current_source_teacher_group_dates.main);
+  group('khu_current_twelve_explicit_live', khu_current_twelve_explicit_live.main);
+}
