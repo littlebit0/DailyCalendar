@@ -1,0 +1,62 @@
+import 'package:flutter_test/flutter_test.dart';
+
+import 'packets/skku_current_attachment_operating.dart' as skku_current_attachment_operating;
+import 'packets/skku_current_colored_own_dates.dart' as skku_current_colored_own_dates;
+import 'packets/skku_current_corrected_weekly.dart' as skku_current_corrected_weekly;
+import 'packets/skku_current_direct_attachment_courses.dart' as skku_current_direct_attachment_courses;
+import 'packets/skku_current_direct_mixed_literal.dart' as skku_current_direct_mixed_literal;
+import 'packets/skku_current_education_operating.dart' as skku_current_education_operating;
+import 'packets/skku_current_exact_design.dart' as skku_current_exact_design;
+import 'packets/skku_current_exact_fall_sections.dart' as skku_current_exact_fall_sections;
+import 'packets/skku_current_full_reviewed_context.dart' as skku_current_full_reviewed_context;
+import 'packets/skku_current_incomplete.dart' as skku_current_incomplete;
+import 'packets/skku_current_literal_humanities.dart' as skku_current_literal_humanities;
+import 'packets/skku_current_literal_intervals.dart' as skku_current_literal_intervals;
+import 'packets/skku_current_literal_module_dates.dart' as skku_current_literal_module_dates;
+import 'packets/skku_current_literal_science.dart' as skku_current_literal_science;
+import 'packets/skku_current_ordinary.dart' as skku_current_ordinary;
+import 'packets/skku_current_own_contact_literal.dart' as skku_current_own_contact_literal;
+import 'packets/skku_current_regular_practice.dart' as skku_current_regular_practice;
+import 'packets/skku_current_remaining.dart' as skku_current_remaining;
+import 'packets/skku_current_scoped_operation.dart' as skku_current_scoped_operation;
+import 'packets/skku_current_scoped_physical_tail.dart' as skku_current_scoped_physical_tail;
+import 'packets/skku_current_source_linked_dates.dart' as skku_current_source_linked_dates;
+import 'packets/skku_current_source_literal_ordinary_dates.dart' as skku_current_source_literal_ordinary_dates;
+import 'packets/skku_current_source_midterm_day_lecture.dart' as skku_current_source_midterm_day_lecture;
+import 'packets/skku_current_source_professor_explicit_times.dart' as skku_current_source_professor_explicit_times;
+import 'packets/skku_current_source_project_physical_dates.dart' as skku_current_source_project_physical_dates;
+import 'packets/skku_current_source_regular_theory_dates.dart' as skku_current_source_regular_theory_dates;
+import 'packets/skku_current_source_social_welfare_dates.dart' as skku_current_source_social_welfare_dates;
+import 'packets/skku_current_visual_operating.dart' as skku_current_visual_operating;
+
+// One process per school: separate test files each cost a compile and start.
+void main() {
+  group('skku_current_attachment_operating', skku_current_attachment_operating.main);
+  group('skku_current_colored_own_dates', skku_current_colored_own_dates.main);
+  group('skku_current_corrected_weekly', skku_current_corrected_weekly.main);
+  group('skku_current_direct_attachment_courses', skku_current_direct_attachment_courses.main);
+  group('skku_current_direct_mixed_literal', skku_current_direct_mixed_literal.main);
+  group('skku_current_education_operating', skku_current_education_operating.main);
+  group('skku_current_exact_design', skku_current_exact_design.main);
+  group('skku_current_exact_fall_sections', skku_current_exact_fall_sections.main);
+  group('skku_current_full_reviewed_context', skku_current_full_reviewed_context.main);
+  group('skku_current_incomplete', skku_current_incomplete.main);
+  group('skku_current_literal_humanities', skku_current_literal_humanities.main);
+  group('skku_current_literal_intervals', skku_current_literal_intervals.main);
+  group('skku_current_literal_module_dates', skku_current_literal_module_dates.main);
+  group('skku_current_literal_science', skku_current_literal_science.main);
+  group('skku_current_ordinary', skku_current_ordinary.main);
+  group('skku_current_own_contact_literal', skku_current_own_contact_literal.main);
+  group('skku_current_regular_practice', skku_current_regular_practice.main);
+  group('skku_current_remaining', skku_current_remaining.main);
+  group('skku_current_scoped_operation', skku_current_scoped_operation.main);
+  group('skku_current_scoped_physical_tail', skku_current_scoped_physical_tail.main);
+  group('skku_current_source_linked_dates', skku_current_source_linked_dates.main);
+  group('skku_current_source_literal_ordinary_dates', skku_current_source_literal_ordinary_dates.main);
+  group('skku_current_source_midterm_day_lecture', skku_current_source_midterm_day_lecture.main);
+  group('skku_current_source_professor_explicit_times', skku_current_source_professor_explicit_times.main);
+  group('skku_current_source_project_physical_dates', skku_current_source_project_physical_dates.main);
+  group('skku_current_source_regular_theory_dates', skku_current_source_regular_theory_dates.main);
+  group('skku_current_source_social_welfare_dates', skku_current_source_social_welfare_dates.main);
+  group('skku_current_visual_operating', skku_current_visual_operating.main);
+}

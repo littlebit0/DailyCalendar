@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 const folder =
     'work/university-research/catalog-c/ordinary-weekly-held-audit-20261008';
-// Historical v1 source proof; current assets are verified by khu_current_ordinary_test.
+// Historical v1 source proof; current assets are verified by packets/khu_current_ordinary.dart.
 Map<String, dynamic> read(String path) =>
     jsonDecode(fixtureFile(path).readAsStringSync()) as Map<String, dynamic>;
 void main() {
