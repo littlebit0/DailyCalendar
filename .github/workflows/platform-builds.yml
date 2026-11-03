@@ -50,7 +50,7 @@ jobs:
 
       # Timetable tests take most of the run; timetable-test below covers them.
       - name: Test
-        run: find test -name '*_test.dart' -not -path 'test/features/timetable/*' | sort | xargs flutter test --concurrency=4
+        run: find test -name '*_test.dart' -not -path 'test/features/timetable/*' | sort | xargs flutter test --concurrency=3
 
       - name: Test Windows widget date rollover helpers
         run: python3 -m unittest discover -s tool/tests -p test_widget_date_rollover_cpp.py -v
@@ -79,7 +79,7 @@ jobs:
       # Split by file, not with --total-shards: that loads every suite in every
       # shard, and these suites read their fixtures while loading.
       - name: Test
-        run: find test/features/timetable -name '*_test.dart' | sort | awk -v shard=${{ matrix.shard }} 'NR % 3 == shard' | xargs flutter test --concurrency=4
+        run: find test/features/timetable -name '*_test.dart' | sort | awk -v shard=${{ matrix.shard }} 'NR % 3 == shard' | xargs flutter test --concurrency=3
 
   apple-lms-test:
     name: Apple LMS session tests
