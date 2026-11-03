@@ -48,6 +48,12 @@ jobs:
       - name: Test Linux reminder delivery
         run: python3 -m unittest discover -s tool/tests -p test_linux_reminders_notify.py -v
 
+      - name: Cache source fixtures
+        uses: actions/cache@v4
+        with:
+          path: /tmp/daily-source-fixtures-*
+          key: source-fixtures-${{ hashFiles('test/fixtures/source_audits/manifest.json') }}
+
       # Timetable tests take most of the run; timetable-test below covers them.
       - name: Test
         run: find test -name '*_test.dart' -not -path 'test/features/timetable/*' | sort | xargs flutter test --concurrency=3
@@ -75,6 +81,12 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Cache source fixtures
+        uses: actions/cache@v4
+        with:
+          path: /tmp/daily-source-fixtures-*
+          key: source-fixtures-${{ hashFiles('test/fixtures/source_audits/manifest.json') }}
 
       # Split by file, not with --total-shards: that loads every suite in every
       # shard, and these suites read their fixtures while loading.
