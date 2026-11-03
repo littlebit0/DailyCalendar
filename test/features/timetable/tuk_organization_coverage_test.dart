@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +5,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   test('TUK places every offering label in an official organization', () async {
-    final catalog = await UniversityCatalog.load();
+    final catalog = await UniversityCatalog.load(university: 'tuk');
     final raw = <String>{};
     final orphans = <String>{};
     for (final dataset in catalog.where((d) => d.universityId == 'tuk')) {

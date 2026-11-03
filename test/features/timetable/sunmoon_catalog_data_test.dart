@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'dart:io';
 
 import 'package:daily/features/timetable/data/timetable_period_defaults.dart';
@@ -93,7 +90,7 @@ void main() {
   test(
     'Sunmoon leaves only the user-held HUSS label without an affiliation',
     () async {
-      final catalog = await UniversityCatalog.load();
+      final catalog = await UniversityCatalog.load(university: 'sunmoon');
       final raw = <String>{};
       final orphans = <String>{};
       for (final dataset in catalog.where((d) => d.universityId == 'sunmoon')) {

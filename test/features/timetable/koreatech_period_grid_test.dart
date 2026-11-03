@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'package:daily/features/timetable/data/university_catalog.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -11,7 +8,7 @@ void main() {
   // 공식 시간표의 1A~13B=09:00~22:00(30분 단위), 메카 학사공지 56180의
   // "SHA590 02분반 금요일 13:00 ~ 16:00".
   test('Koreatech 교시 표기는 1교시 09:00부터 A·B 30분 단위로 계산된다', () async {
-    final catalog = await UniversityCatalog.load();
+    final catalog = await UniversityCatalog.load(university: 'koreatech');
     final courses = [
       for (final d in catalog.where((d) => d.universityId == 'koreatech'))
         ...d.courses,

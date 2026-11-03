@@ -1,6 +1,3 @@
-@Timeout(Duration(minutes: 3))
-library;
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -13,7 +10,7 @@ void main() {
   test(
     'Eulji restores the partial catalog with every label affiliated',
     () async {
-      final catalog = await UniversityCatalog.load();
+      final catalog = await UniversityCatalog.load(university: 'eulji');
       final datasets = catalog.where((d) => d.universityId == 'eulji').toList();
       expect(
         {for (final d in datasets) d.campus: d.courses.length},
@@ -53,7 +50,7 @@ void main() {
   );
 
   test('Eulji course names never carry the section column', () async {
-    final catalog = await UniversityCatalog.load();
+    final catalog = await UniversityCatalog.load(university: 'eulji');
     var checked = 0;
     for (final dataset in catalog.where((d) => d.universityId == 'eulji')) {
       for (final course in dataset.courses) {
