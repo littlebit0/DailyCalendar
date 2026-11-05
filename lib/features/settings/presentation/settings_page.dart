@@ -155,19 +155,21 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     });
     _appVersionInfo = _loadAppVersionInfo();
     Future.microtask(() async {
-      final key = await ref.read(settingsRepositoryProvider).geminiApiKey();
+      if (!mounted) return;
+      // Capture services before the first await: ref is unusable once the
+      // page is popped, but account restoration should still be persisted.
       final settingsRepository = ref.read(settingsRepositoryProvider);
+      final googleDriveAuthService = ref.read(googleDriveAuthServiceProvider);
+      final appleSignInService = ref.read(appleSignInServiceProvider);
+      final key = await settingsRepository.geminiApiKey();
       AppleAccount? appleAccount;
       GoogleDriveAccount? googleDriveAccount;
       var dailyAccount = settingsRepository.dailyAccount();
       try {
-        googleDriveAccount = await ref
-            .read(googleDriveAuthServiceProvider)
+        googleDriveAccount = await googleDriveAuthService
             .restorePreviousSignIn();
         if (googleDriveAccount != null) {
-          final headers = await ref
-              .read(googleDriveAuthServiceProvider)
-              .authorizationHeaders();
+          final headers = await googleDriveAuthService.authorizationHeaders();
           if (headers == null) {
             googleDriveAccount = null;
           }
@@ -187,11 +189,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         // Settings still shows the saved provider connection if restoration fails.
       }
       try {
-        appleAccount = await ref
-            .read(appleSignInServiceProvider)
-            .refreshCurrentAccount();
+        appleAccount = await appleSignInService.refreshCurrentAccount();
       } on Object {
-        appleAccount = ref.read(appleSignInServiceProvider).currentAccount;
+        appleAccount = appleSignInService.currentAccount;
       }
       if (mounted) {
         _apiKeyController.text = key ?? '';
