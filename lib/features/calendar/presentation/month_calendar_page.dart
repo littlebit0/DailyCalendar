@@ -37,6 +37,7 @@ import '../../events/domain/event_category.dart';
 import '../../events/domain/event_draft.dart';
 import '../../events/presentation/event_details_panel.dart';
 import '../../events/presentation/day_sheet_scroll_physics.dart';
+import '../../events/presentation/day_sheet_drag_release.dart';
 import '../../events/presentation/event_editor_dialog.dart';
 import '../../settings/presentation/settings_page.dart';
 import '../widgets/calendar_event_drag_layer.dart';
@@ -1341,6 +1342,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     if (scaffold == null) {
       return;
     }
+    final platform = Theme.of(context).platform;
+    final dragDismiss =
+        platform == TargetPlatform.iOS || platform == TargetPlatform.android;
     final controller = scaffold.showBottomSheet(
       (_) => SafeArea(
         top: false,
@@ -1370,37 +1374,43 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
               ),
             ),
           ),
-          child: DraggableScrollableSheet(
+          child: DaySheetDragDismissListener(
             controller: _daySheetScrollController,
-            expand: false,
-            initialChildSize: 0.68,
-            minChildSize: 0.4,
-            maxChildSize: 0.96,
-            snap: true,
-            snapSizes: const [0.68],
-            shouldCloseOnMinExtent: false,
-            builder: (context, scrollController) => EventDetailsPanel(
-              key: _daySheetSurfaceKey,
-              date: date,
-              events: events,
-              scrollController: scrollController,
-              scrollPhysics: DaySheetScrollPhysics(
-                isCollapsed: () =>
-                    _daySheetScrollController.isAttached &&
-                    _daySheetScrollController.size <= 0.4001,
+            smallestStage: 0.4,
+            isSuspended: () => !dragDismiss || _eventDragActive,
+            child: DraggableScrollableSheet(
+              controller: _daySheetScrollController,
+              expand: false,
+              initialChildSize: 0.68,
+              // Touch platforms close by dragging below the smallest stage.
+              minChildSize: dragDismiss ? 0 : 0.4,
+              maxChildSize: 0.96,
+              snap: true,
+              snapSizes: dragDismiss ? const [0.4, 0.68] : const [0.68],
+              shouldCloseOnMinExtent: dragDismiss,
+              builder: (context, scrollController) => EventDetailsPanel(
+                key: _daySheetSurfaceKey,
+                date: date,
+                events: events,
+                scrollController: scrollController,
+                scrollPhysics: DaySheetScrollPhysics(
+                  isCollapsed: () =>
+                      _daySheetScrollController.isAttached &&
+                      _daySheetScrollController.size <= 0.4001,
+                ),
+                onEventDropped: (event, targetDate, targetIndex) =>
+                    _handleCalendarEventDrop(
+                      context,
+                      ref,
+                      event,
+                      targetDate,
+                      targetIndex,
+                    ),
+                onEventDragStateChanged: _setEventDragVisualActive,
+                onEventDragInteractionStateChanged: _setEventDragActive,
+                onEventDragGlobalPositionChanged:
+                    _handleDaySheetEventDragPosition,
               ),
-              onEventDropped: (event, targetDate, targetIndex) =>
-                  _handleCalendarEventDrop(
-                    context,
-                    ref,
-                    event,
-                    targetDate,
-                    targetIndex,
-                  ),
-              onEventDragStateChanged: _setEventDragVisualActive,
-              onEventDragInteractionStateChanged: _setEventDragActive,
-              onEventDragGlobalPositionChanged:
-                  _handleDaySheetEventDragPosition,
             ),
           ),
         ),
@@ -5248,7 +5258,10 @@ class _CalendarHeader extends ConsumerWidget {
       // LMS refreshes by itself.
       if (lms.supported &&
           lms.needsLogin &&
-          ref.watch(appSettingsProvider).academicProfile?.lmsIntegrationEnabled ==
+          ref
+                  .watch(appSettingsProvider)
+                  .academicProfile
+                  ?.lmsIntegrationEnabled ==
               true)
         DailyIconAction(
           tooltip: context.tr('지금 동기화'),

@@ -1,5 +1,19 @@
 # Daily Agent Memory — current handoff
 
+## #694 Day sheet long-drag dismiss — 2026-11-05
+
+- Changed (shared Dart, iOS/Android only): the day sheet in
+  `month_calendar_page.dart` uses `minChildSize: 0`, snap stages 0.4/0.68/0.96
+  and closes at size 0. `DaySheetDragDismissListener`
+  (`lib/features/events/presentation/day_sheet_drag_release.dart`) overrides the
+  release: closes on travel >= 0.4 of sheet height, travel >= 0.3 at >= 2
+  heights/s, or below the small stage by >= 0.12 / at >= 1.2 heights/s; other
+  releases below 0.4 return to 0.4; short drags keep stage snapping. List-only
+  scrolls, event drags and multi-touch are ignored. Reduced motion jumps.
+- macOS/Windows/web keep the old 0.4 minimum with no drag close.
+- Verified: analyze, full `flutter test`. Not verified: real iPhone/Android touch
+  feel, test apps not updated (deferred by user).
+
 ## #698 / PR #699 Update-required restriction — 2026-11-01
 
 - Changed (shared Dart, all platforms, plus iOS/macOS Siri Swift): once a newer
