@@ -292,7 +292,11 @@ class EventCommandService {
           });
           await stage('sync', () async {
             if (!_isCurrentOwner(event)) return;
-            await _syncService.queueEventUpsert(event);
+            if (event.isDeleted) {
+              await _syncService.queueEventDelete(event.id);
+            } else {
+              await _syncService.queueEventUpsert(event);
+            }
           });
           await stage('briefing', _rescheduleMorningBriefingIfNeeded);
           await stage('widgets', () async {
@@ -879,22 +883,38 @@ class EventCommandService {
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
       _requireWritable();
+      if (existing != null) {
+        // Journal before the soft delete, as save does, so every cleanup
+        // stage survives a failure or process exit and replays on retry.
+        await _settingsRepository.stageEventFollowUp(
+          eventId,
+          _uuid.v4(),
+          existing.reminderMinutesBeforeList,
+        );
+      }
       await _repository.delete(eventId, beforeWrite: _requireWritable);
-      if (isCurrent != null && !isCurrent()) return;
-      if (existing != null && !_isCurrentOwner(existing)) return;
-      await _notificationService.cancelEventReminder(
-        eventId,
-        reminderMinutesBeforeList:
-            existing?.reminderMinutesBeforeList ?? const [],
-      );
       if (!current()) return;
-      await _alarmService.cancelEventAlarm(eventId);
-      if (!current()) return;
-      await _rescheduleMorningBriefingIfNeeded();
-      if (!current()) return;
-      await _syncService.queueEventDelete(eventId);
-      if (!current()) return;
-      await _refreshWidgets();
+      if (existing != null) {
+        // The tombstone is committed; follow-up failures are reported and
+        // retried without failing (or reviving) the deletion.
+        await retryPendingFollowUps();
+      } else {
+        // No stored row to journal; clean up best-effort, each independently.
+        for (final effect in <Future<void> Function()>[
+          () => _notificationService.cancelEventReminder(eventId),
+          () => _alarmService.cancelEventAlarm(eventId),
+          _rescheduleMorningBriefingIfNeeded,
+          () => _syncService.queueEventDelete(eventId),
+          _refreshWidgets,
+        ]) {
+          if (!current()) return;
+          try {
+            await effect();
+          } on Object {
+            /* nothing was deleted, so nothing is left to recover */
+          }
+        }
+      }
     } on Object catch (error) {
       _recordMutation(AnalyticsOperation.delete, stopwatch, error: error);
       rethrow;

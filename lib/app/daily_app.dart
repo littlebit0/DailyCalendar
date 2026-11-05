@@ -1017,7 +1017,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     ref.listen(eventFollowUpFailureProvider, (_, _) {
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
         SnackBar(
-          content: const Text('일정은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.'),
+          content: const Text('일정 변경은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.'),
           action: SnackBarAction(
             label: '다시 시도',
             onPressed: () {
