@@ -1178,10 +1178,11 @@ class SettingsRepository {
       changed =
           canonicalSyncJson(syncSettingsValues(current)) !=
           canonicalSyncJson(syncSettingsValues(target));
-      await _saveSettings(target, markSyncPending: false, changedFrom: null);
+      final previousDocumentRaw = _preferences.getString(
+        _settingsSyncDocumentKey,
+      );
       try {
-        // A failed register write leaves the remote change unconfirmed, so the
-        // caller keeps its restore cursor and retries the same change.
+        await _saveSettings(target, markSyncPending: false, changedFrom: null);
         await _persist(
           _preferences.setString(
             _settingsSyncDocumentKey,
@@ -1192,7 +1193,29 @@ class SettingsRepository {
           _preferences.setBool(_settingsSyncPendingKey, !merged.sameAs(remote)),
         );
       } on Object {
+        // The caller keeps its restore cursor and retries this change; roll
+        // back so that retry still sees the values as changed and notifies.
         await _resyncPreferences();
+        try {
+          await _saveSettings(
+            current,
+            markSyncPending: false,
+            changedFrom: null,
+          );
+          if (_preferences.getString(_settingsSyncDocumentKey) !=
+              previousDocumentRaw) {
+            await _persist(
+              previousDocumentRaw == null
+                  ? _preferences.remove(_settingsSyncDocumentKey)
+                  : _preferences.setString(
+                      _settingsSyncDocumentKey,
+                      previousDocumentRaw,
+                    ),
+            );
+          }
+        } on Object {
+          await _resyncPreferences();
+        }
         rethrow;
       }
     });

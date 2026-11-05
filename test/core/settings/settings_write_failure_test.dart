@@ -123,32 +123,47 @@ void main() {
     },
   );
 
-  test('remote register write failure keeps change unconfirmed', () async {
-    final current = repository.load();
-    final remote = const SettingsSyncDocument().recordChanges(
-      before: syncSettingsValues(current),
-      after: syncSettingsValues(current.copyWith(themeMode: AppThemeMode.dark)),
-      changedAt: DateTime.now().add(const Duration(minutes: 1)),
-      deviceId: 'remote-device',
-    );
-    AppSettings decode(Map<String, Object?> values, AppSettings base) =>
-        base.copyWith(
-          themeMode: AppThemeMode.values.byName(values['themeMode'] as String),
-        );
-    store.failingKeys['flutter.settingsSyncDocument.v1'] = 'false';
+  for (final key in [
+    'flutter.settingsSyncDocument.v1',
+    'flutter.settingsSyncPending',
+  ]) {
+    test('remote $key failure rolls back and retry reports change', () async {
+      final current = repository.load();
+      final remote = const SettingsSyncDocument().recordChanges(
+        before: syncSettingsValues(current),
+        after: syncSettingsValues(
+          current.copyWith(themeMode: AppThemeMode.dark),
+        ),
+        changedAt: DateTime.now().add(const Duration(minutes: 1)),
+        deviceId: 'remote-device',
+      );
+      AppSettings decode(Map<String, Object?> values, AppSettings base) =>
+          base.copyWith(
+            themeMode: AppThemeMode.values.byName(
+              values['themeMode'] as String,
+            ),
+          );
+      store.failingKeys[key] = 'false';
 
-    await expectLater(
-      repository.mergeSettingsSyncDocument(remote, decode),
-      throwsA(isA<Object>()),
-    );
-    expect((await cold()).settingsSyncDocument().sameAs(remote), isFalse);
+      await expectLater(
+        repository.mergeSettingsSyncDocument(remote, decode),
+        throwsA(isA<Object>()),
+      );
+      final reread = await cold();
+      expect(reread.load().themeMode, current.themeMode);
+      expect(reread.settingsSyncDocument().sameAs(remote), isFalse);
 
-    store.failingKeys.clear();
-    await repository.mergeSettingsSyncDocument(remote, decode);
-    final applied = await cold();
-    expect(applied.load().themeMode, AppThemeMode.dark);
-    expect(applied.settingsSyncDocument().sameAs(remote), isTrue);
-  });
+      store.failingKeys.clear();
+      expect(
+        await repository.mergeSettingsSyncDocument(remote, decode),
+        isTrue,
+      );
+      final applied = await cold();
+      expect(applied.load().themeMode, AppThemeMode.dark);
+      expect(applied.settingsSyncDocument().sameAs(remote), isTrue);
+      expect(applied.hasPendingSettingsSync, isFalse);
+    });
+  }
 }
 
 class _Store extends SharedPreferencesStorePlatform {
