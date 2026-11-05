@@ -127,9 +127,7 @@ public class PermissionManager
 
     if (this.activity == null) {
       Log.e("Geolocator", "Trying to process permission result without an valid Activity instance");
-      if (this.errorCallback != null) {
-        this.errorCallback.onError(ErrorCodes.activityMissing);
-      }
+      failPendingRequest(ErrorCodes.activityMissing);
       return false;
     }
 
@@ -138,9 +136,7 @@ public class PermissionManager
     try {
       requestedPermissions = getLocationPermissionsFromManifest(this.activity);
     } catch (PermissionUndefinedException ex) {
-      if (this.errorCallback != null) {
-        this.errorCallback.onError(ErrorCodes.permissionDefinitionsNotFound);
-      }
+      failPendingRequest(ErrorCodes.permissionDefinitionsNotFound);
 
       return false;
     }
@@ -187,11 +183,59 @@ public class PermissionManager
       }
     }
 
-    if (this.resultCallback != null) {
-      this.resultCallback.onResult(locationPermission);
+    final PermissionResultCallback callback = this.resultCallback;
+    // Release the request before notifying, so a request started by the callback is kept.
+    clearPendingRequest();
+    if (callback != null) {
+      callback.onResult(locationPermission);
     }
 
     return true;
+  }
+
+  /**
+   * Releases {@code detachedActivity} when it owns the pending request. A configuration change
+   * keeps the callbacks for the recreated Activity and returns true; any other detach fails the
+   * request so the Dart caller completes instead of waiting on a destroyed Activity.
+   */
+  public boolean onActivityDetached(Activity detachedActivity, boolean forConfigChanges) {
+    if (this.activity == null || this.activity != detachedActivity) {
+      return false;
+    }
+    if (forConfigChanges) {
+      this.activity = null;
+      return true;
+    }
+    failPendingRequest(ErrorCodes.activityMissing);
+    return false;
+  }
+
+  /** Moves a request kept by {@link #onActivityDetached} to the recreated Activity. */
+  public void onActivityReattached(Activity activity) {
+    if (this.activity == null && (this.resultCallback != null || this.errorCallback != null)) {
+      this.activity = activity;
+    }
+  }
+
+  /** Fails a request kept for a recreated Activity that never arrived (engine detached). */
+  public void cancelDetachedRequest() {
+    if (this.activity == null) {
+      failPendingRequest(ErrorCodes.activityMissing);
+    }
+  }
+
+  private void failPendingRequest(ErrorCodes errorCode) {
+    final ErrorCallback callback = this.errorCallback;
+    clearPendingRequest();
+    if (callback != null) {
+      callback.onError(errorCode);
+    }
+  }
+
+  private void clearPendingRequest() {
+    this.activity = null;
+    this.errorCallback = null;
+    this.resultCallback = null;
   }
 
   @RequiresApi(api = Build.VERSION_CODES.Q)

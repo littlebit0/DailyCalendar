@@ -55,6 +55,9 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Nullable private ActivityPluginBinding pluginBinding;
 
+  // True while this plugin's permission request waits for its recreated Activity.
+  private boolean keepsPermissionRequest = false;
+
   public GeolocatorPlugin() {
     permissionManager = PermissionManager.getInstance();
     geolocationManager = GeolocationManager.getInstance();
@@ -90,6 +93,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
     Log.d(TAG, "Attaching Geolocator to activity");
     this.pluginBinding = binding;
+    if (keepsPermissionRequest) {
+      keepsPermissionRequest = false;
+      permissionManager.onActivityReattached(binding.getActivity());
+    }
     registerListeners();
     if (methodCallHandler != null) {
       methodCallHandler.setActivity(binding.getActivity());
@@ -104,7 +111,7 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onDetachedFromActivityForConfigChanges() {
-    onDetachedFromActivity();
+    detachFromActivity(true);
   }
 
   @Override
@@ -114,7 +121,15 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onDetachedFromActivity() {
+    detachFromActivity(false);
+  }
+
+  private void detachFromActivity(boolean forConfigChanges) {
     Log.d(TAG, "Detaching Geolocator from activity");
+    if (pluginBinding != null) {
+      keepsPermissionRequest =
+          permissionManager.onActivityDetached(pluginBinding.getActivity(), forConfigChanges);
+    }
     deregisterListeners();
     if (methodCallHandler != null) {
       methodCallHandler.setActivity(null);
@@ -171,6 +186,10 @@ public class GeolocatorPlugin implements FlutterPlugin, ActivityAware {
 
   private void dispose() {
     Log.d(TAG, "Disposing Geolocator services");
+    if (keepsPermissionRequest) {
+      keepsPermissionRequest = false;
+      permissionManager.cancelDetachedRequest();
+    }
     if (methodCallHandler != null) {
       methodCallHandler.stopListening();
       methodCallHandler.setActivity(null);
