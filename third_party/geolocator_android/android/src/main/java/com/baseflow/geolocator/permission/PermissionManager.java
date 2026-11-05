@@ -125,6 +125,22 @@ public class PermissionManager
       return false;
     }
 
+    if (grantResults.length == 0) {
+      // An interrupted request returns empty arrays (AndroidX contract): answer it as cancelled
+      // exactly once. Report a plain denial, not deniedForever, so the user can be asked again.
+      Log.i(
+          "Geolocator",
+          "The grantResults array is empty. This can happen when the user cancels the permission request");
+      PermissionResultCallback callback = this.resultCallback;
+      this.resultCallback = null;
+      this.errorCallback = null;
+      if (callback == null) {
+        return false;
+      }
+      callback.onResult(LocationPermission.denied);
+      return true;
+    }
+
     if (this.activity == null) {
       Log.e("Geolocator", "Trying to process permission result without an valid Activity instance");
       if (this.errorCallback != null) {
@@ -145,12 +161,6 @@ public class PermissionManager
       return false;
     }
 
-    if (grantResults.length == 0) {
-      Log.i(
-          "Geolocator",
-          "The grantResults array is empty. This can happen when the user cancels the permission request");
-      return false;
-    }
 
     LocationPermission locationPermission = LocationPermission.denied;
     int grantedResult = PackageManager.PERMISSION_DENIED;
