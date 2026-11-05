@@ -3,6 +3,7 @@ import 'provider_retention.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import '../../features/imogi/data/imogi_store.dart';
 import '../../features/timetable/data/timetable_store.dart';
 import '../../features/timetable/data/timetable_period_defaults.dart';
 import 'package:flutter/foundation.dart';
@@ -424,6 +425,10 @@ final timetablePeriodPreparationProvider = FutureProvider<void>((ref) async {
       : profile.timetableUniversity ?? '';
   if (ref.mounted) await store.seedTermPeriods(defaults.periodsFor(university));
 });
+
+final imogiStoreProvider = Provider<ImogiStore>(
+  (ref) => ref.watch(settingsRepositoryProvider).imogiStore,
+);
 
 final timetableStoreProvider = Provider<TimetableStore>((ref) {
   ref.watch(timetablePeriodPreparationProvider);

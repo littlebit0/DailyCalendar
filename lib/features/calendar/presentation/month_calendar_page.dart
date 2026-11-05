@@ -42,13 +42,23 @@ import '../../settings/presentation/settings_page.dart';
 import '../widgets/calendar_event_drag_layer.dart';
 import '../widgets/calendar_month_grid.dart';
 import '../widgets/schedule_timeline_view.dart';
+import '../../imogi/presentation/imogi_page.dart';
+import '../../imogi/presentation/imogi_tab_icon.dart';
 import '../../timetable/presentation/timetable_page.dart';
 import '../../settings/presentation/academic_profile_page.dart';
 import '../../timetable/presentation/timetable_schedule.dart';
 
-enum _BottomCenterAction { quickAccess, calendar, ai, timetable }
+enum _BottomCenterAction { quickAccess, calendar, ai, timetable, imogi }
 
-enum _BottomNavigationItem { quickAccess, week, month, day, siri, timetable }
+enum _BottomNavigationItem {
+  quickAccess,
+  week,
+  month,
+  day,
+  siri,
+  timetable,
+  imogi,
+}
 
 enum _RecurringDragScope { onlyThis, future, all }
 
@@ -125,6 +135,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
   var _searchOpen = false;
   var _quickAccessSelected = false;
   var _timetableSelected = false;
+  var _imogiSelected = false;
   var _showAllDayScheduleEvents = true;
   var _eventDragActive = false;
   var _eventDragVisualActive = false;
@@ -210,7 +221,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
         viewMode == CalendarViewMode.day &&
         settings.weekDayLayoutMode == WeekDayLayoutMode.schedule;
     final showEventSidebar =
-        !_timetableSelected && (wide || showScheduleDaySidebar);
+        !_timetableSelected &&
+        !_imogiSelected &&
+        (wide || showScheduleDaySidebar);
     final showStableEventSidebar =
         !_quickAccessSelected &&
         showEventSidebar &&
@@ -241,11 +254,15 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                     searchOpen: _searchOpen,
                     quickAccessSelected: _quickAccessSelected,
                     timetableSelected: _timetableSelected,
+                    imogiSelected: _imogiSelected,
                     onSearchPressed: _toggleSearch,
                     onTimetablePressed: () =>
                         _selectBottomAction(_BottomCenterAction.timetable),
+                    onImogiPressed: () =>
+                        _selectBottomAction(_BottomCenterAction.imogi),
                     onQuickAccessPressed: () {
                       _timetableSelected = false;
+                      _imogiSelected = false;
                       _closeSearch();
                       setState(() => _quickAccessSelected = true);
                     },
@@ -258,13 +275,17 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                         Expanded(
                           key: _calendarDragSurfaceKey,
                           child: _OrderedCalendarSwitcher(
-                            order: _timetableSelected
+                            order: _imogiSelected
+                                ? (desktop ? -2 : 5)
+                                : _timetableSelected
                                 ? (desktop ? -1 : 4)
                                 : _calendarContentOrder(
                                     _quickAccessSelected,
                                     viewMode,
                                   ),
-                            child: _timetableSelected
+                            child: _imogiSelected
+                                ? const ImogiPage(key: ValueKey<int>(-2))
+                                : _timetableSelected
                                 ? const UpdateRequiredGate(
                                     key: ValueKey<int>(-1),
                                     child: AcademicFeatureGate(
@@ -462,8 +483,12 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                               key: _bottomBarKey,
                               viewMode: viewMode,
                               calendarActive:
-                                  !_quickAccessSelected && !_timetableSelected,
-                              activeAction: _timetableSelected
+                                  !_quickAccessSelected &&
+                                  !_timetableSelected &&
+                                  !_imogiSelected,
+                              activeAction: _imogiSelected
+                                  ? _BottomCenterAction.imogi
+                                  : _timetableSelected
                                   ? _BottomCenterAction.timetable
                                   : aiOpen
                                   ? _BottomCenterAction.ai
@@ -910,7 +935,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     CalendarViewMode viewMode, {
     bool fromBottomBar = false,
   }) {
-    if (_timetableSelected) setState(() => _timetableSelected = false);
+    if (_timetableSelected || _imogiSelected) {
+      setState(() => _timetableSelected = _imogiSelected = false);
+    }
     ref.read(calendarViewModeProvider.notifier).state = viewMode;
     _recordAnalytics(
       AnalyticsRecord.calendarViewChanged(
@@ -997,7 +1024,19 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     if (action != _BottomCenterAction.timetable && _timetableSelected) {
       setState(() => _timetableSelected = false);
     }
+    if (action != _BottomCenterAction.imogi && _imogiSelected) {
+      setState(() => _imogiSelected = false);
+    }
     switch (action) {
+      case _BottomCenterAction.imogi:
+        _closeSearch();
+        _dismissDaySheet();
+        _aiOpen.value = false;
+        _markBottomAction(action);
+        setState(() {
+          _imogiSelected = true;
+          _quickAccessSelected = false;
+        });
       case _BottomCenterAction.timetable:
         _closeSearch();
         _dismissDaySheet();
@@ -5208,9 +5247,11 @@ class _CalendarHeader extends ConsumerWidget {
     required this.searchOpen,
     required this.quickAccessSelected,
     required this.timetableSelected,
+    required this.imogiSelected,
     required this.onSearchPressed,
     required this.onQuickAccessPressed,
     required this.onTimetablePressed,
+    required this.onImogiPressed,
     required this.onCalendarViewSelected,
     required this.onLlmPressed,
   });
@@ -5224,9 +5265,11 @@ class _CalendarHeader extends ConsumerWidget {
   final bool searchOpen;
   final bool quickAccessSelected;
   final bool timetableSelected;
+  final bool imogiSelected;
   final VoidCallback onSearchPressed;
   final VoidCallback onQuickAccessPressed;
   final VoidCallback onTimetablePressed;
+  final VoidCallback onImogiPressed;
   final ValueChanged<CalendarViewMode> onCalendarViewSelected;
   final VoidCallback onLlmPressed;
 
@@ -5248,7 +5291,10 @@ class _CalendarHeader extends ConsumerWidget {
       // LMS refreshes by itself.
       if (lms.supported &&
           lms.needsLogin &&
-          ref.watch(appSettingsProvider).academicProfile?.lmsIntegrationEnabled ==
+          ref
+                  .watch(appSettingsProvider)
+                  .academicProfile
+                  ?.lmsIntegrationEnabled ==
               true)
         DailyIconAction(
           tooltip: context.tr('지금 동기화'),
@@ -5418,11 +5464,15 @@ class _CalendarHeader extends ConsumerWidget {
         borderless: true,
       ),
     ];
+    // Timetable and imogi replace the calendar body and its period controls.
+    final pageSelected = timetableSelected || imogiSelected;
     final timetableTitle = Padding(
       padding: const EdgeInsets.symmetric(horizontal: 2),
       child: Text(
-        context.tr('시간표'),
-        key: const ValueKey('timetable-primary-title'),
+        context.tr(imogiSelected ? '잊모기' : '시간표'),
+        key: ValueKey(
+          imogiSelected ? 'imogi-primary-title' : 'timetable-primary-title',
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.titleLarge,
@@ -5434,10 +5484,8 @@ class _CalendarHeader extends ConsumerWidget {
           ? 'Siri'
           : 'LLM';
       final viewSwitch = SegmentedButton<CalendarViewMode>(
-        selected: quickAccessSelected || timetableSelected
-            ? const {}
-            : {viewMode},
-        emptySelectionAllowed: quickAccessSelected || timetableSelected,
+        selected: quickAccessSelected || pageSelected ? const {} : {viewMode},
+        emptySelectionAllowed: quickAccessSelected || pageSelected,
         showSelectedIcon: false,
         style: ButtonStyle(
           visualDensity: VisualDensity.compact,
@@ -5512,10 +5560,10 @@ class _CalendarHeader extends ConsumerWidget {
             Expanded(
               child: Align(
                 alignment: Alignment.centerLeft,
-                child: timetableSelected ? timetableTitle : monthButton,
+                child: pageSelected ? timetableTitle : monthButton,
               ),
             ),
-            if (!timetableSelected) ...[
+            if (!pageSelected) ...[
               ...navigationActions,
               ...utilityActions.take(2),
               ...lmsActions,
@@ -5529,6 +5577,16 @@ class _CalendarHeader extends ConsumerWidget {
               selectedIcon: Icons.school_rounded,
               borderless: true,
             ),
+            ImogiTabIcon(
+              child: DailyIconAction(
+                tooltip: context.tr('잊모기'),
+                onPressed: onImogiPressed,
+                selected: imogiSelected,
+                icon: imogiIcon,
+                selectedIcon: imogiSelectedIcon,
+                borderless: true,
+              ),
+            ),
             quickAccessButton,
             viewSwitch,
             utilityActions.last,
@@ -5537,7 +5595,7 @@ class _CalendarHeader extends ConsumerWidget {
       );
     }
 
-    if (timetableSelected) {
+    if (pageSelected) {
       return Padding(
         key: mobile
             ? ValueKey('${ios ? 'ios' : 'android'}-calendar-toolbar')
@@ -6066,6 +6124,9 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
     if (widget.activeAction == _BottomCenterAction.timetable) {
       return _BottomNavigationItem.timetable;
     }
+    if (widget.activeAction == _BottomCenterAction.imogi) {
+      return _BottomNavigationItem.imogi;
+    }
     final selectedAction = widget.selectedAction;
     if (selectedAction == _BottomCenterAction.ai) {
       return _BottomNavigationItem.siri;
@@ -6271,6 +6332,8 @@ class _CalendarBottomBarState extends State<_CalendarBottomBar> {
     switch (item) {
       case _BottomNavigationItem.timetable:
         widget.onCenterActionSelected(_BottomCenterAction.timetable);
+      case _BottomNavigationItem.imogi:
+        widget.onCenterActionSelected(_BottomCenterAction.imogi);
       case _BottomNavigationItem.quickAccess:
         widget.onCenterActionSelected(_BottomCenterAction.quickAccess);
       case _BottomNavigationItem.week:
@@ -6307,6 +6370,7 @@ class _UnifiedBottomNavigationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final tooltip = switch (item) {
       _BottomNavigationItem.timetable => context.tr('시간표'),
+      _BottomNavigationItem.imogi => context.tr('잊모기'),
       _BottomNavigationItem.quickAccess => context.tr('빠른 보기'),
       _BottomNavigationItem.week => context.l10n.calendarViewName(
         CalendarViewMode.week,
@@ -6338,6 +6402,9 @@ class _UnifiedBottomNavigationButton extends StatelessWidget {
     final color = selected ? Colors.white : DailyUi.secondaryText(context);
     if (item == _BottomNavigationItem.timetable) {
       return Icon(Icons.school_outlined, size: 20, color: color);
+    }
+    if (item == _BottomNavigationItem.imogi) {
+      return ImogiTabIcon(child: Icon(imogiIcon, size: 20, color: color));
     }
     if (item == _BottomNavigationItem.quickAccess) {
       return Icon(Icons.view_agenda_outlined, size: 20, color: color);
@@ -6466,20 +6533,26 @@ class _LegacyCalendarBottomBar extends StatelessWidget {
                       _BottomCenterAction.calendar => context.tr('달력'),
                       _BottomCenterAction.ai => 'AI',
                       _BottomCenterAction.timetable => context.tr('시간표'),
+                      _BottomCenterAction.imogi => context.tr('잊모기'),
                     },
-                    itemBuilder: (context, action, selected) => Icon(
-                      switch (action) {
-                        _BottomCenterAction.quickAccess =>
-                          Icons.view_agenda_outlined,
-                        _BottomCenterAction.calendar =>
-                          Icons.date_range_rounded,
-                        _BottomCenterAction.ai => Icons.stars_rounded,
-                        _BottomCenterAction.timetable => Icons.school_outlined,
-                      },
-                      size: 20,
-                      color: selected
-                          ? Colors.white
-                          : DailyUi.secondaryText(context),
+                    itemBuilder: (context, action, selected) => ImogiTabIcon(
+                      enabled: action == _BottomCenterAction.imogi,
+                      child: Icon(
+                        switch (action) {
+                          _BottomCenterAction.quickAccess =>
+                            Icons.view_agenda_outlined,
+                          _BottomCenterAction.calendar =>
+                            Icons.date_range_rounded,
+                          _BottomCenterAction.ai => Icons.stars_rounded,
+                          _BottomCenterAction.timetable =>
+                            Icons.school_outlined,
+                          _BottomCenterAction.imogi => imogiIcon,
+                        },
+                        size: 20,
+                        color: selected
+                            ? Colors.white
+                            : DailyUi.secondaryText(context),
+                      ),
                     ),
                     onChanged: onCenterActionSelected,
                   ),

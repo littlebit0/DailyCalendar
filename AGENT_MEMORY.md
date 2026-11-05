@@ -1,5 +1,25 @@
 # Daily Agent Memory — current handoff
 
+## #695 잊모기 (dateless quick to-do tab) — 2026-11-05
+
+- Changed (shared Dart, all platforms): new `lib/features/imogi/`. Items live in
+  `ImogiStore` (SharedPreferences `daily.imogi.v1`, offline-first) and sync as a
+  separate Drive AppData document `daily-sync-v2-imogi.json` (`type: imogi`), one
+  LWW register per item reusing `TimetableSyncValue`; deletion is a null-value
+  tombstone and merges never drop items missing remotely. It is never written to
+  the event DB, so calendar views never show it. In `GoogleDriveSyncService` the
+  existing `includeTimetable` request flag now covers both separate documents
+  (`_documentsPending`); each backs up only when it has pending changes.
+  `resetAll` clears it locally (no cloud tombstones), like the timetable.
+- UI: a 7th item in the mobile bottom bar (6th segment in the legacy bar) and a
+  desktop toolbar button; `ImogiTabIcon` shows an in-app Material `Badge` of the
+  open count (hidden at 0, `99+` above 99), never an OS / app-icon badge.
+  "일정으로 전환" opens `EventEditorDialog` (new `initialTitle` / `initialMemo`),
+  creates one event and keeps the item as completed (restorable).
+- Not done (follow-up): optional repeat reminder notifications.
+- Verified: see PR. NOT verified: Mac/iPhone/Android/Windows devices, small
+  screens with large text, dark mode on device.
+
 ## #698 / PR #699 Update-required restriction — 2026-11-01
 
 - Changed (shared Dart, all platforms, plus iOS/macOS Siri Swift): once a newer

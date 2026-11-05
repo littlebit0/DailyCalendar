@@ -27,6 +27,8 @@ class EventEditorDialog extends StatefulWidget {
     this.initialEndDate,
     this.initialAllDay,
     this.event,
+    this.initialTitle,
+    this.initialMemo,
     this.categories = EventCategory.values,
     this.loadCategories,
     this.defaultReminderMinutes = 60,
@@ -41,6 +43,10 @@ class EventEditorDialog extends StatefulWidget {
   final DateTime? initialEndDate;
   final bool? initialAllDay;
   final CalendarEvent? event;
+
+  /// Prefills a new event, e.g. when an imogi item is converted.
+  final String? initialTitle;
+  final String? initialMemo;
   final List<EventCategory> categories;
   final List<EventCategory> Function()? loadCategories;
   final int defaultReminderMinutes;
@@ -93,8 +99,12 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   void initState() {
     super.initState();
     final event = widget.event;
-    _titleController = TextEditingController(text: event?.title ?? '');
-    _memoController = TextEditingController(text: event?.memo ?? '');
+    _titleController = TextEditingController(
+      text: event?.title ?? widget.initialTitle ?? '',
+    );
+    _memoController = TextEditingController(
+      text: event?.memo ?? widget.initialMemo ?? '',
+    );
     _locationController = TextEditingController(text: event?.location ?? '');
     _urlController = TextEditingController(text: event?.url ?? '');
     _weatherController = TextEditingController(text: event?.weather ?? '');

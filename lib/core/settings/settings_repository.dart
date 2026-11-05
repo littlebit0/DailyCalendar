@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../../features/imogi/data/imogi_store.dart';
 import '../../features/timetable/data/timetable_store.dart';
 
 import 'package:crypto/crypto.dart';
@@ -222,6 +223,7 @@ class SettingsRepository {
   late final weatherStore = WeatherStore(_preferences);
   late final academicStore = AcademicStore(_preferences);
   late final timetableStore = TimetableStore(_preferences, now: _now);
+  late final imogiStore = ImogiStore(_preferences, now: _now);
   final FlutterSecureStorage _secureStorage;
   final DateTime Function() _now;
   Future<void> _settingsMutationTail = Future<void>.value();
@@ -1439,6 +1441,7 @@ class SettingsRepository {
   Future<void> resetAll() {
     academicStore.invalidate();
     timetableStore.invalidate();
+    imogiStore.invalidate();
     _settingsMutationGeneration += 1;
     return _enqueueSettingsMutation(_resetAll);
   }
@@ -1446,6 +1449,7 @@ class SettingsRepository {
   Future<void> _resetAll() async {
     await academicStore.clear();
     await timetableStore.clearLocal();
+    await imogiStore.clearLocal();
     await LockScreenWallpaperService.reset();
     await weatherStore.clear();
     await frequentPlaces.clear();

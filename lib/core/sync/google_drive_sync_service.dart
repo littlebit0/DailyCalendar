@@ -12,6 +12,7 @@ import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../../features/events/domain/recurrence_rule.dart';
 import '../../features/events/domain/event_deletion.dart';
+import '../../features/imogi/data/imogi_store.dart';
 import '../../features/timetable/data/timetable_store.dart';
 import '../../features/timetable/data/timetable_sync_document.dart';
 import 'sync_version.dart';
@@ -90,11 +91,13 @@ class GoogleDriveSyncService implements SyncService {
       validateRequest: () => _validateSyncSession?.call(),
     );
     _timetableStore.localRevisionNotifier.addListener(_timetableChanged);
+    _imogiStore.localRevisionNotifier.addListener(_imogiChanged);
   }
 
   static const _legacySyncFileName = 'daily-sync-v1.json';
   static const _settingsFileName = 'daily-sync-v2-settings.json';
   static const _timetableFileName = 'daily-sync-v2-timetable.json';
+  static const _imogiFileName = 'daily-sync-v2-imogi.json';
   static const _eventFilePrefix = 'daily-sync-v2-event-';
   static const _eventFileSuffix = '.json';
   static const _v2FilePrefix = 'daily-sync-v2-';
@@ -114,6 +117,13 @@ class GoogleDriveSyncService implements SyncService {
   final SettingsRepository _settingsRepository;
   TimetableStore get _timetableStore => _settingsRepository.timetableStore;
   (String?, String?, String?)? _timetableBootstrapIdentity;
+  ImogiStore get _imogiStore => _settingsRepository.imogiStore;
+  (String?, String?, String?)? _imogiBootstrapIdentity;
+
+  /// Request flag `includeTimetable` covers both separate documents
+  /// (timetable and imogi); each one uploads only what it owns.
+  bool get _documentsPending =>
+      _timetableStore.hasPendingSync || _imogiStore.hasPendingSync;
   (String?, String?, String?)? _academicSettingsBootstrapIdentity;
   late final PacedHttpClient _httpClient;
   final Duration _backupRestoreDelay;
@@ -238,6 +248,10 @@ class GoogleDriveSyncService implements SyncService {
     if (_started && _timetableStore.hasPendingSync) _queueChangeSync();
   }
 
+  void _imogiChanged() {
+    if (_started && _imogiStore.hasPendingSync) _queueChangeSync();
+  }
+
   Future<void> syncNow({bool promptIfNecessary = false}) async {
     final eventIds = await _takePendingEventIds();
     await _enqueueSync(
@@ -246,7 +260,7 @@ class GoogleDriveSyncService implements SyncService {
       promptIfNecessary: promptIfNecessary,
       eventIds: eventIds,
       includeSettings: _settingsRepository.hasPendingSettingsSync,
-      includeTimetable: _timetableStore.hasPendingSync,
+      includeTimetable: _documentsPending,
     );
   }
 
@@ -257,7 +271,7 @@ class GoogleDriveSyncService implements SyncService {
       promptIfNecessary: promptIfNecessary,
       eventIds: eventIds,
       includeSettings: _settingsRepository.hasPendingSettingsSync,
-      includeTimetable: _timetableStore.hasPendingSync,
+      includeTimetable: _documentsPending,
       initializeChangeToken: true,
     );
   }
@@ -281,8 +295,7 @@ class GoogleDriveSyncService implements SyncService {
   }) {
     final shouldIncludeSettings = includeSettings ?? eventIds == null;
     final shouldIncludeTimetable =
-        includeTimetable ??
-        (eventIds == null && _timetableStore.hasPendingSync);
+        includeTimetable ?? (eventIds == null && _documentsPending);
     if (!shouldIncludeSettings &&
         !shouldIncludeTimetable &&
         eventIds != null &&
@@ -314,7 +327,7 @@ class GoogleDriveSyncService implements SyncService {
       _manualRestoreDepth -= 1;
       if (succeeded &&
           _manualRestoreDepth == 0 &&
-          (_queuedEventIds.isNotEmpty || _timetableStore.hasPendingSync)) {
+          (_queuedEventIds.isNotEmpty || _documentsPending)) {
         _queueChangeSync();
       }
     }
@@ -326,7 +339,7 @@ class GoogleDriveSyncService implements SyncService {
   }) async {
     final eventIds = await _takePendingEventIds();
     final includeSettings = _settingsRepository.hasPendingSettingsSync;
-    final includeTimetable = _timetableStore.hasPendingSync;
+    final includeTimetable = _documentsPending;
 
     if (restoreAfterBackup) {
       await _enqueueSync(
@@ -395,7 +408,7 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<bool> hasPendingChanges() async =>
-      _timetableStore.hasPendingSync ||
+      _documentsPending ||
       _settingsRepository.hasPendingSettingsSync ||
       (await _eventRepository.pendingSyncEvents()).any(_canSyncEvent) ||
       (await _maintenance?.deletionRecords(pendingOnly: true) ??
@@ -442,6 +455,7 @@ class GoogleDriveSyncService implements SyncService {
     _sessionGeneration++;
     _started = false;
     _timetableBootstrapIdentity = null;
+    _imogiBootstrapIdentity = null;
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
     _changeSyncTimer = null;
@@ -463,6 +477,7 @@ class GoogleDriveSyncService implements SyncService {
   void dispose() {
     _sessionGeneration++;
     _timetableStore.localRevisionNotifier.removeListener(_timetableChanged);
+    _imogiStore.localRevisionNotifier.removeListener(_imogiChanged);
     _cancelQueuedRequests();
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
@@ -588,7 +603,7 @@ class GoogleDriveSyncService implements SyncService {
     final eventIds = Set<String>.from(_queuedEventIds);
     _queuedEventIds.clear();
     final includeSettings = _settingsRepository.hasPendingSettingsSync;
-    final includeTimetable = _timetableStore.hasPendingSync;
+    final includeTimetable = _documentsPending;
     if (eventIds.isEmpty && !includeSettings && !includeTimetable) {
       return;
     }
@@ -692,6 +707,11 @@ class GoogleDriveSyncService implements SyncService {
               '아직 동기화되지 않은 시간표 변경이 남아 있습니다. 다시 시도해 주세요.',
             );
           }
+          if (request.includeTimetable && _imogiStore.hasPendingSync) {
+            throw const GoogleDriveSyncException(
+              '아직 동기화되지 않은 잊모기 변경이 남아 있습니다. 다시 시도해 주세요.',
+            );
+          }
           break;
         case _SyncRequestKind.restoreOnly:
           await _restore(headers);
@@ -704,7 +724,7 @@ class GoogleDriveSyncService implements SyncService {
           if (request.includeSettings) {
             await _backupSettings(headers, _settingsRepository.load());
           }
-          if (request.includeTimetable) await _backupTimetable(headers);
+          if (request.includeTimetable) await _backupDocuments(headers);
           statusNotifier.value = statusNotifier.value.copyWith(
             message: '복원 준비 중',
           );
@@ -732,7 +752,7 @@ class GoogleDriveSyncService implements SyncService {
           if (request.includeSettings) {
             await _backupSettings(headers, _settingsRepository.load());
           }
-          if (request.includeTimetable) await _backupTimetable(headers);
+          if (request.includeTimetable) await _backupDocuments(headers);
           statusNotifier.value = statusNotifier.value.copyWith(
             message: '다른 기기 변경 확인 준비 중',
           );
@@ -778,7 +798,7 @@ class GoogleDriveSyncService implements SyncService {
           headers,
           eventIds: remaining,
           includeSettings: _settingsRepository.hasPendingSettingsSync,
-          includeTimetable: _timetableStore.hasPendingSync,
+          includeTimetable: _documentsPending,
         );
         if (conflicts > 0 || await hasPendingChanges()) {
           throw const GoogleDriveSyncException(
@@ -972,7 +992,7 @@ class GoogleDriveSyncService implements SyncService {
     if (includeSettings) {
       await _backupSettings(authHeaders, _settingsRepository.load());
     }
-    if (includeTimetable) await _backupTimetable(authHeaders);
+    if (includeTimetable) await _backupDocuments(authHeaders);
     return conflicts;
   }
 
@@ -981,6 +1001,7 @@ class GoogleDriveSyncService implements SyncService {
     final remoteFiles = await _listEventFiles(authHeaders);
     final remoteEvents = await _downloadEventFiles(authHeaders, remoteFiles);
     final remoteTimetable = await _downloadRestorableTimetable(authHeaders);
+    final remoteImogi = await _downloadRestorableImogi(authHeaders);
     _validateSyncSession?.call();
     await _applyDownloadedEvents(remoteEvents);
     await _queueEventsMissingFromDrive({
@@ -988,6 +1009,7 @@ class GoogleDriveSyncService implements SyncService {
     });
     if (remoteSettings != null) await _applyDownloadedSettings(remoteSettings);
     await _applyDownloadedTimetable(remoteTimetable);
+    await _applyDownloadedImogi(remoteImogi);
     _academicSettingsBootstrapIdentity = _accountIdentity;
     await _refreshWidgets();
   }
@@ -1180,11 +1202,16 @@ class GoogleDriveSyncService implements SyncService {
             academicProfile.lmsUserId == null ||
             academicProfile.lmsIntegrationEnabled == null);
     var needsTimetable = _timetableBootstrapIdentity != _accountIdentity;
+    var needsImogi = _imogiBootstrapIdentity != _accountIdentity;
     final externalEvents = <_DownloadedEvent>[];
     final eventIds = <String>{};
     for (final change in dailyChanges.values) {
       if (change.fileName == _timetableFileName) {
         needsTimetable = true;
+        continue;
+      }
+      if (change.fileName == _imogiFileName) {
+        needsImogi = true;
         continue;
       }
       if (change.fileName == _settingsFileName) {
@@ -1219,6 +1246,9 @@ class GoogleDriveSyncService implements SyncService {
     final externalTimetable = needsTimetable
         ? await _downloadRestorableTimetable(authHeaders)
         : null;
+    final externalImogi = needsImogi
+        ? await _downloadRestorableImogi(authHeaders)
+        : null;
 
     var restored = false;
     _validateSyncSession?.call();
@@ -1231,6 +1261,7 @@ class GoogleDriveSyncService implements SyncService {
     if (needsTimetable) {
       restored = await _applyDownloadedTimetable(externalTimetable) || restored;
     }
+    if (needsImogi) await _applyDownloadedImogi(externalImogi);
     if (needsAcademicSettings) {
       _academicSettingsBootstrapIdentity = _accountIdentity;
     }
@@ -1248,6 +1279,7 @@ class GoogleDriveSyncService implements SyncService {
   bool _isDailySyncFileName(String fileName) {
     return fileName == _settingsFileName ||
         fileName == _timetableFileName ||
+        fileName == _imogiFileName ||
         _eventIdFromFileName(fileName) != null;
   }
 
@@ -1445,6 +1477,128 @@ class GoogleDriveSyncService implements SyncService {
       return;
     }
     throw const GoogleDriveSyncException('동시에 변경된 시간표가 있어 동기화를 다시 시도해야 합니다.');
+  }
+
+  Future<void> _backupDocuments(Map<String, String> headers) async {
+    // An imogi-only change must not cost timetable Drive requests.
+    if (_timetableStore.hasPendingSync || !_imogiStore.hasPendingSync) {
+      await _backupTimetable(headers);
+    }
+    if (_imogiStore.hasPendingSync) await _backupImogi(headers);
+  }
+
+  Future<List<_DriveFile>> _listImogiFiles(Map<String, String> headers) =>
+      _listFiles(headers, "name = '$_imogiFileName' and trashed = false");
+
+  Future<(ImogiSyncDocument, String, String?)> _downloadImogiFile(
+    Map<String, String> headers,
+    String fileId, {
+    bool requireVersion = false,
+  }) async {
+    final (response, etag) = await _downloadJson(
+      headers,
+      fileId,
+      requireVersion,
+    );
+    try {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      if (data['schemaVersion'] != 2 || data['type'] != 'imogi') {
+        throw const FormatException('Unsupported imogi sync document');
+      }
+      return (
+        ImogiSyncDocument.fromJson(
+          Map<String, dynamic>.from(data['document'] as Map),
+        ),
+        fileId,
+        etag,
+      );
+    } on FormatException {
+      throw const GoogleDriveSyncException(
+        'Google Drive 잊모기 데이터가 손상되었거나 지원하지 않는 형식입니다. 기존 데이터는 보존됩니다.',
+      );
+    } on TypeError {
+      throw const GoogleDriveSyncException(
+        'Google Drive 잊모기 데이터가 손상되었거나 지원하지 않는 형식입니다. 기존 데이터는 보존됩니다.',
+      );
+    }
+  }
+
+  Future<ImogiSyncDocument?> _downloadRestorableImogi(
+    Map<String, String> headers,
+  ) async {
+    final files = await _listImogiFiles(headers);
+    if (files.isEmpty) return null;
+    var merged = ImogiSyncDocument();
+    for (final file in files) {
+      merged = merged.merge((await _downloadImogiFile(headers, file.id)).$1);
+    }
+    return merged;
+  }
+
+  /// Merges, never replaces: an item missing from Drive is kept locally.
+  Future<void> _applyDownloadedImogi(ImogiSyncDocument? remote) async {
+    _validateSyncSession?.call();
+    if (remote != null) {
+      await _imogiStore.mergeSyncDocument(
+        remote,
+        validateSession: _validateSyncSession,
+      );
+      _imogiChanged();
+    }
+    _validateSyncSession?.call();
+    _imogiBootstrapIdentity = _accountIdentity;
+  }
+
+  Future<void> _backupImogi(Map<String, String> headers) async {
+    for (var attempt = 0; attempt < 4; attempt++) {
+      final files = await _listImogiFiles(headers);
+      final remote = await _mapSequentially(
+        files,
+        (file) => _downloadImogiFile(headers, file.id, requireVersion: true),
+      );
+      _validateSyncSession?.call();
+      var merged = _imogiStore.syncDocument();
+      for (final item in remote) {
+        merged = merged.merge(item.$1);
+      }
+      final payload = jsonEncode({
+        'schemaVersion': 2,
+        'type': 'imogi',
+        'document': merged.toJson(),
+      });
+      try {
+        if (files.isEmpty) {
+          if (!merged.isEmpty) {
+            await _uploadJsonFile(
+              headers,
+              fileName: _imogiFileName,
+              jsonBody: payload,
+            );
+          }
+        } else {
+          for (final item in remote) {
+            if (item.$1.sameAs(merged)) continue;
+            await _uploadJsonFile(
+              headers,
+              fileName: _imogiFileName,
+              fileId: item.$2,
+              expectedEtag: item.$3,
+              jsonBody: payload,
+            );
+          }
+        }
+      } on _ConcurrentDriveWrite {
+        continue;
+      }
+      _validateSyncSession?.call();
+      await _imogiStore.acknowledgeSyncDocument(
+        merged,
+        validateSession: _validateSyncSession,
+      );
+      _imogiBootstrapIdentity = _accountIdentity;
+      return;
+    }
+    throw const GoogleDriveSyncException('동시에 변경된 잊모기가 있어 동기화를 다시 시도해야 합니다.');
   }
 
   Future<void> _backupSettings(
