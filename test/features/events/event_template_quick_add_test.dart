@@ -108,6 +108,37 @@ void main() {
     expect(attempts, 2);
   });
 
+  testWidgets('many templates scroll with the form instead of overflowing', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(360, 640);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await _open(
+      tester,
+      EventEditorDialog(
+        initialDate: DateTime(2026, 10, 30),
+        templates: [
+          for (var i = 0; i < 40; i++)
+            EventTemplate(
+              id: 't$i',
+              name: '템플릿 이름 $i',
+              title: '운동',
+              categoryId: EventCategory.basic.id,
+            ),
+        ],
+        onQuickAdd: (_) async {},
+      ),
+    );
+    expect(tester.takeException(), isNull);
+    await tester.scrollUntilVisible(
+      find.text('제목'),
+      200,
+      scrollable: find.byType(Scrollable).first,
+    );
+    expect(find.text('제목'), findsOneWidget);
+  });
+
   testWidgets('quick add is offered only while creating an event', (
     tester,
   ) async {

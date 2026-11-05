@@ -115,6 +115,21 @@ void main() {
       expect(template.startMinutes, 0);
     });
 
+    test('an all-day span ending on a DST change keeps its day count', () {
+      final template = EventTemplate.fromDraft(
+        EventDraft(
+          title: '주말',
+          startAt: DateTime(2026, 3, 7),
+          endAt: DateTime(2026, 3, 9),
+          allDay: true,
+          category: _workout,
+        ),
+        id: 'weekend',
+        name: '주말',
+      );
+      expect(template.endDayOffset, 1);
+    });
+
     test(
       'json round trip keeps every copied field; invalid data is refused',
       () {

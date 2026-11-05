@@ -271,20 +271,22 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                   _DialogValidationMessage(message: _validationMessage!),
                   const SizedBox(height: 12),
                 ],
-                if (_showsQuickAdd) ...[
-                  _QuickAddTemplates(
-                    templates: widget.templates,
-                    busy: _quickAdding,
-                    onSelected: _quickAdd,
-                  ),
-                  const SizedBox(height: 12),
-                ],
                 Flexible(
                   child: SingleChildScrollView(
                     controller: _scrollController,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        // Inside the scroll view so many templates never push
+                        // the form out of the bounded dialog height.
+                        if (_showsQuickAdd) ...[
+                          _QuickAddTemplates(
+                            templates: widget.templates,
+                            busy: _quickAdding,
+                            onSelected: _quickAdd,
+                          ),
+                          const SizedBox(height: 12),
+                        ],
                         if (_isLms) ...[
                           Text(
                             widget.event!.title,

@@ -85,11 +85,12 @@ class EventTemplate {
       draft.startAt.month,
       draft.startAt.day,
     );
-    // All-day drafts use an exclusive end date.
-    final lastMoment = draft.allDay
-        ? draft.endAt.subtract(const Duration(days: 1))
-        : draft.endAt;
-    final endDay = DateTime(lastMoment.year, lastMoment.month, lastMoment.day);
+    // All-day drafts use an exclusive end date; step back one calendar day
+    // (not 24 hours, which lands on the wrong date across a DST change).
+    final endAt = draft.endAt;
+    final endDay = draft.allDay
+        ? DateTime(endAt.year, endAt.month, endAt.day - 1)
+        : DateTime(endAt.year, endAt.month, endAt.day);
     return EventTemplate(
       id: id,
       name: name.trim(),
