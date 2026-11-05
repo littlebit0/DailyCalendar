@@ -62,7 +62,9 @@ class EventEditorDialog extends StatefulWidget {
   final List<EventTemplate> templates;
 
   /// Creates and saves an event from a template; throws when it cannot.
-  final Future<void> Function(EventTemplate template)? onQuickAdd;
+  /// Receives the start date currently shown in the editor.
+  final Future<void> Function(EventTemplate template, DateTime date)?
+  onQuickAdd;
 
   /// Stores the current editor contents as a new template.
   final Future<void> Function(EventDraft draft)? onSaveTemplate;
@@ -908,7 +910,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     _clearValidation();
     setState(() => _quickAdding = true);
     try {
-      await widget.onQuickAdd!(template);
+      await widget.onQuickAdd!(template, _startDate);
     } on Object catch (error) {
       if (!mounted) return;
       setState(() => _quickAdding = false);

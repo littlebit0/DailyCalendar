@@ -331,7 +331,7 @@ class EventDetailsPanel extends ConsumerWidget {
           )
           .catchError((_) {}),
     );
-    final templateOptions = eventTemplateEditorOptions(context, ref, date);
+    final templateOptions = eventTemplateEditorOptions(context, ref);
     final draft = await showDialog<EventDraft>(
       context: context,
       builder: (_) => EventEditorDialog(

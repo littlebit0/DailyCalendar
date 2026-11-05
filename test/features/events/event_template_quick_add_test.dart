@@ -49,14 +49,16 @@ void main() {
     (tester) async {
       final save = Completer<void>();
       final added = <EventTemplate>[];
+      final dates = <DateTime>[];
       var closed = false;
       await _open(
         tester,
         EventEditorDialog(
           initialDate: DateTime(2026, 10, 30),
           templates: [_template],
-          onQuickAdd: (template) {
+          onQuickAdd: (template, date) {
             added.add(template);
+            dates.add(date);
             return save.future;
           },
         ),
@@ -69,6 +71,7 @@ void main() {
       await tester.tap(find.text('저녁 운동'), warnIfMissed: false);
       await tester.pump();
       expect(added, [_template]);
+      expect(dates, [DateTime(2026, 10, 30)]);
       expect(closed, isFalse);
       expect(find.byType(SnackBar), findsNothing);
 
@@ -78,6 +81,32 @@ void main() {
       expect(find.text('\'운동\' 일정을 추가했습니다.'), findsOneWidget);
     },
   );
+
+  testWidgets('quick add uses the start date currently shown in the editor', (
+    tester,
+  ) async {
+    final dates = <DateTime>[];
+    await _open(
+      tester,
+      EventEditorDialog(
+        initialDate: DateTime(2026, 10, 30),
+        templates: [_template],
+        onQuickAdd: (_, date) async => dates.add(date),
+      ),
+    );
+    final startPicker = find.byIcon(Icons.calendar_today_outlined).first;
+    await tester.ensureVisible(startPicker);
+    await tester.tap(startPicker);
+    await tester.pumpAndSettle();
+    expect(find.byType(DatePickerDialog), findsOneWidget);
+    await tester.tap(find.text('31'));
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('저녁 운동'));
+    await tester.tap(find.text('저녁 운동'));
+    await tester.pumpAndSettle();
+    expect(dates, [DateTime(2026, 10, 31)]);
+  });
 
   testWidgets('a failed quick add keeps the dialog open with the reason', (
     tester,
@@ -89,7 +118,7 @@ void main() {
       EventEditorDialog(
         initialDate: DateTime(2026, 10, 30),
         templates: [_template],
-        onQuickAdd: (_) async {
+        onQuickAdd: (_, _) async {
           attempts++;
           throw const EventTemplateUnavailable('템플릿의 분류가 삭제되었습니다.');
         },
@@ -127,7 +156,7 @@ void main() {
               categoryId: EventCategory.basic.id,
             ),
         ],
-        onQuickAdd: (_) async {},
+        onQuickAdd: (_, _) async {},
       ),
     );
     expect(tester.takeException(), isNull);
@@ -154,7 +183,7 @@ void main() {
         initialDate: start,
         event: event,
         templates: [_template],
-        onQuickAdd: (_) async {},
+        onQuickAdd: (_, _) async {},
       ),
     );
     expect(find.text('빠른 추가'), findsNothing);
@@ -194,7 +223,7 @@ void main() {
         event: seed,
         templateMode: true,
         templates: [_template],
-        onQuickAdd: (_) async {},
+        onQuickAdd: (_, _) async {},
         onSaveTemplate: (_) async {},
       ),
       onClosed: (draft) => saved = draft,

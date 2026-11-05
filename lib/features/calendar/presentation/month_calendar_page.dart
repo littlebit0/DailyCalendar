@@ -5160,7 +5160,7 @@ Future<void> _openRangeEventEditor(
         )
         .catchError((_) {}),
   );
-  final templateOptions = eventTemplateEditorOptions(context, ref, start);
+  final templateOptions = eventTemplateEditorOptions(context, ref);
   final draft = await showDialog<EventDraft>(
     context: context,
     builder: (_) => EventEditorDialog(

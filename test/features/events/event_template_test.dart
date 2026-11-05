@@ -46,6 +46,20 @@ void main() {
       expect(draft.recurrence.frequency, RecurrenceFrequency.none);
     });
 
+    test('a template whose times vanish in a DST gap is not applied', () {
+      final gapTemplate = _template(start: 2 * 60 + 30, end: 3 * 60);
+      final day = DateTime(2026, 3, 8);
+      final draft = gapTemplate.draftOn(day, _workout);
+      // Only DST zones (e.g. America/New_York) have the gap; elsewhere the
+      // draft stays valid and must be returned.
+      if (draft.endAt.isAfter(draft.startAt)) {
+        expect(gapTemplate.validDraftOn(day, _workout), isNotNull);
+      } else {
+        expect(gapTemplate.validDraftOn(day, _workout), isNull);
+      }
+      expect(_template().validDraftOn(day, _workout), isNotNull);
+    });
+
     test('an overnight template keeps its end on the following day', () {
       final draft = _template(
         start: 23 * 60,

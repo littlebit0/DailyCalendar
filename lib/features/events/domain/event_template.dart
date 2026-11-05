@@ -152,6 +152,13 @@ class EventTemplate {
     );
   }
 
+  /// [draftOn], or null when a timed template's wall-clock times fall into a
+  /// DST gap on [date] and DateTime's shift would invert the interval.
+  EventDraft? validDraftOn(DateTime date, EventCategory category) {
+    final draft = draftOn(date, category);
+    return draft.allDay || draft.endAt.isAfter(draft.startAt) ? draft : null;
+  }
+
   EventTemplate copyWith({String? name, bool? favorite}) => EventTemplate(
     id: id,
     name: name ?? this.name,

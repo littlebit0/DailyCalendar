@@ -45,9 +45,13 @@ Future<void> createEventFromTemplate(
       );
     }
   }
-  await ref
-      .read(eventCommandServiceProvider)
-      .create(template.draftOn(date, category));
+  final draft = template.validDraftOn(date, category);
+  if (draft == null) {
+    throw const EventTemplateUnavailable(
+      '이 날짜에는 템플릿 시간이 존재하지 않아 바로 추가하지 않았습니다. 일정을 직접 추가해 주세요.',
+    );
+  }
+  await ref.read(eventCommandServiceProvider).create(draft);
 }
 
 /// Asks for a template name and stores [draft] as a new template.
@@ -118,16 +122,18 @@ class _TemplateNameDialogState extends State<_TemplateNameDialog> {
   );
 }
 
-/// Template options for the create-event editor opened on [date].
+/// Template options for the create-event editor. Quick add uses the start
+/// date the editor currently shows.
 ({
   List<EventTemplate> templates,
-  Future<void> Function(EventTemplate) onQuickAdd,
+  Future<void> Function(EventTemplate, DateTime) onQuickAdd,
   Future<void> Function(EventDraft) onSaveTemplate,
 })
-eventTemplateEditorOptions(BuildContext context, WidgetRef ref, DateTime date) {
+eventTemplateEditorOptions(BuildContext context, WidgetRef ref) {
   return (
     templates: ref.read(settingsRepositoryProvider).eventTemplates.templates,
-    onQuickAdd: (template) => createEventFromTemplate(ref, template, date),
+    onQuickAdd: (template, date) =>
+        createEventFromTemplate(ref, template, date),
     onSaveTemplate: (draft) => saveDraftAsTemplate(context, ref, draft),
   );
 }
