@@ -5248,7 +5248,10 @@ class _CalendarHeader extends ConsumerWidget {
       // LMS refreshes by itself.
       if (lms.supported &&
           lms.needsLogin &&
-          ref.watch(appSettingsProvider).academicProfile?.lmsIntegrationEnabled ==
+          ref
+                  .watch(appSettingsProvider)
+                  .academicProfile
+                  ?.lmsIntegrationEnabled ==
               true)
         DailyIconAction(
           tooltip: context.tr('지금 동기화'),
@@ -5403,7 +5406,7 @@ class _CalendarHeader extends ConsumerWidget {
       DailyIconAction(
         tooltip: context.tr('검색/필터'),
         onPressed: () => _showFilterSheet(context, ref),
-        selected: searchQuery.isNotEmpty,
+        selected: calendarDisplayFilterActive(settings, searchQuery),
         icon: Icons.tune_rounded,
         size: actionSize,
         borderless: true,
