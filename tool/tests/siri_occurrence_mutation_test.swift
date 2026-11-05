@@ -63,6 +63,29 @@ verify(try DailySiriDatabase.events(withIDs: [secondID]).isEmpty)
 verify(try DailySiriDatabase.events(withIDs: [thirdID]).count == 1)
 verify(try DailySiriDatabase.events(withIDs: [base.id]).first!.title == "same title")
 verify(try DailySiriDatabase.events(withIDs: [updated.id]).first!.memo == "keep")
+// #387: wallpaper completion resolves expanded occurrence ids to their stored source row.
+let openSeries = try DailySiriDatabase.add(title: "open series", startAt: start, endAt: start.addingTimeInterval(3600),
+  allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+try sql("UPDATE event_records SET recurrence_frequency='daily', recurrence_count=5 WHERE id='\(openSeries.id)'")
+let openSingle = try DailySiriDatabase.add(title: "open single", startAt: start, endAt: start.addingTimeInterval(3600),
+  allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+let doneSingle = try DailySiriDatabase.add(title: "done single", startAt: start, endAt: start.addingTimeInterval(3600),
+  allDay: false, category: DailySiriCategory(id: "basic", colorValue: 1), location: nil, memo: nil)
+try sql("UPDATE event_records SET completed=1 WHERE id='\(doneSingle.id)'")
+let completedIDs = try DailySiriDatabase.completedSourceIDs()
+let window = try DailySiriDatabase.events(from: start, to: start.addingTimeInterval(5 * 86400))
+func occurrences(of id: String) -> [DailySiriEvent] {
+  window.filter { DailySiriOccurrenceIdentity.parse($0.id)?.sourceID == id || $0.id == id }
+}
+func done(_ event: DailySiriEvent) -> Bool { DailySiriDatabase.isCompleted(event.id, completedSourceIDs: completedIDs) }
+let doneSeries = occurrences(of: base.id)
+assert(doneSeries.count == 4 && doneSeries.allSatisfy(done), "completed series: \(doneSeries.map(done))")
+assert(occurrences(of: updated.id).count == 1 && occurrences(of: updated.id).allSatisfy(done))
+assert(occurrences(of: openSeries.id).count == 5 && !occurrences(of: openSeries.id).contains(where: done))
+assert(occurrences(of: openSingle.id).count == 1 && !occurrences(of: openSingle.id).contains(where: done))
+assert(occurrences(of: doneSingle.id).count == 1 && occurrences(of: doneSingle.id).allSatisfy(done))
+// Completing only the detached occurrence must not complete the open series it came from.
+assert(!DailySiriDatabase.isCompleted(DailySiriOccurrenceIdentity.make(sourceID: openSeries.id, start: second), completedSourceIDs: [updated.id]))
 rejected { _ = try DailySiriDatabase.delete(id: secondID) }
 let countBefore = DailySiriEventChangeSignal.changes.count
 try sql("CREATE TRIGGER fail_clone BEFORE INSERT ON event_records BEGIN SELECT RAISE(ABORT, 'fail clone'); END")
