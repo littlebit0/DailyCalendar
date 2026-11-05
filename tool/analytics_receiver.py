@@ -1123,18 +1123,26 @@ class ErrorReportBackend(BugReportBackend):
                 added = max(report["occurrenceCount"] - acknowledged, 0)
                 occurrences = entry.get("occurrences", 0) + added
                 environments = list(entry.get("environments", []))
-                last_comment = entry.get("lastCommentAt")
-                comment_due = last_comment is None or now - datetime.fromisoformat(last_comment) >= ERROR_REPORT_COMMENT_INTERVAL
+                pending = entry.get("pendingEnvironments")
+                pending = dict(pending) if isinstance(pending, dict) else {}
                 if (
                     environment_key not in environments
-                    and len(environments) < MAX_ERROR_REPORT_ENVIRONMENTS
-                    and comment_due
+                    and environment_key not in pending
+                    and len(environments) + len(pending) < MAX_ERROR_REPORT_ENVIRONMENTS
                 ):
+                    # Kept until the next comment, so an environment seen inside
+                    # the comment interval is still published later.
+                    pending[environment_key] = self._environment_lines(payload)
+                last_comment = entry.get("lastCommentAt")
+                comment_due = last_comment is None or now - datetime.fromisoformat(last_comment) >= ERROR_REPORT_COMMENT_INTERVAL
+                if pending and comment_due:
                     # On failure nothing is saved and the client retries, so the
-                    # new environment is not lost.
-                    self._github_comment_creator(entry["issueNumber"], self._error_comment(payload, occurrences))
-                    environments.append(environment_key)
+                    # new environments are not lost.
+                    self._github_comment_creator(entry["issueNumber"], self._error_comment(pending.values(), occurrences))
+                    environments.extend(pending)
+                    pending = {}
                     entry["lastCommentAt"] = now.isoformat()
+                entry["pendingEnvironments"] = pending
                 if delivery_id is not None:
                     deliveries.pop(delivery_id, None)
                     deliveries[delivery_id] = max(report["occurrenceCount"], acknowledged)
@@ -1255,15 +1263,11 @@ class ErrorReportBackend(BugReportBackend):
         )
         return title, body
 
-    def _error_comment(self, payload, occurrences):
-        return "\n".join(
-            [
-                "같은 오류가 새 환경에서 다시 보고되었습니다.",
-                "",
-                f"- 누적 발생 횟수(서버 집계): {occurrences}",
-                *self._environment_lines(payload),
-            ]
-        )
+    def _error_comment(self, environment_blocks, occurrences):
+        lines = ["같은 오류가 새 환경에서 다시 보고되었습니다.", "", f"- 누적 발생 횟수(서버 집계): {occurrences}"]
+        for block in environment_blocks:
+            lines += ["", *block]
+        return "\n".join(lines)
 
     def _github_request(self, method, path, body=None):
         if not self.github_token:
