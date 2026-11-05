@@ -60,6 +60,25 @@ void main() {
       expect(_template().validDraftOn(day, _workout), isNotNull);
     });
 
+    test('editing seeds a day on which the saved times exist', () {
+      final gapTemplate = _template(start: 2 * 60 + 30, end: 4 * 60);
+      final from = DateTime(2026, 3, 8);
+      final day = gapTemplate.representableDayFrom(from);
+      final draft = gapTemplate.draftOn(day, _workout);
+      expect(draft.startAt.hour * 60 + draft.startAt.minute, 2 * 60 + 30);
+      expect(draft.endAt.hour, 4);
+      // Outside DST zones the requested day is kept.
+      if (gapTemplate.draftOn(from, _workout).startAt.hour == 2) {
+        expect(day, from);
+      } else {
+        expect(day, DateTime(2026, 3, 9));
+      }
+      expect(
+        EventTemplate.fromDraft(draft, id: 't1', name: '운동').startMinutes,
+        2 * 60 + 30,
+      );
+    });
+
     test('an overnight template keeps its end on the following day', () {
       final draft = _template(
         start: 23 * 60,

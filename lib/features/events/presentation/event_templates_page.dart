@@ -155,7 +155,7 @@ class EventTemplatesPage extends ConsumerWidget {
         );
     final today = DateTime.now();
     final seed = template
-        .draftOn(today, category)
+        .draftOn(template.representableDayFrom(today), category)
         .toEvent(id: template.id, now: today, deviceId: '');
     final draft = await showDialog<EventDraft>(
       context: context,
