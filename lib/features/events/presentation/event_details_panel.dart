@@ -25,6 +25,7 @@ import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
 import 'event_editor_dialog.dart';
+import 'event_template_actions.dart';
 import 'lms_event_status.dart';
 import 'event_completion_action.dart';
 
@@ -330,6 +331,7 @@ class EventDetailsPanel extends ConsumerWidget {
           )
           .catchError((_) {}),
     );
+    final templateOptions = eventTemplateEditorOptions(context, ref, date);
     final draft = await showDialog<EventDraft>(
       context: context,
       builder: (_) => EventEditorDialog(
@@ -337,6 +339,9 @@ class EventDetailsPanel extends ConsumerWidget {
         loadPlaceEvents: ref
             .read(visibleEventRepositoryProvider)
             .allEventsForSync,
+        templates: templateOptions.templates,
+        onQuickAdd: templateOptions.onQuickAdd,
+        onSaveTemplate: templateOptions.onSaveTemplate,
         initialDate: date,
         categories: categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
@@ -397,6 +402,7 @@ class EventDetailsPanel extends ConsumerWidget {
             .allEventsForSync,
         initialDate: event.startAt,
         event: event,
+        onSaveTemplate: (draft) => saveDraftAsTemplate(context, ref, draft),
         categories: categories,
         loadCategories: () => settingsRepository.load().categories,
         defaultReminderMinutesList: defaultReminderMinutesList,

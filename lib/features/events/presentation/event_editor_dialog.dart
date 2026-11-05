@@ -12,6 +12,7 @@ import '../../../core/theme/daily_ui.dart';
 import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
+import '../domain/event_template.dart';
 import '../domain/recurrence_rule.dart';
 import '../domain/frequent_places.dart';
 import 'frequent_places_field.dart';
@@ -35,6 +36,10 @@ class EventEditorDialog extends StatefulWidget {
     this.frequentPlaces,
     this.loadPlaceEvents,
     this.use24HourTime = true,
+    this.templates = const [],
+    this.onQuickAdd,
+    this.onSaveTemplate,
+    this.templateMode = false,
   });
 
   final DateTime initialDate;
@@ -52,6 +57,18 @@ class EventEditorDialog extends StatefulWidget {
   /// The app's time display setting; labels and pickers follow it instead of
   /// the device default.
   final bool use24HourTime;
+
+  /// Saved templates offered as one-tap quick add while creating an event.
+  final List<EventTemplate> templates;
+
+  /// Creates and saves an event from a template; throws when it cannot.
+  final Future<void> Function(EventTemplate template)? onQuickAdd;
+
+  /// Stores the current editor contents as a new template.
+  final Future<void> Function(EventDraft draft)? onSaveTemplate;
+
+  /// Edits a template's contents: no recurrence or weather, no quick add.
+  final bool templateMode;
 
   @override
   State<EventEditorDialog> createState() => _EventEditorDialogState();
@@ -86,6 +103,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   var _alarmStateLoading = true;
   String? _validationMessage;
   _ValidationTarget? _validationTarget;
+  var _quickAdding = false;
 
   bool get _isLms => widget.event?.lms != null;
 
@@ -225,7 +243,13 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
           const DailySettingsIcon(icon: Icons.event_note_outlined),
           const SizedBox(width: 10),
           Text(
-            context.tr(widget.event == null ? '일정 추가' : '일정 수정'),
+            context.tr(
+              widget.templateMode
+                  ? '템플릿 수정'
+                  : widget.event == null
+                  ? '일정 추가'
+                  : '일정 수정',
+            ),
             style: const TextStyle(
               fontSize: 21,
               fontWeight: FontWeight.w800,
@@ -245,6 +269,14 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
               children: [
                 if (_validationMessage != null) ...[
                   _DialogValidationMessage(message: _validationMessage!),
+                  const SizedBox(height: 12),
+                ],
+                if (_showsQuickAdd) ...[
+                  _QuickAddTemplates(
+                    templates: widget.templates,
+                    busy: _quickAdding,
+                    onSelected: _quickAdd,
+                  ),
                   const SizedBox(height: 12),
                 ],
                 Flexible(
@@ -466,7 +498,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                           ),
                         ],
                         const SizedBox(height: 12),
-                        if (!_isLms) ...[
+                        if (!_isLms && !widget.templateMode) ...[
                           DropdownButtonFormField<RecurrenceFrequency>(
                             onTap: _dismissInput,
                             initialValue: _frequency,
@@ -628,16 +660,18 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                             keyboardType: TextInputType.url,
                           ),
                           const SizedBox(height: 12),
-                          TextField(
-                            controller: _weatherController,
-                            onTapOutside: (_) => _dismissInput(),
-                            decoration: InputDecoration(
-                              labelText: context.tr('날씨'),
-                              hintText: context.tr('예: 흐림'),
-                              prefixIcon: const Icon(Icons.cloud_outlined),
+                          if (!widget.templateMode) ...[
+                            TextField(
+                              controller: _weatherController,
+                              onTapOutside: (_) => _dismissInput(),
+                              decoration: InputDecoration(
+                                labelText: context.tr('날씨'),
+                                hintText: context.tr('예: 흐림'),
+                                prefixIcon: const Icon(Icons.cloud_outlined),
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12),
+                            const SizedBox(height: 12),
+                          ],
                         ],
                         TextField(
                           controller: _memoController,
@@ -658,6 +692,12 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         ),
       ),
       actions: [
+        if (_canSaveTemplate)
+          TextButton.icon(
+            onPressed: _quickAdding ? null : _saveAsTemplate,
+            icon: const Icon(Icons.bookmark_add_outlined, size: 19),
+            label: Text(context.tr('템플릿으로 저장')),
+          ),
         OutlinedButton(
           onPressed: () => Navigator.of(context).pop(),
           style: OutlinedButton.styleFrom(
@@ -669,7 +709,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
           child: Text(context.tr('취소')),
         ),
         FilledButton.icon(
-          onPressed: _submit,
+          onPressed: _quickAdding ? null : _submit,
           icon: const Icon(Icons.check_rounded, size: 19),
           label: Text(context.tr('저장')),
           style: FilledButton.styleFrom(
@@ -849,7 +889,69 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  bool get _showsQuickAdd =>
+      widget.event == null &&
+      !widget.templateMode &&
+      widget.onQuickAdd != null &&
+      widget.templates.isNotEmpty;
+
+  bool get _canSaveTemplate =>
+      widget.onSaveTemplate != null && !widget.templateMode && !_isLms;
+
+  /// One tap creates and saves the event; the dialog closes only after the
+  /// save completed, and further taps are ignored while it runs.
+  Future<void> _quickAdd(EventTemplate template) async {
+    if (_quickAdding) return;
+    _dismissInput();
+    _clearValidation();
+    setState(() => _quickAdding = true);
+    try {
+      await widget.onQuickAdd!(template);
+    } on Object catch (error) {
+      if (!mounted) return;
+      setState(() => _quickAdding = false);
+      _showValidation(
+        error is EventTemplateUnavailable
+            ? context.tr(error.message)
+            : context.tr('템플릿으로 일정을 추가하지 못했습니다. 다시 시도해 주세요.'),
+        target: _ValidationTarget.title,
+      );
+      return;
+    }
+    if (!mounted) return;
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    final message = context.tr(
+      '\'{name}\' 일정을 추가했습니다.',
+      args: {'name': template.title},
+    );
+    Navigator.of(context).pop();
+    messenger?.showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _saveAsTemplate() async {
+    final draft = _validatedDraft();
+    if (draft == null) return;
+    setState(() => _quickAdding = true);
+    try {
+      await widget.onSaveTemplate!(draft);
+    } on Object {
+      if (mounted) {
+        _showValidation(
+          context.tr('템플릿을 저장하지 못했습니다. 다시 시도해 주세요.'),
+          target: _ValidationTarget.title,
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _quickAdding = false);
+    }
+  }
+
   void _submit() {
+    final draft = _validatedDraft();
+    if (draft != null) Navigator.of(context).pop(draft);
+  }
+
+  EventDraft? _validatedDraft() {
     _dismissInput();
     final category = _selectedCategory;
     if (category == null) {
@@ -857,7 +959,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         context.tr('기존 분류가 없습니다. 분류를 다시 선택해 주세요.'),
         target: _ValidationTarget.category,
       );
-      return;
+      return null;
     }
     final title = _titleController.text.trim();
     if (title.isEmpty) {
@@ -865,14 +967,14 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         context.tr('제목을 입력해야 일정을 저장할 수 있습니다.'),
         target: _ValidationTarget.title,
       );
-      return;
+      return null;
     }
     if (_endDate.isBefore(_startDate)) {
       _showValidation(
         context.tr('종료일은 시작일과 같거나 이후여야 합니다.'),
         target: _ValidationTarget.date,
       );
-      return;
+      return null;
     }
     final startAt = _isLms
         ? widget.event!.startAt
@@ -901,14 +1003,14 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
         context.tr('종료 시간은 시작 시간보다 늦어야 합니다.'),
         target: _ValidationTarget.time,
       );
-      return;
+      return null;
     }
     if (_frequency != RecurrenceFrequency.none && _recurrenceInterval < 1) {
       _showValidation(
         context.tr('반복 간격은 1 이상이어야 합니다.'),
         target: _ValidationTarget.recurrence,
       );
-      return;
+      return null;
     }
     final draft = EventDraft(
       title: title,
@@ -965,7 +1067,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       alarmEnabled: _frequency == RecurrenceFrequency.none && _alarmEnabled,
       allDayAlarmMinutes: _allDayAlarmTime.hour * 60 + _allDayAlarmTime.minute,
     );
-    Navigator.of(context).pop(draft);
+    return draft;
   }
 
   bool get _keepsDetails =>
@@ -1308,4 +1410,73 @@ Future<int?> _showNumberDialog({
   );
   controller.dispose();
   return result;
+}
+
+/// A template that cannot be applied as-is; [message] is a translation key.
+class EventTemplateUnavailable implements Exception {
+  const EventTemplateUnavailable(this.message);
+  final String message;
+  @override
+  String toString() => message;
+}
+
+class _QuickAddTemplates extends StatelessWidget {
+  const _QuickAddTemplates({
+    required this.templates,
+    required this.busy,
+    required this.onSelected,
+  });
+
+  final List<EventTemplate> templates;
+  final bool busy;
+  final ValueChanged<EventTemplate> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final ordered = [
+      ...templates.where((t) => t.favorite),
+      ...templates.where((t) => !t.favorite),
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              context.tr('빠른 추가'),
+              style: Theme.of(context).textTheme.titleSmall,
+            ),
+            const SizedBox(width: 8),
+            if (busy)
+              const SizedBox.square(
+                dimension: 14,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+          ],
+        ),
+        const SizedBox(height: 6),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final template in ordered)
+              ActionChip(
+                avatar: Icon(
+                  template.favorite
+                      ? Icons.star_rounded
+                      : Icons.bookmark_outline_rounded,
+                  size: 18,
+                ),
+                label: Text(template.name),
+                tooltip: context.tr(
+                  '{name} 바로 추가',
+                  args: {'name': template.name},
+                ),
+                onPressed: busy ? null : () => onSelected(template),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
 }

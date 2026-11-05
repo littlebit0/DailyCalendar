@@ -28,6 +28,7 @@ import '../../../core/support/bug_report_service.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
 import '../../../core/sync/google_drive_sync_service.dart';
 import '../../../core/theme/daily_ui.dart';
+import '../../events/presentation/event_templates_page.dart';
 import '../../events/domain/calendar_event.dart';
 import '../../events/domain/event_category.dart';
 import 'calendar_import_page.dart';
@@ -726,6 +727,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         onTap: () => Navigator.of(context).push<void>(
                           MaterialPageRoute(
                             builder: (_) => const WeatherSettingsPage(),
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        key: const ValueKey('event-template-settings'),
+                        contentPadding: EdgeInsets.zero,
+                        leading: const _SettingsLeadingIcon(
+                          Icons.bookmarks_outlined,
+                        ),
+                        title: Text(context.tr('일정 템플릿')),
+                        subtitle: _SettingsDescription(
+                          context.tr('일정 추가 화면에서 한 번에 등록할 일정을 관리합니다.'),
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => Navigator.of(context).push<void>(
+                          MaterialPageRoute(
+                            builder: (_) => const EventTemplatesPage(),
                           ),
                         ),
                       ),

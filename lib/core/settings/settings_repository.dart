@@ -12,6 +12,7 @@ import '../auth/apple_account.dart';
 import '../auth/daily_account.dart';
 import '../auth/google_account.dart';
 import '../../features/events/domain/calendar_event.dart';
+import '../../features/events/data/event_template_store.dart';
 import '../../features/events/domain/event_category.dart';
 import '../weather/weather_store.dart';
 import '../widgets/lock_screen_wallpaper_service.dart';
@@ -222,6 +223,12 @@ class SettingsRepository {
   late final weatherStore = WeatherStore(_preferences);
   late final academicStore = AcademicStore(_preferences);
   late final timetableStore = TimetableStore(_preferences, now: _now);
+  late final eventTemplates = EventTemplateStore(
+    _preferences,
+    readOwner: () => dailyAccount()?.googleAccount?.email,
+    deviceId: deviceId,
+    now: _now,
+  );
   final FlutterSecureStorage _secureStorage;
   final DateTime Function() _now;
   Future<void> _settingsMutationTail = Future<void>.value();
@@ -1449,6 +1456,7 @@ class SettingsRepository {
     await LockScreenWallpaperService.reset();
     await weatherStore.clear();
     await frequentPlaces.clear();
+    await eventTemplates.clearLocal();
     await _preferences.remove(_defaultReminderKey);
     await _preferences.remove(_defaultReminderListKey);
     await _preferences.remove(_allDayReminderHourKey);
