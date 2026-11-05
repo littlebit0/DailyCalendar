@@ -4766,7 +4766,7 @@ Future<void> _handleCalendarEventDrop(
   final rangeLastDate = sourceDate.isAfter(normalizedTarget)
       ? sourceDate
       : normalizedTarget;
-  final rangeEnd = rangeLastDate.add(const Duration(days: 1));
+  final rangeEnd = shiftCalendarDateByDays(rangeLastDate, 1);
   final settings = ref.read(appSettingsProvider);
   final repository = ref.read(visibleEventRepositoryProvider);
   final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
@@ -4845,7 +4845,7 @@ Future<void> _handleCalendarEventTimeDrop(
   final rangeLastDate = sourceDate.isAfter(targetDate)
       ? sourceDate
       : targetDate;
-  final rangeEnd = rangeLastDate.add(const Duration(days: 1));
+  final rangeEnd = shiftCalendarDateByDays(rangeLastDate, 1);
   final settings = ref.read(appSettingsProvider);
   final repository = ref.read(visibleEventRepositoryProvider);
   final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
@@ -5248,7 +5248,10 @@ class _CalendarHeader extends ConsumerWidget {
       // LMS refreshes by itself.
       if (lms.supported &&
           lms.needsLogin &&
-          ref.watch(appSettingsProvider).academicProfile?.lmsIntegrationEnabled ==
+          ref
+                  .watch(appSettingsProvider)
+                  .academicProfile
+                  ?.lmsIntegrationEnabled ==
               true)
         DailyIconAction(
           tooltip: context.tr('지금 동기화'),
@@ -8159,20 +8162,20 @@ CalendarRange _monthRangeFor(DateTime month, bool weekStartsOnMonday) {
   final leadingDays = weekStartsOnMonday
       ? first.weekday - 1
       : first.weekday % 7;
-  final gridStart = first.subtract(Duration(days: leadingDays));
-  return CalendarRange(gridStart, gridStart.add(const Duration(days: 42)));
+  final gridStart = shiftCalendarDateByDays(first, -leadingDays);
+  return CalendarRange(gridStart, shiftCalendarDateByDays(gridStart, 42));
 }
 
 CalendarRange _weekRangeFor(DateTime date, bool weekStartsOnMonday) {
   final day = DateTime(date.year, date.month, date.day);
   final leadingDays = weekStartsOnMonday ? day.weekday - 1 : day.weekday % 7;
-  final start = day.subtract(Duration(days: leadingDays));
-  return CalendarRange(start, start.add(const Duration(days: 7)));
+  final start = shiftCalendarDateByDays(day, -leadingDays);
+  return CalendarRange(start, shiftCalendarDateByDays(start, 7));
 }
 
 CalendarRange _dayRangeFor(DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
-  return CalendarRange(start, start.add(const Duration(days: 1)));
+  return CalendarRange(start, shiftCalendarDateByDays(start, 1));
 }
 
 List<CalendarEvent> _filterVisibleEvents(
@@ -8183,9 +8186,31 @@ List<CalendarEvent> _filterVisibleEvents(
 
 List<CalendarEvent> _eventsForDay(List<CalendarEvent> events, DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
-  final end = start.add(const Duration(days: 1));
+  final end = shiftCalendarDateByDays(start, 1);
   return events.where((event) => event.overlaps(start, end)).toList();
 }
+
+// Local calendar-day bounds stay at midnight on DST days (23h/25h days).
+@visibleForTesting
+CalendarRange calendarMonthRangeForTesting(
+  DateTime month,
+  bool weekStartsOnMonday,
+) => _monthRangeFor(month, weekStartsOnMonday);
+
+@visibleForTesting
+CalendarRange calendarWeekRangeForTesting(
+  DateTime date,
+  bool weekStartsOnMonday,
+) => _weekRangeFor(date, weekStartsOnMonday);
+
+@visibleForTesting
+CalendarRange calendarDayRangeForTesting(DateTime date) => _dayRangeFor(date);
+
+@visibleForTesting
+List<CalendarEvent> calendarEventsForDayForTesting(
+  List<CalendarEvent> events,
+  DateTime date,
+) => _eventsForDay(events, date);
 
 List<CalendarEvent> _orderedEventsForDay(
   List<CalendarEvent> events,
