@@ -956,8 +956,26 @@ class _ScheduleTimeGrid extends StatelessWidget {
       24.0,
       (layout.endMinute - layout.startMinute) / 60 * _hourHeight - 2,
     );
+    final eventStart = layout.event.startAt;
     final eventBlock = CalendarEventDraggable(
       event: layout.event,
+      // Wall-clock gap so a block clipped at midnight keeps its event start.
+      sourceStartOffset:
+          DateTime.utc(
+            day.year,
+            day.month,
+            day.day,
+            0,
+            layout.startMinute,
+          ).difference(
+            DateTime.utc(
+              eventStart.year,
+              eventStart.month,
+              eventStart.day,
+              eventStart.hour,
+              eventStart.minute,
+            ),
+          ),
       enabled:
           !preview &&
           !layout.event.readOnly &&
@@ -1122,18 +1140,32 @@ class _ScheduleTimeDropTarget extends StatelessWidget {
     final localOffset = renderObject is RenderBox
         ? renderObject.globalToLocal(details.offset)
         : Offset.zero;
-    final feedbackHeight = math.max(
-      24.0,
-      details.data.event.duration.inMinutes / 60 * hourHeight - 2,
-    );
-    final feedbackTop = localOffset.dy - feedbackHeight / 2;
-    final rawMinutes = feedbackTop / hourHeight * 60;
+    final payload = details.data;
+    final grabDy =
+        payload.grabOffset?.dy ??
+        math.max(24.0, payload.event.duration.inMinutes / 60 * hourHeight - 2) /
+            2;
+    // Event blocks sit 1px below their start line; keep the grabbed point
+    // under the pointer, as the drag feedback does.
+    final blockTop = localOffset.dy - grabDy - 1;
+    final sourceOffsetMinutes = payload.sourceStartOffset.inMinutes;
+    final rawMinutes = blockTop / hourHeight * 60 - sourceOffsetMinutes;
     final snappedMinutes = (rawMinutes / _snapMinutes).round() * _snapMinutes;
-    final minuteOfDay = snappedMinutes.clamp(0, 24 * 60 - _snapMinutes);
+    // Keep the dropped block's top inside this day.
+    final startMinute = snappedMinutes.clamp(
+      -sourceOffsetMinutes,
+      24 * 60 - _snapMinutes - sourceOffsetMinutes,
+    );
+    final dayShift = (startMinute / (24 * 60)).floor();
+    final minuteOfDay = startMinute - dayShift * 24 * 60;
+    final startDay = shiftCalendarDateByDays(
+      DateTime(day.year, day.month, day.day),
+      dayShift,
+    );
     return DateTime(
-      day.year,
-      day.month,
-      day.day,
+      startDay.year,
+      startDay.month,
+      startDay.day,
       minuteOfDay ~/ 60,
       minuteOfDay % 60,
     );
