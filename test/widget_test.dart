@@ -7874,6 +7874,73 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets('adding a name whose id hash collides keeps both categories', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(900, 2600);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+    FlutterSecureStorage.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final settingsRepository = SettingsRepository(preferences: preferences);
+    final authService = _FakeGoogleDriveAuthService(account: null);
+    final notificationService = _FakeNotification();
+    final eventRepository = _FakeEventRepository();
+    final driveSyncService = _FakeGoogleDriveSyncService(
+      authService: authService,
+      eventRepository: eventRepository,
+      notificationService: notificationService,
+      settingsRepository: settingsRepository,
+    );
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          universityRegionsProvider.overrideWith(
+            (ref) async => UniversityRegions.fromJson(
+              jsonDecode(
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
+                  )
+                  as Map<String, dynamic>,
+            ),
+          ),
+          settingsRepositoryProvider.overrideWithValue(settingsRepository),
+          notificationServiceProvider.overrideWithValue(notificationService),
+          syncServiceProvider.overrideWithValue(_FakeSync()),
+          eventRepositoryProvider.overrideWithValue(eventRepository),
+          googleDriveAuthServiceProvider.overrideWithValue(authService),
+          googleDriveSyncServiceProvider.overrideWithValue(driveSyncService),
+        ],
+        child: const MaterialApp(home: SettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('category-settings-navigation')),
+    );
+    await tester.pumpAndSettle();
+    // 'a~' and 'b_' share the legacy hash id custom_19470.
+    for (final name in ['a~', 'b_']) {
+      await tester.tap(find.text('분류 추가'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField).last, name);
+      await tester.tap(find.widgetWithText(FilledButton, '추가'));
+      await tester.pumpAndSettle();
+    }
+
+    final custom = settingsRepository
+        .load()
+        .categories
+        .where((c) => c.id.startsWith('custom_'))
+        .map((c) => (c.id, c.label));
+    expect(custom, [('custom_19470', 'a~'), ('custom_19470_2', 'b_')]);
+    await tester.pumpWidget(const SizedBox.shrink());
+  });
+
   testWidgets('linked Google metadata requires a valid auth session to sync', (
     tester,
   ) async {
