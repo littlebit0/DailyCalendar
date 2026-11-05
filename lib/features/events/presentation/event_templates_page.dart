@@ -170,17 +170,16 @@ class EventTemplatesPage extends ConsumerWidget {
       ),
     );
     if (draft == null || !context.mounted) return;
-    await _run(
-      context,
-      () => repository.eventTemplates.save(
-        EventTemplate.fromDraft(
-          draft,
-          id: template.id,
-          name: template.name,
-          favorite: template.favorite,
-        ),
-      ),
-    );
+    await _run(context, () async {
+      final updated = EventTemplate.fromDraft(
+        draft,
+        id: template.id,
+        name: template.name,
+        favorite: template.favorite,
+      );
+      checkTemplateSpan(updated);
+      await repository.eventTemplates.save(updated);
+    });
   }
 
   Future<void> _delete(
@@ -226,10 +225,18 @@ class EventTemplatesPage extends ConsumerWidget {
   ) async {
     try {
       await action();
-    } on Object {
+    } on Object catch (error) {
       if (context.mounted) {
         ScaffoldMessenger.maybeOf(context)?.showSnackBar(
-          SnackBar(content: Text(context.tr('템플릿을 저장하지 못했습니다. 다시 시도해 주세요.'))),
+          SnackBar(
+            content: Text(
+              context.tr(
+                error is EventTemplateUnavailable
+                    ? error.message
+                    : '템플릿을 저장하지 못했습니다. 다시 시도해 주세요.',
+              ),
+            ),
+          ),
         );
       }
     }

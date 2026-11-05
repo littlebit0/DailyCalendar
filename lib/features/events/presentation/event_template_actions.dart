@@ -54,18 +54,29 @@ Future<void> createEventFromTemplate(
   await ref.read(eventCommandServiceProvider).create(draft);
 }
 
+/// Throws [EventTemplateUnavailable] for a span a template cannot hold.
+void checkTemplateSpan(EventTemplate template) {
+  if (template.endDayOffset > EventTemplate.maxDaySpan) {
+    throw const EventTemplateUnavailable(
+      '템플릿은 최대 367일 기간까지만 저장할 수 있습니다. 기간을 줄여 주세요.',
+    );
+  }
+}
+
 /// Asks for a template name and stores [draft] as a new template.
 Future<void> saveDraftAsTemplate(
   BuildContext context,
   WidgetRef ref,
   EventDraft draft,
 ) async {
+  final id = const Uuid().v4();
+  checkTemplateSpan(EventTemplate.fromDraft(draft, id: id, name: draft.title));
   final name = await showTemplateNameDialog(context, initialName: draft.title);
   if (name == null) return;
   await ref
       .read(settingsRepositoryProvider)
       .eventTemplates
-      .save(EventTemplate.fromDraft(draft, id: const Uuid().v4(), name: name));
+      .save(EventTemplate.fromDraft(draft, id: id, name: name));
   if (context.mounted) {
     ScaffoldMessenger.maybeOf(
       context,

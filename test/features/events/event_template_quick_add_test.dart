@@ -233,6 +233,23 @@ void main() {
     );
   });
 
+  testWidgets('a refused template save shows its reason in the editor', (
+    tester,
+  ) async {
+    await _open(
+      tester,
+      EventEditorDialog(
+        initialDate: DateTime(2026, 10, 30),
+        onSaveTemplate: (_) async =>
+            throw const EventTemplateUnavailable('기간이 너무 깁니다.'),
+      ),
+    );
+    await tester.enterText(find.byType(TextField).first, '장기');
+    await tester.tap(find.text('템플릿으로 저장'));
+    await tester.pumpAndSettle();
+    expect(find.text('기간이 너무 깁니다.'), findsOneWidget);
+  });
+
   testWidgets('template mode hides repeat, weather and quick add', (
     tester,
   ) async {

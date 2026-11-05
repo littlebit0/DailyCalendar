@@ -939,10 +939,12 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     setState(() => _quickAdding = true);
     try {
       await widget.onSaveTemplate!(draft);
-    } on Object {
+    } on Object catch (error) {
       if (mounted) {
         _showValidation(
-          context.tr('템플릿을 저장하지 못했습니다. 다시 시도해 주세요.'),
+          error is EventTemplateUnavailable
+              ? context.tr(error.message)
+              : context.tr('템플릿을 저장하지 못했습니다. 다시 시도해 주세요.'),
           target: _ValidationTarget.title,
         );
       }

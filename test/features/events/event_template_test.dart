@@ -148,6 +148,22 @@ void main() {
       expect(template.startMinutes, 0);
     });
 
+    test('a span longer than a template can hold is kept, not shortened', () {
+      final template = EventTemplate.fromDraft(
+        EventDraft(
+          title: '장기',
+          startAt: DateTime(2026, 1, 1),
+          endAt: DateTime(2028, 1, 1),
+          allDay: true,
+          category: _workout,
+        ),
+        id: 'long',
+        name: '장기',
+      );
+      expect(template.endDayOffset, 729);
+      expect(template.isValid, isFalse);
+    });
+
     test('an all-day span ending on a DST change keeps its day count', () {
       final template = EventTemplate.fromDraft(
         EventDraft(
@@ -172,6 +188,13 @@ void main() {
         )!;
         expect(restored.toJson(), template.toJson());
         expect(EventTemplate.tryFromJson({'id': 'a'}), isNull);
+        expect(
+          EventTemplate.tryFromJson({
+            ...template.toJson(),
+            'endDayOffset': EventTemplate.maxDaySpan + 1,
+          }),
+          isNull,
+        );
         expect(
           EventTemplate.tryFromJson(
             _template(start: 20 * 60, end: 19 * 60).toJson(),

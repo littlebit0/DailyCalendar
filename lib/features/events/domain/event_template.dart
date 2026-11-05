@@ -22,7 +22,7 @@ class EventTemplate {
     this.url,
     this.allDay = false,
     int startMinutes = 9 * 60,
-    int endDayOffset = 0,
+    this.endDayOffset = 0,
     int endMinutes = 10 * 60,
     required this.categoryId,
     List<int> reminderMinutesBeforeList = const [],
@@ -31,14 +31,14 @@ class EventTemplate {
     int allDayAlarmMinutes = 9 * 60,
     this.favorite = false,
   }) : startMinutes = allDay ? 0 : startMinutes.clamp(0, 1439),
-       endDayOffset = endDayOffset.clamp(0, maxDaySpan),
        endMinutes = allDay ? 0 : endMinutes.clamp(0, 1439),
        allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
        reminderMinutesBeforeList = normalizeReminderMinutes(
          reminderMinutesBeforeList,
        );
 
-  /// Upper bound for stored spans; protects against corrupt synced values.
+  /// Upper bound for spans; longer drafts are refused (never shortened) and
+  /// corrupt synced values are rejected by [isValid].
   static const maxDaySpan = 366;
 
   final String id;
@@ -70,6 +70,8 @@ class EventTemplate {
       name.trim().isNotEmpty &&
       title.trim().isNotEmpty &&
       categoryId.isNotEmpty &&
+      endDayOffset >= 0 &&
+      endDayOffset <= maxDaySpan &&
       (allDay || endDayOffset > 0 || endMinutes > startMinutes);
 
   /// Builds a template from an editor draft. Dates are reduced to offsets
