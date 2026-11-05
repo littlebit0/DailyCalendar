@@ -731,6 +731,9 @@ const Map<String, Map<String, String>> _translations = {
     '공휴일 날짜 배경': 'Holiday date background',
     '공휴일 분류 색상을 날짜 배경에 표시합니다.':
         'Use the holiday category color as the date background.',
+    '자정을 넘기는 일정, 다음 날에도 표시': 'Show overnight events on following days',
+    '월간 캘린더와 주·일간 목록에서 시간 일정이 겹치는 날짜마다 표시합니다. 끄면 시작 날짜에만 표시하고, 스케줄 보기는 바뀌지 않습니다.':
+        'Show timed events on every date they overlap in the month calendar and week/day lists. When off, they appear only on their start date. Schedule view is unchanged.',
     '분류 표시': 'Visible categories',
     '검색어 지우기': 'Clear search',
     'AI 입력 닫기': 'Close AI input',
@@ -1737,6 +1740,9 @@ const Map<String, Map<String, String>> _translations = {
     '공휴일 표시': '祝日を表示',
     '공휴일 날짜 배경': '祝日の背景',
     '공휴일 분류 색상을 날짜 배경에 표시합니다.': '祝日カテゴリの色を日付の背景に表示します。',
+    '자정을 넘기는 일정, 다음 날에도 표시': '日付をまたぐ予定を翌日にも表示',
+    '월간 캘린더와 주·일간 목록에서 시간 일정이 겹치는 날짜마다 표시합니다. 끄면 시작 날짜에만 표시하고, 스케줄 보기는 바뀌지 않습니다.':
+        '月間カレンダーと週・日リストで、時間指定の予定を重なる日付ごとに表示します。オフにすると開始日のみに表示します。スケジュール表示は変わりません。',
     '분류 표시': '表示するカテゴリ',
     '검색어 지우기': '検索語を消去',
     'AI 입력 닫기': 'AI入力を閉じる',
@@ -2696,6 +2702,9 @@ const Map<String, Map<String, String>> _translations = {
     '공휴일 표시': '顯示國定假日',
     '공휴일 날짜 배경': '國定假日日期背景',
     '공휴일 분류 색상을 날짜 배경에 표시합니다.': '使用國定假日分類顏色作為日期背景。',
+    '자정을 넘기는 일정, 다음 날에도 표시': '跨午夜的行程也在隔天顯示',
+    '월간 캘린더와 주·일간 목록에서 시간 일정이 겹치는 날짜마다 표시합니다. 끄면 시작 날짜에만 표시하고, 스케줄 보기는 바뀌지 않습니다.':
+        '在月曆與週、日列表中，於有時間的行程重疊的每個日期都顯示。關閉時只在開始日期顯示，排程檢視不受影響。',
     '분류 표시': '顯示分類',
     '검색어 지우기': '清除搜尋',
     'AI 입력 닫기': '關閉 AI 輸入',

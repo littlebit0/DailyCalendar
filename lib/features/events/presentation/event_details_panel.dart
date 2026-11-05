@@ -13,6 +13,7 @@ import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/recurring_event_edit.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/calendar/event_display_filter.dart';
+import '../../../core/calendar/calendar_event_span.dart';
 import '../../../core/maps/map_launcher.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
@@ -1724,7 +1725,7 @@ class _DetailActionRow extends StatelessWidget {
 
 CalendarRange _dayRange(DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
-  return CalendarRange(start, start.add(const Duration(days: 1)));
+  return CalendarRange(start, shiftCalendarDateByDays(start, 1));
 }
 
 List<CalendarEvent> _eventsForDay(
@@ -1733,9 +1734,17 @@ List<CalendarEvent> _eventsForDay(
   AppSettings settings,
 ) {
   final start = DateTime(date.year, date.month, date.day);
-  final end = start.add(const Duration(days: 1));
+  final end = shiftCalendarDateByDays(start, 1);
   return sortedCalendarEvents(
-    events.where((event) => event.overlaps(start, end)),
+    events.where(
+      (event) => calendarEventListedOnDay(
+        event,
+        start,
+        end,
+        showOvernightOnFollowingDays:
+            settings.calendarShowOvernightEventsOnFollowingDays,
+      ),
+    ),
     priority: settings.calendarEventSortPriority,
     categoryOrder: settings.categories.map((category) => category.id).toList(),
     manualOrder:
