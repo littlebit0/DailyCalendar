@@ -44,7 +44,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled true
+            // The app's R8 pass shrinks this library with consumerProguardFiles. A
+            // library-level R8 pass sees no app entry points and would strip the plugin.
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
