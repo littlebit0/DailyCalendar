@@ -144,16 +144,14 @@ class AppUpdateService {
       }
       directory = await _temporaryDirectory();
       final installer = File(path.join(directory.path, assetName));
-      final download = await _client.get(uri);
-      if (download.statusCode != HttpStatus.ok ||
-          download.bodyBytes.length < 2 ||
-          download.bodyBytes[0] != 0x4d ||
-          download.bodyBytes[1] != 0x5a ||
-          sha256.convert(download.bodyBytes).toString() !=
-              digest.substring(7).toLowerCase()) {
+      if (!await downloadVerifiedInstaller(
+        client: _client,
+        uri: uri,
+        destination: installer,
+        expectedSha256: digest.substring(7).toLowerCase(),
+      )) {
         return;
       }
-      await installer.writeAsBytes(download.bodyBytes, flush: true);
       await _prepareAfterExit(installer, digest.substring(7).toLowerCase());
       _prepared = true;
     } on Object {
@@ -223,6 +221,56 @@ class AppUpdateService {
     helper.kill();
     throw StateError('Update preparation failed');
   }
+}
+
+/// Streams [uri] into [destination] while hashing it, so the installer is
+/// never held in memory as a whole. Returns true only when the status, the
+/// `MZ` header, the length and the SHA-256 all match and the file is flushed.
+/// A false result or a thrown error may leave a partial file; the caller
+/// deletes the download directory in that case.
+@visibleForTesting
+Future<bool> downloadVerifiedInstaller({
+  required http.Client client,
+  required Uri uri,
+  required File destination,
+  required String expectedSha256,
+}) async {
+  final response = await client.send(http.Request('GET', uri));
+  if (response.statusCode != HttpStatus.ok) {
+    await response.stream.drain<void>();
+    return false;
+  }
+  Digest? digest;
+  final hasher = sha256.startChunkedConversion(
+    ChunkedConversionSink<Digest>.withCallback(
+      (digests) => digest = digests.single,
+    ),
+  );
+  final header = <int>[];
+  var received = 0;
+  final sink = destination.openWrite();
+  try {
+    await for (final chunk in response.stream) {
+      if (header.length < 2) {
+        header.addAll(chunk.take(2 - header.length));
+        if (header.length == 2 && (header[0] != 0x4d || header[1] != 0x5a)) {
+          return false;
+        }
+      }
+      received += chunk.length;
+      hasher.add(chunk);
+      sink.add(chunk);
+    }
+    await sink.flush();
+  } finally {
+    // Close before any delete; Windows cannot remove a file that is still open.
+    await sink.close();
+  }
+  hasher.close();
+  final expectedLength = response.contentLength;
+  return header.length == 2 &&
+      (expectedLength == null || expectedLength == received) &&
+      digest.toString() == expectedSha256;
 }
 
 @visibleForTesting
