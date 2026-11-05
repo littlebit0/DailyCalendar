@@ -81,6 +81,30 @@ struct DailySiriLogRecord: Codable, Sendable {
   let details: [String: String]?
 }
 
+// BEGIN DAILY SHARED STORE NAMESPACE
+/// The App Store and test builds share one App Group. Each build passes its own
+/// DailySharedStoreNamespace (empty for the App Store build, which keeps the
+/// group root) so snapshots, queues, locks and notifications never cross (#388).
+/// apple_widgets/DailyWidgets.swift resolves the same Info.plist key.
+enum DailySharedStore {
+  static let namespace =
+    (Bundle.main.object(forInfoDictionaryKey: "DailySharedStoreNamespace") as? String)?
+      .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+  static func directory(_ groupURL: URL?) -> URL? {
+    guard let groupURL else { return nil }
+    guard !namespace.isEmpty else { return groupURL }
+    let directory = groupURL.appendingPathComponent(namespace, isDirectory: true)
+    try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    return directory
+  }
+
+  static func notificationName(_ base: String) -> String {
+    namespace.isEmpty ? base : "\(base).\(namespace)"
+  }
+}
+// END DAILY SHARED STORE NAMESPACE
+
 enum DailySiriLogStore {
   #if os(macOS)
   static let appGroup = "A6Y73X2ZLS.com.littlebit0.daily.widgets"
@@ -144,9 +168,9 @@ enum DailySiriLogStore {
   }
 
   private static func fileURL() -> URL? {
-    FileManager.default.containerURL(
+    DailySharedStore.directory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
-    )?.appendingPathComponent(fileName)
+    ))?.appendingPathComponent(fileName)
   }
 }
 
@@ -1378,7 +1402,9 @@ struct DailySiriEventChange: Codable, Sendable {
 }
 
 enum DailySiriEventChangeSignal {
-  static let notificationName = "com.littlebit0.daily.siri.events-changed"
+  static let notificationName = DailySharedStore.notificationName(
+    "com.littlebit0.daily.siri.events-changed"
+  )
   private static let fileName = "daily-siri-pending-event-changes.json"
   private static let lock = NSLock()
 
@@ -1437,9 +1463,9 @@ enum DailySiriEventChangeSignal {
   }
 
   private static func fileURL() -> URL? {
-    FileManager.default.containerURL(
+    DailySharedStore.directory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
-    )?.appendingPathComponent(fileName)
+    ))?.appendingPathComponent(fileName)
   }
 }
 
@@ -2911,9 +2937,9 @@ private enum DailySiriDatabase {
       owner = google["email"] as? String
     }
     var snapshot: [String: Any]?
-    if let url = FileManager.default.containerURL(
+    if let url = DailySharedStore.directory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: DailySiriLogStore.appGroup
-    )?.appendingPathComponent("daily-widget-snapshot.json"),
+    ))?.appendingPathComponent("daily-widget-snapshot.json"),
        let data = try? Data(contentsOf: url) {
       snapshot = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
     }

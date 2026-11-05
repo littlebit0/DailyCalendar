@@ -11,7 +11,7 @@ private final class DailyAppleWidgets {
   static let snapshotFileName = "daily-widget-snapshot.json"
   static let todoActionsFileName = "daily-widget-todo-actions.json"
   static let todoActionsChangedNotification = Notification.Name(
-    "com.littlebit0.daily.widgetTodoActionsChanged"
+    DailySharedStore.notificationName("com.littlebit0.daily.widgetTodoActionsChanged")
   )
   private static var channel: FlutterMethodChannel?
   private static var todoActionsObserver: NSObjectProtocol?
@@ -86,9 +86,9 @@ private final class DailyAppleWidgets {
   }
 
   private static func containerURL() throws -> URL {
-    guard let url = FileManager.default.containerURL(
+    guard let url = DailySharedStore.directory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
-    ) else {
+    )) else {
       throw NSError(
         domain: "DailyWidgets",
         code: 1,
