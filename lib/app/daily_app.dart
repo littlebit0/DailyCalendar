@@ -15,6 +15,7 @@ import '../core/analytics/startup_milestones.dart';
 import '../core/auth/google_account.dart';
 import '../core/security/biometric_auth_service.dart';
 import '../core/security/app_lock_privacy_service.dart';
+import '../core/notifications/local_notification_service.dart';
 import '../core/notifications/notification_settings_change.dart';
 import '../core/settings/app_settings.dart';
 import '../core/localization/app_localizations.dart';
@@ -950,7 +951,11 @@ class _AppHomeState extends ConsumerState<_AppHome>
     }
   }
 
-  Future<void> _reconcileAllEventSchedules() async {
+  // One reconciliation shares the app-wide reminder snapshot across events.
+  Future<void> _reconcileAllEventSchedules() =>
+      runNotificationReconciliation(_reconcileEachEventSchedule);
+
+  Future<void> _reconcileEachEventSchedule() async {
     final events = await ref.read(eventRepositoryProvider).allEventsForSync();
     final notificationService = ref.read(notificationServiceProvider);
     final alarmService = ref.read(alarmServiceProvider);
