@@ -209,6 +209,30 @@ void main() {
     expect(closed, isFalse);
   });
 
+  testWidgets('an all-day span saved from the editor keeps every day', (
+    tester,
+  ) async {
+    EventDraft? stored;
+    await _open(
+      tester,
+      EventEditorDialog(
+        // Ends on the US fall-back day, which has 25 hours in DST zones.
+        initialDate: DateTime(2026, 10, 31),
+        initialEndDate: DateTime(2026, 11, 1),
+        initialAllDay: true,
+        onSaveTemplate: (draft) async => stored = draft,
+      ),
+    );
+    await tester.enterText(find.byType(TextField).first, '주말');
+    await tester.tap(find.text('템플릿으로 저장'));
+    await tester.pumpAndSettle();
+    expect(stored!.endAt, DateTime(2026, 11, 2));
+    expect(
+      EventTemplate.fromDraft(stored!, id: 'w', name: '주말').endDayOffset,
+      1,
+    );
+  });
+
   testWidgets('template mode hides repeat, weather and quick add', (
     tester,
   ) async {
