@@ -347,8 +347,9 @@ _ERROR_SANITIZERS = [
     (re.compile(r"\b[0-9a-f]{16,}\b", re.I), lambda m: "<hex>"),
     (re.compile(r"\+?\d[\d -]{8,}\d"), lambda m: "<number>"),
     (re.compile(r"\d{6,}"), lambda m: "<number>"),
-    (re.compile(r"\"[^\"\n]+\""), lambda m: '"***"'),
-    (re.compile(r"'[^'\n]+'"), lambda m: "'***'"),
+    # An unterminated quote (such as a cut-off JSON value) is masked to the end of its line.
+    (re.compile(r"\"[^\"\n]*(?:\"|$)", re.M), lambda m: '"***"'),
+    (re.compile(r"'[^'\n]*(?:'|$)", re.M), lambda m: "'***'"),
 ]
 
 

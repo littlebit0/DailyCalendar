@@ -189,6 +189,12 @@ class ErrorReportTests(unittest.TestCase):
         entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
         self.assertEqual(entry["occurrences"], 2)
 
+    def test_unterminated_quoted_text_is_masked(self):
+        message = 'FormatException: Unterminated string\n{"title": "Oncology appointment with Dr Smith'
+        cleaned = normalize_error_report(payload(message=message))["report"]["message"]
+        self.assertNotIn("Oncology", cleaned)
+        self.assertNotIn("Smith", cleaned)
+
     def test_long_build_numbers_are_accepted(self):
         for build in ("100000", "2026110501"):
             value = payload()

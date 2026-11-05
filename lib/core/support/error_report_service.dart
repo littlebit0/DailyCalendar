@@ -120,8 +120,10 @@ final _sanitizers = <(RegExp, String Function(Match))>[
   (RegExp(r'\d{6,}'), (_) => '<number>'),
   // Quoted values in messages are usually user data (event titles, names,
   // server text), which must not reach a public issue.
-  (RegExp(r'"[^"\n]+"'), (_) => '"***"'),
-  (RegExp(r"'[^'\n]+'"), (_) => "'***'"),
+  // An unterminated quote (such as a cut-off JSON value) is masked to the end
+  // of its line.
+  (RegExp(r'"[^"\n]*(?:"|$)', multiLine: true), (_) => '"***"'),
+  (RegExp(r"'[^'\n]*(?:'|$)", multiLine: true), (_) => "'***'"),
 ];
 
 /// Masks tokens, cookies, credentials, emails, home-folder names, IDs, phone
@@ -373,7 +375,15 @@ class ErrorReportService {
     try {
       final occurredAt = _now().toUtc();
       final errorType = error.runtimeType.toString();
-      final message = sanitizeErrorText(error.toString(), maxLength: 1000);
+      // A parser error's toString() quotes the source it failed on, which can
+      // be calendar data; keep only its message and position.
+      final message = sanitizeErrorText(
+        error is FormatException
+            ? 'FormatException: ${error.message}'
+                  '${error.offset == null ? '' : ' (at offset ${error.offset})'}'
+            : error.toString(),
+        maxLength: 1000,
+      );
       final stack = sanitizeStackTrace(stackTrace);
       final safeFeature = sanitizeErrorText(feature, maxLength: 64);
       final lifecycle =

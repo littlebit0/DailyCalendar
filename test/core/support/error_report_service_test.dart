@@ -93,6 +93,28 @@ void main() {
     expect(cleaned, contains('***@***'));
   });
 
+  test('parser errors never carry the source they failed on', () async {
+    expect(
+      sanitizeErrorText('{"title": "Oncology appointment with Dr Smith'),
+      isNot(contains('Oncology')),
+    );
+    final reports = service();
+    try {
+      jsonDecode('{"title": "Oncology appointment with Dr Smith');
+    } on FormatException catch (error, stack) {
+      reports.record(
+        error,
+        stack,
+        feature: 'drive_sync',
+        severity: ErrorReportSeverity.fatal,
+      );
+    }
+    await reports.flush();
+    expect(requests, hasLength(1));
+    expect(requests.single.body, isNot(contains('Oncology')));
+    expect(requests.single.body, isNot(contains('Smith')));
+  });
+
   test('fingerprint ignores line numbers and changing IDs', () {
     String fingerprint(String stack, String message) => errorFingerprint(
       errorType: 'StateError',
