@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:daily/core/localization/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:daily/features/events/presentation/event_details_panel.dart';
@@ -220,6 +222,75 @@ void main() {
       },
     );
   }
+
+  test('failed delete cleanup still replays after tombstone compaction', () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = DriftEventRepository(database);
+    final event = _event('compacted', EventCategory.basic);
+    await repository.save(event);
+    final notifications = _FailingCancelNotifications()..fail = true;
+    final alarms = _CountingAlarmService();
+    final commands = EventCommandService(
+      repository: repository,
+      settingsRepository: settings,
+      notificationService: notifications,
+      alarmService: alarms,
+      syncService: _CountingSyncService(),
+    );
+    await commands.delete(event.id);
+    expect(settings.pendingEventFollowUps()[event.id]['stages'], [
+      'notification',
+    ]);
+    await repository.compactDeletedEvents(DateTime(2030));
+    expect(await repository.findById(event.id), isNull);
+    notifications.fail = false;
+    expect(await commands.retryPendingFollowUps(), isTrue);
+    expect(notifications.cancelCalls, 1);
+    expect(alarms.cancelCalls, 2);
+    expect(settings.pendingEventFollowUps(), isEmpty);
+  });
+
+  test('replay racing a delete cannot consume its record early', () async {
+    SharedPreferences.setMockInitialValues({});
+    final settings = SettingsRepository(
+      preferences: await SharedPreferences.getInstance(),
+    );
+    final database = AppDatabase.forTesting(NativeDatabase.memory());
+    addTearDown(database.close);
+    final repository = _GatedDeleteRepository(database);
+    final event = _event('racing-delete', EventCategory.basic).copyWith(
+      startAt: DateTime(2030, 1, 1, 9),
+      endAt: DateTime(2030, 1, 1, 10),
+      reminderMinutesBeforeList: const [10],
+    );
+    await repository.save(event);
+    final notifications = _CountingNotificationService();
+    final alarms = _CountingAlarmService();
+    final commands = EventCommandService(
+      repository: repository,
+      settingsRepository: settings,
+      notificationService: notifications,
+      alarmService: alarms,
+      syncService: _CountingSyncService(),
+    );
+    final deletion = commands.delete(event.id);
+    await repository.deleteStarted.future;
+    final replay = commands.retryPendingFollowUps();
+    await Future<void>.delayed(Duration.zero);
+    repository.gate.complete();
+    await deletion;
+    expect(await replay, isTrue);
+    expect((await repository.findById(event.id))!.isDeleted, isTrue);
+    expect(notifications.scheduleCalls, 0);
+    expect(alarms.scheduleCalls, 0);
+    expect(notifications.cancelCalls, 1);
+    expect(settings.pendingEventFollowUps(), isEmpty);
+  });
 
   test('delete that fails before the write is not journaled as done', () async {
     SharedPreferences.setMockInitialValues({});
@@ -1807,5 +1878,18 @@ class _FailingDeleteSync extends _CountingSyncService {
   Future<void> queueEventDelete(String eventId) async {
     if (fail) throw StateError('injected sync delete failure');
     await super.queueEventDelete(eventId);
+  }
+}
+
+class _GatedDeleteRepository extends DriftEventRepository {
+  _GatedDeleteRepository(super.database);
+  final deleteStarted = Completer<void>();
+  final gate = Completer<void>();
+
+  @override
+  Future<void> delete(String eventId, {void Function()? beforeWrite}) async {
+    deleteStarted.complete();
+    await gate.future;
+    await super.delete(eventId, beforeWrite: beforeWrite);
   }
 }

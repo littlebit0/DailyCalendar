@@ -241,7 +241,8 @@ class EventCommandService {
           ) async {
             if (!stages.contains(name)) return;
             await run(() async {
-              if (!_isCurrentOwner((await _repository.findById(entry.key))!)) {
+              final latest = await _repository.findById(entry.key);
+              if (latest != null && !_isCurrentOwner(latest)) {
                 entryFailed = true;
                 return;
               }
@@ -254,25 +255,21 @@ class EventCommandService {
             });
           }
 
+          // A missing row was compacted into the deletion log or cleared; its
+          // remaining cleanup still runs before the record is acknowledged.
           final event = await _repository.findById(entry.key);
-          if (event == null) {
-            await _settingsRepository.acknowledgeEventFollowUp(
-              entry.key,
-              token,
-            );
-            return;
-          }
           // Retain another owner's pending work without touching that account.
-          if (!_isCurrentOwner(event)) return;
+          if (event != null && !_isCurrentOwner(event)) return;
           await stage('notification', () async {
             await _notificationService.cancelEventReminder(
-              event.id,
+              entry.key,
               reminderMinutesBeforeList: normalizeReminderMinutes([
                 ...(record['reminders'] as List).whereType<int>(),
-                ...event.reminderMinutesBeforeList,
+                ...?event?.reminderMinutesBeforeList,
               ]),
             );
-            if (!event.isDeleted &&
+            if (event != null &&
+                !event.isDeleted &&
                 !event.completed &&
                 _isCurrentOwner(event)) {
               await _notificationService.scheduleEventReminder(
@@ -282,16 +279,18 @@ class EventCommandService {
             }
           });
           await stage('alarm', () async {
-            if (!_isCurrentOwner(event)) return;
-            await _alarmService.cancelEventAlarm(event.id);
-            if (!event.isDeleted &&
+            if (event != null && !_isCurrentOwner(event)) return;
+            await _alarmService.cancelEventAlarm(entry.key);
+            if (event != null &&
+                !event.isDeleted &&
                 !event.completed &&
                 _isCurrentOwner(event)) {
               await _alarmService.scheduleEventAlarm(event);
             }
           });
           await stage('sync', () async {
-            if (!_isCurrentOwner(event)) return;
+            // The deletion log already carries a compacted tombstone.
+            if (event == null || !_isCurrentOwner(event)) return;
             if (event.isDeleted) {
               await _syncService.queueEventDelete(event.id);
             } else {
@@ -302,7 +301,7 @@ class EventCommandService {
           await stage('widgets', () async {
             await _onEventsChanged?.call();
           });
-          if (!entryFailed && _isCurrentOwner(event)) {
+          if (!entryFailed && (event == null || _isCurrentOwner(event))) {
             await _settingsRepository.acknowledgeEventFollowUp(
               entry.key,
               token,
@@ -883,16 +882,19 @@ class EventCommandService {
       if (isCurrent != null && !isCurrent()) return;
       if (existing != null && !_isCurrentOwner(existing)) return;
       _requireWritable();
-      if (existing != null) {
-        // Journal before the soft delete, as save does, so every cleanup
-        // stage survives a failure or process exit and replays on retry.
-        await _settingsRepository.stageEventFollowUp(
-          eventId,
-          _uuid.v4(),
-          existing.reminderMinutesBeforeList,
-        );
-      }
-      await _repository.delete(eventId, beforeWrite: _requireWritable);
+      // Journal before the soft delete, as save does, so every cleanup stage
+      // survives a failure or process exit. Serialized with replay so a
+      // concurrent retry cannot consume the record while the row is live.
+      await _serializeRecurringEffects(() async {
+        if (existing != null) {
+          await _settingsRepository.stageEventFollowUp(
+            eventId,
+            _uuid.v4(),
+            existing.reminderMinutesBeforeList,
+          );
+        }
+        await _repository.delete(eventId, beforeWrite: _requireWritable);
+      });
       if (!current()) return;
       if (existing != null) {
         // The tombstone is committed; follow-up failures are reported and
