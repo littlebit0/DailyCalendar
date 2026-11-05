@@ -470,10 +470,32 @@ struct DailySpokenTemporalValues: Sendable {
 }
 
 enum DailySpokenTemporalParser {
+  private enum ExplicitDate {
+    case absent
+    case invalid
+    case valid(start: Date, end: Date?)
+  }
+
+  /// True when the command names a calendar date that does not exist
+  /// (for example 2월 30일 or 13월 1일), so callers can ask for a new date
+  /// instead of falling back to another source.
+  static func containsInvalidExplicitDate(_ value: String?) -> Bool {
+    guard let value else { return false }
+    if case .invalid = explicitDateRange(in: value, calendar: Calendar.current) {
+      return true
+    }
+    return false
+  }
+
   static func parse(_ value: String?) -> DailySpokenTemporalValues? {
     guard let value else { return nil }
     let calendar = Calendar.current
-    let explicitRange = explicitDateRange(in: value, calendar: calendar)
+    let explicitRange: (start: Date, end: Date?)?
+    switch explicitDateRange(in: value, calendar: calendar) {
+    case .absent: explicitRange = nil
+    case .invalid: return nil
+    case let .valid(start, end): explicitRange = (start, end)
+    }
     let baseDate: Date
     if let start = explicitRange?.start {
       baseDate = start
@@ -548,38 +570,49 @@ enum DailySpokenTemporalParser {
   private static func explicitDateRange(
     in value: String,
     calendar: Calendar
-  ) -> (start: Date, end: Date?)? {
+  ) -> ExplicitDate {
     let pattern = #"(?:(\d{2,4})년\s*)?(\d{1,2})월\s*(\d{1,2})일(?:\s*(?:부터|~|〜|–|—|-)\s*(?:(\d{2,4})년\s*)?(?:(\d{1,2})월\s*)?(\d{1,2})일)?"#
     guard let match = firstMatch(pattern, in: value),
           let startMonth = group(2, match: match, source: value).flatMap(Int.init),
           let startDay = group(3, match: match, source: value).flatMap(Int.init) else {
-      return nil
+      return .absent
     }
     let nowYear = calendar.component(.year, from: Date())
     let startYear = normalizedYear(group(1, match: match, source: value).flatMap(Int.init)) ?? nowYear
-    guard let start = calendar.date(from: DateComponents(
-      timeZone: .current,
-      year: startYear,
-      month: startMonth,
-      day: startDay
-    )) else { return nil }
+    guard let start = exactDate(year: startYear, month: startMonth, day: startDay, calendar: calendar) else {
+      return .invalid
+    }
     guard let endDay = group(6, match: match, source: value).flatMap(Int.init) else {
-      return (calendar.startOfDay(for: start), nil)
+      return .valid(start: start, end: nil)
     }
     let endYear = normalizedYear(group(4, match: match, source: value).flatMap(Int.init)) ?? startYear
     let endMonth = group(5, match: match, source: value).flatMap(Int.init) ?? startMonth
-    guard let inclusiveEnd = calendar.date(from: DateComponents(
-      timeZone: .current,
-      year: endYear,
-      month: endMonth,
-      day: endDay
-    )), inclusiveEnd >= start else {
-      return (calendar.startOfDay(for: start), nil)
+    guard let inclusiveEnd = exactDate(year: endYear, month: endMonth, day: endDay, calendar: calendar) else {
+      return .invalid
     }
-    return (
-      calendar.startOfDay(for: start),
-      calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: inclusiveEnd))
+    guard inclusiveEnd >= start else {
+      return .valid(start: start, end: nil)
+    }
+    return .valid(
+      start: start,
+      end: calendar.date(byAdding: .day, value: 1, to: inclusiveEnd)
     )
+  }
+
+  /// Calendar.date(from:) rolls 2월 30일 into March, so reject any date whose
+  /// components change after construction.
+  private static func exactDate(year: Int, month: Int, day: Int, calendar: Calendar) -> Date? {
+    guard let date = calendar.date(from: DateComponents(
+      timeZone: .current,
+      year: year,
+      month: month,
+      day: day
+    )) else { return nil }
+    let resolved = calendar.dateComponents([.year, .month, .day], from: date)
+    guard resolved.year == year, resolved.month == month, resolved.day == day else {
+      return nil
+    }
+    return calendar.startOfDay(for: date)
   }
 
   private static func normalizedYear(_ value: Int?) -> Int? {
@@ -902,6 +935,15 @@ private enum DailySiriText {
     case .english: "Tell me the event's start date and time."
     case .japanese: "予定の開始日時を話してください。"
     case .traditionalChinese: "請說出行程的開始日期與時間。"
+    }
+  }
+
+  static var invalidDateRequest: String {
+    switch language {
+    case .korean: "말씀하신 날짜가 달력에 없어요. 일정 시작 날짜와 시간을 다시 말해 주세요."
+    case .english: "That date doesn't exist. Tell me the event's start date and time again."
+    case .japanese: "その日付は存在しません。予定の開始日時をもう一度話してください。"
+    case .traditionalChinese: "這個日期不存在。請重新說出行程的開始日期與時間。"
     }
   }
 
@@ -3774,6 +3816,7 @@ struct DailySignalCommandIntent: AppIntent {
   func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
     let ruleBasedAction = classify(spokenCommand)
     let spokenTemporal = DailySpokenTemporalParser.parse(spokenCommand)
+    let hasInvalidSpokenDate = DailySpokenTemporalParser.containsInvalidExplicitDate(spokenCommand)
     var generatedUnderstanding: DailyGenerativeUnderstanding?
     if action == nil, let command = normalized(spokenCommand) {
       if #available(iOS 26.0, macOS 26.0, *) {
@@ -3893,6 +3936,9 @@ struct DailySignalCommandIntent: AppIntent {
           generatedUnderstanding?.eventReference else {
         throw $eventTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
       }
+      if startAt == nil && hasInvalidSpokenDate {
+        throw $startAt.requestValue(IntentDialog(stringLiteral: DailySiriText.invalidDateRequest))
+      }
       guard let startAt = startAt ??
           spokenTemporal?.startAt ??
           generatedUnderstanding?.startAt else {
@@ -3956,6 +4002,9 @@ struct DailySignalCommandIntent: AppIntent {
       let scopeLabel = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries)
       guard let resolvedNewTitle = normalized(newTitle) ?? generatedUnderstanding?.newTitle else {
         throw $newTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
+      }
+      if newStartAt == nil && hasInvalidSpokenDate {
+        throw $newStartAt.requestValue(IntentDialog(stringLiteral: DailySiriText.invalidDateRequest))
       }
       guard let resolvedNewStartAt = newStartAt ??
           spokenTemporal?.startAt ??
