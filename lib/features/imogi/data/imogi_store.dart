@@ -173,6 +173,30 @@ class ImogiStore extends ChangeNotifier {
 
   Future<void> remove(String id) => _write(id, (_) => null);
 
+  /// Persists the event ID before the event is created; returns the ID a
+  /// previous unfinished conversion already reserved, if any. A reservation
+  /// equal to [discard] (its event was deleted) is replaced with a new one.
+  Future<String> reserveConversion(String id, {String? discard}) async {
+    final eventId = const Uuid().v4();
+    await _write(id, (current) {
+      final reserved = current!.conversionEventId;
+      return reserved != null && reserved != discard
+          ? current
+          : current.copyWith(conversionEventId: eventId);
+    });
+    return _items.firstWhere((i) => i.id == id).conversionEventId!;
+  }
+
+  /// Completes a converted item and releases its reserved event ID, so a
+  /// later restore-and-convert creates a new event.
+  Future<void> completeConversion(String id) => _write(
+    id,
+    (current) => current!.copyWith(
+      completedAt: _now().toUtc(),
+      clearConversionEventId: true,
+    ),
+  );
+
   Future<void> _write(String id, ImogiItem? Function(ImogiItem?) update) =>
       _enqueue((validate) async {
         _requireReadable();

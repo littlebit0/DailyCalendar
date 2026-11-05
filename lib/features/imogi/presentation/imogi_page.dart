@@ -169,54 +169,12 @@ class _ImogiPageState extends ConsumerState<ImogiPage> {
   }
 
   Future<void> _edit(ImogiStore store, ImogiItem item) async {
-    final title = TextEditingController(text: item.title);
-    final note = TextEditingController(text: item.note ?? '');
-    final action = await showDialog<_EditAction>(
+    final result = await showDialog<_EditResult>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.tr('잊모기 편집')),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              key: const ValueKey('imogi-edit-title'),
-              controller: title,
-              autofocus: true,
-              maxLength: ImogiItem.maxTitleLength,
-              decoration: InputDecoration(labelText: context.tr('제목')),
-            ),
-            TextField(
-              key: const ValueKey('imogi-edit-note'),
-              controller: note,
-              minLines: 2,
-              maxLines: 5,
-              maxLength: ImogiItem.maxNoteLength,
-              decoration: InputDecoration(labelText: context.tr('메모')),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, _EditAction.delete),
-            child: Text(context.tr('삭제')),
-          ),
-          TextButton(
-            key: const ValueKey('imogi-convert'),
-            onPressed: () => Navigator.pop(context, _EditAction.convert),
-            child: Text(context.tr('일정으로 전환')),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, _EditAction.save),
-            child: Text(context.tr('저장')),
-          ),
-        ],
-      ),
+      builder: (_) => _ImogiEditDialog(item: item),
     );
-    final titleText = title.text.trim();
-    final noteText = note.text;
-    title.dispose();
-    note.dispose();
-    if (!mounted || action == null) return;
+    if (!mounted || result == null) return;
+    final (action, titleText, noteText) = result;
     switch (action) {
       case _EditAction.save:
         if (titleText.isEmpty) return;
@@ -224,14 +182,38 @@ class _ImogiPageState extends ConsumerState<ImogiPage> {
       case _EditAction.delete:
         await _run(() => store.remove(item.id));
       case _EditAction.convert:
-        await _convert(store, item);
+        if (titleText.isEmpty) return;
+        // Keep edits made in this dialog; the event is prefilled from them.
+        if (!await _run(
+          () => store.edit(item.id, title: titleText, note: noteText),
+        )) {
+          return;
+        }
+        await _convert(store, item.id);
     }
   }
 
   /// Creates exactly one event from the item, then keeps the item as a
   /// completed record (restorable) instead of deleting or duplicating it.
-  Future<void> _convert(ImogiStore store, ImogiItem item) async {
+  /// The event ID is persisted on the item first, so a retry after a failed
+  /// completion finishes the same conversion instead of adding another event.
+  Future<void> _convert(ImogiStore store, String id) async {
     if (blockedByRequiredUpdate(context, ref)) return;
+    final item = store.items.where((i) => i.id == id).firstOrNull;
+    if (item == null) return;
+    final reserved = item.conversionEventId;
+    String? deletedReservation;
+    if (reserved != null) {
+      final existing = await ref
+          .read(visibleEventRepositoryProvider)
+          .findById(reserved);
+      if (!mounted) return;
+      if (existing != null && !existing.isDeleted) {
+        if (await _run(() => store.completeConversion(id))) _showConverted();
+        return;
+      }
+      if (existing != null) deletedReservation = reserved;
+    }
     final settings = ref.read(appSettingsProvider);
     final today = DateTime.now();
     final draft = await showDialog<EventDraft>(
@@ -253,17 +235,91 @@ class _ImogiPageState extends ConsumerState<ImogiPage> {
     );
     if (draft == null || !mounted) return;
     final converted = await _run(() async {
-      await ref.read(eventCommandServiceProvider).create(draft);
-      await store.setCompleted(item.id, true);
-    });
-    if (converted && mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.tr('일정으로 전환했습니다. 잊모기는 완료 목록에 남겨 두었습니다.')),
-        ),
+      final eventId = await store.reserveConversion(
+        id,
+        discard: deletedReservation,
       );
-    }
+      await ref.read(eventCommandServiceProvider).create(draft, id: eventId);
+      await store.completeConversion(id);
+    });
+    if (converted) _showConverted();
+  }
+
+  void _showConverted() {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(context.tr('일정으로 전환했습니다. 잊모기는 완료 목록에 남겨 두었습니다.'))),
+    );
   }
 }
 
 enum _EditAction { save, delete, convert }
+
+typedef _EditResult = (_EditAction action, String title, String note);
+
+/// Owns its controllers, so they outlive the dialog's closing animation.
+class _ImogiEditDialog extends StatefulWidget {
+  const _ImogiEditDialog({required this.item});
+
+  final ImogiItem item;
+
+  @override
+  State<_ImogiEditDialog> createState() => _ImogiEditDialogState();
+}
+
+class _ImogiEditDialogState extends State<_ImogiEditDialog> {
+  late final _title = TextEditingController(text: widget.item.title);
+  late final _note = TextEditingController(text: widget.item.note ?? '');
+
+  @override
+  void dispose() {
+    _title.dispose();
+    _note.dispose();
+    super.dispose();
+  }
+
+  void _close(_EditAction action) =>
+      Navigator.pop(context, (action, _title.text.trim(), _note.text));
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(context.tr('잊모기 편집')),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            key: const ValueKey('imogi-edit-title'),
+            controller: _title,
+            autofocus: true,
+            maxLength: ImogiItem.maxTitleLength,
+            decoration: InputDecoration(labelText: context.tr('제목')),
+          ),
+          TextField(
+            key: const ValueKey('imogi-edit-note'),
+            controller: _note,
+            minLines: 2,
+            maxLines: 5,
+            maxLength: ImogiItem.maxNoteLength,
+            decoration: InputDecoration(labelText: context.tr('메모')),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => _close(_EditAction.delete),
+          child: Text(context.tr('삭제')),
+        ),
+        TextButton(
+          key: const ValueKey('imogi-convert'),
+          onPressed: () => _close(_EditAction.convert),
+          child: Text(context.tr('일정으로 전환')),
+        ),
+        FilledButton(
+          onPressed: () => _close(_EditAction.save),
+          child: Text(context.tr('저장')),
+        ),
+      ],
+    );
+  }
+}

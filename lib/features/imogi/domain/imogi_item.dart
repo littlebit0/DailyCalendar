@@ -9,6 +9,7 @@ class ImogiItem {
     this.important = false,
     required this.createdAt,
     this.completedAt,
+    this.conversionEventId,
   });
 
   static const maxTitleLength = 200;
@@ -21,6 +22,10 @@ class ImogiItem {
   final DateTime createdAt;
   final DateTime? completedAt;
 
+  /// The event ID reserved by a conversion that has not finished yet, so a
+  /// retry reuses that event instead of creating a duplicate.
+  final String? conversionEventId;
+
   bool get completed => completedAt != null;
 
   bool get isValid =>
@@ -30,7 +35,8 @@ class ImogiItem {
       title.characters.length <= maxTitleLength &&
       (note == null ||
           (note!.trim().isNotEmpty &&
-              note!.characters.length <= maxNoteLength));
+              note!.characters.length <= maxNoteLength)) &&
+      conversionEventId?.isEmpty != true;
 
   ImogiItem copyWith({
     String? title,
@@ -39,6 +45,8 @@ class ImogiItem {
     bool? important,
     DateTime? completedAt,
     bool clearCompletedAt = false,
+    String? conversionEventId,
+    bool clearConversionEventId = false,
   }) => ImogiItem(
     id: id,
     title: title ?? this.title,
@@ -46,6 +54,9 @@ class ImogiItem {
     important: important ?? this.important,
     createdAt: createdAt,
     completedAt: clearCompletedAt ? null : completedAt ?? this.completedAt,
+    conversionEventId: clearConversionEventId
+        ? null
+        : conversionEventId ?? this.conversionEventId,
   );
 
   Map<String, Object?> toJson() => {
@@ -55,6 +66,7 @@ class ImogiItem {
     'important': important,
     'createdAt': createdAt.toUtc().toIso8601String(),
     'completedAt': completedAt?.toUtc().toIso8601String(),
+    if (conversionEventId != null) 'conversionEventId': conversionEventId,
   };
 
   factory ImogiItem.fromJson(Map<String, dynamic> json) {
@@ -74,6 +86,7 @@ class ImogiItem {
       important: json['important'] as bool,
       createdAt: date(json['createdAt'])!,
       completedAt: date(json['completedAt']),
+      conversionEventId: json['conversionEventId'] as String?,
     );
     if (!item.isValid) throw const FormatException('Invalid imogi item');
     return item;

@@ -95,6 +95,24 @@ void main() {
     },
   );
 
+  test('a conversion keeps one reserved event ID until it completes', () async {
+    final store = await _store();
+    final item = await store.add('전화하기');
+    final first = await store.reserveConversion(item.id);
+    // A retry after a failed completion reuses the persisted ID.
+    final reloaded = await _store();
+    expect(await reloaded.reserveConversion(item.id), first);
+    final replaced = await reloaded.reserveConversion(item.id, discard: first);
+    expect(replaced, isNot(first));
+    await reloaded.completeConversion(item.id);
+    final done = reloaded.items.single;
+    expect(done.completed, isTrue);
+    expect(done.conversionEventId, isNull);
+    // Restoring and converting again reserves a new event.
+    await reloaded.setCompleted(item.id, false);
+    expect(await reloaded.reserveConversion(item.id), isNot(replaced));
+  });
+
   test('clearLocal empties the cache without cloud tombstones', () async {
     final store = await _store();
     await store.add('x');

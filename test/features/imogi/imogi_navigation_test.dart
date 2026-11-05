@@ -135,4 +135,43 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
     });
   }
+
+  testWidgets('converting keeps edits made in the imogi editor', (
+    tester,
+  ) async {
+    final settings = await _mount(
+      tester,
+      TargetPlatform.iOS,
+      const Size(393, 852),
+    );
+    final item = await settings.imogiStore.add('질문');
+    await tester.tap(find.byTooltip('잊모기'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('질문'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('imogi-edit-title')),
+      '교수님께 질문하기',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('imogi-edit-note')),
+      '과제 범위',
+    );
+    await tester.tap(find.byKey(const ValueKey('imogi-convert')));
+    await tester.pumpAndSettle();
+    final stored = settings.imogiStore.items.single;
+    expect(stored.id, item.id);
+    expect(stored.title, '교수님께 질문하기');
+    expect(stored.note, '과제 범위');
+    expect(stored.completed, isFalse);
+    // The event editor opens prefilled with the edited values.
+    expect(
+      find.descendant(
+        of: find.byType(Dialog),
+        matching: find.widgetWithText(TextField, '교수님께 질문하기'),
+      ),
+      findsOneWidget,
+    );
+    debugDefaultTargetPlatformOverride = null;
+  });
 }

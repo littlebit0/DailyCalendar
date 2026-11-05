@@ -90,10 +90,11 @@ class EventCommandService {
     return operation;
   }
 
-  Future<CalendarEvent> create(EventDraft draft) async {
+  /// [id] lets a caller that persisted the identity first retry safely.
+  Future<CalendarEvent> create(EventDraft draft, {String? id}) async {
     final now = _clock.now();
     final event = draft.toEvent(
-      id: _uuid.v4(),
+      id: id ?? _uuid.v4(),
       now: now,
       deviceId: await _settingsRepository.deviceId(),
     );
