@@ -746,13 +746,11 @@ class LmsSyncService extends ChangeNotifier {
         }).toList();
         if (aliases.length == 1) activityId = aliases.single.lms!.activityId;
       }
-      // The final post-deadline sync counts only when this item's own state
-      // was read: an unresolved quiz status or unconfirmed lecture retries.
-      final resolved = switch (activity.type) {
-        'quiz' => activity.sourceCompleted != null,
-        'lecture' => confirmedLearning.contains(activity),
-        _ => true,
-      };
+      // The final post-deadline sync counts only when the school's completion
+      // state was read: an unknown status or unconfirmed lecture retries.
+      final resolved =
+          activity.sourceCompleted != null &&
+          (activity.type != 'lecture' || confirmedLearning.contains(activity));
       final metadata = LmsEventMetadata(
         schoolId: session.schoolId,
         ownerId: session.ownerId,

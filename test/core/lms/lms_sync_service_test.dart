@@ -1520,6 +1520,24 @@ void main() {
       expect(byActivity('quiz', '9001').completed, isTrue);
     });
 
+    test(
+      'unknown assignment completion keeps its final sync pending',
+      () async {
+        h.now = DateTime.utc(2026, 9, 20);
+        h.pages['/mod/assign/index.php'] = h.pages['/mod/assign/index.php']!
+            .replaceFirst('미제출', '');
+        await h.service.refresh();
+        expect(byActivity('assignment', '9001').lms!.sourceCompleted, isNull);
+        expect(byActivity('assignment', '9001').lms!.pastFinalSyncCount, 0);
+        h.pages['/mod/assign/index.php'] = _fixture(
+          'assignment-single',
+        ).replaceFirst('미제출', '제출 완료');
+        await h.service.refresh(force: true);
+        expect(byActivity('assignment', '9001').lms!.pastFinalSyncCount, 1);
+        expect(byActivity('assignment', '9001').completed, isTrue);
+      },
+    );
+
     test('a failed write does not record the final sync', () async {
       h.now = DateTime.utc(2026, 9, 20);
       h.repository.failWrites = true;
