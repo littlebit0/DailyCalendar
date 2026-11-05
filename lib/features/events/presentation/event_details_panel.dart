@@ -332,6 +332,8 @@ class EventDetailsPanel extends ConsumerWidget {
           .catchError((_) {}),
     );
     final templateOptions = eventTemplateEditorOptions(context, ref);
+    // A quick add saves the event itself and closes the editor without a draft.
+    var quickAdded = false;
     final draft = await showDialog<EventDraft>(
       context: context,
       builder: (_) => EventEditorDialog(
@@ -340,7 +342,10 @@ class EventDetailsPanel extends ConsumerWidget {
             .read(visibleEventRepositoryProvider)
             .allEventsForSync,
         templates: templateOptions.templates,
-        onQuickAdd: templateOptions.onQuickAdd,
+        onQuickAdd: (template, date) async {
+          await templateOptions.onQuickAdd(template, date);
+          quickAdded = true;
+        },
         onSaveTemplate: templateOptions.onSaveTemplate,
         initialDate: date,
         categories: categories,
@@ -354,7 +359,7 @@ class EventDetailsPanel extends ConsumerWidget {
           .record(
             AnalyticsRecord.eventEditorCompleted(
               AnalyticsEditorMode.create,
-              outcome: draft == null
+              outcome: draft == null && !quickAdded
                   ? AnalyticsOutcome.canceled
                   : AnalyticsOutcome.succeeded,
               durationMs: stopwatch.elapsedMilliseconds,
