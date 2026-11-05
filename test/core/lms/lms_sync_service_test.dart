@@ -1,5 +1,6 @@
 import 'quiz_test_fixture.dart';
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:daily/core/auth/google_account.dart';
@@ -130,7 +131,9 @@ class _Harness {
     baseUrl: Uri.parse('https://ecampus.smu.ac.kr'),
     generation: 0,
   );
-  var now = DateTime.utc(2026, 9, 26);
+  // Before every fixture deadline: the ordinary tests cover active items.
+  // Past-item finalization (issue #372) moves the clock explicitly.
+  var now = DateTime.utc(2026, 9, 1);
   var updateRequired = false;
   final waits = <Duration>[];
   final requests = <Uri>[];
@@ -398,10 +401,8 @@ void main() {
 
       // Only the lecture the school reports again gets a new time.
       h.now = first.add(const Duration(hours: 6));
-      h.pages['/report/ubcompletion/user_progress.php'] = _learning.replaceFirst(
-        '</tbody>',
-        '$_unlearned</tbody>',
-      );
+      h.pages['/report/ubcompletion/user_progress.php'] = _learning
+          .replaceFirst('</tbody>', '$_unlearned</tbody>');
       await h.service.refresh(force: true);
       final times = {
         for (final event in lectures)
@@ -409,7 +410,8 @@ void main() {
       };
       expect(
         times.values.every(
-          (time) => time != null && time.isAfter(first.add(const Duration(hours: 5))),
+          (time) =>
+              time != null && time.isAfter(first.add(const Duration(hours: 5))),
         ),
         isTrue,
       );
@@ -1405,4 +1407,157 @@ void main() {
       );
     },
   );
+
+  group('past items finalize once after their due date (issue #372)', () {
+    CalendarEvent byActivity(String type, String id) =>
+        h.repository.events.values.singleWhere(
+          (e) => e.lms!.activityType == type && e.lms!.activityId == id,
+        );
+    int quizDetails() =>
+        h.requests.where((u) => u.path == '/mod/quiz/view.php').length;
+
+    test('compares local calendar days, not times', () {
+      expect(
+        LmsSyncService.isPastDay(
+          DateTime(2026, 9, 20, 0, 1),
+          DateTime(2026, 9, 20, 23, 59),
+        ),
+        isFalse,
+      );
+      expect(
+        LmsSyncService.isPastDay(
+          DateTime(2026, 9, 19, 23, 59),
+          DateTime(2026, 9, 20),
+        ),
+        isTrue,
+      );
+      expect(
+        LmsSyncService.isPastDay(DateTime(2026, 9, 21), DateTime(2026, 9, 20)),
+        isFalse,
+      );
+    });
+
+    test('count survives JSON and rejects invalid values', () {
+      final metadata = h.cached().lms!.copyWith(pastFinalSyncCount: 1);
+      final decoded = LmsEventMetadata.fromJson(
+        Map<String, Object?>.from(
+          jsonDecode(jsonEncode(metadata.toJson())) as Map,
+        ),
+      );
+      expect(decoded.pastFinalSyncCount, 1);
+      expect(
+        h.cached().lms!.toJson().containsKey('pastFinalSyncCount'),
+        isFalse,
+      );
+      expect(
+        () => LmsEventMetadata.fromJson({
+          ...metadata.toJson(),
+          'pastFinalSyncCount': 2,
+        }),
+        throwsFormatException,
+      );
+    });
+
+    test(
+      'one final sync per past item, then source changes are ignored while active items refresh',
+      () async {
+        h.pages['/mod/quiz/view.php'] = quizFixtureHtml(['진행 중']);
+        await h.service.refresh();
+        expect(byActivity('assignment', '9001').lms!.pastFinalSyncCount, 0);
+
+        // 9/7 assignment and 9/14 quiz are past; the 9/28 quiz is not.
+        h.now = DateTime.utc(2026, 9, 20);
+        h.pages['/mod/quiz/view.php'] = quizFixtureHtml(['종료됨']);
+        h.pages['/mod/assign/index.php'] = h.pages['/mod/assign/index.php']!
+            .replaceFirst('미제출', '제출 완료');
+        var result = await h.service.refresh(force: true);
+        final assignment = byActivity('assignment', '9001');
+        expect(assignment.lms!.pastFinalSyncCount, 1);
+        expect(assignment.lms!.submissionStatus, '제출 완료');
+        expect(assignment.completed, isTrue);
+        expect(byActivity('quiz', '9001').lms!.pastFinalSyncCount, 1);
+        expect(byActivity('quiz', '9001').completed, isTrue);
+        expect(byActivity('quiz', '9002').lms!.pastFinalSyncCount, 0);
+        expect(result!.frozenPastActivities, 0);
+
+        h.repository.events[assignment.id] = assignment.copyWith(memo: '내 메모');
+        final saves = h.repository.saves;
+        final before = quizDetails();
+        h.now = h.now.add(const Duration(minutes: 6));
+        h.pages['/mod/quiz/view.php'] = quizFixtureHtml(['진행 중']);
+        h.pages['/mod/assign/index.php'] = h.pages['/mod/assign/index.php']!
+            .replaceFirst('과제 1', '바뀐 제목')
+            .replaceFirst('제출 완료', '미제출');
+        result = await h.service.refresh(force: true);
+        expect(result!.frozenPastActivities, 2);
+        expect(result.skippedQuizDetails, 1);
+        // Only the active quiz detail is requested again and only it changes.
+        expect(quizDetails() - before, 1);
+        expect(h.repository.saves - saves, 1);
+        final frozen = byActivity('assignment', '9001');
+        expect(frozen.title, '[수업 8001] 과제 1');
+        expect(frozen.lms!.submissionStatus, '제출 완료');
+        expect(frozen.memo, '내 메모');
+        expect(byActivity('quiz', '9001').completed, isTrue);
+        expect(byActivity('quiz', '9002').completed, isFalse);
+      },
+    );
+
+    test('an unresolved quiz status keeps its final sync pending', () async {
+      h.now = DateTime.utc(2026, 9, 20);
+      h.intercept = (url) async {
+        if (url.path == '/mod/quiz/view.php') throw StateError('test timeout');
+        return LmsHtmlPage(url: url, html: h.pages[url.path]!);
+      };
+      await h.service.refresh();
+      expect(byActivity('quiz', '9001').lms!.pastFinalSyncCount, 0);
+      expect(byActivity('assignment', '9001').lms!.pastFinalSyncCount, 1);
+
+      h.intercept = null;
+      h.pages['/mod/quiz/view.php'] = quizFixtureHtml(['종료됨']);
+      await h.service.refresh(force: true);
+      expect(byActivity('quiz', '9001').lms!.pastFinalSyncCount, 1);
+      expect(byActivity('quiz', '9001').completed, isTrue);
+    });
+
+    test('a failed write does not record the final sync', () async {
+      h.now = DateTime.utc(2026, 9, 20);
+      h.repository.failWrites = true;
+      expect(await h.service.refresh(), isNull);
+      expect(h.repository.events, isEmpty);
+      h.repository.failWrites = false;
+      await h.service.refresh(force: true);
+      expect(byActivity('assignment', '9001').lms!.pastFinalSyncCount, 1);
+    });
+
+    test('finalized past items are never pruned by an empty index', () async {
+      h.now = DateTime.utc(2026, 9, 20);
+      h.pages['/mod/quiz/view.php'] = quizFixtureHtml(['종료됨']);
+      await h.service.refresh();
+      final assignment = byActivity('assignment', '9001');
+      final futureQuiz = byActivity('quiz', '9002');
+      h.pages['/mod/assign/index.php'] = _fixture('assignments-empty');
+      h.pages['/mod/quiz/index.php'] = _fixture('quizzes-empty');
+      final result = await h.service.refresh(force: true);
+      expect(result!.deleted, 1);
+      expect(h.repository.events[assignment.id], same(assignment));
+      expect(
+        h.repository.events[byActivity('quiz', '9001').id]!.isDeleted,
+        isFalse,
+      );
+      expect(h.repository.events[futureQuiz.id]!.isDeleted, isTrue);
+    });
+
+    test('a deadline extended to the future reactivates normal sync', () async {
+      h.now = DateTime.utc(2026, 9, 20);
+      await h.service.refresh();
+      expect(byActivity('assignment', '9001').lms!.pastFinalSyncCount, 1);
+      h.pages['/mod/assign/index.php'] = h.pages['/mod/assign/index.php']!
+          .replaceFirst('2026-09-07 23:59', '2026-09-30 23:59');
+      await h.service.refresh(force: true);
+      final extended = byActivity('assignment', '9001');
+      expect(extended.lms!.pastFinalSyncCount, 0);
+      expect(extended.lms!.dueAt, DateTime.utc(2026, 9, 30, 14, 59));
+    });
+  });
 }

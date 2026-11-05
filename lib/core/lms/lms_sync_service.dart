@@ -53,6 +53,8 @@ class LmsSyncResult {
     this.excludedLearningActivities = 0,
     this.failedLearningCourses = 0,
     this.unresolvedQuizStatuses = 0,
+    this.frozenPastActivities = 0,
+    this.skippedQuizDetails = 0,
   });
   final int courses,
       activities,
@@ -62,6 +64,12 @@ class LmsSyncResult {
       deleted,
       unchanged;
   final int unresolvedQuizStatuses;
+
+  /// Past items already finalized (issue #372): not merged again.
+  final int frozenPastActivities;
+
+  /// Quiz detail pages not requested because the quiz was already finalized.
+  final int skippedQuizDetails;
   final int learningActivities;
   final int unresolvedLearningActivities;
   final int excludedLearningActivities;
@@ -138,6 +146,42 @@ class LmsSyncService extends ChangeNotifier {
 
   static String eventId(LmsEventMetadata metadata) =>
       'lms:${sha256.convert(utf8.encode(jsonEncode([metadata.provider, metadata.schoolId, metadata.ownerId, metadata.lmsUserId, metadata.courseId, metadata.activityType, metadata.activityId])))}';
+
+  /// Stable source ID of an activity read in [session], before any lecture
+  /// alias resolution.
+  static String _activityEventId(
+    LmsSyncSession session,
+    CoursemosActivity activity,
+  ) => eventId(
+    LmsEventMetadata(
+      schoolId: session.schoolId,
+      ownerId: session.ownerId,
+      lmsUserId: session.lmsUserId,
+      courseId: activity.course.id,
+      courseTitle: activity.course.title,
+      activityType: activity.type,
+      activityId: activity.id,
+      sourceUrl: activity.url.toString(),
+    ),
+  );
+
+  /// Compares local calendar days: an item due earlier today is not past.
+  static bool isPastDay(DateTime due, DateTime now) {
+    final d = due.toLocal();
+    final n = now.toLocal();
+    return DateTime(
+      d.year,
+      d.month,
+      d.day,
+    ).isBefore(DateTime(n.year, n.month, n.day));
+  }
+
+  /// A past item whose final post-deadline sync already succeeded. Its source
+  /// fields are no longer refreshed or pruned; personal edits stay allowed.
+  static bool isFinalizedPast(LmsEventMetadata metadata, DateTime now) =>
+      metadata.pastFinalSyncCount == 1 &&
+      metadata.dueAt != null &&
+      isPastDay(metadata.dueAt!, now);
 
   bool _ownerMatches(LmsSyncSession session) =>
       session.ownerId.isNotEmpty &&
@@ -387,6 +431,15 @@ class LmsSyncService extends ChangeNotifier {
         epoch,
       );
       final courses = _parser.courses(dashboard);
+      final finalized = <String>{
+        for (final event in await _repository.allEventsForSync())
+          if (_prunable(event, session) &&
+              event.lms!.activityType == 'quiz' &&
+              isFinalizedPast(event.lms!, _now()))
+            event.id,
+      };
+      _check(session, epoch);
+      var skippedQuizDetails = 0;
       final fetched = <CoursemosActivity>[];
       // Activities whose learning values the school confirmed in this sync.
       final confirmedLearning = Set<CoursemosActivity>.identity();
@@ -407,6 +460,15 @@ class LmsSyncService extends ChangeNotifier {
               .activities;
           for (final activity in activities) {
             if (type != 'quiz') {
+              fetched.add(activity);
+              continue;
+            }
+            // The index still lists it; only the per-quiz request is skipped.
+            final due = activity.dueAt;
+            if (due != null &&
+                isPastDay(due, _now()) &&
+                finalized.contains(_activityEventId(session, activity))) {
+              skippedQuizDetails++;
               fetched.add(activity);
               continue;
             }
@@ -496,6 +558,7 @@ class LmsSyncService extends ChangeNotifier {
         excludedLearningActivities: excludedLearningActivities,
         failedLearningCourses: failedLearningCourses,
         unresolvedQuizStatuses: unresolvedQuizStatuses,
+        skippedQuizDetails: skippedQuizDetails,
       );
       if (!kReleaseMode) {
         debugPrint(
@@ -649,6 +712,7 @@ class LmsSyncService extends ChangeNotifier {
     required int excludedLearningActivities,
     required int failedLearningCourses,
     required int unresolvedQuizStatuses,
+    required int skippedQuizDetails,
   }) async {
     final previous = await _repository.allEventsForSync();
     _check(session, epoch);
@@ -682,6 +746,13 @@ class LmsSyncService extends ChangeNotifier {
         }).toList();
         if (aliases.length == 1) activityId = aliases.single.lms!.activityId;
       }
+      // The final post-deadline sync counts only when this item's own state
+      // was read: an unresolved quiz status or unconfirmed lecture retries.
+      final resolved = switch (activity.type) {
+        'quiz' => activity.sourceCompleted != null,
+        'lecture' => confirmedLearning.contains(activity),
+        _ => true,
+      };
       final metadata = LmsEventMetadata(
         schoolId: session.schoolId,
         ownerId: session.ownerId,
@@ -699,6 +770,7 @@ class LmsSyncService extends ChangeNotifier {
         learnedSeconds: activity.learnedSeconds,
         attendanceStatus: activity.attendanceStatus,
         progressPercent: activity.progressPercent,
+        pastFinalSyncCount: resolved && isPastDay(due, now) ? 1 : 0,
       );
       if (confirmedLearning.contains(activity)) {
         confirmedEventIds.add(eventId(metadata));
@@ -723,6 +795,7 @@ class LmsSyncService extends ChangeNotifier {
     }
     final unchanged = <String>{};
     final added = <String>{};
+    final frozen = <String>{};
     final saved = await _commands.importBatch(
       candidates,
       lmsCategory: _configuredCategory,
@@ -734,6 +807,15 @@ class LmsSyncService extends ChangeNotifier {
         if (local == null) {
           added.add(incoming.id);
           return incoming;
+        }
+        // A deadline moved back to today or later is active again and merges
+        // normally (its count returns to 0); a still-past finalized item stays.
+        if (local.lms != null &&
+            isFinalizedPast(local.lms!, now) &&
+            isPastDay(incoming.lms!.dueAt!, now)) {
+          frozen.add(incoming.id);
+          unchanged.add(incoming.id);
+          return null;
         }
         final destination = _configuredCategory();
         final categoryMatches =
@@ -774,19 +856,7 @@ class LmsSyncService extends ChangeNotifier {
     // disappeared/filtered course and an item with an unset deadline are not
     // evidence that an existing source item was deleted.
     final desiredIds = <String>{
-      for (final activity in activities)
-        eventId(
-          LmsEventMetadata(
-            schoolId: session.schoolId,
-            ownerId: session.ownerId,
-            lmsUserId: session.lmsUserId,
-            courseId: activity.course.id,
-            courseTitle: activity.course.title,
-            activityType: activity.type,
-            activityId: activity.id,
-            sourceUrl: activity.url.toString(),
-          ),
-        ),
+      for (final activity in activities) _activityEventId(session, activity),
     };
     final readCourseIds = courses.map((course) => course.id).toSet();
     var deleted = 0;
@@ -794,6 +864,7 @@ class LmsSyncService extends ChangeNotifier {
     for (final event in previous) {
       if (!event.isDeleted &&
           _prunable(event, session) &&
+          !isFinalizedPast(event.lms!, now) &&
           readCourseIds.contains(event.lms!.courseId) &&
           !desiredIds.contains(event.id)) {
         _check(session, epoch);
@@ -830,6 +901,8 @@ class LmsSyncService extends ChangeNotifier {
       excludedLearningActivities: excludedLearningActivities,
       failedLearningCourses: failedLearningCourses,
       unresolvedQuizStatuses: unresolvedQuizStatuses,
+      frozenPastActivities: frozen.length,
+      skippedQuizDetails: skippedQuizDetails,
     );
   }
 
