@@ -248,7 +248,9 @@ Future<bool> downloadVerifiedInstaller({
   );
   final header = <int>[];
   var received = 0;
-  final sink = destination.openWrite();
+  // Awaited writes pause the response stream (backpressure) and surface disk
+  // errors here instead of as an unhandled IOSink.done error.
+  final file = await destination.open(mode: FileMode.write);
   try {
     await for (final chunk in response.stream) {
       if (header.length < 2) {
@@ -259,12 +261,12 @@ Future<bool> downloadVerifiedInstaller({
       }
       received += chunk.length;
       hasher.add(chunk);
-      sink.add(chunk);
+      await file.writeFrom(chunk);
     }
-    await sink.flush();
+    await file.flush();
   } finally {
     // Close before any delete; Windows cannot remove a file that is still open.
-    await sink.close();
+    await file.close();
   }
   hasher.close();
   final expectedLength = response.contentLength;
