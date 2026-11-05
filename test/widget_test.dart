@@ -9069,6 +9069,131 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  testWidgets(
+    'day schedule sheet swipes to the previous and next day across a month boundary (#693)',
+    (tester) async {
+      SharedPreferences.setMockInitialValues({
+        'onboardingCompleted': true,
+        'defaultCalendarView': 'month',
+      });
+      final preferences = await SharedPreferences.getInstance();
+      final settingsRepository = SettingsRepository(preferences: preferences);
+      final now = DateTime.now();
+      final lastDay = DateTime(now.year, now.month + 1, 0);
+      final nextDay = DateTime(now.year, now.month + 1, 1);
+      CalendarEvent event(String id, String title, DateTime day) =>
+          CalendarEvent(
+            id: id,
+            title: title,
+            startAt: DateTime(day.year, day.month, day.day, 9),
+            endAt: DateTime(day.year, day.month, day.day, 10),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            createdAt: now,
+            updatedAt: now,
+          );
+
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            universityRegionsProvider.overrideWith(
+              (ref) async => UniversityRegions.fromJson(
+                jsonDecode(
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
+                    )
+                    as Map<String, dynamic>,
+              ),
+            ),
+            settingsRepositoryProvider.overrideWithValue(settingsRepository),
+            notificationServiceProvider.overrideWithValue(_FakeNotification()),
+            syncServiceProvider.overrideWithValue(_FakeSync()),
+            eventRepositoryProvider.overrideWithValue(
+              _StreamingEventRepository([
+                event('month-end', '월말 일정', lastDay),
+                event('month-start', '월초 일정', nextDay),
+              ]),
+            ),
+            googleDriveAuthServiceProvider.overrideWithValue(
+              _FakeGoogleDriveAuthService(),
+            ),
+          ],
+          child: const DailyApp(),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(DailyApp)),
+      );
+      final panel = find.byType(EventDetailsPanel);
+      Finder inPanel(String text) =>
+          find.descendant(of: panel, matching: find.text(text));
+
+      await tester.tap(
+        find
+            .byKey(
+              ValueKey(
+                'day-cell-${lastDay.year}-${lastDay.month}-${lastDay.day}',
+              ),
+            )
+            .hitTestable()
+            .first,
+      );
+      await tester.pumpAndSettle();
+      expect(tester.widget<EventDetailsPanel>(panel).date, lastDay);
+      expect(inPanel('월말 일정'), findsOneWidget);
+
+      // Left swipe: next day, crossing into the next month without reopening.
+      await tester.drag(
+        find.byKey(const ValueKey('event-details-date-label')),
+        const Offset(-200, 0),
+      );
+      await tester.pumpAndSettle();
+      expect(panel, findsOneWidget);
+      expect(tester.widget<EventDetailsPanel>(panel).date, nextDay);
+      expect(container.read(selectedDateProvider), nextDay);
+      expect(
+        container.read(visibleMonthProvider),
+        DateTime(nextDay.year, nextDay.month),
+      );
+      expect(inPanel('월초 일정'), findsOneWidget);
+      expect(inPanel('월말 일정'), findsNothing);
+
+      // Right swipes: back to the month end, then to an empty earlier day.
+      for (final expected in [
+        lastDay,
+        DateTime(lastDay.year, lastDay.month, lastDay.day - 1),
+      ]) {
+        await tester.drag(
+          find.byKey(const ValueKey('event-details-date-label')),
+          const Offset(200, 0),
+        );
+        await tester.pumpAndSettle();
+        expect(tester.widget<EventDetailsPanel>(panel).date, expected);
+        expect(container.read(selectedDateProvider), expected);
+      }
+      expect(inPanel('월말 일정'), findsNothing);
+      expect(inPanel('월초 일정'), findsNothing);
+      expect(inPanel('일정이 없습니다.'), findsOneWidget);
+
+      // A short horizontal nudge below both thresholds keeps the date.
+      await tester.timedDrag(
+        find.byKey(const ValueKey('event-details-date-label')),
+        const Offset(-30, 0),
+        const Duration(milliseconds: 600),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<EventDetailsPanel>(panel).date,
+        DateTime(lastDay.year, lastDay.month, lastDay.day - 1),
+      );
+
+      await tester.pumpWidget(const SizedBox.shrink());
+    },
+  );
+
   group('calendar toolbar LMS sync button (#348)', () {
     Future<_ToolbarLms> pumpToolbar(
       WidgetTester tester, {
