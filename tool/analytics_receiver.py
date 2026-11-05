@@ -33,6 +33,8 @@ MAX_ERROR_REPORTS_PER_HOUR = 30
 MAX_NEW_ERROR_ISSUES_PER_DAY = 10
 ERROR_REPORT_COMMENT_INTERVAL = timedelta(hours=24)
 MAX_ERROR_REPORT_ENVIRONMENTS = 20
+# Recent delivery IDs kept per fingerprint so a retried request is not counted twice.
+MAX_ERROR_REPORT_DELIVERIES = 50
 ERROR_REPORT_LABEL = "autobug"
 FINGERPRINT_PATTERN = re.compile(r"^[0-9a-f]{16}$")
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
@@ -1078,19 +1080,23 @@ class ErrorReportBackend(BugReportBackend):
         # fine for a personal receiver, use per-fingerprint locks if volume grows.
         self._index_lock = threading.Lock()
 
-    def submit_error(self, payload, authorization):
+    def submit_error(self, payload, authorization, delivery_id=None):
         identity = self._google_identity_fetcher(authorization)
         subject = identity.get("sub") if isinstance(identity, dict) else None
         if not isinstance(subject, str) or not subject or len(subject) > 255 or identity.get("email_verified") is not True:
             raise InvalidGoogleToken()
         subject_hash = hashlib.sha256(subject.encode()).hexdigest()
+        if not isinstance(delivery_id, str) or not REQUEST_ID_PATTERN.fullmatch(delivery_id):
+            delivery_id = None
+        else:
+            delivery_id = delivery_id.lower()
         self._check_rate(f"error:{subject_hash}", MAX_ERROR_REPORTS_PER_HOUR, 60 * 60)
 
         report = payload["report"]
         environment = payload["environment"]
         fingerprint = report["fingerprint"]
         environment_key = "|".join(
-            environment[key] for key in ("version", "platform", "osVersion", "environment")
+            environment[key] for key in ("version", "buildNumber", "platform", "osVersion", "environment")
         )
         now = self._now()
         with self._index_lock:
@@ -1107,6 +1113,12 @@ class ErrorReportBackend(BugReportBackend):
                         "lastCommentAt": None,
                     }
             if entry is not None:
+                deliveries = entry.setdefault("deliveries", [])
+                if delivery_id in deliveries:
+                    # A retry after a lost response: already counted.
+                    return {"status": "existing", "issueNumber": entry["issueNumber"], "issueUrl": entry["issueUrl"]}
+                if delivery_id is not None:
+                    deliveries[:] = (deliveries + [delivery_id])[-MAX_ERROR_REPORT_DELIVERIES:]
                 entry["occurrences"] = entry.get("occurrences", 0) + report["occurrenceCount"]
                 environments = entry.setdefault("environments", [])
                 last_comment = entry.get("lastCommentAt")
@@ -1144,6 +1156,7 @@ class ErrorReportBackend(BugReportBackend):
                 "occurrences": report["occurrenceCount"],
                 "environments": [environment_key],
                 "lastCommentAt": None,
+                "deliveries": [] if delivery_id is None else [delivery_id],
             }
             self._write_index(index)
             return {"status": "created", "issueNumber": number, "issueUrl": url}
@@ -1350,7 +1363,9 @@ class ReceiverHandler(BaseHTTPRequestHandler):
             self._respond(400, {"error": "invalid_report"})
             return
         try:
-            result = self.error_reports.submit_error(normalized, self.headers.get("Authorization"))
+            result = self.error_reports.submit_error(
+                normalized, self.headers.get("Authorization"), self.headers.get("Idempotency-Key")
+            )
         except InvalidGoogleToken:
             self._respond(401, {"error": "invalid_google_token"})
             return

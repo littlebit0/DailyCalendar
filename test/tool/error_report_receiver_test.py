@@ -143,6 +143,24 @@ class ErrorReportTests(unittest.TestCase):
         self.assertIsNone(normalize_error_report(bad))
         self.assertIsNone(normalize_error_report(payload(fingerprint="xyz")))
 
+    def test_new_build_number_is_a_new_environment(self):
+        self.submit(payload())
+        value = payload()
+        value["environment"]["buildNumber"] = "101"
+        self.submit(value)
+        self.assertEqual(len(self.github.comments), 1)
+
+    def test_retried_delivery_is_counted_once(self):
+        delivery = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+        normalized = normalize_error_report(payload())
+        self.backend.submit_error(normalized, "Bearer x", delivery)
+        self.backend.submit_error(normalized, "Bearer x", delivery)
+        self.backend.submit_error(normalized, "Bearer x", delivery)
+        self.backend.submit_error(normalized, "Bearer x", "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb")
+        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
+        self.assertEqual(entry["occurrences"], 2)
+        self.assertEqual(len(self.github.issues), 1)
+
     def test_long_build_numbers_are_accepted(self):
         for build in ("100000", "2026110501"):
             value = payload()
