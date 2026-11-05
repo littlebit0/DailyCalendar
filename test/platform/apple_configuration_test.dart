@@ -157,6 +157,37 @@ void main() {
     }
   });
 
+  test(
+    'Signal bridge answers from its own request, not shared history',
+    () async {
+      final source = await _readNormalized('apple_siri/DailySiriIntents.swift');
+      final bridgeStart = source.indexOf('private func runAvailableSignal(');
+      final bridgeEnd = source.indexOf('private func speak(', bridgeStart);
+      expect(bridgeStart, isNonNegative);
+      expect(bridgeEnd, greaterThan(bridgeStart));
+      final bridge = source.substring(bridgeStart, bridgeEnd);
+
+      // The history is redacted for LMS reads and shared with concurrent Siri
+      // requests, so the in-app answer must come from this intent's execution.
+      expect(bridge, contains('let message = try await intent.execute()'));
+      expect(bridge, contains('error as? DailySignalExecutionFailed'));
+      expect(bridge, isNot(contains('DailySiriLogStore')));
+      expect(source, contains('let message = try await execute()'));
+      expect(
+        source,
+        contains(
+          'summary: containsLms ? DailySiriText.lmsReadCompleted : summary,',
+        ),
+      );
+      expect(
+        source,
+        contains(
+          'result: containsLms ? DailySiriText.lmsReadCompleted : result,',
+        ),
+      );
+    },
+  );
+
   test('Siri reads the update requirement Flutter stores', () async {
     final source = await _readNormalized('apple_siri/DailySiriIntents.swift');
 
