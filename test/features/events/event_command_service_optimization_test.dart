@@ -292,6 +292,50 @@ void main() {
     expect(settings.pendingEventFollowUps(), isEmpty);
   });
 
+  for (final point in ['queued', 'write']) {
+    test('delete cancelled while $point does not tombstone the event', () async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final database = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = _GatedDeleteRepository(database);
+      final event = _event('cancelled-delete', EventCategory.basic);
+      await repository.save(event);
+      var current = true;
+      final notifications = _GatedCancelNotifications();
+      final sync = _CountingSyncService();
+      final commands = EventCommandService(
+        repository: repository,
+        settingsRepository: settings,
+        notificationService: notifications,
+        syncService: sync,
+      );
+      Future<bool>? replay;
+      if (point == 'queued') {
+        // An unrelated replay holds the queue on a slow cancellation.
+        await settings.stageEventFollowUp('other', 'token', const []);
+        notifications.gate = Completer<void>();
+        replay = commands.retryPendingFollowUps();
+        await notifications.started.future;
+      } else {
+        repository.gate.complete();
+        repository.beforeDelete = () => current = false;
+      }
+      final deletion = commands.delete(event.id, isCurrent: () => current);
+      if (point == 'queued') {
+        await Future<void>.delayed(Duration.zero);
+        current = false;
+        notifications.gate!.complete();
+        expect(await replay, isTrue);
+      }
+      await deletion;
+      expect((await repository.findById(event.id))!.isDeleted, isFalse);
+      expect(sync.deletedIds, isEmpty);
+    });
+  }
+
   test('delete that fails before the write is not journaled as done', () async {
     SharedPreferences.setMockInitialValues({});
     final settings = SettingsRepository(
@@ -1886,10 +1930,30 @@ class _GatedDeleteRepository extends DriftEventRepository {
   final deleteStarted = Completer<void>();
   final gate = Completer<void>();
 
+  void Function()? beforeDelete;
+
   @override
   Future<void> delete(String eventId, {void Function()? beforeWrite}) async {
     deleteStarted.complete();
     await gate.future;
+    beforeDelete?.call();
     await super.delete(eventId, beforeWrite: beforeWrite);
+  }
+}
+
+class _GatedCancelNotifications extends _CountingNotificationService {
+  final started = Completer<void>();
+  Completer<void>? gate;
+  @override
+  Future<void> cancelEventReminder(
+    String eventId, {
+    List<int> reminderMinutesBeforeList = const [],
+  }) async {
+    if (!started.isCompleted) started.complete();
+    await gate?.future;
+    await super.cancelEventReminder(
+      eventId,
+      reminderMinutesBeforeList: reminderMinutesBeforeList,
+    );
   }
 }

@@ -33,6 +33,11 @@ class EventWritesBlocked implements Exception {
   const EventWritesBlocked();
 }
 
+/// A delete whose caller went stale before its tombstone was written.
+class _DeleteCancelled implements Exception {
+  const _DeleteCancelled();
+}
+
 class EventCommandService {
   EventCommandService({
     required EventRepository repository,
@@ -885,7 +890,14 @@ class EventCommandService {
       // Journal before the soft delete, as save does, so every cleanup stage
       // survives a failure or process exit. Serialized with replay so a
       // concurrent retry cannot consume the record while the row is live.
+      var cancelled = false;
       await _serializeRecurringEffects(() async {
+        // The account or session may have changed while queued behind replay.
+        if (!current()) {
+          cancelled = true;
+          return;
+        }
+        _requireWritable();
         if (existing != null) {
           await _settingsRepository.stageEventFollowUp(
             eventId,
@@ -893,9 +905,20 @@ class EventCommandService {
             existing.reminderMinutesBeforeList,
           );
         }
-        await _repository.delete(eventId, beforeWrite: _requireWritable);
+        try {
+          await _repository.delete(
+            eventId,
+            beforeWrite: () {
+              _requireWritable();
+              if (!current()) throw const _DeleteCancelled();
+            },
+          );
+        } on _DeleteCancelled {
+          // Rolled back; a staged record only replays the live row's schedules.
+          cancelled = true;
+        }
       });
-      if (!current()) return;
+      if (cancelled || !current()) return;
       if (existing != null) {
         // The tombstone is committed; follow-up failures are reported and
         // retried without failing (or reviving) the deletion.
