@@ -104,6 +104,13 @@ void main() {
       );
       expect(source, contains('DailyTodoToggle(event: event)'));
       expect(source, contains('.dailyTodoCompletion('));
+      // Month labels share the palette they already resolved with the
+      // completion modifier instead of solving the same contrast twice.
+      expect(
+        source,
+        contains('category: event.color, backgroundAlpha: 0.18, palette: colors'),
+      );
+      expect(source, contains('let colors = palette ?? {'));
       // The shared Swift palette is exercised against numeric RGB fixtures and
       // the full colour grid by tool/tests/event_palette_test.swift. This check
       // guards target wiring, rather than freezing a particular drawing syntax.
