@@ -48,9 +48,14 @@ class _ImogiPageState extends ConsumerState<ImogiPage> {
   Future<void> _add(ImogiStore store) async {
     final title = _controller.text.trim();
     if (title.isEmpty) return;
-    if (await _run(() => store.add(title))) {
-      _controller.clear();
-      _focusNode.requestFocus();
+    // Consume the input before awaiting, so a second submit cannot add it
+    // again and text typed meanwhile is not cleared by this save.
+    _controller.clear();
+    _focusNode.requestFocus();
+    if (!await _run(() => store.add(title)) &&
+        mounted &&
+        _controller.text.isEmpty) {
+      _controller.text = title;
     }
   }
 

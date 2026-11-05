@@ -174,4 +174,23 @@ void main() {
     );
     debugDefaultTargetPlatformOverride = null;
   });
+
+  testWidgets('a double submit adds the quick-add text once', (tester) async {
+    final settings = await _mount(
+      tester,
+      TargetPlatform.iOS,
+      const Size(393, 852),
+    );
+    await tester.tap(find.byTooltip('잊모기'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('imogi-quick-add')),
+      '전화하기',
+    );
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    await tester.tap(find.byKey(const ValueKey('imogi-add')));
+    await tester.pumpAndSettle();
+    expect(settings.imogiStore.items.map((item) => item.title), ['전화하기']);
+    debugDefaultTargetPlatformOverride = null;
+  });
 }
