@@ -143,6 +143,39 @@ class ErrorReportTests(unittest.TestCase):
         self.assertIsNone(normalize_error_report(bad))
         self.assertIsNone(normalize_error_report(payload(fingerprint="xyz")))
 
+    def test_long_build_numbers_are_accepted(self):
+        for build in ("100000", "2026110501"):
+            value = payload()
+            value["environment"]["buildNumber"] = build
+            normalized = normalize_error_report(value)
+            self.assertIsNotNone(normalized, build)
+            self.assertEqual(normalized["environment"]["buildNumber"], build)
+
+    def test_fingerprint_lookup_reads_every_page(self):
+        backend = ErrorReportBackend(self.directory.name, github_token="t", github_repository="littlebit0/DailyCalendar")
+        pages = []
+
+        def request(method, path, body=None):
+            page = int(path.rsplit("page=", 1)[1])
+            pages.append(page)
+            start = (page - 1) * 100
+            count = 100 if page < 3 else 5
+            return [
+                {
+                    "number": n,
+                    "html_url": f"https://github.com/littlebit0/DailyCalendar/issues/{n}",
+                    "body": f"AutoBug fingerprint: `{n:016x}`",
+                }
+                for n in range(start + 1, start + count + 1)
+            ]
+
+        backend._github_request = request
+        self.assertEqual(backend._find_fingerprint_issue(f"{203:016x}")["number"], 203)
+        self.assertEqual(pages, [1, 2, 3])
+        pages.clear()
+        self.assertIsNone(backend._find_fingerprint_issue("f" * 16))
+        self.assertEqual(pages, [1, 2, 3])
+
     def test_server_masks_secrets_again(self):
         message = (
             "Authorization: Bearer ya29.secret token=abc123 mail kim@example.com "

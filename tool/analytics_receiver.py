@@ -400,7 +400,9 @@ def normalize_error_report(payload):
         cleaned = _clean_report_text(environment[key], maximum)
         if cleaned is None or "\n" in cleaned or "\t" in cleaned:
             return None
-        clean_environment[key] = sanitize_error_text(cleaned)
+        # Structured fields are checked against fixed patterns below; only
+        # free text is masked, so long build numbers stay valid.
+        clean_environment[key] = sanitize_error_text(cleaned) if key in {"osVersion", "locale"} else cleaned
     if not VERSION_PATTERN.fullmatch(clean_environment["version"]):
         return None
     if not BUILD_NUMBER_PATTERN.fullmatch(clean_environment["buildNumber"]):
@@ -1283,23 +1285,28 @@ class ErrorReportBackend(BugReportBackend):
             raise UpstreamUnavailable()
 
     def _find_fingerprint_issue(self, fingerprint):
-        decoded = self._github_request(
-            "GET", f"issues?state=all&labels={ERROR_REPORT_LABEL}&sort=created&direction=desc&per_page=100"
-        )
-        if not isinstance(decoded, list):
-            raise UpstreamUnavailable()
         marker = f"AutoBug fingerprint: `{fingerprint}`"
-        for issue in decoded:
-            if (
-                isinstance(issue, dict)
-                and "pull_request" not in issue
-                and isinstance(issue.get("body"), str)
-                and marker in issue["body"]
-                and type(issue.get("number")) is int
-                and self._valid_issue_url(issue.get("html_url"), issue["number"])
-            ):
-                return {"number": issue["number"], "html_url": issue["html_url"]}
-        return None
+        page = 1
+        while True:
+            decoded = self._github_request(
+                "GET",
+                f"issues?state=all&labels={ERROR_REPORT_LABEL}&sort=created&direction=desc&per_page=100&page={page}",
+            )
+            if not isinstance(decoded, list):
+                raise UpstreamUnavailable()
+            for issue in decoded:
+                if (
+                    isinstance(issue, dict)
+                    and "pull_request" not in issue
+                    and isinstance(issue.get("body"), str)
+                    and marker in issue["body"]
+                    and type(issue.get("number")) is int
+                    and self._valid_issue_url(issue.get("html_url"), issue["number"])
+                ):
+                    return {"number": issue["number"], "html_url": issue["html_url"]}
+            if len(decoded) < 100:
+                return None
+            page += 1
 
 
 class ReceiverHandler(BaseHTTPRequestHandler):

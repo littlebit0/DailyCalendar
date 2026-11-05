@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:daily/core/support/error_report_service.dart';
@@ -194,6 +195,25 @@ void main() {
     await reports.setEnabled(false);
     online = true;
     await fail(reports);
+    await reports.flush();
+    expect(requests, isEmpty);
+    expect(preferences.getString('errorReportQueue.v1'), isNull);
+  });
+
+  test('opting out while a send waits for sign-in stops it', () async {
+    final reports = service();
+    final gate = Completer<Map<String, String>?>();
+    reports.authorizationHeaders = () => gate.future;
+    reports.record(
+      StateError('x'),
+      StackTrace.current,
+      feature: 'app',
+      severity: ErrorReportSeverity.fatal,
+    );
+    await Future<void>.delayed(Duration.zero);
+    final disabling = reports.setEnabled(false);
+    gate.complete({'Authorization': 'Bearer g'});
+    await disabling;
     await reports.flush();
     expect(requests, isEmpty);
     expect(preferences.getString('errorReportQueue.v1'), isNull);

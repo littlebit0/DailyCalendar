@@ -322,7 +322,12 @@ class ErrorReportService {
     _enabled.value = value;
     try {
       await _preferences.setBool(_enabledKey, value);
-      if (!value) await _preferences.remove(_queueKey);
+      if (!value) {
+        await _preferences.remove(_queueKey);
+        // Again after any record/flush already queued, which recheck the
+        // switch before saving but may have saved just before it changed.
+        await _enqueue(() => _preferences.remove(_queueKey));
+      }
     } on Object {
       // The in-memory switch still stops reporting for this run.
     }
@@ -401,6 +406,7 @@ class ErrorReportService {
             ),
           );
         }
+        if (!_active) return;
         await _saveQueue(queue);
         await _flushImpl();
       });
@@ -447,12 +453,15 @@ class ErrorReportService {
         if (daily.length >= maxReportsPerDay) break;
 
         final headers = await authorizationHeaders?.call();
+        // Opting out while waiting stops every unsent report.
+        if (!_active) return;
         final authorization =
             headers?['Authorization'] ?? headers?['authorization'];
         if (authorization == null || !authorization.startsWith('Bearer ')) {
           break;
         }
         final outcome = await _send(report, authorization);
+        if (!_active) return;
         if (outcome == _SendOutcome.retryLater) break;
         queue.removeWhere((r) => r.id == report.id);
         if (outcome == _SendOutcome.sent) {
