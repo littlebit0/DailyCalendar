@@ -161,6 +161,34 @@ class ErrorReportTests(unittest.TestCase):
         self.assertEqual(entry["occurrences"], 2)
         self.assertEqual(len(self.github.issues), 1)
 
+    def test_retried_delivery_counts_occurrences_added_later(self):
+        delivery = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+        self.backend.submit_error(normalize_error_report(payload()), "Bearer x", delivery)
+        value = payload()
+        value["report"]["occurrenceCount"] = 3
+        self.backend.submit_error(normalize_error_report(value), "Bearer x", delivery)
+        self.backend.submit_error(normalize_error_report(value), "Bearer x", delivery)
+        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
+        self.assertEqual(entry["occurrences"], 3)
+
+    def test_failed_environment_comment_is_retried(self):
+        self.submit(payload())
+        delivery = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
+        normalized = normalize_error_report(payload(version="6.2.0"))
+        failing = self.github.comment
+
+        def outage(number, body):
+            raise UpstreamUnavailable()
+
+        self.backend._github_comment_creator = outage
+        with self.assertRaises(UpstreamUnavailable):
+            self.backend.submit_error(normalized, "Bearer x", delivery)
+        self.backend._github_comment_creator = failing
+        self.backend.submit_error(normalized, "Bearer x", delivery)
+        self.assertEqual(len(self.github.comments), 1)
+        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
+        self.assertEqual(entry["occurrences"], 2)
+
     def test_long_build_numbers_are_accepted(self):
         for build in ("100000", "2026110501"):
             value = payload()

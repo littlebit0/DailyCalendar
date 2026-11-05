@@ -1113,14 +1113,15 @@ class ErrorReportBackend(BugReportBackend):
                         "lastCommentAt": None,
                     }
             if entry is not None:
-                deliveries = entry.setdefault("deliveries", [])
-                if delivery_id in deliveries:
-                    # A retry after a lost response: already counted.
-                    return {"status": "existing", "issueNumber": entry["issueNumber"], "issueUrl": entry["issueUrl"]}
-                if delivery_id is not None:
-                    deliveries[:] = (deliveries + [delivery_id])[-MAX_ERROR_REPORT_DELIVERIES:]
-                entry["occurrences"] = entry.get("occurrences", 0) + report["occurrenceCount"]
-                environments = entry.setdefault("environments", [])
+                deliveries = entry.get("deliveries")
+                if not isinstance(deliveries, dict):
+                    deliveries = {}
+                # A retried delivery may carry occurrences merged into it after
+                # the first attempt; count only what was not acknowledged yet.
+                acknowledged = deliveries.get(delivery_id, 0) if delivery_id is not None else 0
+                added = max(report["occurrenceCount"] - acknowledged, 0)
+                occurrences = entry.get("occurrences", 0) + added
+                environments = list(entry.get("environments", []))
                 last_comment = entry.get("lastCommentAt")
                 comment_due = last_comment is None or now - datetime.fromisoformat(last_comment) >= ERROR_REPORT_COMMENT_INTERVAL
                 if (
@@ -1128,13 +1129,17 @@ class ErrorReportBackend(BugReportBackend):
                     and len(environments) < MAX_ERROR_REPORT_ENVIRONMENTS
                     and comment_due
                 ):
-                    try:
-                        self._github_comment_creator(entry["issueNumber"], self._error_comment(payload, entry["occurrences"]))
-                        environments.append(environment_key)
-                        entry["lastCommentAt"] = now.isoformat()
-                    except UpstreamUnavailable:
-                        # The occurrence still counts; the environment is retried next time.
-                        pass
+                    # On failure nothing is saved and the client retries, so the
+                    # new environment is not lost.
+                    self._github_comment_creator(entry["issueNumber"], self._error_comment(payload, occurrences))
+                    environments.append(environment_key)
+                    entry["lastCommentAt"] = now.isoformat()
+                if delivery_id is not None:
+                    deliveries.pop(delivery_id, None)
+                    deliveries[delivery_id] = max(report["occurrenceCount"], acknowledged)
+                    while len(deliveries) > MAX_ERROR_REPORT_DELIVERIES:
+                        deliveries.pop(next(iter(deliveries)))
+                entry.update({"deliveries": deliveries, "occurrences": occurrences, "environments": environments})
                 index["fingerprints"][fingerprint] = entry
                 self._write_index(index)
                 return {"status": "existing", "issueNumber": entry["issueNumber"], "issueUrl": entry["issueUrl"]}
@@ -1156,7 +1161,7 @@ class ErrorReportBackend(BugReportBackend):
                 "occurrences": report["occurrenceCount"],
                 "environments": [environment_key],
                 "lastCommentAt": None,
-                "deliveries": [] if delivery_id is None else [delivery_id],
+                "deliveries": {} if delivery_id is None else {delivery_id: report["occurrenceCount"]},
             }
             self._write_index(index)
             return {"status": "created", "issueNumber": number, "issueUrl": url}
