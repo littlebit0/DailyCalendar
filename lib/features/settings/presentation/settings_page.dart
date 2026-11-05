@@ -154,8 +154,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       );
     });
     _appVersionInfo = _loadAppVersionInfo();
+    // The saved account is local state, so it is shown before any provider
+    // restoration or secure storage lookup finishes or fails.
+    _dailyAccount = ref.read(settingsRepositoryProvider).dailyAccount();
+    Future.microtask(_loadGeminiApiKey);
     Future.microtask(() async {
-      final key = await ref.read(settingsRepositoryProvider).geminiApiKey();
       final settingsRepository = ref.read(settingsRepositoryProvider);
       AppleAccount? appleAccount;
       GoogleDriveAccount? googleDriveAccount;
@@ -194,7 +197,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         appleAccount = ref.read(appleSignInServiceProvider).currentAccount;
       }
       if (mounted) {
-        _apiKeyController.text = key ?? '';
         setState(() {
           _appleAccount = appleAccount;
           _googleDriveAccount = googleDriveAccount;
@@ -215,6 +217,19 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         });
       }
     });
+  }
+
+  Future<void> _loadGeminiApiKey() async {
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    try {
+      final key = await settingsRepository.geminiApiKey();
+      if (mounted) {
+        _apiKeyController.text = key ?? '';
+      }
+    } on Object {
+      // A secure storage failure only leaves the key field empty; reopening
+      // the settings page reads it again. Account state does not depend on it.
+    }
   }
 
   @override
