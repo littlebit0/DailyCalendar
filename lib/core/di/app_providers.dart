@@ -25,6 +25,7 @@ import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../analytics/product_analytics.dart';
 import '../support/bug_report_service.dart';
+import '../support/error_report_service.dart';
 import '../auth/apple_sign_in_service.dart';
 import '../alarms/alarm_service.dart';
 import '../alarms/native_alarm_service.dart';
@@ -202,6 +203,9 @@ final bugReportServiceProvider = Provider<BugReportService>((ref) {
   ref.onDispose(service.dispose);
   return service;
 });
+
+/// Overridden in `main`; null in tests and anywhere the app did not start one.
+final errorReportServiceProvider = Provider<ErrorReportService?>((ref) => null);
 
 final todoDatabaseMigrationServiceProvider =
     Provider<TodoDatabaseMigrationService>((ref) {

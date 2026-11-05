@@ -26,6 +26,7 @@ ingestion path, and expose only:
 
 - `POST /v1/events`
 - `POST /v1/bug-reports`
+- `POST /v1/error-reports`
 - `GET /health`
 
 The receiver limits a request to 64 KiB and 25 events, applies an in-memory
@@ -88,6 +89,7 @@ network transmission occurs.
 
 - Public endpoint: `https://littlebit.tail6514a4.ts.net/v1/events`
 - Bug-report endpoint: `https://littlebit.tail6514a4.ts.net/v1/bug-reports`
+- Error-report endpoint: `https://littlebit.tail6514a4.ts.net/v1/error-reports`
 - Health endpoint: `https://littlebit.tail6514a4.ts.net/health`
 - Ubuntu service: `daily-analytics.service` (user systemd service)
 - Receiver source: `~/.local/lib/daily-analytics/analytics_receiver.py`
@@ -227,3 +229,20 @@ codes at the source and both validators reject any other value. Drive sync failu
 stay in `sync_failed`. `cause` such as `timedOut` or `authenticationUnconfirmed` does
 not mean the password is wrong; only `credentialsRejected` reports the school's own
 wrong-credentials message. Deploy the receiver before the app.
+
+## Automatic Error Reports
+
+`POST /v1/error-reports` takes the app's sanitized error reports. It verifies
+the Google access token like `/v1/bug-reports`, masks the text again, rejects
+debug builds, and limits each account to 30 requests an hour and the whole
+receiver to 10 new issues a day. Each fingerprint gets one issue labelled
+`autobug`; `error-report-index.json` in the data directory maps fingerprints to
+issues and records the environments already posted, so a repeat only comments
+when it brings a new version/platform/OS/build environment, at most once every
+24 hours. The same `DAILY_GITHUB_TOKEN` (issues read/write) is used; no token is
+compiled into the app. Override the app endpoint with
+`--dart-define=DAILY_ERROR_REPORT_ENDPOINT=...`.
+
+Deploying a receiver change: copy `tool/analytics_receiver.py` to
+`~/.local/lib/daily-analytics/` on the Ubuntu host and run
+`systemctl --user restart daily-analytics.service`.

@@ -27,6 +27,14 @@ MAX_BUG_REPORTS_PER_HOUR = 5
 BUG_REPORT_RETENTION_DAYS = 365
 DEDUPE_RETENTION_DAYS = 7
 REPORT_EXPORT_INTERVAL_SECONDS = 60
+MAX_ERROR_REPORT_BYTES = 32 * 1024
+MAX_ERROR_REPORTS_PER_HOUR = 30
+# Across all users, so a crash loop on many devices cannot flood the repository.
+MAX_NEW_ERROR_ISSUES_PER_DAY = 10
+ERROR_REPORT_COMMENT_INTERVAL = timedelta(hours=24)
+MAX_ERROR_REPORT_ENVIRONMENTS = 20
+ERROR_REPORT_LABEL = "autobug"
+FINGERPRINT_PATTERN = re.compile(r"^[0-9a-f]{16}$")
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 GITHUB_API_VERSION = "2026-03-10"
 VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:\.\d+)?$")
@@ -289,6 +297,130 @@ def normalize_bug_report(payload):
     if clean_environment["platform"] not in {"iOS", "macOS", "Android", "Windows", "Linux"}:
         return None
     return {"report": clean_report, "environment": clean_environment}
+
+
+ERROR_REPORT_FIELDS = {
+    "fingerprint": 16,
+    "severity": 16,
+    "feature": 64,
+    "errorType": 200,
+    "message": 1000,
+    "stackTrace": 6000,
+    "firstOccurredAt": 40,
+    "lastOccurredAt": 40,
+    "occurrenceCount": None,
+    "lifecycle": 32,
+}
+ERROR_REPORT_ENVIRONMENT_FIELDS = {
+    "version": 32,
+    "buildNumber": 32,
+    "platform": 16,
+    "osVersion": 256,
+    "deviceType": 16,
+    "locale": 35,
+    "timeZone": 16,
+    "environment": 16,
+}
+_ERROR_SANITIZERS = [
+    (re.compile(r"\b(Bearer|Basic)\s+[A-Za-z0-9._~+/=-]+", re.I), lambda m: f"{m[1]} ***"),
+    (re.compile(r"\b(Cookie|Set-Cookie|Authorization)\s*:[^\n]*", re.I), lambda m: f"{m[1]}: ***"),
+    (
+        re.compile(
+            r"\b(access_token|refresh_token|id_token|token|password|passwd|pwd|pw|"
+            r"cookie|session(?:_?id)?|jsessionid|api[_-]?key|secret|code|user_?id|"
+            r"student_?id|email)([\"']?\s*[=:]\s*)[\"']?[^\s&;,\"'}]+",
+            re.I,
+        ),
+        lambda m: f"{m[1]}{m[2]}***",
+    ),
+    (re.compile(r"eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]*"), lambda m: "***"),
+    (re.compile(r"\bya29\.[A-Za-z0-9._-]+"), lambda m: "***"),
+    (re.compile(r"[^\s@<>()\"]+@[^\s@<>()\"]+\.[A-Za-z]{2,}"), lambda m: "***@***"),
+    (re.compile(r"(https?://[^\s?#]+)\?[^\s#)]*", re.I), lambda m: f"{m[1]}?***"),
+    (re.compile(r"(/Users/|/home/|[A-Za-z]:\\Users\\)[^/\\\s]+", re.I), lambda m: f"{m[1]}***"),
+    (
+        re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b", re.I),
+        lambda m: "<uuid>",
+    ),
+    (re.compile(r"\b[0-9a-f]{16,}\b", re.I), lambda m: "<hex>"),
+    (re.compile(r"\+?\d[\d -]{8,}\d"), lambda m: "<number>"),
+    (re.compile(r"\d{6,}"), lambda m: "<number>"),
+    (re.compile(r"\"[^\"\n]+\""), lambda m: '"***"'),
+    (re.compile(r"'[^'\n]+'"), lambda m: "'***'"),
+]
+
+
+def sanitize_error_text(value):
+    """Same masking as the app's `sanitizeErrorText`, applied again here so a
+    modified or older client cannot publish tokens or personal data."""
+    for pattern, replace in _ERROR_SANITIZERS:
+        value = pattern.sub(replace, value)
+    return value.replace("`", "'")
+
+
+def normalize_error_report(payload):
+    if not isinstance(payload, dict) or set(payload) != {"report", "environment", "integrations"}:
+        return None
+    report, environment, integrations = payload["report"], payload["environment"], payload["integrations"]
+    if not isinstance(report, dict) or set(report) != set(ERROR_REPORT_FIELDS):
+        return None
+    if not isinstance(environment, dict) or set(environment) != set(ERROR_REPORT_ENVIRONMENT_FIELDS):
+        return None
+    if not isinstance(integrations, dict) or set(integrations) != {"driveLinked", "lmsConnected", "lastDriveSyncAt"}:
+        return None
+
+    clean_report = {}
+    for key, maximum in ERROR_REPORT_FIELDS.items():
+        if maximum is None:
+            continue
+        value = report[key]
+        if key == "stackTrace" and value == "":
+            clean_report[key] = ""
+            continue
+        cleaned = _clean_report_text(value, maximum)
+        if cleaned is None:
+            return None
+        clean_report[key] = cleaned
+    count = report["occurrenceCount"]
+    if type(count) is not int or not 1 <= count <= 1_000_000:
+        return None
+    clean_report["occurrenceCount"] = count
+    if not FINGERPRINT_PATTERN.fullmatch(clean_report["fingerprint"]):
+        return None
+    if clean_report["severity"] not in {"fatal", "nonFatal"}:
+        return None
+    for key in ("firstOccurredAt", "lastOccurredAt"):
+        if not _valid_timestamp(clean_report[key]):
+            return None
+    for key in ("feature", "errorType", "message", "stackTrace", "lifecycle"):
+        clean_report[key] = sanitize_error_text(clean_report[key])
+
+    clean_environment = {}
+    for key, maximum in ERROR_REPORT_ENVIRONMENT_FIELDS.items():
+        cleaned = _clean_report_text(environment[key], maximum)
+        if cleaned is None or "\n" in cleaned or "\t" in cleaned:
+            return None
+        clean_environment[key] = sanitize_error_text(cleaned)
+    if not VERSION_PATTERN.fullmatch(clean_environment["version"]):
+        return None
+    if not BUILD_NUMBER_PATTERN.fullmatch(clean_environment["buildNumber"]):
+        return None
+    if clean_environment["platform"] not in {"iOS", "macOS", "Android", "Windows", "Linux"}:
+        return None
+    if clean_environment["deviceType"] not in {"mobile", "desktop"}:
+        return None
+    # Debug builds never report; this guards against a modified client.
+    if clean_environment["environment"] not in {"profile", "test", "production"}:
+        return None
+
+    last_sync = integrations["lastDriveSyncAt"]
+    if (
+        type(integrations["driveLinked"]) is not bool
+        or type(integrations["lmsConnected"]) is not bool
+        or (last_sync is not None and not _valid_timestamp(last_sync))
+    ):
+        return None
+    return {"report": clean_report, "environment": clean_environment, "integrations": dict(integrations)}
 
 
 class InvalidGoogleToken(Exception):
@@ -924,9 +1056,256 @@ class BugReportBackend:
         )
 
 
+class ErrorReportBackend(BugReportBackend):
+    """Automatic error reports: one GitHub issue per fingerprint.
+
+    `error-report-index.json` maps a fingerprint to its issue, the environments
+    already shown on it and the occurrence total. A repeat only adds a comment
+    when it brings a new version/platform/OS/build environment, at most once per
+    `ERROR_REPORT_COMMENT_INTERVAL`; otherwise only the private total grows.
+    When the index has no entry (first run, lost file), the `autobug` labelled
+    issues are scanned for the fingerprint before a new issue is created.
+    """
+
+    def __init__(self, directory, *, github_comment_creator=None, github_fingerprint_finder=None, **kwargs):
+        super().__init__(directory, **kwargs)
+        self.index_path = Path(directory) / "error-report-index.json"
+        self._github_comment_creator = github_comment_creator or self._create_github_comment
+        self._github_fingerprint_finder = github_fingerprint_finder or self._find_fingerprint_issue
+        # shortcut: one lock serializes every error report (GitHub calls included);
+        # fine for a personal receiver, use per-fingerprint locks if volume grows.
+        self._index_lock = threading.Lock()
+
+    def submit_error(self, payload, authorization):
+        identity = self._google_identity_fetcher(authorization)
+        subject = identity.get("sub") if isinstance(identity, dict) else None
+        if not isinstance(subject, str) or not subject or len(subject) > 255 or identity.get("email_verified") is not True:
+            raise InvalidGoogleToken()
+        subject_hash = hashlib.sha256(subject.encode()).hexdigest()
+        self._check_rate(f"error:{subject_hash}", MAX_ERROR_REPORTS_PER_HOUR, 60 * 60)
+
+        report = payload["report"]
+        environment = payload["environment"]
+        fingerprint = report["fingerprint"]
+        environment_key = "|".join(
+            environment[key] for key in ("version", "platform", "osVersion", "environment")
+        )
+        now = self._now()
+        with self._index_lock:
+            index = self._read_index()
+            entry = index["fingerprints"].get(fingerprint)
+            if entry is None:
+                existing = self._github_fingerprint_finder(fingerprint)
+                if existing is not None:
+                    entry = {
+                        "issueNumber": existing["number"],
+                        "issueUrl": existing["html_url"],
+                        "occurrences": 0,
+                        "environments": [],
+                        "lastCommentAt": None,
+                    }
+            if entry is not None:
+                entry["occurrences"] = entry.get("occurrences", 0) + report["occurrenceCount"]
+                environments = entry.setdefault("environments", [])
+                last_comment = entry.get("lastCommentAt")
+                comment_due = last_comment is None or now - datetime.fromisoformat(last_comment) >= ERROR_REPORT_COMMENT_INTERVAL
+                if (
+                    environment_key not in environments
+                    and len(environments) < MAX_ERROR_REPORT_ENVIRONMENTS
+                    and comment_due
+                ):
+                    try:
+                        self._github_comment_creator(entry["issueNumber"], self._error_comment(payload, entry["occurrences"]))
+                        environments.append(environment_key)
+                        entry["lastCommentAt"] = now.isoformat()
+                    except UpstreamUnavailable:
+                        # The occurrence still counts; the environment is retried next time.
+                        pass
+                index["fingerprints"][fingerprint] = entry
+                self._write_index(index)
+                return {"status": "existing", "issueNumber": entry["issueNumber"], "issueUrl": entry["issueUrl"]}
+
+            day = now.date().isoformat()
+            created_today = index["createdPerDay"].get(day, 0)
+            if created_today >= MAX_NEW_ERROR_ISSUES_PER_DAY:
+                raise BugReportRateLimited()
+            title, body = self._error_issue(payload)
+            issue = self._github_issue_creator(title, body)
+            number = issue.get("number") if isinstance(issue, dict) else None
+            url = issue.get("html_url") if isinstance(issue, dict) else None
+            if type(number) is not int or not self._valid_issue_url(url, number):
+                raise UpstreamUnavailable()
+            index["createdPerDay"] = {day: created_today + 1}
+            index["fingerprints"][fingerprint] = {
+                "issueNumber": number,
+                "issueUrl": url,
+                "occurrences": report["occurrenceCount"],
+                "environments": [environment_key],
+                "lastCommentAt": None,
+            }
+            self._write_index(index)
+            return {"status": "created", "issueNumber": number, "issueUrl": url}
+
+    def _check_rate(self, key, maximum, seconds):
+        timestamp = self._now().timestamp()
+        with self._rate_lock:
+            window = [value for value in self._rate_windows[key] if timestamp - value < seconds]
+            if len(window) >= maximum:
+                self._rate_windows[key] = window
+                raise BugReportRateLimited()
+            window.append(timestamp)
+            self._rate_windows[key] = window
+
+    def _read_index(self):
+        try:
+            index = json.loads(self.index_path.read_text())
+        except (OSError, ValueError):
+            index = {}
+        if not isinstance(index, dict):
+            index = {}
+        if not isinstance(index.get("fingerprints"), dict):
+            index["fingerprints"] = {}
+        if not isinstance(index.get("createdPerDay"), dict):
+            index["createdPerDay"] = {}
+        return index
+
+    def _write_index(self, index):
+        self.index_path.parent.mkdir(parents=True, exist_ok=True)
+        fd, temporary = tempfile.mkstemp(prefix=".error-report-index.", dir=self.index_path.parent)
+        try:
+            os.fchmod(fd, 0o600)
+            with os.fdopen(fd, "w") as output:
+                json.dump(index, output, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+                output.flush()
+                os.fsync(output.fileno())
+            os.replace(temporary, self.index_path)
+        finally:
+            if os.path.exists(temporary):
+                os.unlink(temporary)
+
+    @staticmethod
+    def _environment_lines(payload):
+        environment = payload["environment"]
+        integrations = payload["integrations"]
+        return [
+            f"- Daily: {environment['version']} ({environment['buildNumber']})",
+            f"- 빌드 환경: {environment['environment']}",
+            f"- 플랫폼: {environment['platform']} ({environment['deviceType']})",
+            f"- OS: {environment['osVersion']}",
+            f"- locale / 시간대: {environment['locale']} / {environment['timeZone']}",
+            f"- Google Drive 연동: {'켜짐' if integrations['driveLinked'] else '꺼짐'}",
+            f"- LMS 연동: {'켜짐' if integrations['lmsConnected'] else '꺼짐'}",
+            f"- 마지막 Drive 동기화: {integrations['lastDriveSyncAt'] or '없음'}",
+        ]
+
+    def _error_issue(self, payload):
+        report = payload["report"]
+        environment = payload["environment"]
+        tag = "" if environment["environment"] == "production" else f"[{environment['environment']}]"
+        title = f"[AutoBug]{tag} {report['feature']}: {report['errorType']}"[:200]
+        body = "\n".join(
+            [
+                "앱이 자동으로 보고한 오류입니다. 개인정보와 인증 정보는 앱과 서버에서 마스킹했습니다.",
+                "",
+                "## 오류",
+                f"- 심각도: {report['severity']}",
+                f"- 기능: {report['feature']}",
+                f"- 오류 유형: `{report['errorType']}`",
+                f"- 처음 발생: {report['firstOccurredAt']}",
+                f"- 마지막 발생: {report['lastOccurredAt']}",
+                f"- 보고 시점 발생 횟수: {report['occurrenceCount']}",
+                f"- 앱 상태: {report['lifecycle']}",
+                "",
+                "## 메시지",
+                "```text",
+                report["message"],
+                "```",
+                "",
+                "## Stack trace (상위 프레임)",
+                "```text",
+                report["stackTrace"] or "(없음)",
+                "```",
+                "",
+                "## 실행 환경",
+                *self._environment_lines(payload),
+                "",
+                f"AutoBug fingerprint: `{report['fingerprint']}`",
+            ]
+        )
+        return title, body
+
+    def _error_comment(self, payload, occurrences):
+        return "\n".join(
+            [
+                "같은 오류가 새 환경에서 다시 보고되었습니다.",
+                "",
+                f"- 누적 발생 횟수(서버 집계): {occurrences}",
+                *self._environment_lines(payload),
+            ]
+        )
+
+    def _github_request(self, method, path, body=None):
+        if not self.github_token:
+            raise UpstreamUnavailable()
+        request = Request(
+            f"https://api.github.com/repos/{self.github_repository}/{path}",
+            data=None if body is None else json.dumps(body, ensure_ascii=False).encode(),
+            headers={
+                "Accept": "application/vnd.github+json",
+                "Authorization": f"Bearer {self.github_token}",
+                "Content-Type": "application/json",
+                "X-GitHub-Api-Version": GITHUB_API_VERSION,
+                "User-Agent": "DailyCalendar-Bug-Reporter",
+            },
+            method=method,
+        )
+        try:
+            with urlopen(request, timeout=15) as response:
+                response_body = response.read(2 * 1024 * 1024 + 1)
+        except (HTTPError, OSError, URLError, TimeoutError):
+            raise UpstreamUnavailable() from None
+        if len(response_body) > 2 * 1024 * 1024:
+            raise UpstreamUnavailable()
+        try:
+            return json.loads(response_body)
+        except (TypeError, ValueError, UnicodeDecodeError):
+            raise UpstreamUnavailable() from None
+
+    def _create_github_issue(self, title, body):
+        decoded = self._github_request("POST", "issues", {"title": title, "body": body, "labels": [ERROR_REPORT_LABEL]})
+        if not isinstance(decoded, dict):
+            raise UpstreamUnavailable()
+        return decoded
+
+    def _create_github_comment(self, issue_number, body):
+        decoded = self._github_request("POST", f"issues/{issue_number}/comments", {"body": body})
+        if not isinstance(decoded, dict):
+            raise UpstreamUnavailable()
+
+    def _find_fingerprint_issue(self, fingerprint):
+        decoded = self._github_request(
+            "GET", f"issues?state=all&labels={ERROR_REPORT_LABEL}&sort=created&direction=desc&per_page=100"
+        )
+        if not isinstance(decoded, list):
+            raise UpstreamUnavailable()
+        marker = f"AutoBug fingerprint: `{fingerprint}`"
+        for issue in decoded:
+            if (
+                isinstance(issue, dict)
+                and "pull_request" not in issue
+                and isinstance(issue.get("body"), str)
+                and marker in issue["body"]
+                and type(issue.get("number")) is int
+                and self._valid_issue_url(issue.get("html_url"), issue["number"])
+            ):
+                return {"number": issue["number"], "html_url": issue["html_url"]}
+        return None
+
+
 class ReceiverHandler(BaseHTTPRequestHandler):
     aggregator = None
     bug_reports = None
+    error_reports = None
     rate_lock = threading.Lock()
     rate_windows = defaultdict(list)
 
@@ -940,7 +1319,7 @@ class ReceiverHandler(BaseHTTPRequestHandler):
             self._respond(404, {"error": "not_found"})
 
     def do_POST(self):
-        if self.path not in {"/v1/events", "/v1/bug-reports"}:
+        if self.path not in {"/v1/events", "/v1/bug-reports", "/v1/error-reports"}:
             self._respond(404, {"error": "not_found"})
             return
         if not self._allow_request():
@@ -949,7 +1328,35 @@ class ReceiverHandler(BaseHTTPRequestHandler):
         if self.path == "/v1/events":
             self._post_events()
             return
+        if self.path == "/v1/error-reports":
+            self._post_error_report()
+            return
         self._post_bug_report()
+
+    def _post_error_report(self):
+        payload, error_status, error_code = self._read_json(MAX_ERROR_REPORT_BYTES)
+        if error_code is not None:
+            self._respond(error_status, {"error": error_code})
+            return
+        normalized = normalize_error_report(payload)
+        if normalized is None:
+            self._respond(400, {"error": "invalid_report"})
+            return
+        try:
+            result = self.error_reports.submit_error(normalized, self.headers.get("Authorization"))
+        except InvalidGoogleToken:
+            self._respond(401, {"error": "invalid_google_token"})
+            return
+        except BugReportRateLimited:
+            self._respond(429, {"error": "rate_limited"})
+            return
+        except UpstreamUnavailable:
+            self._respond(503, {"error": "upstream_unavailable"})
+            return
+        except OSError:
+            self._respond(500, {"error": "store_failed"})
+            return
+        self._respond(201 if result["status"] == "created" else 200, result)
 
     def _post_events(self):
         batch, error_status, error_code = self._read_json(MAX_REQUEST_BYTES)
@@ -1035,6 +1442,7 @@ def main():
     directory = os.environ.get("DAILY_ANALYTICS_DATA_DIR", "var/analytics")
     ReceiverHandler.aggregator = Aggregator(directory, export_interval=REPORT_EXPORT_INTERVAL_SECONDS)
     ReceiverHandler.bug_reports = BugReportBackend(directory)
+    ReceiverHandler.error_reports = ErrorReportBackend(directory)
     server = ThreadingHTTPServer((address, port), ReceiverHandler)
     server.daemon_threads = True
 

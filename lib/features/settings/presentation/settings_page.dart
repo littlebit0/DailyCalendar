@@ -950,6 +950,29 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                         onTap: _deleteAnalyticsData,
                       ),
+                      if (ref.watch(errorReportServiceProvider)
+                          case final errorReports?) ...[
+                        const Divider(height: 1),
+                        ValueListenableBuilder<bool>(
+                          valueListenable: errorReports.enabledListenable,
+                          builder: (context, enabled, _) =>
+                              _AnimatedSettingsSwitchListTile(
+                                tileKey: const ValueKey('error-report-toggle'),
+                                contentPadding: EdgeInsets.zero,
+                                secondary: const _SettingsLeadingIcon(
+                                  Icons.bug_report_outlined,
+                                ),
+                                value: enabled,
+                                title: Text(context.tr('자동 오류 보고')),
+                                subtitle: _SettingsDescription(
+                                  context.tr(
+                                    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 개발자에게 보내 공개 GitHub 이슈로 등록합니다. 일정 내용과 계정 정보는 보내지 않습니다.',
+                                  ),
+                                ),
+                                onChanged: errorReports.setEnabled,
+                              ),
+                        ),
+                      ],
                       const Divider(height: 1),
                       _AnimatedSettingsSwitchListTile(
                         contentPadding: EdgeInsets.zero,

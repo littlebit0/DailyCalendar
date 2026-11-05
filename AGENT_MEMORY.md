@@ -1,5 +1,20 @@
 # Daily Agent Memory — current handoff
 
+## #91 Automatic error reports — 2026-11-05
+
+- Client: `lib/core/support/error_report_service.dart` (on by default, Settings >
+  Privacy toggle, Google login required to send, offline queue 20/7 days,
+  6h per fingerprint, 10/day, non-fatal after 3 repeats, debug never sends).
+  Hooks: `FlutterError.onError` (non-fatal), `PlatformDispatcher.onError`
+  (fatal), retryable Drive sync failures (non-fatal). LMS-specific failures and
+  native crashes are not hooked.
+- Receiver: `/v1/error-reports` in `tool/analytics_receiver.py`; one `autobug`
+  issue per fingerprint, comment only for a new environment once per 24h.
+  NOT deployed to the Ubuntu host yet; copy the file and restart
+  `daily-analytics.service` (docs/ANALYTICS_DEPLOYMENT.md).
+- Shared Dart code: Mac/iPhone/Windows/Android behavior identical; no device
+  verification done.
+
 ## #698 / PR #699 Update-required restriction — 2026-11-01
 
 - Changed (shared Dart, all platforms, plus iOS/macOS Siri Swift): once a newer

@@ -28,6 +28,7 @@ import '../core/weather/weather_widgets.dart';
 import '../core/sync/startup_sync_gate.dart';
 import '../core/diagnostics/startup_timing.dart';
 import '../core/sync/google_drive_auth_service.dart';
+import '../core/support/error_report_service.dart';
 import 'daily_theme.dart';
 
 class DailyApp extends ConsumerWidget {
@@ -712,6 +713,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   ];
 
   late final LmsController _lmsController;
+  ErrorReportService? _errorReports;
   var _servicesStarted = false;
   String? _initialRestoreOwner;
   String? _scheduledLmsOwner;
@@ -775,10 +777,37 @@ class _AppHomeState extends ConsumerState<_AppHome>
       unawaited(_measureLocalCalendar());
     }
     _refreshCalendarWidgets();
+    _connectErrorReports();
+  }
+
+  void _connectErrorReports() {
+    final errorReports = _errorReports = ref.read(errorReportServiceProvider);
+    if (errorReports == null) return;
+    final settings = ref.read(settingsRepositoryProvider);
+    errorReports
+      ..authorizationHeaders = () async {
+        // Only the signed-in Daily Google account may send; otherwise the
+        // reports wait in the queue.
+        if (settings.dailyAccount()?.googleAccount == null) return null;
+        return ref.read(googleDriveAuthServiceProvider).authorizationHeaders();
+      }
+      ..integrations = () => ErrorReportIntegrations(
+        driveLinked: settings.dailyAccount()?.googleAccount != null,
+        lmsConnected: _lmsController.connected,
+        lastDriveSyncAt: ref
+            .read(googleDriveSyncServiceProvider)
+            .statusNotifier
+            .value
+            .lastSyncedAt,
+      );
+    unawaited(errorReports.flush());
   }
 
   @override
   void dispose() {
+    _errorReports
+      ?..authorizationHeaders = null
+      ..integrations = null;
     WidgetsBinding.instance.removeObserver(this);
     _lmsController.setForeground(false);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
@@ -984,6 +1013,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(productAnalyticsProvider).flush().catchError((_) {}));
+      unawaited(ref.read(errorReportServiceProvider)?.flush());
     }
     switch (state) {
       case AppLifecycleState.resumed:
@@ -1292,8 +1322,19 @@ class _AppHomeState extends ConsumerState<_AppHome>
         });
       }
       return true;
-    } on Object catch (error) {
+    } on Object catch (error, stackTrace) {
       _syncRestoreRetryable = error is! GoogleDriveAuthException;
+      // Expired sign-in is handled by the reconnect prompt, not a bug.
+      if (_syncRestoreRetryable) {
+        ref
+            .read(errorReportServiceProvider)
+            ?.record(
+              error,
+              stackTrace,
+              feature: 'drive_sync',
+              severity: ErrorReportSeverity.nonFatal,
+            );
+      }
       if (startup) rethrow;
       // Google Drive sync is optional; local calendar use stays available.
       return false;

@@ -124,6 +124,35 @@ Private email-to-issue contact mappings are access-restricted on Daily's Ubuntu
 server and are retained for no more than 365 days. Bug-report submission is a
 support feature and is independent of the optional anonymous analytics setting.
 
+## Automatic Error Reports
+
+Automatic error reports are on by default and can be turned off at any time in
+Settings > Privacy > Automatic error reports. Turning them off also deletes
+reports still waiting on the device. Debug builds never send them.
+
+When Daily hits an unhandled error, a framework error, or a failed Google Drive
+sync, it records the error type, the feature where it happened, the top stack
+frames, the error message, how often it happened, the app lifecycle state, app
+version and build number, build environment, platform, device type
+(mobile/desktop), operating-system version, locale, UTC offset, whether Google
+Drive and the LMS are connected, and the time of the last Drive sync. Event
+titles, notes, account names, email addresses, school or LMS details, and
+calendar content are not collected.
+
+Before a report leaves the device, and again on the receiver, Daily masks access
+and refresh tokens, cookies and session IDs, passwords, email addresses, the
+user-name part of home-folder paths, URL query strings, UUIDs and long IDs,
+phone numbers, and quoted text in error messages.
+
+Reports are sent only while a Google account is signed in to Daily; until then
+they wait on the device (at most 20, for at most 7 days). Daily sends the same
+error at most once every 6 hours and at most 10 reports a day. The receiver
+verifies the Google access token the same way as for bug reports, keeps a hash
+of the account ID only for rate limiting, and does not store the token or the
+email address. Each distinct error becomes one public issue in the
+DailyCalendar GitHub repository; a repeat only adds the new app or OS
+environment to that issue.
+
 ## Data Sharing
 
 Daily does not operate a separate backend server for your calendar data. When
@@ -137,6 +166,9 @@ When you explicitly submit a bug report, the report text and app environment are
 shared with GitHub as a public issue. Google receives the one-time UserInfo
 request needed to verify the signed-in account. The verified email is retained
 only by Daily's support receiver and is not published to GitHub.
+
+Automatic error reports, described above, are shared with GitHub as public
+issues after masking. No account identity is included in them.
 
 ## Deleting Data
 
