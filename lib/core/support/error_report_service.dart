@@ -196,6 +196,7 @@ class _PendingErrorReport {
     required this.lastOccurredAt,
     required this.occurrenceCount,
     required this.lifecycle,
+    required this.environment,
   });
 
   final String id;
@@ -209,6 +210,10 @@ class _PendingErrorReport {
   DateTime lastOccurredAt;
   int occurrenceCount;
   final String lifecycle;
+
+  /// Where the error happened, kept so an app update before sending does not
+  /// attribute the error to the new build.
+  final Map<String, String> environment;
 
   static _PendingErrorReport? fromJson(Object? value) {
     if (value is! Map) return null;
@@ -227,6 +232,7 @@ class _PendingErrorReport {
         lastOccurredAt: DateTime.parse(value['lastOccurredAt'] as String),
         occurrenceCount: value['occurrenceCount'] as int,
         lifecycle: value['lifecycle'] as String,
+        environment: Map<String, String>.from(value['environment'] as Map),
       );
     } on Object {
       return null;
@@ -245,6 +251,7 @@ class _PendingErrorReport {
     'lastOccurredAt': lastOccurredAt.toUtc().toIso8601String(),
     'occurrenceCount': occurrenceCount,
     'lifecycle': lifecycle,
+    'environment': environment,
   };
 }
 
@@ -381,7 +388,13 @@ class ErrorReportService {
           platform: environment.platform,
         );
         final queue = _loadQueue();
-        final existing = queue.where((r) => r.fingerprint == fingerprint);
+        final environmentJson = environment.toJson();
+        // Occurrences in another build or OS stay separate reports.
+        final existing = queue.where(
+          (r) =>
+              r.fingerprint == fingerprint &&
+              mapEquals(r.environment, environmentJson),
+        );
         if (existing.isNotEmpty) {
           final report = existing.first
             ..occurrenceCount += 1
@@ -403,6 +416,7 @@ class ErrorReportService {
               lastOccurredAt: occurredAt,
               occurrenceCount: 1,
               lifecycle: lifecycle,
+              environment: environmentJson,
             ),
           );
         }
@@ -486,7 +500,6 @@ class ErrorReportService {
     _PendingErrorReport report,
     String authorization,
   ) async {
-    final environment = await _environmentLoader();
     final body = jsonEncode({
       'report': {
         'fingerprint': report.fingerprint,
@@ -500,7 +513,7 @@ class ErrorReportService {
         'occurrenceCount': report.occurrenceCount,
         'lifecycle': report.lifecycle,
       },
-      'environment': environment.toJson(),
+      'environment': report.environment,
       'integrations':
           (integrations?.call() ??
                   const ErrorReportIntegrations(

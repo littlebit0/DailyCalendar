@@ -219,6 +219,41 @@ void main() {
     expect(preferences.getString('errorReportQueue.v1'), isNull);
   });
 
+  test('a queued report keeps the build it happened in', () async {
+    var current = environment;
+    ErrorReportService withEnvironment() => ErrorReportService(
+      preferences: preferences,
+      httpClient: MockClient((request) async {
+        requests.add(request);
+        return http.Response('{}', 201);
+      }),
+      endpoint: Uri.parse('https://errors.example.test/v1/error-reports'),
+      now: () => now,
+      environmentLoader: () async => current,
+      buildMode: 'release',
+    );
+    final before = withEnvironment()..authorizationHeaders = () async => null;
+    await fail(before);
+    current = const ErrorReportEnvironment(
+      version: '6.2.0',
+      buildNumber: '101',
+      platform: 'macOS',
+      osVersion: 'Version 27.2',
+      deviceType: 'desktop',
+      locale: 'ko-KR',
+      timeZone: 'UTC+09:00',
+      environment: 'production',
+    );
+    final after = withEnvironment()
+      ..authorizationHeaders = () async => {'Authorization': 'Bearer g'};
+    await after.flush();
+    expect(requests, hasLength(1));
+    final sent =
+        (jsonDecode(requests.single.body) as Map)['environment'] as Map;
+    expect(sent['version'], '6.1.0');
+    expect(sent['buildNumber'], '100');
+  });
+
   test('reporting is on by default', () {
     expect(service().enabled, isTrue);
   });
