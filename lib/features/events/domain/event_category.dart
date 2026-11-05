@@ -149,15 +149,22 @@ class EventCategory {
   }) {
     final name = label.trim().toLowerCase();
     final baseId = _customId(label);
+    // Reuse a same-name category anywhere in this hash's id chain first, so a
+    // freed lower slot does not split one name across two ids.
+    final sameName = existing.where(
+      (category) =>
+          (category.id == baseId || category.id.startsWith('${baseId}_')) &&
+          category.label.trim().toLowerCase() == name,
+    );
+    if (sameName.isNotEmpty) {
+      return EventCategory(
+        id: sameName.first.id,
+        label: label.trim(),
+        colorValue: colorValue,
+      );
+    }
     var id = baseId;
-    for (var suffix = 2; ; suffix++) {
-      final holders = existing.where((category) => category.id == id);
-      if (holders.isEmpty ||
-          holders.any(
-            (category) => category.label.trim().toLowerCase() == name,
-          )) {
-        break;
-      }
+    for (var suffix = 2; existing.any((c) => c.id == id); suffix++) {
       id = '${baseId}_$suffix';
     }
     return EventCategory(id: id, label: label.trim(), colorValue: colorValue);

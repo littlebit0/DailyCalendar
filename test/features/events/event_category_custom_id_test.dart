@@ -44,6 +44,11 @@ void main() {
       EventCategory.custom(label: 'B_', colorValue: 9, existing: [a, b]).id,
       b.id,
     );
+    // After a~ is deleted, re-adding b_ keeps b_'s suffixed id.
+    expect(
+      EventCategory.custom(label: 'b_', colorValue: 9, existing: [b]).id,
+      b.id,
+    );
   });
 
   test('suffixed ids survive a json round trip', () {
