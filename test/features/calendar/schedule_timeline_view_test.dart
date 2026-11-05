@@ -991,6 +991,58 @@ void main() {
       );
       expect(droppedStart, DateTime(2026, 8, 28));
     });
+
+    testWidgets('day view keeps the preview of a start moved before the day', (
+      tester,
+    ) async {
+      final day = DateTime(2026, 8, 28);
+      final event = timed(
+        'overnight-preview',
+        DateTime(2026, 8, 27, 23),
+        DateTime(2026, 8, 28, 11),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ScheduleTimelineView(
+              days: [day],
+              events: [event],
+              selectedDate: day,
+              use24HourTime: true,
+              showAllDayEvents: true,
+              holidayBackgroundEnabled: true,
+              holidayColorValue: EventCategory.holiday.colorValue,
+              onEventTimeDropped: (event, targetStart) async {},
+              onShowAllDayEventsChanged: (_) {},
+              onDateSelected: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final block = tester.getRect(
+        find.byKey(
+          ValueKey('schedule-event-${event.id}-${day.toIso8601String()}'),
+        ),
+      );
+      final gesture = await tester.startGesture(
+        Offset(block.center.dx, block.top + 10 * 64),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+      // 30 minutes down: the event now starts 2026-08-27 23:30.
+      await gesture.moveBy(const Offset(0, 32));
+      await tester.pump(const Duration(milliseconds: 220));
+      expect(
+        find.byKey(
+          ValueKey(
+            'schedule-event-${event.id}-${day.toIso8601String()}-preview',
+          ),
+        ),
+        findsOneWidget,
+      );
+      await gesture.up();
+      await tester.pumpAndSettle();
+    });
   });
 
   testWidgets('sidebar schedule drop changes only the date', (tester) async {

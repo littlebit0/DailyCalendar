@@ -818,8 +818,9 @@ class _ScheduleTimeGrid extends StatelessWidget {
         ? events
         : <CalendarEvent>[
             ...events.where((event) => !_sameDraggedEvent(event, activeEvent)),
-            if (dragPreviewStart != null &&
-                days.any((day) => _isSameDay(day, dragPreviewStart!)))
+            // Segmenting per day keeps only the displayed overlap, so a start
+            // before the view (a moved overnight continuation) still shows.
+            if (dragPreviewStart != null)
               shiftCalendarEventToStart(activeEvent, dragPreviewStart!),
           ];
     final projectedLayouts = activeEvent == null
