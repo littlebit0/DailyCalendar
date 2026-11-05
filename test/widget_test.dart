@@ -9399,6 +9399,33 @@ void main() {
       debugDefaultTargetPlatformOverride = null;
       await tester.pumpWidget(const SizedBox.shrink());
     });
+
+    testWidgets('category chip selection scrim stays on the color dot (#724)', (
+      tester,
+    ) async {
+      await pumpFilter(tester);
+      await tester.tap(find.byIcon(Icons.tune_rounded).first);
+      await tester.pumpAndSettle();
+      final chips = find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.byType(FilterChip),
+      );
+      expect(chips, findsWidgets);
+      // After the dot itself, RawChip's selection scrim must cover only the
+      // 5px dot, not the whole avatar box, or chips flip to a gray disc when
+      // the group repaints.
+      const scrim = Color(0x60191919);
+      for (final element in chips.evaluate()) {
+        expect(
+          element.renderObject,
+          paints
+            ..circle(radius: 5)
+            ..circle(radius: 5, color: scrim),
+        );
+      }
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
   });
 
   testWidgets(
