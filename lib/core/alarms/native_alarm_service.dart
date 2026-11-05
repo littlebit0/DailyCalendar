@@ -60,15 +60,7 @@ class NativeAlarmService implements AlarmService, ReconciliableAlarmService {
     if (await authorizationState() != AlarmAuthorizationState.authorized) {
       return;
     }
-    final fireAt = event.allDay
-        ? DateTime(
-            event.startAt.year,
-            event.startAt.month,
-            event.startAt.day,
-            event.allDayAlarmMinutes ~/ 60,
-            event.allDayAlarmMinutes % 60,
-          )
-        : event.startAt;
+    final fireAt = event.alarmFireAt;
     if (!reconcile && !fireAt.isAfter(DateTime.now())) {
       return;
     }

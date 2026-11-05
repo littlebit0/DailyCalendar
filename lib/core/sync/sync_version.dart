@@ -88,6 +88,11 @@ Map<String, Object?> eventVersionValues(CalendarEvent event) => {
   'completed': event.completed,
   'alarmEnabled': event.alarmEnabled,
   'allDayAlarmMinutes': event.allDayAlarmMinutes,
+  // Omitted at defaults so existing event fingerprints stay unchanged.
+  if (event.alarmMinutesBefore != 0)
+    'alarmMinutesBefore': event.alarmMinutesBefore,
+  if (event.alarmCustomAt != null)
+    'alarmCustomAt': event.alarmCustomAt!.toUtc().toIso8601String(),
 };
 
 String _day(DateTime date) =>

@@ -529,6 +529,85 @@ void main() {
     expect(savedDraft?.alarmEnabled, isTrue);
   });
 
+  testWidgets('saves a relative alarm time independent of reminders', (
+    tester,
+  ) async {
+    EventDraft? savedDraft;
+    await tester.pumpWidget(
+      _DialogHost(
+        builder: (context) => EventEditorDialog(
+          initialDate: DateTime.now().add(const Duration(days: 1)),
+          alarmService: const _AuthorizedAlarmService(),
+        ),
+        onSaved: (draft) => savedDraft = draft,
+      ),
+    );
+
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).first, '알람 일정');
+    await tester.ensureVisible(find.text('일정 알람'));
+    await tester.tap(find.text('일정 알람'));
+    await tester.pumpAndSettle();
+    final chip = find.widgetWithText(ChoiceChip, '30분 전');
+    await tester.ensureVisible(chip);
+    await tester.tap(chip);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+
+    expect(savedDraft?.alarmEnabled, isTrue);
+    expect(savedDraft?.alarmMinutesBefore, 30);
+    expect(savedDraft?.alarmCustomAt, isNull);
+  });
+
+  testWidgets('keeps an existing custom alarm time on save', (
+    tester,
+  ) async {
+    final customAt = DateTime.now().add(const Duration(days: 3));
+    final customMinute = DateTime(
+      customAt.year,
+      customAt.month,
+      customAt.day,
+      customAt.hour,
+      customAt.minute,
+    );
+    final start = DateTime.now().add(const Duration(days: 5));
+    EventDraft? savedDraft;
+    await tester.pumpWidget(
+      _DialogHost(
+        builder: (context) => EventEditorDialog(
+          initialDate: start,
+          event: CalendarEvent(
+            id: 'custom-alarm',
+            title: '맞춤 알람',
+            startAt: start,
+            endAt: start.add(const Duration(hours: 1)),
+            allDay: false,
+            category: EventCategory.basic,
+            colorValue: EventCategory.basic.colorValue,
+            createdAt: DateTime(2026, 1, 1),
+            updatedAt: DateTime(2026, 1, 1),
+            alarmEnabled: true,
+            alarmMinutesBefore: 10,
+            alarmCustomAt: customMinute,
+          ),
+          alarmService: const _AuthorizedAlarmService(),
+        ),
+        onSaved: (draft) => savedDraft = draft,
+      ),
+    );
+
+    await tester.tap(find.text('열기'));
+    await tester.pumpAndSettle();
+    expect(find.text('일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.'), findsOneWidget);
+    await tester.tap(find.text('저장'));
+    await tester.pumpAndSettle();
+
+    expect(savedDraft?.alarmCustomAt, customMinute);
+    expect(savedDraft?.alarmMinutesBefore, 10);
+  });
+
   testWidgets('time picker input mode works with the basic text scale', (
     tester,
   ) async {

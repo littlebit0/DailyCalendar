@@ -534,6 +534,8 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       completed: Value(event.completed),
       alarmEnabled: Value(event.alarmEnabled),
       allDayAlarmMinutes: Value(event.allDayAlarmMinutes),
+      alarmMinutesBefore: Value(event.alarmMinutesBefore),
+      alarmCustomAt: Value(event.alarmCustomAt),
     );
   }
 }
