@@ -29,10 +29,13 @@ class CalendarEvent {
     this.completed = false,
     this.alarmEnabled = false,
     int allDayAlarmMinutes = 9 * 60,
+    int alarmMinutesBefore = 0,
+    this.alarmCustomAt,
     this.readOnly = false,
     this.systemEvent = false,
     this.holiday = false,
   }) : allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
+       alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
        reminderMinutesBeforeList = normalizeReminderMinutes(
          reminderMinutesBeforeList ??
              (reminderMinutesBefore == null
@@ -64,11 +67,34 @@ class CalendarEvent {
   final bool completed;
   final bool alarmEnabled;
   final int allDayAlarmMinutes;
+
+  /// Minutes before [alarmBaseTime]; 0 rings at the base time (정시).
+  final int alarmMinutesBefore;
+
+  /// A user-chosen absolute alarm time. It overrides [alarmMinutesBefore] and
+  /// is kept as-is when the event's date or start time changes.
+  final DateTime? alarmCustomAt;
   final bool readOnly;
   final bool systemEvent;
   final bool holiday;
 
   Duration get duration => endAt.difference(startAt);
+
+  /// Reference for relative alarms: the start time, or the all-day alarm
+  /// clock time on the start date for all-day events.
+  DateTime get alarmBaseTime => allDay
+      ? DateTime(
+          startAt.year,
+          startAt.month,
+          startAt.day,
+          allDayAlarmMinutes ~/ 60,
+          allDayAlarmMinutes % 60,
+        )
+      : startAt;
+
+  DateTime get alarmFireAt =>
+      alarmCustomAt ??
+      alarmBaseTime.subtract(Duration(minutes: alarmMinutesBefore));
 
   bool get isDeleted => deletedAt != null;
 
@@ -131,6 +157,8 @@ class CalendarEvent {
     bool? completed,
     bool? alarmEnabled,
     int? allDayAlarmMinutes,
+    int? alarmMinutesBefore,
+    DateTime? alarmCustomAt,
     bool? readOnly,
     bool? systemEvent,
     bool? holiday,
@@ -142,6 +170,7 @@ class CalendarEvent {
     bool clearLms = false,
     bool clearReminder = false,
     bool clearDeletedAt = false,
+    bool clearAlarmCustomAt = false,
   }) {
     final nextReminderMinutes = clearReminder
         ? const <int>[]
@@ -176,6 +205,10 @@ class CalendarEvent {
       completed: completed ?? this.completed,
       alarmEnabled: alarmEnabled ?? this.alarmEnabled,
       allDayAlarmMinutes: allDayAlarmMinutes ?? this.allDayAlarmMinutes,
+      alarmMinutesBefore: alarmMinutesBefore ?? this.alarmMinutesBefore,
+      alarmCustomAt: clearAlarmCustomAt
+          ? null
+          : alarmCustomAt ?? this.alarmCustomAt,
       readOnly: readOnly ?? this.readOnly,
       systemEvent: systemEvent ?? this.systemEvent,
       holiday: holiday ?? this.holiday,

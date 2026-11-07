@@ -28,6 +28,7 @@ import '../../../core/support/bug_report_service.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
 import '../../../core/sync/google_drive_sync_service.dart';
 import '../../../core/theme/daily_ui.dart';
+import '../../events/presentation/event_templates_page.dart';
 import '../../events/domain/calendar_event.dart';
 import '../../events/domain/event_category.dart';
 import 'calendar_import_page.dart';
@@ -745,6 +746,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                       ),
                       const Divider(height: 1),
+                      ListTile(
+                        key: const ValueKey('event-template-settings'),
+                        contentPadding: EdgeInsets.zero,
+                        leading: const _SettingsLeadingIcon(
+                          Icons.bookmarks_outlined,
+                        ),
+                        title: Text(context.tr('일정 템플릿')),
+                        subtitle: _SettingsDescription(
+                          context.tr('일정 추가 화면에서 한 번에 등록할 일정을 관리합니다.'),
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => Navigator.of(context).push<void>(
+                          MaterialPageRoute(
+                            builder: (_) => const EventTemplatesPage(),
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1),
                       _AnimatedSettingsSwitchListTile(
                         tileKey: const ValueKey('show-lunar-dates-toggle'),
                         contentPadding: EdgeInsets.zero,
@@ -1097,6 +1116,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         onChanged: (value) => _save(
                           settings.copyWith(
                             calendarHolidayBackgroundEnabled: value,
+                          ),
+                          changedFrom: settings,
+                        ),
+                      ),
+                      _AnimatedSettingsSwitchListTile(
+                        tileKey: const ValueKey('overnight-events-setting'),
+                        contentPadding: EdgeInsets.zero,
+                        secondary: const _SettingsLeadingIcon(
+                          Icons.nights_stay_outlined,
+                        ),
+                        value:
+                            settings.calendarShowOvernightEventsOnFollowingDays,
+                        title: Text(context.tr('자정을 넘기는 일정, 다음 날에도 표시')),
+                        subtitle: _SettingsDescription(
+                          context.tr(
+                            '월간 캘린더와 주·일간 목록에서 시간 일정이 겹치는 날짜마다 표시합니다. 끄면 시작 날짜에만 표시하고, 스케줄 보기는 바뀌지 않습니다.',
+                          ),
+                        ),
+                        onChanged: (value) => _save(
+                          settings.copyWith(
+                            calendarShowOvernightEventsOnFollowingDays: value,
                           ),
                           changedFrom: settings,
                         ),

@@ -46,6 +46,9 @@ class EventRecords extends Table {
   BoolColumn get alarmEnabled => boolean().withDefault(const Constant(false))();
   IntColumn get allDayAlarmMinutes =>
       integer().withDefault(const Constant(9 * 60))();
+  IntColumn get alarmMinutesBefore =>
+      integer().withDefault(const Constant(0))();
+  DateTimeColumn get alarmCustomAt => dateTime().nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -53,7 +56,7 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 11;
+  static const currentSchemaVersion = 12;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,

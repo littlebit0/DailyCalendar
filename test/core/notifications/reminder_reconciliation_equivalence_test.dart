@@ -84,8 +84,13 @@ List<CalendarEvent> _events(int n) => [
         colorValue: EventCategory.basic.colorValue,
         createdAt: start,
         updatedAt: start,
-        reminderMinutesBeforeList: i % 2 == 0 ? [10] : [0, 60],
-        showDday: i % 6 == 0,
+        // Single-shot and D-day requests are never trimmed to the iOS limit,
+        // so keep them at most 53 for any run date; repeating events fill the
+        // remaining room and are trimmed.
+        reminderMinutesBeforeList: i % 2 == 0
+            ? [10]
+            : (repeating || i < 40 ? [0, 60] : [0]),
+        showDday: i % 6 == 0 && i < 36,
         completed: i % 17 == 16,
         recurrence: repeating ? _rule(i) : const RecurrenceRule(),
       );
