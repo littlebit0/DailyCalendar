@@ -205,6 +205,12 @@ void main() {
       'batch reconciliation of $n events schedules the same requests',
       () async {
         final events = _events(n);
+        // Every reminder and due-grace boundary is a whole minute and both
+        // runs read the real clock, so run them inside the same minute.
+        final second = DateTime.now().second;
+        if (second >= 40) {
+          await Future<void>.delayed(Duration(seconds: 61 - second));
+        }
         final before = await _reconcile(events, shared: false);
         final after = await _reconcile(events, shared: true);
 

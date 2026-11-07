@@ -64,13 +64,10 @@ bool bugReportDraftFits(BugReportDraft draft) {
 }
 
 class BugReportSubmission {
-  const BugReportSubmission({
-    required this.issueNumber,
-    required this.issueUrl,
-  });
+  const BugReportSubmission({required this.reportId});
 
-  final int issueNumber;
-  final Uri issueUrl;
+  /// The receiver's ID for the stored report, shown to the user.
+  final String reportId;
 }
 
 class BugReportException implements Exception {
@@ -104,7 +101,7 @@ class BugReportService {
   final Uri _endpoint;
 
   /// One request ID per logical report, so a retry after a lost answer cannot
-  /// create a second issue. Cleared on success; a different report gets a new ID.
+  /// store a second report. Cleared on success; a different report gets a new ID.
   final Map<String, String> _requestIds = {};
 
   String _requestIdFor(BugReportDraft draft, BugReportEnvironment environment) {
@@ -164,7 +161,7 @@ class BugReportService {
             },
             body: requestBody,
           )
-          // Covers the receiver's Google check and GitHub create/lookup budgets.
+          // Covers the receiver's Google check and storage.
           .timeout(const Duration(seconds: 40));
     } on Object {
       throw const BugReportException('network', '버그 제보 서버에 연결할 수 없습니다.');
@@ -181,16 +178,16 @@ class BugReportService {
       final code = body['error']?.toString() ?? 'submission_failed';
       throw BugReportException(code, _messageFor(code));
     }
-    final issueNumber = body['issueNumber'];
-    final issueUrl = Uri.tryParse(body['issueUrl']?.toString() ?? '');
-    if (issueNumber is! int || issueUrl == null || issueUrl.scheme != 'https') {
+    final reportId = body['reportId'];
+    if (reportId is! String ||
+        !RegExp(r'^[0-9a-fA-F-]{36}$').hasMatch(reportId)) {
       throw const BugReportException(
         'invalid_response',
         '버그 제보 결과를 확인할 수 없습니다.',
       );
     }
     _requestIds.removeWhere((_, id) => id == requestId);
-    return BugReportSubmission(issueNumber: issueNumber, issueUrl: issueUrl);
+    return BugReportSubmission(reportId: reportId);
   }
 
   void dispose() {
@@ -203,7 +200,6 @@ class BugReportService {
     'rate_limited' => '버그 제보 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.',
     'invalid_report' => '버그 제보 내용을 다시 확인해 주세요.',
     'invalid_size' => '제보 내용이 너무 깁니다. 내용을 줄여 다시 시도해 주세요.',
-    'github_unavailable' => 'GitHub 이슈를 생성하지 못했습니다. 잠시 후 다시 시도해 주세요.',
     _ => '버그 제보를 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.',
   };
 }

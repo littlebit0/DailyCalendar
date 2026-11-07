@@ -12,6 +12,7 @@ import 'core/diagnostics/startup_timing.dart';
 import 'core/analytics/privacy_analytics_service.dart';
 import 'core/di/app_providers.dart';
 import 'core/settings/settings_repository.dart';
+import 'core/support/error_report_service.dart';
 import 'core/update/app_update_service.dart';
 import 'core/update/update_requirement.dart';
 
@@ -36,6 +37,8 @@ Future<Widget> _initializeApplication() async {
   final settingsRepository = SettingsRepository(preferences: preferences);
   final analytics = PrivacyAnalyticsService(preferences: preferences);
   await analytics.initialize();
+  final errorReports = ErrorReportService(preferences: preferences)
+    ..installGlobalHandlers();
 
   final updates = AppUpdateService();
   final requirement = UpdateRequirementController(
@@ -54,6 +57,7 @@ Future<Widget> _initializeApplication() async {
       ),
       updateRequirementControllerProvider.overrideWithValue(requirement),
       productAnalyticsProvider.overrideWithValue(analytics),
+      errorReportServiceProvider.overrideWithValue(errorReports),
     ],
     child: const DailyBootstrap(),
   );

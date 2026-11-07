@@ -29,6 +29,8 @@ import '../core/weather/weather_widgets.dart';
 import '../core/sync/startup_sync_gate.dart';
 import '../core/diagnostics/startup_timing.dart';
 import '../core/sync/google_drive_auth_service.dart';
+import '../core/support/error_report_service.dart';
+import '../core/sync/google_drive_sync_service.dart';
 import 'daily_theme.dart';
 
 class DailyApp extends ConsumerWidget {
@@ -713,6 +715,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
   ];
 
   late final LmsController _lmsController;
+  ErrorReportService? _errorReports;
+  GoogleDriveSyncService? _driveSync;
   var _servicesStarted = false;
   String? _initialRestoreOwner;
   String? _scheduledLmsOwner;
@@ -776,10 +780,48 @@ class _AppHomeState extends ConsumerState<_AppHome>
       unawaited(_measureLocalCalendar());
     }
     _refreshCalendarWidgets();
+    _connectErrorReports();
+  }
+
+  void _connectErrorReports() {
+    final errorReports = _errorReports = ref.read(errorReportServiceProvider);
+    if (errorReports == null) return;
+    final settings = ref.read(settingsRepositoryProvider);
+    errorReports
+      ..authorizationHeaders = () async {
+        // Only the signed-in Daily Google account may send; otherwise the
+        // reports wait in the queue.
+        if (settings.dailyAccount()?.googleAccount == null) return null;
+        return ref.read(googleDriveAuthServiceProvider).authorizationHeaders();
+      }
+      ..integrations = () => ErrorReportIntegrations(
+        driveLinked: settings.dailyAccount()?.googleAccount != null,
+        lmsConnected: _lmsController.connected,
+        lastDriveSyncAt: ref
+            .read(googleDriveSyncServiceProvider)
+            .statusNotifier
+            .value
+            .lastSyncedAt,
+      );
+    // Every failed sync run, including uploads after edits and automatic
+    // retries, which swallow their own errors.
+    final driveSync = ref.read(googleDriveSyncServiceProvider);
+    _driveSync = driveSync;
+    driveSync.onSyncFailure = (error, stackTrace) => errorReports.record(
+      error,
+      stackTrace,
+      feature: 'drive_sync',
+      severity: ErrorReportSeverity.nonFatal,
+    );
+    unawaited(errorReports.flush());
   }
 
   @override
   void dispose() {
+    _errorReports
+      ?..authorizationHeaders = null
+      ..integrations = null;
+    _driveSync?.onSyncFailure = null;
     WidgetsBinding.instance.removeObserver(this);
     _lmsController.setForeground(false);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
@@ -989,6 +1031,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       unawaited(ref.read(productAnalyticsProvider).flush().catchError((_) {}));
+      unawaited(ref.read(errorReportServiceProvider)?.flush());
     }
     switch (state) {
       case AppLifecycleState.resumed:
