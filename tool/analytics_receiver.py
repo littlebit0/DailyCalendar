@@ -1126,9 +1126,14 @@ class ErrorReportBackend(BugReportBackend):
                         "lastCommentAt": None,
                     }
             if entry is not None:
-                deliveries = entry.get("deliveries")
-                if not isinstance(deliveries, dict):
-                    deliveries = {}
+                # Stored as an ordered [[id, count], ...] list: the index is
+                # written with sorted keys, so a dict would lose recency.
+                stored = entry.get("deliveries")
+                deliveries = {
+                    item[0]: item[1]
+                    for item in (stored if isinstance(stored, list) else [])
+                    if isinstance(item, list) and len(item) == 2 and isinstance(item[0], str) and type(item[1]) is int
+                }
                 # A retried delivery may carry occurrences merged into it after
                 # the first attempt; count only what was not acknowledged yet.
                 acknowledged = deliveries.get(delivery_id, 0) if delivery_id is not None else 0
@@ -1160,7 +1165,7 @@ class ErrorReportBackend(BugReportBackend):
                     deliveries[delivery_id] = max(report["occurrenceCount"], acknowledged)
                     while len(deliveries) > MAX_ERROR_REPORT_DELIVERIES:
                         deliveries.pop(next(iter(deliveries)))
-                entry.update({"deliveries": deliveries, "occurrences": occurrences, "environments": environments})
+                entry.update({"deliveries": [[key, value] for key, value in deliveries.items()], "occurrences": occurrences, "environments": environments})
                 index["fingerprints"][fingerprint] = entry
                 self._write_index(index)
                 return {"status": "existing", "issueNumber": entry["issueNumber"], "issueUrl": entry["issueUrl"]}
@@ -1182,7 +1187,7 @@ class ErrorReportBackend(BugReportBackend):
                 "occurrences": report["occurrenceCount"],
                 "environments": [environment_key],
                 "lastCommentAt": None,
-                "deliveries": {} if delivery_id is None else {delivery_id: report["occurrenceCount"]},
+                "deliveries": [] if delivery_id is None else [[delivery_id, report["occurrenceCount"]]],
             }
             self._write_index(index)
             return {"status": "created", "issueNumber": number, "issueUrl": url}

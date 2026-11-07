@@ -202,6 +202,19 @@ class ErrorReportTests(unittest.TestCase):
         self.assertNotIn("Oncology", cleaned)
         self.assertNotIn("Smith", cleaned)
 
+    def test_recent_deliveries_survive_reload_eviction(self):
+        from tool.analytics_receiver import MAX_ERROR_REPORT_DELIVERIES
+
+        ids = [f"{n:08x}-aaaa-4aaa-8aaa-aaaaaaaaaaaa" for n in range(MAX_ERROR_REPORT_DELIVERIES + 2, 0, -1)]
+        normalized = normalize_error_report(payload())
+        for delivery in ids:
+            # A fresh backend each time reloads the index from disk.
+            self.make_backend().submit_error(normalized, "Bearer x", delivery)
+        self.make_backend().submit_error(normalized, "Bearer x", ids[-1])
+        self.make_backend().submit_error(normalized, "Bearer x", ids[-2])
+        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
+        self.assertEqual(entry["occurrences"], len(ids))
+
     def test_long_build_numbers_are_accepted(self):
         for build in ("100000", "2026110501"):
             value = payload()
