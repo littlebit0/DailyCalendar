@@ -75,6 +75,12 @@ class ErrorReportTests(unittest.TestCase):
         self.assertEqual(len(reports), 1)
         self.assertEqual(reports[0]["occurrences"], 10)
         self.assertEqual(reports[0]["fingerprint"], "0123456789abcdef")
+        # The day file alone must be enough to write an issue.
+        for key in ("fingerprint", "firstOccurredAt", "lastOccurredAt", "occurrences", "message", "stackTrace", "errorType", "feature", "severity"):
+            self.assertTrue(reports[0][key], key)
+        environment = reports[0]["environments"][0]
+        for key in ("version", "buildNumber", "platform", "osVersion", "environment", "deviceType"):
+            self.assertTrue(environment[key], key)
 
     def test_environments_are_listed_per_build_and_os(self):
         self.submit(payload())

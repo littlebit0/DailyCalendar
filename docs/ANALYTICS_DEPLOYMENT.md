@@ -248,6 +248,57 @@ that day, rewritten after each accepted report. Both are 0600 and deleted after
 after a lost response adds only new occurrences. Override the app endpoint with
 `--dart-define=DAILY_ERROR_REPORT_ENDPOINT=...`.
 
+### From stored reports to GitHub issues
+
+The receiver never creates issues. The intended flow is:
+
+1. The app sends masked error reports to `/v1/error-reports`.
+2. The receiver writes `/mnt/storage/daily-analytics/error-reports-YYYY-MM-DD.json`
+   on the Ubuntu host (UTC day, same directory as `analytics-YYYY-MM-DD.json`).
+3. Claude reads that file, checks the reports (real bug or noise, already filed,
+   anything left unmasked) and writes the GitHub issue with the user.
+
+Reading follows the analytics reports: there is no download endpoint, and as
+of 2026-10-13 Claude had no SSH access to the host. The user copies the file
+(for example `scp <host>:/mnt/storage/daily-analytics/error-reports-2026-11-07.json .`)
+or pastes its contents, and Claude reads that copy.
+
+Each day file is enough on its own to write an issue:
+
+```json
+{
+  "schemaVersion": 1,
+  "day": "2026-11-07",
+  "reports": [
+    {
+      "fingerprint": "0123456789abcdef",
+      "severity": "fatal",
+      "feature": "drive_sync",
+      "errorType": "StateError",
+      "message": "Bad state: ... (masked)",
+      "stackTrace": "#0 ... (top 15 frames, masked)",
+      "firstOccurredAt": "2026-11-07T00:00:00.000Z",
+      "lastOccurredAt": "2026-11-07T00:01:00.000Z",
+      "lifecycle": "resumed",
+      "occurrences": 3,
+      "environments": [
+        {
+          "version": "6.1.0", "buildNumber": "100", "environment": "production",
+          "platform": "macOS", "deviceType": "desktop", "osVersion": "Version 27.2",
+          "locale": "ko-KR", "timeZone": "UTC+09:00",
+          "driveLinked": true, "lmsConnected": false, "lastDriveSyncAt": null,
+          "occurrences": 3
+        }
+      ]
+    }
+  ]
+}
+```
+
+The same fingerprint on several days means the same bug kept happening; search
+open issues for the fingerprint before filing a new one, and put the
+fingerprint in the issue body.
+
 Deploying a receiver change: copy `tool/analytics_receiver.py` to
 `~/.local/lib/daily-analytics/` on the Ubuntu host and run
 `systemctl --user restart daily-analytics.service`.

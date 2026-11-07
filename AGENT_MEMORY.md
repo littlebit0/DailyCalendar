@@ -13,6 +13,13 @@
   stored privately like analytics in `error-reports-state.sqlite` +
   `error-reports-YYYY-MM-DD.json` per fingerprint/day with counts and build/OS
   environments, 90-day retention, Google token verified but no account stored.
+- Issue flow (user intent, 2026-11-07): app -> receiver ->
+  `/mnt/storage/daily-analytics/error-reports-YYYY-MM-DD.json` on the Ubuntu host
+  -> Claude reads the file, checks it and writes the GitHub issue. The receiver
+  never creates issues. No download endpoint and no Claude SSH access (as of
+  2026-10-13): the user copies or pastes the file. Each report has fingerprint,
+  first/last time, occurrences, build/OS environments, masked message and stack;
+  format in docs/ANALYTICS_DEPLOYMENT.md "From stored reports to GitHub issues".
   NOT deployed to the Ubuntu host yet; copy the file and restart
   `daily-analytics.service` (docs/ANALYTICS_DEPLOYMENT.md).
 - Shared Dart code: Mac/iPhone/Windows/Android behavior identical; no device
