@@ -111,7 +111,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             10,
           )
         : event.allDay
-        ? event.endAt.subtract(const Duration(days: 1))
+        // Calendar-day steps, not 24 hours, so DST days keep their date.
+        ? DateTime(event.endAt.year, event.endAt.month, event.endAt.day - 1)
         : event.endAt;
     _endDate = DateTime(sourceEnd.year, sourceEnd.month, sourceEnd.day);
     if (_endDate.isBefore(_startDate)) {
@@ -888,7 +889,7 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
     final endAt = _isLms
         ? widget.event!.endAt
         : _allDay
-        ? _endDate.add(const Duration(days: 1))
+        ? DateTime(_endDate.year, _endDate.month, _endDate.day + 1)
         : DateTime(
             _endDate.year,
             _endDate.month,

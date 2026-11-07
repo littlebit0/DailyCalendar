@@ -374,6 +374,63 @@ void main() {
       },
     );
   }
+  // Issue #378: run with TZ=America/New_York to cross real DST days.
+  for (final (label, start, end) in [
+    ('spring', DateTime(2026, 3, 6), DateTime(2026, 3, 9)),
+    ('fall', DateTime(2026, 10, 31), DateTime(2026, 11, 2)),
+    ('one day', DateTime(2026, 3, 8), DateTime(2026, 3, 9)),
+  ]) {
+    testWidgets('all-day $label range survives an unchanged save', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(900, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final event = CalendarEvent(
+        id: 'all-day-$label',
+        title: '여행',
+        startAt: start,
+        endAt: end,
+        allDay: true,
+        category: EventCategory.basic,
+        colorValue: EventCategory.basic.colorValue,
+        createdAt: start,
+        updatedAt: start,
+      );
+      EventDraft? saved;
+      await tester.pumpWidget(
+        _DialogHost(
+          builder: (_) => EventEditorDialog(initialDate: start, event: event),
+          onSaved: (draft) => saved = draft,
+        ),
+      );
+      await tester.tap(find.text('열기'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('저장'));
+      await tester.pumpAndSettle();
+      expect(saved!.startAt, start);
+      expect(saved!.endAt, end);
+      final applied = saved!.applyTo(event).normalizeAllDayBounds();
+      expect(applied.startAt, start);
+      expect(applied.endAt, end);
+    });
+  }
+
+  test('all-day empty range on a 25-hour day extends to the next date', () {
+    final day = DateTime(2026, 11, 1);
+    final event = CalendarEvent(
+      id: 'all-day-empty',
+      title: '휴일',
+      startAt: day,
+      endAt: day,
+      allDay: true,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: day,
+      updatedAt: day,
+    ).normalizeAllDayBounds();
+    expect(event.endAt, DateTime(2026, 11, 2));
+  });
+
   testWidgets('shows missing title validation inside the event dialog', (
     tester,
   ) async {
