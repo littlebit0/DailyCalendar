@@ -318,7 +318,8 @@ class ErrorReportService {
 
   Future<void> _tail = Future<void>.value();
   bool _recording = false;
-  bool _flushing = false;
+  Future<void>? _flushOperation;
+  bool _flushAgain = false;
 
   bool get enabled => _enabled.value;
   ValueListenable<bool> get enabledListenable => _enabled;
@@ -432,8 +433,10 @@ class ErrorReportService {
         }
         if (!_active) return;
         await _saveQueue(queue);
-        await _flushImpl();
       });
+      // Sending runs outside the queue chain, so a slow upload never delays
+      // saving the next error.
+      unawaited(flush());
     } on Object {
       // Reporting must not raise a second error.
     } finally {
@@ -442,69 +445,94 @@ class ErrorReportService {
   }
 
   /// Sends due reports. Call on start and resume; reports recorded offline or
-  /// before sign-in go out here.
-  Future<void> flush() => _enqueue(_flushImpl);
+  /// before sign-in go out here. A call during a running pass makes it run
+  /// once more and completes with it.
+  Future<void> flush() {
+    final running = _flushOperation;
+    if (running != null) {
+      _flushAgain = true;
+      return running;
+    }
+    return _flushOperation = () async {
+      try {
+        do {
+          _flushAgain = false;
+          await _tail;
+          await _flushPass();
+        } while (_flushAgain && _active);
+      } on Object {
+        // Kept in the queue for the next attempt.
+      } finally {
+        _flushOperation = null;
+      }
+    }();
+  }
 
+  /// Serializes every read-modify-write of the stored queue and sent log.
   Future<void> _enqueue(Future<void> Function() action) {
     return _tail = _tail.then((_) => action()).catchError((Object _) {});
   }
 
-  Future<void> _flushImpl() async {
-    if (!_active || _flushing) return;
-    _flushing = true;
-    try {
-      final queue = _loadQueue();
-      if (queue.isEmpty) return;
-      final sent = _loadSent();
-      final now = _now().toUtc();
-      for (final report in List.of(queue)) {
-        if (report.severity == ErrorReportSeverity.nonFatal &&
-            report.occurrenceCount < nonFatalThreshold) {
-          continue;
-        }
-        final lastSent = DateTime.tryParse(
-          sent['fingerprints']?[report.fingerprint]?.toString() ?? '',
-        );
-        if (lastSent != null &&
-            now.difference(lastSent) < fingerprintInterval) {
-          continue;
-        }
-        final daily = (sent['daily'] as List? ?? const [])
-            .map((value) => DateTime.tryParse(value.toString()))
-            .whereType<DateTime>()
-            .where((time) => now.difference(time) < const Duration(days: 1))
-            .toList();
-        if (daily.length >= maxReportsPerDay) break;
-
-        final headers = await authorizationHeaders?.call();
-        // Opting out while waiting stops every unsent report.
-        if (!_active) return;
-        final authorization =
-            headers?['Authorization'] ?? headers?['authorization'];
-        if (authorization == null || !authorization.startsWith('Bearer ')) {
-          break;
-        }
-        final outcome = await _send(report, authorization);
-        if (!_active) return;
-        if (outcome == _SendOutcome.retryLater) break;
-        queue.removeWhere((r) => r.id == report.id);
-        if (outcome == _SendOutcome.sent) {
-          (sent['fingerprints'] ??= <String, Object?>{})[report.fingerprint] =
-              now.toIso8601String();
-          sent['daily'] = [
-            ...daily.map((time) => time.toIso8601String()),
-            now.toIso8601String(),
-          ];
-          await _preferences.setString(_sentKey, jsonEncode(sent));
-        }
-        await _saveQueue(queue);
+  Future<void> _flushPass() async {
+    if (!_active) return;
+    for (final report in _loadQueue()) {
+      if (report.severity == ErrorReportSeverity.nonFatal &&
+          report.occurrenceCount < nonFatalThreshold) {
+        continue;
       }
-    } on Object {
-      // Kept in the queue for the next attempt.
-    } finally {
-      _flushing = false;
+      final now = _now().toUtc();
+      final sent = _loadSent();
+      final lastSent = DateTime.tryParse(
+        sent['fingerprints']?[report.fingerprint]?.toString() ?? '',
+      );
+      if (lastSent != null && now.difference(lastSent) < fingerprintInterval) {
+        continue;
+      }
+      if (_recentDaily(sent, now).length >= maxReportsPerDay) return;
+
+      final headers = await authorizationHeaders?.call();
+      // Opting out while waiting stops every unsent report.
+      if (!_active) return;
+      final authorization =
+          headers?['Authorization'] ?? headers?['authorization'];
+      if (authorization == null || !authorization.startsWith('Bearer ')) {
+        return;
+      }
+      final outcome = await _send(report, authorization);
+      if (!_active || outcome == _SendOutcome.retryLater) return;
+      await _enqueue(() async {
+        if (!_active) return;
+        final queue = _loadQueue();
+        // Occurrences merged in while the request was out keep the report
+        // (same delivery ID); the receiver counts only the difference.
+        queue.removeWhere(
+          (r) =>
+              r.id == report.id &&
+              (outcome == _SendOutcome.rejected ||
+                  r.occurrenceCount == report.occurrenceCount),
+        );
+        await _saveQueue(queue);
+        if (outcome == _SendOutcome.sent) {
+          final latest = _loadSent();
+          final stamp = _now().toUtc();
+          (latest['fingerprints'] ??= <String, Object?>{})[report.fingerprint] =
+              stamp.toIso8601String();
+          latest['daily'] = [
+            ..._recentDaily(latest, stamp).map((t) => t.toIso8601String()),
+            stamp.toIso8601String(),
+          ];
+          await _preferences.setString(_sentKey, jsonEncode(latest));
+        }
+      });
     }
   }
+
+  static List<DateTime> _recentDaily(Map<String, dynamic> sent, DateTime now) =>
+      (sent['daily'] as List? ?? const [])
+          .map((value) => DateTime.tryParse(value.toString()))
+          .whereType<DateTime>()
+          .where((time) => now.difference(time) < const Duration(days: 1))
+          .toList();
 
   Future<_SendOutcome> _send(
     _PendingErrorReport report,

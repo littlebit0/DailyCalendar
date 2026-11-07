@@ -276,6 +276,76 @@ void main() {
     expect(sent['buildNumber'], '100');
   });
 
+  test('a stalled upload does not delay saving new errors', () async {
+    final upload = Completer<http.Response>();
+    final reports = ErrorReportService(
+      preferences: preferences,
+      httpClient: MockClient((request) {
+        requests.add(request);
+        return upload.future;
+      }),
+      endpoint: Uri.parse('https://errors.example.test/v1/error-reports'),
+      now: () => now,
+      environmentLoader: () async => environment,
+      buildMode: 'release',
+    )..authorizationHeaders = () async => {'Authorization': 'Bearer g'};
+    reports.record(
+      StateError('first'),
+      StackTrace.fromString('#0 a (package:daily/a.dart:1:1)'),
+      feature: 'app',
+      severity: ErrorReportSeverity.fatal,
+    );
+    await pumpEventQueue();
+    expect(requests, hasLength(1));
+    reports.record(
+      StateError('second'),
+      StackTrace.fromString('#0 b (package:daily/b.dart:1:1)'),
+      feature: 'app',
+      severity: ErrorReportSeverity.fatal,
+    );
+    await pumpEventQueue();
+    final queued = jsonDecode(preferences.getString('errorReportQueue.v1')!);
+    expect(queued, hasLength(2));
+    upload.complete(http.Response('{}', 201));
+    await reports.flush();
+  });
+
+  test('occurrences merged during an upload stay queued', () async {
+    final upload = Completer<http.Response>();
+    final reports = ErrorReportService(
+      preferences: preferences,
+      httpClient: MockClient((request) {
+        requests.add(request);
+        return upload.future;
+      }),
+      endpoint: Uri.parse('https://errors.example.test/v1/error-reports'),
+      now: () => now,
+      environmentLoader: () async => environment,
+      buildMode: 'release',
+    )..authorizationHeaders = () async => {'Authorization': 'Bearer g'};
+    final stack = StackTrace.current;
+    reports.record(
+      StateError('x'),
+      stack,
+      feature: 'app',
+      severity: ErrorReportSeverity.fatal,
+    );
+    await pumpEventQueue();
+    reports.record(
+      StateError('x'),
+      stack,
+      feature: 'app',
+      severity: ErrorReportSeverity.fatal,
+    );
+    await pumpEventQueue();
+    upload.complete(http.Response('{}', 201));
+    await reports.flush();
+    final queued =
+        jsonDecode(preferences.getString('errorReportQueue.v1')!) as List;
+    expect(queued, hasLength(1));
+    expect((queued.single as Map)['occurrenceCount'], 2);
+  });
+
   test('reporting is on by default', () {
     expect(service().enabled, isTrue);
   });
