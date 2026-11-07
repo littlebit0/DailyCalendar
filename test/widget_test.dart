@@ -9745,6 +9745,9 @@ void main() {
         await tester.tap(find.byIcon(Icons.tune_rounded).first);
         await tester.pumpAndSettle();
         repository.holdNextSave();
+        // A failing expectation below must not leave the held save pending.
+        addTearDown(repository.releaseSave);
+        expect(repository.load().calendarDdayOnly, isFalse);
         await tester.tap(
           find.descendant(
             of: find.byType(SwitchListTile).first,
@@ -9754,8 +9757,17 @@ void main() {
         await tester.pump();
         await dismissSheet(tester); // the save has not completed yet
         expect(filterOutcomes(records), ['succeeded']);
+        final heldSave = repository.heldSave;
+        expect(heldSave, isNotNull);
+        var saveFinished = false;
+        unawaited(heldSave!.then((_) => saveFinished = true));
+        await tester.pump();
+        expect(saveFinished, isFalse);
+        expect(repository.load().calendarDdayOnly, isFalse);
         repository.releaseSave();
         await tester.pumpAndSettle();
+        expect(saveFinished, isTrue);
+        expect(repository.load().calendarDdayOnly, isTrue);
         debugDefaultTargetPlatformOverride = null;
         await tester.pumpWidget(const SizedBox.shrink());
       },
@@ -11184,26 +11196,48 @@ class _RecordingAnalytics extends NoopProductAnalytics {
 class _GatedSaveSettingsRepository extends SettingsRepository {
   _GatedSaveSettingsRepository({required super.preferences});
 
+  // Kept until released so [releaseSave] can still reach a save already
+  // waiting on it (#403).
   Completer<void>? _gate;
+  bool _armed = false;
 
-  void holdNextSave() => _gate = Completer<void>();
-  void releaseSave() => _gate?.complete();
+  /// The held save, set once it starts; completes after it is persisted.
+  Future<void>? heldSave;
+
+  void holdNextSave() {
+    _gate = Completer<void>();
+    _armed = true;
+    heldSave = null;
+  }
+
+  void releaseSave() {
+    final gate = _gate;
+    _gate = null;
+    _armed = false;
+    if (gate != null && !gate.isCompleted) gate.complete();
+  }
 
   @override
   Future<void> save(
     AppSettings settings, {
     bool markSyncPending = true,
     AppSettings? changedFrom,
-  }) async {
+  }) {
     final gate = _gate;
-    if (gate != null) {
-      _gate = null;
-      await gate.future;
+    if (!_armed || gate == null) {
+      return super.save(
+        settings,
+        markSyncPending: markSyncPending,
+        changedFrom: changedFrom,
+      );
     }
-    await super.save(
-      settings,
-      markSyncPending: markSyncPending,
-      changedFrom: changedFrom,
+    _armed = false;
+    return heldSave = gate.future.then(
+      (_) => super.save(
+        settings,
+        markSyncPending: markSyncPending,
+        changedFrom: changedFrom,
+      ),
     );
   }
 }
