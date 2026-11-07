@@ -1599,6 +1599,7 @@ void main() {
                 },
               ],
               'calendarHolidayBackgroundEnabled': false,
+              'calendarShowOvernightEventsOnFollowingDays': false,
               'calendarEventTitleAlignment':
                   CalendarEventTitleAlignment.center.name,
               'calendarEventSortPriority':
@@ -1634,6 +1635,7 @@ void main() {
       expect(holiday.colorValue, 0xffa855f7);
       expect(holiday.locked, isTrue);
       expect(restored.calendarHolidayBackgroundEnabled, isFalse);
+      expect(restored.calendarShowOvernightEventsOnFollowingDays, isFalse);
       expect(
         restored.calendarEventTitleAlignment,
         CalendarEventTitleAlignment.center,
