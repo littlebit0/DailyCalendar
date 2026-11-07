@@ -401,6 +401,8 @@ class SettingsRepository {
   static const _calendarHolidayBackgroundEnabledKey =
       'calendarHolidayBackgroundEnabled';
   static const _calendarDdayOnlyKey = 'calendarDdayOnly';
+  static const _calendarShowOvernightEventsOnFollowingDaysKey =
+      'calendarShowOvernightEventsOnFollowingDays';
   static const _appLockConfigurationKey = 'appLockConfiguration.v1';
   static const _appLockEnabledKey = 'appLockEnabled';
   static const _appLockBiometricsEnabledKey = 'appLockBiometricsEnabled';
@@ -479,6 +481,11 @@ class SettingsRepository {
       calendarHolidayBackgroundEnabled:
           _preferences.getBool(_calendarHolidayBackgroundEnabledKey) ?? true,
       calendarDdayOnly: _preferences.getBool(_calendarDdayOnlyKey) ?? false,
+      calendarShowOvernightEventsOnFollowingDays:
+          _preferences.getBool(
+            _calendarShowOvernightEventsOnFollowingDaysKey,
+          ) ??
+          true,
       appLockEnabled: lock.enabled,
       appLockBiometricsEnabled: lock.biometrics,
       appLockMethod: lock.method,
@@ -1039,6 +1046,15 @@ class SettingsRepository {
         previous.calendarDdayOnly != settings.calendarDdayOnly) {
       await _persist(
         _preferences.setBool(_calendarDdayOnlyKey, settings.calendarDdayOnly),
+      );
+    }
+    if (baseline.calendarShowOvernightEventsOnFollowingDays !=
+            settings.calendarShowOvernightEventsOnFollowingDays &&
+        previous.calendarShowOvernightEventsOnFollowingDays !=
+            settings.calendarShowOvernightEventsOnFollowingDays) {
+      await _preferences.setBool(
+        _calendarShowOvernightEventsOnFollowingDaysKey,
+        settings.calendarShowOvernightEventsOnFollowingDays,
       );
     }
     for (final legacyKey in const [
@@ -1615,6 +1631,7 @@ class SettingsRepository {
     await _preferences.remove(_calendarShowHolidaysKey);
     await _preferences.remove(_calendarHolidayBackgroundEnabledKey);
     await _preferences.remove(_calendarDdayOnlyKey);
+    await _preferences.remove(_calendarShowOvernightEventsOnFollowingDaysKey);
     await _preferences.remove('hideSensitiveEvents');
     await _preferences.remove('hideSensitiveNotifications');
     await _preferences.remove('privateEventHidingConfigured');

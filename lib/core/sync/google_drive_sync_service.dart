@@ -2509,6 +2509,8 @@ class GoogleDriveSyncService implements SyncService {
       calendarHolidayBackgroundEnabled:
           json['calendarHolidayBackgroundEnabled'] as bool? ?? true,
       calendarDdayOnly: json['calendarDdayOnly'] as bool? ?? false,
+      calendarShowOvernightEventsOnFollowingDays:
+          json['calendarShowOvernightEventsOnFollowingDays'] as bool? ?? true,
       use24HourTime: json['use24HourTime'] as bool? ?? true,
       themeMode: AppThemeMode.fromName(json['themeMode'] as String?),
     );

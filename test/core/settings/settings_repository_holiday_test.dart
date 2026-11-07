@@ -28,4 +28,29 @@ void main() {
     expect(restoredHoliday.locked, isTrue);
     expect(restored.calendarHolidayBackgroundEnabled, isFalse);
   });
+
+  test('keeps showing overnight events by default and persists off', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final repository = SettingsRepository(preferences: preferences);
+    // Upgrading users keep the previous every-overlapped-date listing.
+    expect(
+      repository.load().calendarShowOvernightEventsOnFollowingDays,
+      isTrue,
+    );
+
+    await repository.save(
+      repository.load().copyWith(
+        calendarShowOvernightEventsOnFollowingDays: false,
+      ),
+      markSyncPending: false,
+    );
+
+    expect(
+      SettingsRepository(
+        preferences: preferences,
+      ).load().calendarShowOvernightEventsOnFollowingDays,
+      isFalse,
+    );
+  });
 }

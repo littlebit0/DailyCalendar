@@ -1120,6 +1120,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                           changedFrom: settings,
                         ),
                       ),
+                      _AnimatedSettingsSwitchListTile(
+                        tileKey: const ValueKey('overnight-events-setting'),
+                        contentPadding: EdgeInsets.zero,
+                        secondary: const _SettingsLeadingIcon(
+                          Icons.nights_stay_outlined,
+                        ),
+                        value:
+                            settings.calendarShowOvernightEventsOnFollowingDays,
+                        title: Text(context.tr('자정을 넘기는 일정, 다음 날에도 표시')),
+                        subtitle: _SettingsDescription(
+                          context.tr(
+                            '월간 캘린더와 주·일간 목록에서 시간 일정이 겹치는 날짜마다 표시합니다. 끄면 시작 날짜에만 표시하고, 스케줄 보기는 바뀌지 않습니다.',
+                          ),
+                        ),
+                        onChanged: (value) => _save(
+                          settings.copyWith(
+                            calendarShowOvernightEventsOnFollowingDays: value,
+                          ),
+                          changedFrom: settings,
+                        ),
+                      ),
                       const SizedBox(height: 10),
                       Align(
                         alignment: Alignment.centerLeft,

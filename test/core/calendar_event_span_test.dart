@@ -97,4 +97,110 @@ void main() {
     final span = CalendarEventSpan.fromEvent(item, DateTime(2026, 3, 8))!;
     expect((span.startCol, span.endCol), (1, 1));
   });
+
+  group('overnight timed events (#696)', () {
+    CalendarEvent timed(DateTime start, DateTime end) =>
+        event('night', start, end).copyWith(allDay: false);
+    List<DateTime> listedDays(
+      CalendarEvent item,
+      DateTime from,
+      int count, {
+      required bool showOvernight,
+    }) =>
+        [
+          for (var index = 0; index < count; index++)
+            DateTime(from.year, from.month, from.day + index),
+        ].where((day) {
+          final next = DateTime(day.year, day.month, day.day + 1);
+          return calendarEventListedOnDay(
+            item,
+            day,
+            next,
+            showOvernightOnFollowingDays: showOvernight,
+          );
+        }).toList();
+
+    test('lists every overlapped date when on and only the start when off', () {
+      final item = timed(DateTime(2026, 10, 29, 22), DateTime(2026, 10, 30, 2));
+      final from = DateTime(2026, 10, 28);
+      expect(listedDays(item, from, 4, showOvernight: true), [
+        DateTime(2026, 10, 29),
+        DateTime(2026, 10, 30),
+      ]);
+      expect(listedDays(item, from, 4, showOvernight: false), [
+        DateTime(2026, 10, 29),
+      ]);
+    });
+
+    test('an exact midnight end never adds the end date', () {
+      final item = timed(DateTime(2026, 10, 29, 22), DateTime(2026, 10, 30));
+      expect(listedDays(item, DateTime(2026, 10, 28), 4, showOvernight: true), [
+        DateTime(2026, 10, 29),
+      ]);
+    });
+
+    test('multi-day spans cross month, year and leap-day boundaries', () {
+      final yearEnd = timed(
+        DateTime(2026, 12, 31, 20),
+        DateTime(2027, 1, 2, 1),
+      );
+      expect(
+        listedDays(yearEnd, DateTime(2026, 12, 30), 5, showOvernight: true),
+        [DateTime(2026, 12, 31), DateTime(2027, 1, 1), DateTime(2027, 1, 2)],
+      );
+      expect(
+        listedDays(yearEnd, DateTime(2026, 12, 30), 5, showOvernight: false),
+        [DateTime(2026, 12, 31)],
+      );
+      final leap = timed(DateTime(2028, 2, 28, 23), DateTime(2028, 3, 1, 1));
+      expect(listedDays(leap, DateTime(2028, 2, 27), 4, showOvernight: true), [
+        DateTime(2028, 2, 28),
+        DateTime(2028, 2, 29),
+        DateTime(2028, 3, 1),
+      ]);
+    });
+
+    test('all-day events keep their whole span when off', () {
+      final trip = event('trip', DateTime(2026, 5, 4), DateTime(2026, 5, 6));
+      expect(listedDays(trip, DateTime(2026, 5, 3), 4, showOvernight: false), [
+        DateTime(2026, 5, 4),
+        DateTime(2026, 5, 5),
+      ]);
+    });
+
+    test('local dates are used across a daylight-saving change', () {
+      // Calendar-date arithmetic, so a 23/25-hour local day keeps its date.
+      final item = timed(DateTime(2026, 11, 1, 23), DateTime(2026, 11, 2, 1));
+      expect(listedDays(item, DateTime(2026, 10, 31), 4, showOvernight: true), [
+        DateTime(2026, 11, 1),
+        DateTime(2026, 11, 2),
+      ]);
+      expect(
+        listedDays(item, DateTime(2026, 10, 31), 4, showOvernight: false),
+        [DateTime(2026, 11, 1)],
+      );
+    });
+
+    test('start-day-only spans collapse to the start column', () {
+      final item = timed(DateTime(2026, 10, 29, 22), DateTime(2026, 10, 31, 2));
+      final weekStart = DateTime(2026, 10, 26);
+      final full = CalendarEventSpan.fromEvent(item, weekStart)!;
+      expect((full.startCol, full.endCol), (3, 5));
+      final startOnly = CalendarEventSpan.fromEvent(
+        item,
+        weekStart,
+        startDayOnly: true,
+      )!;
+      expect((startOnly.startCol, startOnly.endCol), (3, 3));
+      // A carried-over event that started last week has nothing to show.
+      expect(
+        CalendarEventSpan.fromEvent(
+          timed(DateTime(2026, 10, 25, 22), DateTime(2026, 10, 26, 2)),
+          weekStart,
+          startDayOnly: true,
+        ),
+        isNull,
+      );
+    });
+  });
 }
