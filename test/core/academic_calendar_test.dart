@@ -1092,14 +1092,16 @@ void main() {
     await importAll();
     final id = remote().dailyId('smu');
     notifications.failNextCancel = true;
-    await expectLater(service.removeImported('smu'), throwsStateError);
-    expect(repository.events[id]!.isDeleted, isTrue);
-    expect(service.subscriptions['smu']!.pendingRemovals, {id});
-    expect(settings.academicStore.load()['smu']!.pendingRemovals, {id});
+    // The tombstone is final; the failed reminder cancel is journaled.
     await service.removeImported('smu');
-    expect(notifications.cancelled, contains(id));
+    expect(repository.events[id]!.isDeleted, isTrue);
     expect(service.subscriptions['smu']!.pendingRemovals, isEmpty);
     expect(settings.academicStore.load()['smu']!.pendingRemovals, isEmpty);
+    expect(notifications.cancelled, isNot(contains(id)));
+    expect(settings.pendingEventFollowUps().keys, contains(id));
+    expect(await commands.retryPendingFollowUps(), isTrue);
+    expect(notifications.cancelled, contains(id));
+    expect(settings.pendingEventFollowUps(), isEmpty);
   });
   test(
     'a same-title event inserted earlier neither drops nor duplicates',
