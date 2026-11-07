@@ -262,6 +262,9 @@ const Map<String, Map<String, String>> _translations = {
     "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
         "Titles, deadlines and submission status update from school. Events you complete manually stay complete even if school reports incomplete. Notes, categories and reminders are kept separately.",
     "과제": "Assignment",
+    "일정": "Event",
+    "아이디·비밀번호는 이 기기의 보안 저장소에만 저장되며 다른 기기로 동기화되지 않습니다. 자동 로그인은 해당 기기에만 적용됩니다. LMS에서 가져온 일정만 Google 계정으로 동기화됩니다. 자동 로그인 시 다른 기기나 브라우저의 LMS 세션이 종료되어 로그아웃될 수 있습니다.":
+        "Your ID and password are stored only in this device’s secure storage and are not synced to other devices. Auto login applies only to this device. Only events imported from the LMS are synced with your Google account. Auto login may end LMS sessions on other devices or browsers and sign you out there.",
     "퀴즈": "Quiz",
     "강의": "Lecture",
     "학교 제출 상태: {status}": "School submission status: {status}",
@@ -1389,6 +1392,9 @@ const Map<String, Map<String, String>> _translations = {
     "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
         "タイトル・締切・提出状態は学校から更新されます。手動で完了した予定は学校の未完了状態で変更されません。メモ・分類・通知は別途保持されます。",
     "과제": "課題",
+    "일정": "予定",
+    "아이디·비밀번호는 이 기기의 보안 저장소에만 저장되며 다른 기기로 동기화되지 않습니다. 자동 로그인은 해당 기기에만 적용됩니다. LMS에서 가져온 일정만 Google 계정으로 동기화됩니다. 자동 로그인 시 다른 기기나 브라우저의 LMS 세션이 종료되어 로그아웃될 수 있습니다.":
+        "IDとパスワードはこの端末の安全な保存領域にのみ保存され、他の端末には同期されません。自動ログインはこの端末にのみ適用されます。LMSから取り込んだ予定のみがGoogleアカウントで同期されます。自動ログインすると、他の端末やブラウザのLMSセッションが終了し、ログアウトされる場合があります。",
     "퀴즈": "小テスト",
     "강의": "講義",
     "학교 제출 상태: {status}": "大学での提出状況：{status}",
@@ -2416,6 +2422,9 @@ const Map<String, Map<String, String>> _translations = {
     "제목·마감·제출 상태는 학교에서 갱신됩니다. 직접 완료한 일정은 학교의 미완료 상태로 변경되지 않습니다. 메모·분류·알림은 별도로 유지됩니다.":
         "標題、期限和提交狀態會從學校更新。手動完成的行程不會因學校的未完成狀態而變更。備註、分類和提醒會分別保留。",
     "과제": "作業",
+    "일정": "行程",
+    "아이디·비밀번호는 이 기기의 보안 저장소에만 저장되며 다른 기기로 동기화되지 않습니다. 자동 로그인은 해당 기기에만 적용됩니다. LMS에서 가져온 일정만 Google 계정으로 동기화됩니다. 자동 로그인 시 다른 기기나 브라우저의 LMS 세션이 종료되어 로그아웃될 수 있습니다.":
+        "帳號與密碼只會儲存在此裝置的安全儲存空間，不會同步到其他裝置。自動登入僅適用於此裝置。只有從 LMS 匯入的行程會透過 Google 帳戶同步。自動登入時，其他裝置或瀏覽器上的 LMS 工作階段可能會結束並登出。",
     "퀴즈": "測驗",
     "강의": "課程",
     "학교 제출 상태: {status}": "學校繳交狀態：{status}",
