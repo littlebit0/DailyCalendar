@@ -1299,6 +1299,53 @@ void main() {
     expect(AppTextSize.basic.scale, 0.8);
     expect(AppTextSize.large.scale, 1.0);
   });
+
+  testWidgets('overnight timed event follows the next-day display setting', (
+    tester,
+  ) async {
+    final now = DateTime(2026, 10, 1);
+    final event = CalendarEvent(
+      id: 'night',
+      title: '야간 작업',
+      startAt: DateTime(2026, 10, 29, 22),
+      endAt: DateTime(2026, 10, 30, 2),
+      allDay: false,
+      category: EventCategory.basic,
+      colorValue: EventCategory.basic.colorValue,
+      createdAt: now,
+      updatedAt: now,
+    );
+    Future<double> flagWidth(bool showOvernight) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 700,
+              height: 420,
+              child: CalendarMonthGrid(
+                month: DateTime(2026, 10),
+                selectedDate: DateTime(2026, 10, 29),
+                events: [event],
+                weekStartsOnMonday: true,
+                showLunarDates: false,
+                showOvernightEventsOnFollowingDays: showOvernight,
+                onDateSelected: (_) {},
+              ),
+            ),
+          ),
+        ),
+      );
+      final flag = find.byKey(const ValueKey('event-span-night-2026-10-26'));
+      expect(flag, findsOneWidget);
+      return tester.getSize(flag).width;
+    }
+
+    final onWidth = await flagWidth(true);
+    // Toggling on the same grid must rebuild the cached week segments.
+    final offWidth = await flagWidth(false);
+    expect(offWidth, lessThan(onWidth * 0.7));
+    expect(await flagWidth(true), onWidth);
+  });
 }
 
 DateTime _weekStart(DateTime day) {
