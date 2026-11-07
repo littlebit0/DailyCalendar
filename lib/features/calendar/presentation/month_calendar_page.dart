@@ -2765,10 +2765,12 @@ class _WeekPageViewState extends State<_WeekPageView> {
             }
           },
           itemBuilder: (context, index) {
-            final pageDate = shiftCalendarDateByDays(
-              _anchorDate,
-              (index - _initialPage) * 7,
-            );
+            final weekOffset = index - _initialPage;
+            // _anchorDate는 페이지 위치 계산용이다. 선택 날짜가 있는 주에는 실제 선택 날짜를 넘긴다.
+            final pageDate =
+                weekOffset == _weekDelta(_anchorDate, widget.selectedDate)
+                ? _dateOnly(widget.selectedDate)
+                : shiftCalendarDateByDays(_anchorDate, weekOffset * 7);
             return _desktopMouseWheelSignalRegion(
               context,
               onPointerSignal: _handlePointerSignal,
