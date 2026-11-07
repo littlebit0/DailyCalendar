@@ -429,5 +429,11 @@ extension InternalHeadlessInAppWebView on MacOSHeadlessInAppWebView {
   Future<void> internalDispose() async {
     _started = false;
     _running = false;
+    // The visible widget now owns the native WebView and the same-id
+    // `flutter_inappwebview_$id` controller channel, so only the headless-only
+    // channel and Dart references are released here; no native dispose.
+    disposeChannel();
+    _webViewController = null;
+    _controllerFromPlatform = null;
   }
 }

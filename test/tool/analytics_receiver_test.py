@@ -534,6 +534,106 @@ class SqliteStateTests(DedupeAcrossMidnightTests):
             self.assertTrue((Path(directory) / 'analytics-2026-10-14.json').exists())
 
 
+class DayChangeExportTests(SqliteStateTests):
+    """Counts held back by the export interval reach their own day's report."""
+
+    IDS = [f'00000000-0000-4000-8000-00000000000{n}' for n in range(1, 6)]
+
+    def report(self, directory, day):
+        return json.loads((Path(directory) / f'analytics-{day}.json').read_text())['groups']
+
+    def stored(self, directory, day):
+        import sqlite3
+        with sqlite3.connect(Path(directory) / 'analytics-state.sqlite') as db:
+            rows = db.execute('SELECT key, data FROM groups WHERE day = ?', (day,)).fetchall()
+        return {key: json.loads(data) for key, data in rows}
+
+    def timed_batch(self, event_id, duration):
+        batch = self.event_batch(event_id)
+        batch['events'][0]['attributes']['durationMs'] = duration
+        return batch
+
+    def assert_report_matches_store(self, directory, day):
+        report, stored = self.report(directory, day), self.stored(directory, day)
+        self.assertEqual(set(report), set(stored))
+        for key, group in stored.items():
+            for field in ('count', 'durationTotalMs', 'durationMaxMs'):
+                self.assertEqual(report[key][field], group[field], field)
+
+    def before_midnight(self, directory, clock):
+        from datetime import timedelta
+        aggregator = Aggregator(directory, now=lambda: clock[0], export_interval=60)
+        self.assertEqual(aggregator.accept(self.timed_batch(self.IDS[0], 25)), 1)
+        clock[0] += timedelta(seconds=20)  # 23:59:50, inside the interval
+        self.assertEqual(aggregator.accept(self.timed_batch(self.IDS[1], 25)), 1)
+        self.assertEqual(sum(g['count'] for g in self.report(directory, '2026-10-13').values()), 1)
+        return aggregator
+
+    def clock(self):
+        from datetime import datetime, timezone
+        return [datetime(2026, 10, 13, 23, 59, 30, tzinfo=timezone.utc)]
+
+    def test_the_next_day_request_finishes_the_previous_report(self):
+        from datetime import timedelta
+        with tempfile.TemporaryDirectory() as directory:
+            clock = self.clock()
+            aggregator = self.before_midnight(directory, clock)
+            clock[0] += timedelta(seconds=11)  # 00:00:01 the next UTC day
+            self.assertEqual(aggregator.accept(self.timed_batch(self.IDS[2], 40)), 1)
+            aggregator.flush_report()
+            self.assert_report_matches_store(directory, '2026-10-13')
+            self.assert_report_matches_store(directory, '2026-10-14')
+            self.assertEqual(sum(g['count'] for g in self.report(directory, '2026-10-13').values()), 2)
+            # Resending a counted event changes neither day.
+            self.assertEqual(aggregator.accept(self.timed_batch(self.IDS[1], 25)), 0)
+            aggregator.flush_report()
+            self.assertEqual(sum(g['count'] for g in self.report(directory, '2026-10-13').values()), 2)
+            self.assertEqual(sum(g['count'] for g in self.report(directory, '2026-10-14').values()), 1)
+
+    def test_shutdown_after_midnight_still_writes_the_previous_day(self):
+        from datetime import timedelta
+        with tempfile.TemporaryDirectory() as directory:
+            clock = self.clock()
+            aggregator = self.before_midnight(directory, clock)
+            clock[0] += timedelta(seconds=11)
+            aggregator.flush_report()
+            self.assert_report_matches_store(directory, '2026-10-13')
+            self.assertFalse((Path(directory) / 'analytics-2026-10-14.json').exists())
+
+    def test_a_failed_export_of_the_previous_day_is_retried(self):
+        from datetime import timedelta
+        from unittest import mock
+        with tempfile.TemporaryDirectory() as directory:
+            clock = self.clock()
+            aggregator = self.before_midnight(directory, clock)
+            clock[0] += timedelta(seconds=11)
+            with mock.patch.object(aggregator, '_write_json', side_effect=OSError('read-only')):
+                self.assertEqual(aggregator.accept(self.timed_batch(self.IDS[2], 40)), 1)
+                aggregator.flush_report()
+            self.assertEqual(sum(g['count'] for g in self.report(directory, '2026-10-13').values()), 1)
+            aggregator.flush_report()
+            self.assert_report_matches_store(directory, '2026-10-13')
+            self.assert_report_matches_store(directory, '2026-10-14')
+
+    def test_a_restart_recovers_reports_left_pending(self):
+        from datetime import timedelta
+        with tempfile.TemporaryDirectory() as directory:
+            clock = self.clock()
+            self.before_midnight(directory, clock)  # stopped without a flush
+            clock[0] += timedelta(seconds=11)
+            restarted = Aggregator(directory, now=lambda: clock[0], export_interval=60)
+            self.assertEqual(restarted.accept(self.timed_batch(self.IDS[2], 40)), 1)
+            self.assert_report_matches_store(directory, '2026-10-13')
+            self.assert_report_matches_store(directory, '2026-10-14')
+            # Exported days are no longer pending: a later request only rewrites today.
+            with open(Path(directory) / 'analytics-2026-10-13.json') as report:
+                before = report.read()
+            clock[0] += timedelta(seconds=61)
+            self.assertEqual(restarted.accept(self.timed_batch(self.IDS[3], 10)), 1)
+            self.assertEqual((Path(directory) / 'analytics-2026-10-13.json').read_text(), before)
+            self.assert_report_matches_store(directory, '2026-10-14')
+
+
 def _payload():
     return {
         "report": {

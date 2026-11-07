@@ -889,6 +889,162 @@ void main() {
     expect(acceptedPreview, findsNothing);
   });
 
+  group('timed schedule drop follows the grabbed point', () {
+    CalendarEvent timed(String id, DateTime start, DateTime end) =>
+        CalendarEvent(
+          id: id,
+          title: id,
+          startAt: start,
+          endAt: end,
+          allDay: false,
+          category: EventCategory.basic,
+          colorValue: EventCategory.basic.colorValue,
+          createdAt: DateTime(2026, 8, 1),
+          updatedAt: DateTime(2026, 8, 1),
+        );
+
+    Future<DateTime?> dragFrom(
+      WidgetTester tester, {
+      required List<DateTime> days,
+      required CalendarEvent event,
+      required DateTime blockDay,
+      required Offset Function(Rect block) grabPoint,
+      required Offset moveBy,
+    }) async {
+      DateTime? droppedStart;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ScheduleTimelineView(
+              days: days,
+              events: [event],
+              selectedDate: days.first,
+              use24HourTime: true,
+              showAllDayEvents: true,
+              holidayBackgroundEnabled: true,
+              holidayColorValue: EventCategory.holiday.colorValue,
+              onEventTimeDropped: (event, targetStart) async {
+                droppedStart = targetStart;
+              },
+              onShowAllDayEventsChanged: (_) {},
+              onDateSelected: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final block = find.byKey(
+        ValueKey('schedule-event-${event.id}-${blockDay.toIso8601String()}'),
+      );
+      final gesture = await tester.startGesture(
+        grabPoint(tester.getRect(block)),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+      await gesture.moveBy(moveBy);
+      await tester.pump(const Duration(milliseconds: 220));
+      await gesture.up();
+      await tester.pumpAndSettle();
+      return droppedStart;
+    }
+
+    testWidgets('top, center and bottom grabs land on the same start', (
+      tester,
+    ) async {
+      final day = DateTime(2026, 8, 27);
+      final event = timed(
+        'grab-point',
+        DateTime(2026, 8, 27, 9),
+        DateTime(2026, 8, 27, 10),
+      );
+      for (final fraction in [0.1, 0.5, 0.9]) {
+        final droppedStart = await dragFrom(
+          tester,
+          days: [day],
+          event: event,
+          blockDay: day,
+          grabPoint: (block) =>
+              Offset(block.center.dx, block.top + block.height * fraction),
+          moveBy: const Offset(0, 64),
+        );
+        expect(droppedStart, DateTime(2026, 8, 27, 10), reason: '$fraction');
+      }
+    });
+
+    testWidgets('a block clipped at midnight moves its event by the drag', (
+      tester,
+    ) async {
+      final firstDay = DateTime(2026, 8, 27);
+      final secondDay = DateTime(2026, 8, 28);
+      final event = timed(
+        'overnight',
+        DateTime(2026, 8, 27, 23),
+        DateTime(2026, 8, 28, 11),
+      );
+      // The second-day block starts at 00:00; grab it at its 10:00 line.
+      final droppedStart = await dragFrom(
+        tester,
+        days: [firstDay, secondDay],
+        event: event,
+        blockDay: secondDay,
+        grabPoint: (block) => Offset(block.center.dx, block.top + 10 * 64),
+        moveBy: const Offset(0, 64),
+      );
+      expect(droppedStart, DateTime(2026, 8, 28));
+    });
+
+    testWidgets('day view keeps the preview of a start moved before the day', (
+      tester,
+    ) async {
+      final day = DateTime(2026, 8, 28);
+      final event = timed(
+        'overnight-preview',
+        DateTime(2026, 8, 27, 23),
+        DateTime(2026, 8, 28, 11),
+      );
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: ScheduleTimelineView(
+              days: [day],
+              events: [event],
+              selectedDate: day,
+              use24HourTime: true,
+              showAllDayEvents: true,
+              holidayBackgroundEnabled: true,
+              holidayColorValue: EventCategory.holiday.colorValue,
+              onEventTimeDropped: (event, targetStart) async {},
+              onShowAllDayEventsChanged: (_) {},
+              onDateSelected: (_) {},
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final block = tester.getRect(
+        find.byKey(
+          ValueKey('schedule-event-${event.id}-${day.toIso8601String()}'),
+        ),
+      );
+      final gesture = await tester.startGesture(
+        Offset(block.center.dx, block.top + 10 * 64),
+      );
+      await tester.pump(const Duration(milliseconds: 400));
+      // 30 minutes down: the event now starts 2026-08-27 23:30.
+      await gesture.moveBy(const Offset(0, 32));
+      await tester.pump(const Duration(milliseconds: 220));
+      expect(
+        find.byKey(
+          ValueKey(
+            'schedule-event-${event.id}-${day.toIso8601String()}-preview',
+          ),
+        ),
+        findsOneWidget,
+      );
+      await gesture.up();
+      await tester.pumpAndSettle();
+    });
+  });
+
   testWidgets('sidebar schedule drop changes only the date', (tester) async {
     final event = CalendarEvent(
       id: 'sidebar-schedule',

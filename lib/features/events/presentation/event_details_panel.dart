@@ -192,10 +192,20 @@ class EventDetailsPanel extends ConsumerWidget {
                 : const EdgeInsets.all(16),
             children: [
               if (scrollController != null) header,
-              Text(
-                context.tr('일정이 없습니다.'),
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
+              // A date opened without preloaded events must not claim it is
+              // empty before its own query answers.
+              if (!liveEventsAsync.hasValue &&
+                  !liveEventsAsync.hasError &&
+                  events.isEmpty)
+                const Center(
+                  key: ValueKey('event-details-loading'),
+                  child: CircularProgressIndicator.adaptive(),
+                )
+              else
+                Text(
+                  context.tr('일정이 없습니다.'),
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
             ],
           )
         : _DraggableEventList(
