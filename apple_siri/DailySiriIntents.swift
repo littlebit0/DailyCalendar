@@ -1943,26 +1943,11 @@ private extension DailySiriDatabase {
       .data(using: .utf8).flatMap { try? JSONDecoder().decode([String].self, from: $0) } ?? [])
     let colors = Dictionary(DailySiriPreferences.categories.map { ($0.id, $0.colorValue) },
                             uniquingKeysWith: { _, latest in latest })
-    let completed: Set<String> = try withDatabase { database in
-      var statement: OpaquePointer?
-      guard sqlite3_prepare_v2(database,
-        "SELECT id FROM event_records WHERE deleted_at IS NULL AND completed = 1", -1, &statement, nil) == SQLITE_OK else {
-        throw DailySiriError.databaseUnavailable
-      }
-      defer { sqlite3_finalize(statement) }
-      var ids = Set<String>()
-      var status = sqlite3_step(statement)
-      while status == SQLITE_ROW {
-        ids.insert(string(statement, 0))
-        status = sqlite3_step(statement)
-      }
-      guard status == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
-      return ids
-    }
+    let completed = try completedSourceIDs()
     return try events(from: start, to: end).filter { !hidden.contains($0.categoryID) }.map {
       DailyWallpaperEvent(id: "\($0.id):\($0.startAt.timeIntervalSince1970)", title: $0.title,
         start: $0.startAt, end: $0.endAt, color: colors[$0.categoryID] ?? $0.colorValue,
-        completed: completed.contains($0.id), holiday: $0.isHoliday)
+        completed: isCompleted($0.id, completedSourceIDs: completed), holiday: $0.isHoliday)
     }
   }
 }
@@ -2244,6 +2229,30 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
 
 @available(iOS 16.0, macOS 13.0, *)
 private enum DailySiriDatabase {
+  // Completion lives on the stored row, so an expanded occurrence resolves to its source id.
+  static func isCompleted(_ eventID: String, completedSourceIDs: Set<String>) -> Bool {
+    completedSourceIDs.contains(DailySiriOccurrenceIdentity.parse(eventID)?.sourceID ?? eventID)
+  }
+
+  static func completedSourceIDs() throws -> Set<String> {
+    try withDatabase { database in
+      var statement: OpaquePointer?
+      guard sqlite3_prepare_v2(database,
+        "SELECT id FROM event_records WHERE deleted_at IS NULL AND completed = 1", -1, &statement, nil) == SQLITE_OK else {
+        throw DailySiriError.databaseUnavailable
+      }
+      defer { sqlite3_finalize(statement) }
+      var ids = Set<String>()
+      var status = sqlite3_step(statement)
+      while status == SQLITE_ROW {
+        ids.insert(string(statement, 0))
+        status = sqlite3_step(statement)
+      }
+      guard status == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
+      return ids
+    }
+  }
+
   static func add(
     title: String,
     startAt: Date,
