@@ -8,8 +8,11 @@
   Hooks: `FlutterError.onError` (non-fatal), `PlatformDispatcher.onError`
   (fatal), retryable Drive sync failures (non-fatal). LMS-specific failures and
   native crashes are not hooked.
-- Receiver: `/v1/error-reports` in `tool/analytics_receiver.py`; one `autobug`
-  issue per fingerprint, comment only for a new environment once per 24h.
+- Receiver: `/v1/error-reports` in `tool/analytics_receiver.py`
+  (`ErrorReportStore`). Not published to GitHub (user decision 2026-11-07):
+  stored privately like analytics in `error-reports-state.sqlite` +
+  `error-reports-YYYY-MM-DD.json` per fingerprint/day with counts and build/OS
+  environments, 90-day retention, Google token verified but no account stored.
   NOT deployed to the Ubuntu host yet; copy the file and restart
   `daily-analytics.service` (docs/ANALYTICS_DEPLOYMENT.md).
 - Shared Dart code: Mac/iPhone/Windows/Android behavior identical; no device

@@ -1,13 +1,16 @@
+import json
+import os
+import stat
 import tempfile
+from pathlib import Path
 import unittest
 from datetime import datetime, timedelta, timezone
 
 from tool.analytics_receiver import (
     BugReportRateLimited,
-    ErrorReportBackend,
+    ErrorReportStore,
     InvalidGoogleToken,
-    MAX_NEW_ERROR_ISSUES_PER_DAY,
-    UpstreamUnavailable,
+    MAX_ERROR_FINGERPRINTS_PER_DAY,
     normalize_error_report,
 )
 
@@ -40,87 +43,82 @@ def payload(fingerprint="0123456789abcdef", message="boom", environment="product
     }
 
 
-class FakeGitHub:
-    def __init__(self):
-        self.issues = []
-        self.comments = []
-        self.fail_create = False
-
-    def create(self, title, body):
-        if self.fail_create:
-            raise UpstreamUnavailable()
-        number = len(self.issues) + 1
-        issue = {"number": number, "html_url": f"https://github.com/littlebit0/DailyCalendar/issues/{number}", "title": title, "body": body}
-        self.issues.append(issue)
-        return issue
-
-    def comment(self, number, body):
-        self.comments.append((number, body))
-
-    def find(self, fingerprint):
-        for issue in self.issues:
-            if f"AutoBug fingerprint: `{fingerprint}`" in issue["body"]:
-                return issue
-        return None
+DELIVERY = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
 
 
 class ErrorReportTests(unittest.TestCase):
     def setUp(self):
         self.directory = tempfile.TemporaryDirectory()
-        self.github = FakeGitHub()
-        self.now = datetime(2026, 11, 5, tzinfo=timezone.utc)
-        self.backend = self.make_backend()
+        self.now = datetime(2026, 11, 5, 3, tzinfo=timezone.utc)
+        self.store = self.make_store()
 
     def tearDown(self):
         self.directory.cleanup()
 
-    def make_backend(self):
-        return ErrorReportBackend(
+    def make_store(self):
+        return ErrorReportStore(
             self.directory.name,
-            github_token="unused",
-            github_repository="littlebit0/DailyCalendar",
             google_identity_fetcher=lambda auth: {"sub": "user", "email": "a@b.co", "email_verified": True},
-            github_issue_creator=self.github.create,
-            github_comment_creator=self.github.comment,
-            github_fingerprint_finder=self.github.find,
             now=lambda: self.now,
         )
 
-    def submit(self, value):
-        return self.backend.submit_error(normalize_error_report(value), "Bearer x")
+    def submit(self, value, delivery=None):
+        return self.store.submit_error(normalize_error_report(value), "Bearer x", delivery)
 
-    def test_same_fingerprint_ten_times_creates_one_issue(self):
+    def export(self, day="2026-11-05"):
+        return json.loads((Path(self.directory.name) / f"error-reports-{day}.json").read_text())
+
+    def test_same_fingerprint_is_one_entry_with_counts(self):
         for _ in range(10):
             self.submit(payload())
-        self.assertEqual(len(self.github.issues), 1)
-        self.assertEqual(self.github.comments, [])
+        reports = self.export()["reports"]
+        self.assertEqual(len(reports), 1)
+        self.assertEqual(reports[0]["occurrences"], 10)
+        self.assertEqual(reports[0]["fingerprint"], "0123456789abcdef")
 
-    def test_new_environment_comments_once_per_interval(self):
+    def test_environments_are_listed_per_build_and_os(self):
         self.submit(payload())
         self.submit(payload(version="6.2.0"))
-        self.submit(payload(version="6.3.0"))
-        self.submit(payload(version="6.4.0"))
-        self.assertEqual(len(self.github.comments), 1)
-        # Environments seen inside the interval go out with the next comment.
-        self.now += timedelta(hours=25)
-        self.submit(payload(version="6.2.0"))
-        self.assertEqual(len(self.github.comments), 2)
-        self.assertIn("6.3.0", self.github.comments[1][1])
-        self.assertIn("6.4.0", self.github.comments[1][1])
-        self.now += timedelta(hours=25)
-        self.submit(payload(version="6.3.0"))
-        self.assertEqual(len(self.github.comments), 2)
-        self.assertEqual(len(self.github.issues), 1)
-
-    def test_existing_issue_found_without_index(self):
+        value = payload()
+        value["environment"]["buildNumber"] = "101"
+        self.submit(value)
         self.submit(payload())
-        self.backend.index_path.unlink()
-        result = self.make_backend().submit_error(normalize_error_report(payload()), "Bearer x")
-        self.assertEqual(result["status"], "existing")
-        self.assertEqual(len(self.github.issues), 1)
+        environments = self.export()["reports"][0]["environments"]
+        self.assertEqual(len(environments), 3)
+        counts = {(e["version"], e["buildNumber"]): e["occurrences"] for e in environments}
+        self.assertEqual(counts[("6.1.0", "100")], 2)
+        self.assertTrue(all("driveLinked" in e for e in environments))
 
-    def test_daily_new_issue_cap(self):
-        for number in range(MAX_NEW_ERROR_ISSUES_PER_DAY):
+    def test_retried_delivery_adds_only_new_occurrences(self):
+        self.submit(payload(), DELIVERY)
+        self.submit(payload(), DELIVERY)
+        value = payload()
+        value["report"]["occurrenceCount"] = 3
+        self.submit(value, DELIVERY)
+        self.submit(value, DELIVERY)
+        self.submit(payload(), "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb")
+        self.assertEqual(self.export()["reports"][0]["occurrences"], 4)
+
+    def test_days_are_stored_separately_and_expire(self):
+        self.submit(payload())
+        self.now += timedelta(days=1)
+        self.submit(payload())
+        self.assertEqual(self.export("2026-11-06")["reports"][0]["occurrences"], 1)
+        self.now += timedelta(days=91)
+        self.submit(payload(fingerprint="f" * 16))
+        directory = Path(self.directory.name)
+        self.assertFalse((directory / "error-reports-2026-11-05.json").exists())
+        self.assertFalse((directory / "error-reports-2026-11-06.json").exists())
+
+    def test_files_are_private(self):
+        self.submit(payload())
+        directory = Path(self.directory.name)
+        for name in ("error-reports-state.sqlite", "error-reports-2026-11-05.json"):
+            self.assertEqual(stat.S_IMODE(os.stat(directory / name).st_mode), 0o600, name)
+
+    def test_daily_fingerprint_cap(self):
+        for number in range(MAX_ERROR_FINGERPRINTS_PER_DAY):
+            self.store._rate_windows.clear()
             self.submit(payload(fingerprint=f"{number:016x}"))
         with self.assertRaises(BugReportRateLimited):
             self.submit(payload(fingerprint="f" * 16))
@@ -130,18 +128,11 @@ class ErrorReportTests(unittest.TestCase):
             for _ in range(100):
                 self.submit(payload())
 
-    def test_github_failure_raises_and_keeps_no_index(self):
-        self.github.fail_create = True
-        with self.assertRaises(UpstreamUnavailable):
-            self.submit(payload())
-        self.github.fail_create = False
-        self.assertEqual(self.submit(payload())["status"], "created")
-
     def test_unverified_google_account_rejected(self):
-        backend = self.make_backend()
-        backend._google_identity_fetcher = lambda auth: {"sub": "user", "email_verified": False}
+        store = self.make_store()
+        store._google_identity_fetcher = lambda auth: {"sub": "user", "email_verified": False}
         with self.assertRaises(InvalidGoogleToken):
-            backend.submit_error(normalize_error_report(payload()), "Bearer x")
+            store.submit_error(normalize_error_report(payload()), "Bearer x")
 
     def test_debug_reports_and_bad_schema_rejected(self):
         self.assertIsNone(normalize_error_report(payload(environment="debug")))
@@ -150,105 +141,7 @@ class ErrorReportTests(unittest.TestCase):
         self.assertIsNone(normalize_error_report(bad))
         self.assertIsNone(normalize_error_report(payload(fingerprint="xyz")))
 
-    def test_new_build_number_is_a_new_environment(self):
-        self.submit(payload())
-        value = payload()
-        value["environment"]["buildNumber"] = "101"
-        self.submit(value)
-        self.assertEqual(len(self.github.comments), 1)
-
-    def test_retried_delivery_is_counted_once(self):
-        delivery = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
-        normalized = normalize_error_report(payload())
-        self.backend.submit_error(normalized, "Bearer x", delivery)
-        self.backend.submit_error(normalized, "Bearer x", delivery)
-        self.backend.submit_error(normalized, "Bearer x", delivery)
-        self.backend.submit_error(normalized, "Bearer x", "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb")
-        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
-        self.assertEqual(entry["occurrences"], 2)
-        self.assertEqual(len(self.github.issues), 1)
-
-    def test_retried_delivery_counts_occurrences_added_later(self):
-        delivery = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
-        self.backend.submit_error(normalize_error_report(payload()), "Bearer x", delivery)
-        value = payload()
-        value["report"]["occurrenceCount"] = 3
-        self.backend.submit_error(normalize_error_report(value), "Bearer x", delivery)
-        self.backend.submit_error(normalize_error_report(value), "Bearer x", delivery)
-        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
-        self.assertEqual(entry["occurrences"], 3)
-
-    def test_failed_environment_comment_is_retried(self):
-        self.submit(payload())
-        delivery = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
-        normalized = normalize_error_report(payload(version="6.2.0"))
-        failing = self.github.comment
-
-        def outage(number, body):
-            raise UpstreamUnavailable()
-
-        self.backend._github_comment_creator = outage
-        with self.assertRaises(UpstreamUnavailable):
-            self.backend.submit_error(normalized, "Bearer x", delivery)
-        self.backend._github_comment_creator = failing
-        self.backend.submit_error(normalized, "Bearer x", delivery)
-        self.assertEqual(len(self.github.comments), 1)
-        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
-        self.assertEqual(entry["occurrences"], 2)
-
-    def test_unterminated_quoted_text_is_masked(self):
-        message = 'FormatException: Unterminated string\n{"title": "Oncology appointment with Dr Smith'
-        cleaned = normalize_error_report(payload(message=message))["report"]["message"]
-        self.assertNotIn("Oncology", cleaned)
-        self.assertNotIn("Smith", cleaned)
-
-    def test_recent_deliveries_survive_reload_eviction(self):
-        from tool.analytics_receiver import MAX_ERROR_REPORT_DELIVERIES
-
-        ids = [f"{n:08x}-aaaa-4aaa-8aaa-aaaaaaaaaaaa" for n in range(MAX_ERROR_REPORT_DELIVERIES + 2, 0, -1)]
-        normalized = normalize_error_report(payload())
-        for delivery in ids:
-            # A fresh backend each time reloads the index from disk.
-            self.make_backend().submit_error(normalized, "Bearer x", delivery)
-        self.make_backend().submit_error(normalized, "Bearer x", ids[-1])
-        self.make_backend().submit_error(normalized, "Bearer x", ids[-2])
-        entry = self.backend._read_index()["fingerprints"]["0123456789abcdef"]
-        self.assertEqual(entry["occurrences"], len(ids))
-
-    def test_long_build_numbers_are_accepted(self):
-        for build in ("100000", "2026110501"):
-            value = payload()
-            value["environment"]["buildNumber"] = build
-            normalized = normalize_error_report(value)
-            self.assertIsNotNone(normalized, build)
-            self.assertEqual(normalized["environment"]["buildNumber"], build)
-
-    def test_fingerprint_lookup_reads_every_page(self):
-        backend = ErrorReportBackend(self.directory.name, github_token="t", github_repository="littlebit0/DailyCalendar")
-        pages = []
-
-        def request(method, path, body=None):
-            page = int(path.rsplit("page=", 1)[1])
-            pages.append(page)
-            start = (page - 1) * 100
-            count = 100 if page < 3 else 5
-            return [
-                {
-                    "number": n,
-                    "html_url": f"https://github.com/littlebit0/DailyCalendar/issues/{n}",
-                    "body": f"AutoBug fingerprint: `{n:016x}`",
-                }
-                for n in range(start + 1, start + count + 1)
-            ]
-
-        backend._github_request = request
-        self.assertEqual(backend._find_fingerprint_issue(f"{203:016x}")["number"], 203)
-        self.assertEqual(pages, [1, 2, 3])
-        pages.clear()
-        self.assertIsNone(backend._find_fingerprint_issue("f" * 16))
-        self.assertEqual(pages, [1, 2, 3])
-
-    def test_server_masks_secrets_again(self):
+    def test_server_masks_secrets_and_stores_no_account(self):
         message = (
             "Authorization: Bearer ya29.secret token=abc123 mail kim@example.com "
             "path /Users/kimhwi/Library title \"Dentist\" id 2026123456"
@@ -257,10 +150,25 @@ class ErrorReportTests(unittest.TestCase):
         for secret in ("ya29.secret", "abc123", "kim@example.com", "kimhwi", "Dentist", "2026123456"):
             self.assertNotIn(secret, cleaned)
         self.submit(payload(message=message))
-        body = self.github.issues[0]["body"]
-        for secret in ("ya29.secret", "abc123", "kim@example.com", "kimhwi", "Dentist", "a@b.co"):
-            self.assertNotIn(secret, body)
-        self.assertIn("AutoBug fingerprint: `0123456789abcdef`", body)
+        directory = Path(self.directory.name)
+        stored = (directory / "error-reports-2026-11-05.json").read_text()
+        stored += (directory / "error-reports-state.sqlite").read_bytes().decode("utf-8", "replace")
+        for secret in ("ya29.secret", "abc123", "kim@example.com", "kimhwi", "Dentist", "a@b.co", "user"):
+            self.assertNotIn(secret, stored)
+
+    def test_unterminated_quoted_text_is_masked(self):
+        message = 'FormatException: Unterminated string\n{"title": "Oncology appointment with Dr Smith'
+        cleaned = normalize_error_report(payload(message=message))["report"]["message"]
+        self.assertNotIn("Oncology", cleaned)
+        self.assertNotIn("Smith", cleaned)
+
+    def test_long_build_numbers_are_accepted(self):
+        for build in ("100000", "2026110501"):
+            value = payload()
+            value["environment"]["buildNumber"] = build
+            normalized = normalize_error_report(value)
+            self.assertIsNotNone(normalized, build)
+            self.assertEqual(normalized["environment"]["buildNumber"], build)
 
 
 if __name__ == "__main__":

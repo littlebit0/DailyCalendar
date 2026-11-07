@@ -233,14 +233,19 @@ wrong-credentials message. Deploy the receiver before the app.
 ## Automatic Error Reports
 
 `POST /v1/error-reports` takes the app's sanitized error reports. It verifies
-the Google access token like `/v1/bug-reports`, masks the text again, rejects
-debug builds, and limits each account to 30 requests an hour and the whole
-receiver to 10 new issues a day. Each fingerprint gets one issue labelled
-`autobug`; `error-report-index.json` in the data directory maps fingerprints to
-issues and records the environments already posted, so a repeat only comments
-when it brings a new version/platform/OS/build environment, at most once every
-24 hours. The same `DAILY_GITHUB_TOKEN` (issues read/write) is used; no token is
-compiled into the app. Override the app endpoint with
+the Google access token like `/v1/bug-reports` (the account is hashed for rate
+limiting only and never stored), masks the text again, rejects debug builds,
+limits each account to 30 requests an hour and stores at most 200 distinct
+errors a day. Nothing is published and no GitHub token is used.
+
+Storage follows the analytics receiver, in the same data directory but in
+separate files: `error-reports-state.sqlite` keeps one row per UTC day and
+fingerprint (severity, feature, error type, masked message and top stack
+frames, first/last occurrence, occurrence count) and one row per build/OS
+environment under it; `error-reports-YYYY-MM-DD.json` is the readable copy of
+that day, rewritten after each accepted report. Both are 0600 and deleted after
+90 days. Delivery IDs (the app's `Idempotency-Key`) are kept 7 days so a retry
+after a lost response adds only new occurrences. Override the app endpoint with
 `--dart-define=DAILY_ERROR_REPORT_ENDPOINT=...`.
 
 Deploying a receiver change: copy `tool/analytics_receiver.py` to

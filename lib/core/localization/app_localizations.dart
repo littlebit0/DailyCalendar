@@ -660,8 +660,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보': 'Privacy',
     '익명 사용성 분석 허용': 'Allow anonymous usage analytics',
     '자동 오류 보고': 'Automatic error reports',
-    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 개발자에게 보내 공개 GitHub 이슈로 등록합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
-        'When an error occurs, the app version, device details and the error with personal data removed are sent to the developer through your Google sign-in and filed as a public GitHub issue. Event content and account details are never sent.',
+    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 확인한 뒤 Daily 서버에 비공개로 저장해 개발자가 확인합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
+        'When an error occurs, the app version, device details and the error with personal data removed are verified through your Google sign-in and stored privately on the Daily server for the developer. Event content and account details are never sent.',
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         'Collect screen and feature usage, error categories, and performance only, without event content, searches, or account information.',
     '분석 데이터 삭제': 'Delete analytics data',
@@ -816,8 +816,10 @@ const Map<String, Map<String, String>> _translations = {
     '알람 직접 입력': 'Custom alarm',
     '몇 분 전에 울릴까요?': 'How many minutes before should it ring?',
     '날짜·시각 지정': 'Pick date & time',
-    '일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.': 'This alarm time stays the same even if the event time changes.',
-    '지난 시각이라 알람이 울리지 않습니다.': 'This time has passed, so the alarm will not ring.',
+    '일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.':
+        'This alarm time stays the same even if the event time changes.',
+    '지난 시각이라 알람이 울리지 않습니다.':
+        'This time has passed, so the alarm will not ring.',
     'URL / 링크': 'URL / Link',
     '날씨': 'Weather',
     '예: 흐림': 'e.g. Cloudy',
@@ -1750,8 +1752,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보': 'プライバシー',
     '익명 사용성 분석 허용': '匿名の利用状況分析を許可',
     '자동 오류 보고': '自動エラー報告',
-    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 개발자에게 보내 공개 GitHub 이슈로 등록합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
-        'エラーが起きると、アプリのバージョン、デバイス情報、個人情報を除いたエラー内容を Google ログインのアカウントで開発者に送り、公開 GitHub Issue として登録します。予定の内容とアカウント情報は送信しません。',
+    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 확인한 뒤 Daily 서버에 비공개로 저장해 개발자가 확인합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
+        'エラーが起きると、アプリのバージョン、デバイス情報、個人情報を除いたエラー内容を Google ログインのアカウントで確認したうえで、開発者向けに Daily サーバーへ非公開で保存します。予定の内容とアカウント情報は送信しません。',
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         '予定内容、検索語、アカウント情報を含めず、画面・機能の利用、エラー分類、性能情報のみを収集します。',
     '분석 데이터 삭제': '分析データを削除',
@@ -2770,8 +2772,8 @@ const Map<String, Map<String, String>> _translations = {
     '개인정보': '隱私權',
     '익명 사용성 분석 허용': '允許匿名使用情況分析',
     '자동 오류 보고': '自動錯誤回報',
-    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 개발자에게 보내 공개 GitHub 이슈로 등록합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
-        '發生錯誤時，會透過 Google 登入帳號將 App 版本、裝置資訊與移除個人資料後的錯誤內容傳送給開發者，並登錄為公開的 GitHub Issue。不會傳送行程內容與帳號資訊。',
+    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 확인한 뒤 Daily 서버에 비공개로 저장해 개발자가 확인합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
+        '發生錯誤時，會透過 Google 登入帳號確認後，將 App 版本、裝置資訊與移除個人資料後的錯誤內容以非公開方式儲存在 Daily 伺服器供開發者查看。不會傳送行程內容與帳號資訊。',
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         '僅收集畫面與功能使用、錯誤分類及效能資訊，不包含行程內容、搜尋詞或帳號資訊。',
     '분석 데이터 삭제': '刪除分析資料',

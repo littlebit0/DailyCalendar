@@ -149,9 +149,10 @@ they wait on the device (at most 20, for at most 7 days). Daily sends the same
 error at most once every 6 hours and at most 10 reports a day. The receiver
 verifies the Google access token the same way as for bug reports, keeps a hash
 of the account ID only for rate limiting, and does not store the token or the
-email address. Each distinct error becomes one public issue in the
-DailyCalendar GitHub repository; a repeat only adds the new app or OS
-environment to that issue.
+email address. Reports are not published: the receiver stores them privately
+on Daily's Ubuntu server, the same way as the anonymous analytics aggregates,
+grouped per day and per distinct error with occurrence counts and the app and
+OS environments seen. Stored reports are kept for no more than 90 days.
 
 ## Data Sharing
 
@@ -167,8 +168,8 @@ shared with GitHub as a public issue. Google receives the one-time UserInfo
 request needed to verify the signed-in account. The verified email is retained
 only by Daily's support receiver and is not published to GitHub.
 
-Automatic error reports, described above, are shared with GitHub as public
-issues after masking. No account identity is included in them.
+Automatic error reports, described above, are not shared with GitHub or any
+other third party; they stay on Daily's server.
 
 ## Deleting Data
 

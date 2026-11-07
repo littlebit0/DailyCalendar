@@ -15,7 +15,7 @@ import '../platform/app_build_identity.dart';
 /// Fatal: crash, unhandled exception, data that may be lost. Sent on first
 /// occurrence. Non-fatal: sent only once it repeats
 /// [ErrorReportService.nonFatalThreshold] times, so a single timeout or other
-/// transient failure never becomes an issue.
+/// transient failure never becomes a report.
 enum ErrorReportSeverity { fatal, nonFatal }
 
 class ErrorReportEnvironment {
@@ -119,7 +119,7 @@ final _sanitizers = <(RegExp, String Function(Match))>[
   (RegExp(r'\+?\d[\d -]{8,}\d'), (_) => '<number>'),
   (RegExp(r'\d{6,}'), (_) => '<number>'),
   // Quoted values in messages are usually user data (event titles, names,
-  // server text), which must not reach a public issue.
+  // server text), which must not leave the device.
   // An unterminated quote (such as a cut-off JSON value) is masked to the end
   // of its line.
   (RegExp(r'"[^"\n]*(?:"|$)', multiLine: true), (_) => '"***"'),
@@ -258,8 +258,8 @@ class _PendingErrorReport {
 }
 
 /// Collects sanitized error reports, keeps them in a small offline queue and
-/// sends them to the Daily receiver, which creates or deduplicates the GitHub
-/// issue. The GitHub credential lives only on the receiver.
+/// sends them to the Daily receiver, which stores them privately, grouped by
+/// fingerprint, like the analytics aggregates. Nothing is published.
 ///
 /// Every public method swallows its own failures: reporting must never become
 /// a new cause of app errors.
@@ -325,7 +325,7 @@ class ErrorReportService {
   ValueListenable<bool> get enabledListenable => _enabled;
 
   /// Debug builds never report, so deliberate errors during development do
-  /// not become production issues.
+  /// not become production reports.
   bool get _active => enabled && _buildMode != 'debug';
 
   Future<void> setEnabled(bool value) async {

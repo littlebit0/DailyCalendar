@@ -29,13 +29,10 @@ DEDUPE_RETENTION_DAYS = 7
 REPORT_EXPORT_INTERVAL_SECONDS = 60
 MAX_ERROR_REPORT_BYTES = 32 * 1024
 MAX_ERROR_REPORTS_PER_HOUR = 30
-# Across all users, so a crash loop on many devices cannot flood the repository.
-MAX_NEW_ERROR_ISSUES_PER_DAY = 10
-ERROR_REPORT_COMMENT_INTERVAL = timedelta(hours=24)
+# Bounds storage when a crash loop hits many devices at once.
+MAX_ERROR_FINGERPRINTS_PER_DAY = 200
 MAX_ERROR_REPORT_ENVIRONMENTS = 20
-# Recent delivery IDs kept per fingerprint so a retried request is not counted twice.
-MAX_ERROR_REPORT_DELIVERIES = 50
-ERROR_REPORT_LABEL = "autobug"
+ERROR_REPORT_RETENTION_DAYS = 90
 FINGERPRINT_PATTERN = re.compile(r"^[0-9a-f]{16}$")
 GOOGLE_USERINFO_URL = "https://openidconnect.googleapis.com/v1/userinfo"
 GITHUB_API_VERSION = "2026-03-10"
@@ -695,6 +692,38 @@ REQUEST_ID_PATTERN = re.compile(
 )
 
 
+def fetch_google_identity(authorization):
+    if (
+        not isinstance(authorization, str)
+        or not authorization.startswith("Bearer ")
+        or len(authorization) > 8192
+    ):
+        raise InvalidGoogleToken()
+    request = Request(
+        GOOGLE_USERINFO_URL,
+        headers={"Authorization": authorization, "Accept": "application/json"},
+        method="GET",
+    )
+    try:
+        with urlopen(request, timeout=10) as response:
+            body = response.read(64 * 1024 + 1)
+    except HTTPError as error:
+        if error.code in {400, 401, 403}:
+            raise InvalidGoogleToken() from None
+        raise UpstreamUnavailable() from None
+    except (OSError, URLError, TimeoutError):
+        raise UpstreamUnavailable() from None
+    if len(body) > 64 * 1024:
+        raise UpstreamUnavailable()
+    try:
+        decoded = json.loads(body)
+    except (TypeError, ValueError, UnicodeDecodeError):
+        raise UpstreamUnavailable() from None
+    if not isinstance(decoded, dict):
+        raise UpstreamUnavailable()
+    return decoded
+
+
 class BugReportBackend:
     def __init__(
         self,
@@ -927,35 +956,7 @@ class BugReportBackend:
         return None
 
     def _fetch_google_identity(self, authorization):
-        if (
-            not isinstance(authorization, str)
-            or not authorization.startswith("Bearer ")
-            or len(authorization) > 8192
-        ):
-            raise InvalidGoogleToken()
-        request = Request(
-            GOOGLE_USERINFO_URL,
-            headers={"Authorization": authorization, "Accept": "application/json"},
-            method="GET",
-        )
-        try:
-            with urlopen(request, timeout=10) as response:
-                body = response.read(64 * 1024 + 1)
-        except HTTPError as error:
-            if error.code in {400, 401, 403}:
-                raise InvalidGoogleToken() from None
-            raise UpstreamUnavailable() from None
-        except (OSError, URLError, TimeoutError):
-            raise UpstreamUnavailable() from None
-        if len(body) > 64 * 1024:
-            raise UpstreamUnavailable()
-        try:
-            decoded = json.loads(body)
-        except (TypeError, ValueError, UnicodeDecodeError):
-            raise UpstreamUnavailable() from None
-        if not isinstance(decoded, dict):
-            raise UpstreamUnavailable()
-        return decoded
+        return fetch_google_identity(authorization)
 
     def _create_github_issue(self, title, body):
         if not self.github_token:
@@ -1073,280 +1074,213 @@ class BugReportBackend:
         )
 
 
-class ErrorReportBackend(BugReportBackend):
-    """Automatic error reports: one GitHub issue per fingerprint.
+class ErrorReportStore:
+    """Automatic error reports, stored like the analytics aggregates.
 
-    `error-report-index.json` maps a fingerprint to its issue, the environments
-    already shown on it and the occurrence total. A repeat only adds a comment
-    when it brings a new version/platform/OS/build environment, at most once per
-    `ERROR_REPORT_COMMENT_INTERVAL`; otherwise only the private total grows.
-    When the index has no entry (first run, lost file), the `autobug` labelled
-    issues are scanned for the fingerprint before a new issue is created.
+    `error-reports-state.sqlite` holds one row per UTC day and fingerprint (and
+    per environment under it); `error-reports-YYYY-MM-DD.json` is the readable
+    copy of that day, rebuilt after each accepted report. Both are private
+    (0600 in a 0700 directory) and deleted after `ERROR_REPORT_RETENTION_DAYS`.
+    Nothing is published anywhere. Delivery IDs (kept `DEDUPE_RETENTION_DAYS`)
+    remember how many occurrences each request already added, so a retry after
+    a lost response adds only what is new.
     """
 
-    def __init__(self, directory, *, github_comment_creator=None, github_fingerprint_finder=None, **kwargs):
-        super().__init__(directory, **kwargs)
-        self.index_path = Path(directory) / "error-report-index.json"
-        self._github_comment_creator = github_comment_creator or self._create_github_comment
-        self._github_fingerprint_finder = github_fingerprint_finder or self._find_fingerprint_issue
-        # shortcut: one lock serializes every error report (GitHub calls included);
-        # fine for a personal receiver, use per-fingerprint locks if volume grows.
-        self._index_lock = threading.Lock()
+    def __init__(self, directory, *, google_identity_fetcher=None, now=None):
+        self.directory = Path(directory)
+        self._database = self.directory / "error-reports-state.sqlite"
+        self._google_identity_fetcher = google_identity_fetcher or fetch_google_identity
+        self._now = now or (lambda: datetime.now(timezone.utc))
+        self._lock = threading.Lock()
+        self._rate_lock = threading.Lock()
+        self._rate_windows = defaultdict(list)
 
     def submit_error(self, payload, authorization, delivery_id=None):
         identity = self._google_identity_fetcher(authorization)
         subject = identity.get("sub") if isinstance(identity, dict) else None
         if not isinstance(subject, str) or not subject or len(subject) > 255 or identity.get("email_verified") is not True:
             raise InvalidGoogleToken()
+        # The account is used only for rate limiting and never stored.
         subject_hash = hashlib.sha256(subject.encode()).hexdigest()
         if not isinstance(delivery_id, str) or not REQUEST_ID_PATTERN.fullmatch(delivery_id):
             delivery_id = None
         else:
             delivery_id = delivery_id.lower()
-        self._check_rate(f"error:{subject_hash}", MAX_ERROR_REPORTS_PER_HOUR, 60 * 60)
+        self._check_rate(subject_hash)
 
         report = payload["report"]
         environment = payload["environment"]
+        integrations = payload["integrations"]
         fingerprint = report["fingerprint"]
         environment_key = "|".join(
             environment[key] for key in ("version", "buildNumber", "platform", "osVersion", "environment")
         )
         now = self._now()
-        with self._index_lock:
-            index = self._read_index()
-            entry = index["fingerprints"].get(fingerprint)
-            if entry is None:
-                existing = self._github_fingerprint_finder(fingerprint)
-                if existing is not None:
-                    entry = {
-                        "issueNumber": existing["number"],
-                        "issueUrl": existing["html_url"],
-                        "occurrences": 0,
-                        "environments": [],
-                        "lastCommentAt": None,
-                    }
-            if entry is not None:
-                # Stored as an ordered [[id, count], ...] list: the index is
-                # written with sorted keys, so a dict would lose recency.
-                stored = entry.get("deliveries")
-                deliveries = {
-                    item[0]: item[1]
-                    for item in (stored if isinstance(stored, list) else [])
-                    if isinstance(item, list) and len(item) == 2 and isinstance(item[0], str) and type(item[1]) is int
-                }
-                # A retried delivery may carry occurrences merged into it after
-                # the first attempt; count only what was not acknowledged yet.
-                acknowledged = deliveries.get(delivery_id, 0) if delivery_id is not None else 0
-                added = max(report["occurrenceCount"] - acknowledged, 0)
-                occurrences = entry.get("occurrences", 0) + added
-                environments = list(entry.get("environments", []))
-                pending = entry.get("pendingEnvironments")
-                pending = dict(pending) if isinstance(pending, dict) else {}
-                if (
-                    environment_key not in environments
-                    and environment_key not in pending
-                    and len(environments) + len(pending) < MAX_ERROR_REPORT_ENVIRONMENTS
-                ):
-                    # Kept until the next comment, so an environment seen inside
-                    # the comment interval is still published later.
-                    pending[environment_key] = self._environment_lines(payload)
-                last_comment = entry.get("lastCommentAt")
-                comment_due = last_comment is None or now - datetime.fromisoformat(last_comment) >= ERROR_REPORT_COMMENT_INTERVAL
-                if pending and comment_due:
-                    # On failure nothing is saved and the client retries, so the
-                    # new environments are not lost.
-                    self._github_comment_creator(entry["issueNumber"], self._error_comment(pending.values(), occurrences))
-                    environments.extend(pending)
-                    pending = {}
-                    entry["lastCommentAt"] = now.isoformat()
-                entry["pendingEnvironments"] = pending
+        day = now.date().isoformat()
+        with self._lock:
+            connection = self._connect()
+            try:
+                connection.execute("BEGIN IMMEDIATE")
+                self._delete_expired(connection, now)
+                acknowledged = 0
                 if delivery_id is not None:
-                    deliveries.pop(delivery_id, None)
-                    deliveries[delivery_id] = max(report["occurrenceCount"], acknowledged)
-                    while len(deliveries) > MAX_ERROR_REPORT_DELIVERIES:
-                        deliveries.pop(next(iter(deliveries)))
-                entry.update({"deliveries": [[key, value] for key, value in deliveries.items()], "occurrences": occurrences, "environments": environments})
-                index["fingerprints"][fingerprint] = entry
-                self._write_index(index)
-                return {"status": "existing", "issueNumber": entry["issueNumber"], "issueUrl": entry["issueUrl"]}
+                    row = connection.execute(
+                        "SELECT acknowledged FROM deliveries WHERE id = ?", (delivery_id,)
+                    ).fetchone()
+                    acknowledged = row[0] if row else 0
+                added = max(report["occurrenceCount"] - acknowledged, 0)
+                existing = connection.execute(
+                    "SELECT severity FROM reports WHERE day = ? AND fingerprint = ?", (day, fingerprint)
+                ).fetchone()
+                if existing is None:
+                    stored = connection.execute("SELECT COUNT(*) FROM reports WHERE day = ?", (day,)).fetchone()[0]
+                    if stored >= MAX_ERROR_FINGERPRINTS_PER_DAY:
+                        raise BugReportRateLimited()
+                    connection.execute(
+                        "INSERT INTO reports(day, fingerprint, severity, feature, error_type, message, stack_trace,"
+                        " first_occurred_at, last_occurred_at, lifecycle, occurrences) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                        (
+                            day, fingerprint, report["severity"], report["feature"], report["errorType"],
+                            report["message"], report["stackTrace"], report["firstOccurredAt"],
+                            report["lastOccurredAt"], report["lifecycle"], added,
+                        ),
+                    )
+                else:
+                    severity = "fatal" if "fatal" in (existing[0], report["severity"]) else "nonFatal"
+                    connection.execute(
+                        "UPDATE reports SET severity = ?, message = ?, stack_trace = ?, lifecycle = ?,"
+                        " first_occurred_at = MIN(first_occurred_at, ?), last_occurred_at = MAX(last_occurred_at, ?),"
+                        " occurrences = occurrences + ? WHERE day = ? AND fingerprint = ?",
+                        (
+                            severity, report["message"], report["stackTrace"], report["lifecycle"],
+                            report["firstOccurredAt"], report["lastOccurredAt"], added, day, fingerprint,
+                        ),
+                    )
+                known = connection.execute(
+                    "SELECT 1 FROM environments WHERE day = ? AND fingerprint = ? AND key = ?",
+                    (day, fingerprint, environment_key),
+                ).fetchone()
+                if known is not None:
+                    connection.execute(
+                        "UPDATE environments SET occurrences = occurrences + ?, details = ?"
+                        " WHERE day = ? AND fingerprint = ? AND key = ?",
+                        (added, json.dumps({**environment, **integrations}, sort_keys=True), day, fingerprint, environment_key),
+                    )
+                else:
+                    count = connection.execute(
+                        "SELECT COUNT(*) FROM environments WHERE day = ? AND fingerprint = ?", (day, fingerprint)
+                    ).fetchone()[0]
+                    if count < MAX_ERROR_REPORT_ENVIRONMENTS:
+                        connection.execute(
+                            "INSERT INTO environments(day, fingerprint, key, details, occurrences) VALUES (?,?,?,?,?)",
+                            (day, fingerprint, environment_key, json.dumps({**environment, **integrations}, sort_keys=True), added),
+                        )
+                if delivery_id is not None:
+                    connection.execute(
+                        "INSERT INTO deliveries(id, day, acknowledged) VALUES (?,?,?)"
+                        " ON CONFLICT(id) DO UPDATE SET acknowledged = MAX(acknowledged, excluded.acknowledged)",
+                        (delivery_id, day, max(report["occurrenceCount"], acknowledged)),
+                    )
+                export = self._day_export(connection, day)
+                connection.execute("COMMIT")
+            except BaseException:
+                if connection.in_transaction:
+                    connection.execute("ROLLBACK")
+                raise
+            finally:
+                connection.close()
+        # The readable copy is a convenience; the database stays the source.
+        self._write_json(self.directory / f"error-reports-{day}.json", export)
+        return {"status": "stored"}
 
-            day = now.date().isoformat()
-            created_today = index["createdPerDay"].get(day, 0)
-            if created_today >= MAX_NEW_ERROR_ISSUES_PER_DAY:
-                raise BugReportRateLimited()
-            title, body = self._error_issue(payload)
-            issue = self._github_issue_creator(title, body)
-            number = issue.get("number") if isinstance(issue, dict) else None
-            url = issue.get("html_url") if isinstance(issue, dict) else None
-            if type(number) is not int or not self._valid_issue_url(url, number):
-                raise UpstreamUnavailable()
-            index["createdPerDay"] = {day: created_today + 1}
-            index["fingerprints"][fingerprint] = {
-                "issueNumber": number,
-                "issueUrl": url,
-                "occurrences": report["occurrenceCount"],
-                "environments": [environment_key],
-                "lastCommentAt": None,
-                "deliveries": [] if delivery_id is None else [[delivery_id, report["occurrenceCount"]]],
-            }
-            self._write_index(index)
-            return {"status": "created", "issueNumber": number, "issueUrl": url}
-
-    def _check_rate(self, key, maximum, seconds):
+    def _check_rate(self, subject_hash):
         timestamp = self._now().timestamp()
         with self._rate_lock:
-            window = [value for value in self._rate_windows[key] if timestamp - value < seconds]
-            if len(window) >= maximum:
-                self._rate_windows[key] = window
+            window = [value for value in self._rate_windows[subject_hash] if timestamp - value < 60 * 60]
+            if len(window) >= MAX_ERROR_REPORTS_PER_HOUR:
+                self._rate_windows[subject_hash] = window
                 raise BugReportRateLimited()
             window.append(timestamp)
-            self._rate_windows[key] = window
+            self._rate_windows[subject_hash] = window
 
-    def _read_index(self):
-        try:
-            index = json.loads(self.index_path.read_text())
-        except (OSError, ValueError):
-            index = {}
-        if not isinstance(index, dict):
-            index = {}
-        if not isinstance(index.get("fingerprints"), dict):
-            index["fingerprints"] = {}
-        if not isinstance(index.get("createdPerDay"), dict):
-            index["createdPerDay"] = {}
-        return index
+    def _connect(self):
+        Aggregator._make_private(self.directory, directory=True)
+        if not self._database.exists():
+            os.close(os.open(self._database, os.O_CREAT | os.O_WRONLY, 0o600))
+        Aggregator._make_private(self._database)
+        connection = sqlite3.connect(self._database, timeout=10, isolation_level=None)
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS reports(day TEXT NOT NULL, fingerprint TEXT NOT NULL,"
+            " severity TEXT NOT NULL, feature TEXT NOT NULL, error_type TEXT NOT NULL, message TEXT NOT NULL,"
+            " stack_trace TEXT NOT NULL, first_occurred_at TEXT NOT NULL, last_occurred_at TEXT NOT NULL,"
+            " lifecycle TEXT NOT NULL, occurrences INTEGER NOT NULL, PRIMARY KEY(day, fingerprint))"
+        )
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS environments(day TEXT NOT NULL, fingerprint TEXT NOT NULL,"
+            " key TEXT NOT NULL, details TEXT NOT NULL, occurrences INTEGER NOT NULL,"
+            " PRIMARY KEY(day, fingerprint, key))"
+        )
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS deliveries(id TEXT PRIMARY KEY, day TEXT NOT NULL, acknowledged INTEGER NOT NULL)"
+        )
+        return connection
 
-    def _write_index(self, index):
-        self.index_path.parent.mkdir(parents=True, exist_ok=True)
-        fd, temporary = tempfile.mkstemp(prefix=".error-report-index.", dir=self.index_path.parent)
+    def _delete_expired(self, connection, now):
+        today = now.date()
+        report_cutoff = (today - timedelta(days=ERROR_REPORT_RETENTION_DAYS)).isoformat()
+        delivery_cutoff = (today - timedelta(days=DEDUPE_RETENTION_DAYS)).isoformat()
+        connection.execute("DELETE FROM reports WHERE day < ?", (report_cutoff,))
+        connection.execute("DELETE FROM environments WHERE day < ?", (report_cutoff,))
+        connection.execute("DELETE FROM deliveries WHERE day < ?", (delivery_cutoff,))
+        for path in self.directory.glob("error-reports-*.json"):
+            match = re.fullmatch(r"error-reports-(\d{4}-\d{2}-\d{2})\.json", path.name)
+            if match and match.group(1) < report_cutoff:
+                path.unlink(missing_ok=True)
+
+    @staticmethod
+    def _day_export(connection, day):
+        reports = []
+        for row in connection.execute(
+            "SELECT fingerprint, severity, feature, error_type, message, stack_trace, first_occurred_at,"
+            " last_occurred_at, lifecycle, occurrences FROM reports WHERE day = ? ORDER BY fingerprint",
+            (day,),
+        ):
+            environments = [
+                {**json.loads(details), "occurrences": occurrences}
+                for details, occurrences in connection.execute(
+                    "SELECT details, occurrences FROM environments WHERE day = ? AND fingerprint = ? ORDER BY key",
+                    (day, row[0]),
+                )
+            ]
+            reports.append(
+                {
+                    "fingerprint": row[0],
+                    "severity": row[1],
+                    "feature": row[2],
+                    "errorType": row[3],
+                    "message": row[4],
+                    "stackTrace": row[5],
+                    "firstOccurredAt": row[6],
+                    "lastOccurredAt": row[7],
+                    "lifecycle": row[8],
+                    "occurrences": row[9],
+                    "environments": environments,
+                }
+            )
+        return {"schemaVersion": 1, "day": day, "reports": reports}
+
+    def _write_json(self, path, value):
+        fd, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=self.directory)
         try:
             os.fchmod(fd, 0o600)
             with os.fdopen(fd, "w") as output:
-                json.dump(index, output, ensure_ascii=True, sort_keys=True, separators=(",", ":"))
+                json.dump(value, output, ensure_ascii=False, sort_keys=True, indent=2)
                 output.flush()
                 os.fsync(output.fileno())
-            os.replace(temporary, self.index_path)
+            os.replace(temporary, path)
         finally:
             if os.path.exists(temporary):
                 os.unlink(temporary)
-
-    @staticmethod
-    def _environment_lines(payload):
-        environment = payload["environment"]
-        integrations = payload["integrations"]
-        return [
-            f"- Daily: {environment['version']} ({environment['buildNumber']})",
-            f"- 빌드 환경: {environment['environment']}",
-            f"- 플랫폼: {environment['platform']} ({environment['deviceType']})",
-            f"- OS: {environment['osVersion']}",
-            f"- locale / 시간대: {environment['locale']} / {environment['timeZone']}",
-            f"- Google Drive 연동: {'켜짐' if integrations['driveLinked'] else '꺼짐'}",
-            f"- LMS 연동: {'켜짐' if integrations['lmsConnected'] else '꺼짐'}",
-            f"- 마지막 Drive 동기화: {integrations['lastDriveSyncAt'] or '없음'}",
-        ]
-
-    def _error_issue(self, payload):
-        report = payload["report"]
-        environment = payload["environment"]
-        tag = "" if environment["environment"] == "production" else f"[{environment['environment']}]"
-        title = f"[AutoBug]{tag} {report['feature']}: {report['errorType']}"[:200]
-        body = "\n".join(
-            [
-                "앱이 자동으로 보고한 오류입니다. 개인정보와 인증 정보는 앱과 서버에서 마스킹했습니다.",
-                "",
-                "## 오류",
-                f"- 심각도: {report['severity']}",
-                f"- 기능: {report['feature']}",
-                f"- 오류 유형: `{report['errorType']}`",
-                f"- 처음 발생: {report['firstOccurredAt']}",
-                f"- 마지막 발생: {report['lastOccurredAt']}",
-                f"- 보고 시점 발생 횟수: {report['occurrenceCount']}",
-                f"- 앱 상태: {report['lifecycle']}",
-                "",
-                "## 메시지",
-                "```text",
-                report["message"],
-                "```",
-                "",
-                "## Stack trace (상위 프레임)",
-                "```text",
-                report["stackTrace"] or "(없음)",
-                "```",
-                "",
-                "## 실행 환경",
-                *self._environment_lines(payload),
-                "",
-                f"AutoBug fingerprint: `{report['fingerprint']}`",
-            ]
-        )
-        return title, body
-
-    def _error_comment(self, environment_blocks, occurrences):
-        lines = ["같은 오류가 새 환경에서 다시 보고되었습니다.", "", f"- 누적 발생 횟수(서버 집계): {occurrences}"]
-        for block in environment_blocks:
-            lines += ["", *block]
-        return "\n".join(lines)
-
-    def _github_request(self, method, path, body=None):
-        if not self.github_token:
-            raise UpstreamUnavailable()
-        request = Request(
-            f"https://api.github.com/repos/{self.github_repository}/{path}",
-            data=None if body is None else json.dumps(body, ensure_ascii=False).encode(),
-            headers={
-                "Accept": "application/vnd.github+json",
-                "Authorization": f"Bearer {self.github_token}",
-                "Content-Type": "application/json",
-                "X-GitHub-Api-Version": GITHUB_API_VERSION,
-                "User-Agent": "DailyCalendar-Bug-Reporter",
-            },
-            method=method,
-        )
-        try:
-            with urlopen(request, timeout=15) as response:
-                response_body = response.read(2 * 1024 * 1024 + 1)
-        except (HTTPError, OSError, URLError, TimeoutError):
-            raise UpstreamUnavailable() from None
-        if len(response_body) > 2 * 1024 * 1024:
-            raise UpstreamUnavailable()
-        try:
-            return json.loads(response_body)
-        except (TypeError, ValueError, UnicodeDecodeError):
-            raise UpstreamUnavailable() from None
-
-    def _create_github_issue(self, title, body):
-        decoded = self._github_request("POST", "issues", {"title": title, "body": body, "labels": [ERROR_REPORT_LABEL]})
-        if not isinstance(decoded, dict):
-            raise UpstreamUnavailable()
-        return decoded
-
-    def _create_github_comment(self, issue_number, body):
-        decoded = self._github_request("POST", f"issues/{issue_number}/comments", {"body": body})
-        if not isinstance(decoded, dict):
-            raise UpstreamUnavailable()
-
-    def _find_fingerprint_issue(self, fingerprint):
-        marker = f"AutoBug fingerprint: `{fingerprint}`"
-        page = 1
-        while True:
-            decoded = self._github_request(
-                "GET",
-                f"issues?state=all&labels={ERROR_REPORT_LABEL}&sort=created&direction=desc&per_page=100&page={page}",
-            )
-            if not isinstance(decoded, list):
-                raise UpstreamUnavailable()
-            for issue in decoded:
-                if (
-                    isinstance(issue, dict)
-                    and "pull_request" not in issue
-                    and isinstance(issue.get("body"), str)
-                    and marker in issue["body"]
-                    and type(issue.get("number")) is int
-                    and self._valid_issue_url(issue.get("html_url"), issue["number"])
-                ):
-                    return {"number": issue["number"], "html_url": issue["html_url"]}
-            if len(decoded) < 100:
-                return None
-            page += 1
 
 
 class ReceiverHandler(BaseHTTPRequestHandler):
@@ -1402,10 +1336,10 @@ class ReceiverHandler(BaseHTTPRequestHandler):
         except UpstreamUnavailable:
             self._respond(503, {"error": "upstream_unavailable"})
             return
-        except OSError:
+        except (OSError, sqlite3.Error):
             self._respond(500, {"error": "store_failed"})
             return
-        self._respond(201 if result["status"] == "created" else 200, result)
+        self._respond(202, result)
 
     def _post_events(self):
         batch, error_status, error_code = self._read_json(MAX_REQUEST_BYTES)
@@ -1491,7 +1425,7 @@ def main():
     directory = os.environ.get("DAILY_ANALYTICS_DATA_DIR", "var/analytics")
     ReceiverHandler.aggregator = Aggregator(directory, export_interval=REPORT_EXPORT_INTERVAL_SECONDS)
     ReceiverHandler.bug_reports = BugReportBackend(directory)
-    ReceiverHandler.error_reports = ErrorReportBackend(directory)
+    ReceiverHandler.error_reports = ErrorReportStore(directory)
     server = ThreadingHTTPServer((address, port), ReceiverHandler)
     server.daemon_threads = True
 
