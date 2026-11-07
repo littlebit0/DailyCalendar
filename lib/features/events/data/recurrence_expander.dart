@@ -213,6 +213,9 @@ class RecurrenceExpander {
 
 /// Occurrences of a rule with BYDAY/BYMONTHDAY/BYMONTH/BYSETPOS conditions.
 ///
+/// Generation stops once a period starts after the calendar date of
+/// [lastDate], so rules whose periods yield no candidates still terminate.
+///
 /// Generated period by period (days, weeks, months, years), so the nth
 /// occurrence has no closed form; the start date is always the first one.
 extension _DetailedRecurrence on RecurrenceExpander {
@@ -229,7 +232,16 @@ extension _DetailedRecurrence on RecurrenceExpander {
     final skipBefore = rule.count == null
         ? rangeStart.subtract(duration + const Duration(days: 1))
         : null;
-    for (final start in _detailedStarts(event.startAt, rule, skipBefore)) {
+    final rangeLast = rangeEnd.toLocal();
+    final lastDate = rule.until != null && rule.until!.isBefore(rangeLast)
+        ? rule.until!
+        : rangeLast;
+    for (final start in _detailedStarts(
+      event.startAt,
+      rule,
+      skipBefore,
+      lastDate,
+    )) {
       generated += 1;
       if (rule.count != null && generated > rule.count!) break;
       if (rule.until != null && _isAfterDate(start, rule.until!)) break;
@@ -252,7 +264,12 @@ extension _DetailedRecurrence on RecurrenceExpander {
     final rule = event.recurrence;
     var generated = 0;
     DateTime? last;
-    for (final start in _detailedStarts(event.startAt, rule, null)) {
+    for (final start in _detailedStarts(
+      event.startAt,
+      rule,
+      null,
+      rule.until,
+    )) {
       generated += 1;
       if (rule.count != null && generated > rule.count!) break;
       if (rule.until != null && _isAfterDate(start, rule.until!)) break;
@@ -381,6 +398,7 @@ Iterable<DateTime> _detailedStarts(
   DateTime start,
   RecurrenceRule rule,
   DateTime? skipBefore,
+  DateTime? lastDate,
 ) sync* {
   final interval = rule.interval < 1 ? 1 : rule.interval;
   DateTime at(int year, int month, int day) => DateTime(
@@ -396,6 +414,9 @@ Iterable<DateTime> _detailedStarts(
   final tokens = _dayTokens(rule.byDay);
   final weekdays = {for (final token in tokens) token.weekday};
   final startDay = DateTime(start.year, start.month, start.day);
+  final lastDay = lastDate == null
+      ? null
+      : DateTime(lastDate.year, lastDate.month, lastDate.day);
   var firstPeriod = 0;
   if (skipBefore != null && skipBefore.isAfter(start)) {
     final days = DateTime.utc(
@@ -419,6 +440,26 @@ Iterable<DateTime> _detailedStarts(
   if (firstPeriod == 0) yield start;
   var yielded = 0;
   for (var period = firstPeriod; period < firstPeriod + 200000; period++) {
+    final periodStart = switch (rule.frequency) {
+      RecurrenceFrequency.daily => DateTime(
+        start.year,
+        start.month,
+        start.day + period * interval,
+      ),
+      RecurrenceFrequency.weekly => DateTime(
+        start.year,
+        start.month,
+        start.day - (start.weekday - DateTime.monday) + 7 * interval * period,
+      ),
+      RecurrenceFrequency.monthly => DateTime(
+        start.year,
+        start.month + period * interval,
+      ),
+      _ => DateTime(start.year + period * interval),
+    };
+    if (lastDay != null && periodStart.isAfter(lastDay)) return;
+    // iCalendar dates have four-digit years; also keeps DateTime in range.
+    if (periodStart.year > 9999) return;
     final candidates = <DateTime>[];
     switch (rule.frequency) {
       case RecurrenceFrequency.daily:

@@ -101,6 +101,9 @@ class CustomPlatformViewController
   Completer<void> _creatingCompleter = Completer<void>();
   int _textureId = 0;
   bool _isDisposed = false;
+  bool _isCreated = false;
+  Future<void>? _creation;
+  Future<void>? _disposal;
 
   Future<void> get ready => _creatingCompleter.future;
 
@@ -119,12 +122,24 @@ class CustomPlatformViewController
 
   /// Initializes the underlying platform view.
   Future<void> initialize(
-      {Function(int id)? onPlatformViewCreated, dynamic arguments}) async {
+      {Function(int id)? onPlatformViewCreated, dynamic arguments}) {
     if (_isDisposed) {
-      return;
+      return Future<void>.value();
     }
+    return _creation ??= _create(onPlatformViewCreated, arguments);
+  }
+
+  Future<void> _create(
+      Function(int id)? onPlatformViewCreated, dynamic arguments) async {
     _textureId = (await _pluginChannel.invokeMethod<int>(
         'createInAppWebView', arguments))!;
+    _isCreated = true;
+    // Daily #400: a view disposed while creation was pending must not wire
+    // channels or call back into the removed widget; dispose() releases it.
+    if (_isDisposed) {
+      _creatingCompleter.complete();
+      return;
+    }
 
     _methodChannel =
         MethodChannel('com.pichillilorenzo/custom_platform_view_$_textureId');
@@ -153,13 +168,28 @@ class CustomPlatformViewController
 
   @override
   Future<void> dispose() async {
-    await _creatingCompleter.future;
-    if (!_isDisposed) {
-      _isDisposed = true;
-      await _eventStreamSubscription?.cancel();
-      await _pluginChannel.invokeMethod('dispose', {"id": _textureId});
+    final pending = _disposal;
+    if (pending != null) {
+      return pending;
     }
-    super.dispose();
+    final disposal = Completer<void>();
+    _disposal = disposal.future;
+    // Daily #400: record the request before waiting so a late creation stops.
+    _isDisposed = true;
+    try {
+      try {
+        await _creation;
+      } catch (_) {
+        // The creation failure is reported by initialize(); nothing to release.
+      }
+      await _eventStreamSubscription?.cancel();
+      if (_isCreated) {
+        await _pluginChannel.invokeMethod('dispose', {"id": _textureId});
+      }
+    } finally {
+      super.dispose();
+      disposal.complete();
+    }
   }
 
   /// Limits the number of frames per second to the given value.
@@ -278,6 +308,9 @@ class _CustomPlatformViewState extends State<CustomPlatformView> {
 
     _controller.initialize(
         onPlatformViewCreated: (id) {
+          if (!mounted) {
+            return;
+          }
           widget.onPlatformViewCreated?.call(id);
           setState(() {});
         },
@@ -414,6 +447,9 @@ class _CustomPlatformViewState extends State<CustomPlatformView> {
     final box = _key.currentContext?.findRenderObject() as RenderBox?;
     if (box != null) {
       await _controller.ready;
+      if (!mounted || !box.attached) {
+        return;
+      }
       unawaited(_controller._setSize(
           box.size, widget.scaleFactor ?? window.devicePixelRatio));
     }
@@ -423,6 +459,9 @@ class _CustomPlatformViewState extends State<CustomPlatformView> {
     final box = _key.currentContext?.findRenderObject() as RenderBox?;
     if (box != null) {
       await _controller.ready;
+      if (!mounted || !box.attached) {
+        return;
+      }
       final position = box.localToGlobal(Offset.zero);
       unawaited(_controller._setPosition(
           position, widget.scaleFactor ?? window.devicePixelRatio));

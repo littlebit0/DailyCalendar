@@ -35,6 +35,30 @@ class RunnerTests: XCTestCase {
     XCTAssertEqual(calendar.component(.day, from: endAt), 11)
   }
 
+  func testKoreanExplicitDateRejectsNonexistentCalendarDates() throws {
+    let leapDay = try XCTUnwrap(DailySpokenTemporalParser.parse("2028년 2월 29일 종일 회의 추가"))
+    let calendar = Calendar.current
+    XCTAssertEqual(calendar.dateComponents([.year, .month, .day], from: leapDay.startAt),
+                   DateComponents(year: 2028, month: 2, day: 29))
+    let monthEnd = try XCTUnwrap(DailySpokenTemporalParser.parse("2026년 2월 28일 종일 회의 추가"))
+    XCTAssertEqual(calendar.dateComponents([.year, .month, .day], from: monthEnd.startAt),
+                   DateComponents(year: 2026, month: 2, day: 28))
+    XCTAssertFalse(DailySpokenTemporalParser.containsInvalidExplicitDate("2026년 2월 28일 종일 회의 추가"))
+    XCTAssertFalse(DailySpokenTemporalParser.containsInvalidExplicitDate("내일 오후 3시 회의 추가"))
+
+    for command in [
+      "2026년 2월 30일 종일 회의 추가",
+      "2026년 13월 1일 종일 회의 추가",
+      "2027년 2월 29일 오후 3시 회의 추가",
+      "2026년 4월 0일 종일 회의 추가",
+      "2026년 4월 28일부터 4월 31일까지 여행 추가",
+      "2월 30일 내일 회의 추가",
+    ] {
+      XCTAssertNil(DailySpokenTemporalParser.parse(command), command)
+      XCTAssertTrue(DailySpokenTemporalParser.containsInvalidExplicitDate(command), command)
+    }
+  }
+
   func testSiriUpdateRequirementComparesVersionsLikeFlutter() {
     XCTAssertTrue(DailySiriUpdateRequirement.isNewer("4.1.0", than: "4.0.9"))
     XCTAssertTrue(DailySiriUpdateRequirement.isNewer("4.10", than: "4.9.9"))
