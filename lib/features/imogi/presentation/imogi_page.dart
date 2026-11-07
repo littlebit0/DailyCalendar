@@ -289,6 +289,8 @@ class _ImogiEditDialogState extends State<_ImogiEditDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      // Keeps both fields reachable with the keyboard open or large text.
+      scrollable: true,
       title: Text(context.tr('잊모기 편집')),
       content: Column(
         mainAxisSize: MainAxisSize.min,

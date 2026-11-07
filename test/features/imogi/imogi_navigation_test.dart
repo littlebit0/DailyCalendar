@@ -193,4 +193,34 @@ void main() {
     expect(settings.imogiStore.items.map((item) => item.title), ['전화하기']);
     debugDefaultTargetPlatformOverride = null;
   });
+
+  testWidgets('the editor stays usable on a small screen with large text', (
+    tester,
+  ) async {
+    final settings = await _mount(
+      tester,
+      TargetPlatform.iOS,
+      const Size(320, 480),
+    );
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await settings.imogiStore.add('질문');
+    await tester.tap(find.byTooltip('잊모기'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('질문'));
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('imogi-edit-note')),
+      List.filled(8, '긴 메모 줄').join('\n'),
+    );
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    await tester.ensureVisible(find.byKey(const ValueKey('imogi-convert')));
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('imogi-convert')).hitTestable(),
+      findsOneWidget,
+    );
+    debugDefaultTargetPlatformOverride = null;
+  });
 }
