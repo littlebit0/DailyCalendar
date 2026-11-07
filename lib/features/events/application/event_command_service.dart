@@ -951,12 +951,14 @@ class EventCommandService {
     required EventCategory previous,
     required EventCategory updated,
     bool Function()? isCurrent,
+    bool matchLegacyLabel = true,
   }) {
     final operation = _categoryUpdateTail.then(
       (_) => _updateCategoryUsage(
         previous: previous,
         updated: updated,
         isCurrent: isCurrent,
+        matchLegacyLabel: matchLegacyLabel,
       ),
     );
     _categoryUpdateTail = operation.then<void>(
@@ -970,6 +972,7 @@ class EventCommandService {
     required EventCategory previous,
     required EventCategory updated,
     bool Function()? isCurrent,
+    required bool matchLegacyLabel,
   }) async {
     if (isCurrent != null && !isCurrent()) {
       throw StateError('Category update cancelled');
@@ -980,6 +983,7 @@ class EventCommandService {
       updated: updated,
       updatedAt: _clock.now(),
       beforeWrite: _requireWritable,
+      matchLegacyLabel: matchLegacyLabel,
     );
     if (affected.isEmpty) {
       return;
