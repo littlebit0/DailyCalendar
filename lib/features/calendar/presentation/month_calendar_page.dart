@@ -38,6 +38,7 @@ import '../../events/domain/event_category.dart';
 import '../../events/domain/event_draft.dart';
 import '../../events/presentation/event_details_panel.dart';
 import '../../events/presentation/day_sheet_scroll_physics.dart';
+import '../../events/presentation/day_sheet_drag_release.dart';
 import '../../events/presentation/event_editor_dialog.dart';
 import '../../events/presentation/event_template_actions.dart';
 import '../../settings/presentation/settings_page.dart';
@@ -1348,6 +1349,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     // The sheet owns its displayed date so swipes can move it without
     // reopening, while drag edge navigation only moves the background range.
     final sheetDate = ValueNotifier(date);
+    final platform = Theme.of(context).platform;
+    final dragDismiss =
+        platform == TargetPlatform.iOS || platform == TargetPlatform.android;
     final controller = scaffold.showBottomSheet(
       (_) => SafeArea(
         top: false,
@@ -1377,46 +1381,52 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
               ),
             ),
           ),
-          child: DraggableScrollableSheet(
+          child: DaySheetDragDismissListener(
             controller: _daySheetScrollController,
-            expand: false,
-            initialChildSize: 0.68,
-            minChildSize: 0.4,
-            maxChildSize: 0.96,
-            snap: true,
-            snapSizes: const [0.68],
-            shouldCloseOnMinExtent: false,
-            builder: (context, scrollController) => ValueListenableBuilder<DateTime>(
-              valueListenable: sheetDate,
-              builder: (context, shownDate, _) => _DaySheetSwipeNavigator(
-                enabled: () => !_eventDragActive,
-                onDayDelta: (delta) => _shiftDaySheetDate(sheetDate, delta),
-                child: EventDetailsPanel(
-                  key: _daySheetSurfaceKey,
-                  date: shownDate,
-                  // Opening events belong to the opening date only; other dates
-                  // wait for their own live query instead of showing stale items.
-                  events: DateUtils.isSameDay(shownDate, date)
-                      ? events
-                      : const <CalendarEvent>[],
-                  scrollController: scrollController,
-                  scrollPhysics: DaySheetScrollPhysics(
-                    isCollapsed: () =>
-                        _daySheetScrollController.isAttached &&
-                        _daySheetScrollController.size <= 0.4001,
+            smallestStage: 0.4,
+            isSuspended: () => !dragDismiss || _eventDragActive,
+            child: DraggableScrollableSheet(
+              controller: _daySheetScrollController,
+              expand: false,
+              initialChildSize: 0.68,
+              // Touch platforms close by dragging below the smallest stage.
+              minChildSize: dragDismiss ? 0 : 0.4,
+              maxChildSize: 0.96,
+              snap: true,
+              snapSizes: dragDismiss ? const [0.4, 0.68] : const [0.68],
+              shouldCloseOnMinExtent: dragDismiss,
+              builder: (context, scrollController) => ValueListenableBuilder<DateTime>(
+                valueListenable: sheetDate,
+                builder: (context, shownDate, _) => _DaySheetSwipeNavigator(
+                  enabled: () => !_eventDragActive,
+                  onDayDelta: (delta) => _shiftDaySheetDate(sheetDate, delta),
+                  child: EventDetailsPanel(
+                    key: _daySheetSurfaceKey,
+                    date: shownDate,
+                    // Opening events belong to the opening date only; other dates
+                    // wait for their own live query instead of showing stale items.
+                    events: DateUtils.isSameDay(shownDate, date)
+                        ? events
+                        : const <CalendarEvent>[],
+                    scrollController: scrollController,
+                    scrollPhysics: DaySheetScrollPhysics(
+                      isCollapsed: () =>
+                          _daySheetScrollController.isAttached &&
+                          _daySheetScrollController.size <= 0.4001,
+                    ),
+                    onEventDropped: (event, targetDate, targetIndex) =>
+                        _handleCalendarEventDrop(
+                          context,
+                          ref,
+                          event,
+                          targetDate,
+                          targetIndex,
+                        ),
+                    onEventDragStateChanged: _setEventDragVisualActive,
+                    onEventDragInteractionStateChanged: _setEventDragActive,
+                    onEventDragGlobalPositionChanged:
+                        _handleDaySheetEventDragPosition,
                   ),
-                  onEventDropped: (event, targetDate, targetIndex) =>
-                      _handleCalendarEventDrop(
-                        context,
-                        ref,
-                        event,
-                        targetDate,
-                        targetIndex,
-                      ),
-                  onEventDragStateChanged: _setEventDragVisualActive,
-                  onEventDragInteractionStateChanged: _setEventDragActive,
-                  onEventDragGlobalPositionChanged:
-                      _handleDaySheetEventDragPosition,
                 ),
               ),
             ),
@@ -6068,9 +6078,10 @@ class _CalendarHeader extends ConsumerWidget {
                             for (final category in live.categories)
                               FilterChip(
                                 avatar: CircleAvatar(
-                                  radius: 5,
+                                  radius: _categoryDotRadius,
                                   backgroundColor: Color(category.colorValue),
                                 ),
+                                avatarBorder: const _CategoryDotAvatarBorder(),
                                 label: Text(
                                   context.l10n.categoryName(
                                     id: category.id,
@@ -8248,6 +8259,37 @@ class _WeekDayDropTarget extends StatelessWidget {
     }
     return index;
   }
+}
+
+const double _categoryDotRadius = 5;
+
+/// Limits the selected-chip scrim to the category dot. RawChip paints the
+/// scrim over the whole avatar box with `BlendMode.srcATop`, so depending on
+/// whether the avatar is composited into its own layer it darkened either the
+/// dot alone or a gray disc around it, and hovering one chip flipped every
+/// chip in the group between the two looks (#724).
+class _CategoryDotAvatarBorder extends CircleBorder {
+  const _CategoryDotAvatarBorder();
+
+  Rect _dot(Rect rect) =>
+      Rect.fromCircle(center: rect.center, radius: _categoryDotRadius);
+
+  @override
+  Path getOuterPath(Rect rect, {ui.TextDirection? textDirection}) =>
+      super.getOuterPath(_dot(rect), textDirection: textDirection);
+
+  @override
+  void paintInterior(
+    Canvas canvas,
+    Rect rect,
+    Paint paint, {
+    ui.TextDirection? textDirection,
+  }) => super.paintInterior(
+    canvas,
+    _dot(rect),
+    paint,
+    textDirection: textDirection,
+  );
 }
 
 class _WeekEventInsertionGap extends StatelessWidget {

@@ -358,8 +358,9 @@ void main() {
           universityRegionsProvider.overrideWith(
             (ref) async => UniversityRegions.fromJson(
               jsonDecode(
-                    File('assets/academic/university_regions.json')
-                        .readAsStringSync(),
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
                   )
                   as Map<String, dynamic>,
             ),
@@ -380,7 +381,9 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    return ProviderScope.containerOf(tester.element(find.byType(MonthCalendarPage)));
+    return ProviderScope.containerOf(
+      tester.element(find.byType(MonthCalendarPage)),
+    );
   }
 
   CalendarEvent searchableEvent(String id, String title, DateTime start) =>
@@ -539,8 +542,9 @@ void main() {
           universityRegionsProvider.overrideWith(
             (ref) async => UniversityRegions.fromJson(
               jsonDecode(
-                    File('assets/academic/university_regions.json')
-                        .readAsStringSync(),
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
                   )
                   as Map<String, dynamic>,
             ),
@@ -548,7 +552,9 @@ void main() {
           settingsRepositoryProvider.overrideWithValue(
             SettingsRepository(preferences: preferences),
           ),
-          productAnalyticsProvider.overrideWithValue(_RecordingAnalytics(records)),
+          productAnalyticsProvider.overrideWithValue(
+            _RecordingAnalytics(records),
+          ),
           notificationServiceProvider.overrideWithValue(_FakeNotification()),
           syncServiceProvider.overrideWithValue(_FakeSync()),
           eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
@@ -565,7 +571,10 @@ void main() {
         if (record.name == AnalyticsEventName.startupMilestone)
           record.attributes['milestone'],
     ];
-    expect(milestones, containsAll(['firstCalendarFrame', 'localCalendarReady']));
+    expect(
+      milestones,
+      containsAll(['firstCalendarFrame', 'localCalendarReady']),
+    );
     expect(milestones.toSet().length, milestones.length, reason: 'once each');
     debugDefaultTargetPlatformOverride = null;
     await tester.pumpWidget(const SizedBox.shrink());
@@ -8603,10 +8612,12 @@ void main() {
           find.byType(DraggableScrollableSheet),
         );
         expect(sheet.initialChildSize, 0.68);
-        expect(sheet.minChildSize, 0.4);
+        // Touch platforms close by dragging below the 0.4 small stage.
+        expect(sheet.minChildSize, 0);
+        expect(sheet.snapSizes, const [0.4, 0.68]);
         expect(sheet.maxChildSize, 0.96);
         expect(sheet.snap, isTrue);
-        expect(sheet.shouldCloseOnMinExtent, isFalse);
+        expect(sheet.shouldCloseOnMinExtent, isTrue);
         final bottomSheet = tester.widget<BottomSheet>(
           find.byType(BottomSheet),
         );
@@ -8623,7 +8634,7 @@ void main() {
         );
         final controller = sheet.controller!;
         for (final fromHeader in [true, false]) {
-          controller.jumpTo(sheet.minChildSize);
+          controller.jumpTo(0.4);
           await tester.pumpAndSettle();
           final panelRect = tester.getRect(find.byType(EventDetailsPanel));
           final point = fromHeader
@@ -8633,7 +8644,7 @@ void main() {
               : Offset(panelRect.left + 8, panelRect.bottom - 25);
           await tester.dragFrom(point, const Offset(0, -180));
           await tester.pumpAndSettle();
-          expect(controller.size, greaterThan(sheet.minChildSize));
+          expect(controller.size, greaterThan(0.4));
         }
         controller.jumpTo(sheet.initialChildSize);
         await tester.pumpAndSettle();
@@ -8656,6 +8667,32 @@ void main() {
 
         expect(find.byType(EventDetailsPanel), findsNothing);
         expect(container.read(selectedDateProvider), selectedDate);
+
+        // One long downward drag from the large stage closes the sheet.
+        await tester.tap(dayCell);
+        await tester.pumpAndSettle();
+        final reopened = tester
+            .widget<DraggableScrollableSheet>(
+              find.byType(DraggableScrollableSheet),
+            )
+            .controller!;
+        reopened.jumpTo(0.96);
+        await tester.pumpAndSettle();
+        final gesture = await tester.startGesture(
+          tester.getCenter(
+            find.byKey(const ValueKey('event-details-date-label')),
+          ),
+        );
+        final screenHeight =
+            tester.view.physicalSize.height / tester.view.devicePixelRatio;
+        for (var i = 0; i < 20; i++) {
+          await gesture.moveBy(Offset(0, screenHeight * .6 / 20));
+          await tester.pump(const Duration(milliseconds: 50));
+        }
+        await tester.pump(const Duration(milliseconds: 300));
+        await gesture.up();
+        await tester.pumpAndSettle();
+        expect(find.byType(EventDetailsPanel), findsNothing);
 
         await tester.pumpWidget(const SizedBox.shrink());
         debugDefaultTargetPlatformOverride = null;
@@ -9449,8 +9486,9 @@ void main() {
             universityRegionsProvider.overrideWith(
               (ref) async => UniversityRegions.fromJson(
                 jsonDecode(
-                      File('assets/academic/university_regions.json')
-                          .readAsStringSync(),
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
                     )
                     as Map<String, dynamic>,
               ),
@@ -9606,7 +9644,10 @@ void main() {
         platform: TargetPlatform.iOS,
         size: const Size(360, 800),
       );
-      expect(find.byKey(const ValueKey('ios-calendar-toolbar')), findsOneWidget);
+      expect(
+        find.byKey(const ValueKey('ios-calendar-toolbar')),
+        findsOneWidget,
+      );
       expect(find.byTooltip('지금 동기화'), findsOneWidget);
       expect(tester.takeException(), isNull);
       await finish(tester);
@@ -9654,8 +9695,9 @@ void main() {
             universityRegionsProvider.overrideWith(
               (ref) async => UniversityRegions.fromJson(
                 jsonDecode(
-                      File('assets/academic/university_regions.json')
-                          .readAsStringSync(),
+                      File(
+                        'assets/academic/university_regions.json',
+                      ).readAsStringSync(),
                     )
                     as Map<String, dynamic>,
               ),
@@ -9690,34 +9732,64 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('a switch dismissed before its save finishes is still applied', (
+    testWidgets(
+      'a switch dismissed before its save finishes is still applied',
+      (tester) async {
+        final (records, repository) = await pumpFilter(tester);
+        await tester.tap(find.byIcon(Icons.tune_rounded).first);
+        await tester.pumpAndSettle();
+        repository.holdNextSave();
+        await tester.tap(
+          find.descendant(
+            of: find.byType(SwitchListTile).first,
+            matching: find.byType(Switch),
+          ),
+        );
+        await tester.pump();
+        await dismissSheet(tester); // the save has not completed yet
+        expect(filterOutcomes(records), ['succeeded']);
+        repository.releaseSave();
+        await tester.pumpAndSettle();
+        debugDefaultTargetPlatformOverride = null;
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+
+    testWidgets('closing the sheet without a change is canceled', (
       tester,
     ) async {
-      final (records, repository) = await pumpFilter(tester);
-      await tester.tap(find.byIcon(Icons.tune_rounded).first);
-      await tester.pumpAndSettle();
-      repository.holdNextSave();
-      await tester.tap(
-        find.descendant(
-          of: find.byType(SwitchListTile).first,
-          matching: find.byType(Switch),
-        ),
-      );
-      await tester.pump();
-      await dismissSheet(tester); // the save has not completed yet
-      expect(filterOutcomes(records), ['succeeded']);
-      repository.releaseSave();
-      await tester.pumpAndSettle();
-      debugDefaultTargetPlatformOverride = null;
-      await tester.pumpWidget(const SizedBox.shrink());
-    });
-
-    testWidgets('closing the sheet without a change is canceled', (tester) async {
       final (records, _) = await pumpFilter(tester);
       await tester.tap(find.byIcon(Icons.tune_rounded).first);
       await tester.pumpAndSettle();
       await dismissSheet(tester);
       expect(filterOutcomes(records), ['canceled']);
+      debugDefaultTargetPlatformOverride = null;
+      await tester.pumpWidget(const SizedBox.shrink());
+    });
+
+    testWidgets('category chip selection scrim stays on the color dot (#724)', (
+      tester,
+    ) async {
+      await pumpFilter(tester);
+      await tester.tap(find.byIcon(Icons.tune_rounded).first);
+      await tester.pumpAndSettle();
+      final chips = find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.byType(FilterChip),
+      );
+      expect(chips, findsWidgets);
+      // After the dot itself, RawChip's selection scrim must cover only the
+      // 5px dot, not the whole avatar box, or chips flip to a gray disc when
+      // the group repaints.
+      const scrim = Color(0x60191919);
+      for (final element in chips.evaluate()) {
+        expect(
+          element.renderObject,
+          paints
+            ..circle(radius: 5)
+            ..circle(radius: 5, color: scrim),
+        );
+      }
       debugDefaultTargetPlatformOverride = null;
       await tester.pumpWidget(const SizedBox.shrink());
     });
@@ -10028,7 +10100,11 @@ void main() {
       preferences: await SharedPreferences.getInstance(),
     );
     const work = EventCategory(id: 'work', label: '업무', colorValue: 0xff7c3aed);
-    const study = EventCategory(id: 'study', label: '공부', colorValue: 0xff0f766e);
+    const study = EventCategory(
+      id: 'study',
+      label: '공부',
+      colorValue: 0xff0f766e,
+    );
     await settingsRepository.save(
       settingsRepository.load().copyWith(
         categories: const [EventCategory.basic, work, study],
@@ -10064,8 +10140,9 @@ void main() {
           universityRegionsProvider.overrideWith(
             (ref) async => UniversityRegions.fromJson(
               jsonDecode(
-                    File('assets/academic/university_regions.json')
-                        .readAsStringSync(),
+                    File(
+                      'assets/academic/university_regions.json',
+                    ).readAsStringSync(),
                   )
                   as Map<String, dynamic>,
             ),
@@ -10085,8 +10162,7 @@ void main() {
     await tester.tap(find.byTooltip('빠른 보기'));
     await tester.pumpAndSettle();
 
-    Finder card(String id) =>
-        find.byKey(ValueKey('quick-todo-category-$id'));
+    Finder card(String id) => find.byKey(ValueKey('quick-todo-category-$id'));
     final basic = tester.getTopLeft(card('basic'));
     final middle = tester.getTopLeft(card('work'));
     final third = tester.getTopLeft(card('study'));
