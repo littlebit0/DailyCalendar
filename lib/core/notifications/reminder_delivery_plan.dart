@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import '../../features/events/data/recurrence_expander.dart';
 import '../../features/events/domain/calendar_event.dart';
 
@@ -83,44 +85,70 @@ List<RecurringReminderRequest> planRecurringReminders({
   required bool allowImmediate,
   Duration dueGrace = const Duration(minutes: 2),
   int slots = recurringReminderSlotsPerOffset,
+  List<int> probeDays = recurringReminderProbeDays,
 }) {
-  final requests = <RecurringReminderRequest>[];
-  if (slots <= 0) return requests;
-  // Widen the search until a valid reminder exists, so a series whose next
-  // occurrence is years away (yearly, multi-year interval) keeps its reminder.
-  var occurrences = <CalendarEvent>[];
-  for (final days in const [800, 3700, 36600]) {
-    occurrences = RecurrenceExpander().expand(
+  if (slots <= 0) return <RecurringReminderRequest>[];
+  List<CalendarEvent> expand(int days) {
+    final occurrences = RecurrenceExpander().expand(
       event,
       now.subtract(event.duration + const Duration(days: 2)),
       now.add(Duration(days: days)),
     )..sort((a, b) => a.startAt.compareTo(b.startAt));
+    debugRecurringReminderOccurrences += occurrences.length;
+    return occurrences;
+  }
+
+  List<RecurringReminderRequest> plan(List<CalendarEvent> occurrences) {
+    final requests = <RecurringReminderRequest>[];
+    for (final occurrence in occurrences) {
+      final base = baseTime(occurrence);
+      final plan = resolveReminderDeliveryPlan(
+        reminderAt: base.subtract(Duration(minutes: reminderMinutes)),
+        fallbackAt: base,
+        eventEndAt: occurrence.endAt,
+        now: now,
+        allowImmediate: allowImmediate,
+        dueGrace: dueGrace,
+      );
+      if (plan.type == ReminderDeliveryType.none) continue;
+      requests.add(
+        RecurringReminderRequest(
+          slot: requests.length,
+          occurrence: occurrence,
+          base: base,
+          plan: plan,
+        ),
+      );
+      if (requests.length >= slots) break;
+    }
+    return requests;
+  }
+
+  // A shorter window from the same start yields the start-ordered prefix of a
+  // wider one, so once it already holds [slots] reminders every wider search
+  // below would pick exactly the same ones.
+  for (final days in probeDays) {
+    final requests = plan(expand(days));
+    if (requests.length >= slots) return requests;
+  }
+  // Widen the search until a valid reminder exists, so a series whose next
+  // occurrence is years away (yearly, multi-year interval) keeps its reminder.
+  var occurrences = <CalendarEvent>[];
+  for (final days in const [800, 3700, 36600]) {
+    occurrences = expand(days);
     final hasUpcoming = occurrences.any(
       (o) =>
           baseTime(o).isAfter(now.subtract(dueGrace)) || o.endAt.isAfter(now),
     );
     if (hasUpcoming) break;
   }
-  for (final occurrence in occurrences) {
-    final base = baseTime(occurrence);
-    final plan = resolveReminderDeliveryPlan(
-      reminderAt: base.subtract(Duration(minutes: reminderMinutes)),
-      fallbackAt: base,
-      eventEndAt: occurrence.endAt,
-      now: now,
-      allowImmediate: allowImmediate,
-      dueGrace: dueGrace,
-    );
-    if (plan.type == ReminderDeliveryType.none) continue;
-    requests.add(
-      RecurringReminderRequest(
-        slot: requests.length,
-        occurrence: occurrence,
-        base: base,
-        plan: plan,
-      ),
-    );
-    if (requests.length >= slots) break;
-  }
-  return requests;
+  return plan(occurrences);
 }
+
+/// Short windows tried before the full 800-day search: a month covers the
+/// default slots of a daily series, four months those of a weekly one.
+const recurringReminderProbeDays = [32, 128];
+
+/// Occurrences expanded by [planRecurringReminders]; tests measure work with it.
+@visibleForTesting
+int debugRecurringReminderOccurrences = 0;

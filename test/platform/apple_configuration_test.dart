@@ -104,6 +104,13 @@ void main() {
       );
       expect(source, contains('DailyTodoToggle(event: event)'));
       expect(source, contains('.dailyTodoCompletion('));
+      // Month labels share the palette they already resolved with the
+      // completion modifier instead of solving the same contrast twice.
+      expect(
+        source,
+        contains('category: event.color, backgroundAlpha: 0.18, palette: colors'),
+      );
+      expect(source, contains('let colors = palette ?? {'));
       // The shared Swift palette is exercised against numeric RGB fixtures and
       // the full colour grid by tool/tests/event_palette_test.swift. This check
       // guards target wiring, rather than freezing a particular drawing syntax.
@@ -156,6 +163,37 @@ void main() {
       expect(source, isNot(contains('reloadTimelines(ofKind:')));
     }
   });
+
+  test(
+    'Signal bridge answers from its own request, not shared history',
+    () async {
+      final source = await _readNormalized('apple_siri/DailySiriIntents.swift');
+      final bridgeStart = source.indexOf('private func runAvailableSignal(');
+      final bridgeEnd = source.indexOf('private func speak(', bridgeStart);
+      expect(bridgeStart, isNonNegative);
+      expect(bridgeEnd, greaterThan(bridgeStart));
+      final bridge = source.substring(bridgeStart, bridgeEnd);
+
+      // The history is redacted for LMS reads and shared with concurrent Siri
+      // requests, so the in-app answer must come from this intent's execution.
+      expect(bridge, contains('let message = try await intent.execute()'));
+      expect(bridge, contains('error as? DailySignalExecutionFailed'));
+      expect(bridge, isNot(contains('DailySiriLogStore')));
+      expect(source, contains('let message = try await execute()'));
+      expect(
+        source,
+        contains(
+          'summary: containsLms ? DailySiriText.lmsReadCompleted : summary,',
+        ),
+      );
+      expect(
+        source,
+        contains(
+          'result: containsLms ? DailySiriText.lmsReadCompleted : result,',
+        ),
+      );
+    },
+  );
 
   test('Siri reads the update requirement Flutter stores', () async {
     final source = await _readNormalized('apple_siri/DailySiriIntents.swift');

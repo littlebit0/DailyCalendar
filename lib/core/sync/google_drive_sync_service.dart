@@ -13,6 +13,7 @@ import '../../features/events/domain/event_repository.dart';
 import '../../features/events/domain/recurrence_rule.dart';
 import '../../features/events/domain/event_deletion.dart';
 import '../../features/imogi/data/imogi_store.dart';
+import '../../features/events/data/event_template_store.dart';
 import '../../features/timetable/data/timetable_store.dart';
 import '../../features/timetable/data/timetable_sync_document.dart';
 import 'sync_version.dart';
@@ -92,12 +93,15 @@ class GoogleDriveSyncService implements SyncService {
     );
     _timetableStore.localRevisionNotifier.addListener(_timetableChanged);
     _imogiStore.localRevisionNotifier.addListener(_imogiChanged);
+    _templateStore.localRevisionNotifier.addListener(_templatesChanged);
   }
 
   static const _legacySyncFileName = 'daily-sync-v1.json';
   static const _settingsFileName = 'daily-sync-v2-settings.json';
   static const _timetableFileName = 'daily-sync-v2-timetable.json';
   static const _imogiFileName = 'daily-sync-v2-imogi.json';
+  // Must not start with the event prefix, or it would be read as an event.
+  static const _templatesFileName = 'daily-sync-v2-templates.json';
   static const _eventFilePrefix = 'daily-sync-v2-event-';
   static const _eventFileSuffix = '.json';
   static const _v2FilePrefix = 'daily-sync-v2-';
@@ -119,11 +123,15 @@ class GoogleDriveSyncService implements SyncService {
   (String?, String?, String?)? _timetableBootstrapIdentity;
   ImogiStore get _imogiStore => _settingsRepository.imogiStore;
   (String?, String?, String?)? _imogiBootstrapIdentity;
+  EventTemplateStore get _templateStore => _settingsRepository.eventTemplates;
+  (String?, String?, String?)? _templatesBootstrapIdentity;
 
-  /// Request flag `includeTimetable` covers both separate documents
-  /// (timetable and imogi); each one uploads only what it owns.
+  /// Timetable, event templates and imogi travel in the same "documents"
+  /// requests (`includeTimetable`); each one uploads only what it owns.
   bool get _documentsPending =>
-      _timetableStore.hasPendingSync || _imogiStore.hasPendingSync;
+      _timetableStore.hasPendingSync ||
+      _templateStore.hasPendingSync ||
+      _imogiStore.hasPendingSync;
   (String?, String?, String?)? _academicSettingsBootstrapIdentity;
   late final PacedHttpClient _httpClient;
   final Duration _backupRestoreDelay;
@@ -250,6 +258,10 @@ class GoogleDriveSyncService implements SyncService {
 
   void _imogiChanged() {
     if (_started && _imogiStore.hasPendingSync) _queueChangeSync();
+  }
+
+  void _templatesChanged() {
+    if (_started && _templateStore.hasPendingSync) _queueChangeSync();
   }
 
   Future<void> syncNow({bool promptIfNecessary = false}) async {
@@ -456,6 +468,7 @@ class GoogleDriveSyncService implements SyncService {
     _started = false;
     _timetableBootstrapIdentity = null;
     _imogiBootstrapIdentity = null;
+    _templatesBootstrapIdentity = null;
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
     _changeSyncTimer = null;
@@ -478,6 +491,7 @@ class GoogleDriveSyncService implements SyncService {
     _sessionGeneration++;
     _timetableStore.localRevisionNotifier.removeListener(_timetableChanged);
     _imogiStore.localRevisionNotifier.removeListener(_imogiChanged);
+    _templateStore.localRevisionNotifier.removeListener(_templatesChanged);
     _cancelQueuedRequests();
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
@@ -710,6 +724,11 @@ class GoogleDriveSyncService implements SyncService {
           if (request.includeTimetable && _imogiStore.hasPendingSync) {
             throw const GoogleDriveSyncException(
               '아직 동기화되지 않은 잊모기 변경이 남아 있습니다. 다시 시도해 주세요.',
+            );
+          }
+          if (request.includeTimetable && _templateStore.hasPendingSync) {
+            throw const GoogleDriveSyncException(
+              '아직 동기화되지 않은 일정 템플릿 변경이 남아 있습니다. 다시 시도해 주세요.',
             );
           }
           break;
@@ -996,12 +1015,19 @@ class GoogleDriveSyncService implements SyncService {
     return conflicts;
   }
 
+  Future<void> _backupDocuments(Map<String, String> headers) async {
+    if (_timetableStore.hasPendingSync) await _backupTimetable(headers);
+    if (_templateStore.hasPendingSync) await _backupTemplates(headers);
+    if (_imogiStore.hasPendingSync) await _backupImogi(headers);
+  }
+
   Future<void> _restore(Map<String, String> authHeaders) async {
     final remoteSettings = await _downloadRestorableSettings(authHeaders);
     final remoteFiles = await _listEventFiles(authHeaders);
     final remoteEvents = await _downloadEventFiles(authHeaders, remoteFiles);
     final remoteTimetable = await _downloadRestorableTimetable(authHeaders);
     final remoteImogi = await _downloadRestorableImogi(authHeaders);
+    final remoteTemplates = await _downloadRestorableTemplates(authHeaders);
     _validateSyncSession?.call();
     await _applyDownloadedEvents(remoteEvents);
     await _queueEventsMissingFromDrive({
@@ -1010,6 +1036,7 @@ class GoogleDriveSyncService implements SyncService {
     if (remoteSettings != null) await _applyDownloadedSettings(remoteSettings);
     await _applyDownloadedTimetable(remoteTimetable);
     await _applyDownloadedImogi(remoteImogi);
+    await _applyDownloadedTemplates(remoteTemplates);
     _academicSettingsBootstrapIdentity = _accountIdentity;
     await _refreshWidgets();
   }
@@ -1203,6 +1230,7 @@ class GoogleDriveSyncService implements SyncService {
             academicProfile.lmsIntegrationEnabled == null);
     var needsTimetable = _timetableBootstrapIdentity != _accountIdentity;
     var needsImogi = _imogiBootstrapIdentity != _accountIdentity;
+    var needsTemplates = _templatesBootstrapIdentity != _accountIdentity;
     final externalEvents = <_DownloadedEvent>[];
     final eventIds = <String>{};
     for (final change in dailyChanges.values) {
@@ -1212,6 +1240,10 @@ class GoogleDriveSyncService implements SyncService {
       }
       if (change.fileName == _imogiFileName) {
         needsImogi = true;
+        continue;
+      }
+      if (change.fileName == _templatesFileName) {
+        needsTemplates = true;
         continue;
       }
       if (change.fileName == _settingsFileName) {
@@ -1249,6 +1281,9 @@ class GoogleDriveSyncService implements SyncService {
     final externalImogi = needsImogi
         ? await _downloadRestorableImogi(authHeaders)
         : null;
+    final externalTemplates = needsTemplates
+        ? await _downloadRestorableTemplates(authHeaders)
+        : null;
 
     var restored = false;
     _validateSyncSession?.call();
@@ -1262,6 +1297,9 @@ class GoogleDriveSyncService implements SyncService {
       restored = await _applyDownloadedTimetable(externalTimetable) || restored;
     }
     if (needsImogi) await _applyDownloadedImogi(externalImogi);
+    if (needsTemplates) {
+      restored = await _applyDownloadedTemplates(externalTemplates) || restored;
+    }
     if (needsAcademicSettings) {
       _academicSettingsBootstrapIdentity = _accountIdentity;
     }
@@ -1280,6 +1318,7 @@ class GoogleDriveSyncService implements SyncService {
     return fileName == _settingsFileName ||
         fileName == _timetableFileName ||
         fileName == _imogiFileName ||
+        fileName == _templatesFileName ||
         _eventIdFromFileName(fileName) != null;
   }
 
@@ -1479,14 +1518,6 @@ class GoogleDriveSyncService implements SyncService {
     throw const GoogleDriveSyncException('동시에 변경된 시간표가 있어 동기화를 다시 시도해야 합니다.');
   }
 
-  Future<void> _backupDocuments(Map<String, String> headers) async {
-    // An imogi-only change must not cost timetable Drive requests.
-    if (_timetableStore.hasPendingSync || !_imogiStore.hasPendingSync) {
-      await _backupTimetable(headers);
-    }
-    if (_imogiStore.hasPendingSync) await _backupImogi(headers);
-  }
-
   Future<List<_DriveFile>> _listImogiFiles(Map<String, String> headers) =>
       _listFiles(headers, "name = '$_imogiFileName' and trashed = false");
 
@@ -1599,6 +1630,127 @@ class GoogleDriveSyncService implements SyncService {
       return;
     }
     throw const GoogleDriveSyncException('동시에 변경된 잊모기가 있어 동기화를 다시 시도해야 합니다.');
+  }
+
+  Future<List<_DriveFile>> _listTemplateFiles(Map<String, String> headers) =>
+      _listFiles(headers, "name = '$_templatesFileName' and trashed = false");
+
+  Future<_DownloadedSettings> _downloadTemplateFile(
+    Map<String, String> headers,
+    String fileId, {
+    bool requireVersion = false,
+  }) async {
+    final (response, etag) = await _downloadJson(
+      headers,
+      fileId,
+      requireVersion,
+    );
+    try {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      if (data['schemaVersion'] != 2 || data['type'] != 'eventTemplates') {
+        throw const FormatException('Unsupported template sync document');
+      }
+      return _DownloadedSettings(
+        document: SettingsSyncDocument.fromJson(
+          Map<String, Object?>.from(data['document'] as Map),
+        ),
+        fileId: fileId,
+        etag: etag,
+      );
+    } on FormatException {
+      throw const GoogleDriveSyncException(
+        'Google Drive 일정 템플릿 데이터가 손상되었거나 지원하지 않는 형식입니다. 기존 데이터는 보존됩니다.',
+      );
+    } on TypeError {
+      throw const GoogleDriveSyncException(
+        'Google Drive 일정 템플릿 데이터가 손상되었거나 지원하지 않는 형식입니다. 기존 데이터는 보존됩니다.',
+      );
+    }
+  }
+
+  Future<SettingsSyncDocument?> _downloadRestorableTemplates(
+    Map<String, String> headers,
+  ) async {
+    final files = await _listTemplateFiles(headers);
+    if (files.isEmpty) return null;
+    var merged = const SettingsSyncDocument();
+    for (final file in files) {
+      merged = merged.merge(
+        (await _downloadTemplateFile(headers, file.id)).document,
+      );
+    }
+    return merged;
+  }
+
+  Future<bool> _applyDownloadedTemplates(SettingsSyncDocument? remote) async {
+    _validateSyncSession?.call();
+    var changed = false;
+    if (remote != null) {
+      final before = _templateStore.syncDocument();
+      await _templateStore.mergeSyncDocument(
+        remote,
+        validateSession: _validateSyncSession,
+      );
+      changed = !before.sameAs(_templateStore.syncDocument());
+      _templatesChanged();
+    }
+    _validateSyncSession?.call();
+    _templatesBootstrapIdentity = _accountIdentity;
+    return changed;
+  }
+
+  Future<void> _backupTemplates(Map<String, String> headers) async {
+    for (var attempt = 0; attempt < 4; attempt++) {
+      final files = await _listTemplateFiles(headers);
+      final remote = await _mapSequentially(
+        files,
+        (file) => _downloadTemplateFile(headers, file.id, requireVersion: true),
+      );
+      _validateSyncSession?.call();
+      var merged = _templateStore.syncDocument();
+      for (final item in remote) {
+        merged = merged.merge(item.document);
+      }
+      final payload = jsonEncode({
+        'schemaVersion': 2,
+        'type': 'eventTemplates',
+        'document': merged.toJson(),
+      });
+      try {
+        if (files.isEmpty) {
+          if (merged.fields.isNotEmpty) {
+            await _uploadJsonFile(
+              headers,
+              fileName: _templatesFileName,
+              jsonBody: payload,
+            );
+          }
+        } else {
+          for (final item in remote) {
+            if (item.document.sameAs(merged)) continue;
+            await _uploadJsonFile(
+              headers,
+              fileName: _templatesFileName,
+              fileId: item.fileId,
+              expectedEtag: item.etag,
+              jsonBody: payload,
+            );
+          }
+        }
+      } on _ConcurrentDriveWrite {
+        continue;
+      }
+      _validateSyncSession?.call();
+      await _templateStore.acknowledgeSyncDocument(
+        merged,
+        validateSession: _validateSyncSession,
+      );
+      _templatesBootstrapIdentity = _accountIdentity;
+      return;
+    }
+    throw const GoogleDriveSyncException(
+      '동시에 변경된 일정 템플릿이 있어 동기화를 다시 시도해야 합니다.',
+    );
   }
 
   Future<void> _backupSettings(
@@ -2299,6 +2451,8 @@ class GoogleDriveSyncService implements SyncService {
       'completed': normalized.completed,
       'alarmEnabled': normalized.alarmEnabled,
       'allDayAlarmMinutes': normalized.allDayAlarmMinutes,
+      'alarmMinutesBefore': normalized.alarmMinutesBefore,
+      'alarmCustomAt': normalized.alarmCustomAt?.toUtc().toIso8601String(),
     };
   }
 
@@ -2370,6 +2524,8 @@ class GoogleDriveSyncService implements SyncService {
       completed: json['completed'] as bool? ?? false,
       alarmEnabled: json['alarmEnabled'] as bool? ?? false,
       allDayAlarmMinutes: json['allDayAlarmMinutes'] as int? ?? 9 * 60,
+      alarmMinutesBefore: json['alarmMinutesBefore'] as int? ?? 0,
+      alarmCustomAt: _readDate(json['alarmCustomAt']),
     ).normalizeAllDayBounds();
   }
 

@@ -8,6 +8,7 @@ import 'package:daily/features/events/domain/event_deletion.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
+import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:drift/native.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sqlite3/sqlite3.dart';
@@ -198,7 +199,7 @@ void main() {
     );
   });
 
-  for (final oldVersion in [8, 9]) {
+  for (final oldVersion in [8, 9, 10]) {
     for (final hasLmsColumns in [false, true]) {
       test('schema $oldVersion adds nullable columns locally without cloud work '
           '(existing metadata: $hasLmsColumns)', () async {
@@ -507,6 +508,100 @@ void main() {
     },
   );
 
+  test(
+    'legacy remote merge keeps detailed recurrence and anchor day on insert and update',
+    () async {
+      final local = _event(id: 'shared');
+      await _createSchemaSixDatabase(databaseFile, [
+        local,
+      ], dropRecurrenceColumns: true);
+      final start = DateTime(2026, 1, 15, 9);
+      final base = _event(id: 'remote-new').copyWith(
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        updatedAt: local.updatedAt.add(const Duration(hours: 1)),
+      );
+      final inserted = base.copyWith(
+        recurrence: RecurrenceRule(
+          frequency: RecurrenceFrequency.monthly,
+          count: 4,
+          anchorDay: 15,
+          byMonthDay: const [15, 28],
+          excludedDates: [DateTime(2026, 1, 28)],
+        ),
+      );
+      final updated = base.copyWith(
+        id: 'shared',
+        title: '원격 반복',
+        recurrence: RecurrenceRule(
+          frequency: RecurrenceFrequency.yearly,
+          until: DateTime(2029, 12, 31),
+          anchorDay: 31,
+          byDay: const ['TU', '-1FR'],
+          byMonth: const [3, 9],
+          bySetPos: const [-1],
+          rawRule: 'FREQ=YEARLY;BYMONTH=3,9;BYDAY=TU,-1FR;BYSETPOS=-1',
+          excludedDates: [DateTime(2027, 3, 26)],
+        ),
+      );
+      final remote = [inserted, updated];
+      final service = TodoDatabaseMigrationService(
+        databaseFile: () async => databaseFile,
+        hasLinkedGoogleAccount: () => true,
+        loadRemoteEvents: () async => remote,
+        backupMigratedEvents: () async {},
+      );
+      addTearDown(service.dispose);
+      expect((await service.migrateIfNeeded()).migrated, isTrue);
+
+      final normalFile = File('${directory.path}/normal.sqlite');
+      final normalDatabase = AppDatabase.forTesting(NativeDatabase(normalFile));
+      addTearDown(normalDatabase.close);
+      final normal = DriftEventRepository(normalDatabase);
+      for (final event in remote) {
+        await normal.save(event);
+      }
+      final migratedDatabase = AppDatabase.forTesting(
+        NativeDatabase(databaseFile),
+      );
+      addTearDown(migratedDatabase.close);
+      final migrated = DriftEventRepository(migratedDatabase);
+
+      for (final event in remote) {
+        final stored = (await migrated.findById(event.id))!.recurrence;
+        final expected = (await normal.findById(event.id))!.recurrence;
+        expect(stored.anchorDay, event.recurrence.anchorDay);
+        expect(stored.detailsJson, event.recurrence.detailsJson);
+        expect(stored.byDay, event.recurrence.byDay);
+        expect(stored.byMonthDay, event.recurrence.byMonthDay);
+        expect(stored.byMonth, event.recurrence.byMonth);
+        expect(stored.bySetPos, event.recurrence.bySetPos);
+        expect(stored.rawRule, event.recurrence.rawRule);
+        expect(stored.excludedDates, event.recurrence.excludedDates);
+        expect(stored.count, expected.count);
+        expect(stored.until, expected.until);
+        expect(stored.anchorDay, expected.anchorDay);
+        expect(stored.detailsJson, expected.detailsJson);
+      }
+      List<String> occurrences(List<CalendarEvent> events) => [
+        for (final event in events) '${event.id}@${event.startAt}',
+      ]..sort();
+      final rangeStart = DateTime(2026);
+      final rangeEnd = DateTime(2030);
+      final migratedOccurrences = occurrences(
+        await migrated.eventsInRange(rangeStart, rangeEnd),
+      );
+      expect(
+        migratedOccurrences,
+        occurrences(await normal.eventsInRange(rangeStart, rangeEnd)),
+      );
+      expect(
+        migratedOccurrences.where((id) => id.startsWith('remote-new@')),
+        hasLength(3),
+      );
+    },
+  );
+
   test('newer remote changes replace older pending local changes', () async {
     final local = _event(id: 'pending-local', syncStatus: 'pending');
     await _createSchemaSixDatabase(databaseFile, [local]);
@@ -604,8 +699,9 @@ void main() {
 
 Future<void> _createSchemaSixDatabase(
   File file,
-  List<CalendarEvent> events,
-) async {
+  List<CalendarEvent> events, {
+  bool dropRecurrenceColumns = false,
+}) async {
   final database = AppDatabase.forTesting(NativeDatabase(file));
   final repository = DriftEventRepository(database);
   for (final event in events) {
@@ -616,6 +712,11 @@ Future<void> _createSchemaSixDatabase(
   final raw = sqlite3.open(file.path);
   try {
     raw.execute('ALTER TABLE event_records DROP COLUMN completed');
+    if (dropRecurrenceColumns) {
+      // Schema 6 predates the anchor-day and detail columns.
+      raw.execute('ALTER TABLE event_records DROP COLUMN recurrence_anchor_day');
+      raw.execute('ALTER TABLE event_records DROP COLUMN recurrence_details');
+    }
     raw.execute('PRAGMA user_version = 6');
   } finally {
     raw.close();

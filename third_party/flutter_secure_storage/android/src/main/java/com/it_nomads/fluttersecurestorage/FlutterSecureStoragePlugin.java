@@ -231,7 +231,8 @@ public class FlutterSecureStoragePlugin implements MethodCallHandler, FlutterPlu
                                 break;
                         }
                     } catch (Exception e) {
-                        if (config.shouldDeleteOnFailure()) {
+                        // A disk-write failure must surface as an error, not as a reset reported as success.
+                        if (config.shouldDeleteOnFailure() && !(e instanceof DurableEdit.PersistenceException)) {
                             try {
                                 secureStorage.deleteAll();
                                 result.success("Data has been reset");

@@ -182,4 +182,134 @@ void main() {
       },
     );
   });
+
+  // Run under a DST zone (e.g. TZ=America/New_York) to cover clock changes;
+  // in zones without DST these still guard the plain calendar-date contract.
+  // US DST in 2026 starts on 8 March and ends on 1 November.
+  group('RuleBasedScheduleParser calendar-date arithmetic across DST', () {
+    final parser = RuleBasedScheduleParser();
+
+    Future<({DateTime start, DateTime end, bool allDay})> parse(
+      String input,
+      DateTime baseDate,
+    ) async {
+      final draft = (await parser.parse(
+        input,
+        baseDate: baseDate,
+        defaultReminderMinutes: 10,
+      )).draft!;
+      return (start: draft.startAt, end: draft.endAt, allDay: draft.allDay);
+    }
+
+    test('오늘/내일/모레 on and around the DST end day', () async {
+      final fallBack = DateTime(2026, 11, 1, 12);
+      expect(
+        (await parse('내일 오전 9시 회의', fallBack)).start,
+        DateTime(2026, 11, 2, 9),
+      );
+      expect(
+        (await parse('모레 오전 9시 회의', fallBack)).start,
+        DateTime(2026, 11, 3, 9),
+      );
+      expect(
+        (await parse('오늘 오후 3시 회의', fallBack)).start,
+        DateTime(2026, 11, 1, 15),
+      );
+      final dayBefore = DateTime(2026, 10, 31, 12);
+      expect(
+        (await parse('내일 오전 9시 회의', dayBefore)).start,
+        DateTime(2026, 11, 1, 9),
+      );
+      expect(
+        (await parse('모레 오전 9시 회의', dayBefore)).start,
+        DateTime(2026, 11, 2, 9),
+      );
+    });
+
+    test('오늘/내일/모레 on and around the DST start day', () async {
+      final dayBefore = DateTime(2026, 3, 7, 12);
+      expect(
+        (await parse('내일 오전 9시 회의', dayBefore)).start,
+        DateTime(2026, 3, 8, 9),
+      );
+      expect(
+        (await parse('모레 오전 9시 회의', dayBefore)).start,
+        DateTime(2026, 3, 9, 9),
+      );
+      expect(
+        (await parse('내일 오전 9시 회의', DateTime(2026, 3, 8, 12))).start,
+        DateTime(2026, 3, 9, 9),
+      );
+    });
+
+    test('weekday names resolve across a DST week boundary', () async {
+      // Sunday 1 November: the start of its week is before the clock change.
+      final fallBack = DateTime(2026, 11, 1, 12);
+      expect(
+        (await parse('월요일 오전 9시 회의', fallBack)).start,
+        DateTime(2026, 11, 2, 9),
+      );
+      expect(
+        (await parse('수요일 오전 9시 회의', fallBack)).start,
+        DateTime(2026, 11, 4, 9),
+      );
+      expect(
+        (await parse('다음 주 월요일 오전 9시 회의', fallBack)).start,
+        DateTime(2026, 11, 2, 9),
+      );
+      expect(
+        (await parse('일요일 오전 9시 회의', DateTime(2026, 3, 3, 12))).start,
+        DateTime(2026, 3, 8, 9),
+      );
+    });
+
+    test(
+      'a month-day of yesterday stays this year after the DST end',
+      () async {
+        expect(
+          (await parse('11월 1일 오전 9시 회의', DateTime(2026, 11, 2, 12))).start,
+          DateTime(2026, 11, 1, 9),
+        );
+      },
+    );
+
+    test('all-day drafts end at the next calendar midnight', () async {
+      final single = await parse('내일 휴가', DateTime(2026, 10, 31, 12));
+      expect(single.allDay, isTrue);
+      expect(single.start, DateTime(2026, 11, 1));
+      expect(single.end, DateTime(2026, 11, 2));
+
+      final spring = await parse('내일 휴가', DateTime(2026, 3, 7, 12));
+      expect(spring.start, DateTime(2026, 3, 8));
+      expect(spring.end, DateTime(2026, 3, 9));
+    });
+
+    test('date ranges and durations count calendar days', () async {
+      final base = DateTime(2026, 10, 31, 12);
+      final relative = await parse('내일부터 모레까지 여행', base);
+      expect(relative.start, DateTime(2026, 11, 1));
+      expect(relative.end, DateTime(2026, 11, 3));
+
+      final days = await parse('내일부터 3일간 워크숍', base);
+      expect(days.start, DateTime(2026, 11, 1));
+      expect(days.end, DateTime(2026, 11, 4));
+
+      final nights = await parse('내일 2박 3일 여행', base);
+      expect(nights.start, DateTime(2026, 11, 1));
+      expect(nights.end, DateTime(2026, 11, 4));
+
+      final monthDays = await parse('10월 31일부터 11월 2일까지 출장', base);
+      expect(monthDays.start, DateTime(2026, 10, 31));
+      expect(monthDays.end, DateTime(2026, 11, 3));
+    });
+
+    test('a timed event past midnight ends on the next calendar day', () async {
+      final result = await parse(
+        '오늘 오후 11시부터 오전 1시까지 야간 작업',
+        DateTime(2026, 11, 1, 12),
+      );
+      expect(result.start, DateTime(2026, 11, 1, 23));
+      expect(result.end, DateTime(2026, 11, 2, 1));
+    });
+  });
 }

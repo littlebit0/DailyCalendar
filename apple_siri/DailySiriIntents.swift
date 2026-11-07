@@ -71,6 +71,12 @@ struct DailySiriLmsVisibility: Equatable {
 }
 // END LMS VISIBILITY POLICY
 
+/// A failure already recorded by `loggedSiriOperation` during an in-app
+/// Signal request.
+struct DailySignalExecutionFailed: Error {
+  let underlying: Error
+}
+
 struct DailySiriLogRecord: Codable, Sendable {
   let id: String
   let occurredAt: Date
@@ -80,6 +86,30 @@ struct DailySiriLogRecord: Codable, Sendable {
   let success: Bool
   let details: [String: String]?
 }
+
+// BEGIN DAILY SHARED STORE NAMESPACE
+/// The App Store and test builds share one App Group. Each build passes its own
+/// DailySharedStoreNamespace (empty for the App Store build, which keeps the
+/// group root) so snapshots, queues, locks and notifications never cross (#388).
+/// apple_widgets/DailyWidgets.swift resolves the same Info.plist key.
+enum DailySharedStore {
+  static let namespace =
+    (Bundle.main.object(forInfoDictionaryKey: "DailySharedStoreNamespace") as? String)?
+      .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+  static func directory(_ groupURL: URL?) -> URL? {
+    guard let groupURL else { return nil }
+    guard !namespace.isEmpty else { return groupURL }
+    let directory = groupURL.appendingPathComponent(namespace, isDirectory: true)
+    try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    return directory
+  }
+
+  static func notificationName(_ base: String) -> String {
+    namespace.isEmpty ? base : "\(base).\(namespace)"
+  }
+}
+// END DAILY SHARED STORE NAMESPACE
 
 enum DailySiriLogStore {
   #if os(macOS)
@@ -144,9 +174,9 @@ enum DailySiriLogStore {
   }
 
   private static func fileURL() -> URL? {
-    FileManager.default.containerURL(
+    DailySharedStore.directory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
-    )?.appendingPathComponent(fileName)
+    ))?.appendingPathComponent(fileName)
   }
 }
 
@@ -403,20 +433,13 @@ final class DailySignalVoiceBridge: NSObject {
     result: @escaping FlutterResult
   ) {
     Task { @MainActor in
-      let startedAt = Date()
       var intent = DailySignalCommandIntent()
       intent.spokenCommand = command
       intent.isBridgeExecution = true
       intent.confirmedInApp = confirmed
       do {
-        _ = try await intent.perform()
-        guard let record = DailySiriLogStore.load().first,
-              record.occurredAt >= startedAt.addingTimeInterval(-0.5) else {
-          result(FlutterError(code: "signal_result_missing", message: DailySiriText.signalResultMissing, details: nil))
-          return
-        }
-        let message = self.responseMessage(for: record)
-        result(["message": message, "success": record.success])
+        let message = try await intent.execute()
+        result(["message": message, "success": true])
       } catch {
         if let confirmation = error as? DailySignalConfirmationRequired {
           result(FlutterError(code: "signal_confirmation_required", message: confirmation.message, details: nil))
@@ -432,26 +455,12 @@ final class DailySignalVoiceBridge: NSObject {
           result(FlutterError(code: code, message: error.localizedDescription, details: nil))
           return
         }
-        if let record = DailySiriLogStore.load().first,
-           record.occurredAt >= startedAt.addingTimeInterval(-0.5),
-           !record.success {
-          let code = record.result == "cancelled"
-            ? "signal_cancelled"
-            : "signal_execution_failed"
-          result(FlutterError(code: code, message: error.localizedDescription, details: nil))
+        if let failure = error as? DailySignalExecutionFailed {
+          result(FlutterError(code: "signal_execution_failed", message: failure.underlying.localizedDescription, details: nil))
           return
         }
         result(FlutterError(code: "signal_needs_input", message: error.localizedDescription, details: nil))
       }
-    }
-  }
-
-  private func responseMessage(for record: DailySiriLogRecord) -> String {
-    switch record.action.replacingOccurrences(of: "signal-", with: "") {
-    case "add": return DailySiriText.added(record.summary)
-    case "update": return DailySiriText.updated(record.result)
-    case "delete": return DailySiriText.deleted(record.summary)
-    default: return record.result
     }
   }
 
@@ -470,10 +479,32 @@ struct DailySpokenTemporalValues: Sendable {
 }
 
 enum DailySpokenTemporalParser {
+  private enum ExplicitDate {
+    case absent
+    case invalid
+    case valid(start: Date, end: Date?)
+  }
+
+  /// True when the command names a calendar date that does not exist
+  /// (for example 2월 30일 or 13월 1일), so callers can ask for a new date
+  /// instead of falling back to another source.
+  static func containsInvalidExplicitDate(_ value: String?) -> Bool {
+    guard let value else { return false }
+    if case .invalid = explicitDateRange(in: value, calendar: Calendar.current) {
+      return true
+    }
+    return false
+  }
+
   static func parse(_ value: String?) -> DailySpokenTemporalValues? {
     guard let value else { return nil }
     let calendar = Calendar.current
-    let explicitRange = explicitDateRange(in: value, calendar: calendar)
+    let explicitRange: (start: Date, end: Date?)?
+    switch explicitDateRange(in: value, calendar: calendar) {
+    case .absent: explicitRange = nil
+    case .invalid: return nil
+    case let .valid(start, end): explicitRange = (start, end)
+    }
     let baseDate: Date
     if let start = explicitRange?.start {
       baseDate = start
@@ -548,38 +579,49 @@ enum DailySpokenTemporalParser {
   private static func explicitDateRange(
     in value: String,
     calendar: Calendar
-  ) -> (start: Date, end: Date?)? {
+  ) -> ExplicitDate {
     let pattern = #"(?:(\d{2,4})년\s*)?(\d{1,2})월\s*(\d{1,2})일(?:\s*(?:부터|~|〜|–|—|-)\s*(?:(\d{2,4})년\s*)?(?:(\d{1,2})월\s*)?(\d{1,2})일)?"#
     guard let match = firstMatch(pattern, in: value),
           let startMonth = group(2, match: match, source: value).flatMap(Int.init),
           let startDay = group(3, match: match, source: value).flatMap(Int.init) else {
-      return nil
+      return .absent
     }
     let nowYear = calendar.component(.year, from: Date())
     let startYear = normalizedYear(group(1, match: match, source: value).flatMap(Int.init)) ?? nowYear
-    guard let start = calendar.date(from: DateComponents(
-      timeZone: .current,
-      year: startYear,
-      month: startMonth,
-      day: startDay
-    )) else { return nil }
+    guard let start = exactDate(year: startYear, month: startMonth, day: startDay, calendar: calendar) else {
+      return .invalid
+    }
     guard let endDay = group(6, match: match, source: value).flatMap(Int.init) else {
-      return (calendar.startOfDay(for: start), nil)
+      return .valid(start: start, end: nil)
     }
     let endYear = normalizedYear(group(4, match: match, source: value).flatMap(Int.init)) ?? startYear
     let endMonth = group(5, match: match, source: value).flatMap(Int.init) ?? startMonth
-    guard let inclusiveEnd = calendar.date(from: DateComponents(
-      timeZone: .current,
-      year: endYear,
-      month: endMonth,
-      day: endDay
-    )), inclusiveEnd >= start else {
-      return (calendar.startOfDay(for: start), nil)
+    guard let inclusiveEnd = exactDate(year: endYear, month: endMonth, day: endDay, calendar: calendar) else {
+      return .invalid
     }
-    return (
-      calendar.startOfDay(for: start),
-      calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: inclusiveEnd))
+    guard inclusiveEnd >= start else {
+      return .valid(start: start, end: nil)
+    }
+    return .valid(
+      start: start,
+      end: calendar.date(byAdding: .day, value: 1, to: inclusiveEnd)
     )
+  }
+
+  /// Calendar.date(from:) rolls 2월 30일 into March, so reject any date whose
+  /// components change after construction.
+  private static func exactDate(year: Int, month: Int, day: Int, calendar: Calendar) -> Date? {
+    guard let date = calendar.date(from: DateComponents(
+      timeZone: .current,
+      year: year,
+      month: month,
+      day: day
+    )) else { return nil }
+    let resolved = calendar.dateComponents([.year, .month, .day], from: date)
+    guard resolved.year == year, resolved.month == month, resolved.day == day else {
+      return nil
+    }
+    return calendar.startOfDay(for: date)
   }
 
   private static func normalizedYear(_ value: Int?) -> Int? {
@@ -780,10 +822,6 @@ private enum DailySiriText {
     "이 운영체제 버전에서는 Daily Signal을 사용할 수 없습니다.", "Daily Signal is unavailable on this operating system version.",
     "このOSバージョンではDaily Signalを利用できません。", "此作業系統版本無法使用 Daily Signal。"
   ) }
-  static var signalResultMissing: String { localized(
-    "시그널 실행 결과를 확인하지 못했습니다.", "The Signal result could not be verified.",
-    "Signalの実行結果を確認できませんでした。", "無法確認 Signal 執行結果。"
-  ) }
 
   static var databaseUnavailable: String {
     return switch language {
@@ -902,6 +940,15 @@ private enum DailySiriText {
     case .english: "Tell me the event's start date and time."
     case .japanese: "予定の開始日時を話してください。"
     case .traditionalChinese: "請說出行程的開始日期與時間。"
+    }
+  }
+
+  static var invalidDateRequest: String {
+    switch language {
+    case .korean: "말씀하신 날짜가 달력에 없어요. 일정 시작 날짜와 시간을 다시 말해 주세요."
+    case .english: "That date doesn't exist. Tell me the event's start date and time again."
+    case .japanese: "その日付は存在しません。予定の開始日時をもう一度話してください。"
+    case .traditionalChinese: "這個日期不存在。請重新說出行程的開始日期與時間。"
     }
   }
 
@@ -1378,7 +1425,9 @@ struct DailySiriEventChange: Codable, Sendable {
 }
 
 enum DailySiriEventChangeSignal {
-  static let notificationName = "com.littlebit0.daily.siri.events-changed"
+  static let notificationName = DailySharedStore.notificationName(
+    "com.littlebit0.daily.siri.events-changed"
+  )
   private static let fileName = "daily-siri-pending-event-changes.json"
   private static let lock = NSLock()
 
@@ -1437,9 +1486,9 @@ enum DailySiriEventChangeSignal {
   }
 
   private static func fileURL() -> URL? {
-    FileManager.default.containerURL(
+    DailySharedStore.directory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
-    )?.appendingPathComponent(fileName)
+    ))?.appendingPathComponent(fileName)
   }
 }
 
@@ -1943,26 +1992,11 @@ private extension DailySiriDatabase {
       .data(using: .utf8).flatMap { try? JSONDecoder().decode([String].self, from: $0) } ?? [])
     let colors = Dictionary(DailySiriPreferences.categories.map { ($0.id, $0.colorValue) },
                             uniquingKeysWith: { _, latest in latest })
-    let completed: Set<String> = try withDatabase { database in
-      var statement: OpaquePointer?
-      guard sqlite3_prepare_v2(database,
-        "SELECT id FROM event_records WHERE deleted_at IS NULL AND completed = 1", -1, &statement, nil) == SQLITE_OK else {
-        throw DailySiriError.databaseUnavailable
-      }
-      defer { sqlite3_finalize(statement) }
-      var ids = Set<String>()
-      var status = sqlite3_step(statement)
-      while status == SQLITE_ROW {
-        ids.insert(string(statement, 0))
-        status = sqlite3_step(statement)
-      }
-      guard status == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
-      return ids
-    }
+    let completed = try completedSourceIDs()
     return try events(from: start, to: end).filter { !hidden.contains($0.categoryID) }.map {
       DailyWallpaperEvent(id: "\($0.id):\($0.startAt.timeIntervalSince1970)", title: $0.title,
         start: $0.startAt, end: $0.endAt, color: colors[$0.categoryID] ?? $0.colorValue,
-        completed: completed.contains($0.id), holiday: $0.isHoliday)
+        completed: isCompleted($0.id, completedSourceIDs: completed), holiday: $0.isHoliday)
     }
   }
 }
@@ -2244,6 +2278,30 @@ private enum DailySiriError: Error, CustomLocalizedStringResourceConvertible {
 
 @available(iOS 16.0, macOS 13.0, *)
 private enum DailySiriDatabase {
+  // Completion lives on the stored row, so an expanded occurrence resolves to its source id.
+  static func isCompleted(_ eventID: String, completedSourceIDs: Set<String>) -> Bool {
+    completedSourceIDs.contains(DailySiriOccurrenceIdentity.parse(eventID)?.sourceID ?? eventID)
+  }
+
+  static func completedSourceIDs() throws -> Set<String> {
+    try withDatabase { database in
+      var statement: OpaquePointer?
+      guard sqlite3_prepare_v2(database,
+        "SELECT id FROM event_records WHERE deleted_at IS NULL AND completed = 1", -1, &statement, nil) == SQLITE_OK else {
+        throw DailySiriError.databaseUnavailable
+      }
+      defer { sqlite3_finalize(statement) }
+      var ids = Set<String>()
+      var status = sqlite3_step(statement)
+      while status == SQLITE_ROW {
+        ids.insert(string(statement, 0))
+        status = sqlite3_step(statement)
+      }
+      guard status == SQLITE_DONE else { throw DailySiriError.databaseUnavailable }
+      return ids
+    }
+  }
+
   static func add(
     title: String,
     startAt: Date,
@@ -2911,9 +2969,9 @@ private enum DailySiriDatabase {
       owner = google["email"] as? String
     }
     var snapshot: [String: Any]?
-    if let url = FileManager.default.containerURL(
+    if let url = DailySharedStore.directory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: DailySiriLogStore.appGroup
-    )?.appendingPathComponent("daily-widget-snapshot.json"),
+    ))?.appendingPathComponent("daily-widget-snapshot.json"),
        let data = try? Data(contentsOf: url) {
       snapshot = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
     }
@@ -3772,8 +3830,21 @@ struct DailySignalCommandIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    let message = try await execute()
+    return .result(
+      dialog: IntentDialog(stringLiteral: message),
+      view: DailySiriSnippetView(message: message)
+    )
+  }
+
+  /// Returns this request's live answer. The in-app bridge uses it directly
+  /// because the shared action history is redacted for LMS reads and may hold
+  /// records from concurrent Siri requests.
+  @MainActor
+  func execute() async throws -> String {
     let ruleBasedAction = classify(spokenCommand)
     let spokenTemporal = DailySpokenTemporalParser.parse(spokenCommand)
+    let hasInvalidSpokenDate = DailySpokenTemporalParser.containsInvalidExplicitDate(spokenCommand)
     var generatedUnderstanding: DailyGenerativeUnderstanding?
     if action == nil, let command = normalized(spokenCommand) {
       if #available(iOS 26.0, macOS 26.0, *) {
@@ -3798,46 +3869,46 @@ struct DailySignalCommandIntent: AppIntent {
     case .yesterday:
       let today = Calendar.current.startOfDay(for: Date())
       let start = Calendar.current.date(byAdding: .day, value: -1, to: today)!
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-yesterday",
         label: DailySiriText.yesterdayLabel(),
         from: start,
         to: today
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .today:
       let start = Calendar.current.startOfDay(for: Date())
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-today",
         label: DailySiriText.todayLabel(),
         from: start,
         to: Calendar.current.date(byAdding: .day, value: 1, to: start)!
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .tomorrow:
       let today = Calendar.current.startOfDay(for: Date())
       let start = Calendar.current.date(byAdding: .day, value: 1, to: today)!
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-tomorrow",
         label: DailySiriText.tomorrowLabel(),
         from: start,
         to: Calendar.current.date(byAdding: .day, value: 1, to: start)!
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .date:
       guard let date = date ?? generatedUnderstanding?.startAt else {
         throw $date.requestValue(IntentDialog(stringLiteral: DailySiriText.dateRequest))
       }
       let start = Calendar.current.startOfDay(for: date)
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-date",
         label: DailySiriText.date(date, includeTime: false),
         from: start,
         to: Calendar.current.date(byAdding: .day, value: 1, to: start)!
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .next:
-      let nextEvent = try loggedSiriOperation(action: "signal-next", summary: "Next event") {
+      let nextEvent = try loggedOperation(action: "signal-next", summary: "Next event") {
         try DailySiriDatabase.nextEvent(after: Date())
       }
       let message = DailySiriText.nextEvent(nextEvent)
@@ -3847,10 +3918,7 @@ struct DailySignalCommandIntent: AppIntent {
         result: message,
         events: nextEvent.map { [$0] } ?? []
       )
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .search:
       guard let query = normalized(query) ??
           generatedUnderstanding?.searchText ??
@@ -3858,7 +3926,7 @@ struct DailySignalCommandIntent: AppIntent {
           searchQuery(from: spokenCommand) else {
         throw $query.requestValue(IntentDialog(stringLiteral: DailySiriText.searchRequest))
       }
-      let events = try loggedSiriOperation(action: "signal-search", summary: query) {
+      let events = try loggedOperation(action: "signal-search", summary: query) {
         try DailySiriDatabase.search(query)
       }
       let message = summaryMessage(events, empty: DailySiriText.noSearchResults)
@@ -3868,12 +3936,9 @@ struct DailySignalCommandIntent: AppIntent {
         result: message,
         events: events
       )
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .dday:
-      let events = try loggedSiriOperation(action: "signal-dday", summary: "D-day") {
+      let events = try loggedOperation(action: "signal-dday", summary: "D-day") {
         try DailySiriDatabase.ddayEvents()
       }
       let message = summaryMessage(events, empty: DailySiriText.noDdayEvents)
@@ -3883,15 +3948,15 @@ struct DailySignalCommandIntent: AppIntent {
         result: message,
         events: events
       )
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .add:
       guard let eventTitle = normalized(eventTitle) ??
           generatedUnderstanding?.eventTitle ??
           generatedUnderstanding?.eventReference else {
         throw $eventTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
+      }
+      if startAt == nil && hasInvalidSpokenDate {
+        throw $startAt.requestValue(IntentDialog(stringLiteral: DailySiriText.invalidDateRequest))
       }
       guard let startAt = startAt ??
           spokenTemporal?.startAt ??
@@ -3920,7 +3985,7 @@ struct DailySignalCommandIntent: AppIntent {
       if isBridgeExecution && !confirmedInApp {
         throw DailySignalConfirmationRequired()
       }
-      let addedEvent = try loggedSiriOperation(action: "signal-add", summary: eventTitle) {
+      let addedEvent = try loggedOperation(action: "signal-add", summary: eventTitle) {
         try DailySiriDatabase.add(
           title: eventTitle,
           startAt: start,
@@ -3944,10 +4009,7 @@ struct DailySignalCommandIntent: AppIntent {
         details: siriEventDetails(addedEvent)
       )
       let message = DailySiriText.added(addedEvent.title)
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .update:
       guard let event = event ?? resolvedEvent(from: generatedUnderstanding?.eventReference) else {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.updateTargetRequest))
@@ -3956,6 +4018,9 @@ struct DailySignalCommandIntent: AppIntent {
       let scopeLabel = try DailySiriDatabase.mutationScopeLabel(id: event.id, entireSeries: repeatScope == .entireSeries)
       guard let resolvedNewTitle = normalized(newTitle) ?? generatedUnderstanding?.newTitle else {
         throw $newTitle.requestValue(IntentDialog(stringLiteral: DailySiriText.addTitleRequest))
+      }
+      if newStartAt == nil && hasInvalidSpokenDate {
+        throw $newStartAt.requestValue(IntentDialog(stringLiteral: DailySiriText.invalidDateRequest))
       }
       guard let resolvedNewStartAt = newStartAt ??
           spokenTemporal?.startAt ??
@@ -3989,7 +4054,7 @@ struct DailySignalCommandIntent: AppIntent {
         try await requestConfirmation(result: .result(dialog: IntentDialog(stringLiteral: scopeLabel + " · " + DailySiriText.commandConfirmation)))
       }
       try await authenticateMutation(DailySiriText.updateAuthentication)
-      let updatedEvent = try loggedSiriOperation(action: "signal-update", summary: event.title) {
+      let updatedEvent = try loggedOperation(action: "signal-update", summary: event.title) {
         try DailySiriDatabase.update(
           id: event.id,
           newTitle: resolvedNewTitle,
@@ -4015,10 +4080,7 @@ struct DailySignalCommandIntent: AppIntent {
         details: siriEventDetails(updatedEvent)
       )
       let message = DailySiriText.updated(updatedEvent.title)
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .delete:
       guard let event = event ?? resolvedEvent(from: generatedUnderstanding?.eventReference) else {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.deleteTargetRequest))
@@ -4039,7 +4101,7 @@ struct DailySignalCommandIntent: AppIntent {
           throw error
         }
       }
-      let deletedEvent = try loggedSiriOperation(action: "signal-delete", summary: event.title) {
+      let deletedEvent = try loggedOperation(action: "signal-delete", summary: event.title) {
         try DailySiriDatabase.delete(id: event.id, entireSeries: repeatScope == .entireSeries)
       }
       DailySiriLogStore.append(
@@ -4050,10 +4112,29 @@ struct DailySignalCommandIntent: AppIntent {
         details: siriEventDetails(deletedEvent)
       )
       let message = DailySiriText.deleted(deletedEvent.title)
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
+    }
+  }
+
+  /// Runs an operation that logs its own failure and tags that failure for
+  /// the in-app bridge, so it never has to infer it from shared history.
+  private func loggedOperation<T>(
+    action: String,
+    summary: String,
+    operation: () throws -> T
+  ) throws -> T {
+    do {
+      return try loggedSiriOperation(action: action, summary: summary, operation: operation)
+    } catch {
+      throw isBridgeExecution ? DailySignalExecutionFailed(underlying: error) : error
+    }
+  }
+
+  private func executing<T>(_ operation: () async throws -> T) async throws -> T {
+    do {
+      return try await operation()
+    } catch {
+      throw isBridgeExecution ? DailySignalExecutionFailed(underlying: error) : error
     }
   }
 

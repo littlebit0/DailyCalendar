@@ -632,6 +632,8 @@ void main() {
             syncStatus: 'pending',
           ).copyWith(
             completed: true,
+            alarmMinutesBefore: 30,
+            alarmCustomAt: DateTime.utc(2026, 6, 19, 22),
             recurrence: const RecurrenceRule(
               frequency: RecurrenceFrequency.monthly,
               anchorDay: 31,
@@ -706,6 +708,8 @@ void main() {
       expect(event['completed'], isTrue);
       expect(event['recurrenceAnchorDay'], 31);
       expect(event['recurrenceDetails'], '{"byDay":["MO","WE"]}');
+      expect(event['alarmMinutesBefore'], 30);
+      expect(event['alarmCustomAt'], '2026-06-19T22:00:00.000Z');
       expect((await repository.findById('queued-event'))!.syncStatus, 'synced');
       expect(
         requests.any(
@@ -2636,37 +2640,34 @@ void main() {
     expect(service.statusNotifier.value.message, '동기화 실패');
   });
 
-  test(
-    'whenIdle waits for the running sync and the ones queued behind it',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final reached = Completer<void>();
-      final release = Completer<void>();
-      final service = _service(
-        repository: _MemoryEventRepository(),
-        notificationService: _FakeNotificationService(),
-        preferences: preferences,
-        httpClient: _versionedClient((request) async {
-          if (!reached.isCompleted) reached.complete();
-          await release.future;
-          return http.Response('', 500);
-        }),
-      );
-      addTearDown(service.dispose);
-      await service.whenIdle(); // idle already: returns immediately
+  test('whenIdle waits for the running sync and the ones queued behind it', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final reached = Completer<void>();
+    final release = Completer<void>();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async {
+        if (!reached.isCompleted) reached.complete();
+        await release.future;
+        return http.Response('', 500);
+      }),
+    );
+    addTearDown(service.dispose);
+    await service.whenIdle(); // idle already: returns immediately
 
-      final running = service.restoreNow().catchError((Object _) {});
-      await reached.future;
-      var idle = false;
-      final waiting = service.whenIdle().then((_) => idle = true);
-      await Future<void>.delayed(const Duration(milliseconds: 20));
-      expect(idle, isFalse, reason: 'sync still in flight');
-      release.complete();
-      await Future.wait([running, waiting]);
-      expect(idle, isTrue);
-    },
-  );
+    final running = service.restoreNow().catchError((Object _) {});
+    await reached.future;
+    var idle = false;
+    final waiting = service.whenIdle().then((_) => idle = true);
+    await Future<void>.delayed(const Duration(milliseconds: 20));
+    expect(idle, isFalse, reason: 'sync still in flight');
+    release.complete();
+    await Future.wait([running, waiting]);
+    expect(idle, isTrue);
+  });
 
   test(
     'sync analytics records categorized failure without changing the error',
@@ -2701,141 +2702,123 @@ void main() {
     },
   );
 
-  test(
-    'issue152 a sync cut off by a session change reports abandoned, not failed',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final analytics = _RecordingAnalytics();
-      final reached = Completer<void>();
-      final release = Completer<void>();
-      final service = _service(
-        repository: _MemoryEventRepository(),
-        notificationService: _FakeNotificationService(),
-        preferences: preferences,
-        httpClient: _versionedClient((request) async {
-          if (!reached.isCompleted) reached.complete();
-          await release.future;
-          return http.Response('', 500);
-        }),
-        analytics: analytics,
-      );
-      addTearDown(service.dispose);
+  test('issue152 a sync cut off by a session change reports abandoned, not failed',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final reached = Completer<void>();
+    final release = Completer<void>();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async {
+        if (!reached.isCompleted) reached.complete();
+        await release.future;
+        return http.Response('', 500);
+      }),
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
 
-      final running = service.restoreNow().catchError((Object _) {});
-      await reached.future;
-      final stopping = service.stop();
-      release.complete();
-      await Future.wait([running, stopping]);
-      await Future<void>.delayed(Duration.zero);
+    final running = service.restoreNow().catchError((Object _) {});
+    await reached.future;
+    final stopping = service.stop();
+    release.complete();
+    await Future.wait([running, stopping]);
+    await Future<void>.delayed(Duration.zero);
 
-      expect(analytics.records.map((record) => record.name), [
-        AnalyticsEventName.syncStarted,
-        AnalyticsEventName.syncAbandoned,
-      ]);
-      expect(analytics.records.last.attributes['reason'], 'sessionChanged');
-      expect(
-        analytics.records.last.attributes.containsKey('errorCode'),
-        isFalse,
-      );
-    },
-  );
+    expect(analytics.records.map((record) => record.name), [
+      AnalyticsEventName.syncStarted,
+      AnalyticsEventName.syncAbandoned,
+    ]);
+    expect(analytics.records.last.attributes['reason'], 'sessionChanged');
+    expect(analytics.records.last.attributes.containsKey('errorCode'), isFalse);
+  });
 
-  test(
-    'issue152 later independent syncs are never labelled as retries',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final analytics = _RecordingAnalytics();
-      final service = _service(
-        repository: _MemoryEventRepository(),
-        notificationService: _FakeNotificationService(),
-        preferences: preferences,
-        httpClient: _versionedClient((request) async => http.Response('', 503)),
-        // The retry stays pending for the whole test.
-        automaticRetryDelays: const [Duration(hours: 1)],
-        analytics: analytics,
-      );
-      addTearDown(service.dispose);
+  test('issue152 later independent syncs are never labelled as retries', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      // The retry stays pending for the whole test.
+      automaticRetryDelays: const [Duration(hours: 1)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
 
-      await service.restoreNow().catchError((Object _) {});
-      // A retry is scheduled, but this is a new, independent sync.
-      await service.restoreNow().catchError((Object _) {});
-      await Future<void>.delayed(const Duration(milliseconds: 20));
+    await service.restoreNow().catchError((Object _) {});
+    // A retry is scheduled, but this is a new, independent sync.
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      final started = analytics.records
-          .where((record) => record.name == AnalyticsEventName.syncStarted)
-          .toList();
-      expect(started, hasLength(2));
-      expect(
-        started.every((record) => !record.attributes.containsKey('attempt')),
-        isTrue,
-      );
-    },
-  );
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .toList();
+    expect(started, hasLength(2));
+    expect(started.every((record) => !record.attributes.containsKey('attempt')), isTrue);
+  });
 
-  test(
-    'issue152 after the retry budget is spent new syncs stay first attempts',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final analytics = _RecordingAnalytics();
-      final service = _service(
-        repository: _MemoryEventRepository(),
-        notificationService: _FakeNotificationService(),
-        preferences: preferences,
-        httpClient: _versionedClient((request) async => http.Response('', 503)),
-        automaticRetryDelays: const [Duration(milliseconds: 5)],
-        analytics: analytics,
-      );
-      addTearDown(service.dispose);
+  test('issue152 after the retry budget is spent new syncs stay first attempts', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      automaticRetryDelays: const [Duration(milliseconds: 5)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
 
-      await service.restoreNow().catchError((Object _) {});
-      await Future<void>.delayed(
-        const Duration(milliseconds: 80),
-      ); // the one retry runs and fails
-      analytics.records.clear();
-      await service.restoreNow().catchError((Object _) {});
-      await Future<void>.delayed(const Duration(milliseconds: 20));
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 80)); // the one retry runs and fails
+    analytics.records.clear();
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 20));
 
-      final started = analytics.records
-          .where((record) => record.name == AnalyticsEventName.syncStarted)
-          .single;
-      expect(started.attributes.containsKey('attempt'), isFalse);
-    },
-  );
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .single;
+    expect(started.attributes.containsKey('attempt'), isFalse);
+  });
 
-  test(
-    'issue152 automatic retries are numbered and the first attempt is not',
-    () async {
-      SharedPreferences.setMockInitialValues({});
-      final preferences = await SharedPreferences.getInstance();
-      final analytics = _RecordingAnalytics();
-      final service = _service(
-        repository: _MemoryEventRepository(),
-        notificationService: _FakeNotificationService(),
-        preferences: preferences,
-        httpClient: _versionedClient((request) async => http.Response('', 503)),
-        automaticRetryDelays: const [Duration(milliseconds: 5)],
-        analytics: analytics,
-      );
-      addTearDown(service.dispose);
+  test('issue152 automatic retries are numbered and the first attempt is not',
+      () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final analytics = _RecordingAnalytics();
+    final service = _service(
+      repository: _MemoryEventRepository(),
+      notificationService: _FakeNotificationService(),
+      preferences: preferences,
+      httpClient: _versionedClient((request) async => http.Response('', 503)),
+      automaticRetryDelays: const [Duration(milliseconds: 5)],
+      analytics: analytics,
+    );
+    addTearDown(service.dispose);
 
-      await service.restoreNow().catchError((Object _) {});
-      await Future<void>.delayed(const Duration(milliseconds: 80));
+    await service.restoreNow().catchError((Object _) {});
+    await Future<void>.delayed(const Duration(milliseconds: 80));
 
-      final started = analytics.records
-          .where((record) => record.name == AnalyticsEventName.syncStarted)
-          .toList();
-      expect(started.length, greaterThanOrEqualTo(2));
-      expect(started.first.attributes.containsKey('attempt'), isFalse);
-      expect(started[1].attributes['attempt'], 2);
-      final failed = analytics.records
-          .where((record) => record.name == AnalyticsEventName.syncFailed)
-          .toList();
-      expect(failed[1].attributes['attempt'], 2);
-    },
-  );
+    final started = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncStarted)
+        .toList();
+    expect(started.length, greaterThanOrEqualTo(2));
+    expect(started.first.attributes.containsKey('attempt'), isFalse);
+    expect(started[1].attributes['attempt'], 2);
+    final failed = analytics.records
+        .where((record) => record.name == AnalyticsEventName.syncFailed)
+        .toList();
+    expect(failed[1].attributes['attempt'], 2);
+  });
 }
 
 GoogleDriveSyncService _service({
@@ -2873,12 +2856,14 @@ MockClient _versionedClient(
 ) {
   final bodies = <String, http.Response>{};
   return MockClient((request) async {
-    // These event/settings fixtures predate timetable and imogi storage. Model
-    // empty namespaces; their transport and bootstrap have dedicated tests.
+    // These event/settings fixtures predate timetable, template and imogi
+    // storage. Model empty namespaces; their transport and bootstrap have
+    // dedicated tests.
     final query = request.url.queryParameters['q'] ?? '';
     if (request.method == 'GET' &&
         request.url.path == '/drive/v3/files' &&
         (query.contains("name = 'daily-sync-v2-timetable.json'") ||
+            query.contains("name = 'daily-sync-v2-templates.json'") ||
             query.contains("name = 'daily-sync-v2-imogi.json'"))) {
       return _driveFiles([]);
     }
@@ -3055,6 +3040,7 @@ class _MemoryEventRepository implements EventRepository {
     required EventCategory updated,
     required DateTime updatedAt,
     void Function()? beforeWrite,
+    bool matchLegacyLabel = true,
   }) async {
     final affected = <CalendarEvent>[];
     for (final entry in _events.entries.toList()) {
@@ -3319,12 +3305,17 @@ void _latestMergeTests() {
 
         expect((await repository.findById('a'))!.title, 'Drive A');
         expect((await repository.findById('b'))!.title, 'Local B');
-        expect((drive.payload('file-b')['event'] as Map)['title'], 'Local B');
+        expect(
+          (drive.payload('file-b')['event'] as Map)['title'],
+          'Local B',
+        );
         expect((await repository.findById('c'))!.title, 'Same C');
         expect(drive.payload('file-c')['event'], isNotNull);
         final d = await repository.findById('d');
         expect(d == null || d.isDeleted, isTrue);
-        final uploaded = {for (final f in drive.files.values) f.name: f.data};
+        final uploaded = {
+          for (final f in drive.files.values) f.name: f.data,
+        };
         expect(
           (uploaded['daily-sync-v2-event-e.json']!['event'] as Map)['title'],
           'Only local E',
@@ -3378,7 +3369,10 @@ void _latestMergeTests() {
           ),
           isTrue,
         );
-        expect((await repository.findById('only-local'))!.syncStatus, 'synced');
+        expect(
+          (await repository.findById('only-local'))!.syncStatus,
+          'synced',
+        );
       },
     );
 
@@ -3423,67 +3417,62 @@ void _latestMergeTests() {
       },
     );
 
-    test(
-      'issue121 large backups split the name query and lose no event',
-      () async {
-        await settings.saveGoogleAccount(
-          const GoogleAccount(email: 'tester@example.com'),
+    test('issue121 large backups split the name query and lose no event', () async {
+      await settings.saveGoogleAccount(
+        const GoogleAccount(email: 'tester@example.com'),
+      );
+      const count = 150;
+      final ids = [for (var i = 0; i < count; i++) 'bulk-event-$i-${'x' * 20}'];
+      await repository.saveAllAtomically([
+        for (final id in ids)
+          _event(
+            id: id,
+            title: 'Local $id',
+            startAt: DateTime(2026, 9, 17),
+            endAt: DateTime(2026, 9, 18),
+            updatedAt: DateTime.utc(2026, 9, 15, 2),
+            syncStatus: 'pending',
+          ),
+      ]);
+      // Every second event already exists remotely with an older version.
+      for (var i = 0; i < count; i += 2) {
+        drive.seed(
+          'remote-$i',
+          'daily-sync-v2-event-${ids[i]}.json',
+          _eventFileJson(
+            id: ids[i],
+            title: 'Old $i',
+            startAt: '2026-09-17',
+            endAt: '2026-09-18',
+            updatedAt: '2026-09-15T01:00:00Z',
+          ),
         );
-        const count = 150;
-        final ids = [
-          for (var i = 0; i < count; i++) 'bulk-event-$i-${'x' * 20}',
-        ];
-        await repository.saveAllAtomically([
-          for (final id in ids)
-            _event(
-              id: id,
-              title: 'Local $id',
-              startAt: DateTime(2026, 9, 17),
-              endAt: DateTime(2026, 9, 18),
-              updatedAt: DateTime.utc(2026, 9, 15, 2),
-              syncStatus: 'pending',
-            ),
-        ]);
-        // Every second event already exists remotely with an older version.
-        for (var i = 0; i < count; i += 2) {
-          drive.seed(
-            'remote-$i',
-            'daily-sync-v2-event-${ids[i]}.json',
-            _eventFileJson(
-              id: ids[i],
-              title: 'Old $i',
-              startAt: '2026-09-17',
-              endAt: '2026-09-18',
-              updatedAt: '2026-09-15T01:00:00Z',
-            ),
-          );
-        }
+      }
 
-        await service.backupNow(eventIds: ids.toSet(), includeSettings: false);
+      await service.backupNow(eventIds: ids.toSet(), includeSettings: false);
 
-        final listQueries = [
-          for (final request in drive.requests)
-            if (request.method == 'GET' &&
-                request.url.path == '/drive/v3/files')
-              request.url.queryParameters['q'] ?? '',
-        ];
-        expect(listQueries.length, greaterThan(1));
-        expect(listQueries.every((q) => q.length <= 4100), isTrue);
-        for (var i = 0; i < count; i += 2) {
-          expect(
-            (drive.payload('remote-$i')['event'] as Map)['title'],
-            'Local ${ids[i]}',
-          );
-        }
-        final uploadedNames = {
-          for (final file in drive.files.values) file.name,
-        };
-        for (final id in ids) {
-          expect(uploadedNames, contains('daily-sync-v2-event-$id.json'));
-        }
-        expect(drive.files.length, count);
-      },
-    );
+      final listQueries = [
+        for (final request in drive.requests)
+          if (request.method == 'GET' &&
+              request.url.path == '/drive/v3/files')
+            request.url.queryParameters['q'] ?? '',
+      ];
+      expect(listQueries.length, greaterThan(1));
+      expect(listQueries.every((q) => q.length <= 4100), isTrue);
+      for (var i = 0; i < count; i += 2) {
+        expect(
+          (drive.payload('remote-$i')['event'] as Map)['title'],
+          'Local ${ids[i]}',
+        );
+      }
+      final uploadedNames = {
+        for (final file in drive.files.values) file.name,
+      };
+      for (final id in ids) {
+        expect(uploadedNames, contains('daily-sync-v2-event-$id.json'));
+      }
+      expect(drive.files.length, count);
+    });
 
     test(
       'LMS upload and compact deletions stay with owner while personal events still upload',

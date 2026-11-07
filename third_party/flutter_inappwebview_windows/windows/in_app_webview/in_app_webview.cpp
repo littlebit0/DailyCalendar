@@ -92,12 +92,10 @@ namespace flutter_inappwebview_plugin
                   return E_FAIL;
                 }
 
-                ICoreWebView2Controller3* webViewController3;
-                if (succeededOrLog(webViewController->QueryInterface(IID_PPV_ARGS(&webViewController3)))) {
-                  webViewController3->put_BoundsMode(COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS);
-                  webViewController3->put_ShouldDetectMonitorScaleChanges(FALSE);
-                  webViewController3->put_RasterizationScale(1.0);
-                }
+                // webViewController already owns the ICoreWebView2Controller3 reference; a raw re-query would leak one AddRef.
+                webViewController->put_BoundsMode(COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS);
+                webViewController->put_ShouldDetectMonitorScaleChanges(FALSE);
+                webViewController->put_RasterizationScale(1.0);
 
                 completionHandler(std::move(env), std::move(webViewController), std::move(compositionController));
                 return S_OK;
@@ -115,12 +113,10 @@ namespace flutter_inappwebview_plugin
                   return E_FAIL;
                 }
 
-                ICoreWebView2Controller3* webViewController3;
-                if (succeededOrLog(webViewController->QueryInterface(IID_PPV_ARGS(&webViewController3)))) {
-                  webViewController3->put_BoundsMode(COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS);
-                  webViewController3->put_ShouldDetectMonitorScaleChanges(FALSE);
-                  webViewController3->put_RasterizationScale(1.0);
-                }
+                // webViewController already owns the ICoreWebView2Controller3 reference; a raw re-query would leak one AddRef.
+                webViewController->put_BoundsMode(COREWEBVIEW2_BOUNDS_MODE_USE_RAW_PIXELS);
+                webViewController->put_ShouldDetectMonitorScaleChanges(FALSE);
+                webViewController->put_RasterizationScale(1.0);
 
                 completionHandler(std::move(env), std::move(webViewController), std::move(compositionController));
                 return S_OK;
