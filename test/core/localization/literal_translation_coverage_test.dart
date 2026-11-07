@@ -10,6 +10,9 @@ import 'package:flutter_test/flutter_test.dart';
 /// The first argument is scanned as a whole, so string literals chosen by a
 /// conditional (`context.tr(done ? '완료' : '미완료')`) are found as well.
 ///
+/// A bare identifier argument (`context.tr(_notice)`) is resolved to the
+/// `const`/`final` declaration of that name in the same file.
+///
 /// Limits: keys built at run time, adjacent-string concatenation and
 /// interpolated strings are not found by this scan.
 final _stringLiteral = RegExp(
@@ -45,10 +48,46 @@ String firstArgument(String source, int start) {
   return source.substring(start);
 }
 
+/// The initializer of the `const`/`final` variable [name] in [source].
+String? declarationOf(String source, String name) {
+  final match = RegExp(
+    '(?:const|final)\\s+(?:String\\s+)?${RegExp.escape(name)}\\s*=',
+  ).firstMatch(source);
+  if (match == null) return null;
+  var depth = 0;
+  String? quote;
+  for (var index = match.end; index < source.length; index++) {
+    final char = source[index];
+    if (quote != null) {
+      if (char == r'\') {
+        index++;
+      } else if (char == quote) {
+        quote = null;
+      }
+      continue;
+    }
+    switch (char) {
+      case "'" || '"':
+        quote = char;
+      case '(' || '[' || '{':
+        depth++;
+      case ')' || ']' || '}':
+        depth--;
+      case ';':
+        if (depth == 0) return source.substring(match.end, index);
+    }
+  }
+  return null;
+}
+
 Set<String> translationKeysIn(String source) {
   final keys = <String>{};
   for (final call in RegExp(r'\.tr\(').allMatches(source)) {
-    final argument = firstArgument(source, call.end);
+    var argument = firstArgument(source, call.end);
+    final identifier = RegExp(r'^\s*([A-Za-z_]\w*)\s*$').firstMatch(argument);
+    if (identifier != null) {
+      argument = declarationOf(source, identifier.group(1)!) ?? argument;
+    }
     for (final match in _stringLiteral.allMatches(argument)) {
       // A literal followed by `=>` is a switch pattern, not a displayed text.
       if (RegExp(r'^\s*=>').hasMatch(argument.substring(match.end))) continue;
@@ -80,6 +119,18 @@ void main() {
     expect(
       translationKeysIn("context.tr(switch (s) { '여름' => '여름계절학기', _ => '기타' })"),
       {'여름계절학기', '기타'},
+    );
+    expect(
+      translationKeysIn(
+        "Text(context.tr(_notice));\nconst _notice =\n    '안내 문구';",
+      ),
+      {'안내 문구'},
+    );
+    expect(
+      translationKeysIn(
+        "final status = busy ? '확인 중' : switch (s) { A.b => '완료', _ => '대기' };\nText(context.tr(status));",
+      ),
+      {'확인 중', '완료', '대기'},
     );
   });
 
