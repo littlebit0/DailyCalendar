@@ -3095,6 +3095,10 @@ class _CalendarWeekPage extends ConsumerWidget {
           return TimetableSchedule(
             days: days,
             events: visibleEvents,
+            showLectureModeChanges: lectureModeChangesShown(
+              settings,
+              searchQuery,
+            ),
             builder: (scheduleEvents, classActions) => ScheduleTimelineView(
               eventActions: _gatedClassActions(context, ref, classActions),
               days: days,
@@ -3474,6 +3478,10 @@ class _CalendarDayPage extends ConsumerWidget {
           return TimetableSchedule(
             days: [date],
             events: visibleEvents,
+            showLectureModeChanges: lectureModeChangesShown(
+              settings,
+              searchQuery,
+            ),
             builder: (scheduleEvents, classActions) => ScheduleTimelineView(
               eventActions: _gatedClassActions(context, ref, classActions),
               days: [date],
@@ -4618,8 +4626,9 @@ class _CalendarMonthPage extends ConsumerWidget {
               searchQuery,
             );
             final range = _monthRangeFor(month, settings.weekStartsOnMonday);
-            // Day panels add their own lecture-mode rows; callbacks keep the
-            // stored events so projections never reach manual ordering (#771).
+            // Day panels add their own lecture-mode rows, so date selection
+            // keeps the stored events. Drops get the displayed rows so the
+            // drop index matches; saved orders skip projections (#771).
             return LectureModeChanges(
               days: lectureModeChangesShown(settings, searchQuery)
                   ? _calendarDaysIn(range)
@@ -4685,7 +4694,7 @@ class _CalendarMonthPage extends ConsumerWidget {
                       event,
                       targetDate,
                       targetIndex,
-                      visibleEvents,
+                      displayEvents,
                       settings,
                     ),
               ),
@@ -4858,7 +4867,7 @@ class _CalendarMonthPage extends ConsumerWidget {
               )
               .toList();
       manualOrders[sourceKey] = CalendarManualEventOrder(
-        eventKeys: sourceEvents.map(calendarEventOrderKey).toList(),
+        eventKeys: _storedOrderKeys(sourceEvents),
         updatedAt: now,
         deviceId: deviceId,
       );
@@ -4889,7 +4898,7 @@ class _CalendarMonthPage extends ConsumerWidget {
     final insertionIndex = targetIndex.clamp(0, sortedTarget.length);
     sortedTarget.insert(insertionIndex, movedEvent);
     manualOrders[targetKey] = CalendarManualEventOrder(
-      eventKeys: sortedTarget.map(calendarEventOrderKey).toList(),
+      eventKeys: _storedOrderKeys(sortedTarget),
       updatedAt: now,
       deviceId: deviceId,
     );
@@ -4967,10 +4976,17 @@ Future<void> _handleCalendarEventDrop(
         rangeEnd,
         category: settings.holidayCategory,
       );
-  final visibleEvents = _filterVisibleEvents(
-    [...storedEvents, ...holidayEvents],
-    settings,
-    '',
+  if (!context.mounted) {
+    return;
+  }
+  // Lists show lecture-mode rows; include them so the drop index matches.
+  final visibleEvents = withLectureModeChanges(
+    context,
+    ref.read(timetableStoreProvider),
+    lectureModeChangesShown(settings, ref.read(calendarSearchQueryProvider))
+        ? [normalizedTarget]
+        : const [],
+    _filterVisibleEvents([...storedEvents, ...holidayEvents], settings, ''),
   );
   if (!context.mounted) {
     return;
@@ -5240,7 +5256,7 @@ Future<void> _saveCalendarManualOrderAfterDrop(
             )
             .toList();
     manualOrders[sourceKey] = CalendarManualEventOrder(
-      eventKeys: sourceEvents.map(calendarEventOrderKey).toList(),
+      eventKeys: _storedOrderKeys(sourceEvents),
       updatedAt: now,
       deviceId: deviceId,
     );
@@ -5270,7 +5286,7 @@ Future<void> _saveCalendarManualOrderAfterDrop(
   final insertionIndex = targetIndex.clamp(0, sortedTarget.length);
   sortedTarget.insert(insertionIndex, movedEvent);
   manualOrders[targetKey] = CalendarManualEventOrder(
-    eventKeys: sortedTarget.map(calendarEventOrderKey).toList(),
+    eventKeys: _storedOrderKeys(sortedTarget),
     updatedAt: now,
     deviceId: deviceId,
   );
@@ -8502,6 +8518,13 @@ CalendarRange _dayRangeFor(DateTime date) {
   return CalendarRange(start, shiftCalendarDateByDays(start, 1));
 }
 
+/// Manual order keys for stored events; timetable projections are positional
+/// only and never persisted (#771).
+List<String> _storedOrderKeys(Iterable<CalendarEvent> events) => [
+  for (final event in events)
+    if (!isTimetableProjection(event)) calendarEventOrderKey(event),
+];
+
 List<DateTime> _calendarDaysIn(CalendarRange range) => [
   for (
     var day = range.start;
@@ -8628,5 +8651,6 @@ Future<void> debugDropCalendarEventOnDate(
   BuildContext context,
   WidgetRef ref,
   CalendarEvent event,
-  DateTime targetDate,
-) => _handleCalendarEventDrop(context, ref, event, targetDate, 0);
+  DateTime targetDate, {
+  int targetIndex = 0,
+}) => _handleCalendarEventDrop(context, ref, event, targetDate, targetIndex);

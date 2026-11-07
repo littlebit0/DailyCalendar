@@ -39,10 +39,11 @@ List<ClassOccurrence> lectureModeChangeOccurrences(
 /// in the title ('강의명 영상 강의') so the change is visible without opening it.
 CalendarEvent timetableOccurrenceEvent(
   BuildContext context,
-  ClassOccurrence o,
-) => CalendarEvent(
+  ClassOccurrence o, {
+  bool showChange = true,
+}) => CalendarEvent(
   id: o.id,
-  title: isLectureModeChange(o)
+  title: showChange && isLectureModeChange(o)
       ? '${o.course.title} ${context.tr(lectureModeLabel(o.mode))}'
       : o.course.title,
   startAt: o.start,
@@ -138,10 +139,14 @@ class TimetableSchedule extends ConsumerWidget {
     required this.events,
     required this.builder,
     this.includeUnscheduled = false,
+    this.showLectureModeChanges = true,
   });
   final List<DateTime> days;
   final List<CalendarEvent> events;
   final bool includeUnscheduled;
+
+  /// See [lectureModeChangesShown]; false keeps the plain class blocks.
+  final bool showLectureModeChanges;
   final Widget Function(List<CalendarEvent>, Map<String, VoidCallback>) builder;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -159,7 +164,7 @@ class TimetableSchedule extends ConsumerWidget {
                 store.periodFor(course.academicYear, course.semester),
           ))
             if (includeUnscheduled ||
-                isLectureModeChange(o) ||
+                (showLectureModeChanges && isLectureModeChange(o)) ||
                 (o.mode != LectureMode.cancelled &&
                     o.mode != LectureMode.video))
               o,
@@ -168,7 +173,12 @@ class TimetableSchedule extends ConsumerWidget {
           [
             for (final event in events)
               if (!isTimetableProjection(event)) event,
-            for (final o in occurrences) timetableOccurrenceEvent(context, o),
+            for (final o in occurrences)
+              timetableOccurrenceEvent(
+                context,
+                o,
+                showChange: showLectureModeChanges,
+              ),
           ],
           {
             for (final o in occurrences)

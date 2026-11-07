@@ -221,6 +221,40 @@ void main() {
     expect(event.reminderMinutesBeforeList, isEmpty);
   });
 
+  testWidgets('schedule layouts keep plain class blocks while changes are '
+      'hidden by search or D-day only', (tester) async {
+    final settings = await _settings();
+    final store = await _seed(settings);
+    await store.setOverride('class', 'm', _today, LectureMode.liveOnline);
+    late List<CalendarEvent> rendered;
+    Future<void> pump(bool show) => tester.pumpWidget(
+      ProviderScope(
+        overrides: [
+          settingsRepositoryProvider.overrideWithValue(settings),
+          timetableStoreProvider.overrideWithValue(store),
+        ],
+        child: _localized(
+          TimetableSchedule(
+            days: [_today],
+            events: const [],
+            showLectureModeChanges: show,
+            builder: (events, _) {
+              rendered = events;
+              return const SizedBox();
+            },
+          ),
+        ),
+      ),
+    );
+    await pump(false);
+    expect(rendered.single.title, '자료구조');
+    await store.setOverride('class', 'm', _today, LectureMode.cancelled);
+    await tester.pump();
+    expect(rendered, isEmpty);
+    await pump(true);
+    expect(rendered.single.title, '자료구조 휴강');
+  });
+
   for (final (platform, size) in [
     (TargetPlatform.iOS, const Size(393, 852)),
     (TargetPlatform.macOS, const Size(1000, 800)),
