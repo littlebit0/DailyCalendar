@@ -10,7 +10,9 @@ import 'event_draft.dart';
 ///
 /// Copied into a new event: title, memo, location, URL, all-day flag, start
 /// time, end day offset and end time, category, reminders, D-day display,
-/// alarm and all-day alarm time. Never copied: event id, account/LMS source,
+/// alarm, all-day alarm time and alarm trigger (N minutes before, or a custom
+/// alarm time kept as the same wall-clock time and day offset from the start
+/// day, e.g. "the day before at 21:00"). Never copied: event id, account/LMS source,
 /// creation history, completion state, weather (date-specific) and recurrence.
 class EventTemplate {
   EventTemplate({
@@ -29,10 +31,15 @@ class EventTemplate {
     this.showDday = false,
     this.alarmEnabled = false,
     int allDayAlarmMinutes = 9 * 60,
+    int alarmMinutesBefore = 0,
+    this.alarmCustomDayOffset,
+    int? alarmCustomMinutes,
     this.favorite = false,
   }) : startMinutes = allDay ? 0 : startMinutes.clamp(0, 1439),
        endMinutes = allDay ? 0 : endMinutes.clamp(0, 1439),
        allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
+       alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
+       alarmCustomMinutes = alarmCustomMinutes?.clamp(0, 1439),
        reminderMinutesBeforeList = normalizeReminderMinutes(
          reminderMinutesBeforeList,
        );
@@ -63,7 +70,19 @@ class EventTemplate {
   final bool showDday;
   final bool alarmEnabled;
   final int allDayAlarmMinutes;
+
+  /// Same meaning as [CalendarEvent.alarmMinutesBefore]; 0 = 정시.
+  final int alarmMinutesBefore;
+
+  /// A custom alarm time as days from the start day (negative = before) and
+  /// minutes after midnight. Both null = no custom time; it overrides
+  /// [alarmMinutesBefore] like [CalendarEvent.alarmCustomAt].
+  final int? alarmCustomDayOffset;
+  final int? alarmCustomMinutes;
   final bool favorite;
+
+  bool get _hasCustomAlarm =>
+      alarmCustomDayOffset != null && alarmCustomMinutes != null;
 
   bool get isValid =>
       id.isNotEmpty &&
@@ -93,6 +112,7 @@ class EventTemplate {
     final endDay = draft.allDay
         ? DateTime(endAt.year, endAt.month, endAt.day - 1)
         : DateTime(endAt.year, endAt.month, endAt.day);
+    final customAt = draft.alarmCustomAt;
     return EventTemplate(
       id: id,
       name: name.trim(),
@@ -109,6 +129,13 @@ class EventTemplate {
       showDday: draft.showDday,
       alarmEnabled: draft.alarmEnabled,
       allDayAlarmMinutes: draft.allDayAlarmMinutes,
+      alarmMinutesBefore: draft.alarmMinutesBefore,
+      alarmCustomDayOffset: customAt == null
+          ? null
+          : _calendarDaysBetween(startDay, customAt),
+      alarmCustomMinutes: customAt == null
+          ? null
+          : customAt.hour * 60 + customAt.minute,
       favorite: favorite,
     );
   }
@@ -151,6 +178,16 @@ class EventTemplate {
       showDday: showDday,
       alarmEnabled: alarmEnabled,
       allDayAlarmMinutes: allDayAlarmMinutes,
+      alarmMinutesBefore: alarmMinutesBefore,
+      alarmCustomAt: _hasCustomAlarm
+          ? DateTime(
+              date.year,
+              date.month,
+              date.day + alarmCustomDayOffset!,
+              alarmCustomMinutes! ~/ 60,
+              alarmCustomMinutes! % 60,
+            )
+          : null,
     );
   }
 
@@ -194,6 +231,9 @@ class EventTemplate {
     showDday: showDday,
     alarmEnabled: alarmEnabled,
     allDayAlarmMinutes: allDayAlarmMinutes,
+    alarmMinutesBefore: alarmMinutesBefore,
+    alarmCustomDayOffset: alarmCustomDayOffset,
+    alarmCustomMinutes: alarmCustomMinutes,
     favorite: favorite ?? this.favorite,
   );
 
@@ -213,6 +253,12 @@ class EventTemplate {
     'showDday': showDday,
     'alarmEnabled': alarmEnabled,
     'allDayAlarmMinutes': allDayAlarmMinutes,
+    // Optional keys: absent means 정시, which older documents and apps assume.
+    if (alarmMinutesBefore != 0) 'alarmMinutesBefore': alarmMinutesBefore,
+    if (_hasCustomAlarm) ...{
+      'alarmCustomDayOffset': alarmCustomDayOffset,
+      'alarmCustomMinutes': alarmCustomMinutes,
+    },
     'favorite': favorite,
   };
 
@@ -240,6 +286,9 @@ class EventTemplate {
         showDday: json['showDday'] as bool? ?? false,
         alarmEnabled: json['alarmEnabled'] as bool? ?? false,
         allDayAlarmMinutes: json['allDayAlarmMinutes'] as int? ?? 9 * 60,
+        alarmMinutesBefore: json['alarmMinutesBefore'] as int? ?? 0,
+        alarmCustomDayOffset: json['alarmCustomDayOffset'] as int?,
+        alarmCustomMinutes: json['alarmCustomMinutes'] as int?,
         favorite: json['favorite'] as bool? ?? false,
       );
       return template.isValid ? template : null;

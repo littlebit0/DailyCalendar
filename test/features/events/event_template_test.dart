@@ -205,6 +205,92 @@ void main() {
     );
   });
 
+  group('EventTemplate alarm trigger (#776)', () {
+    EventDraft alarmDraft({int before = 0, DateTime? customAt}) => EventDraft(
+      title: '회의',
+      startAt: DateTime(2026, 3, 7, 19),
+      endAt: DateTime(2026, 3, 7, 20),
+      category: _workout,
+      alarmEnabled: true,
+      alarmMinutesBefore: before,
+      alarmCustomAt: customAt,
+    );
+
+    test('"N분 전" is copied into events made from the template', () {
+      final template = EventTemplate.fromDraft(
+        alarmDraft(before: 10),
+        id: 'm',
+        name: '회의',
+      );
+      final draft = template.draftOn(DateTime(2026, 11, 2), _workout);
+      expect(draft.alarmEnabled, isTrue);
+      expect(draft.alarmMinutesBefore, 10);
+      expect(draft.alarmCustomAt, isNull);
+      expect(
+        draft.toEvent(id: 'e', now: DateTime(2026), deviceId: 'd').alarmFireAt,
+        DateTime(2026, 11, 2, 18, 50),
+      );
+    });
+
+    test('a custom alarm keeps its wall-clock time and day offset', () {
+      final template = EventTemplate.fromDraft(
+        alarmDraft(customAt: DateTime(2026, 3, 6, 21, 30)),
+        id: 'm',
+        name: '회의',
+      );
+      expect(template.alarmCustomDayOffset, -1);
+      expect(template.alarmCustomMinutes, 21 * 60 + 30);
+      // Applied across a month end and a DST period: the day before, 21:30.
+      final draft = template.draftOn(DateTime(2026, 11, 1), _workout);
+      expect(draft.alarmCustomAt, DateTime(2026, 10, 31, 21, 30));
+      // Editing the template round-trips the same rule.
+      final edited = EventTemplate.fromDraft(draft, id: 'm', name: '회의');
+      expect(edited.toJson(), template.toJson());
+    });
+
+    test('json round trip keeps the alarm trigger', () {
+      for (final template in [
+        EventTemplate.fromDraft(alarmDraft(before: 1440), id: 'a', name: 'a'),
+        EventTemplate.fromDraft(
+          alarmDraft(customAt: DateTime(2026, 3, 9, 8)),
+          id: 'b',
+          name: 'b',
+        ),
+      ]) {
+        final restored = EventTemplate.tryFromJson(
+          jsonDecode(jsonEncode(template.toJson())),
+        )!;
+        expect(restored.alarmMinutesBefore, template.alarmMinutesBefore);
+        expect(restored.alarmCustomDayOffset, template.alarmCustomDayOffset);
+        expect(restored.alarmCustomMinutes, template.alarmCustomMinutes);
+      }
+    });
+
+    test('documents without the new keys keep ringing at the start', () {
+      final legacy = {
+        'id': 'old',
+        'name': '예전',
+        'title': '예전',
+        'allDay': false,
+        'startMinutes': 9 * 60,
+        'endDayOffset': 0,
+        'endMinutes': 10 * 60,
+        'categoryId': _workout.id,
+        'reminderMinutesBeforeList': [10],
+        'showDday': false,
+        'alarmEnabled': true,
+        'allDayAlarmMinutes': 9 * 60,
+        'favorite': false,
+      };
+      final template = EventTemplate.tryFromJson(legacy)!;
+      final draft = template.draftOn(DateTime(2026, 11, 2), _workout);
+      expect(draft.alarmMinutesBefore, 0);
+      expect(draft.alarmCustomAt, isNull);
+      // A template without an alarm trigger writes exactly the old keys.
+      expect(template.toJson(), legacy);
+    });
+  });
+
   group('EventTemplateStore', () {
     late SharedPreferences preferences;
     String? owner;
@@ -278,6 +364,28 @@ void main() {
         await templates.acknowledgeSyncDocument(merged);
         expect(templates.templates.single.name, 'remote');
         expect(templates.hasPendingSync, isFalse);
+
+        // A newer remote write carrying the alarm trigger keeps it.
+        final withAlarm = EventTemplate.tryFromJson({
+          ..._template(id: 'a', name: 'remote').toJson(),
+          'alarmMinutesBefore': 30,
+          'alarmCustomDayOffset': 0,
+          'alarmCustomMinutes': 18 * 60,
+        })!;
+        await templates.mergeSyncDocument(
+          merged.withField(
+            EventTemplateStore.templateKey('a'),
+            SettingsSyncValue(
+              withAlarm.toJson(),
+              now.add(const Duration(minutes: 2)),
+              'device-b',
+            ),
+          ),
+        );
+        final stored = store().templates.single;
+        expect(stored.alarmMinutesBefore, 30);
+        expect(stored.alarmCustomDayOffset, 0);
+        expect(stored.alarmCustomMinutes, 18 * 60);
 
         // An older remote write does not undo a newer local delete.
         now = now.add(const Duration(minutes: 5));
