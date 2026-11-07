@@ -10765,6 +10765,7 @@ class _FakeEventRepository implements EventRepository {
     required EventCategory updated,
     required DateTime updatedAt,
     void Function()? beforeWrite,
+    bool matchLegacyLabel = true,
   }) async {
     if (failCategoryUpdate) throw StateError('event rows were not updated');
     final affected = <CalendarEvent>[];

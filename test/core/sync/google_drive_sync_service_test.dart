@@ -632,6 +632,8 @@ void main() {
             syncStatus: 'pending',
           ).copyWith(
             completed: true,
+            alarmMinutesBefore: 30,
+            alarmCustomAt: DateTime.utc(2026, 6, 19, 22),
             recurrence: const RecurrenceRule(
               frequency: RecurrenceFrequency.monthly,
               anchorDay: 31,
@@ -706,6 +708,8 @@ void main() {
       expect(event['completed'], isTrue);
       expect(event['recurrenceAnchorDay'], 31);
       expect(event['recurrenceDetails'], '{"byDay":["MO","WE"]}');
+      expect(event['alarmMinutesBefore'], 30);
+      expect(event['alarmCustomAt'], '2026-06-19T22:00:00.000Z');
       expect((await repository.findById('queued-event'))!.syncStatus, 'synced');
       expect(
         requests.any(
@@ -2852,13 +2856,13 @@ MockClient _versionedClient(
 ) {
   final bodies = <String, http.Response>{};
   return MockClient((request) async {
-    // These event/settings fixtures predate timetable storage. Model an empty
-    // timetable namespace; its transport and bootstrap have dedicated tests.
+    // These event/settings fixtures predate timetable and template storage.
+    // Model empty namespaces; their transport and bootstrap have dedicated tests.
+    final query = request.url.queryParameters['q'] ?? '';
     if (request.method == 'GET' &&
         request.url.path == '/drive/v3/files' &&
-        (request.url.queryParameters['q'] ?? '').contains(
-          "name = 'daily-sync-v2-timetable.json'",
-        )) {
+        (query.contains("name = 'daily-sync-v2-timetable.json'") ||
+            query.contains("name = 'daily-sync-v2-templates.json'"))) {
       return _driveFiles([]);
     }
     if (request.url.path.startsWith('/drive/v2/files/')) {
@@ -3034,6 +3038,7 @@ class _MemoryEventRepository implements EventRepository {
     required EventCategory updated,
     required DateTime updatedAt,
     void Function()? beforeWrite,
+    bool matchLegacyLabel = true,
   }) async {
     final affected = <CalendarEvent>[];
     for (final entry in _events.entries.toList()) {

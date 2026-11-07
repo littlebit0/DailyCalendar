@@ -140,11 +140,12 @@ class TodoDatabaseMigrationService {
       }
 
       // Schema 8 already has Todo completion, exact sync timestamps and compact
-      // deletions. Schemas 9-11 only add nullable columns (LMS metadata, the
-      // recurrence anchor day, recurrence details): they must not repeat the old
-      // cloud migration or turn every unchanged event into an upload.
+      // deletions. Schemas 9-12 only add nullable or defaulted columns (LMS
+      // metadata, the recurrence anchor day, recurrence details, alarm timing):
+      // they must not repeat the old cloud migration or turn every unchanged
+      // event into an upload.
       final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 11;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 12;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
@@ -442,6 +443,8 @@ class TodoDatabaseMigrationService {
     completed: row['completed'] == 1,
     alarmEnabled: row['alarm_enabled'] == 1,
     allDayAlarmMinutes: row['all_day_alarm_minutes'] as int? ?? 540,
+    alarmMinutesBefore: row['alarm_minutes_before'] as int? ?? 0,
+    alarmCustomAt: _dateFromSql(row['alarm_custom_at']),
   ).toDomain();
 
   List<CalendarEvent> _remoteWinners(
@@ -488,7 +491,8 @@ class TodoDatabaseMigrationService {
         recurrence_anchor_day, recurrence_details,
         recurrence_excluded_dates, created_at, updated_at, deleted_at,
         device_id, sync_status, show_dday, completed, alarm_enabled,
-        all_day_alarm_minutes, lms_metadata
+        all_day_alarm_minutes, alarm_minutes_before, alarm_custom_at,
+        lms_metadata
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
         ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
@@ -520,6 +524,8 @@ class TodoDatabaseMigrationService {
         completed = excluded.completed,
         alarm_enabled = excluded.alarm_enabled,
         all_day_alarm_minutes = excluded.all_day_alarm_minutes,
+        alarm_minutes_before = excluded.alarm_minutes_before,
+        alarm_custom_at = excluded.alarm_custom_at,
         lms_metadata = excluded.lms_metadata
       ''',
       [
@@ -554,6 +560,10 @@ class TodoDatabaseMigrationService {
         normalized.completed ? 1 : 0,
         normalized.alarmEnabled ? 1 : 0,
         normalized.allDayAlarmMinutes,
+        normalized.alarmMinutesBefore,
+        normalized.alarmCustomAt == null
+            ? null
+            : _dateToSql(normalized.alarmCustomAt!),
         normalized.lms == null ? null : jsonEncode(normalized.lms!.toJson()),
       ],
     );

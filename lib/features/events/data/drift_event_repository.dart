@@ -243,10 +243,12 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
     required EventCategory updated,
     required DateTime updatedAt,
     void Function()? beforeWrite,
+    bool matchLegacyLabel = true,
   }) async {
+    // Legacy rows stored the display label instead of the category ID.
     final previousStoredValues = {
       previous.id,
-      previous.label,
+      if (matchLegacyLabel) previous.label,
     }.where((value) => value.trim().isNotEmpty).toList();
     if (previousStoredValues.isEmpty) {
       return const [];
@@ -534,6 +536,8 @@ class DriftEventRepository implements EventRepository, EventSyncMaintenance {
       completed: Value(event.completed),
       alarmEnabled: Value(event.alarmEnabled),
       allDayAlarmMinutes: Value(event.allDayAlarmMinutes),
+      alarmMinutesBefore: Value(event.alarmMinutesBefore),
+      alarmCustomAt: Value(event.alarmCustomAt),
     );
   }
 }

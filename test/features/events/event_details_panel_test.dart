@@ -1440,6 +1440,7 @@ class _SingleEventRepository implements EventRepository {
     required EventCategory updated,
     required DateTime updatedAt,
     void Function()? beforeWrite,
+    bool matchLegacyLabel = true,
   }) async {
     await findById(previous.id);
     beforeResolve?.call();

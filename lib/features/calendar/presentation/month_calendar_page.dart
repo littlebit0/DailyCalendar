@@ -39,6 +39,7 @@ import '../../events/presentation/event_details_panel.dart';
 import '../../events/presentation/day_sheet_scroll_physics.dart';
 import '../../events/presentation/day_sheet_drag_release.dart';
 import '../../events/presentation/event_editor_dialog.dart';
+import '../../events/presentation/event_template_actions.dart';
 import '../../settings/presentation/settings_page.dart';
 import '../widgets/calendar_event_drag_layer.dart';
 import '../widgets/calendar_month_grid.dart';
@@ -5255,6 +5256,9 @@ Future<void> _openRangeEventEditor(
         )
         .catchError((_) {}),
   );
+  final templateOptions = eventTemplateEditorOptions(context, ref);
+  // A quick add saves the event itself and closes the editor without a draft.
+  var quickAdded = false;
   final draft = await showDialog<EventDraft>(
     context: context,
     builder: (_) => EventEditorDialog(
@@ -5262,6 +5266,12 @@ Future<void> _openRangeEventEditor(
       loadPlaceEvents: ref
           .read(visibleEventRepositoryProvider)
           .allEventsForSync,
+      templates: templateOptions.templates,
+      onQuickAdd: (template, date) async {
+        await templateOptions.onQuickAdd(template, date);
+        quickAdded = true;
+      },
+      onSaveTemplate: templateOptions.onSaveTemplate,
       initialDate: start,
       initialEndDate: end,
       initialAllDay: true,
@@ -5276,7 +5286,7 @@ Future<void> _openRangeEventEditor(
         .record(
           AnalyticsRecord.eventEditorCompleted(
             AnalyticsEditorMode.create,
-            outcome: draft == null
+            outcome: draft == null && !quickAdded
                 ? AnalyticsOutcome.canceled
                 : AnalyticsOutcome.succeeded,
             durationMs: stopwatch.elapsedMilliseconds,
