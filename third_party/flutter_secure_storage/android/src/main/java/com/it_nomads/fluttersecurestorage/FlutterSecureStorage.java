@@ -110,6 +110,8 @@ public class FlutterSecureStorage {
     public void write(String key, String value) throws Exception {
         try {
             writeUnsafe(key, value);
+        } catch (DurableEdit.PersistenceException e) {
+            throw e; // Disk failure, not corrupt data: never delete the stored value to recover.
         } catch (Exception e) {
             if (handleStorageError("write", key, e)) {
                 writeUnsafe(key, value); // Retry after deleting corrupted data
@@ -120,27 +122,20 @@ public class FlutterSecureStorage {
     }
 
     private void writeUnsafe(String key, String value) throws Exception {
-        SharedPreferences.Editor editor = preferences.edit();
-
         if (config.isUseEncryptedSharedPreferences() && !config.shouldMigrateOnAlgorithmChange()) {
-            editor.putString(key, value);
+            DurableEdit.putString(preferences, key, value);
         } else {
             byte[] result = storageCipher.encrypt(value.getBytes(charset));
-            editor.putString(key, Base64.encodeToString(result, 0));
+            DurableEdit.putString(preferences, key, Base64.encodeToString(result, 0));
         }
-        editor.apply();
     }
 
-    public void delete(String key) {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.remove(key);
-        editor.apply();
+    public void delete(String key) throws DurableEdit.PersistenceException {
+        DurableEdit.remove(preferences, key);
     }
 
-    public void deleteAll() {
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear();
-        editor.apply();
+    public void deleteAll() throws DurableEdit.PersistenceException {
+        DurableEdit.clear(preferences);
     }
 
     public void initialize(FlutterSecureStorageConfig config, SecurePreferencesCallback<Void> callback) {

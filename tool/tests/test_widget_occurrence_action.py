@@ -6,6 +6,15 @@ import tempfile
 import unittest
 ROOT = Path(__file__).resolve().parents[2]
 
+
+def shared_store_block():
+    """Production namespace helper (#388); the namespace comes from DAILY_TEST_NAMESPACE."""
+    widget = (ROOT / 'apple_widgets/DailyWidgets.swift').read_text()
+    block = widget.split('// BEGIN DAILY SHARED STORE NAMESPACE', 1)[1].split('// END DAILY SHARED STORE NAMESPACE', 1)[0]
+    lookup = '(Bundle.main.object(forInfoDictionaryKey: "DailySharedStoreNamespace") as? String)'
+    assert lookup in block
+    return block.replace(lookup, 'ProcessInfo.processInfo.environment["DAILY_TEST_NAMESPACE"]') + '\n'
+
 class WidgetOccurrenceActionTest(unittest.TestCase):
     @unittest.skipUnless(shutil.which('swiftc'), 'Swift compiler required')
     def test_selected_occurrence_only(self):
@@ -38,7 +47,7 @@ print("widget occurrence checks passed")
 '''
         with tempfile.TemporaryDirectory() as d:
             path = Path(d)
-            (path / 'main.swift').write_text(harness + store)
+            (path / 'main.swift').write_text(harness.replace('import Foundation\n', 'import Foundation\n' + shared_store_block(), 1) + store)
             compiled = subprocess.run(['swiftc', str(path / 'main.swift'), '-o', str(path / 'test')], capture_output=True, text=True)
             self.assertEqual(compiled.returncode, 0, compiled.stderr)
             result = subprocess.run([str(path / 'test'), d], capture_output=True, text=True)
@@ -93,7 +102,7 @@ if mode == "append" {
 ''' % app['ios/Runner/AppDelegate.swift']
         with tempfile.TemporaryDirectory() as d:
             path = Path(d)
-            (path / 'main.swift').write_text(harness + store)
+            (path / 'main.swift').write_text(harness.replace('import Foundation\n', 'import Foundation\n' + shared_store_block(), 1) + store)
             compiled = subprocess.run(['swiftc', str(path / 'main.swift'), '-o', str(path / 'test')], capture_output=True, text=True)
             self.assertEqual(compiled.returncode, 0, compiled.stderr)
             work = path / 'container'
@@ -126,7 +135,7 @@ print("done")
 '''
         with tempfile.TemporaryDirectory() as d:
             path = Path(d)
-            (path / 'main.swift').write_text(harness + store)
+            (path / 'main.swift').write_text(harness.replace('import Foundation\n', 'import Foundation\n' + shared_store_block(), 1) + store)
             compiled = subprocess.run(['swiftc', str(path / 'main.swift'), '-o', str(path / 'test')], capture_output=True, text=True)
             self.assertEqual(compiled.returncode, 0, compiled.stderr)
             work = path / 'container'

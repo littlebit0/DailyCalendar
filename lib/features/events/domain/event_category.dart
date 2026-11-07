@@ -138,15 +138,36 @@ class EventCategory {
     return basic;
   }
 
+  /// [existing] holds the other categories already saved. When the hashed id
+  /// is held by a category with a different name, a numbered suffix is added
+  /// so that category is not silently replaced. A same-name category keeps
+  /// sharing its id, and ids already saved are never regenerated.
   static EventCategory custom({
     required String label,
     required int colorValue,
+    Iterable<EventCategory> existing = const [],
   }) {
-    return EventCategory(
-      id: _customId(label),
-      label: label.trim(),
-      colorValue: colorValue,
+    final name = label.trim().toLowerCase();
+    final baseId = _customId(label);
+    // Reuse a same-name category anywhere in this hash's id chain first, so a
+    // freed lower slot does not split one name across two ids.
+    final sameName = existing.where(
+      (category) =>
+          (category.id == baseId || category.id.startsWith('${baseId}_')) &&
+          category.label.trim().toLowerCase() == name,
     );
+    if (sameName.isNotEmpty) {
+      return EventCategory(
+        id: sameName.first.id,
+        label: label.trim(),
+        colorValue: colorValue,
+      );
+    }
+    var id = baseId;
+    for (var suffix = 2; existing.any((c) => c.id == id); suffix++) {
+      id = '${baseId}_$suffix';
+    }
+    return EventCategory(id: id, label: label.trim(), colorValue: colorValue);
   }
 
   static String _customId(String value) {

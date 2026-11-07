@@ -121,6 +121,32 @@ void main() {
       ),
       DateTime(2026, 10, 12, 10),
     );
+    // Rules whose later periods never match end at the start occurrence
+    // instead of walking past the representable date range.
+    for (final interval in [1, 2]) {
+      for (final rule in [
+        RecurrenceRule(
+          frequency: RecurrenceFrequency.yearly,
+          interval: interval,
+          until: DateTime(2030, 1, 1),
+          byMonth: const [2],
+          byMonthDay: const [30],
+        ),
+        RecurrenceRule(
+          frequency: RecurrenceFrequency.yearly,
+          interval: interval,
+          count: 3,
+          byMonth: const [2],
+          byMonthDay: const [30],
+        ),
+      ]) {
+        expect(
+          expander.lastPlannedEnd(event(rule)),
+          DateTime(2026, 10, 5, 10),
+          reason: 'interval $interval, count ${rule.count}',
+        );
+      }
+    }
   });
 
   for (final item in cases) {

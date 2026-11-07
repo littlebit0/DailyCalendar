@@ -16,7 +16,30 @@ private let appGroup = "group.com.littlebit0.daily.widgets"
 #endif
 private let snapshotFileName = "daily-widget-snapshot.json"
 private let todoActionsFileName = "daily-widget-todo-actions.json"
-private let todoActionsChangedNotification = "com.littlebit0.daily.widgetTodoActionsChanged"
+private let todoActionsChangedNotification = dailySharedStoreNotificationName(
+  "com.littlebit0.daily.widgetTodoActionsChanged"
+)
+
+// BEGIN DAILY SHARED STORE NAMESPACE
+// The App Store and test builds share one App Group. Each build passes its own
+// DailySharedStoreNamespace (empty for the App Store build, which keeps the
+// group root) so snapshots, queues, locks and notifications never cross (#388).
+private let dailySharedStoreNamespace =
+  (Bundle.main.object(forInfoDictionaryKey: "DailySharedStoreNamespace") as? String)?
+    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+private func dailySharedStoreDirectory(_ groupURL: URL?) -> URL? {
+  guard let groupURL else { return nil }
+  guard !dailySharedStoreNamespace.isEmpty else { return groupURL }
+  let directory = groupURL.appendingPathComponent(dailySharedStoreNamespace, isDirectory: true)
+  try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+  return directory
+}
+
+private func dailySharedStoreNotificationName(_ base: String) -> String {
+  dailySharedStoreNamespace.isEmpty ? base : "\(base).\(dailySharedStoreNamespace)"
+}
+// END DAILY SHARED STORE NAMESPACE
 private enum DailyWidgetKind {
   static let today = "DailyTodayWidget"
   static let calendar = "DailyMonthWidget"
@@ -52,9 +75,9 @@ struct DailyWidgetMonthEvent: Codable, Identifiable {
 
 private enum DailyWidgetTodoActionStore {
   static func append(eventId: String, completed: Bool, occurrenceId: String? = nil) throws {
-    guard let containerURL = FileManager.default.containerURL(
+    guard let containerURL = dailySharedStoreDirectory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
-    ) else {
+    )) else {
       throw NSError(
         domain: "DailyWidgets",
         code: 1,
@@ -345,7 +368,7 @@ private struct DailyWidgetEventLabel: View {
       .font(.system(size: fontSize, weight: .medium))
       .dailyTodoCompletion(
         event.completed == true,
-        category: event.color, backgroundAlpha: 0.18
+        category: event.color, backgroundAlpha: 0.18, palette: colors
       )
       .lineLimit(1)
       .minimumScaleFactor(0.7)
@@ -541,9 +564,9 @@ struct DailyWidgetSnapshot: Codable {
   }
 
   private static func storedJSON() -> [String: Any]? {
-    guard let containerURL = FileManager.default.containerURL(
+    guard let containerURL = dailySharedStoreDirectory(FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: appGroup
-          ),
+          )),
           let data = try? Data(contentsOf: containerURL.appendingPathComponent(snapshotFileName)) else {
       return nil
     }
@@ -551,9 +574,9 @@ struct DailyWidgetSnapshot: Codable {
   }
 
   private static func loadStored() -> DailyWidgetSnapshot {
-    guard let containerURL = FileManager.default.containerURL(
+    guard let containerURL = dailySharedStoreDirectory(FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: appGroup
-          ),
+          )),
           let data = try? Data(
             contentsOf: containerURL.appendingPathComponent(snapshotFileName),
             options: .mappedIfSafe
@@ -1052,9 +1075,10 @@ private struct DailyWidgetBackgroundModifier: ViewModifier {
 
 private extension View {
   func dailyTodoCompletion(_ completed: Bool, category: Int,
-                           backgroundAlpha: Double = 0, systemManaged: Bool = false) -> some View {
+                           backgroundAlpha: Double = 0, systemManaged: Bool = false,
+                           palette: DailyEventPalette.Palette? = nil) -> some View {
     modifier(DailyCompletionModifier(completed: completed, category: category,
-      backgroundAlpha: backgroundAlpha, systemManaged: systemManaged))
+      backgroundAlpha: backgroundAlpha, systemManaged: systemManaged, palette: palette))
   }
 
   func dailyWidgetBackground(themeMode: String?) -> some View {
@@ -1069,6 +1093,8 @@ private struct DailyCompletionModifier: ViewModifier {
   let category: Int
   let backgroundAlpha: Double
   let systemManaged: Bool
+  /// Palette the caller already resolved for the same category, alpha and appearance.
+  let palette: DailyEventPalette.Palette?
 
   @ViewBuilder
   func body(content: Content) -> some View {
@@ -1077,9 +1103,11 @@ private struct DailyCompletionModifier: ViewModifier {
       // wallpaper is unavailable, so use the OS foreground and native line.
       content.foregroundStyle(.primary).strikethrough(completed, color: colorScheme == .dark ? .white : .black)
     } else {
-      let surface = colorScheme == .dark ? 0xff000000 : 0xffffffff
-      let background = DailyEventPalette.blend(category, on: surface, alpha: backgroundAlpha)
-      let colors = DailyEventPalette.resolve(category: category | 0xff000000, background: background)
+      let colors = palette ?? {
+        let surface = colorScheme == .dark ? 0xff000000 : 0xffffffff
+        let background = DailyEventPalette.blend(category, on: surface, alpha: backgroundAlpha)
+        return DailyEventPalette.resolve(category: category | 0xff000000, background: background)
+      }()
       content.foregroundStyle(Color.daily(argb: colors.foreground))
         .background(Color.daily(argb: colors.background))
         // Keep a visible line in both appearances and at small month-label sizes.

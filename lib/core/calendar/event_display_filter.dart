@@ -2,6 +2,17 @@ import '../../features/events/domain/calendar_event.dart';
 import '../settings/app_settings.dart';
 import 'calendar_event_ordering.dart';
 
+/// Whether [filterVisibleCalendarEvents] currently restricts anything, so the
+/// header filter button reflects every applied condition, not only search.
+/// Hidden ids of categories that no longer exist cannot be cleared from the
+/// filter sheet and hide nothing, so they do not count.
+bool calendarDisplayFilterActive(AppSettings settings, String searchQuery) {
+  if (searchQuery.trim().isNotEmpty) return true;
+  if (!settings.calendarShowHolidays || settings.calendarDdayOnly) return true;
+  final hidden = settings.hiddenCategoryIds.toSet();
+  return settings.categories.any((category) => hidden.contains(category.id));
+}
+
 /// The calendar's display policy (hidden categories, holidays, D-day only and
 /// the current search). The month grid and the day panel both apply it, so a
 /// live database result never shows what the calendar itself hides.

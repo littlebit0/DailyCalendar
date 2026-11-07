@@ -154,6 +154,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       );
     });
     _appVersionInfo = _loadAppVersionInfo();
+    // The saved account is local state, so it is shown before any provider
+    // restoration or secure storage lookup finishes or fails.
+    _dailyAccount = ref.read(settingsRepositoryProvider).dailyAccount();
+    Future.microtask(_loadGeminiApiKey);
     Future.microtask(() async {
       if (!mounted) return;
       // Capture services before the first await: ref is unusable once the
@@ -161,7 +165,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       final settingsRepository = ref.read(settingsRepositoryProvider);
       final googleDriveAuthService = ref.read(googleDriveAuthServiceProvider);
       final appleSignInService = ref.read(appleSignInServiceProvider);
-      final key = await settingsRepository.geminiApiKey();
       AppleAccount? appleAccount;
       GoogleDriveAccount? googleDriveAccount;
       var dailyAccount = settingsRepository.dailyAccount();
@@ -194,7 +197,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         appleAccount = appleSignInService.currentAccount;
       }
       if (mounted) {
-        _apiKeyController.text = key ?? '';
         setState(() {
           _appleAccount = appleAccount;
           _googleDriveAccount = googleDriveAccount;
@@ -215,6 +217,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         });
       }
     });
+  }
+
+  Future<void> _loadGeminiApiKey() async {
+    if (!mounted) return;
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    try {
+      final key = await settingsRepository.geminiApiKey();
+      if (mounted) {
+        _apiKeyController.text = key ?? '';
+      }
+    } on Object {
+      // A secure storage failure only leaves the key field empty; reopening
+      // the settings page reads it again. Account state does not depend on it.
+    }
   }
 
   @override
@@ -1908,7 +1924,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Future<void> _addCategory(AppSettings settings) async {
-    final category = await _showCategoryDialog(context);
+    final category = await _showCategoryDialog(
+      context,
+      existingCategories: settings.categories,
+    );
     if (category == null) {
       return;
     }
@@ -1991,6 +2010,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final updatedCategory = await _showCategoryDialog(
       context,
       initialCategory: category,
+      // The edited category keeps its own id when the new name hashes to it.
+      existingCategories: settings.categories.where(
+        (item) => item.id != category.id,
+      ),
     );
     if (updatedCategory == null) {
       return;
@@ -4562,10 +4585,14 @@ class _SyncStatusTile extends StatelessWidget {
 Future<EventCategory?> _showCategoryDialog(
   BuildContext context, {
   EventCategory? initialCategory,
+  required Iterable<EventCategory> existingCategories,
 }) async {
   return showDialog<EventCategory>(
     context: context,
-    builder: (context) => _CategoryDialog(initialCategory: initialCategory),
+    builder: (context) => _CategoryDialog(
+      initialCategory: initialCategory,
+      existingCategories: existingCategories.toList(),
+    ),
   );
 }
 
@@ -4630,9 +4657,13 @@ Widget _settingsDialogTitle(
 }
 
 class _CategoryDialog extends StatefulWidget {
-  const _CategoryDialog({required this.initialCategory});
+  const _CategoryDialog({
+    required this.initialCategory,
+    required this.existingCategories,
+  });
 
   final EventCategory? initialCategory;
+  final List<EventCategory> existingCategories;
 
   @override
   State<_CategoryDialog> createState() => _CategoryDialogState();
@@ -4719,7 +4750,11 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                 initialCategory == null ||
                     (initialCategory.id != EventCategory.basic.id &&
                         initialCategory.id != EventCategory.holiday.id)
-                ? EventCategory.custom(label: label, colorValue: _selectedColor)
+                ? EventCategory.custom(
+                    label: label,
+                    colorValue: _selectedColor,
+                    existing: widget.existingCategories,
+                  )
                 : initialCategory.copyWith(
                     label: label,
                     colorValue: _selectedColor,

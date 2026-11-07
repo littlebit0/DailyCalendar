@@ -107,6 +107,7 @@ class CalendarEventDraggable extends StatelessWidget {
     this.compactFeedbackListenable,
     this.feedbackSpecListenable,
     this.origin = CalendarEventDragOrigin.calendar,
+    this.sourceStartOffset = Duration.zero,
   });
 
   final CalendarEvent event;
@@ -124,6 +125,9 @@ class CalendarEventDraggable extends StatelessWidget {
   final ValueListenable<bool>? compactFeedbackListenable;
   final ValueListenable<CalendarEventDragFeedbackSpec>? feedbackSpecListenable;
   final CalendarEventDragOrigin origin;
+
+  /// See [CalendarEventDragPayload.sourceStartOffset].
+  final Duration sourceStartOffset;
 
   @override
   Widget build(BuildContext context) {
@@ -206,8 +210,13 @@ class CalendarEventDraggable extends StatelessWidget {
             reportVisualEnd();
           }
 
+          final payload = CalendarEventDragPayload(
+            event,
+            origin: origin,
+            sourceStartOffset: sourceStartOffset,
+          );
           return LongPressDraggable<CalendarEventDragPayload>(
-            data: CalendarEventDragPayload(event, origin: origin),
+            data: payload,
             delay: const Duration(milliseconds: 320),
             allowedButtonsFilter: (buttons) =>
                 (buttons & kPrimaryMouseButton) != 0,
@@ -215,6 +224,7 @@ class CalendarEventDraggable extends StatelessWidget {
               final box = sourceContext.findRenderObject()! as RenderBox;
               sourceSize = box.size;
               grabOffset = box.globalToLocal(position);
+              payload.grabOffset = grabOffset;
               // Drop handlers receive pointer coordinates, not card coordinates.
               return Offset.zero;
             },
