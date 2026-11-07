@@ -20,6 +20,12 @@
   2026-10-13): the user copies or pastes the file. Each report has fingerprint,
   first/last time, occurrences, build/OS environments, masked message and stack;
   format in docs/ANALYTICS_DEPLOYMENT.md "From stored reports to GitHub issues".
+- Manual bug reports (user decision 2026-11-07) are no longer GitHub issues:
+  `BugReportStore` keeps masked text + environment + verified contact email in
+  `bug-reports-state.sqlite` and `bug-reports-YYYY-MM-DD.json` (0600, 90 days);
+  the app shows a report ID. Legacy `bug-report-contacts/`/`bug-report-requests/`
+  are only expired (365 days). `DAILY_GITHUB_TOKEN` is no longer used anywhere;
+  the host's `~/.config/daily/bug-report.env` can be removed and the token revoked.
   NOT deployed to the Ubuntu host yet; copy the file and restart
   `daily-analytics.service` (docs/ANALYTICS_DEPLOYMENT.md).
 - Shared Dart code: Mac/iPhone/Windows/Android behavior identical; no device

@@ -46,30 +46,23 @@ has an active Google session.
 
 The app sends its Google bearer token to `/v1/bug-reports`. The receiver uses it
 once with Google's OpenID Connect UserInfo endpoint, requires a verified email,
-and never writes the bearer token to disk or logs. It then creates an issue in
-`littlebit0/DailyCalendar` using a server-side GitHub credential owned by the
-`littlebit0` account. The public issue contains the report and app environment,
-but not the user's email address.
+and never writes the bearer token to disk or logs. Reports are not published
+and no GitHub credential is used: the receiver masks the report text with the
+same rules as automatic error reports and stores it privately, like the error
+reports, in separate files of the same data directory:
+`bug-reports-state.sqlite` (one row per report: report ID, receive time, masked
+title/description/steps/expected/actual, app version, build, platform, OS and
+the verified contact email) and the readable day copy
+`bug-reports-YYYY-MM-DD.json` (UTC day of receipt). Both are `0600` in a `0700`
+directory and expire after 90 days. The app shows the report ID instead of an
+issue link. Each Google identity is limited to five accepted reports per hour;
+a retry with the same `Idempotency-Key` returns the same report ID.
 
-Create a fine-grained GitHub personal access token with access only to the
-`littlebit0/DailyCalendar` repository and `Issues: Read and write`. Store it
-outside the repository:
-
-```bash
-install -d -m 700 "$HOME/.config/daily"
-read -rsp "GitHub token: " DAILY_GITHUB_TOKEN; echo
-umask 077
-printf 'DAILY_GITHUB_TOKEN=%s\n' "$DAILY_GITHUB_TOKEN" \
-  > "$HOME/.config/daily/bug-report.env"
-unset DAILY_GITHUB_TOKEN
-systemctl --user restart daily-analytics.service
-```
-
-The service loads this file through `EnvironmentFile` and never places the
-credential in source control. Verified contact mappings are stored under
-`/mnt/storage/daily-analytics/bug-report-contacts` with directory mode `0700`
-and file mode `0600`; they expire after 365 days. Each Google identity is limited
-to five accepted reports per hour.
+Files written by the earlier GitHub-issue version
+(`bug-report-contacts/`, `bug-report-requests/`) are no longer created; the
+receiver keeps deleting them on their original 365-day schedule. The former
+`~/.config/daily/bug-report.env` (`DAILY_GITHUB_TOKEN`) is no longer read and
+can be deleted on the host, and the token revoked.
 
 ## App Build
 

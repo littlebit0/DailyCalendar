@@ -34,11 +34,7 @@ void main() {
         expect((body['report']! as Map)['title'], '일정 저장 실패');
         expect((body['environment']! as Map)['platform'], 'iOS');
         return http.Response(
-          jsonEncode({
-            'issueNumber': 321,
-            'issueUrl':
-                'https://github.com/littlebit0/DailyCalendar/issues/321',
-          }),
+          jsonEncode({'reportId': 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'}),
           201,
         );
       });
@@ -52,11 +48,7 @@ void main() {
         },
       );
 
-      expect(submission.issueNumber, 321);
-      expect(
-        submission.issueUrl,
-        Uri.parse('https://github.com/littlebit0/DailyCalendar/issues/321'),
-      );
+      expect(submission.reportId, 'cccccccc-cccc-4ccc-8ccc-cccccccccccc');
     },
   );
 
@@ -110,24 +102,32 @@ void main() {
   });
 
   group('bugReportDraftFits (the form enforces bytes, not characters)', () {
-    BugReportDraft all(String unit, {int title = 120, int long = 4000, int short = 2000}) =>
-        BugReportDraft(
-          title: unit * title,
-          description: unit * long,
-          reproductionSteps: unit * long,
-          expectedBehavior: unit * short,
-          actualBehavior: unit * short,
-        );
+    BugReportDraft all(
+      String unit, {
+      int title = 120,
+      int long = 4000,
+      int short = 2000,
+    }) => BugReportDraft(
+      title: unit * title,
+      description: unit * long,
+      reproductionSteps: unit * long,
+      expectedBehavior: unit * short,
+      actualBehavior: unit * short,
+    );
 
-    test('every field filled to its character limit fits for ordinary text', () {
-      expect(bugReportDraftFits(all('a')), isTrue);
-      expect(bugReportDraftFits(all('가')), isTrue); // 3 bytes each
-      expect(bugReportDraftFits(all('😀')), isTrue); // 4 bytes each
-      expect(bugReportDraftFits(all('\n')), isTrue); // escaped to 2 bytes
-    });
+    test(
+      'every field filled to its character limit fits for ordinary text',
+      () {
+        expect(bugReportDraftFits(all('a')), isTrue);
+        expect(bugReportDraftFits(all('가')), isTrue); // 3 bytes each
+        expect(bugReportDraftFits(all('😀')), isTrue); // 4 bytes each
+        expect(bugReportDraftFits(all('\n')), isTrue); // escaped to 2 bytes
+      },
+    );
 
     test('multi-code-point characters are limited by their real size', () {
-      const family = '👨\u200d👩\u200d👧\u200d👦'; // one grapheme, 25 UTF-8 bytes
+      const family =
+          '👨\u200d👩\u200d👧\u200d👦'; // one grapheme, 25 UTF-8 bytes
       // 12,120 of them satisfy every character limit but are ~300 KiB.
       expect(bugReportDraftFits(all(family)), isFalse);
       expect(
@@ -151,29 +151,34 @@ void main() {
       expect(count, lessThan(4000));
     });
 
-    test('a draft that fits is sent, one that does not is refused before sending', () async {
-      final service = BugReportService(
-        httpClient: MockClient((_) async => http.Response(
-          '{"issueNumber":7,"issueUrl":"https://github.com/o/r/issues/7"}',
-          201,
-        )),
-        endpoint: endpoint,
-      );
-      final fits = BugReportDraft(
-        title: 't',
-        description: '😀' * 4000,
-        reproductionSteps: '😀' * 4000,
-        expectedBehavior: '😀' * 2000,
-        actualBehavior: '😀' * 2000,
-      );
-      expect(bugReportDraftFits(fits), isTrue);
-      final submission = await service.submit(
-        draft: fits,
-        environment: environment,
-        googleAuthorizationHeaders: const {'Authorization': 'Bearer t'},
-      );
-      expect(submission.issueNumber, 7);
-    });
+    test(
+      'a draft that fits is sent, one that does not is refused before sending',
+      () async {
+        final service = BugReportService(
+          httpClient: MockClient(
+            (_) async => http.Response(
+              '{"reportId":"cccccccc-cccc-4ccc-8ccc-cccccccccccc"}',
+              201,
+            ),
+          ),
+          endpoint: endpoint,
+        );
+        final fits = BugReportDraft(
+          title: 't',
+          description: '😀' * 4000,
+          reproductionSteps: '😀' * 4000,
+          expectedBehavior: '😀' * 2000,
+          actualBehavior: '😀' * 2000,
+        );
+        expect(bugReportDraftFits(fits), isTrue);
+        final submission = await service.submit(
+          draft: fits,
+          environment: environment,
+          googleAuthorizationHeaders: const {'Authorization': 'Bearer t'},
+        );
+        expect(submission.reportId, 'cccccccc-cccc-4ccc-8ccc-cccccccccccc');
+      },
+    );
   });
 
   test('refuses a body over the receiver limit before sending it', () async {
@@ -240,10 +245,7 @@ void main() {
           return http.Response('{"error":"upstream_unavailable"}', 503);
         }
         return http.Response(
-          jsonEncode({
-            'issueNumber': 7,
-            'issueUrl': 'https://github.com/littlebit0/DailyCalendar/issues/7',
-          }),
+          jsonEncode({'reportId': 'cccccccc-cccc-4ccc-8ccc-cccccccccccc'}),
           201,
         );
       });

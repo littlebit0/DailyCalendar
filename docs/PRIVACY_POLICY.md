@@ -114,15 +114,18 @@ Google access token to Daily's support receiver.
 
 The receiver uses the access token only to request your Google account identity
 from Google's OpenID Connect UserInfo service. It requires a verified email
-address and does not store or log the access token. The verified email is kept
-privately so the developer can contact you about the report. The report text and
-app environment are posted as a public issue in the DailyCalendar GitHub
-repository; the email address is not included in that public issue. The app
-shows this public/private distinction before submission.
+address and does not store or log the access token. Reports are not published.
+Before storing, the receiver masks tokens, cookies, passwords, email addresses,
+phone numbers, long IDs, URL query strings, home-folder user names and quoted
+text in the report, using the same rules as automatic error reports. The masked
+report, the app environment and the verified email (kept so the developer can
+contact you) are stored privately on Daily's Ubuntu server and deleted after 90
+days. The app shows a report ID after submission.
 
-Private email-to-issue contact mappings are access-restricted on Daily's Ubuntu
-server and are retained for no more than 365 days. Bug-report submission is a
-support feature and is independent of the optional anonymous analytics setting.
+Contact files kept by an earlier version that posted reports as public GitHub
+issues are deleted no later than 365 days after they were written.
+Bug-report submission is a support feature and is independent of the optional
+anonymous analytics setting.
 
 ## Automatic Error Reports
 
@@ -163,10 +166,10 @@ usage analytics, the allowlisted anonymous events described above are sent to
 Daily's aggregate analytics receiver. They are not combined with calendar,
 account, advertising, or third-party data.
 
-When you explicitly submit a bug report, the report text and app environment are
-shared with GitHub as a public issue. Google receives the one-time UserInfo
-request needed to verify the signed-in account. The verified email is retained
-only by Daily's support receiver and is not published to GitHub.
+When you explicitly submit a bug report, Google receives the one-time UserInfo
+request needed to verify the signed-in account. The report and the verified
+email stay on Daily's support receiver and are not shared with GitHub or any
+other third party.
 
 Automatic error reports, described above, are not shared with GitHub or any
 other third party; they stay on Daily's server.
@@ -183,8 +186,10 @@ analytics. Data already received is aggregate-only and has no account or
 persistent device identifier, so it cannot be identified or deleted as one
 specific user's history.
 
-To request deletion of a private bug-report contact mapping or redaction of a
-public issue, contact the address below and include the GitHub issue number.
+To request deletion of a stored bug report and its contact email, contact the
+address below and include the report ID shown in the app. Issues created under
+the earlier version can still be redacted on request with their GitHub issue
+number.
 
 ## Contact
 

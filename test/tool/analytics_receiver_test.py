@@ -3,15 +3,15 @@ import os
 import stat
 import tempfile
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from tool.analytics_receiver import (
     Aggregator,
-    BugReportBackend,
     BugReportRateLimited,
+    BugReportStore,
     InvalidGoogleToken,
     MAX_BUG_REPORT_BYTES,
-    UpstreamUnavailable,
     normalize_bug_report,
     valid_batch,
 )
@@ -660,215 +660,80 @@ class BugReportBackendTest(unittest.TestCase):
         invalid["report"]["title"] = " "
         self.assertIsNone(normalize_bug_report(invalid))
 
-    def test_creates_an_issue_without_publishing_the_email(self):
+    def test_stores_the_report_privately_with_masked_text_and_contact(self):
         with tempfile.TemporaryDirectory() as directory:
-            captured = {}
+            store = _store(directory)
+            value = _payload()
+            value["report"]["description"] = "토큰 token=abc123 연락 kim@example.com \"치과 예약\""
+            submission = store.submit(value, "Bearer google-token", REQUEST_A)
+            self.assertRegex(submission["reportId"], r"^[0-9a-f-]{36}$")
+            path = Path(directory) / "bug-reports-2026-11-07.json"
+            self.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o600)
+            self.assertEqual(stat.S_IMODE((Path(directory) / "bug-reports-state.sqlite").stat().st_mode), 0o600)
+            report = json.loads(path.read_text())["reports"][0]
+            self.assertEqual(report["reportId"], submission["reportId"])
+            self.assertEqual(report["contactEmail"], "daily-user@example.com")
+            self.assertEqual(report["title"], "일정 저장 실패")
+            self.assertEqual(report["environment"]["platform"], "macOS")
+            for secret in ("abc123", "kim@example.com", "치과", "google-token"):
+                self.assertNotIn(secret, path.read_text())
+            self.assertFalse((Path(directory) / "bug-report-contacts").exists())
 
-            def create_issue(title, body):
-                captured["title"] = title
-                captured["body"] = body
-                return {
-                    "number": 321,
-                    "html_url": "https://github.com/littlebit0/DailyCalendar/issues/321",
-                }
-
-            backend = BugReportBackend(
-                directory,
-                github_token="test-token",
-                github_repository="littlebit0/DailyCalendar",
-                google_identity_fetcher=lambda _authorization: {
-                    "sub": "google-subject-1",
-                    "email": "daily-user@example.com",
-                    "email_verified": True,
-                },
-                github_issue_creator=create_issue,
-            )
-
-            submission = backend.submit(_payload(), "Bearer google-access-token")
-
-            self.assertEqual(submission["issueNumber"], 321)
-            self.assertEqual(captured["title"], "[Bug] 일정 저장 실패")
-            self.assertNotIn("daily-user@example.com", captured["body"])
-            self.assertIn("Google 로그인: 서버 검증 완료", captured["body"])
-
-            contacts = list((Path(directory) / "bug-report-contacts").glob("*.json"))
-            self.assertEqual(len(contacts), 1)
-            stored = json.loads(contacts[0].read_text())
-            self.assertEqual(stored["email"], "daily-user@example.com")
-            self.assertEqual(stored["issueNumber"], 321)
-            self.assertNotIn("google-subject-1", contacts[0].read_text())
-            self.assertEqual(stat.S_IMODE(contacts[0].stat().st_mode), 0o600)
-
-    def test_rejects_an_unverified_google_identity(self):
+    def test_retry_returns_the_same_report_and_accounts_stay_separate(self):
         with tempfile.TemporaryDirectory() as directory:
-            backend = BugReportBackend(
-                directory,
-                github_token="test-token",
-                google_identity_fetcher=lambda _authorization: {
-                    "sub": "google-subject-1",
-                    "email": "daily-user@example.com",
-                    "email_verified": False,
-                },
-                github_issue_creator=lambda _title, _body: {},
-            )
+            store = _store(directory)
+            first = store.submit(_payload(), "Bearer t", REQUEST_A)
+            for _ in range(10):
+                self.assertEqual(store.submit(_payload(), "Bearer t", REQUEST_A), first)
+            self.assertNotEqual(store.submit(_payload(), "Bearer t", REQUEST_B), first)
+            other = _store(directory, subject="google-subject-2")
+            self.assertNotEqual(other.submit(_payload(), "Bearer t", REQUEST_A), first)
+            reports = json.loads((Path(directory) / "bug-reports-2026-11-07.json").read_text())["reports"]
+            self.assertEqual(len(reports), 3)
 
-            with self.assertRaises(InvalidGoogleToken):
-                backend.submit(_payload(), "Bearer invalid-token")
-
-    def test_limits_each_verified_google_account_to_five_reports_per_hour(self):
+    def test_rate_limit_and_identity_checks(self):
         with tempfile.TemporaryDirectory() as directory:
-            issue_number = 0
-
-            def create_issue(_title, _body):
-                nonlocal issue_number
-                issue_number += 1
-                return {
-                    "number": issue_number,
-                    "html_url": (
-                        "https://github.com/littlebit0/DailyCalendar/issues/"
-                        f"{issue_number}"
-                    ),
-                }
-
-            backend = BugReportBackend(
-                directory,
-                github_token="test-token",
-                google_identity_fetcher=lambda _authorization: {
-                    "sub": "google-subject-1",
-                    "email": "daily-user@example.com",
-                    "email_verified": True,
-                },
-                github_issue_creator=create_issue,
-            )
-
-            for _ in range(5):
-                backend.submit(_payload(), "Bearer google-access-token")
+            store = _store(directory)
             with self.assertRaises(BugReportRateLimited):
-                backend.submit(_payload(), "Bearer google-access-token")
+                for _ in range(6):
+                    store.submit(_payload(), "Bearer t")
+            unverified = _store(directory, verified=False)
+            with self.assertRaises(InvalidGoogleToken):
+                unverified.submit(_payload(), "Bearer t")
+
+    def test_reports_expire_after_90_days_and_legacy_files_after_365(self):
+        with tempfile.TemporaryDirectory() as directory:
+            clock = [datetime(2026, 11, 7, tzinfo=timezone.utc)]
+            store = _store(directory, now=lambda: clock[0])
+            legacy = Path(directory) / "bug-report-contacts"
+            legacy.mkdir()
+            old, recent = legacy / "old.json", legacy / "recent.json"
+            old.write_text("{}")
+            recent.write_text("{}")
+            stamp = (clock[0] - timedelta(days=400)).timestamp()
+            os.utime(old, (stamp, stamp))
+            store.submit(_payload(), "Bearer t")
+            self.assertFalse(old.exists())
+            self.assertTrue(recent.exists())
+            clock[0] += timedelta(days=91)
+            store.submit(_payload(), "Bearer t")
+            self.assertFalse((Path(directory) / "bug-reports-2026-11-07.json").exists())
+
+
+def _store(directory, subject="google-subject-1", verified=True, now=None):
+    return BugReportStore(
+        directory,
+        google_identity_fetcher=lambda _auth: {
+            "sub": subject,
+            "email": "daily-user@example.com",
+            "email_verified": verified,
+        },
+        now=now or (lambda: datetime(2026, 11, 7, tzinfo=timezone.utc)),
+    )
 
 
 REQUEST_A = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
 REQUEST_B = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"
-
-
-class _FakeGithub:
-    """Stands in for GitHub; the creation can succeed while its answer is lost."""
-
-    def __init__(self):
-        self.issues = []
-        self.lose_answer = False
-        self.fail_before_create = False
-        self.find_fails = False
-
-    def create(self, title, body):
-        if self.fail_before_create:
-            raise UpstreamUnavailable()
-        number = len(self.issues) + 1
-        issue = {
-            "number": number,
-            "html_url": f"https://github.com/littlebit0/DailyCalendar/issues/{number}",
-            "body": body,
-        }
-        self.issues.append(issue)
-        if self.lose_answer:
-            raise UpstreamUnavailable()
-        return issue
-
-    def find(self, report_id):
-        if self.find_fails:
-            raise UpstreamUnavailable()
-        for issue in self.issues:
-            if f"`{report_id}`" in issue["body"]:
-                return issue
-        return None
-
-
-class IdempotentBugReportTest(unittest.TestCase):
-    def backend(self, directory, github, subject="google-subject-1"):
-        return BugReportBackend(
-            directory,
-            github_token="test-token",
-            google_identity_fetcher=lambda _authorization: {
-                "sub": subject,
-                "email": "daily-user@example.com",
-                "email_verified": True,
-            },
-            github_issue_creator=github.create,
-            github_issue_finder=github.find,
-        )
-
-    def submit(self, backend, request_id):
-        return backend.submit(_payload(), "Bearer token", request_id)
-
-    def test_lost_answer_retry_reuses_the_created_issue_and_keeps_the_contact(self):
-        with tempfile.TemporaryDirectory() as directory:
-            github = _FakeGithub()
-            backend = self.backend(directory, github)
-            github.lose_answer = True
-            with self.assertRaises(UpstreamUnavailable):
-                self.submit(backend, REQUEST_A)
-            contacts = list((Path(directory) / "bug-report-contacts").glob("*.json"))
-            self.assertEqual(len(contacts), 1)
-            github.lose_answer = False
-            retried = self.submit(backend, REQUEST_A)
-            self.assertEqual(len(github.issues), 1)
-            self.assertEqual(retried["issueNumber"], 1)
-            stored = json.loads(contacts[0].read_text())
-            self.assertEqual(stored["status"], "created")
-            self.assertEqual(stored["issueNumber"], 1)
-            # Replaying a finished request returns the same issue without a new one.
-            self.assertEqual(self.submit(backend, REQUEST_A)["issueNumber"], 1)
-            self.assertEqual(len(github.issues), 1)
-
-    def test_retry_after_a_failure_before_creation_creates_exactly_one_issue(self):
-        with tempfile.TemporaryDirectory() as directory:
-            github = _FakeGithub()
-            backend = self.backend(directory, github)
-            github.fail_before_create = True
-            with self.assertRaises(UpstreamUnavailable):
-                self.submit(backend, REQUEST_A)
-            github.fail_before_create = False
-            self.assertEqual(self.submit(backend, REQUEST_A)["issueNumber"], 1)
-            self.assertEqual(len(github.issues), 1)
-            self.assertEqual(len(list((Path(directory) / "bug-report-contacts").glob("*.json"))), 1)
-
-    def test_unresolvable_lookup_never_creates_a_second_issue(self):
-        with tempfile.TemporaryDirectory() as directory:
-            github = _FakeGithub()
-            backend = self.backend(directory, github)
-            github.lose_answer = True
-            with self.assertRaises(UpstreamUnavailable):
-                self.submit(backend, REQUEST_A)
-            github.find_fails = True
-            with self.assertRaises(UpstreamUnavailable):
-                self.submit(backend, REQUEST_A)
-            self.assertEqual(len(github.issues), 1)
-
-    def test_distinct_requests_and_accounts_stay_separate(self):
-        with tempfile.TemporaryDirectory() as directory:
-            github = _FakeGithub()
-            backend = self.backend(directory, github)
-            self.assertEqual(self.submit(backend, REQUEST_A)["issueNumber"], 1)
-            self.assertEqual(self.submit(backend, REQUEST_B)["issueNumber"], 2)
-            other = self.backend(directory, github, subject="google-subject-2")
-            self.assertEqual(self.submit(other, REQUEST_A)["issueNumber"], 3)
-
-    def test_without_a_request_id_a_failed_report_leaves_no_contact(self):
-        with tempfile.TemporaryDirectory() as directory:
-            github = _FakeGithub()
-            backend = self.backend(directory, github)
-            github.fail_before_create = True
-            with self.assertRaises(UpstreamUnavailable):
-                backend.submit(_payload(), "Bearer token")
-            self.assertEqual(list((Path(directory) / "bug-report-contacts").glob("*.json")), [])
-
-    def test_replaying_a_finished_request_does_not_use_the_hourly_limit(self):
-        with tempfile.TemporaryDirectory() as directory:
-            github = _FakeGithub()
-            backend = self.backend(directory, github)
-            for _ in range(10):
-                self.submit(backend, REQUEST_A)
-            self.assertEqual(len(github.issues), 1)
 
 
 if __name__ == "__main__":
