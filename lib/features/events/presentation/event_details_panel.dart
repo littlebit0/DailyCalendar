@@ -1621,15 +1621,21 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   }
 
   String _formatAlarmLabel(BuildContext context, CalendarEvent event) {
-    if (!event.allDay) {
+    if (!event.allDay &&
+        event.alarmCustomAt == null &&
+        event.alarmMinutesBefore == 0) {
       return context.tr('시작 시각 · 중지 또는 10분 후 다시 알림');
     }
-    final minutes = event.allDayAlarmMinutes;
-    final time = DateTime(2000, 1, 1, minutes ~/ 60, minutes % 60);
+    final fireAt = event.alarmFireAt;
+    final locale = context.l10n.locale.toLanguageTag();
+    final time = DateFormat.jm(locale).format(fireAt);
+    final sameDay = DateUtils.isSameDay(fireAt, event.startAt);
     return context.tr(
       '{time} · 중지 또는 10분 후 다시 알림',
       args: {
-        'time': DateFormat.jm(context.l10n.locale.toLanguageTag()).format(time),
+        'time': sameDay
+            ? time
+            : '${DateFormat.MMMd(locale).format(fireAt)} $time',
       },
     );
   }

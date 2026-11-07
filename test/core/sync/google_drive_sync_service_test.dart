@@ -632,6 +632,8 @@ void main() {
             syncStatus: 'pending',
           ).copyWith(
             completed: true,
+            alarmMinutesBefore: 30,
+            alarmCustomAt: DateTime.utc(2026, 6, 19, 22),
             recurrence: const RecurrenceRule(
               frequency: RecurrenceFrequency.monthly,
               anchorDay: 31,
@@ -706,6 +708,8 @@ void main() {
       expect(event['completed'], isTrue);
       expect(event['recurrenceAnchorDay'], 31);
       expect(event['recurrenceDetails'], '{"byDay":["MO","WE"]}');
+      expect(event['alarmMinutesBefore'], 30);
+      expect(event['alarmCustomAt'], '2026-06-19T22:00:00.000Z');
       expect((await repository.findById('queued-event'))!.syncStatus, 'synced');
       expect(
         requests.any(

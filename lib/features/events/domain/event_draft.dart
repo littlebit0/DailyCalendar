@@ -22,7 +22,10 @@ class EventDraft {
     this.showDday = false,
     this.alarmEnabled = false,
     int allDayAlarmMinutes = 9 * 60,
+    int alarmMinutesBefore = 0,
+    this.alarmCustomAt,
   }) : allDayAlarmMinutes = allDayAlarmMinutes.clamp(0, 1439),
+       alarmMinutesBefore = alarmMinutesBefore < 0 ? 0 : alarmMinutesBefore,
        reminderMinutesBeforeList = normalizeReminderMinutes(
          reminderMinutesBeforeList ??
              (reminderMinutesBefore == null
@@ -49,6 +52,8 @@ class EventDraft {
   final bool showDday;
   final bool alarmEnabled;
   final int allDayAlarmMinutes;
+  final int alarmMinutesBefore;
+  final DateTime? alarmCustomAt;
 
   int? get reminderMinutesBefore => reminderMinutesBeforeList.isEmpty
       ? null
@@ -81,6 +86,8 @@ class EventDraft {
       showDday: showDday,
       alarmEnabled: alarmEnabled,
       allDayAlarmMinutes: allDayAlarmMinutes,
+      alarmMinutesBefore: alarmMinutesBefore,
+      alarmCustomAt: alarmCustomAt,
       holiday: category.id == EventCategory.holiday.id,
     ).normalizeAllDayBounds();
   }
@@ -102,6 +109,9 @@ class EventDraft {
       showDday: showDday,
       alarmEnabled: alarmEnabled,
       allDayAlarmMinutes: allDayAlarmMinutes,
+      alarmMinutesBefore: alarmMinutesBefore,
+      alarmCustomAt: alarmCustomAt,
+      clearAlarmCustomAt: alarmCustomAt == null,
       holiday: category.id == EventCategory.holiday.id,
       clearMemo: memo == null,
       clearLocation: location == null,
@@ -128,6 +138,9 @@ class EventDraft {
     bool? showDday,
     bool? alarmEnabled,
     int? allDayAlarmMinutes,
+    int? alarmMinutesBefore,
+    DateTime? alarmCustomAt,
+    bool clearAlarmCustomAt = false,
     bool clearMemo = false,
     bool clearLocation = false,
     bool clearUrl = false,
@@ -158,6 +171,10 @@ class EventDraft {
       showDday: showDday ?? this.showDday,
       alarmEnabled: alarmEnabled ?? this.alarmEnabled,
       allDayAlarmMinutes: allDayAlarmMinutes ?? this.allDayAlarmMinutes,
+      alarmMinutesBefore: alarmMinutesBefore ?? this.alarmMinutesBefore,
+      alarmCustomAt: clearAlarmCustomAt
+          ? null
+          : alarmCustomAt ?? this.alarmCustomAt,
     );
   }
 }

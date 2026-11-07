@@ -82,6 +82,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
   late bool _showDday;
   late bool _alarmEnabled;
   late TimeOfDay _allDayAlarmTime;
+  late int _alarmMinutesBefore;
+  DateTime? _alarmCustomAt;
   AlarmAuthorizationState _alarmState = AlarmAuthorizationState.unsupported;
   var _alarmStateLoading = true;
   String? _validationMessage;
@@ -154,6 +156,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       hour: allDayAlarmMinutes ~/ 60,
       minute: allDayAlarmMinutes % 60,
     );
+    _alarmMinutesBefore = event?.alarmMinutesBefore ?? 0;
+    _alarmCustomAt = event?.alarmCustomAt;
     unawaited(_loadAlarmState());
   }
 
@@ -465,6 +469,11 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
                             value: _formatTime(_allDayAlarmTime),
                             onPressed: _pickAllDayAlarmTime,
                           ),
+                        ],
+                        if (_alarmEnabled &&
+                            _frequency == RecurrenceFrequency.none) ...[
+                          const SizedBox(height: 8),
+                          _buildAlarmTimeSelector(context),
                         ],
                         const SizedBox(height: 12),
                         if (!_isLms) ...[
@@ -965,6 +974,8 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       showDday: _showDday,
       alarmEnabled: _frequency == RecurrenceFrequency.none && _alarmEnabled,
       allDayAlarmMinutes: _allDayAlarmTime.hour * 60 + _allDayAlarmTime.minute,
+      alarmMinutesBefore: _alarmMinutesBefore,
+      alarmCustomAt: _alarmCustomAt,
     );
     Navigator.of(context).pop(draft);
   }
@@ -1031,10 +1042,10 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
             : context.tr('켜면 시스템 알람 권한을 요청하고 정시 알림을 알람으로 대체합니다.'),
       AlarmAuthorizationState.authorized =>
         isMacOS
-            ? (_allDay
+            ? (_allDay || _alarmCustomAt != null || _alarmMinutesBefore != 0
                   ? context.tr('선택한 시각에 소리와 다시 알림이 있는 macOS 시스템 알림을 전달합니다.')
                   : context.tr('시작 시각에 소리와 다시 알림이 있는 macOS 시스템 알림을 전달합니다.'))
-            : (_allDay
+            : (_allDay || _alarmCustomAt != null || _alarmMinutesBefore != 0
                   ? context.tr('선택한 시각에 시스템 알람이 울립니다.')
                   : context.tr('시작 시각의 정시 알림을 시스템 알람으로 대체합니다.')),
     };
@@ -1063,6 +1074,140 @@ class _EventEditorDialogState extends State<EventEditorDialog> {
       _alarmState = state;
       _alarmEnabled = enabled && state == AlarmAuthorizationState.authorized;
     });
+  }
+
+  /// Relative alarms follow the edited start; only a custom time is absolute.
+  DateTime get _alarmBaseTime => _allDay
+      ? DateTime(
+          _startDate.year,
+          _startDate.month,
+          _startDate.day,
+          _allDayAlarmTime.hour,
+          _allDayAlarmTime.minute,
+        )
+      : DateTime(
+          _startDate.year,
+          _startDate.month,
+          _startDate.day,
+          _startTime.hour,
+          _startTime.minute,
+        );
+
+  DateTime get _alarmFireAt =>
+      _alarmCustomAt ??
+      _alarmBaseTime.subtract(Duration(minutes: _alarmMinutesBefore));
+
+  Widget _buildAlarmTimeSelector(BuildContext context) {
+    final custom = _alarmCustomAt;
+    final options = normalizeReminderMinutes([
+      0,
+      10,
+      30,
+      60,
+      1440,
+      if (custom == null) _alarmMinutesBefore,
+    ]);
+    return InputDecorator(
+      decoration: InputDecoration(
+        labelText: context.tr('알람 시각'),
+        prefixIcon: const Icon(Icons.alarm_on_outlined),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              for (final minutes in options)
+                ChoiceChip(
+                  label: Text(_label(minutes)),
+                  selected: custom == null && _alarmMinutesBefore == minutes,
+                  onSelected: (_) => setState(() {
+                    _alarmMinutesBefore = minutes;
+                    _alarmCustomAt = null;
+                  }),
+                ),
+              IconButton.outlined(
+                tooltip: context.tr('알람 직접 입력'),
+                onPressed: _pickAlarmMinutesBefore,
+                icon: const Icon(Icons.edit_outlined),
+              ),
+              ChoiceChip(
+                label: Text(context.tr('날짜·시각 지정')),
+                selected: custom != null,
+                onSelected: (_) => _pickAlarmCustomAt(),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            _formatAlarmDateTime(_alarmFireAt),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          if (custom != null)
+            Text(
+              context.tr('일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.'),
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          if (!_alarmFireAt.isAfter(DateTime.now()))
+            Text(
+              context.tr('지난 시각이라 알람이 울리지 않습니다.'),
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  String _formatAlarmDateTime(DateTime value) {
+    final date = DateFormat.yMMMd(
+      Localizations.localeOf(context).toLanguageTag(),
+    ).format(value);
+    return '$date ${_formatTime(TimeOfDay.fromDateTime(value))}';
+  }
+
+  Future<void> _pickAlarmMinutesBefore() async {
+    _dismissInput();
+    final picked = await _showNumberDialog(
+      context: context,
+      title: context.tr('알람 직접 입력'),
+      label: context.tr('몇 분 전에 울릴까요?'),
+      initialValue: _alarmMinutesBefore,
+      minValue: 0,
+    );
+    if (picked != null && mounted) {
+      setState(() {
+        _alarmMinutesBefore = picked;
+        _alarmCustomAt = null;
+      });
+    }
+  }
+
+  Future<void> _pickAlarmCustomAt() async {
+    _dismissInput();
+    final initial = _alarmFireAt;
+    final date = await showDatePicker(
+      context: context,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      initialDate: initial,
+    );
+    if (date == null || !mounted) return;
+    final time = await _showTimePicker(TimeOfDay.fromDateTime(initial));
+    if (time == null || !mounted) return;
+    setState(
+      () => _alarmCustomAt = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      ),
+    );
   }
 
   Future<void> _pickAllDayAlarmTime() async {

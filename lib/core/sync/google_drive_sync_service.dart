@@ -2145,6 +2145,8 @@ class GoogleDriveSyncService implements SyncService {
       'completed': normalized.completed,
       'alarmEnabled': normalized.alarmEnabled,
       'allDayAlarmMinutes': normalized.allDayAlarmMinutes,
+      'alarmMinutesBefore': normalized.alarmMinutesBefore,
+      'alarmCustomAt': normalized.alarmCustomAt?.toUtc().toIso8601String(),
     };
   }
 
@@ -2216,6 +2218,8 @@ class GoogleDriveSyncService implements SyncService {
       completed: json['completed'] as bool? ?? false,
       alarmEnabled: json['alarmEnabled'] as bool? ?? false,
       allDayAlarmMinutes: json['allDayAlarmMinutes'] as int? ?? 9 * 60,
+      alarmMinutesBefore: json['alarmMinutesBefore'] as int? ?? 0,
+      alarmCustomAt: _readDate(json['alarmCustomAt']),
     ).normalizeAllDayBounds();
   }
 
