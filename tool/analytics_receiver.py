@@ -1181,17 +1181,30 @@ class ErrorReportStore:
                         " ON CONFLICT(id) DO UPDATE SET acknowledged = MAX(acknowledged, excluded.acknowledged)",
                         (delivery_id, day, max(report["occurrenceCount"], acknowledged)),
                     )
-                export = self._day_export(connection, day)
+                # Recorded with the data, so a failed export is retried by
+                # later requests and after a restart.
+                connection.execute("INSERT OR IGNORE INTO export_pending(day) VALUES (?)", (day,))
                 connection.execute("COMMIT")
             except BaseException:
                 if connection.in_transaction:
                     connection.execute("ROLLBACK")
                 raise
+            try:
+                # Under the same lock, so an older snapshot never replaces a newer one.
+                self._export_pending(connection)
             finally:
                 connection.close()
-        # The readable copy is a convenience; the database stays the source.
-        self._write_json(self.directory / f"error-reports-{day}.json", export)
         return {"status": "stored"}
+
+    def _export_pending(self, connection):
+        days = [row[0] for row in connection.execute("SELECT day FROM export_pending ORDER BY day")]
+        for day in days:
+            try:
+                self._write_json(self.directory / f"error-reports-{day}.json", self._day_export(connection, day))
+            except OSError:
+                # The report is stored; the readable copy is rewritten next time.
+                return
+            connection.execute("DELETE FROM export_pending WHERE day = ?", (day,))
 
     def _check_rate(self, subject_hash):
         timestamp = self._now().timestamp()
@@ -1223,6 +1236,7 @@ class ErrorReportStore:
         connection.execute(
             "CREATE TABLE IF NOT EXISTS deliveries(id TEXT PRIMARY KEY, day TEXT NOT NULL, acknowledged INTEGER NOT NULL)"
         )
+        connection.execute("CREATE TABLE IF NOT EXISTS export_pending(day TEXT PRIMARY KEY)")
         return connection
 
     def _delete_expired(self, connection, now):
@@ -1232,6 +1246,7 @@ class ErrorReportStore:
         connection.execute("DELETE FROM reports WHERE day < ?", (report_cutoff,))
         connection.execute("DELETE FROM environments WHERE day < ?", (report_cutoff,))
         connection.execute("DELETE FROM deliveries WHERE day < ?", (delivery_cutoff,))
+        connection.execute("DELETE FROM export_pending WHERE day < ?", (report_cutoff,))
         for path in self.directory.glob("error-reports-*.json"):
             match = re.fullmatch(r"error-reports-(\d{4}-\d{2}-\d{2})\.json", path.name)
             if match and match.group(1) < report_cutoff:

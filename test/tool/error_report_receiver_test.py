@@ -116,6 +116,30 @@ class ErrorReportTests(unittest.TestCase):
         self.assertFalse((directory / "error-reports-2026-11-05.json").exists())
         self.assertFalse((directory / "error-reports-2026-11-06.json").exists())
 
+    def test_failed_export_is_written_by_a_later_request(self):
+        original = self.store._write_json
+
+        def failing(path, value):
+            raise OSError("disk full")
+
+        self.store._write_json = failing
+        self.assertEqual(self.submit(payload())["status"], "stored")
+        self.store._write_json = original
+        self.now += timedelta(days=1)
+        self.submit(payload(fingerprint="f" * 16))
+        self.assertEqual(self.export("2026-11-05")["reports"][0]["occurrences"], 1)
+        self.assertEqual(self.export("2026-11-06")["reports"][0]["fingerprint"], "f" * 16)
+
+    def test_concurrent_requests_leave_the_latest_export(self):
+        import threading
+
+        threads = [threading.Thread(target=self.submit, args=(payload(),)) for _ in range(8)]
+        for thread in threads:
+            thread.start()
+        for thread in threads:
+            thread.join()
+        self.assertEqual(self.export()["reports"][0]["occurrences"], 8)
+
     def test_files_are_private(self):
         self.submit(payload())
         directory = Path(self.directory.name)
