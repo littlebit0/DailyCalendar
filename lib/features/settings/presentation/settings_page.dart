@@ -1923,7 +1923,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Future<void> _addCategory(AppSettings settings) async {
-    final category = await _showCategoryDialog(context);
+    final category = await _showCategoryDialog(
+      context,
+      existingCategories: settings.categories,
+    );
     if (category == null) {
       return;
     }
@@ -2006,6 +2009,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final updatedCategory = await _showCategoryDialog(
       context,
       initialCategory: category,
+      // The edited category keeps its own id when the new name hashes to it.
+      existingCategories: settings.categories.where(
+        (item) => item.id != category.id,
+      ),
     );
     if (updatedCategory == null) {
       return;
@@ -4577,10 +4584,14 @@ class _SyncStatusTile extends StatelessWidget {
 Future<EventCategory?> _showCategoryDialog(
   BuildContext context, {
   EventCategory? initialCategory,
+  required Iterable<EventCategory> existingCategories,
 }) async {
   return showDialog<EventCategory>(
     context: context,
-    builder: (context) => _CategoryDialog(initialCategory: initialCategory),
+    builder: (context) => _CategoryDialog(
+      initialCategory: initialCategory,
+      existingCategories: existingCategories.toList(),
+    ),
   );
 }
 
@@ -4645,9 +4656,13 @@ Widget _settingsDialogTitle(
 }
 
 class _CategoryDialog extends StatefulWidget {
-  const _CategoryDialog({required this.initialCategory});
+  const _CategoryDialog({
+    required this.initialCategory,
+    required this.existingCategories,
+  });
 
   final EventCategory? initialCategory;
+  final List<EventCategory> existingCategories;
 
   @override
   State<_CategoryDialog> createState() => _CategoryDialogState();
@@ -4734,7 +4749,11 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                 initialCategory == null ||
                     (initialCategory.id != EventCategory.basic.id &&
                         initialCategory.id != EventCategory.holiday.id)
-                ? EventCategory.custom(label: label, colorValue: _selectedColor)
+                ? EventCategory.custom(
+                    label: label,
+                    colorValue: _selectedColor,
+                    existing: widget.existingCategories,
+                  )
                 : initialCategory.copyWith(
                     label: label,
                     colorValue: _selectedColor,
