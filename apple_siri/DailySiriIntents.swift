@@ -71,6 +71,12 @@ struct DailySiriLmsVisibility: Equatable {
 }
 // END LMS VISIBILITY POLICY
 
+/// A failure already recorded by `loggedSiriOperation` during an in-app
+/// Signal request.
+struct DailySignalExecutionFailed: Error {
+  let underlying: Error
+}
+
 struct DailySiriLogRecord: Codable, Sendable {
   let id: String
   let occurredAt: Date
@@ -403,20 +409,13 @@ final class DailySignalVoiceBridge: NSObject {
     result: @escaping FlutterResult
   ) {
     Task { @MainActor in
-      let startedAt = Date()
       var intent = DailySignalCommandIntent()
       intent.spokenCommand = command
       intent.isBridgeExecution = true
       intent.confirmedInApp = confirmed
       do {
-        _ = try await intent.perform()
-        guard let record = DailySiriLogStore.load().first,
-              record.occurredAt >= startedAt.addingTimeInterval(-0.5) else {
-          result(FlutterError(code: "signal_result_missing", message: DailySiriText.signalResultMissing, details: nil))
-          return
-        }
-        let message = self.responseMessage(for: record)
-        result(["message": message, "success": record.success])
+        let message = try await intent.execute()
+        result(["message": message, "success": true])
       } catch {
         if let confirmation = error as? DailySignalConfirmationRequired {
           result(FlutterError(code: "signal_confirmation_required", message: confirmation.message, details: nil))
@@ -432,26 +431,12 @@ final class DailySignalVoiceBridge: NSObject {
           result(FlutterError(code: code, message: error.localizedDescription, details: nil))
           return
         }
-        if let record = DailySiriLogStore.load().first,
-           record.occurredAt >= startedAt.addingTimeInterval(-0.5),
-           !record.success {
-          let code = record.result == "cancelled"
-            ? "signal_cancelled"
-            : "signal_execution_failed"
-          result(FlutterError(code: code, message: error.localizedDescription, details: nil))
+        if let failure = error as? DailySignalExecutionFailed {
+          result(FlutterError(code: "signal_execution_failed", message: failure.underlying.localizedDescription, details: nil))
           return
         }
         result(FlutterError(code: "signal_needs_input", message: error.localizedDescription, details: nil))
       }
-    }
-  }
-
-  private func responseMessage(for record: DailySiriLogRecord) -> String {
-    switch record.action.replacingOccurrences(of: "signal-", with: "") {
-    case "add": return DailySiriText.added(record.summary)
-    case "update": return DailySiriText.updated(record.result)
-    case "delete": return DailySiriText.deleted(record.summary)
-    default: return record.result
     }
   }
 
@@ -812,10 +797,6 @@ private enum DailySiriText {
   static var signalUnavailable: String { localized(
     "이 운영체제 버전에서는 Daily Signal을 사용할 수 없습니다.", "Daily Signal is unavailable on this operating system version.",
     "このOSバージョンではDaily Signalを利用できません。", "此作業系統版本無法使用 Daily Signal。"
-  ) }
-  static var signalResultMissing: String { localized(
-    "시그널 실행 결과를 확인하지 못했습니다.", "The Signal result could not be verified.",
-    "Signalの実行結果を確認できませんでした。", "無法確認 Signal 執行結果。"
   ) }
 
   static var databaseUnavailable: String {
@@ -3823,6 +3804,18 @@ struct DailySignalCommandIntent: AppIntent {
 
   @MainActor
   func perform() async throws -> some IntentResult & ProvidesDialog & ShowsSnippetView {
+    let message = try await execute()
+    return .result(
+      dialog: IntentDialog(stringLiteral: message),
+      view: DailySiriSnippetView(message: message)
+    )
+  }
+
+  /// Returns this request's live answer. The in-app bridge uses it directly
+  /// because the shared action history is redacted for LMS reads and may hold
+  /// records from concurrent Siri requests.
+  @MainActor
+  func execute() async throws -> String {
     let ruleBasedAction = classify(spokenCommand)
     let spokenTemporal = DailySpokenTemporalParser.parse(spokenCommand)
     let hasInvalidSpokenDate = DailySpokenTemporalParser.containsInvalidExplicitDate(spokenCommand)
@@ -3850,46 +3843,46 @@ struct DailySignalCommandIntent: AppIntent {
     case .yesterday:
       let today = Calendar.current.startOfDay(for: Date())
       let start = Calendar.current.date(byAdding: .day, value: -1, to: today)!
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-yesterday",
         label: DailySiriText.yesterdayLabel(),
         from: start,
         to: today
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .today:
       let start = Calendar.current.startOfDay(for: Date())
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-today",
         label: DailySiriText.todayLabel(),
         from: start,
         to: Calendar.current.date(byAdding: .day, value: 1, to: start)!
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .tomorrow:
       let today = Calendar.current.startOfDay(for: Date())
       let start = Calendar.current.date(byAdding: .day, value: 1, to: today)!
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-tomorrow",
         label: DailySiriText.tomorrowLabel(),
         from: start,
         to: Calendar.current.date(byAdding: .day, value: 1, to: start)!
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .date:
       guard let date = date ?? generatedUnderstanding?.startAt else {
         throw $date.requestValue(IntentDialog(stringLiteral: DailySiriText.dateRequest))
       }
       let start = Calendar.current.startOfDay(for: date)
-      let response = try await eventDialog(
+      let response = try await executing { try await eventDialog(
         action: "signal-date",
         label: DailySiriText.date(date, includeTime: false),
         from: start,
         to: Calendar.current.date(byAdding: .day, value: 1, to: start)!
-      )
-      return .result(dialog: response.dialog, view: DailySiriSnippetView(message: response.message))
+      ) }
+      return response.message
     case .next:
-      let nextEvent = try loggedSiriOperation(action: "signal-next", summary: "Next event") {
+      let nextEvent = try loggedOperation(action: "signal-next", summary: "Next event") {
         try DailySiriDatabase.nextEvent(after: Date())
       }
       let message = DailySiriText.nextEvent(nextEvent)
@@ -3899,10 +3892,7 @@ struct DailySignalCommandIntent: AppIntent {
         result: message,
         events: nextEvent.map { [$0] } ?? []
       )
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .search:
       guard let query = normalized(query) ??
           generatedUnderstanding?.searchText ??
@@ -3910,7 +3900,7 @@ struct DailySignalCommandIntent: AppIntent {
           searchQuery(from: spokenCommand) else {
         throw $query.requestValue(IntentDialog(stringLiteral: DailySiriText.searchRequest))
       }
-      let events = try loggedSiriOperation(action: "signal-search", summary: query) {
+      let events = try loggedOperation(action: "signal-search", summary: query) {
         try DailySiriDatabase.search(query)
       }
       let message = summaryMessage(events, empty: DailySiriText.noSearchResults)
@@ -3920,12 +3910,9 @@ struct DailySignalCommandIntent: AppIntent {
         result: message,
         events: events
       )
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .dday:
-      let events = try loggedSiriOperation(action: "signal-dday", summary: "D-day") {
+      let events = try loggedOperation(action: "signal-dday", summary: "D-day") {
         try DailySiriDatabase.ddayEvents()
       }
       let message = summaryMessage(events, empty: DailySiriText.noDdayEvents)
@@ -3935,10 +3922,7 @@ struct DailySignalCommandIntent: AppIntent {
         result: message,
         events: events
       )
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .add:
       guard let eventTitle = normalized(eventTitle) ??
           generatedUnderstanding?.eventTitle ??
@@ -3975,7 +3959,7 @@ struct DailySignalCommandIntent: AppIntent {
       if isBridgeExecution && !confirmedInApp {
         throw DailySignalConfirmationRequired()
       }
-      let addedEvent = try loggedSiriOperation(action: "signal-add", summary: eventTitle) {
+      let addedEvent = try loggedOperation(action: "signal-add", summary: eventTitle) {
         try DailySiriDatabase.add(
           title: eventTitle,
           startAt: start,
@@ -3999,10 +3983,7 @@ struct DailySignalCommandIntent: AppIntent {
         details: siriEventDetails(addedEvent)
       )
       let message = DailySiriText.added(addedEvent.title)
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .update:
       guard let event = event ?? resolvedEvent(from: generatedUnderstanding?.eventReference) else {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.updateTargetRequest))
@@ -4047,7 +4028,7 @@ struct DailySignalCommandIntent: AppIntent {
         try await requestConfirmation(result: .result(dialog: IntentDialog(stringLiteral: scopeLabel + " · " + DailySiriText.commandConfirmation)))
       }
       try await authenticateMutation(DailySiriText.updateAuthentication)
-      let updatedEvent = try loggedSiriOperation(action: "signal-update", summary: event.title) {
+      let updatedEvent = try loggedOperation(action: "signal-update", summary: event.title) {
         try DailySiriDatabase.update(
           id: event.id,
           newTitle: resolvedNewTitle,
@@ -4073,10 +4054,7 @@ struct DailySignalCommandIntent: AppIntent {
         details: siriEventDetails(updatedEvent)
       )
       let message = DailySiriText.updated(updatedEvent.title)
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
     case .delete:
       guard let event = event ?? resolvedEvent(from: generatedUnderstanding?.eventReference) else {
         throw $event.requestValue(IntentDialog(stringLiteral: DailySiriText.deleteTargetRequest))
@@ -4097,7 +4075,7 @@ struct DailySignalCommandIntent: AppIntent {
           throw error
         }
       }
-      let deletedEvent = try loggedSiriOperation(action: "signal-delete", summary: event.title) {
+      let deletedEvent = try loggedOperation(action: "signal-delete", summary: event.title) {
         try DailySiriDatabase.delete(id: event.id, entireSeries: repeatScope == .entireSeries)
       }
       DailySiriLogStore.append(
@@ -4108,10 +4086,29 @@ struct DailySignalCommandIntent: AppIntent {
         details: siriEventDetails(deletedEvent)
       )
       let message = DailySiriText.deleted(deletedEvent.title)
-      return .result(
-        dialog: IntentDialog(stringLiteral: message),
-        view: DailySiriSnippetView(message: message)
-      )
+      return message
+    }
+  }
+
+  /// Runs an operation that logs its own failure and tags that failure for
+  /// the in-app bridge, so it never has to infer it from shared history.
+  private func loggedOperation<T>(
+    action: String,
+    summary: String,
+    operation: () throws -> T
+  ) throws -> T {
+    do {
+      return try loggedSiriOperation(action: action, summary: summary, operation: operation)
+    } catch {
+      throw isBridgeExecution ? DailySignalExecutionFailed(underlying: error) : error
+    }
+  }
+
+  private func executing<T>(_ operation: () async throws -> T) async throws -> T {
+    do {
+      return try await operation()
+    } catch {
+      throw isBridgeExecution ? DailySignalExecutionFailed(underlying: error) : error
     }
   }
 
