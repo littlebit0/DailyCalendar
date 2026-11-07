@@ -15,6 +15,7 @@ import '../core/analytics/startup_milestones.dart';
 import '../core/auth/google_account.dart';
 import '../core/security/biometric_auth_service.dart';
 import '../core/security/app_lock_privacy_service.dart';
+import '../core/notifications/local_notification_service.dart';
 import '../core/notifications/notification_settings_change.dart';
 import '../core/settings/app_settings.dart';
 import '../core/localization/app_localizations.dart';
@@ -979,7 +980,11 @@ class _AppHomeState extends ConsumerState<_AppHome>
     }
   }
 
-  Future<void> _reconcileAllEventSchedules() async {
+  // One reconciliation shares the app-wide reminder snapshot across events.
+  Future<void> _reconcileAllEventSchedules() =>
+      runNotificationReconciliation(_reconcileEachEventSchedule);
+
+  Future<void> _reconcileEachEventSchedule() async {
     final events = await ref.read(eventRepositoryProvider).allEventsForSync();
     final notificationService = ref.read(notificationServiceProvider);
     final alarmService = ref.read(alarmServiceProvider);
@@ -1047,7 +1052,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     ref.listen(eventFollowUpFailureProvider, (_, _) {
       ScaffoldMessenger.maybeOf(context)?.showSnackBar(
         SnackBar(
-          content: const Text('일정은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.'),
+          content: const Text('일정 변경은 저장됐습니다. 알림·동기화 등 일부 후속 처리를 완료하지 못했습니다.'),
           action: SnackBarAction(
             label: '다시 시도',
             onPressed: () {

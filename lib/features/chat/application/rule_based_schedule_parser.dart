@@ -1,3 +1,4 @@
+import '../../../core/calendar/calendar_event_movement.dart';
 import '../../events/domain/calendar_event.dart';
 import '../../events/domain/event_category.dart';
 import '../../events/domain/event_draft.dart';
@@ -160,7 +161,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
       final startDate = _parseDate(input, baseDate, selectedDate);
       return _ParsedDateRange(
         startDate,
-        startDate.add(Duration(days: (days - 1).clamp(0, 3650).toInt())),
+        shiftCalendarDateByDays(startDate, (days - 1).clamp(0, 3650).toInt()),
       );
     }
 
@@ -170,7 +171,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
       final startDate = _parseDate(input, baseDate, selectedDate);
       return _ParsedDateRange(
         startDate,
-        startDate.add(Duration(days: (days - 1).clamp(0, 3650).toInt())),
+        shiftCalendarDateByDays(startDate, (days - 1).clamp(0, 3650).toInt()),
       );
     }
 
@@ -187,10 +188,10 @@ class RuleBasedScheduleParser implements ScheduleParser {
   DateTime _parseDate(String input, DateTime baseDate, DateTime? selectedDate) {
     final today = DateTime(baseDate.year, baseDate.month, baseDate.day);
     if (input.contains('모레')) {
-      return today.add(const Duration(days: 2));
+      return shiftCalendarDateByDays(today, 2);
     }
     if (input.contains('내일')) {
-      return today.add(const Duration(days: 1));
+      return shiftCalendarDateByDays(today, 1);
     }
     if (input.contains('오늘')) {
       return today;
@@ -205,13 +206,14 @@ class RuleBasedScheduleParser implements ScheduleParser {
 
     final weekday = _parseWeekday(input);
     if (weekday != null) {
-      final startOfWeek = today.subtract(Duration(days: today.weekday - 1));
+      final startOfWeek = shiftCalendarDateByDays(today, 1 - today.weekday);
       final isNextWeek = input.contains('다음 주') || input.contains('다음주');
-      final candidate = startOfWeek.add(
-        Duration(days: weekday - 1 + (isNextWeek ? 7 : 0)),
+      final candidate = shiftCalendarDateByDays(
+        startOfWeek,
+        weekday - 1 + (isNextWeek ? 7 : 0),
       );
       if (!isNextWeek && candidate.isBefore(today)) {
-        return candidate.add(const Duration(days: 7));
+        return shiftCalendarDateByDays(candidate, 7);
       }
       return candidate;
     }
@@ -232,7 +234,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
   }
 
   DateTime _resolveMonthDay(int month, int day, DateTime today) {
-    final earliest = today.subtract(const Duration(days: 1));
+    final earliest = shiftCalendarDateByDays(today, -1);
     // Eight years is enough to reach the next 29 February.
     for (var year = today.year; year <= today.year + 8; year++) {
       final date = _exactDate(year, month, day);
@@ -256,8 +258,8 @@ class RuleBasedScheduleParser implements ScheduleParser {
 
   DateTime _resolveRelativeDate(String value, DateTime today) {
     return switch (value) {
-      '모레' => today.add(const Duration(days: 2)),
-      '내일' => today.add(const Duration(days: 1)),
+      '모레' => shiftCalendarDateByDays(today, 2),
+      '내일' => shiftCalendarDateByDays(today, 1),
       _ => today,
     };
   }
@@ -303,11 +305,7 @@ class RuleBasedScheduleParser implements ScheduleParser {
   }) {
     if (endDate != null) {
       if (allDay) {
-        return DateTime(
-          endDate.year,
-          endDate.month,
-          endDate.day,
-        ).add(const Duration(days: 1));
+        return DateTime(endDate.year, endDate.month, endDate.day + 1);
       }
       if (endTime != null) {
         final endAt = DateTime(
@@ -319,13 +317,9 @@ class RuleBasedScheduleParser implements ScheduleParser {
         );
         return endAt.isAfter(startAt)
             ? endAt
-            : endAt.add(const Duration(days: 1));
+            : shiftCalendarDateByDays(endAt, 1);
       }
-      return DateTime(
-        endDate.year,
-        endDate.month,
-        endDate.day,
-      ).add(const Duration(days: 1));
+      return DateTime(endDate.year, endDate.month, endDate.day + 1);
     }
 
     if (endTime != null) {
@@ -336,13 +330,11 @@ class RuleBasedScheduleParser implements ScheduleParser {
         endTime.hour,
         endTime.minute,
       );
-      return endAt.isAfter(startAt)
-          ? endAt
-          : endAt.add(const Duration(days: 1));
+      return endAt.isAfter(startAt) ? endAt : shiftCalendarDateByDays(endAt, 1);
     }
 
     return allDay
-        ? startAt.add(const Duration(days: 1))
+        ? shiftCalendarDateByDays(startAt, 1)
         : startAt.add(const Duration(hours: 1));
   }
 

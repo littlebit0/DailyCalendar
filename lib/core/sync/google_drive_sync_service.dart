@@ -12,6 +12,7 @@ import '../../features/events/domain/event_category.dart';
 import '../../features/events/domain/event_repository.dart';
 import '../../features/events/domain/recurrence_rule.dart';
 import '../../features/events/domain/event_deletion.dart';
+import '../../features/events/data/event_template_store.dart';
 import '../../features/timetable/data/timetable_store.dart';
 import '../../features/timetable/data/timetable_sync_document.dart';
 import 'sync_version.dart';
@@ -90,11 +91,14 @@ class GoogleDriveSyncService implements SyncService {
       validateRequest: () => _validateSyncSession?.call(),
     );
     _timetableStore.localRevisionNotifier.addListener(_timetableChanged);
+    _templateStore.localRevisionNotifier.addListener(_templatesChanged);
   }
 
   static const _legacySyncFileName = 'daily-sync-v1.json';
   static const _settingsFileName = 'daily-sync-v2-settings.json';
   static const _timetableFileName = 'daily-sync-v2-timetable.json';
+  // Must not start with the event prefix, or it would be read as an event.
+  static const _templatesFileName = 'daily-sync-v2-templates.json';
   static const _eventFilePrefix = 'daily-sync-v2-event-';
   static const _eventFileSuffix = '.json';
   static const _v2FilePrefix = 'daily-sync-v2-';
@@ -114,6 +118,12 @@ class GoogleDriveSyncService implements SyncService {
   final SettingsRepository _settingsRepository;
   TimetableStore get _timetableStore => _settingsRepository.timetableStore;
   (String?, String?, String?)? _timetableBootstrapIdentity;
+  EventTemplateStore get _templateStore => _settingsRepository.eventTemplates;
+  (String?, String?, String?)? _templatesBootstrapIdentity;
+
+  /// Timetable and event templates travel in the same "documents" requests.
+  bool get _documentsPending =>
+      _timetableStore.hasPendingSync || _templateStore.hasPendingSync;
   (String?, String?, String?)? _academicSettingsBootstrapIdentity;
   late final PacedHttpClient _httpClient;
   final Duration _backupRestoreDelay;
@@ -238,6 +248,10 @@ class GoogleDriveSyncService implements SyncService {
     if (_started && _timetableStore.hasPendingSync) _queueChangeSync();
   }
 
+  void _templatesChanged() {
+    if (_started && _templateStore.hasPendingSync) _queueChangeSync();
+  }
+
   Future<void> syncNow({bool promptIfNecessary = false}) async {
     final eventIds = await _takePendingEventIds();
     await _enqueueSync(
@@ -246,7 +260,7 @@ class GoogleDriveSyncService implements SyncService {
       promptIfNecessary: promptIfNecessary,
       eventIds: eventIds,
       includeSettings: _settingsRepository.hasPendingSettingsSync,
-      includeTimetable: _timetableStore.hasPendingSync,
+      includeTimetable: _documentsPending,
     );
   }
 
@@ -257,7 +271,7 @@ class GoogleDriveSyncService implements SyncService {
       promptIfNecessary: promptIfNecessary,
       eventIds: eventIds,
       includeSettings: _settingsRepository.hasPendingSettingsSync,
-      includeTimetable: _timetableStore.hasPendingSync,
+      includeTimetable: _documentsPending,
       initializeChangeToken: true,
     );
   }
@@ -281,8 +295,7 @@ class GoogleDriveSyncService implements SyncService {
   }) {
     final shouldIncludeSettings = includeSettings ?? eventIds == null;
     final shouldIncludeTimetable =
-        includeTimetable ??
-        (eventIds == null && _timetableStore.hasPendingSync);
+        includeTimetable ?? (eventIds == null && _documentsPending);
     if (!shouldIncludeSettings &&
         !shouldIncludeTimetable &&
         eventIds != null &&
@@ -314,7 +327,7 @@ class GoogleDriveSyncService implements SyncService {
       _manualRestoreDepth -= 1;
       if (succeeded &&
           _manualRestoreDepth == 0 &&
-          (_queuedEventIds.isNotEmpty || _timetableStore.hasPendingSync)) {
+          (_queuedEventIds.isNotEmpty || _documentsPending)) {
         _queueChangeSync();
       }
     }
@@ -326,7 +339,7 @@ class GoogleDriveSyncService implements SyncService {
   }) async {
     final eventIds = await _takePendingEventIds();
     final includeSettings = _settingsRepository.hasPendingSettingsSync;
-    final includeTimetable = _timetableStore.hasPendingSync;
+    final includeTimetable = _documentsPending;
 
     if (restoreAfterBackup) {
       await _enqueueSync(
@@ -395,7 +408,7 @@ class GoogleDriveSyncService implements SyncService {
   }
 
   Future<bool> hasPendingChanges() async =>
-      _timetableStore.hasPendingSync ||
+      _documentsPending ||
       _settingsRepository.hasPendingSettingsSync ||
       (await _eventRepository.pendingSyncEvents()).any(_canSyncEvent) ||
       (await _maintenance?.deletionRecords(pendingOnly: true) ??
@@ -442,6 +455,7 @@ class GoogleDriveSyncService implements SyncService {
     _sessionGeneration++;
     _started = false;
     _timetableBootstrapIdentity = null;
+    _templatesBootstrapIdentity = null;
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
     _changeSyncTimer = null;
@@ -463,6 +477,7 @@ class GoogleDriveSyncService implements SyncService {
   void dispose() {
     _sessionGeneration++;
     _timetableStore.localRevisionNotifier.removeListener(_timetableChanged);
+    _templateStore.localRevisionNotifier.removeListener(_templatesChanged);
     _cancelQueuedRequests();
     _changeSyncTimer?.cancel();
     _automaticRetryTimer?.cancel();
@@ -588,7 +603,7 @@ class GoogleDriveSyncService implements SyncService {
     final eventIds = Set<String>.from(_queuedEventIds);
     _queuedEventIds.clear();
     final includeSettings = _settingsRepository.hasPendingSettingsSync;
-    final includeTimetable = _timetableStore.hasPendingSync;
+    final includeTimetable = _documentsPending;
     if (eventIds.isEmpty && !includeSettings && !includeTimetable) {
       return;
     }
@@ -692,6 +707,11 @@ class GoogleDriveSyncService implements SyncService {
               '아직 동기화되지 않은 시간표 변경이 남아 있습니다. 다시 시도해 주세요.',
             );
           }
+          if (request.includeTimetable && _templateStore.hasPendingSync) {
+            throw const GoogleDriveSyncException(
+              '아직 동기화되지 않은 일정 템플릿 변경이 남아 있습니다. 다시 시도해 주세요.',
+            );
+          }
           break;
         case _SyncRequestKind.restoreOnly:
           await _restore(headers);
@@ -704,7 +724,7 @@ class GoogleDriveSyncService implements SyncService {
           if (request.includeSettings) {
             await _backupSettings(headers, _settingsRepository.load());
           }
-          if (request.includeTimetable) await _backupTimetable(headers);
+          if (request.includeTimetable) await _backupDocuments(headers);
           statusNotifier.value = statusNotifier.value.copyWith(
             message: '복원 준비 중',
           );
@@ -732,7 +752,7 @@ class GoogleDriveSyncService implements SyncService {
           if (request.includeSettings) {
             await _backupSettings(headers, _settingsRepository.load());
           }
-          if (request.includeTimetable) await _backupTimetable(headers);
+          if (request.includeTimetable) await _backupDocuments(headers);
           statusNotifier.value = statusNotifier.value.copyWith(
             message: '다른 기기 변경 확인 준비 중',
           );
@@ -778,7 +798,7 @@ class GoogleDriveSyncService implements SyncService {
           headers,
           eventIds: remaining,
           includeSettings: _settingsRepository.hasPendingSettingsSync,
-          includeTimetable: _timetableStore.hasPendingSync,
+          includeTimetable: _documentsPending,
         );
         if (conflicts > 0 || await hasPendingChanges()) {
           throw const GoogleDriveSyncException(
@@ -972,8 +992,13 @@ class GoogleDriveSyncService implements SyncService {
     if (includeSettings) {
       await _backupSettings(authHeaders, _settingsRepository.load());
     }
-    if (includeTimetable) await _backupTimetable(authHeaders);
+    if (includeTimetable) await _backupDocuments(authHeaders);
     return conflicts;
+  }
+
+  Future<void> _backupDocuments(Map<String, String> headers) async {
+    if (_timetableStore.hasPendingSync) await _backupTimetable(headers);
+    if (_templateStore.hasPendingSync) await _backupTemplates(headers);
   }
 
   Future<void> _restore(Map<String, String> authHeaders) async {
@@ -981,6 +1006,7 @@ class GoogleDriveSyncService implements SyncService {
     final remoteFiles = await _listEventFiles(authHeaders);
     final remoteEvents = await _downloadEventFiles(authHeaders, remoteFiles);
     final remoteTimetable = await _downloadRestorableTimetable(authHeaders);
+    final remoteTemplates = await _downloadRestorableTemplates(authHeaders);
     _validateSyncSession?.call();
     await _applyDownloadedEvents(remoteEvents);
     await _queueEventsMissingFromDrive({
@@ -988,6 +1014,7 @@ class GoogleDriveSyncService implements SyncService {
     });
     if (remoteSettings != null) await _applyDownloadedSettings(remoteSettings);
     await _applyDownloadedTimetable(remoteTimetable);
+    await _applyDownloadedTemplates(remoteTemplates);
     _academicSettingsBootstrapIdentity = _accountIdentity;
     await _refreshWidgets();
   }
@@ -1180,11 +1207,16 @@ class GoogleDriveSyncService implements SyncService {
             academicProfile.lmsUserId == null ||
             academicProfile.lmsIntegrationEnabled == null);
     var needsTimetable = _timetableBootstrapIdentity != _accountIdentity;
+    var needsTemplates = _templatesBootstrapIdentity != _accountIdentity;
     final externalEvents = <_DownloadedEvent>[];
     final eventIds = <String>{};
     for (final change in dailyChanges.values) {
       if (change.fileName == _timetableFileName) {
         needsTimetable = true;
+        continue;
+      }
+      if (change.fileName == _templatesFileName) {
+        needsTemplates = true;
         continue;
       }
       if (change.fileName == _settingsFileName) {
@@ -1219,6 +1251,9 @@ class GoogleDriveSyncService implements SyncService {
     final externalTimetable = needsTimetable
         ? await _downloadRestorableTimetable(authHeaders)
         : null;
+    final externalTemplates = needsTemplates
+        ? await _downloadRestorableTemplates(authHeaders)
+        : null;
 
     var restored = false;
     _validateSyncSession?.call();
@@ -1230,6 +1265,9 @@ class GoogleDriveSyncService implements SyncService {
     }
     if (needsTimetable) {
       restored = await _applyDownloadedTimetable(externalTimetable) || restored;
+    }
+    if (needsTemplates) {
+      restored = await _applyDownloadedTemplates(externalTemplates) || restored;
     }
     if (needsAcademicSettings) {
       _academicSettingsBootstrapIdentity = _accountIdentity;
@@ -1248,6 +1286,7 @@ class GoogleDriveSyncService implements SyncService {
   bool _isDailySyncFileName(String fileName) {
     return fileName == _settingsFileName ||
         fileName == _timetableFileName ||
+        fileName == _templatesFileName ||
         _eventIdFromFileName(fileName) != null;
   }
 
@@ -1445,6 +1484,127 @@ class GoogleDriveSyncService implements SyncService {
       return;
     }
     throw const GoogleDriveSyncException('동시에 변경된 시간표가 있어 동기화를 다시 시도해야 합니다.');
+  }
+
+  Future<List<_DriveFile>> _listTemplateFiles(Map<String, String> headers) =>
+      _listFiles(headers, "name = '$_templatesFileName' and trashed = false");
+
+  Future<_DownloadedSettings> _downloadTemplateFile(
+    Map<String, String> headers,
+    String fileId, {
+    bool requireVersion = false,
+  }) async {
+    final (response, etag) = await _downloadJson(
+      headers,
+      fileId,
+      requireVersion,
+    );
+    try {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      if (data['schemaVersion'] != 2 || data['type'] != 'eventTemplates') {
+        throw const FormatException('Unsupported template sync document');
+      }
+      return _DownloadedSettings(
+        document: SettingsSyncDocument.fromJson(
+          Map<String, Object?>.from(data['document'] as Map),
+        ),
+        fileId: fileId,
+        etag: etag,
+      );
+    } on FormatException {
+      throw const GoogleDriveSyncException(
+        'Google Drive 일정 템플릿 데이터가 손상되었거나 지원하지 않는 형식입니다. 기존 데이터는 보존됩니다.',
+      );
+    } on TypeError {
+      throw const GoogleDriveSyncException(
+        'Google Drive 일정 템플릿 데이터가 손상되었거나 지원하지 않는 형식입니다. 기존 데이터는 보존됩니다.',
+      );
+    }
+  }
+
+  Future<SettingsSyncDocument?> _downloadRestorableTemplates(
+    Map<String, String> headers,
+  ) async {
+    final files = await _listTemplateFiles(headers);
+    if (files.isEmpty) return null;
+    var merged = const SettingsSyncDocument();
+    for (final file in files) {
+      merged = merged.merge(
+        (await _downloadTemplateFile(headers, file.id)).document,
+      );
+    }
+    return merged;
+  }
+
+  Future<bool> _applyDownloadedTemplates(SettingsSyncDocument? remote) async {
+    _validateSyncSession?.call();
+    var changed = false;
+    if (remote != null) {
+      final before = _templateStore.syncDocument();
+      await _templateStore.mergeSyncDocument(
+        remote,
+        validateSession: _validateSyncSession,
+      );
+      changed = !before.sameAs(_templateStore.syncDocument());
+      _templatesChanged();
+    }
+    _validateSyncSession?.call();
+    _templatesBootstrapIdentity = _accountIdentity;
+    return changed;
+  }
+
+  Future<void> _backupTemplates(Map<String, String> headers) async {
+    for (var attempt = 0; attempt < 4; attempt++) {
+      final files = await _listTemplateFiles(headers);
+      final remote = await _mapSequentially(
+        files,
+        (file) => _downloadTemplateFile(headers, file.id, requireVersion: true),
+      );
+      _validateSyncSession?.call();
+      var merged = _templateStore.syncDocument();
+      for (final item in remote) {
+        merged = merged.merge(item.document);
+      }
+      final payload = jsonEncode({
+        'schemaVersion': 2,
+        'type': 'eventTemplates',
+        'document': merged.toJson(),
+      });
+      try {
+        if (files.isEmpty) {
+          if (merged.fields.isNotEmpty) {
+            await _uploadJsonFile(
+              headers,
+              fileName: _templatesFileName,
+              jsonBody: payload,
+            );
+          }
+        } else {
+          for (final item in remote) {
+            if (item.document.sameAs(merged)) continue;
+            await _uploadJsonFile(
+              headers,
+              fileName: _templatesFileName,
+              fileId: item.fileId,
+              expectedEtag: item.etag,
+              jsonBody: payload,
+            );
+          }
+        }
+      } on _ConcurrentDriveWrite {
+        continue;
+      }
+      _validateSyncSession?.call();
+      await _templateStore.acknowledgeSyncDocument(
+        merged,
+        validateSession: _validateSyncSession,
+      );
+      _templatesBootstrapIdentity = _accountIdentity;
+      return;
+    }
+    throw const GoogleDriveSyncException(
+      '동시에 변경된 일정 템플릿이 있어 동기화를 다시 시도해야 합니다.',
+    );
   }
 
   Future<void> _backupSettings(
@@ -2145,6 +2305,8 @@ class GoogleDriveSyncService implements SyncService {
       'completed': normalized.completed,
       'alarmEnabled': normalized.alarmEnabled,
       'allDayAlarmMinutes': normalized.allDayAlarmMinutes,
+      'alarmMinutesBefore': normalized.alarmMinutesBefore,
+      'alarmCustomAt': normalized.alarmCustomAt?.toUtc().toIso8601String(),
     };
   }
 
@@ -2216,6 +2378,8 @@ class GoogleDriveSyncService implements SyncService {
       completed: json['completed'] as bool? ?? false,
       alarmEnabled: json['alarmEnabled'] as bool? ?? false,
       allDayAlarmMinutes: json['allDayAlarmMinutes'] as int? ?? 9 * 60,
+      alarmMinutesBefore: json['alarmMinutesBefore'] as int? ?? 0,
+      alarmCustomAt: _readDate(json['alarmCustomAt']),
     ).normalizeAllDayBounds();
   }
 

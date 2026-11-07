@@ -14,6 +14,7 @@ import 'package:daily/features/events/data/app_database.dart';
 import 'package:daily/features/events/data/drift_event_repository.dart';
 import 'package:daily/features/events/domain/calendar_event.dart';
 import 'package:daily/features/events/domain/event_category.dart';
+import 'package:daily/features/events/domain/event_template.dart';
 import 'package:daily/features/timetable/data/timetable_store.dart';
 import 'package:daily/features/timetable/data/timetable_sync_document.dart';
 import 'package:daily/features/timetable/domain/timetable.dart';
@@ -1115,6 +1116,45 @@ void main() {
       expect(await device.service.hasPendingChanges(), isFalse);
     },
   );
+
+  test('event templates sync through their own Drive document', () async {
+    const file = 'daily-sync-v2-templates.json';
+    final drive = _TimetableDrive();
+    final source = await _Device.create(drive);
+    final template = EventTemplate(
+      id: 'workout',
+      name: '저녁 운동',
+      title: '운동',
+      startMinutes: 19 * 60,
+      endMinutes: 20 * 60,
+      categoryId: EventCategory.basic.id,
+      reminderMinutesBeforeList: const [10],
+    );
+    await source.settings.eventTemplates.save(template);
+    await source.service.syncPendingChangesNow();
+    expect(drive.writes, [file]);
+    expect(drive.payload(file)['type'], 'eventTemplates');
+    expect(source.settings.eventTemplates.hasPendingSync, isFalse);
+
+    final target = await _Device.create(drive);
+    await target.service.restoreNow();
+    expect(
+      target.settings.eventTemplates.templates.single.toJson(),
+      template.toJson(),
+    );
+    // A template is not an event: nothing is created on restore.
+    expect(await target.events.allEventsForSync(), isEmpty);
+
+    await target.settings.saveDriveChangePageToken(
+      accountEmail: target.auth.email,
+      pageToken: drive.cursor,
+    );
+    await source.settings.eventTemplates.delete(template.id);
+    await source.service.syncPendingChangesNow();
+    await target.service.checkForRemoteChangesNow();
+    expect(target.settings.eventTemplates.templates, isEmpty);
+    expect(target.settings.eventTemplates.hasPendingSync, isFalse);
+  });
 }
 
 Map<String, Object?> _envelope(TimetableSyncDocument document) => {

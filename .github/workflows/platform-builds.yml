@@ -34,6 +34,9 @@ jobs:
       - name: Test Windows capture factory ownership
         run: python3 -m unittest discover -s tool/tests -p test_windows_capture_factory_release.py -v
 
+      - name: Test Windows WebView controller3 ownership
+        run: python3 -m unittest discover -s tool/tests -p test_windows_webview_controller3_release.py -v
+
       - name: Test Windows 64-bit notification time ABI
         run: python3 -m unittest discover -s tool/tests -p test_windows_notification_time64.py -v
 

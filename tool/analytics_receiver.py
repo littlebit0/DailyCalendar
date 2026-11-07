@@ -450,7 +450,10 @@ class Aggregator:
     count is bounded by the number of distinct groups, not by the event count.
     The report is a convenience copy: with `export_interval` seconds above zero
     it is rewritten at most that often (and by `flush_report`), so a busy
-    receiver does not re-export every group on every request.
+    receiver does not re-export every group on every request. Days whose
+    counters changed after their last export stay in `export_pending` (written
+    in the counting transaction), so a UTC day change, a failed write or a
+    restart cannot drop a day's last counts from its report.
     """
 
     def __init__(self, directory, now=None, export_interval=0):
@@ -459,7 +462,6 @@ class Aggregator:
         self._now = now or (lambda: datetime.now(timezone.utc))
         self._database = self.directory / "analytics-state.sqlite"
         self._export_interval = export_interval
-        self._export_dirty = False
         self._last_export = None
         self._last_export_day = None
 
@@ -474,13 +476,11 @@ class Aggregator:
     def flush_report(self):
         """Writes the pending report now (used when the receiver shuts down)."""
         with self.lock:
-            if not self._export_dirty:
-                return
             now = self._now()
             try:
                 connection = self._connect()
                 try:
-                    self._export(connection, now.strftime("%Y-%m-%d"), now)
+                    self._export_pending(connection, now)
                 finally:
                     connection.close()
             except (sqlite3.Error, OSError):
@@ -509,13 +509,16 @@ class Aggregator:
                             continue
                         accepted += 1
                         self._count(connection, day, environment, event)
+                    if accepted:
+                        connection.execute(
+                            "INSERT OR IGNORE INTO export_pending(day) VALUES (?)", (day,)
+                        )
                     connection.execute("COMMIT")
                 except BaseException:
                     connection.execute("ROLLBACK")
                     raise
-                self._export_dirty = self._export_dirty or accepted > 0
-                if self._export_dirty and self._export_due(day, now):
-                    self._export(connection, day, now)
+                if self._export_due(day, now):
+                    self._export_pending(connection, now)
                 return accepted
             finally:
                 connection.close()
@@ -555,6 +558,7 @@ class Aggregator:
         )
         # Retention cleanup filters on the day, which the hash key cannot serve.
         connection.execute("CREATE INDEX IF NOT EXISTS dedupe_day ON dedupe(day)")
+        connection.execute("CREATE TABLE IF NOT EXISTS export_pending(day TEXT PRIMARY KEY)")
         connection.execute("CREATE TABLE IF NOT EXISTS meta(name TEXT PRIMARY KEY, value TEXT)")
         return connection
 
@@ -585,6 +589,12 @@ class Aggregator:
             (day, key, json.dumps(group, ensure_ascii=True, sort_keys=True, separators=(",", ":"))),
         )
 
+    def _export_pending(self, connection, now):
+        """Exports every day whose counters changed since its last report, oldest first."""
+        days = [row[0] for row in connection.execute("SELECT day FROM export_pending ORDER BY day")]
+        for day in days:
+            self._export(connection, day, now)
+
     def _export(self, connection, day, now):
         """Rewrites the day's report from its counter rows (best effort)."""
         rows = connection.execute("SELECT key, data FROM groups WHERE day = ?", (day,)).fetchall()
@@ -597,9 +607,10 @@ class Aggregator:
         try:
             self._write_json(self.directory / f"analytics-{day}.json", aggregate)
         except OSError:
-            # The counters are already committed; the next request refreshes it.
+            # The counters are already committed and the day stays pending, so
+            # the next due request or shutdown retries it.
             return
-        self._export_dirty = False
+        connection.execute("DELETE FROM export_pending WHERE day = ?", (day,))
         self._last_export = now
         self._last_export_day = day
 
@@ -665,6 +676,7 @@ class Aggregator:
         group_cutoff = (today - timedelta(days=90)).strftime("%Y-%m-%d")
         connection.execute("DELETE FROM dedupe WHERE day < ?", (dedupe_cutoff,))
         connection.execute("DELETE FROM groups WHERE day < ?", (group_cutoff,))
+        connection.execute("DELETE FROM export_pending WHERE day < ?", (group_cutoff,))
         for path in self.directory.glob("*.json"):
             match = re.fullmatch(r"(analytics|dedupe)-(\d{4}-\d{2}-\d{2})\.json", path.name)
             if not match:

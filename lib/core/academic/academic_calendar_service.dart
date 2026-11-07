@@ -100,6 +100,9 @@ class AcademicCalendarService extends ChangeNotifier {
         previous: category,
         updated: updated,
         isCurrent: current,
+        // The label is the university name, which a personal category may
+        // share; only rows stored under the academic ID belong to it.
+        matchLegacyLabel: false,
       );
     } on Object {
       // Event rows stay on the old colour when propagation fails; restore only

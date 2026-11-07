@@ -1,3 +1,5 @@
+import 'dart:ui' show Offset;
+
 import '../../features/events/data/recurrence_expander.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/recurrence_rule.dart';
@@ -15,13 +17,21 @@ typedef CalendarEventTimeDropCallback =
 enum CalendarEventDragOrigin { calendar, sidebar }
 
 class CalendarEventDragPayload {
-  const CalendarEventDragPayload(
+  CalendarEventDragPayload(
     this.event, {
     this.origin = CalendarEventDragOrigin.calendar,
+    this.sourceStartOffset = Duration.zero,
   });
 
   final CalendarEvent event;
   final CalendarEventDragOrigin origin;
+
+  /// Wall-clock time from [event]'s start to the top of the dragged block.
+  /// Non-zero only for a block clipped at midnight.
+  final Duration sourceStartOffset;
+
+  /// Pointer position inside the dragged block when the drag started.
+  Offset? grabOffset;
 }
 
 const calendarEventAppendIndex = 1 << 30;

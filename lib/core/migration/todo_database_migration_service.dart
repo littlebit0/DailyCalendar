@@ -11,6 +11,7 @@ import '../../features/events/data/app_database.dart';
 import '../../features/events/data/event_mapper.dart';
 import '../../features/events/domain/calendar_event.dart';
 import '../../features/events/domain/event_deletion.dart';
+import '../../features/events/domain/recurrence_rule.dart';
 import '../sync/sync_version.dart';
 
 enum TodoMigrationStage {
@@ -139,11 +140,12 @@ class TodoDatabaseMigrationService {
       }
 
       // Schema 8 already has Todo completion, exact sync timestamps and compact
-      // deletions. Schemas 9-11 only add nullable columns (LMS metadata, the
-      // recurrence anchor day, recurrence details): they must not repeat the old
-      // cloud migration or turn every unchanged event into an upload.
+      // deletions. Schemas 9-12 only add nullable or defaulted columns (LMS
+      // metadata, the recurrence anchor day, recurrence details, alarm timing):
+      // they must not repeat the old cloud migration or turn every unchanged
+      // event into an upload.
       final isAdditiveLmsMigration =
-          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 11;
+          originalVersion >= 8 && AppDatabase.currentSchemaVersion <= 12;
       final requiresLegacyCloudMigration = !isAdditiveLmsMigration;
       List<CalendarEvent>? remoteEvents = const <CalendarEvent>[];
       if (requiresLegacyCloudMigration) {
@@ -285,6 +287,9 @@ class TodoDatabaseMigrationService {
                   ?.map((event) => event.id)
                   .where((id) => !removedIds.contains(id)) ??
               const [],
+          remoteWinners: remoteWinners.where(
+            (event) => !removedIds.contains(event.id),
+          ),
         );
       } finally {
         working.close();
@@ -425,6 +430,7 @@ class TodoDatabaseMigrationService {
     recurrenceUntil: _dateFromSql(row['recurrence_until']),
     recurrenceCount: row['recurrence_count'] as int?,
     recurrenceAnchorDay: row['recurrence_anchor_day'] as int?,
+    recurrenceDetails: row['recurrence_details'] as String?,
     recurrenceExcludedDates:
         row['recurrence_excluded_dates'] as String? ?? '[]',
     createdAt: _dateFromSql(row['created_at'])!,
@@ -437,6 +443,8 @@ class TodoDatabaseMigrationService {
     completed: row['completed'] == 1,
     alarmEnabled: row['alarm_enabled'] == 1,
     allDayAlarmMinutes: row['all_day_alarm_minutes'] as int? ?? 540,
+    alarmMinutesBefore: row['alarm_minutes_before'] as int? ?? 0,
+    alarmCustomAt: _dateFromSql(row['alarm_custom_at']),
   ).toDomain();
 
   List<CalendarEvent> _remoteWinners(
@@ -480,11 +488,13 @@ class TodoDatabaseMigrationService {
         category, color_value, reminder_minutes_before,
         reminder_minutes_before_list, recurrence_frequency,
         recurrence_interval, recurrence_until, recurrence_count,
+        recurrence_anchor_day, recurrence_details,
         recurrence_excluded_dates, created_at, updated_at, deleted_at,
         device_id, sync_status, show_dday, completed, alarm_enabled,
-        all_day_alarm_minutes, lms_metadata
+        all_day_alarm_minutes, alarm_minutes_before, alarm_custom_at,
+        lms_metadata
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-        ?, ?, ?, ?, ?, ?, ?, ?)
+        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
         title = excluded.title,
         memo = excluded.memo,
@@ -502,6 +512,8 @@ class TodoDatabaseMigrationService {
         recurrence_interval = excluded.recurrence_interval,
         recurrence_until = excluded.recurrence_until,
         recurrence_count = excluded.recurrence_count,
+        recurrence_anchor_day = excluded.recurrence_anchor_day,
+        recurrence_details = excluded.recurrence_details,
         recurrence_excluded_dates = excluded.recurrence_excluded_dates,
         created_at = excluded.created_at,
         updated_at = excluded.updated_at,
@@ -512,6 +524,8 @@ class TodoDatabaseMigrationService {
         completed = excluded.completed,
         alarm_enabled = excluded.alarm_enabled,
         all_day_alarm_minutes = excluded.all_day_alarm_minutes,
+        alarm_minutes_before = excluded.alarm_minutes_before,
+        alarm_custom_at = excluded.alarm_custom_at,
         lms_metadata = excluded.lms_metadata
       ''',
       [
@@ -534,12 +548,9 @@ class TodoDatabaseMigrationService {
             ? null
             : _dateToSql(normalized.recurrence.until!),
         normalized.recurrence.count,
-        jsonEncode(
-          normalized.recurrence.excludedDates
-              .map((date) => DateTime(date.year, date.month, date.day))
-              .map((date) => date.toIso8601String())
-              .toList(),
-        ),
+        normalized.recurrence.anchorDay,
+        normalized.recurrence.detailsJson,
+        _excludedDatesJson(normalized.recurrence),
         _dateToSql(normalized.createdAt),
         _dateToSql(normalized.updatedAt),
         normalized.deletedAt == null ? null : _dateToSql(normalized.deletedAt!),
@@ -549,6 +560,10 @@ class TodoDatabaseMigrationService {
         normalized.completed ? 1 : 0,
         normalized.alarmEnabled ? 1 : 0,
         normalized.allDayAlarmMinutes,
+        normalized.alarmMinutesBefore,
+        normalized.alarmCustomAt == null
+            ? null
+            : _dateToSql(normalized.alarmCustomAt!),
         normalized.lms == null ? null : jsonEncode(normalized.lms!.toJson()),
       ],
     );
@@ -563,6 +578,7 @@ class TodoDatabaseMigrationService {
     required List<Map<String, Object?>> expectedColumns,
     required Iterable<String> localIds,
     required Iterable<String> remoteIds,
+    required Iterable<CalendarEvent> remoteWinners,
   }) {
     if (_userVersion(database) != AppDatabase.currentSchemaVersion ||
         !_hasCurrentSchema(database, expectedColumns) ||
@@ -584,7 +600,36 @@ class TodoDatabaseMigrationService {
     if (invalidCompletion.isNotEmpty) {
       throw StateError('Todo completion validation failed.');
     }
+    // Stored remote winners must keep the exact rule the normal repository
+    // would restore, or later occurrences silently change.
+    for (final winner in remoteWinners) {
+      final rows = database.select('SELECT * FROM event_records WHERE id = ?', [
+        winner.id,
+      ]);
+      if (rows.isEmpty ||
+          _recurrenceSignature(_readEventRow(rows.single).recurrence) !=
+              _recurrenceSignature(winner.normalizeAllDayBounds().recurrence)) {
+        throw StateError('Todo recurrence validation failed.');
+      }
+    }
   }
+
+  String _recurrenceSignature(RecurrenceRule rule) => jsonEncode([
+    rule.frequency.name,
+    rule.interval,
+    rule.until == null ? null : _dateToSql(rule.until!),
+    rule.count,
+    rule.anchorDay,
+    rule.detailsJson,
+    _excludedDatesJson(rule),
+  ]);
+
+  String _excludedDatesJson(RecurrenceRule rule) => jsonEncode(
+    rule.excludedDates
+        .map((date) => DateTime(date.year, date.month, date.day))
+        .map((date) => date.toIso8601String())
+        .toList(),
+  );
 
   final void Function()? beforeCommit;
 
