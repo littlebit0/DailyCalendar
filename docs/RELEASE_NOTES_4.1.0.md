@@ -43,7 +43,7 @@ Drive v2 시간표 문서 형식과 `schemaVersion`은 바꾸지 않았습니다
 ## 알려진 제한
 
 - 자동 오류 보고와 수동 버그 제보를 받는 서버 수신기는 이 릴리스와 별도로 배포합니다. 수신기가 준비되기 전에는 보고 전송이 실패할 수 있습니다.
-- Mac App Store용 4.1.0은 Apple Silicon(M 시리즈) Mac 전용입니다. 현재 빌드 도구(Xcode 27과 Flutter 3.44.0)의 호환 문제로 Intel·Apple Silicon 공용 빌드를 만들 수 없었습니다. Intel Mac에서는 App Store 4.1.0을 설치·업데이트할 수 없습니다. GitHub에 올리는 macOS DMG는 이 제한 없이 별도 빌드 환경에서 만듭니다.
+- Mac App Store용 4.1.0은 Apple Silicon(M 시리즈) Mac 전용입니다. 현재 빌드 도구(Xcode 27과 Flutter 3.44.0)의 호환 문제로 Intel·Apple Silicon 공용 빌드를 만들 수 없었습니다. Intel Mac에서는 App Store 4.1.0을 설치·업데이트할 수 없습니다. GitHub 릴리스의 macOS DMG는 GitHub Actions 빌드 환경에서 따로 만듭니다.
 - 학사일정 1차 지원 학교와 학교 시간표 자료는 학교 공개 자료 기준으로 연동했습니다. 학교별 실제 계정 화면 확인은 일부 학교만 했습니다.
 
 ## 검증
