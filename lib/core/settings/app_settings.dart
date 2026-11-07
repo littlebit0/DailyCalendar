@@ -246,6 +246,7 @@ class AppSettings {
     this.calendarShowHolidays = true,
     this.calendarHolidayBackgroundEnabled = true,
     this.calendarDdayOnly = false,
+    this.calendarShowOvernightEventsOnFollowingDays = true,
     this.appLockEnabled = false,
     this.appLockBiometricsEnabled = false,
     this.appLockMethod = AppLockMethod.noPin,
@@ -295,6 +296,11 @@ class AppSettings {
   final bool calendarShowHolidays;
   final bool calendarHolidayBackgroundEnabled;
   final bool calendarDdayOnly;
+
+  /// Lists timed events on every local date they overlap (true) or only on the
+  /// start date (false) in month and list views. Defaults to true because the
+  /// calendar always listed overlapping dates before this setting existed.
+  final bool calendarShowOvernightEventsOnFollowingDays;
   final bool appLockEnabled;
   final bool appLockBiometricsEnabled;
   final AppLockMethod appLockMethod;
@@ -332,6 +338,7 @@ class AppSettings {
     bool? calendarShowHolidays,
     bool? calendarHolidayBackgroundEnabled,
     bool? calendarDdayOnly,
+    bool? calendarShowOvernightEventsOnFollowingDays,
     bool? appLockEnabled,
     bool? appLockBiometricsEnabled,
     AppLockMethod? appLockMethod,
@@ -382,6 +389,9 @@ class AppSettings {
           calendarHolidayBackgroundEnabled ??
           this.calendarHolidayBackgroundEnabled,
       calendarDdayOnly: calendarDdayOnly ?? this.calendarDdayOnly,
+      calendarShowOvernightEventsOnFollowingDays:
+          calendarShowOvernightEventsOnFollowingDays ??
+          this.calendarShowOvernightEventsOnFollowingDays,
       appLockEnabled: appLockEnabled ?? this.appLockEnabled,
       appLockBiometricsEnabled:
           appLockBiometricsEnabled ?? this.appLockBiometricsEnabled,

@@ -1,5 +1,21 @@
 import '../../features/events/domain/calendar_event.dart';
 
+/// Whether month and list views show [event] on the local date
+/// [dayStart, dayEnd). With [showOvernightOnFollowingDays] off, a timed event
+/// is listed only on its start date; all-day events keep their full span.
+/// Schedule timelines must not use this: they always place the real interval.
+bool calendarEventListedOnDay(
+  CalendarEvent event,
+  DateTime dayStart,
+  DateTime dayEnd, {
+  required bool showOvernightOnFollowingDays,
+}) {
+  if (showOvernightOnFollowingDays || event.allDay) {
+    return event.overlaps(dayStart, dayEnd);
+  }
+  return !event.startAt.isBefore(dayStart) && event.startAt.isBefore(dayEnd);
+}
+
 /// A visible, inclusive date span. The event itself keeps its exclusive end.
 class CalendarEventSpan {
   const CalendarEventSpan({
@@ -20,17 +36,20 @@ class CalendarEventSpan {
     CalendarEvent event,
     DateTime firstDay, {
     int dayCount = 7,
+    bool startDayOnly = false,
   }) {
     // UTC date ordinals avoid losing a column across a daylight-saving change.
     DateTime ordinal(DateTime date) =>
         DateTime.utc(date.year, date.month, date.day);
     final origin = ordinal(firstDay);
     final start = ordinal(event.startAt).difference(origin).inDays;
-    final end = ordinal(
-      event.lms != null && event.startAt == event.endAt
-          ? event.endAt
-          : event.endAt.subtract(const Duration(microseconds: 1)),
-    ).difference(origin).inDays;
+    final end = startDayOnly
+        ? start
+        : ordinal(
+            event.lms != null && event.startAt == event.endAt
+                ? event.endAt
+                : event.endAt.subtract(const Duration(microseconds: 1)),
+          ).difference(origin).inDays;
     if (dayCount <= 0 || end < 0 || start >= dayCount || end < start) {
       return null;
     }
