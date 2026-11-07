@@ -29,6 +29,8 @@ import 'event_editor_dialog.dart';
 import 'event_template_actions.dart';
 import 'lms_event_status.dart';
 import 'event_completion_action.dart';
+import '../../timetable/data/timetable_store.dart';
+import '../../timetable/presentation/timetable_schedule.dart';
 
 enum _RecurringChangeScope { onlyThis, future, all }
 
@@ -67,6 +69,19 @@ class EventDetailsPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Timetable edits and sync refresh lecture-mode change rows at once (#771).
+    final timetable = ref.watch(timetableStoreProvider);
+    return ListenableBuilder(
+      listenable: timetable,
+      builder: (context, _) => _buildPanel(context, ref, timetable),
+    );
+  }
+
+  Widget _buildPanel(
+    BuildContext context,
+    WidgetRef ref,
+    TimetableStore timetable,
+  ) {
     final settings = ref.watch(appSettingsProvider);
     final selectedEvent = initialEvent;
     if (selectedEvent != null) {
@@ -104,15 +119,23 @@ class EventDetailsPanel extends ConsumerWidget {
         : null;
     final liveEventsAsync = ref.watch(eventsInRangeProvider(_dayRange(date)));
     final searchQuery = ref.watch(calendarSearchQueryProvider);
+    final changeDays = lectureModeChangesShown(settings, searchQuery)
+        ? [date]
+        : const <DateTime>[];
     final dayEvents = liveEventsAsync.maybeWhen(
       // The live result is unfiltered: apply the calendar's display policy again.
       data: (items) => _eventsForDay(
-        filterVisibleCalendarEvents(items, settings, searchQuery),
+        withLectureModeChanges(
+          context,
+          timetable,
+          changeDays,
+          filterVisibleCalendarEvents(items, settings, searchQuery),
+        ),
         date,
         settings,
       ),
       orElse: () => sortedCalendarEvents(
-        events,
+        withLectureModeChanges(context, timetable, changeDays, events),
         priority: settings.calendarEventSortPriority,
         categoryOrder: settings.categories
             .map((category) => category.id)
@@ -226,13 +249,15 @@ class EventDetailsPanel extends ConsumerWidget {
             dragOrigin: dragOrigin,
             itemBuilder: (context, event) => _EventTile(
               event: event,
-              onOpen: () => _openEventDetails(
-                context,
-                ref,
-                event,
-                settings.categories,
-                settings.defaultReminderMinutesList,
-              ),
+              onOpen: () => openTimetableProjection(context, ref, event)
+                  ? null
+                  : _openEventDetails(
+                      context,
+                      ref,
+                      event,
+                      settings.categories,
+                      settings.defaultReminderMinutesList,
+                    ),
               onEdit: event.readOnly
                   ? null
                   : () => _editEvent(

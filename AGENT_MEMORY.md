@@ -1,5 +1,28 @@
 # Daily Agent Memory — current handoff
 
+## #771 시간표 강의 방식 변경을 캘린더에 표시 — 2026-11-07
+
+- Changed (shared Dart, all platforms): a timetable meeting whose dated mode
+  (`overrides`) differs from `defaultMode` is shown as '강의명 + 방식'
+  (`context.tr(lectureModeLabel(...))`, e.g. '자료구조 휴강') in the month grid,
+  week/day list views and every `EventDetailsPanel` (day sheet, side panel,
+  day list). Render-only projections from
+  `lib/features/timetable/presentation/timetable_schedule.dart`
+  (`LectureModeChanges`, `withLectureModeChanges`, id `timetable/...`,
+  `readOnly` + `systemEvent`); never stored, synced, notified or searched.
+- Schedule (time) layout: `TimetableSchedule` keeps one block per occurrence;
+  changed occurrences, including 휴강/영상 that used to be hidden, now show with
+  the mode in the title. Unchanged class blocks are as before.
+- Hidden while a search query is active or D-day-only is on
+  (`lectureModeChangesShown`), in list and schedule layouts alike (schedule
+  then draws plain class blocks as before). Tapping a projection row in a day panel opens
+  `showClassOccurrence` (update-required gated); projection taps in month/week
+  grids select the date as before. Drop indices count the displayed projection
+  rows; saved manual orders skip them (`_storedOrderKeys`).
+- Verified: analyze, `test/features/timetable/lecture_mode_calendar_test.dart`,
+  full `flutter test` (see PR). Not verified on devices; test apps not updated
+  (deferred).
+
 ## #91 Automatic error reports — 2026-11-05
 
 - Client: `lib/core/support/error_report_service.dart` (on by default, Settings >

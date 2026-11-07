@@ -23,6 +23,9 @@ import 'package:daily/features/events/presentation/event_details_panel.dart';
 import 'package:daily/features/events/presentation/event_editor_dialog.dart';
 import 'package:daily/features/events/domain/recurrence_rule.dart';
 import 'package:daily/core/calendar/recurring_event_edit.dart';
+import 'package:daily/core/calendar/calendar_event_ordering.dart';
+import 'package:daily/features/timetable/domain/timetable.dart';
+import 'package:daily/features/timetable/domain/timetable_term.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -778,6 +781,80 @@ void main() {
     }
 
     final target = DateTime(2026, 7, 20, 10);
+
+    testWidgets('a list drop index counts displayed lecture-mode rows', (
+      tester,
+    ) async {
+      SharedPreferences.setMockInitialValues({});
+      final settings = SettingsRepository(
+        preferences: await SharedPreferences.getInstance(),
+      );
+      final day = DateTime(2026, 7, 20);
+      final store = settings.timetableStore;
+      await store.selectTerm(2026, '2');
+      await store.setTermPeriod(
+        2026,
+        '2',
+        TimetablePeriod(
+          start: DateTime(2026, 7, 1),
+          end: DateTime(2026, 8, 31),
+        ),
+      );
+      await store.save(
+        TimetableClass(
+          id: 'class',
+          title: '자료구조',
+          academicYear: 2026,
+          semester: '2',
+          meetings: const [
+            ClassMeeting(id: 'm', weekday: 1, startMinute: 540, endMinute: 600),
+          ],
+        ),
+      );
+      await store.setOverride('class', 'm', day, LectureMode.video);
+      CalendarEvent at(String id, int hour) => _event().copyWith(
+        id: id,
+        title: id,
+        startAt: DateTime(2026, 7, 20, hour),
+        endAt: DateTime(2026, 7, 20, hour, 30),
+      );
+      final a = at('A', 10), b = at('B', 11), c = at('C', 12);
+      final repository = _MultipleEventRepository([a, b, c]);
+      late BuildContext hostContext;
+      late WidgetRef hostRef;
+      await tester.pumpWidget(
+        ProviderScope(
+          overrides: [
+            settingsRepositoryProvider.overrideWithValue(settings),
+            eventRepositoryProvider.overrideWithValue(repository),
+            timetableStoreProvider.overrideWithValue(store),
+            syncServiceProvider.overrideWithValue(_NoopSyncService()),
+          ],
+          child: MaterialApp(
+            home: Consumer(
+              builder: (context, ref, _) {
+                hostContext = context;
+                hostRef = ref;
+                return const SizedBox();
+              },
+            ),
+          ),
+        ),
+      );
+      // Displayed: [자료구조 영상 강의, A, B, C]; C dropped before B is index 2.
+      await debugDropCalendarEventOnDate(
+        hostContext,
+        hostRef,
+        c,
+        day,
+        targetIndex: 2,
+      );
+      final keys = hostRef
+          .read(appSettingsProvider)
+          .calendarManualEventOrders[calendarDateKey(day)]!
+          .eventKeys;
+      expect(keys, [a, c, b].map(calendarEventOrderKey).toList());
+    });
 
     testWidgets('lets a repeating time drop through while up to date', (
       tester,
