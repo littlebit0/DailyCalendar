@@ -97,13 +97,14 @@ class Repository implements EventRepository, EventSyncMaintenance {
     required EventCategory updated,
     required DateTime updatedAt,
     void Function()? beforeWrite,
+    bool matchLegacyLabel = true,
   }) async {
     if (failCategoryUpdate) throw StateError('category write failed');
     final affected = [
       for (final event in events.values)
         if (!event.isDeleted &&
             (event.category.id == previous.id ||
-                event.category.label == previous.label))
+                (matchLegacyLabel && event.category.label == previous.label)))
           event.copyWith(
             category: updated,
             colorValue: updated.colorValue,
@@ -606,6 +607,78 @@ void main() {
   );
 
   test(
+    'academic color change leaves same-named legacy personal rows alone',
+    () async {
+      final db = AppDatabase.forTesting(NativeDatabase.memory());
+      addTearDown(db.close);
+      final repo = DriftEventRepository(db);
+      final commands = EventCommandService(
+        repository: repo,
+        settingsRepository: settings,
+        notificationService: Notifications(),
+        syncService: sync,
+      );
+      final realService = AcademicCalendarService(
+        sources: [source],
+        store: settings.academicStore,
+        settings: settings,
+        repository: repo,
+        sync: sync,
+        commands: commands,
+      );
+      addTearDown(realService.dispose);
+      final preview = await realService.preview(source, 2026);
+      await realService.importSelection(preview, {
+        '766720',
+      }, colorValue: 0xff123456);
+      final id = remote().dailyId('smu');
+      final imported = (await repo.findById(id))!;
+      const personal = EventCategory(
+        id: 'personal-smu',
+        label: '상명대학교',
+        colorValue: 0xfffedcba,
+      );
+      expect(personal.label, imported.category.label);
+      await repo.save(
+        imported.copyWith(
+          id: 'legacy-personal',
+          category: personal,
+          colorValue: personal.colorValue,
+        ),
+      );
+      await repo.markSynced('legacy-personal');
+      // Old rows stored the display label instead of the category ID.
+      await db.customStatement(
+        'UPDATE event_records SET category = ? WHERE id = ?',
+        [personal.label, 'legacy-personal'],
+      );
+      final before = (await repo.findById('legacy-personal'))!;
+      sync.uploaded.clear();
+
+      await realService.setCategoryColor('smu', 0xffab1234);
+
+      expect((await repo.findById(id))!.colorValue, 0xffab1234);
+      final after = (await repo.findById('legacy-personal'))!;
+      expect(after.category.id, before.category.id);
+      expect(after.category.id, isNot(imported.category.id));
+      expect(after.colorValue, personal.colorValue);
+      expect(after.syncStatus, before.syncStatus);
+      expect(sync.uploaded, [id]);
+
+      // The general category editor still migrates legacy label rows.
+      final recolored = personal.copyWith(colorValue: 0xff00ff00);
+      await commands.updateCategoryUsage(
+        previous: personal,
+        updated: recolored,
+      );
+      final migrated = (await repo.findById('legacy-personal'))!;
+      expect(migrated.category.id, personal.id);
+      expect(migrated.colorValue, 0xff00ff00);
+      expect(migrated.syncStatus, 'pending');
+    },
+  );
+
+  test(
     'preview is read-only; import creates named category and queues v2 event uploads',
     () async {
       final preview = await service.preview(source, 2026);
@@ -1092,14 +1165,16 @@ void main() {
     await importAll();
     final id = remote().dailyId('smu');
     notifications.failNextCancel = true;
-    await expectLater(service.removeImported('smu'), throwsStateError);
-    expect(repository.events[id]!.isDeleted, isTrue);
-    expect(service.subscriptions['smu']!.pendingRemovals, {id});
-    expect(settings.academicStore.load()['smu']!.pendingRemovals, {id});
+    // The tombstone is final; the failed reminder cancel is journaled.
     await service.removeImported('smu');
-    expect(notifications.cancelled, contains(id));
+    expect(repository.events[id]!.isDeleted, isTrue);
     expect(service.subscriptions['smu']!.pendingRemovals, isEmpty);
     expect(settings.academicStore.load()['smu']!.pendingRemovals, isEmpty);
+    expect(notifications.cancelled, isNot(contains(id)));
+    expect(settings.pendingEventFollowUps().keys, contains(id));
+    expect(await commands.retryPendingFollowUps(), isTrue);
+    expect(notifications.cancelled, contains(id));
+    expect(settings.pendingEventFollowUps(), isEmpty);
   });
   test(
     'a same-title event inserted earlier neither drops nor duplicates',

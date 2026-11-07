@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -51,6 +52,40 @@ WindowsNotificationIdentity windowsNotificationIdentityForBuild({
       : windowsProductionNotificationIdentity;
 }
 
+const _reconciliationKey = #dailyNotificationReconciliation;
+
+/// Runs [body] as one reminder reconciliation (for example rescheduling every
+/// event at app start).
+///
+/// Every [LocalNotificationService] call made inside shares one snapshot of the
+/// event list, the reminder settings, the current time and the iOS repeating
+/// slot allowance, so the app-wide allowance is planned once per batch instead
+/// of twice per event. A call from outside the scope (an edit, a sync restore,
+/// an account reset), a changed reminder setting or an old snapshot makes the
+/// next call inside take a fresh one.
+Future<T> runNotificationReconciliation<T>(Future<T> Function() body) =>
+    Zone.current[_reconciliationKey] != null
+    ? body()
+    : runZoned(
+        body,
+        zoneValues: {_reconciliationKey: <Object, _ReminderSnapshot>{}},
+      );
+
+class _ReminderSnapshot {
+  _ReminderSnapshot(this.revision, this.settingsKey, this.now);
+
+  final int revision;
+  final String settingsKey;
+  final DateTime now;
+  List<CalendarEvent>? events;
+  Map<String, int>? allowance;
+  var allowanceReady = false;
+
+  /// Repeating keys already trimmed to [allowance]; nothing in this snapshot
+  /// schedules past it again, so trimming them once is enough.
+  final trimmed = <String>{};
+}
+
 class LocalNotificationService implements NotificationService {
   LocalNotificationService({
     required SettingsRepository settingsRepository,
@@ -98,6 +133,45 @@ class LocalNotificationService implements NotificationService {
   final FlutterLocalNotificationsPlugin _plugin;
   final _linuxScheduler = LinuxNotificationScheduler();
   var _initialized = false;
+
+  /// Bumped by every call from outside a reconciliation, so a batch running
+  /// alongside an edit or a restore does not keep a stale snapshot.
+  var _revision = 0;
+
+  /// False recomputes everything per step as before; tests compare both.
+  @visibleForTesting
+  var shareReconciliationSnapshot = true;
+
+  static const _snapshotMaxAge = Duration(minutes: 1);
+
+  Future<T> _reconcile<T>(Future<T> Function() action) {
+    if (Zone.current[_reconciliationKey] == null) _revision++;
+    return runNotificationReconciliation(action);
+  }
+
+  _ReminderSnapshot _snapshot(AppSettings settings) {
+    final scope =
+        Zone.current[_reconciliationKey] as Map<Object, _ReminderSnapshot>?;
+    final settingsKey =
+        '${settings.morningBriefingEnabled}|'
+        '${settings.allDayReminderHour}:${settings.allDayReminderMinute}|'
+        '${settings.dDayReminderOffsets}';
+    final now = DateTime.now();
+    final current = scope?[this];
+    if (shareReconciliationSnapshot &&
+        current != null &&
+        current.revision == _revision &&
+        current.settingsKey == settingsKey &&
+        now.difference(current.now) < _snapshotMaxAge) {
+      return current;
+    }
+    final fresh = _ReminderSnapshot(_revision, settingsKey, now);
+    if (shareReconciliationSnapshot && scope != null) scope[this] = fresh;
+    return fresh;
+  }
+
+  Future<List<CalendarEvent>> _events(_ReminderSnapshot snapshot) async =>
+      snapshot.events ??= await _eventRepository.allEventsForSync();
 
   @override
   Future<void> initialize() async {
@@ -156,7 +230,9 @@ class LocalNotificationService implements NotificationService {
   Future<void> scheduleEventReminder(
     CalendarEvent event, {
     bool allowImmediate = false,
-  }) => _scheduleEventReminder(event, allowImmediate: allowImmediate);
+  }) => _reconcile(
+    () => _scheduleEventReminder(event, allowImmediate: allowImmediate),
+  );
 
   Future<void> _scheduleEventReminder(
     CalendarEvent event, {
@@ -172,13 +248,14 @@ class LocalNotificationService implements NotificationService {
     }
 
     final settings = _settingsRepository.load();
+    final snapshot = _snapshot(settings);
     final l10n = _localizations(settings);
     final reminderMinutesList = event.reminderMinutesBeforeList;
     final title = l10n.eventTitle(event.title, holiday: event.holiday);
     final base = _baseReminderTime(event, settings);
     var deliveredImmediateReminder = false;
     final slotAllowance = event.recurrence.isRepeating
-        ? await _repeatingSlotAllowance(settings)
+        ? await _sharedSlotAllowance(snapshot, settings)
         : null;
     for (final reminderMinutes in reminderMinutesList) {
       if (event.recurrence.isRepeating) {
@@ -245,7 +322,7 @@ class LocalNotificationService implements NotificationService {
         _legacyIds(event.id, reminderMinutesList),
         exceptEventId: event.id,
       );
-      await _trimOtherRepeatingSlots(settings, event.id);
+      await _trimOtherRepeatingSlots(_snapshot(settings), settings, event.id);
     }
   }
 
@@ -265,13 +342,15 @@ class LocalNotificationService implements NotificationService {
   /// were holding. Re-share the app-wide limit by cancelling their slots that
   /// no longer fit, so pending requests never exceed it until the next restart.
   Future<void> _trimOtherRepeatingSlots(
+    _ReminderSnapshot snapshot,
     AppSettings settings,
     String exceptEventId,
   ) async {
-    final allowance = await _repeatingSlotAllowance(settings);
+    final allowance = await _sharedSlotAllowance(snapshot, settings);
     if (allowance == null) return;
     for (final entry in allowance.entries) {
       if (entry.key.startsWith('$exceptEventId:reminder:')) continue;
+      if (!snapshot.trimmed.add(entry.key)) continue;
       await _cancelSlotsFrom(entry.key, entry.value);
     }
   }
@@ -304,18 +383,33 @@ class LocalNotificationService implements NotificationService {
   /// are next scheduled (app start, edit, sync restore).
   @visibleForTesting
   Future<Map<String, int>?> repeatingSlotAllowance(AppSettings settings) =>
-      _repeatingSlotAllowance(settings);
+      _repeatingSlotAllowance(
+        settings,
+        _ReminderSnapshot(_revision, '', DateTime.now()),
+      );
+
+  Future<Map<String, int>?> _sharedSlotAllowance(
+    _ReminderSnapshot snapshot,
+    AppSettings settings,
+  ) async {
+    if (!snapshot.allowanceReady) {
+      snapshot.allowance = await _repeatingSlotAllowance(settings, snapshot);
+      snapshot.allowanceReady = true;
+    }
+    return snapshot.allowance;
+  }
 
   Future<Map<String, int>?> _repeatingSlotAllowance(
     AppSettings settings,
+    _ReminderSnapshot snapshot,
   ) async {
     final limit = _pendingLimit;
     if (limit == null) return null;
-    final now = DateTime.now();
+    final now = snapshot.now;
     var fixed = settings.morningBriefingEnabled ? _briefingScheduleDays : 0;
     final candidates = <MapEntry<String, DateTime>>[];
     final keys = <String>[];
-    for (final other in await _eventRepository.allEventsForSync()) {
+    for (final other in await _events(snapshot)) {
       if (other.isDeleted ||
           other.completed ||
           other.systemEvent ||
@@ -350,6 +444,7 @@ class LocalNotificationService implements NotificationService {
           now: now,
           allowImmediate: false,
           dueGrace: _dueReminderGrace,
+          probeDays: _probeDays,
         )) {
           candidates.add(MapEntry(key, request.plan.deliverAt!));
         }
@@ -365,6 +460,9 @@ class LocalNotificationService implements NotificationService {
     }
     return allowance;
   }
+
+  List<int> get _probeDays =>
+      shareReconciliationSnapshot ? recurringReminderProbeDays : const [];
 
   /// Schedules the next occurrences of a repeating event for one offset.
   ///
@@ -389,6 +487,7 @@ class LocalNotificationService implements NotificationService {
       now: DateTime.now(),
       allowImmediate: allowImmediate,
       dueGrace: _dueReminderGrace,
+      probeDays: _probeDays,
     );
     for (final request in requests) {
       if (request.plan.type == ReminderDeliveryType.immediate) {
@@ -470,7 +569,7 @@ class LocalNotificationService implements NotificationService {
     for (final other
         in includeDelivered
             ? <CalendarEvent>[]
-            : await _eventRepository.allEventsForSync()) {
+            : await _events(_snapshot(_settingsRepository.load()))) {
       if (other.id == exceptEventId || other.isDeleted || other.completed) {
         continue;
       }
@@ -516,7 +615,7 @@ class LocalNotificationService implements NotificationService {
     List<int> reminderMinutesBeforeList = const [],
     List<int> dDayOffsets = const [],
     bool includeDelivered = false,
-  }) async {
+  }) => _reconcile(() async {
     await initialize();
     final cancel = includeDelivered
         ? _cancelNotification
@@ -550,9 +649,10 @@ class LocalNotificationService implements NotificationService {
     }
     // An offset removed from the settings (for example by a Drive restore) is
     // in none of the lists above, so cancel every D-day id still registered.
-    for (final id in _settingsRepository
-        .notificationIdsWithPrefix('$eventId:dday:')
-        .values) {
+    for (final id
+        in _settingsRepository
+            .notificationIdsWithPrefix('$eventId:dday:')
+            .values) {
       await cancel(id);
     }
     await _retireLegacy(
@@ -560,13 +660,13 @@ class LocalNotificationService implements NotificationService {
       exceptEventId: eventId,
       includeDelivered: includeDelivered,
     );
-  }
+  });
 
   @override
   Future<void> scheduleMorningBriefing({
     required int hour,
     required int minute,
-  }) => _scheduleMorningBriefing(hour: hour, minute: minute);
+  }) => _reconcile(() => _scheduleMorningBriefing(hour: hour, minute: minute));
 
   Future<void> _scheduleMorningBriefing({
     required int hour,
@@ -605,23 +705,28 @@ class LocalNotificationService implements NotificationService {
   }
 
   @override
-  Future<void> cancelMorningBriefing({bool includeDelivered = false}) async {
-    await initialize();
-    final cancel = includeDelivered
-        ? _cancelNotification
-        : _cancelPendingNotification;
-    for (var dayOffset = 0; dayOffset < _briefingScheduleDays; dayOffset++) {
-      final id = _settingsRepository.existingNotificationId(
-        'briefing:$dayOffset',
-      );
-      if (id != null) await cancel(id);
-    }
-    await _retireLegacy({
-      _briefingId,
-      for (var index = 0; index < _briefingScheduleDays; index++)
-        _morningBriefingNotificationId(index),
-    }, includeDelivered: includeDelivered);
-  }
+  Future<void> cancelMorningBriefing({bool includeDelivered = false}) =>
+      _reconcile(() async {
+        await initialize();
+        final cancel = includeDelivered
+            ? _cancelNotification
+            : _cancelPendingNotification;
+        for (
+          var dayOffset = 0;
+          dayOffset < _briefingScheduleDays;
+          dayOffset++
+        ) {
+          final id = _settingsRepository.existingNotificationId(
+            'briefing:$dayOffset',
+          );
+          if (id != null) await cancel(id);
+        }
+        await _retireLegacy({
+          _briefingId,
+          for (var index = 0; index < _briefingScheduleDays; index++)
+            _morningBriefingNotificationId(index),
+        }, includeDelivered: includeDelivered);
+      });
 
   Future<String> _morningBriefingBody(DateTime briefingDate) async {
     final today = DateTime(

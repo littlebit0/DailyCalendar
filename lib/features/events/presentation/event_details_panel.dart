@@ -1265,7 +1265,12 @@ class _EventTile extends StatelessWidget {
       return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
     }
     if (event.allDay) {
-      final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
+      // Calendar-day step, not 24 hours, so DST days keep their date.
+      final inclusiveEnd = DateTime(
+        event.endAt.year,
+        event.endAt.month,
+        event.endAt.day - 1,
+      );
       if (_sameDay(event.startAt, inclusiveEnd)) {
         return context.tr('종일');
       }
@@ -1584,7 +1589,12 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
       return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
     }
     if (event.allDay) {
-      final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
+      // Calendar-day step, not 24 hours, so DST days keep their date.
+      final inclusiveEnd = DateTime(
+        event.endAt.year,
+        event.endAt.month,
+        event.endAt.day - 1,
+      );
       if (_sameDay(event.startAt, inclusiveEnd)) {
         return '${dateFormatter.format(event.startAt)} ${context.tr('종일')}';
       }

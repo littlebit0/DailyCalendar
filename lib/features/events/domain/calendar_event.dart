@@ -90,7 +90,7 @@ class CalendarEvent {
     final normalizedStart = DateTime(startAt.year, startAt.month, startAt.day);
     var normalizedEnd = DateTime(endAt.year, endAt.month, endAt.day);
     if (!normalizedEnd.isAfter(normalizedStart)) {
-      normalizedEnd = normalizedStart.add(const Duration(days: 1));
+      normalizedEnd = DateTime(startAt.year, startAt.month, startAt.day + 1);
     }
     if (normalizedStart == startAt && normalizedEnd == endAt) {
       return this;
