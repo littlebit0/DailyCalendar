@@ -248,6 +248,42 @@ void main() {
       expect(edited.toJson(), template.toJson());
     });
 
+    test('editing seeds a day on which the custom alarm time exists', () {
+      // Run under a DST zone (e.g. TZ=America/New_York) to cover the gap on
+      // 2026-03-08; elsewhere the requested day is kept.
+      for (final allDay in [false, true]) {
+        final template = EventTemplate(
+          id: 'g',
+          name: '알람',
+          title: '알람',
+          allDay: allDay,
+          startMinutes: 19 * 60,
+          endMinutes: 20 * 60,
+          categoryId: _workout.id,
+          alarmEnabled: true,
+          alarmCustomDayOffset: 0,
+          alarmCustomMinutes: 2 * 60 + 30,
+        );
+        final from = DateTime(2026, 3, 8);
+        final day = template.representableDayFrom(from);
+        final customAt = template.draftOn(day, _workout).alarmCustomAt!;
+        expect(customAt.hour * 60 + customAt.minute, 2 * 60 + 30);
+        expect(DateTime(customAt.year, customAt.month, customAt.day), day);
+        if (template.draftOn(from, _workout).alarmCustomAt!.hour == 2) {
+          expect(day, from);
+        } else {
+          expect(day, DateTime(2026, 3, 9));
+        }
+        final edited = EventTemplate.fromDraft(
+          template.draftOn(day, _workout),
+          id: 'g',
+          name: '알람',
+        );
+        expect(edited.alarmCustomDayOffset, 0);
+        expect(edited.alarmCustomMinutes, 2 * 60 + 30);
+      }
+    });
+
     test('json round trip keeps the alarm trigger', () {
       for (final template in [
         EventTemplate.fromDraft(alarmDraft(before: 1440), id: 'a', name: 'a'),

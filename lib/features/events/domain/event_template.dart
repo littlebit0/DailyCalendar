@@ -198,8 +198,9 @@ class EventTemplate {
     return draft.allDay || draft.endAt.isAfter(draft.startAt) ? draft : null;
   }
 
-  /// The first day from [from] on which this template's wall-clock times all
-  /// exist, so editing it never rewrites them through a DST gap.
+  /// The first day from [from] on which this template's wall-clock times
+  /// (including a custom alarm time) all exist, so editing it never rewrites
+  /// them through a DST gap.
   DateTime representableDayFrom(DateTime from) {
     var day = DateTime(from.year, from.month, from.day);
     for (var i = 0; i < 7 && !_keepsTimesOn(day); i++) {
@@ -209,8 +210,14 @@ class EventTemplate {
   }
 
   bool _keepsTimesOn(DateTime day) {
-    if (allDay) return true;
     final draft = draftOn(day, EventCategory.basic);
+    final customAt = draft.alarmCustomAt;
+    if (customAt != null &&
+        (customAt.hour * 60 + customAt.minute != alarmCustomMinutes ||
+            _calendarDaysBetween(day, customAt) != alarmCustomDayOffset)) {
+      return false;
+    }
+    if (allDay) return true;
     return draft.startAt.hour * 60 + draft.startAt.minute == startMinutes &&
         draft.endAt.hour * 60 + draft.endAt.minute == endMinutes;
   }
