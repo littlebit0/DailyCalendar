@@ -6068,9 +6068,10 @@ class _CalendarHeader extends ConsumerWidget {
                             for (final category in live.categories)
                               FilterChip(
                                 avatar: CircleAvatar(
-                                  radius: 5,
+                                  radius: _categoryDotRadius,
                                   backgroundColor: Color(category.colorValue),
                                 ),
+                                avatarBorder: const _CategoryDotAvatarBorder(),
                                 label: Text(
                                   context.l10n.categoryName(
                                     id: category.id,
@@ -8248,6 +8249,37 @@ class _WeekDayDropTarget extends StatelessWidget {
     }
     return index;
   }
+}
+
+const double _categoryDotRadius = 5;
+
+/// Limits the selected-chip scrim to the category dot. RawChip paints the
+/// scrim over the whole avatar box with `BlendMode.srcATop`, so depending on
+/// whether the avatar is composited into its own layer it darkened either the
+/// dot alone or a gray disc around it, and hovering one chip flipped every
+/// chip in the group between the two looks (#724).
+class _CategoryDotAvatarBorder extends CircleBorder {
+  const _CategoryDotAvatarBorder();
+
+  Rect _dot(Rect rect) =>
+      Rect.fromCircle(center: rect.center, radius: _categoryDotRadius);
+
+  @override
+  Path getOuterPath(Rect rect, {ui.TextDirection? textDirection}) =>
+      super.getOuterPath(_dot(rect), textDirection: textDirection);
+
+  @override
+  void paintInterior(
+    Canvas canvas,
+    Rect rect,
+    Paint paint, {
+    ui.TextDirection? textDirection,
+  }) => super.paintInterior(
+    canvas,
+    _dot(rect),
+    paint,
+    textDirection: textDirection,
+  );
 }
 
 class _WeekEventInsertionGap extends StatelessWidget {
