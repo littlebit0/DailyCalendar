@@ -111,6 +111,9 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   final _apiKeyController = TextEditingController();
   late final Future<_AppVersionInfo> _appVersionInfo;
   var _syncMessage = '';
+  // The sync error shown in _syncMessage; a later successful sync clears it.
+  ({DateTime at, String message})? _syncError;
+  late final ValueNotifier<GoogleDriveSyncStatus> _driveSyncStatus;
   var _syncBusy = false;
   var _appleMessage = '';
   var _appleBusy = false;
@@ -155,6 +158,8 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       );
     });
     _appVersionInfo = _loadAppVersionInfo();
+    _driveSyncStatus = ref.read(googleDriveSyncServiceProvider).statusNotifier
+      ..addListener(_clearSyncErrorAfterLaterSuccess);
     // The saved account is local state, so it is shown before any provider
     // restoration or secure storage lookup finishes or fails.
     _dailyAccount = ref.read(settingsRepositoryProvider).dailyAccount();
@@ -236,8 +241,36 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
 
   @override
   void dispose() {
+    _driveSyncStatus.removeListener(_clearSyncErrorAfterLaterSuccess);
     _apiKeyController.dispose();
     super.dispose();
+  }
+
+  void _clearSyncErrorAfterLaterSuccess() {
+    final error = _syncError;
+    final status = _driveSyncStatus.value;
+    final syncedAt = status.lastSyncedAt;
+    if (!mounted ||
+        error == null ||
+        status.syncing ||
+        status.error != null ||
+        syncedAt == null ||
+        !syncedAt.isAfter(error.at)) {
+      return;
+    }
+    setState(() {
+      _syncError = null;
+      // Another action may have replaced the message since the error.
+      if (_syncMessage == error.message) _syncMessage = '';
+    });
+  }
+
+  void _showSyncError(Object error) {
+    final message = _googleAccountErrorMessage(error);
+    setState(() {
+      _syncMessage = message;
+      _syncError = (at: DateTime.now(), message: message);
+    });
   }
 
   @override
@@ -2206,6 +2239,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         ref.read(appSettingsProvider.notifier).state = ref
             .read(settingsRepositoryProvider)
             .load();
+        // Signed in: show the session even if the first sync below fails.
+        setState(() {
+          _googleDriveAccount = account;
+          _dailyAccount = ref.read(settingsRepositoryProvider).dailyAccount();
+        });
       }
       final syncService = ref.read(googleDriveSyncServiceProvider);
       await syncService.startListeningOnly(flushPendingChanges: false);
@@ -2233,7 +2271,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       await offerAcademicProfile(context, ref);
     } on Object catch (error) {
       if (mounted && _isCurrentGoogleDriveConnectAttempt(attempt)) {
-        setState(() => _syncMessage = _googleAccountErrorMessage(error));
+        _showSyncError(error);
       }
     } finally {
       if (mounted && _isCurrentGoogleDriveConnectAttempt(attempt)) {
@@ -2340,7 +2378,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       }
     } on Object catch (error) {
       if (mounted) {
-        setState(() => _syncMessage = _googleAccountErrorMessage(error));
+        _showSyncError(error);
       }
     } finally {
       if (mounted) {
