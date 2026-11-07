@@ -22,6 +22,7 @@ import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/calendar/event_display_filter.dart';
 import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/calendar_period_label.dart';
+import '../../../core/calendar/calendar_event_span.dart';
 import '../../../core/settings/app_settings.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/siri/signal_voice_service.dart';
@@ -38,6 +39,7 @@ import '../../events/domain/event_draft.dart';
 import '../../events/presentation/event_details_panel.dart';
 import '../../events/presentation/day_sheet_scroll_physics.dart';
 import '../../events/presentation/event_editor_dialog.dart';
+import '../../events/presentation/event_template_actions.dart';
 import '../../settings/presentation/settings_page.dart';
 import '../widgets/calendar_event_drag_layer.dart';
 import '../widgets/calendar_month_grid.dart';
@@ -388,6 +390,8 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
                                                         _eventsForDay(
                                                           events,
                                                           date,
+                                                          showOvernight: settings
+                                                              .calendarShowOvernightEventsOnFollowingDays,
                                                         ),
                                                       );
                                                     }
@@ -2658,6 +2662,7 @@ class _MonthDetailsPanel extends ConsumerWidget {
       events: _eventsForDay(
         _filterVisibleEvents(events, settings, searchQuery),
         selectedDate,
+        showOvernight: settings.calendarShowOvernightEventsOnFollowingDays,
       ),
       onEventDropped: (event, targetDate, targetIndex) =>
           _handleCalendarEventDrop(
@@ -3089,8 +3094,15 @@ class _CalendarWeekPage extends ConsumerWidget {
               externalEventDragInteractionActive:
                   externalEventDragInteractionActive,
               onShowAllDayEventsChanged: onShowAllDayScheduleEventsChanged,
-              onDateSelected: (date) =>
-                  onDateSelected(date, _eventsForDay(visibleEvents, date)),
+              onDateSelected: (date) => onDateSelected(
+                date,
+                _eventsForDay(
+                  visibleEvents,
+                  date,
+                  showOvernight:
+                      settings.calendarShowOvernightEventsOnFollowingDays,
+                ),
+              ),
             ),
           );
         }
@@ -3106,6 +3118,7 @@ class _CalendarWeekPage extends ConsumerWidget {
               .map((category) => category.id)
               .toList(),
           manualEventOrders: settings.calendarManualEventOrders,
+          showOvernight: settings.calendarShowOvernightEventsOnFollowingDays,
           events: visibleEvents,
           externalEventDragActive: externalEventDragActive,
           onEventDropped: (event, targetDate, targetIndex) =>
@@ -3396,9 +3409,11 @@ class _CalendarDayPage extends ConsumerWidget {
     final eventsAsync = ref.watch(eventsInRangeProvider(_dayRangeFor(date)));
     return eventsAsync.when(
       data: (events) {
+        // The schedule timeline always places the real interval (#696).
         final visibleEvents = _eventsForDay(
           _filterVisibleEvents(events, settings, searchQuery),
           date,
+          showOvernight: true,
         );
         if (settings.weekDayLayoutMode == WeekDayLayoutMode.schedule) {
           return TimetableSchedule(
@@ -3460,6 +3475,7 @@ class _CalendarDayPage extends ConsumerWidget {
                 .map((category) => category.id)
                 .toList(),
             manualEventOrders: settings.calendarManualEventOrders,
+            showOvernight: settings.calendarShowOvernightEventsOnFollowingDays,
           ),
           onEventDropped: (event, targetDate, targetIndex) =>
               _handleCalendarEventDrop(
@@ -4564,6 +4580,8 @@ class _CalendarMonthPage extends ConsumerWidget {
                   .map((category) => category.id)
                   .toList(),
               manualEventOrders: settings.calendarManualEventOrders,
+              showOvernightEventsOnFollowingDays:
+                  settings.calendarShowOvernightEventsOnFollowingDays,
               showAdjacentMonthDates:
                   !continuous && settings.showAdjacentMonthDates,
               continuous: continuous,
@@ -4579,7 +4597,15 @@ class _CalendarMonthPage extends ConsumerWidget {
               externalEventDragInteractionActive:
                   externalEventDragInteractionActive,
               onDateSelected: (date) {
-                onDateSelected(date, _eventsForDay(visibleEvents, date));
+                onDateSelected(
+                  date,
+                  _eventsForDay(
+                    visibleEvents,
+                    date,
+                    showOvernight:
+                        settings.calendarShowOvernightEventsOnFollowingDays,
+                  ),
+                );
               },
               onDateRangeSelected: (start, end) => _addEventForRange(
                 context,
@@ -4619,6 +4645,8 @@ class _CalendarMonthPage extends ConsumerWidget {
                 .map((category) => category.id)
                 .toList(),
             manualEventOrders: settings.calendarManualEventOrders,
+            showOvernightEventsOnFollowingDays:
+                settings.calendarShowOvernightEventsOnFollowingDays,
             showAdjacentMonthDates:
                 !continuous && settings.showAdjacentMonthDates,
             continuous: continuous,
@@ -4752,13 +4780,19 @@ class _CalendarMonthPage extends ConsumerWidget {
     final now = DateTime.now();
 
     if (sourceKey != targetKey) {
-      final sourceEvents = _eventsForDay(visibleEvents, sourceDate)
-          .where(
-            (candidate) =>
-                calendarEventOrderKey(candidate) != originalOrderKey &&
-                candidate.id != originalEvent.id,
-          )
-          .toList();
+      final sourceEvents =
+          _eventsForDay(
+                visibleEvents,
+                sourceDate,
+                showOvernight:
+                    settings.calendarShowOvernightEventsOnFollowingDays,
+              )
+              .where(
+                (candidate) =>
+                    calendarEventOrderKey(candidate) != originalOrderKey &&
+                    candidate.id != originalEvent.id,
+              )
+              .toList();
       manualOrders[sourceKey] = CalendarManualEventOrder(
         eventKeys: sourceEvents.map(calendarEventOrderKey).toList(),
         updatedAt: now,
@@ -4766,14 +4800,20 @@ class _CalendarMonthPage extends ConsumerWidget {
       );
     }
 
-    final existingTarget = _eventsForDay(visibleEvents, targetDate)
-        .where(
-          (candidate) =>
-              calendarEventOrderKey(candidate) != originalOrderKey &&
-              calendarEventOrderKey(candidate) != movedOrderKey &&
-              candidate.id != originalEvent.id,
-        )
-        .toList();
+    final existingTarget =
+        _eventsForDay(
+              visibleEvents,
+              targetDate,
+              showOvernight:
+                  settings.calendarShowOvernightEventsOnFollowingDays,
+            )
+            .where(
+              (candidate) =>
+                  calendarEventOrderKey(candidate) != originalOrderKey &&
+                  calendarEventOrderKey(candidate) != movedOrderKey &&
+                  candidate.id != originalEvent.id,
+            )
+            .toList();
     final sortedTarget = sortedCalendarEvents(
       existingTarget,
       priority: settings.calendarEventSortPriority,
@@ -4986,6 +5026,7 @@ Future<void> _handleCalendarEventTimeDrop(
       _eventsForDay(
           visibleEvents,
           targetDate,
+          showOvernight: settings.calendarShowOvernightEventsOnFollowingDays,
         ).where((candidate) => !_isSameCalendarEvent(candidate, event)).toList()
         ..add(movedEvent);
   final sortedTarget = sortedCalendarEvents(
@@ -5121,13 +5162,19 @@ Future<void> _saveCalendarManualOrderAfterDrop(
   final now = DateTime.now();
 
   if (sourceKey != targetKey) {
-    final sourceEvents = _eventsForDay(visibleEvents, sourceDate)
-        .where(
-          (candidate) =>
-              calendarEventOrderKey(candidate) != originalOrderKey &&
-              candidate.id != originalEvent.id,
-        )
-        .toList();
+    final sourceEvents =
+        _eventsForDay(
+              visibleEvents,
+              sourceDate,
+              showOvernight:
+                  settings.calendarShowOvernightEventsOnFollowingDays,
+            )
+            .where(
+              (candidate) =>
+                  calendarEventOrderKey(candidate) != originalOrderKey &&
+                  candidate.id != originalEvent.id,
+            )
+            .toList();
     manualOrders[sourceKey] = CalendarManualEventOrder(
       eventKeys: sourceEvents.map(calendarEventOrderKey).toList(),
       updatedAt: now,
@@ -5135,14 +5182,19 @@ Future<void> _saveCalendarManualOrderAfterDrop(
     );
   }
 
-  final existingTarget = _eventsForDay(visibleEvents, targetDate)
-      .where(
-        (candidate) =>
-            calendarEventOrderKey(candidate) != originalOrderKey &&
-            calendarEventOrderKey(candidate) != movedOrderKey &&
-            candidate.id != originalEvent.id,
-      )
-      .toList();
+  final existingTarget =
+      _eventsForDay(
+            visibleEvents,
+            targetDate,
+            showOvernight: settings.calendarShowOvernightEventsOnFollowingDays,
+          )
+          .where(
+            (candidate) =>
+                calendarEventOrderKey(candidate) != originalOrderKey &&
+                calendarEventOrderKey(candidate) != movedOrderKey &&
+                candidate.id != originalEvent.id,
+          )
+          .toList();
   final sortedTarget = sortedCalendarEvents(
     existingTarget,
     priority: settings.calendarEventSortPriority,
@@ -5245,6 +5297,9 @@ Future<void> _openRangeEventEditor(
         )
         .catchError((_) {}),
   );
+  final templateOptions = eventTemplateEditorOptions(context, ref);
+  // A quick add saves the event itself and closes the editor without a draft.
+  var quickAdded = false;
   final draft = await showDialog<EventDraft>(
     context: context,
     builder: (_) => EventEditorDialog(
@@ -5252,6 +5307,12 @@ Future<void> _openRangeEventEditor(
       loadPlaceEvents: ref
           .read(visibleEventRepositoryProvider)
           .allEventsForSync,
+      templates: templateOptions.templates,
+      onQuickAdd: (template, date) async {
+        await templateOptions.onQuickAdd(template, date);
+        quickAdded = true;
+      },
+      onSaveTemplate: templateOptions.onSaveTemplate,
       initialDate: start,
       initialEndDate: end,
       initialAllDay: true,
@@ -5266,7 +5327,7 @@ Future<void> _openRangeEventEditor(
         .record(
           AnalyticsRecord.eventEditorCompleted(
             AnalyticsEditorMode.create,
-            outcome: draft == null
+            outcome: draft == null && !quickAdded
                 ? AnalyticsOutcome.canceled
                 : AnalyticsOutcome.succeeded,
             durationMs: stopwatch.elapsedMilliseconds,
@@ -7566,6 +7627,7 @@ class _CalendarWeekView extends StatefulWidget {
     required this.eventSortPriority,
     required this.categoryOrder,
     required this.manualEventOrders,
+    required this.showOvernight,
     required this.events,
     required this.externalEventDragActive,
     required this.onEventDropped,
@@ -7581,6 +7643,7 @@ class _CalendarWeekView extends StatefulWidget {
   final CalendarEventSortPriority eventSortPriority;
   final List<String> categoryOrder;
   final Map<String, CalendarManualEventOrder> manualEventOrders;
+  final bool showOvernight;
   final List<CalendarEvent> events;
   final bool externalEventDragActive;
   final CalendarEventDropCallback onEventDropped;
@@ -7646,6 +7709,7 @@ class _CalendarWeekViewState extends State<_CalendarWeekView> {
             priority: widget.eventSortPriority,
             categoryOrder: widget.categoryOrder,
             manualEventOrders: widget.manualEventOrders,
+            showOvernight: widget.showOvernight,
           );
           return _WeekDayPanel(
             day: day,
@@ -7691,6 +7755,7 @@ class _CalendarWeekViewState extends State<_CalendarWeekView> {
                       priority: widget.eventSortPriority,
                       categoryOrder: widget.categoryOrder,
                       manualEventOrders: widget.manualEventOrders,
+                      showOvernight: widget.showOvernight,
                     );
                     return _WeekDayPanel(
                       day: day,
@@ -7750,6 +7815,7 @@ class _CalendarWeekViewState extends State<_CalendarWeekView> {
         priority: widget.eventSortPriority,
         categoryOrder: widget.categoryOrder,
         manualEventOrders: widget.manualEventOrders,
+        showOvernight: widget.showOvernight,
       );
       final sourceIndex = sourceEvents.indexWhere(
         (candidate) => _isSameCalendarEvent(candidate, event),
@@ -8315,10 +8381,23 @@ List<CalendarEvent> _filterVisibleEvents(
   String searchQuery,
 ) => filterVisibleCalendarEvents(events, settings, searchQuery);
 
-List<CalendarEvent> _eventsForDay(List<CalendarEvent> events, DateTime date) {
+List<CalendarEvent> _eventsForDay(
+  List<CalendarEvent> events,
+  DateTime date, {
+  required bool showOvernight,
+}) {
   final start = DateTime(date.year, date.month, date.day);
   final end = shiftCalendarDateByDays(start, 1);
-  return events.where((event) => event.overlaps(start, end)).toList();
+  return events
+      .where(
+        (event) => calendarEventListedOnDay(
+          event,
+          start,
+          end,
+          showOvernightOnFollowingDays: showOvernight,
+        ),
+      )
+      .toList();
 }
 
 // Local calendar-day bounds stay at midnight on DST days (23h/25h days).
@@ -8340,8 +8419,9 @@ CalendarRange calendarDayRangeForTesting(DateTime date) => _dayRangeFor(date);
 @visibleForTesting
 List<CalendarEvent> calendarEventsForDayForTesting(
   List<CalendarEvent> events,
-  DateTime date,
-) => _eventsForDay(events, date);
+  DateTime date, {
+  bool showOvernight = true,
+}) => _eventsForDay(events, date, showOvernight: showOvernight);
 
 List<CalendarEvent> _orderedEventsForDay(
   List<CalendarEvent> events,
@@ -8349,9 +8429,10 @@ List<CalendarEvent> _orderedEventsForDay(
   required CalendarEventSortPriority priority,
   required List<String> categoryOrder,
   required Map<String, CalendarManualEventOrder> manualEventOrders,
+  required bool showOvernight,
 }) {
   return sortedCalendarEvents(
-    _eventsForDay(events, date),
+    _eventsForDay(events, date, showOvernight: showOvernight),
     priority: priority,
     categoryOrder: categoryOrder,
     manualOrder:

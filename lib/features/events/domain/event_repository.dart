@@ -35,6 +35,7 @@ abstract interface class EventRepository {
     required EventCategory updated,
     required DateTime updatedAt,
     void Function()? beforeWrite,
+    bool matchLegacyLabel = true,
   });
 
   Future<List<EventRestoreMutation>> mergeRestoredEventsAtomically(
