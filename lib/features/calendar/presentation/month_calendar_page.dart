@@ -3155,33 +3155,39 @@ class _CalendarWeekPage extends ConsumerWidget {
             ),
           );
         }
-        return _CalendarWeekView(
-          selectedDate: selectedDate,
-          weekStartsOnMonday: settings.weekStartsOnMonday,
-          showLunarDates: settings.showLunarDates,
-          centerEventTitles:
-              settings.calendarEventTitleAlignment ==
-              CalendarEventTitleAlignment.center,
-          eventSortPriority: settings.calendarEventSortPriority,
-          categoryOrder: settings.categories
-              .map((category) => category.id)
-              .toList(),
-          manualEventOrders: settings.calendarManualEventOrders,
-          showOvernight: settings.calendarShowOvernightEventsOnFollowingDays,
+        return LectureModeChanges(
+          days: lectureModeChangesShown(settings, searchQuery)
+              ? _calendarDaysIn(range)
+              : const [],
           events: visibleEvents,
-          externalEventDragActive: externalEventDragActive,
-          onEventDropped: (event, targetDate, targetIndex) =>
-              _handleCalendarEventDrop(
-                context,
-                ref,
-                event,
-                targetDate,
-                targetIndex,
-              ),
-          onEventDragStateChanged: onEventDragStateChanged,
-          onEventDragInteractionStateChanged:
-              onEventDragInteractionStateChanged,
-          onDateSelected: onDateSelected,
+          builder: (displayEvents) => _CalendarWeekView(
+            selectedDate: selectedDate,
+            weekStartsOnMonday: settings.weekStartsOnMonday,
+            showLunarDates: settings.showLunarDates,
+            centerEventTitles:
+                settings.calendarEventTitleAlignment ==
+                CalendarEventTitleAlignment.center,
+            eventSortPriority: settings.calendarEventSortPriority,
+            categoryOrder: settings.categories
+                .map((category) => category.id)
+                .toList(),
+            manualEventOrders: settings.calendarManualEventOrders,
+            showOvernight: settings.calendarShowOvernightEventsOnFollowingDays,
+            events: displayEvents,
+            externalEventDragActive: externalEventDragActive,
+            onEventDropped: (event, targetDate, targetIndex) =>
+                _handleCalendarEventDrop(
+                  context,
+                  ref,
+                  event,
+                  targetDate,
+                  targetIndex,
+                ),
+            onEventDragStateChanged: onEventDragStateChanged,
+            onEventDragInteractionStateChanged:
+                onEventDragInteractionStateChanged,
+            onDateSelected: onDateSelected,
+          ),
         );
       },
       error: (error, stackTrace) => Center(child: Text('$error')),
@@ -4611,69 +4617,78 @@ class _CalendarMonthPage extends ConsumerWidget {
               settings,
               searchQuery,
             );
-            return CalendarMonthGrid(
-              availableWidth: availableWidth,
-              month: month,
-              selectedDate: selectedDate,
+            final range = _monthRangeFor(month, settings.weekStartsOnMonday);
+            // Day panels add their own lecture-mode rows; callbacks keep the
+            // stored events so projections never reach manual ordering (#771).
+            return LectureModeChanges(
+              days: lectureModeChangesShown(settings, searchQuery)
+                  ? _calendarDaysIn(range)
+                  : const [],
               events: visibleEvents,
-              weekStartsOnMonday: settings.weekStartsOnMonday,
-              showLunarDates: settings.showLunarDates,
-              holidayBackgroundEnabled:
-                  settings.calendarHolidayBackgroundEnabled,
-              holidayColorValue: settings.holidayCategory.colorValue,
-              centerEventTitles:
-                  settings.calendarEventTitleAlignment ==
-                  CalendarEventTitleAlignment.center,
-              eventSortPriority: settings.calendarEventSortPriority,
-              categoryOrder: settings.categories
-                  .map((category) => category.id)
-                  .toList(),
-              manualEventOrders: settings.calendarManualEventOrders,
-              showOvernightEventsOnFollowingDays:
-                  settings.calendarShowOvernightEventsOnFollowingDays,
-              showAdjacentMonthDates:
-                  !continuous && settings.showAdjacentMonthDates,
-              continuous: continuous,
-              showWeekdayHeader: showWeekdayHeader,
-              onRangeHitTestBoxChanged: onRangeHitTestBoxChanged,
-              externalRangeStart: externalRangeStart,
-              externalRangeEnd: externalRangeEnd,
-              enableRangeGestures: enableRangeGestures,
-              onEventDragStateChanged: onEventDragStateChanged,
-              onEventDragInteractionStateChanged:
-                  onEventDragInteractionStateChanged,
-              externalEventDragActive: externalEventDragActive,
-              externalEventDragInteractionActive:
-                  externalEventDragInteractionActive,
-              onDateSelected: (date) {
-                onDateSelected(
-                  date,
-                  _eventsForDay(
-                    visibleEvents,
+              builder: (displayEvents) => CalendarMonthGrid(
+                availableWidth: availableWidth,
+                month: month,
+                selectedDate: selectedDate,
+                events: displayEvents,
+                weekStartsOnMonday: settings.weekStartsOnMonday,
+                showLunarDates: settings.showLunarDates,
+                holidayBackgroundEnabled:
+                    settings.calendarHolidayBackgroundEnabled,
+                holidayColorValue: settings.holidayCategory.colorValue,
+                centerEventTitles:
+                    settings.calendarEventTitleAlignment ==
+                    CalendarEventTitleAlignment.center,
+                eventSortPriority: settings.calendarEventSortPriority,
+                categoryOrder: settings.categories
+                    .map((category) => category.id)
+                    .toList(),
+                manualEventOrders: settings.calendarManualEventOrders,
+                showOvernightEventsOnFollowingDays:
+                    settings.calendarShowOvernightEventsOnFollowingDays,
+                showAdjacentMonthDates:
+                    !continuous && settings.showAdjacentMonthDates,
+                continuous: continuous,
+                showWeekdayHeader: showWeekdayHeader,
+                onRangeHitTestBoxChanged: onRangeHitTestBoxChanged,
+                externalRangeStart: externalRangeStart,
+                externalRangeEnd: externalRangeEnd,
+                enableRangeGestures: enableRangeGestures,
+                onEventDragStateChanged: onEventDragStateChanged,
+                onEventDragInteractionStateChanged:
+                    onEventDragInteractionStateChanged,
+                externalEventDragActive: externalEventDragActive,
+                externalEventDragInteractionActive:
+                    externalEventDragInteractionActive,
+                onDateSelected: (date) {
+                  onDateSelected(
                     date,
-                    showOvernight:
-                        settings.calendarShowOvernightEventsOnFollowingDays,
-                  ),
-                );
-              },
-              onDateRangeSelected: (start, end) => _addEventForRange(
-                context,
-                ref,
-                start,
-                end,
-                settings.categories,
-                settings.defaultReminderMinutesList,
+                    _eventsForDay(
+                      visibleEvents,
+                      date,
+                      showOvernight:
+                          settings.calendarShowOvernightEventsOnFollowingDays,
+                    ),
+                  );
+                },
+                onDateRangeSelected: (start, end) => _addEventForRange(
+                  context,
+                  ref,
+                  start,
+                  end,
+                  settings.categories,
+                  settings.defaultReminderMinutesList,
+                ),
+                onEventDropped: (event, targetDate, targetIndex) =>
+                    _handleEventDrop(
+                      context,
+                      ref,
+                      event,
+                      targetDate,
+                      targetIndex,
+                      visibleEvents,
+                      settings,
+                    ),
               ),
-              onEventDropped: (event, targetDate, targetIndex) =>
-                  _handleEventDrop(
-                    context,
-                    ref,
-                    event,
-                    targetDate,
-                    targetIndex,
-                    visibleEvents,
-                    settings,
-                  ),
             );
           },
           error: (error, stackTrace) => Center(child: Text('$error')),
@@ -8486,6 +8501,15 @@ CalendarRange _dayRangeFor(DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
   return CalendarRange(start, shiftCalendarDateByDays(start, 1));
 }
+
+List<DateTime> _calendarDaysIn(CalendarRange range) => [
+  for (
+    var day = range.start;
+    day.isBefore(range.end);
+    day = shiftCalendarDateByDays(day, 1)
+  )
+    day,
+];
 
 List<CalendarEvent> _filterVisibleEvents(
   List<CalendarEvent> events,

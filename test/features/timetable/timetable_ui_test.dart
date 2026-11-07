@@ -639,7 +639,7 @@ void main() {
     },
   );
   testWidgets(
-    'overlapping class and personal event share lanes; cancelled class leaves schedule only',
+    'overlapping class and personal event share lanes; cancelled class shows as 휴강',
     (tester) async {
       final repo = await settings();
       final store = repo.timetableStore;
@@ -713,9 +713,14 @@ void main() {
       );
       expect(projected.readOnly, isTrue);
       expect(projected.systemEvent, isTrue);
+      // A changed occurrence keeps its one block, titled with the mode (#771).
       await store.setOverride('class', 'm', date, LectureMode.cancelled);
       await tester.pumpAndSettle();
-      expect(rendered.map((e) => e.id), ['personal']);
+      expect(rendered, hasLength(2));
+      expect(
+        rendered.singleWhere((e) => e.id.startsWith('timetable/')).title,
+        '자료구조 휴강',
+      );
       await store.setOverride('class', 'm', date, null);
       await tester.pumpAndSettle();
       expect(rendered, hasLength(2));
