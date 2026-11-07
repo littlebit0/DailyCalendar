@@ -518,6 +518,9 @@ class GoogleDriveAuthService {
           );
         }
         await _settleAndroidBackgroundOperations();
+        // A logout during that wait invalidates this request; re-owning the
+        // generation below would otherwise make it look current again.
+        if (!isCurrent()) return null;
         if (!forceAccountSelection && _currentUser != null) {
           return currentAccount;
         }

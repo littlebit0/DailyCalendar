@@ -360,6 +360,29 @@ class $EventRecordsTable extends EventRecords
     requiredDuringInsert: false,
     defaultValue: const Constant(9 * 60),
   );
+  static const VerificationMeta _alarmMinutesBeforeMeta =
+      const VerificationMeta('alarmMinutesBefore');
+  @override
+  late final GeneratedColumn<int> alarmMinutesBefore = GeneratedColumn<int>(
+    'alarm_minutes_before',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _alarmCustomAtMeta = const VerificationMeta(
+    'alarmCustomAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> alarmCustomAt =
+      GeneratedColumn<DateTime>(
+        'alarm_custom_at',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -393,6 +416,8 @@ class $EventRecordsTable extends EventRecords
     completed,
     alarmEnabled,
     allDayAlarmMinutes,
+    alarmMinutesBefore,
+    alarmCustomAt,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -642,6 +667,24 @@ class $EventRecordsTable extends EventRecords
         ),
       );
     }
+    if (data.containsKey('alarm_minutes_before')) {
+      context.handle(
+        _alarmMinutesBeforeMeta,
+        alarmMinutesBefore.isAcceptableOrUnknown(
+          data['alarm_minutes_before']!,
+          _alarmMinutesBeforeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('alarm_custom_at')) {
+      context.handle(
+        _alarmCustomAtMeta,
+        alarmCustomAt.isAcceptableOrUnknown(
+          data['alarm_custom_at']!,
+          _alarmCustomAtMeta,
+        ),
+      );
+    }
     return context;
   }
 
@@ -775,6 +818,14 @@ class $EventRecordsTable extends EventRecords
         DriftSqlType.int,
         data['${effectivePrefix}all_day_alarm_minutes'],
       )!,
+      alarmMinutesBefore: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}alarm_minutes_before'],
+      )!,
+      alarmCustomAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}alarm_custom_at'],
+      ),
     );
   }
 
@@ -816,6 +867,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
   final bool completed;
   final bool alarmEnabled;
   final int allDayAlarmMinutes;
+  final int alarmMinutesBefore;
+  final DateTime? alarmCustomAt;
   const EventRecord({
     required this.id,
     required this.title,
@@ -848,6 +901,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     required this.completed,
     required this.alarmEnabled,
     required this.allDayAlarmMinutes,
+    required this.alarmMinutesBefore,
+    this.alarmCustomAt,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -911,6 +966,10 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     map['completed'] = Variable<bool>(completed);
     map['alarm_enabled'] = Variable<bool>(alarmEnabled);
     map['all_day_alarm_minutes'] = Variable<int>(allDayAlarmMinutes);
+    map['alarm_minutes_before'] = Variable<int>(alarmMinutesBefore);
+    if (!nullToAbsent || alarmCustomAt != null) {
+      map['alarm_custom_at'] = Variable<DateTime>(alarmCustomAt);
+    }
     return map;
   }
 
@@ -967,6 +1026,10 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       completed: Value(completed),
       alarmEnabled: Value(alarmEnabled),
       allDayAlarmMinutes: Value(allDayAlarmMinutes),
+      alarmMinutesBefore: Value(alarmMinutesBefore),
+      alarmCustomAt: alarmCustomAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(alarmCustomAt),
     );
   }
 
@@ -1021,6 +1084,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       completed: serializer.fromJson<bool>(json['completed']),
       alarmEnabled: serializer.fromJson<bool>(json['alarmEnabled']),
       allDayAlarmMinutes: serializer.fromJson<int>(json['allDayAlarmMinutes']),
+      alarmMinutesBefore: serializer.fromJson<int>(json['alarmMinutesBefore']),
+      alarmCustomAt: serializer.fromJson<DateTime?>(json['alarmCustomAt']),
     );
   }
   @override
@@ -1062,6 +1127,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       'completed': serializer.toJson<bool>(completed),
       'alarmEnabled': serializer.toJson<bool>(alarmEnabled),
       'allDayAlarmMinutes': serializer.toJson<int>(allDayAlarmMinutes),
+      'alarmMinutesBefore': serializer.toJson<int>(alarmMinutesBefore),
+      'alarmCustomAt': serializer.toJson<DateTime?>(alarmCustomAt),
     };
   }
 
@@ -1097,6 +1164,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     bool? completed,
     bool? alarmEnabled,
     int? allDayAlarmMinutes,
+    int? alarmMinutesBefore,
+    Value<DateTime?> alarmCustomAt = const Value.absent(),
   }) => EventRecord(
     id: id ?? this.id,
     title: title ?? this.title,
@@ -1143,6 +1212,10 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     completed: completed ?? this.completed,
     alarmEnabled: alarmEnabled ?? this.alarmEnabled,
     allDayAlarmMinutes: allDayAlarmMinutes ?? this.allDayAlarmMinutes,
+    alarmMinutesBefore: alarmMinutesBefore ?? this.alarmMinutesBefore,
+    alarmCustomAt: alarmCustomAt.present
+        ? alarmCustomAt.value
+        : this.alarmCustomAt,
   );
   EventRecord copyWithCompanion(EventRecordsCompanion data) {
     return EventRecord(
@@ -1207,6 +1280,12 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
       allDayAlarmMinutes: data.allDayAlarmMinutes.present
           ? data.allDayAlarmMinutes.value
           : this.allDayAlarmMinutes,
+      alarmMinutesBefore: data.alarmMinutesBefore.present
+          ? data.alarmMinutesBefore.value
+          : this.alarmMinutesBefore,
+      alarmCustomAt: data.alarmCustomAt.present
+          ? data.alarmCustomAt.value
+          : this.alarmCustomAt,
     );
   }
 
@@ -1243,7 +1322,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           ..write('showDday: $showDday, ')
           ..write('completed: $completed, ')
           ..write('alarmEnabled: $alarmEnabled, ')
-          ..write('allDayAlarmMinutes: $allDayAlarmMinutes')
+          ..write('allDayAlarmMinutes: $allDayAlarmMinutes, ')
+          ..write('alarmMinutesBefore: $alarmMinutesBefore, ')
+          ..write('alarmCustomAt: $alarmCustomAt')
           ..write(')'))
         .toString();
   }
@@ -1281,6 +1362,8 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
     completed,
     alarmEnabled,
     allDayAlarmMinutes,
+    alarmMinutesBefore,
+    alarmCustomAt,
   ]);
   @override
   bool operator ==(Object other) =>
@@ -1316,7 +1399,9 @@ class EventRecord extends DataClass implements Insertable<EventRecord> {
           other.showDday == this.showDday &&
           other.completed == this.completed &&
           other.alarmEnabled == this.alarmEnabled &&
-          other.allDayAlarmMinutes == this.allDayAlarmMinutes);
+          other.allDayAlarmMinutes == this.allDayAlarmMinutes &&
+          other.alarmMinutesBefore == this.alarmMinutesBefore &&
+          other.alarmCustomAt == this.alarmCustomAt);
 }
 
 class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
@@ -1351,6 +1436,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
   final Value<bool> completed;
   final Value<bool> alarmEnabled;
   final Value<int> allDayAlarmMinutes;
+  final Value<int> alarmMinutesBefore;
+  final Value<DateTime?> alarmCustomAt;
   final Value<int> rowid;
   const EventRecordsCompanion({
     this.id = const Value.absent(),
@@ -1384,6 +1471,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.completed = const Value.absent(),
     this.alarmEnabled = const Value.absent(),
     this.allDayAlarmMinutes = const Value.absent(),
+    this.alarmMinutesBefore = const Value.absent(),
+    this.alarmCustomAt = const Value.absent(),
     this.rowid = const Value.absent(),
   });
   EventRecordsCompanion.insert({
@@ -1418,6 +1507,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     this.completed = const Value.absent(),
     this.alarmEnabled = const Value.absent(),
     this.allDayAlarmMinutes = const Value.absent(),
+    this.alarmMinutesBefore = const Value.absent(),
+    this.alarmCustomAt = const Value.absent(),
     this.rowid = const Value.absent(),
   }) : id = Value(id),
        title = Value(title),
@@ -1458,6 +1549,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Expression<bool>? completed,
     Expression<bool>? alarmEnabled,
     Expression<int>? allDayAlarmMinutes,
+    Expression<int>? alarmMinutesBefore,
+    Expression<DateTime>? alarmCustomAt,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
@@ -1499,6 +1592,9 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       if (alarmEnabled != null) 'alarm_enabled': alarmEnabled,
       if (allDayAlarmMinutes != null)
         'all_day_alarm_minutes': allDayAlarmMinutes,
+      if (alarmMinutesBefore != null)
+        'alarm_minutes_before': alarmMinutesBefore,
+      if (alarmCustomAt != null) 'alarm_custom_at': alarmCustomAt,
       if (rowid != null) 'rowid': rowid,
     });
   }
@@ -1535,6 +1631,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     Value<bool>? completed,
     Value<bool>? alarmEnabled,
     Value<int>? allDayAlarmMinutes,
+    Value<int>? alarmMinutesBefore,
+    Value<DateTime?>? alarmCustomAt,
     Value<int>? rowid,
   }) {
     return EventRecordsCompanion(
@@ -1572,6 +1670,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
       completed: completed ?? this.completed,
       alarmEnabled: alarmEnabled ?? this.alarmEnabled,
       allDayAlarmMinutes: allDayAlarmMinutes ?? this.allDayAlarmMinutes,
+      alarmMinutesBefore: alarmMinutesBefore ?? this.alarmMinutesBefore,
+      alarmCustomAt: alarmCustomAt ?? this.alarmCustomAt,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -1680,6 +1780,12 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
     if (allDayAlarmMinutes.present) {
       map['all_day_alarm_minutes'] = Variable<int>(allDayAlarmMinutes.value);
     }
+    if (alarmMinutesBefore.present) {
+      map['alarm_minutes_before'] = Variable<int>(alarmMinutesBefore.value);
+    }
+    if (alarmCustomAt.present) {
+      map['alarm_custom_at'] = Variable<DateTime>(alarmCustomAt.value);
+    }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
     }
@@ -1720,6 +1826,8 @@ class EventRecordsCompanion extends UpdateCompanion<EventRecord> {
           ..write('completed: $completed, ')
           ..write('alarmEnabled: $alarmEnabled, ')
           ..write('allDayAlarmMinutes: $allDayAlarmMinutes, ')
+          ..write('alarmMinutesBefore: $alarmMinutesBefore, ')
+          ..write('alarmCustomAt: $alarmCustomAt, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -1770,6 +1878,8 @@ typedef $$EventRecordsTableCreateCompanionBuilder =
       Value<bool> completed,
       Value<bool> alarmEnabled,
       Value<int> allDayAlarmMinutes,
+      Value<int> alarmMinutesBefore,
+      Value<DateTime?> alarmCustomAt,
       Value<int> rowid,
     });
 typedef $$EventRecordsTableUpdateCompanionBuilder =
@@ -1805,6 +1915,8 @@ typedef $$EventRecordsTableUpdateCompanionBuilder =
       Value<bool> completed,
       Value<bool> alarmEnabled,
       Value<int> allDayAlarmMinutes,
+      Value<int> alarmMinutesBefore,
+      Value<DateTime?> alarmCustomAt,
       Value<int> rowid,
     });
 
@@ -1969,6 +2081,16 @@ class $$EventRecordsTableFilterComposer
 
   ColumnFilters<int> get allDayAlarmMinutes => $composableBuilder(
     column: $table.allDayAlarmMinutes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get alarmMinutesBefore => $composableBuilder(
+    column: $table.alarmMinutesBefore,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get alarmCustomAt => $composableBuilder(
+    column: $table.alarmCustomAt,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -2136,6 +2258,16 @@ class $$EventRecordsTableOrderingComposer
     column: $table.allDayAlarmMinutes,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get alarmMinutesBefore => $composableBuilder(
+    column: $table.alarmMinutesBefore,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get alarmCustomAt => $composableBuilder(
+    column: $table.alarmCustomAt,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$EventRecordsTableAnnotationComposer
@@ -2269,6 +2401,16 @@ class $$EventRecordsTableAnnotationComposer
     column: $table.allDayAlarmMinutes,
     builder: (column) => column,
   );
+
+  GeneratedColumn<int> get alarmMinutesBefore => $composableBuilder(
+    column: $table.alarmMinutesBefore,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<DateTime> get alarmCustomAt => $composableBuilder(
+    column: $table.alarmCustomAt,
+    builder: (column) => column,
+  );
 }
 
 class $$EventRecordsTableTableManager
@@ -2333,6 +2475,8 @@ class $$EventRecordsTableTableManager
                 Value<bool> completed = const Value.absent(),
                 Value<bool> alarmEnabled = const Value.absent(),
                 Value<int> allDayAlarmMinutes = const Value.absent(),
+                Value<int> alarmMinutesBefore = const Value.absent(),
+                Value<DateTime?> alarmCustomAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EventRecordsCompanion(
                 id: id,
@@ -2366,6 +2510,8 @@ class $$EventRecordsTableTableManager
                 completed: completed,
                 alarmEnabled: alarmEnabled,
                 allDayAlarmMinutes: allDayAlarmMinutes,
+                alarmMinutesBefore: alarmMinutesBefore,
+                alarmCustomAt: alarmCustomAt,
                 rowid: rowid,
               ),
           createCompanionCallback:
@@ -2401,6 +2547,8 @@ class $$EventRecordsTableTableManager
                 Value<bool> completed = const Value.absent(),
                 Value<bool> alarmEnabled = const Value.absent(),
                 Value<int> allDayAlarmMinutes = const Value.absent(),
+                Value<int> alarmMinutesBefore = const Value.absent(),
+                Value<DateTime?> alarmCustomAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
               }) => EventRecordsCompanion.insert(
                 id: id,
@@ -2434,6 +2582,8 @@ class $$EventRecordsTableTableManager
                 completed: completed,
                 alarmEnabled: alarmEnabled,
                 allDayAlarmMinutes: allDayAlarmMinutes,
+                alarmMinutesBefore: alarmMinutesBefore,
+                alarmCustomAt: alarmCustomAt,
                 rowid: rowid,
               ),
           withReferenceMapper: (p0) => p0

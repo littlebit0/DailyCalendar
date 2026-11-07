@@ -28,6 +28,7 @@ import '../../../core/support/bug_report_service.dart';
 import '../../../core/sync/google_drive_auth_service.dart';
 import '../../../core/sync/google_drive_sync_service.dart';
 import '../../../core/theme/daily_ui.dart';
+import '../../events/presentation/event_templates_page.dart';
 import '../../events/domain/calendar_event.dart';
 import '../../events/domain/event_category.dart';
 import 'calendar_import_page.dart';
@@ -154,20 +155,25 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       );
     });
     _appVersionInfo = _loadAppVersionInfo();
+    // The saved account is local state, so it is shown before any provider
+    // restoration or secure storage lookup finishes or fails.
+    _dailyAccount = ref.read(settingsRepositoryProvider).dailyAccount();
+    Future.microtask(_loadGeminiApiKey);
     Future.microtask(() async {
-      final key = await ref.read(settingsRepositoryProvider).geminiApiKey();
+      if (!mounted) return;
+      // Capture services before the first await: ref is unusable once the
+      // page is popped, but account restoration should still be persisted.
       final settingsRepository = ref.read(settingsRepositoryProvider);
+      final googleDriveAuthService = ref.read(googleDriveAuthServiceProvider);
+      final appleSignInService = ref.read(appleSignInServiceProvider);
       AppleAccount? appleAccount;
       GoogleDriveAccount? googleDriveAccount;
       var dailyAccount = settingsRepository.dailyAccount();
       try {
-        googleDriveAccount = await ref
-            .read(googleDriveAuthServiceProvider)
+        googleDriveAccount = await googleDriveAuthService
             .restorePreviousSignIn();
         if (googleDriveAccount != null) {
-          final headers = await ref
-              .read(googleDriveAuthServiceProvider)
-              .authorizationHeaders();
+          final headers = await googleDriveAuthService.authorizationHeaders();
           if (headers == null) {
             googleDriveAccount = null;
           }
@@ -187,14 +193,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         // Settings still shows the saved provider connection if restoration fails.
       }
       try {
-        appleAccount = await ref
-            .read(appleSignInServiceProvider)
-            .refreshCurrentAccount();
+        appleAccount = await appleSignInService.refreshCurrentAccount();
       } on Object {
-        appleAccount = ref.read(appleSignInServiceProvider).currentAccount;
+        appleAccount = appleSignInService.currentAccount;
       }
       if (mounted) {
-        _apiKeyController.text = key ?? '';
         setState(() {
           _appleAccount = appleAccount;
           _googleDriveAccount = googleDriveAccount;
@@ -215,6 +218,20 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         });
       }
     });
+  }
+
+  Future<void> _loadGeminiApiKey() async {
+    if (!mounted) return;
+    final settingsRepository = ref.read(settingsRepositoryProvider);
+    try {
+      final key = await settingsRepository.geminiApiKey();
+      if (mounted) {
+        _apiKeyController.text = key ?? '';
+      }
+    } on Object {
+      // A secure storage failure only leaves the key field empty; reopening
+      // the settings page reads it again. Account state does not depend on it.
+    }
   }
 
   @override
@@ -730,6 +747,24 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                       ),
                       const Divider(height: 1),
+                      ListTile(
+                        key: const ValueKey('event-template-settings'),
+                        contentPadding: EdgeInsets.zero,
+                        leading: const _SettingsLeadingIcon(
+                          Icons.bookmarks_outlined,
+                        ),
+                        title: Text(context.tr('일정 템플릿')),
+                        subtitle: _SettingsDescription(
+                          context.tr('일정 추가 화면에서 한 번에 등록할 일정을 관리합니다.'),
+                        ),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () => Navigator.of(context).push<void>(
+                          MaterialPageRoute(
+                            builder: (_) => const EventTemplatesPage(),
+                          ),
+                        ),
+                      ),
+                      const Divider(height: 1),
                       _AnimatedSettingsSwitchListTile(
                         tileKey: const ValueKey('show-lunar-dates-toggle'),
                         contentPadding: EdgeInsets.zero,
@@ -1082,6 +1117,27 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         onChanged: (value) => _save(
                           settings.copyWith(
                             calendarHolidayBackgroundEnabled: value,
+                          ),
+                          changedFrom: settings,
+                        ),
+                      ),
+                      _AnimatedSettingsSwitchListTile(
+                        tileKey: const ValueKey('overnight-events-setting'),
+                        contentPadding: EdgeInsets.zero,
+                        secondary: const _SettingsLeadingIcon(
+                          Icons.nights_stay_outlined,
+                        ),
+                        value:
+                            settings.calendarShowOvernightEventsOnFollowingDays,
+                        title: Text(context.tr('자정을 넘기는 일정, 다음 날에도 표시')),
+                        subtitle: _SettingsDescription(
+                          context.tr(
+                            '월간 캘린더와 주·일간 목록에서 시간 일정이 겹치는 날짜마다 표시합니다. 끄면 시작 날짜에만 표시하고, 스케줄 보기는 바뀌지 않습니다.',
+                          ),
+                        ),
+                        onChanged: (value) => _save(
+                          settings.copyWith(
+                            calendarShowOvernightEventsOnFollowingDays: value,
                           ),
                           changedFrom: settings,
                         ),
@@ -1908,7 +1964,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
   }
 
   Future<void> _addCategory(AppSettings settings) async {
-    final category = await _showCategoryDialog(context);
+    final category = await _showCategoryDialog(
+      context,
+      existingCategories: settings.categories,
+    );
     if (category == null) {
       return;
     }
@@ -1991,6 +2050,10 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
     final updatedCategory = await _showCategoryDialog(
       context,
       initialCategory: category,
+      // The edited category keeps its own id when the new name hashes to it.
+      existingCategories: settings.categories.where(
+        (item) => item.id != category.id,
+      ),
     );
     if (updatedCategory == null) {
       return;
@@ -4562,10 +4625,14 @@ class _SyncStatusTile extends StatelessWidget {
 Future<EventCategory?> _showCategoryDialog(
   BuildContext context, {
   EventCategory? initialCategory,
+  required Iterable<EventCategory> existingCategories,
 }) async {
   return showDialog<EventCategory>(
     context: context,
-    builder: (context) => _CategoryDialog(initialCategory: initialCategory),
+    builder: (context) => _CategoryDialog(
+      initialCategory: initialCategory,
+      existingCategories: existingCategories.toList(),
+    ),
   );
 }
 
@@ -4630,9 +4697,13 @@ Widget _settingsDialogTitle(
 }
 
 class _CategoryDialog extends StatefulWidget {
-  const _CategoryDialog({required this.initialCategory});
+  const _CategoryDialog({
+    required this.initialCategory,
+    required this.existingCategories,
+  });
 
   final EventCategory? initialCategory;
+  final List<EventCategory> existingCategories;
 
   @override
   State<_CategoryDialog> createState() => _CategoryDialogState();
@@ -4719,7 +4790,11 @@ class _CategoryDialogState extends State<_CategoryDialog> {
                 initialCategory == null ||
                     (initialCategory.id != EventCategory.basic.id &&
                         initialCategory.id != EventCategory.holiday.id)
-                ? EventCategory.custom(label: label, colorValue: _selectedColor)
+                ? EventCategory.custom(
+                    label: label,
+                    colorValue: _selectedColor,
+                    existing: widget.existingCategories,
+                  )
                 : initialCategory.copyWith(
                     label: label,
                     colorValue: _selectedColor,

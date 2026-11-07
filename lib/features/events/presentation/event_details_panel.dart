@@ -13,6 +13,7 @@ import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/calendar/recurring_event_edit.dart';
 import '../../../core/calendar/calendar_event_ordering.dart';
 import '../../../core/calendar/event_display_filter.dart';
+import '../../../core/calendar/calendar_event_span.dart';
 import '../../../core/maps/map_launcher.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../../core/settings/app_settings.dart';
@@ -25,6 +26,7 @@ import '../domain/calendar_event.dart';
 import '../domain/event_category.dart';
 import '../domain/event_draft.dart';
 import 'event_editor_dialog.dart';
+import 'event_template_actions.dart';
 import 'lms_event_status.dart';
 import 'event_completion_action.dart';
 
@@ -192,10 +194,20 @@ class EventDetailsPanel extends ConsumerWidget {
                 : const EdgeInsets.all(16),
             children: [
               if (scrollController != null) header,
-              Text(
-                context.tr('일정이 없습니다.'),
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
+              // A date opened without preloaded events must not claim it is
+              // empty before its own query answers.
+              if (!liveEventsAsync.hasValue &&
+                  !liveEventsAsync.hasError &&
+                  events.isEmpty)
+                const Center(
+                  key: ValueKey('event-details-loading'),
+                  child: CircularProgressIndicator.adaptive(),
+                )
+              else
+                Text(
+                  context.tr('일정이 없습니다.'),
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
             ],
           )
         : _DraggableEventList(
@@ -330,6 +342,9 @@ class EventDetailsPanel extends ConsumerWidget {
           )
           .catchError((_) {}),
     );
+    final templateOptions = eventTemplateEditorOptions(context, ref);
+    // A quick add saves the event itself and closes the editor without a draft.
+    var quickAdded = false;
     final draft = await showDialog<EventDraft>(
       context: context,
       builder: (_) => EventEditorDialog(
@@ -337,6 +352,12 @@ class EventDetailsPanel extends ConsumerWidget {
         loadPlaceEvents: ref
             .read(visibleEventRepositoryProvider)
             .allEventsForSync,
+        templates: templateOptions.templates,
+        onQuickAdd: (template, date) async {
+          await templateOptions.onQuickAdd(template, date);
+          quickAdded = true;
+        },
+        onSaveTemplate: templateOptions.onSaveTemplate,
         initialDate: date,
         categories: categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
@@ -349,7 +370,7 @@ class EventDetailsPanel extends ConsumerWidget {
           .record(
             AnalyticsRecord.eventEditorCompleted(
               AnalyticsEditorMode.create,
-              outcome: draft == null
+              outcome: draft == null && !quickAdded
                   ? AnalyticsOutcome.canceled
                   : AnalyticsOutcome.succeeded,
               durationMs: stopwatch.elapsedMilliseconds,
@@ -397,6 +418,7 @@ class EventDetailsPanel extends ConsumerWidget {
             .allEventsForSync,
         initialDate: event.startAt,
         event: event,
+        onSaveTemplate: (draft) => saveDraftAsTemplate(context, ref, draft),
         categories: categories,
         loadCategories: () => settingsRepository.load().categories,
         defaultReminderMinutesList: defaultReminderMinutesList,
@@ -1255,7 +1277,12 @@ class _EventTile extends StatelessWidget {
       return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
     }
     if (event.allDay) {
-      final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
+      // Calendar-day step, not 24 hours, so DST days keep their date.
+      final inclusiveEnd = DateTime(
+        event.endAt.year,
+        event.endAt.month,
+        event.endAt.day - 1,
+      );
       if (_sameDay(event.startAt, inclusiveEnd)) {
         return context.tr('종일');
       }
@@ -1574,7 +1601,12 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
       return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
     }
     if (event.allDay) {
-      final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
+      // Calendar-day step, not 24 hours, so DST days keep their date.
+      final inclusiveEnd = DateTime(
+        event.endAt.year,
+        event.endAt.month,
+        event.endAt.day - 1,
+      );
       if (_sameDay(event.startAt, inclusiveEnd)) {
         return '${dateFormatter.format(event.startAt)} ${context.tr('종일')}';
       }
@@ -1601,15 +1633,21 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
   }
 
   String _formatAlarmLabel(BuildContext context, CalendarEvent event) {
-    if (!event.allDay) {
+    if (!event.allDay &&
+        event.alarmCustomAt == null &&
+        event.alarmMinutesBefore == 0) {
       return context.tr('시작 시각 · 중지 또는 10분 후 다시 알림');
     }
-    final minutes = event.allDayAlarmMinutes;
-    final time = DateTime(2000, 1, 1, minutes ~/ 60, minutes % 60);
+    final fireAt = event.alarmFireAt;
+    final locale = context.l10n.locale.toLanguageTag();
+    final time = DateFormat.jm(locale).format(fireAt);
+    final sameDay = DateUtils.isSameDay(fireAt, event.startAt);
     return context.tr(
       '{time} · 중지 또는 10분 후 다시 알림',
       args: {
-        'time': DateFormat.jm(context.l10n.locale.toLanguageTag()).format(time),
+        'time': sameDay
+            ? time
+            : '${DateFormat.MMMd(locale).format(fireAt)} $time',
       },
     );
   }
@@ -1724,7 +1762,7 @@ class _DetailActionRow extends StatelessWidget {
 
 CalendarRange _dayRange(DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
-  return CalendarRange(start, start.add(const Duration(days: 1)));
+  return CalendarRange(start, shiftCalendarDateByDays(start, 1));
 }
 
 List<CalendarEvent> _eventsForDay(
@@ -1733,9 +1771,17 @@ List<CalendarEvent> _eventsForDay(
   AppSettings settings,
 ) {
   final start = DateTime(date.year, date.month, date.day);
-  final end = start.add(const Duration(days: 1));
+  final end = shiftCalendarDateByDays(start, 1);
   return sortedCalendarEvents(
-    events.where((event) => event.overlaps(start, end)),
+    events.where(
+      (event) => calendarEventListedOnDay(
+        event,
+        start,
+        end,
+        showOvernightOnFollowingDays:
+            settings.calendarShowOvernightEventsOnFollowingDays,
+      ),
+    ),
     priority: settings.calendarEventSortPriority,
     categoryOrder: settings.categories.map((category) => category.id).toList(),
     manualOrder:

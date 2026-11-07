@@ -1,5 +1,50 @@
 # Daily Agent Memory — current handoff
 
+## #694 Day sheet long-drag dismiss — 2026-11-05
+
+- Changed (shared Dart, iOS/Android only): the day sheet in
+  `month_calendar_page.dart` uses `minChildSize: 0`, snap stages 0.4/0.68/0.96
+  and closes at size 0. `DaySheetDragDismissListener`
+  (`lib/features/events/presentation/day_sheet_drag_release.dart`) overrides the
+  release: closes on travel >= 0.4 of sheet height, travel >= 0.3 at >= 2
+  heights/s, or below the small stage by >= 0.12 / at >= 1.2 heights/s; other
+  releases below 0.4 return to 0.4; short drags keep stage snapping. List-only
+  scrolls, event drags and multi-touch are ignored. Reduced motion jumps.
+- macOS/Windows/web keep the old 0.4 minimum with no drag close.
+- Verified: analyze, full `flutter test`. Not verified: real iPhone/Android touch
+  feel, test apps not updated (deferred by user).
+
+## #697 Event templates with one-tap quick add — 2026-11-05
+
+- Changed (shared Dart, all platforms): `EventTemplate` stores a single,
+  non-repeating preset as wall-clock offsets (start minutes, end day offset, end
+  minutes, all-day day span) plus title, memo, location, URL, category id,
+  reminders, D-day, alarm and all-day alarm time. Never copied: ids, LMS/account
+  source, history, completion, weather, recurrence. Applying it on a date uses
+  local constructors, so DST and midnight crossing keep wall-clock times.
+- Storage: `EventTemplateStore` (`eventTemplates.v1`) keeps one bucket per Google
+  account email ('' when signed out); each template is an LWW register
+  (`template/<id>`, null = deletion) plus an `order` register. Drive file
+  `daily-sync-v2-templates.json` (`schemaVersion` 2, `type` `eventTemplates`),
+  uploaded/restored with the timetable document flows (`_documentsPending`),
+  bootstrapped once per account session and picked up from the change feed.
+  The name must not start with `daily-sync-v2-event-`.
+- UI: the create-event editor shows "빠른 추가" chips (favorites first); one tap
+  builds the event on the editor's date and saves through
+  `EventCommandService.create`; the dialog closes and shows a snackbar only after
+  the save succeeds, ignores taps while saving, and stays open with the reason
+  when the category was deleted, the alarm is unavailable or an update is
+  required. "템플릿으로 저장" in the create/edit editor; Settings > 일정 템플릿
+  lists, favorites, renames, edits (editor `templateMode`), deletes, reorders.
+- Verified (macOS host): `flutter analyze` clean; tests in test/core/sync,
+  test/features/{events,settings,calendar}, test/core/{settings,localization},
+  test/app and widget_test passed, including `event_template_test.dart` under
+  TZ=America/New_York.
+- NOT verified: app builds and any device run (test app update deferred by the
+  user). Mac/iPhone acceptance: create a template, quick add on another date,
+  restore on a second device with the same account, and confirm a different
+  account does not see it.
+
 ## #698 / PR #699 Update-required restriction — 2026-11-01
 
 - Changed (shared Dart, all platforms, plus iOS/macOS Siri Swift): once a newer
