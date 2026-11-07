@@ -1341,6 +1341,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     if (scaffold == null) {
       return;
     }
+    // The sheet owns its displayed date so swipes can move it without
+    // reopening, while drag edge navigation only moves the background range.
+    final sheetDate = ValueNotifier(date);
     final controller = scaffold.showBottomSheet(
       (_) => SafeArea(
         top: false,
@@ -1379,28 +1382,39 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
             snap: true,
             snapSizes: const [0.68],
             shouldCloseOnMinExtent: false,
-            builder: (context, scrollController) => EventDetailsPanel(
-              key: _daySheetSurfaceKey,
-              date: date,
-              events: events,
-              scrollController: scrollController,
-              scrollPhysics: DaySheetScrollPhysics(
-                isCollapsed: () =>
-                    _daySheetScrollController.isAttached &&
-                    _daySheetScrollController.size <= 0.4001,
-              ),
-              onEventDropped: (event, targetDate, targetIndex) =>
-                  _handleCalendarEventDrop(
-                    context,
-                    ref,
-                    event,
-                    targetDate,
-                    targetIndex,
+            builder: (context, scrollController) => ValueListenableBuilder<DateTime>(
+              valueListenable: sheetDate,
+              builder: (context, shownDate, _) => _DaySheetSwipeNavigator(
+                enabled: () => !_eventDragActive,
+                onDayDelta: (delta) => _shiftDaySheetDate(sheetDate, delta),
+                child: EventDetailsPanel(
+                  key: _daySheetSurfaceKey,
+                  date: shownDate,
+                  // Opening events belong to the opening date only; other dates
+                  // wait for their own live query instead of showing stale items.
+                  events: DateUtils.isSameDay(shownDate, date)
+                      ? events
+                      : const <CalendarEvent>[],
+                  scrollController: scrollController,
+                  scrollPhysics: DaySheetScrollPhysics(
+                    isCollapsed: () =>
+                        _daySheetScrollController.isAttached &&
+                        _daySheetScrollController.size <= 0.4001,
                   ),
-              onEventDragStateChanged: _setEventDragVisualActive,
-              onEventDragInteractionStateChanged: _setEventDragActive,
-              onEventDragGlobalPositionChanged:
-                  _handleDaySheetEventDragPosition,
+                  onEventDropped: (event, targetDate, targetIndex) =>
+                      _handleCalendarEventDrop(
+                        context,
+                        ref,
+                        event,
+                        targetDate,
+                        targetIndex,
+                      ),
+                  onEventDragStateChanged: _setEventDragVisualActive,
+                  onEventDragInteractionStateChanged: _setEventDragActive,
+                  onEventDragGlobalPositionChanged:
+                      _handleDaySheetEventDragPosition,
+                ),
+              ),
             ),
           ),
         ),
@@ -1420,6 +1434,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       _daySheetRevealsCalendar.value = false;
     });
     await controller.closed;
+    sheetDate.dispose();
     if (mounted && identical(_daySheetController, controller)) {
       setState(() {
         _daySheetController = null;
@@ -1427,6 +1442,16 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       });
       _setEventDragActive(false);
     }
+  }
+
+  void _shiftDaySheetDate(ValueNotifier<DateTime> sheetDate, int delta) {
+    final next = shiftCalendarDateByDays(sheetDate.value, delta);
+    sheetDate.value = next;
+    ref.read(selectedDateProvider.notifier).state = next;
+    ref.read(visibleMonthProvider.notifier).state = DateTime(
+      next.year,
+      next.month,
+    );
   }
 
   void _moveVisibleRange(
@@ -1458,6 +1483,65 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           next.month,
         );
     }
+  }
+}
+
+/// Moves the day schedule sheet one day per horizontal swipe: left swipe goes
+/// to the next day, right swipe to the previous day.
+class _DaySheetSwipeNavigator extends StatefulWidget {
+  const _DaySheetSwipeNavigator({
+    required this.enabled,
+    required this.onDayDelta,
+    required this.child,
+  });
+
+  static const minDistance = 56.0;
+  static const minVelocity = 320.0;
+
+  final bool Function() enabled;
+  final ValueChanged<int> onDayDelta;
+  final Widget child;
+
+  @override
+  State<_DaySheetSwipeNavigator> createState() =>
+      _DaySheetSwipeNavigatorState();
+}
+
+class _DaySheetSwipeNavigatorState extends State<_DaySheetSwipeNavigator> {
+  var _dx = 0.0;
+
+  void _end(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    final dx = _dx;
+    _dx = 0;
+    if (!widget.enabled()) return;
+    final direction = velocity.abs() >= _DaySheetSwipeNavigator.minVelocity
+        ? velocity.sign
+        : dx.abs() >= _DaySheetSwipeNavigator.minDistance
+        ? dx.sign
+        : 0.0;
+    if (direction != 0) widget.onDayDelta(direction < 0 ? 1 : -1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      customSemanticsActions: {
+        CustomSemanticsAction(label: context.tr('이전 날')): () =>
+            widget.onDayDelta(-1),
+        CustomSemanticsAction(label: context.tr('다음 날')): () =>
+            widget.onDayDelta(1),
+      },
+      child: GestureDetector(
+        key: const ValueKey('day-sheet-swipe-navigator'),
+        behavior: HitTestBehavior.translucent,
+        onHorizontalDragStart: (_) => _dx = 0,
+        onHorizontalDragUpdate: (details) => _dx += details.primaryDelta ?? 0,
+        onHorizontalDragEnd: _end,
+        onHorizontalDragCancel: () => _dx = 0,
+        child: widget.child,
+      ),
+    );
   }
 }
 
