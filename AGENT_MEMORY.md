@@ -1,5 +1,37 @@
 # Daily Agent Memory — current handoff
 
+## #91 Automatic error reports — 2026-11-05
+
+- Client: `lib/core/support/error_report_service.dart` (on by default, Settings >
+  Privacy toggle, Google login required to send, offline queue 20/7 days,
+  6h per fingerprint, 10/day, non-fatal after 3 repeats, debug never sends).
+  Hooks: `FlutterError.onError` (non-fatal), `PlatformDispatcher.onError`
+  (fatal), every failed Drive sync run via `GoogleDriveSyncService.onSyncFailure`
+  except auth/cancel (non-fatal). LMS-specific failures and
+  native crashes are not hooked.
+- Receiver: `/v1/error-reports` in `tool/analytics_receiver.py`
+  (`ErrorReportStore`). Not published to GitHub (user decision 2026-11-07):
+  stored privately like analytics in `error-reports-state.sqlite` +
+  `error-reports-YYYY-MM-DD.json` per fingerprint/day with counts and build/OS
+  environments, 90-day retention, Google token verified but no account stored.
+- Issue flow (user intent, 2026-11-07): app -> receiver ->
+  `/mnt/storage/daily-analytics/error-reports-YYYY-MM-DD.json` on the Ubuntu host
+  -> Claude reads the file, checks it and writes the GitHub issue. The receiver
+  never creates issues. No download endpoint and no Claude SSH access (as of
+  2026-10-13): the user copies or pastes the file. Each report has fingerprint,
+  first/last time, occurrences, build/OS environments, masked message and stack;
+  format in docs/ANALYTICS_DEPLOYMENT.md "From stored reports to GitHub issues".
+- Manual bug reports (user decision 2026-11-07) are no longer GitHub issues:
+  `BugReportStore` keeps masked text + environment + verified contact email in
+  `bug-reports-state.sqlite` and `bug-reports-YYYY-MM-DD.json` (0600, 90 days);
+  the app shows a report ID. Legacy `bug-report-contacts/`/`bug-report-requests/`
+  are only expired (365 days). `DAILY_GITHUB_TOKEN` is no longer used anywhere;
+  the host's `~/.config/daily/bug-report.env` can be removed and the token revoked.
+  NOT deployed to the Ubuntu host yet; copy the file and restart
+  `daily-analytics.service` (docs/ANALYTICS_DEPLOYMENT.md).
+- Shared Dart code: Mac/iPhone/Windows/Android behavior identical; no device
+  verification done.
+
 ## #695 잊모기 (dateless quick to-do tab) — 2026-11-05
 
 - Changed (shared Dart, all platforms): new `lib/features/imogi/`. Items live in

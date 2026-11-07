@@ -170,6 +170,11 @@ class GoogleDriveSyncService implements SyncService {
   var _automaticRetryIndex = 0;
   var _manualRestoreDepth = 0;
 
+  /// Called for every failed sync run (startup, uploads after edits, automatic
+  /// retries), except sign-in problems and cancellations. Used for automatic
+  /// error reports; must not throw.
+  void Function(Object error, StackTrace stackTrace)? onSyncFailure;
+
   final statusNotifier = ValueNotifier<GoogleDriveSyncStatus>(
     const GoogleDriveSyncStatus(),
   );
@@ -842,7 +847,7 @@ class GoogleDriveSyncService implements SyncService {
           attempt: analyticsAttempt,
         ),
       );
-    } on Object catch (error) {
+    } on Object catch (error, stackTrace) {
       if (generation != _sessionGeneration || identity != _accountIdentity) {
         if (generation == _sessionGeneration) {
           statusNotifier.value = const GoogleDriveSyncStatus();
@@ -859,6 +864,14 @@ class GoogleDriveSyncService implements SyncService {
         rethrow;
       }
       _scheduleAutomaticRetry(request, error);
+      if (error is! GoogleDriveAuthException &&
+          categorizeAnalyticsError(error) != AnalyticsErrorCode.canceled) {
+        try {
+          onSyncFailure?.call(error, stackTrace);
+        } on Object {
+          // Reporting never changes the sync outcome.
+        }
+      }
       statusNotifier.value = statusNotifier.value.copyWith(
         syncing: false,
         message: '동기화 실패',

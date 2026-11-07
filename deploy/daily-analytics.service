@@ -1,5 +1,5 @@
 [Unit]
-Description=Daily analytics and authenticated bug report receiver
+Description=Daily analytics, error report and bug report receiver
 After=network-online.target
 Wants=network-online.target
 
@@ -9,8 +9,6 @@ Environment=PYTHONUNBUFFERED=1
 Environment=DAILY_ANALYTICS_BIND=127.0.0.1
 Environment=DAILY_ANALYTICS_PORT=8787
 Environment=DAILY_ANALYTICS_DATA_DIR=/mnt/storage/daily-analytics
-Environment=DAILY_GITHUB_REPOSITORY=littlebit0/DailyCalendar
-EnvironmentFile=-%h/.config/daily/bug-report.env
 ExecStart=/usr/bin/python3 %h/.local/lib/daily-analytics/analytics_receiver.py
 Restart=on-failure
 RestartSec=5

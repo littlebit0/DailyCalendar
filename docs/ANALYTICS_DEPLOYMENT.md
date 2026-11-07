@@ -26,6 +26,7 @@ ingestion path, and expose only:
 
 - `POST /v1/events`
 - `POST /v1/bug-reports`
+- `POST /v1/error-reports`
 - `GET /health`
 
 The receiver limits a request to 64 KiB and 25 events, applies an in-memory
@@ -45,30 +46,23 @@ has an active Google session.
 
 The app sends its Google bearer token to `/v1/bug-reports`. The receiver uses it
 once with Google's OpenID Connect UserInfo endpoint, requires a verified email,
-and never writes the bearer token to disk or logs. It then creates an issue in
-`littlebit0/DailyCalendar` using a server-side GitHub credential owned by the
-`littlebit0` account. The public issue contains the report and app environment,
-but not the user's email address.
+and never writes the bearer token to disk or logs. Reports are not published
+and no GitHub credential is used: the receiver masks the report text with the
+same rules as automatic error reports and stores it privately, like the error
+reports, in separate files of the same data directory:
+`bug-reports-state.sqlite` (one row per report: report ID, receive time, masked
+title/description/steps/expected/actual, app version, build, platform, OS and
+the verified contact email) and the readable day copy
+`bug-reports-YYYY-MM-DD.json` (UTC day of receipt). Both are `0600` in a `0700`
+directory and expire after 90 days. The app shows the report ID instead of an
+issue link. Each Google identity is limited to five accepted reports per hour;
+a retry with the same `Idempotency-Key` returns the same report ID.
 
-Create a fine-grained GitHub personal access token with access only to the
-`littlebit0/DailyCalendar` repository and `Issues: Read and write`. Store it
-outside the repository:
-
-```bash
-install -d -m 700 "$HOME/.config/daily"
-read -rsp "GitHub token: " DAILY_GITHUB_TOKEN; echo
-umask 077
-printf 'DAILY_GITHUB_TOKEN=%s\n' "$DAILY_GITHUB_TOKEN" \
-  > "$HOME/.config/daily/bug-report.env"
-unset DAILY_GITHUB_TOKEN
-systemctl --user restart daily-analytics.service
-```
-
-The service loads this file through `EnvironmentFile` and never places the
-credential in source control. Verified contact mappings are stored under
-`/mnt/storage/daily-analytics/bug-report-contacts` with directory mode `0700`
-and file mode `0600`; they expire after 365 days. Each Google identity is limited
-to five accepted reports per hour.
+Files written by the earlier GitHub-issue version
+(`bug-report-contacts/`, `bug-report-requests/`) are no longer created; the
+receiver keeps deleting them on their original 365-day schedule. The former
+`~/.config/daily/bug-report.env` (`DAILY_GITHUB_TOKEN`) is no longer read and
+can be deleted on the host, and the token revoked.
 
 ## App Build
 
@@ -88,6 +82,7 @@ network transmission occurs.
 
 - Public endpoint: `https://littlebit.tail6514a4.ts.net/v1/events`
 - Bug-report endpoint: `https://littlebit.tail6514a4.ts.net/v1/bug-reports`
+- Error-report endpoint: `https://littlebit.tail6514a4.ts.net/v1/error-reports`
 - Health endpoint: `https://littlebit.tail6514a4.ts.net/health`
 - Ubuntu service: `daily-analytics.service` (user systemd service)
 - Receiver source: `~/.local/lib/daily-analytics/analytics_receiver.py`
@@ -227,3 +222,76 @@ codes at the source and both validators reject any other value. Drive sync failu
 stay in `sync_failed`. `cause` such as `timedOut` or `authenticationUnconfirmed` does
 not mean the password is wrong; only `credentialsRejected` reports the school's own
 wrong-credentials message. Deploy the receiver before the app.
+
+## Automatic Error Reports
+
+`POST /v1/error-reports` takes the app's sanitized error reports. It verifies
+the Google access token like `/v1/bug-reports` (the account is hashed for rate
+limiting only and never stored), masks the text again, rejects debug builds,
+limits each account to 30 requests an hour and stores at most 200 distinct
+errors a day. Nothing is published and no GitHub token is used.
+
+Storage follows the analytics receiver, in the same data directory but in
+separate files: `error-reports-state.sqlite` keeps one row per UTC day and
+fingerprint (severity, feature, error type, masked message and top stack
+frames, first/last occurrence, occurrence count) and one row per build/OS
+environment under it; `error-reports-YYYY-MM-DD.json` is the readable copy of
+that day, rewritten after each accepted report. Both are 0600 and deleted after
+90 days. Delivery IDs (the app's `Idempotency-Key`) are kept 7 days so a retry
+after a lost response adds only new occurrences. Override the app endpoint with
+`--dart-define=DAILY_ERROR_REPORT_ENDPOINT=...`.
+
+### From stored reports to GitHub issues
+
+The receiver never creates issues. The intended flow is:
+
+1. The app sends masked error reports to `/v1/error-reports`.
+2. The receiver writes `/mnt/storage/daily-analytics/error-reports-YYYY-MM-DD.json`
+   on the Ubuntu host (UTC day, same directory as `analytics-YYYY-MM-DD.json`).
+3. Claude reads that file, checks the reports (real bug or noise, already filed,
+   anything left unmasked) and writes the GitHub issue with the user.
+
+Reading follows the analytics reports: there is no download endpoint, and as
+of 2026-10-13 Claude had no SSH access to the host. The user copies the file
+(for example `scp <host>:/mnt/storage/daily-analytics/error-reports-2026-11-07.json .`)
+or pastes its contents, and Claude reads that copy.
+
+Each day file is enough on its own to write an issue:
+
+```json
+{
+  "schemaVersion": 1,
+  "day": "2026-11-07",
+  "reports": [
+    {
+      "fingerprint": "0123456789abcdef",
+      "severity": "fatal",
+      "feature": "drive_sync",
+      "errorType": "StateError",
+      "message": "Bad state: ... (masked)",
+      "stackTrace": "#0 ... (top 15 frames, masked)",
+      "firstOccurredAt": "2026-11-07T00:00:00.000Z",
+      "lastOccurredAt": "2026-11-07T00:01:00.000Z",
+      "lifecycle": "resumed",
+      "occurrences": 3,
+      "environments": [
+        {
+          "version": "6.1.0", "buildNumber": "100", "environment": "production",
+          "platform": "macOS", "deviceType": "desktop", "osVersion": "Version 27.2",
+          "locale": "ko-KR", "timeZone": "UTC+09:00",
+          "driveLinked": true, "lmsConnected": false, "lastDriveSyncAt": null,
+          "occurrences": 3
+        }
+      ]
+    }
+  ]
+}
+```
+
+The same fingerprint on several days means the same bug kept happening; search
+open issues for the fingerprint before filing a new one, and put the
+fingerprint in the issue body.
+
+Deploying a receiver change: copy `tool/analytics_receiver.py` to
+`~/.local/lib/daily-analytics/` on the Ubuntu host and run
+`systemctl --user restart daily-analytics.service`.

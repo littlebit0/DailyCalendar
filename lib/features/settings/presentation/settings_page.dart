@@ -985,6 +985,29 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         ),
                         onTap: _deleteAnalyticsData,
                       ),
+                      if (ref.watch(errorReportServiceProvider)
+                          case final errorReports?) ...[
+                        const Divider(height: 1),
+                        ValueListenableBuilder<bool>(
+                          valueListenable: errorReports.enabledListenable,
+                          builder: (context, enabled, _) =>
+                              _AnimatedSettingsSwitchListTile(
+                                tileKey: const ValueKey('error-report-toggle'),
+                                contentPadding: EdgeInsets.zero,
+                                secondary: const _SettingsLeadingIcon(
+                                  Icons.bug_report_outlined,
+                                ),
+                                value: enabled,
+                                title: Text(context.tr('자동 오류 보고')),
+                                subtitle: _SettingsDescription(
+                                  context.tr(
+                                    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 확인한 뒤 Daily 서버에 비공개로 저장해 개발자가 확인합니다. 일정 내용과 계정 정보는 보내지 않습니다.',
+                                  ),
+                                ),
+                                onChanged: errorReports.setEnabled,
+                              ),
+                        ),
+                      ],
                       const Divider(height: 1),
                       _AnimatedSettingsSwitchListTile(
                         contentPadding: EdgeInsets.zero,
@@ -1265,7 +1288,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
                         title: Text(context.tr('버그 제보')),
                         subtitle: _SettingsDescription(
                           context.tr(
-                            'Google 로그인 사용자만 GitHub 이슈를 자동 등록할 수 있습니다.',
+                            'Google 로그인 사용자만 Daily 서버에 비공개로 제보할 수 있습니다.',
                           ),
                         ),
                         trailing: _bugReportBusy
@@ -1464,30 +1487,17 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       await showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text(context.tr('버그 제보를 등록했습니다.')),
+          title: Text(context.tr('버그 제보를 보냈습니다.')),
           content: Text(
             context.tr(
-              'GitHub 이슈 #{number}로 등록되었습니다.',
-              args: {'number': '${submission.issueNumber}'},
+              'Daily 서버에 제보를 받았습니다. 제보 ID: {id}',
+              args: {'id': submission.reportId},
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(context.tr('닫기')),
-            ),
-            FilledButton.icon(
-              onPressed: () {
-                Navigator.of(context).pop();
-                unawaited(
-                  launchUrl(
-                    submission.issueUrl,
-                    mode: LaunchMode.externalApplication,
-                  ),
-                );
-              },
-              icon: const Icon(Icons.open_in_new),
-              label: Text(context.tr('GitHub에서 보기')),
             ),
           ],
         ),
@@ -3661,7 +3671,7 @@ class _BugReportDialogState extends State<_BugReportDialog> {
                   icon: Icons.lock_outline_rounded,
                   title: context.tr('연락처 보호'),
                   text: context.tr(
-                    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 공개 GitHub 이슈에 표시되지 않고 Daily 서버에 비공개로 저장됩니다.',
+                    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 제보와 함께 Daily 서버에 비공개로 저장되고 90일 뒤 삭제됩니다.',
                     args: {'email': widget.email},
                   ),
                 ),
@@ -3670,7 +3680,7 @@ class _BugReportDialogState extends State<_BugReportDialog> {
                   icon: Icons.public_outlined,
                   color: DailyUi.warning,
                   text: context.tr(
-                    '작성한 제보 내용은 공개 GitHub 이슈로 등록됩니다. 개인정보를 입력하지 마세요.',
+                    '작성한 제보 내용은 공개되지 않고 Daily 서버에 비공개로 저장됩니다. 토큰·이메일·전화번호와 따옴표 안의 글은 저장 전에 가려집니다.',
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -3742,7 +3752,7 @@ class _BugReportDialogState extends State<_BugReportDialog> {
           key: const ValueKey('submit-bug-report'),
           onPressed: _submit,
           icon: const Icon(Icons.send_outlined),
-          label: Text(context.tr('GitHub 이슈 등록')),
+          label: Text(context.tr('제보 보내기')),
           style: FilledButton.styleFrom(
             backgroundColor: DailyUi.primary,
             foregroundColor: Colors.white,

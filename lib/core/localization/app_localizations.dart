@@ -659,6 +659,9 @@ const Map<String, Map<String, String>> _translations = {
     '더 크게': 'Larger',
     '개인정보': 'Privacy',
     '익명 사용성 분석 허용': 'Allow anonymous usage analytics',
+    '자동 오류 보고': 'Automatic error reports',
+    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 확인한 뒤 Daily 서버에 비공개로 저장해 개발자가 확인합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
+        'When an error occurs, the app version, device details and the error with personal data removed are verified through your Google sign-in and stored privately on the Daily server for the developer. Event content and account details are never sent.',
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         'Collect screen and feature usage, error categories, and performance only, without event content, searches, or account information.',
     '분석 데이터 삭제': 'Delete analytics data',
@@ -813,8 +816,10 @@ const Map<String, Map<String, String>> _translations = {
     '알람 직접 입력': 'Custom alarm',
     '몇 분 전에 울릴까요?': 'How many minutes before should it ring?',
     '날짜·시각 지정': 'Pick date & time',
-    '일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.': 'This alarm time stays the same even if the event time changes.',
-    '지난 시각이라 알람이 울리지 않습니다.': 'This time has passed, so the alarm will not ring.',
+    '일정 시각을 바꿔도 지정한 알람 시각은 유지됩니다.':
+        'This alarm time stays the same even if the event time changes.',
+    '지난 시각이라 알람이 울리지 않습니다.':
+        'This time has passed, so the alarm will not ring.',
     'URL / 링크': 'URL / Link',
     '날씨': 'Weather',
     '예: 흐림': 'e.g. Cloudy',
@@ -885,25 +890,25 @@ const Map<String, Map<String, String>> _translations = {
     '백업 없이 로그아웃': 'Sign out without backup',
     '백업을 완료하지 못했습니다': 'Backup Could Not Be Completed',
     '버그 제보': 'Report a Bug',
-    'Google 로그인 사용자만 GitHub 이슈를 자동 등록할 수 있습니다.':
-        'Only users signed in with Google can create a GitHub issue automatically.',
+    'Google 로그인 사용자만 Daily 서버에 비공개로 제보할 수 있습니다.':
+        'Only users signed in with Google can send a private report to the Daily server.',
     'Google 로그인이 필요합니다.': 'Google Sign-In Required',
     '확인': 'OK',
     '버그 제보는 Google 로그인으로 Daily를 사용 중인 경우에만 등록할 수 있습니다. 계정 설정에서 Google 계정을 연결해 주세요.':
         'Bug reports are available while using Daily with Google sign-in. Connect your Google account in Account Settings.',
-    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 공개 GitHub 이슈에 표시되지 않고 Daily 서버에 비공개로 저장됩니다.':
-        'Your Google account email, {email}, will be collected as the report contact. It will not appear in the public GitHub issue and is stored privately on the Daily server.',
-    '작성한 제보 내용은 공개 GitHub 이슈로 등록됩니다. 개인정보를 입력하지 마세요.':
-        'Your report content will be posted as a public GitHub issue. Do not enter personal information.',
+    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 제보와 함께 Daily 서버에 비공개로 저장되고 90일 뒤 삭제됩니다.':
+        'Your Google account email, {email}, will be collected as the report contact. It is stored privately with the report on the Daily server and deleted after 90 days.',
+    '작성한 제보 내용은 공개되지 않고 Daily 서버에 비공개로 저장됩니다. 토큰·이메일·전화번호와 따옴표 안의 글은 저장 전에 가려집니다.':
+        'Your report is not published; it is stored privately on the Daily server. Tokens, email addresses, phone numbers and quoted text are masked before it is stored.',
     '문제 설명': 'Problem Description',
     '재현 방법': 'Steps to Reproduce',
     '예상 동작': 'Expected Behavior',
     '실제 동작': 'Actual Behavior',
     '필수 입력 항목입니다.': 'This field is required.',
-    'GitHub 이슈 등록': 'Create GitHub Issue',
-    '버그 제보를 등록했습니다.': 'Bug Report Created',
-    'GitHub 이슈 #{number}로 등록되었습니다.': 'Created as GitHub issue #{number}.',
-    'GitHub에서 보기': 'View on GitHub',
+    '제보 보내기': 'Send Report',
+    '버그 제보를 보냈습니다.': 'Bug Report Sent',
+    'Daily 서버에 제보를 받았습니다. 제보 ID: {id}':
+        'The Daily server received your report. Report ID: {id}',
     'Google 로그인 정보를 확인할 수 없습니다.':
         'Google sign-in information could not be verified.',
     '버그 제보 서버에 연결할 수 없습니다.': 'Could not connect to the bug report server.',
@@ -912,8 +917,6 @@ const Map<String, Map<String, String>> _translations = {
     '버그 제보 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.':
         'Too many bug reports were submitted. Please try again later.',
     '버그 제보 내용을 다시 확인해 주세요.': 'Review the bug report content and try again.',
-    'GitHub 이슈를 생성하지 못했습니다. 잠시 후 다시 시도해 주세요.':
-        'Could not create the GitHub issue. Please try again later.',
     '버그 제보 결과를 확인할 수 없습니다.': 'The bug report result could not be verified.',
     '버그 제보를 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.':
         'Could not submit the bug report. Please try again later.',
@@ -1746,6 +1749,9 @@ const Map<String, Map<String, String>> _translations = {
     '더 크게': '特大',
     '개인정보': 'プライバシー',
     '익명 사용성 분석 허용': '匿名の利用状況分析を許可',
+    '자동 오류 보고': '自動エラー報告',
+    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 확인한 뒤 Daily 서버에 비공개로 저장해 개발자가 확인합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
+        'エラーが起きると、アプリのバージョン、デバイス情報、個人情報を除いたエラー内容を Google ログインのアカウントで確認したうえで、開発者向けに Daily サーバーへ非公開で保存します。予定の内容とアカウント情報は送信しません。',
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         '予定内容、検索語、アカウント情報を含めず、画面・機能の利用、エラー分類、性能情報のみを収集します。',
     '분석 데이터 삭제': '分析データを削除',
@@ -1943,33 +1949,30 @@ const Map<String, Map<String, String>> _translations = {
     '백업 없이 로그아웃': 'バックアップせずログアウト',
     '백업을 완료하지 못했습니다': 'バックアップを完了できませんでした',
     '버그 제보': '不具合を報告',
-    'Google 로그인 사용자만 GitHub 이슈를 자동 등록할 수 있습니다.':
-        'Googleでログイン中のユーザーのみ、GitHub Issueを自動登録できます。',
+    'Google 로그인 사용자만 Daily 서버에 비공개로 제보할 수 있습니다.':
+        'Googleでログイン中のユーザーのみ、Dailyサーバーへ非公開で報告できます。',
     'Google 로그인이 필요합니다.': 'Googleログインが必要です',
     '확인': 'OK',
     '버그 제보는 Google 로그인으로 Daily를 사용 중인 경우에만 등록할 수 있습니다. 계정 설정에서 Google 계정을 연결해 주세요.':
         '不具合報告はGoogleログインでDailyを使用中の場合のみ登録できます。アカウント設定でGoogleアカウントを連携してください。',
-    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 공개 GitHub 이슈에 표시되지 않고 Daily 서버에 비공개로 저장됩니다.':
-        'Googleアカウントのメールアドレス（{email}）を連絡先として収集します。公開GitHub Issueには表示せず、Dailyサーバーに非公開で保存します。',
-    '작성한 제보 내용은 공개 GitHub 이슈로 등록됩니다. 개인정보를 입력하지 마세요.':
-        '入力した報告内容は公開GitHub Issueとして登録されます。個人情報を入力しないでください。',
+    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 제보와 함께 Daily 서버에 비공개로 저장되고 90일 뒤 삭제됩니다.':
+        'Googleアカウントのメールアドレス（{email}）を連絡先として収集します。報告とともにDailyサーバーに非公開で保存し、90日後に削除します。',
+    '작성한 제보 내용은 공개되지 않고 Daily 서버에 비공개로 저장됩니다. 토큰·이메일·전화번호와 따옴표 안의 글은 저장 전에 가려집니다.':
+        '入力した報告内容は公開されず、Dailyサーバーに非公開で保存されます。トークン・メールアドレス・電話番号・引用符内の文字は保存前に伏せられます。',
     '문제 설명': '問題の説明',
     '재현 방법': '再現手順',
     '예상 동작': '期待する動作',
     '실제 동작': '実際の動作',
     '필수 입력 항목입니다.': '必須項目です。',
-    'GitHub 이슈 등록': 'GitHub Issueを登録',
-    '버그 제보를 등록했습니다.': '不具合報告を登録しました',
-    'GitHub 이슈 #{number}로 등록되었습니다.': 'GitHub Issue #{number}として登録されました。',
-    'GitHub에서 보기': 'GitHubで表示',
+    '제보 보내기': '報告を送信',
+    '버그 제보를 보냈습니다.': '不具合報告を送信しました',
+    'Daily 서버에 제보를 받았습니다. 제보 ID: {id}': 'Dailyサーバーが報告を受け付けました。報告ID：{id}',
     'Google 로그인 정보를 확인할 수 없습니다.': 'Googleログイン情報を確認できません。',
     '버그 제보 서버에 연결할 수 없습니다.': '不具合報告サーバーに接続できません。',
     'Google 로그인 상태를 확인한 뒤 다시 시도해 주세요.': 'Googleログイン状態を確認してから再試行してください。',
     '버그 제보 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.':
         '不具合報告のリクエストが多すぎます。しばらくしてから再試行してください。',
     '버그 제보 내용을 다시 확인해 주세요.': '不具合報告の内容を確認してください。',
-    'GitHub 이슈를 생성하지 못했습니다. 잠시 후 다시 시도해 주세요.':
-        'GitHub Issueを作成できませんでした。しばらくしてから再試行してください。',
     '버그 제보 결과를 확인할 수 없습니다.': '不具合報告の結果を確認できません。',
     '버그 제보를 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.':
         '不具合報告を登録できませんでした。しばらくしてから再試行してください。',
@@ -2763,6 +2766,9 @@ const Map<String, Map<String, String>> _translations = {
     '더 크게': '特大',
     '개인정보': '隱私權',
     '익명 사용성 분석 허용': '允許匿名使用情況分析',
+    '자동 오류 보고': '自動錯誤回報',
+    '오류가 생기면 앱 버전, 기기 정보, 개인정보를 지운 오류 내용을 Google 로그인 계정으로 확인한 뒤 Daily 서버에 비공개로 저장해 개발자가 확인합니다. 일정 내용과 계정 정보는 보내지 않습니다.':
+        '發生錯誤時，會透過 Google 登入帳號確認後，將 App 版本、裝置資訊與移除個人資料後的錯誤內容以非公開方式儲存在 Daily 伺服器供開發者查看。不會傳送行程內容與帳號資訊。',
     '일정 내용, 검색어, 계정 정보 없이 화면과 기능 사용, 오류 범주, 성능 정보만 수집합니다.':
         '僅收集畫面與功能使用、錯誤分類及效能資訊，不包含行程內容、搜尋詞或帳號資訊。',
     '분석 데이터 삭제': '刪除分析資料',
@@ -2956,31 +2962,29 @@ const Map<String, Map<String, String>> _translations = {
     '백업 없이 로그아웃': '不備份直接登出',
     '백업을 완료하지 못했습니다': '無法完成備份',
     '버그 제보': '回報問題',
-    'Google 로그인 사용자만 GitHub 이슈를 자동 등록할 수 있습니다.':
-        '只有使用 Google 登入的使用者才能自動建立 GitHub Issue。',
+    'Google 로그인 사용자만 Daily 서버에 비공개로 제보할 수 있습니다.':
+        '只有使用 Google 登入的使用者才能以非公開方式回報至 Daily 伺服器。',
     'Google 로그인이 필요합니다.': '需要 Google 登入',
     '확인': '確定',
     '버그 제보는 Google 로그인으로 Daily를 사용 중인 경우에만 등록할 수 있습니다. 계정 설정에서 Google 계정을 연결해 주세요.':
         '只有使用 Google 登入 Daily 時才能提交錯誤回報。請在帳號設定中連結 Google 帳號。',
-    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 공개 GitHub 이슈에 표시되지 않고 Daily 서버에 비공개로 저장됩니다.':
-        '系統會收集 Google 帳號電子郵件 {email} 作為回報聯絡方式。電子郵件不會顯示於公開 GitHub Issue，並會私密儲存在 Daily 伺服器。',
-    '작성한 제보 내용은 공개 GitHub 이슈로 등록됩니다. 개인정보를 입력하지 마세요.':
-        '您填寫的回報內容將建立為公開 GitHub Issue。請勿輸入個人資料。',
+    'Google 계정 이메일 {email}을 제보 연락처로 수집합니다. 이메일은 제보와 함께 Daily 서버에 비공개로 저장되고 90일 뒤 삭제됩니다.':
+        '系統會收集 Google 帳號電子郵件 {email} 作為回報聯絡方式。電子郵件會與回報一起私密儲存在 Daily 伺服器，並於 90 天後刪除。',
+    '작성한 제보 내용은 공개되지 않고 Daily 서버에 비공개로 저장됩니다. 토큰·이메일·전화번호와 따옴표 안의 글은 저장 전에 가려집니다.':
+        '您填寫的回報內容不會公開，會私密儲存在 Daily 伺服器。權杖、電子郵件、電話號碼與引號內的文字會在儲存前遮蔽。',
     '문제 설명': '問題說明',
     '재현 방법': '重現步驟',
     '예상 동작': '預期行為',
     '실제 동작': '實際行為',
     '필수 입력 항목입니다.': '此欄位為必填。',
-    'GitHub 이슈 등록': '建立 GitHub Issue',
-    '버그 제보를 등록했습니다.': '已建立錯誤回報',
-    'GitHub 이슈 #{number}로 등록되었습니다.': '已建立為 GitHub Issue #{number}。',
-    'GitHub에서 보기': '在 GitHub 查看',
+    '제보 보내기': '傳送回報',
+    '버그 제보를 보냈습니다.': '已傳送錯誤回報',
+    'Daily 서버에 제보를 받았습니다. 제보 ID: {id}': 'Daily 伺服器已收到您的回報。回報 ID：{id}',
     'Google 로그인 정보를 확인할 수 없습니다.': '無法驗證 Google 登入資訊。',
     '버그 제보 서버에 연결할 수 없습니다.': '無法連線至錯誤回報伺服器。',
     'Google 로그인 상태를 확인한 뒤 다시 시도해 주세요.': '請確認 Google 登入狀態後再試一次。',
     '버그 제보 요청이 너무 많습니다. 잠시 후 다시 시도해 주세요.': '錯誤回報請求過多，請稍後再試。',
     '버그 제보 내용을 다시 확인해 주세요.': '請重新檢查錯誤回報內容。',
-    'GitHub 이슈를 생성하지 못했습니다. 잠시 후 다시 시도해 주세요.': '無法建立 GitHub Issue，請稍後再試。',
     '버그 제보 결과를 확인할 수 없습니다.': '無法驗證錯誤回報結果。',
     '버그 제보를 등록하지 못했습니다. 잠시 후 다시 시도해 주세요.': '無法提交錯誤回報，請稍後再試。',
     '보내기': '傳送',
