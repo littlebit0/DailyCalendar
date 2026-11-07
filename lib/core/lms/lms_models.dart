@@ -34,6 +34,7 @@ class LmsEventMetadata {
     this.requiredLearningSeconds,
     this.learnedSeconds,
     this.attendanceStatus,
+    this.pastFinalSyncCount = 0,
   }) : ownerId = normalizeLmsOwner(ownerId),
        openAt = openAt?.toUtc(),
        dueAt = dueAt?.toUtc() {
@@ -72,6 +73,9 @@ class LmsEventMetadata {
             progressPercent! > 100)) {
       throw const FormatException('Invalid LMS progress');
     }
+    if (pastFinalSyncCount < 0 || pastFinalSyncCount > 1) {
+      throw const FormatException('Invalid LMS final sync count');
+    }
   }
 
   final String provider;
@@ -94,6 +98,11 @@ class LmsEventMetadata {
   final int? requiredLearningSeconds;
   final int? learnedSeconds;
   final String? attendanceStatus;
+
+  /// 1 once the school state was reflected after the due date became past;
+  /// later syncs then leave this item's source fields alone (issue #372).
+  /// It travels with the event so restores and other devices keep it.
+  final int pastFinalSyncCount;
 
   bool belongsToOwner(String? owner) =>
       owner != null && normalizeLmsOwner(owner) == ownerId;
@@ -118,6 +127,7 @@ class LmsEventMetadata {
       'requiredLearningSeconds': requiredLearningSeconds,
     if (learnedSeconds != null) 'learnedSeconds': learnedSeconds,
     if (attendanceStatus != null) 'attendanceStatus': attendanceStatus,
+    if (pastFinalSyncCount != 0) 'pastFinalSyncCount': pastFinalSyncCount,
   };
 
   factory LmsEventMetadata.fromJson(Map<String, Object?> json) {
@@ -153,6 +163,10 @@ class LmsEventMetadata {
         attendance != null && attendance is! String) {
       throw const FormatException('Invalid LMS activity state');
     }
+    final finalSync = json['pastFinalSyncCount'];
+    if (finalSync != null && finalSync is! int) {
+      throw const FormatException('Invalid LMS final sync count');
+    }
     final progress = json['progressPercent'];
     final status = json['submissionStatus'];
     if (progress != null && progress is! num ||
@@ -178,6 +192,7 @@ class LmsEventMetadata {
       requiredLearningSeconds: duration('requiredLearningSeconds'),
       learnedSeconds: duration('learnedSeconds'),
       attendanceStatus: attendance as String?,
+      pastFinalSyncCount: finalSync as int? ?? 0,
     );
   }
 
@@ -200,6 +215,7 @@ class LmsEventMetadata {
     int? requiredLearningSeconds,
     int? learnedSeconds,
     String? attendanceStatus,
+    int? pastFinalSyncCount,
     bool clearSourceCompleted = false,
     bool clearLearningDurations = false,
     bool clearAttendanceStatus = false,
@@ -238,6 +254,7 @@ class LmsEventMetadata {
     progressPercent: clearProgressPercent
         ? null
         : progressPercent ?? this.progressPercent,
+    pastFinalSyncCount: pastFinalSyncCount ?? this.pastFinalSyncCount,
   );
 
   String get fingerprint =>
