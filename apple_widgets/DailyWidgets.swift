@@ -16,7 +16,30 @@ private let appGroup = "group.com.littlebit0.daily.widgets"
 #endif
 private let snapshotFileName = "daily-widget-snapshot.json"
 private let todoActionsFileName = "daily-widget-todo-actions.json"
-private let todoActionsChangedNotification = "com.littlebit0.daily.widgetTodoActionsChanged"
+private let todoActionsChangedNotification = dailySharedStoreNotificationName(
+  "com.littlebit0.daily.widgetTodoActionsChanged"
+)
+
+// BEGIN DAILY SHARED STORE NAMESPACE
+// The App Store and test builds share one App Group. Each build passes its own
+// DailySharedStoreNamespace (empty for the App Store build, which keeps the
+// group root) so snapshots, queues, locks and notifications never cross (#388).
+private let dailySharedStoreNamespace =
+  (Bundle.main.object(forInfoDictionaryKey: "DailySharedStoreNamespace") as? String)?
+    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+
+private func dailySharedStoreDirectory(_ groupURL: URL?) -> URL? {
+  guard let groupURL else { return nil }
+  guard !dailySharedStoreNamespace.isEmpty else { return groupURL }
+  let directory = groupURL.appendingPathComponent(dailySharedStoreNamespace, isDirectory: true)
+  try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+  return directory
+}
+
+private func dailySharedStoreNotificationName(_ base: String) -> String {
+  dailySharedStoreNamespace.isEmpty ? base : "\(base).\(dailySharedStoreNamespace)"
+}
+// END DAILY SHARED STORE NAMESPACE
 private enum DailyWidgetKind {
   static let today = "DailyTodayWidget"
   static let calendar = "DailyMonthWidget"
@@ -52,9 +75,9 @@ struct DailyWidgetMonthEvent: Codable, Identifiable {
 
 private enum DailyWidgetTodoActionStore {
   static func append(eventId: String, completed: Bool, occurrenceId: String? = nil) throws {
-    guard let containerURL = FileManager.default.containerURL(
+    guard let containerURL = dailySharedStoreDirectory(FileManager.default.containerURL(
       forSecurityApplicationGroupIdentifier: appGroup
-    ) else {
+    )) else {
       throw NSError(
         domain: "DailyWidgets",
         code: 1,
@@ -541,9 +564,9 @@ struct DailyWidgetSnapshot: Codable {
   }
 
   private static func storedJSON() -> [String: Any]? {
-    guard let containerURL = FileManager.default.containerURL(
+    guard let containerURL = dailySharedStoreDirectory(FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: appGroup
-          ),
+          )),
           let data = try? Data(contentsOf: containerURL.appendingPathComponent(snapshotFileName)) else {
       return nil
     }
@@ -551,9 +574,9 @@ struct DailyWidgetSnapshot: Codable {
   }
 
   private static func loadStored() -> DailyWidgetSnapshot {
-    guard let containerURL = FileManager.default.containerURL(
+    guard let containerURL = dailySharedStoreDirectory(FileManager.default.containerURL(
             forSecurityApplicationGroupIdentifier: appGroup
-          ),
+          )),
           let data = try? Data(
             contentsOf: containerURL.appendingPathComponent(snapshotFileName),
             options: .mappedIfSafe
