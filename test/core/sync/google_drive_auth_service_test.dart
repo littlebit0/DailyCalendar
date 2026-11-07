@@ -607,6 +607,31 @@ void main() {
     );
   }
 
+  test(
+    'logout while a connection waits for background work cancels it',
+    () async {
+      await initialize();
+      final clear = Completer<void>();
+      platform.clearCredentialState = () => clear.future;
+      // The first logout's credential clear stays pending in the background.
+      unawaited(service.signOut());
+      await Future<void>.delayed(Duration.zero);
+      final connection = service.connectToDrive();
+      await Future<void>.delayed(Duration.zero);
+      platform.clearCredentialState = null;
+      await service.signOut();
+      expect(service.currentAccount, isNull);
+      clear.complete();
+      expect(await connection, isNull);
+      expect(service.currentAccount, isNull);
+      expect(platform.signInCalls, 1);
+      // A connection the user starts after the logout still proceeds.
+      final account = await service.connectToDrive();
+      expect(account?.email, 'signed-in@example.com');
+      expect(platform.signInCalls, 2);
+    },
+  );
+
   test('timed-out consent blocks another interactive scope request', () async {
     await initialize(approvalTimeout: const Duration(milliseconds: 10));
     final consent = Completer<ClientAuthorizationTokenData?>();

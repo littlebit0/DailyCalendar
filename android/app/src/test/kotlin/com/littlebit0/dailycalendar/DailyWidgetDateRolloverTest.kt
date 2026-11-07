@@ -130,4 +130,26 @@ class DailyWidgetDateRolloverTest {
             java.util.Locale.setDefault(previous)
         }
     }
+
+    @Test fun todayKeyStaysAsciiUnderNativeDigitLocales() {
+        val instant = 1_793_464_200_000L // Nov 1 in Seoul, Oct 31 in UTC
+        val previous = java.util.Locale.getDefault()
+        try {
+            for (tag in listOf("ar-EG-u-nu-arab", "fa-IR-u-nu-arabext", "th-TH-u-ca-buddhist-nu-thai")) {
+                java.util.Locale.setDefault(java.util.Locale.forLanguageTag(tag))
+                val nextDay = DailyWidgetDateRollover.todayKey(seoul, instant)
+                val sameDay = DailyWidgetDateRollover.todayKey(utc, instant)
+                assertEquals(tag, "2026-11-01", nextDay)
+                assertEquals(tag, "2026-10-31", sameDay)
+                // The ASCII snapshotDate and dailyViews written by Dart must still match.
+                val stored = snapshot()
+                assertSame(tag, stored, DailyWidgetDateRollover.rollForward(stored, sameDay, seoul))
+                val rolled = DailyWidgetDateRollover.rollForward(snapshot(), nextDay, seoul)
+                assertNotNull(tag, rolled)
+                assertEquals(tag, "Nov 1", rolled!!.getString("todayTitle"))
+            }
+        } finally {
+            java.util.Locale.setDefault(previous)
+        }
+    }
 }

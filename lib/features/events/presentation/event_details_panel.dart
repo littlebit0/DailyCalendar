@@ -192,10 +192,20 @@ class EventDetailsPanel extends ConsumerWidget {
                 : const EdgeInsets.all(16),
             children: [
               if (scrollController != null) header,
-              Text(
-                context.tr('일정이 없습니다.'),
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
+              // A date opened without preloaded events must not claim it is
+              // empty before its own query answers.
+              if (!liveEventsAsync.hasValue &&
+                  !liveEventsAsync.hasError &&
+                  events.isEmpty)
+                const Center(
+                  key: ValueKey('event-details-loading'),
+                  child: CircularProgressIndicator.adaptive(),
+                )
+              else
+                Text(
+                  context.tr('일정이 없습니다.'),
+                  style: Theme.of(context).textTheme.labelMedium,
+                ),
             ],
           )
         : _DraggableEventList(
@@ -1255,7 +1265,12 @@ class _EventTile extends StatelessWidget {
       return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
     }
     if (event.allDay) {
-      final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
+      // Calendar-day step, not 24 hours, so DST days keep their date.
+      final inclusiveEnd = DateTime(
+        event.endAt.year,
+        event.endAt.month,
+        event.endAt.day - 1,
+      );
       if (_sameDay(event.startAt, inclusiveEnd)) {
         return context.tr('종일');
       }
@@ -1574,7 +1589,12 @@ class _EventDetailSheetState extends ConsumerState<_EventDetailSheet> {
       return '${context.tr('마감')} ${dateFormatter.format(event.startAt)} ${timeFormatter.format(event.startAt)}';
     }
     if (event.allDay) {
-      final inclusiveEnd = event.endAt.subtract(const Duration(days: 1));
+      // Calendar-day step, not 24 hours, so DST days keep their date.
+      final inclusiveEnd = DateTime(
+        event.endAt.year,
+        event.endAt.month,
+        event.endAt.day - 1,
+      );
       if (_sameDay(event.startAt, inclusiveEnd)) {
         return '${dateFormatter.format(event.startAt)} ${context.tr('종일')}';
       }

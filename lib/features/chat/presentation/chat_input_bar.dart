@@ -3,6 +3,7 @@ import '../../../core/update/update_required_view.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/calendar/calendar_event_movement.dart';
 import '../../../core/di/app_providers.dart';
 import '../../../core/localization/app_localizations.dart';
 import '../../events/domain/event_draft.dart';
@@ -246,7 +247,7 @@ class _DraftConfirmationSheet extends StatelessWidget {
     final dateFormatter = DateFormat.yMMMMd(locale);
     final timeFormatter = DateFormat.Hm(locale);
     if (draft.allDay) {
-      final inclusiveEnd = draft.endAt.subtract(const Duration(days: 1));
+      final inclusiveEnd = shiftCalendarDateByDays(draft.endAt, -1);
       if (_sameDay(draft.startAt, inclusiveEnd)) {
         return '${dateFormatter.format(draft.startAt)}  ${context.tr('종일')}';
       }

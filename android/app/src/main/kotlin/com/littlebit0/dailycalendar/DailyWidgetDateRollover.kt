@@ -4,6 +4,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.Calendar
 import java.util.GregorianCalendar
+import java.util.Locale
 import java.util.TimeZone
 
 /**
@@ -19,14 +20,20 @@ import java.util.TimeZone
  * showing stale values as current (#103).
  */
 internal object DailyWidgetDateRollover {
-    /** `yyyy-MM-dd` in the Gregorian calendar and [zone], whatever calendar the user's locale prefers. */
+    /**
+     * `yyyy-MM-dd` in the Gregorian calendar and [zone], whatever calendar the user's locale prefers.
+     * Formatted with [Locale.ROOT] so the digits stay ASCII like Dart's keys,
+     * even when the default locale uses Arabic-Indic or other native digits (#379).
+     */
     fun todayKey(
         zone: TimeZone = TimeZone.getDefault(),
         nowMs: Long = System.currentTimeMillis(),
     ): String {
         val calendar = GregorianCalendar(zone)
         calendar.timeInMillis = nowMs
-        return "%04d-%02d-%02d".format(
+        return String.format(
+            Locale.ROOT,
+            "%04d-%02d-%02d",
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH) + 1,
             calendar.get(Calendar.DAY_OF_MONTH),

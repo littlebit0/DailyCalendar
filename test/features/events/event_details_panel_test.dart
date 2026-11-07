@@ -277,6 +277,19 @@ void main() {
     expect(find.text('삭제'), findsOneWidget);
   });
 
+  // Issue #378: run with TZ=America/New_York to cross real DST days.
+  testWidgets('all-day range shows its last day across DST', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(800, 1000));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final event = _event().copyWith(
+      startAt: DateTime(2026, 3, 6),
+      endAt: DateTime(2026, 3, 9),
+      allDay: true,
+    );
+    await _pumpPanel(tester, event: event);
+    expect(find.text('2026년 3월 6일 - 2026년 3월 8일 종일'), findsOneWidget);
+  });
+
   testWidgets('event card and action boxes respond across their full bounds', (
     tester,
   ) async {

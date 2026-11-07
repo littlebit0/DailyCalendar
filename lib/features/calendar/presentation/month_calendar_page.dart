@@ -1342,6 +1342,9 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
     if (scaffold == null) {
       return;
     }
+    // The sheet owns its displayed date so swipes can move it without
+    // reopening, while drag edge navigation only moves the background range.
+    final sheetDate = ValueNotifier(date);
     final platform = Theme.of(context).platform;
     final dragDismiss =
         platform == TargetPlatform.iOS || platform == TargetPlatform.android;
@@ -1388,28 +1391,39 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
               snap: true,
               snapSizes: dragDismiss ? const [0.4, 0.68] : const [0.68],
               shouldCloseOnMinExtent: dragDismiss,
-              builder: (context, scrollController) => EventDetailsPanel(
-                key: _daySheetSurfaceKey,
-                date: date,
-                events: events,
-                scrollController: scrollController,
-                scrollPhysics: DaySheetScrollPhysics(
-                  isCollapsed: () =>
-                      _daySheetScrollController.isAttached &&
-                      _daySheetScrollController.size <= 0.4001,
-                ),
-                onEventDropped: (event, targetDate, targetIndex) =>
-                    _handleCalendarEventDrop(
-                      context,
-                      ref,
-                      event,
-                      targetDate,
-                      targetIndex,
+              builder: (context, scrollController) => ValueListenableBuilder<DateTime>(
+                valueListenable: sheetDate,
+                builder: (context, shownDate, _) => _DaySheetSwipeNavigator(
+                  enabled: () => !_eventDragActive,
+                  onDayDelta: (delta) => _shiftDaySheetDate(sheetDate, delta),
+                  child: EventDetailsPanel(
+                    key: _daySheetSurfaceKey,
+                    date: shownDate,
+                    // Opening events belong to the opening date only; other dates
+                    // wait for their own live query instead of showing stale items.
+                    events: DateUtils.isSameDay(shownDate, date)
+                        ? events
+                        : const <CalendarEvent>[],
+                    scrollController: scrollController,
+                    scrollPhysics: DaySheetScrollPhysics(
+                      isCollapsed: () =>
+                          _daySheetScrollController.isAttached &&
+                          _daySheetScrollController.size <= 0.4001,
                     ),
-                onEventDragStateChanged: _setEventDragVisualActive,
-                onEventDragInteractionStateChanged: _setEventDragActive,
-                onEventDragGlobalPositionChanged:
-                    _handleDaySheetEventDragPosition,
+                    onEventDropped: (event, targetDate, targetIndex) =>
+                        _handleCalendarEventDrop(
+                          context,
+                          ref,
+                          event,
+                          targetDate,
+                          targetIndex,
+                        ),
+                    onEventDragStateChanged: _setEventDragVisualActive,
+                    onEventDragInteractionStateChanged: _setEventDragActive,
+                    onEventDragGlobalPositionChanged:
+                        _handleDaySheetEventDragPosition,
+                  ),
+                ),
               ),
             ),
           ),
@@ -1430,6 +1444,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       _daySheetRevealsCalendar.value = false;
     });
     await controller.closed;
+    sheetDate.dispose();
     if (mounted && identical(_daySheetController, controller)) {
       setState(() {
         _daySheetController = null;
@@ -1437,6 +1452,16 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
       });
       _setEventDragActive(false);
     }
+  }
+
+  void _shiftDaySheetDate(ValueNotifier<DateTime> sheetDate, int delta) {
+    final next = shiftCalendarDateByDays(sheetDate.value, delta);
+    sheetDate.value = next;
+    ref.read(selectedDateProvider.notifier).state = next;
+    ref.read(visibleMonthProvider.notifier).state = DateTime(
+      next.year,
+      next.month,
+    );
   }
 
   void _moveVisibleRange(
@@ -1468,6 +1493,65 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
           next.month,
         );
     }
+  }
+}
+
+/// Moves the day schedule sheet one day per horizontal swipe: left swipe goes
+/// to the next day, right swipe to the previous day.
+class _DaySheetSwipeNavigator extends StatefulWidget {
+  const _DaySheetSwipeNavigator({
+    required this.enabled,
+    required this.onDayDelta,
+    required this.child,
+  });
+
+  static const minDistance = 56.0;
+  static const minVelocity = 320.0;
+
+  final bool Function() enabled;
+  final ValueChanged<int> onDayDelta;
+  final Widget child;
+
+  @override
+  State<_DaySheetSwipeNavigator> createState() =>
+      _DaySheetSwipeNavigatorState();
+}
+
+class _DaySheetSwipeNavigatorState extends State<_DaySheetSwipeNavigator> {
+  var _dx = 0.0;
+
+  void _end(DragEndDetails details) {
+    final velocity = details.primaryVelocity ?? 0;
+    final dx = _dx;
+    _dx = 0;
+    if (!widget.enabled()) return;
+    final direction = velocity.abs() >= _DaySheetSwipeNavigator.minVelocity
+        ? velocity.sign
+        : dx.abs() >= _DaySheetSwipeNavigator.minDistance
+        ? dx.sign
+        : 0.0;
+    if (direction != 0) widget.onDayDelta(direction < 0 ? 1 : -1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      customSemanticsActions: {
+        CustomSemanticsAction(label: context.tr('이전 날')): () =>
+            widget.onDayDelta(-1),
+        CustomSemanticsAction(label: context.tr('다음 날')): () =>
+            widget.onDayDelta(1),
+      },
+      child: GestureDetector(
+        key: const ValueKey('day-sheet-swipe-navigator'),
+        behavior: HitTestBehavior.translucent,
+        onHorizontalDragStart: (_) => _dx = 0,
+        onHorizontalDragUpdate: (details) => _dx += details.primaryDelta ?? 0,
+        onHorizontalDragEnd: _end,
+        onHorizontalDragCancel: () => _dx = 0,
+        child: widget.child,
+      ),
+    );
   }
 }
 
@@ -2775,10 +2859,12 @@ class _WeekPageViewState extends State<_WeekPageView> {
             }
           },
           itemBuilder: (context, index) {
-            final pageDate = shiftCalendarDateByDays(
-              _anchorDate,
-              (index - _initialPage) * 7,
-            );
+            final weekOffset = index - _initialPage;
+            // _anchorDate는 페이지 위치 계산용이다. 선택 날짜가 있는 주에는 실제 선택 날짜를 넘긴다.
+            final pageDate =
+                weekOffset == _weekDelta(_anchorDate, widget.selectedDate)
+                ? _dateOnly(widget.selectedDate)
+                : shiftCalendarDateByDays(_anchorDate, weekOffset * 7);
             return _desktopMouseWheelSignalRegion(
               context,
               onPointerSignal: _handlePointerSignal,
@@ -4776,7 +4862,7 @@ Future<void> _handleCalendarEventDrop(
   final rangeLastDate = sourceDate.isAfter(normalizedTarget)
       ? sourceDate
       : normalizedTarget;
-  final rangeEnd = rangeLastDate.add(const Duration(days: 1));
+  final rangeEnd = shiftCalendarDateByDays(rangeLastDate, 1);
   final settings = ref.read(appSettingsProvider);
   final repository = ref.read(visibleEventRepositoryProvider);
   final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
@@ -4855,7 +4941,7 @@ Future<void> _handleCalendarEventTimeDrop(
   final rangeLastDate = sourceDate.isAfter(targetDate)
       ? sourceDate
       : targetDate;
-  final rangeEnd = rangeLastDate.add(const Duration(days: 1));
+  final rangeEnd = shiftCalendarDateByDays(rangeLastDate, 1);
   final settings = ref.read(appSettingsProvider);
   final repository = ref.read(visibleEventRepositoryProvider);
   final storedEvents = await repository.eventsInRange(rangeStart, rangeEnd);
@@ -5416,7 +5502,7 @@ class _CalendarHeader extends ConsumerWidget {
       DailyIconAction(
         tooltip: context.tr('검색/필터'),
         onPressed: () => _showFilterSheet(context, ref),
-        selected: searchQuery.isNotEmpty,
+        selected: calendarDisplayFilterActive(settings, searchQuery),
         icon: Icons.tune_rounded,
         size: actionSize,
         borderless: true,
@@ -5729,9 +5815,15 @@ class _CalendarHeader extends ConsumerWidget {
     final queryController = TextEditingController(
       text: ref.read(calendarSearchQueryProvider),
     );
+    // What the user chose in this sheet, compared on close for analytics only.
+    // The sheet shows the live settings so an external change is never masked
+    // or written back from this snapshot (#722).
     var hidden = settings.hiddenCategoryIds.toSet();
     var showHolidays = settings.calendarShowHolidays;
     var ddayOnly = settings.calendarDdayOnly;
+    // Optimistic values shown until this sheet's own save of that key lands.
+    final pending = <String, bool>{};
+    final pendingTokens = <String, int>{};
     final initialQuery = ref.read(calendarSearchQueryProvider);
     // Taken now: the sheet can outlive this widget's ref.
     final analytics = ref.read(productAnalyticsProvider);
@@ -5748,246 +5840,285 @@ class _CalendarHeader extends ConsumerWidget {
         side: DailyUi.popupBorder(context),
       ),
       builder: (context) => StatefulBuilder(
-        builder: (context, setState) {
-          final viewInsets = MediaQuery.viewInsetsOf(context);
-          final maxHeight = MediaQuery.sizeOf(context).height * 0.86;
-          return Padding(
-            padding: EdgeInsets.only(bottom: viewInsets.bottom),
-            child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: maxHeight),
-              child: ListView(
-                padding: EdgeInsets.fromLTRB(
-                  DailyUi.isDesktop ? 24 : 16,
-                  10,
-                  DailyUi.isDesktop ? 24 : 16,
-                  20,
-                ),
-                shrinkWrap: true,
-                children: [
-                  const DailySheetHandle(),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      const DailySettingsIcon(icon: Icons.filter_alt_outlined),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          context.tr('검색/필터'),
-                          style: const TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0,
-                          ),
-                        ),
-                      ),
-                      DailyIconAction(
-                        tooltip: context.tr('닫기'),
-                        onPressed: () {
-                          FocusManager.instance.primaryFocus?.unfocus();
-                          Navigator.of(context).pop();
-                        },
-                        icon: Icons.close_rounded,
-                      ),
-                    ],
+        builder: (context, setState) => Consumer(
+          builder: (context, sheetRef, _) {
+            final live = sheetRef.watch(appSettingsProvider);
+            final liveHidden = live.hiddenCategoryIds.toSet();
+            bool shown(String key, bool liveValue) => pending[key] ?? liveValue;
+            Future<void> savePending(
+              String key,
+              bool value,
+              Future<void> Function() save,
+            ) async {
+              final token = (pendingTokens[key] ?? 0) + 1;
+              pendingTokens[key] = token;
+              setState(() => pending[key] = value);
+              try {
+                await save();
+              } finally {
+                // A failed save falls back to the stored value, not this guess.
+                if (pendingTokens[key] == token && context.mounted) {
+                  setState(() => pending.remove(key));
+                }
+              }
+            }
+
+            final viewInsets = MediaQuery.viewInsetsOf(context);
+            final maxHeight = MediaQuery.sizeOf(context).height * 0.86;
+            return Padding(
+              padding: EdgeInsets.only(bottom: viewInsets.bottom),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: maxHeight),
+                child: ListView(
+                  padding: EdgeInsets.fromLTRB(
+                    DailyUi.isDesktop ? 24 : 16,
+                    10,
+                    DailyUi.isDesktop ? 24 : 16,
+                    20,
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: queryController,
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      hintText: context.tr('현재 보기에서 검색'),
-                      prefixIcon: const Icon(Icons.search_rounded),
-                      fillColor: DailyUi.groupedSurface(context),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide(
-                          color: DailyUi.separator(context),
+                  shrinkWrap: true,
+                  children: [
+                    const DailySheetHandle(),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const DailySettingsIcon(
+                          icon: Icons.filter_alt_outlined,
                         ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: BorderSide(
-                          color: DailyUi.separator(context),
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        borderSide: const BorderSide(
-                          color: DailyUi.primary,
-                          width: 1.5,
-                        ),
-                      ),
-                    ),
-                    onChanged: (value) =>
-                        ref.read(calendarSearchQueryProvider.notifier).state =
-                            value.trim(),
-                  ),
-                  const SizedBox(height: 4),
-                  DailyGroupedSection(
-                    label: context.tr('표시 옵션'),
-                    children: [
-                      SwitchListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                        ),
-                        secondary: const Icon(Icons.flag_outlined),
-                        value: ddayOnly,
-                        title: Text(context.tr('D-day 일정만 보기')),
-                        onChanged: (value) async {
-                          setState(() => ddayOnly = value);
-                          final currentSettings = ref.read(appSettingsProvider);
-                          final updated = currentSettings.copyWith(
-                            calendarDdayOnly: value,
-                          );
-                          final settingsRepository = ref.read(
-                            settingsRepositoryProvider,
-                          );
-                          await settingsRepository.save(
-                            updated,
-                            changedFrom: currentSettings,
-                          );
-                          ref.read(appSettingsProvider.notifier).state =
-                              settingsRepository.load();
-                        },
-                      ),
-                      SwitchListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                        ),
-                        secondary: const Icon(Icons.celebration_outlined),
-                        value: showHolidays,
-                        title: Text(context.tr('공휴일 표시')),
-                        onChanged: (value) async {
-                          setState(() => showHolidays = value);
-                          final currentSettings = ref.read(appSettingsProvider);
-                          final updated = currentSettings.copyWith(
-                            calendarShowHolidays: value,
-                          );
-                          final settingsRepository = ref.read(
-                            settingsRepositoryProvider,
-                          );
-                          await settingsRepository.save(
-                            updated,
-                            changedFrom: currentSettings,
-                          );
-                          ref.read(appSettingsProvider.notifier).state =
-                              settingsRepository.load();
-                        },
-                      ),
-                    ],
-                  ),
-                  DailySectionLabel(context.tr('분류 표시')),
-                  Material(
-                    color: DailyUi.groupedSurface(context),
-                    clipBehavior: Clip.antiAlias,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      side: BorderSide(color: DailyUi.separator(context)),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(14),
-                      child: Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          for (final category in settings.categories)
-                            FilterChip(
-                              avatar: CircleAvatar(
-                                radius: 5,
-                                backgroundColor: Color(category.colorValue),
-                              ),
-                              label: Text(
-                                context.l10n.categoryName(
-                                  id: category.id,
-                                  label: category.label,
-                                ),
-                              ),
-                              selected: !hidden.contains(category.id),
-                              selectedColor: DailyUi.primary.withValues(
-                                alpha:
-                                    Theme.of(context).brightness ==
-                                        Brightness.dark
-                                    ? 0.28
-                                    : 0.13,
-                              ),
-                              checkmarkColor: DailyUi.primary,
-                              shape: const StadiumBorder(),
-                              onSelected: (selected) async {
-                                setState(() {
-                                  if (selected) {
-                                    hidden.remove(category.id);
-                                  } else {
-                                    hidden.add(category.id);
-                                  }
-                                });
-                                final currentSettings = ref.read(
-                                  appSettingsProvider,
-                                );
-                                final updated = currentSettings.copyWith(
-                                  hiddenCategoryIds: hidden.toList(),
-                                );
-                                final settingsRepository = ref.read(
-                                  settingsRepositoryProvider,
-                                );
-                                await settingsRepository.save(
-                                  updated,
-                                  changedFrom: currentSettings,
-                                );
-                                ref.read(appSettingsProvider.notifier).state =
-                                    settingsRepository.load();
-                              },
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 18),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            queryController.clear();
-                            ref
-                                    .read(calendarSearchQueryProvider.notifier)
-                                    .state =
-                                '';
-                          },
-                          icon: const Icon(Icons.clear_rounded),
-                          label: Text(context.tr('검색어 지우기')),
-                          style: OutlinedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(48),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            context.tr('검색/필터'),
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 0,
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: FilledButton(
+                        DailyIconAction(
+                          tooltip: context.tr('닫기'),
                           onPressed: () {
                             FocusManager.instance.primaryFocus?.unfocus();
                             Navigator.of(context).pop();
                           },
-                          style: FilledButton.styleFrom(
-                            backgroundColor: DailyUi.primary,
-                            foregroundColor: Colors.white,
-                            minimumSize: const Size.fromHeight(48),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                            ),
+                          icon: Icons.close_rounded,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: queryController,
+                      autofocus: true,
+                      decoration: InputDecoration(
+                        hintText: context.tr('현재 보기에서 검색'),
+                        prefixIcon: const Icon(Icons.search_rounded),
+                        fillColor: DailyUi.groupedSurface(context),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide(
+                            color: DailyUi.separator(context),
                           ),
-                          child: Text(context.tr('완료')),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: BorderSide(
+                            color: DailyUi.separator(context),
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          borderSide: const BorderSide(
+                            color: DailyUi.primary,
+                            width: 1.5,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                      onChanged: (value) =>
+                          ref.read(calendarSearchQueryProvider.notifier).state =
+                              value.trim(),
+                    ),
+                    const SizedBox(height: 4),
+                    DailyGroupedSection(
+                      label: context.tr('표시 옵션'),
+                      children: [
+                        SwitchListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                          ),
+                          secondary: const Icon(Icons.flag_outlined),
+                          value: shown('dday', live.calendarDdayOnly),
+                          title: Text(context.tr('D-day 일정만 보기')),
+                          onChanged: (value) async {
+                            ddayOnly = value;
+                            await savePending('dday', value, () async {
+                              final currentSettings = ref.read(
+                                appSettingsProvider,
+                              );
+                              final updated = currentSettings.copyWith(
+                                calendarDdayOnly: value,
+                              );
+                              final settingsRepository = ref.read(
+                                settingsRepositoryProvider,
+                              );
+                              await settingsRepository.save(
+                                updated,
+                                changedFrom: currentSettings,
+                              );
+                              ref.read(appSettingsProvider.notifier).state =
+                                  settingsRepository.load();
+                            });
+                          },
+                        ),
+                        SwitchListTile(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                          ),
+                          secondary: const Icon(Icons.celebration_outlined),
+                          value: shown('holidays', live.calendarShowHolidays),
+                          title: Text(context.tr('공휴일 표시')),
+                          onChanged: (value) async {
+                            showHolidays = value;
+                            await savePending('holidays', value, () async {
+                              final currentSettings = ref.read(
+                                appSettingsProvider,
+                              );
+                              final updated = currentSettings.copyWith(
+                                calendarShowHolidays: value,
+                              );
+                              final settingsRepository = ref.read(
+                                settingsRepositoryProvider,
+                              );
+                              await settingsRepository.save(
+                                updated,
+                                changedFrom: currentSettings,
+                              );
+                              ref.read(appSettingsProvider.notifier).state =
+                                  settingsRepository.load();
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    DailySectionLabel(context.tr('분류 표시')),
+                    Material(
+                      color: DailyUi.groupedSurface(context),
+                      clipBehavior: Clip.antiAlias,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                        side: BorderSide(color: DailyUi.separator(context)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Wrap(
+                          spacing: 8,
+                          runSpacing: 8,
+                          children: [
+                            for (final category in live.categories)
+                              FilterChip(
+                                avatar: CircleAvatar(
+                                  radius: 5,
+                                  backgroundColor: Color(category.colorValue),
+                                ),
+                                label: Text(
+                                  context.l10n.categoryName(
+                                    id: category.id,
+                                    label: category.label,
+                                  ),
+                                ),
+                                selected: !shown(
+                                  'category:${category.id}',
+                                  liveHidden.contains(category.id),
+                                ),
+                                selectedColor: DailyUi.primary.withValues(
+                                  alpha:
+                                      Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? 0.28
+                                      : 0.13,
+                                ),
+                                checkmarkColor: DailyUi.primary,
+                                shape: const StadiumBorder(),
+                                onSelected: (selected) async {
+                                  selected
+                                      ? hidden.remove(category.id)
+                                      : hidden.add(category.id);
+                                  await savePending(
+                                    'category:${category.id}',
+                                    !selected,
+                                    () async {
+                                      final settingsRepository = ref.read(
+                                        settingsRepositoryProvider,
+                                      );
+                                      // Changes only this id in the latest list,
+                                      // keeping external and concurrent edits.
+                                      await settingsRepository
+                                          .setCategoryHidden(
+                                            category.id,
+                                            !selected,
+                                          );
+                                      ref
+                                          .read(appSettingsProvider.notifier)
+                                          .state = settingsRepository
+                                          .load();
+                                    },
+                                  );
+                                },
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () {
+                              queryController.clear();
+                              ref
+                                      .read(
+                                        calendarSearchQueryProvider.notifier,
+                                      )
+                                      .state =
+                                  '';
+                            },
+                            icon: const Icon(Icons.clear_rounded),
+                            label: Text(context.tr('검색어 지우기')),
+                            style: OutlinedButton.styleFrom(
+                              minimumSize: const Size.fromHeight(48),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: FilledButton(
+                            onPressed: () {
+                              FocusManager.instance.primaryFocus?.unfocus();
+                              Navigator.of(context).pop();
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: DailyUi.primary,
+                              foregroundColor: Colors.white,
+                              minimumSize: const Size.fromHeight(48),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                            ),
+                            child: Text(context.tr('완료')),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     ).whenComplete(() {
       // Closing the sheet without changing anything is not a use of the
@@ -8172,20 +8303,20 @@ CalendarRange _monthRangeFor(DateTime month, bool weekStartsOnMonday) {
   final leadingDays = weekStartsOnMonday
       ? first.weekday - 1
       : first.weekday % 7;
-  final gridStart = first.subtract(Duration(days: leadingDays));
-  return CalendarRange(gridStart, gridStart.add(const Duration(days: 42)));
+  final gridStart = shiftCalendarDateByDays(first, -leadingDays);
+  return CalendarRange(gridStart, shiftCalendarDateByDays(gridStart, 42));
 }
 
 CalendarRange _weekRangeFor(DateTime date, bool weekStartsOnMonday) {
   final day = DateTime(date.year, date.month, date.day);
   final leadingDays = weekStartsOnMonday ? day.weekday - 1 : day.weekday % 7;
-  final start = day.subtract(Duration(days: leadingDays));
-  return CalendarRange(start, start.add(const Duration(days: 7)));
+  final start = shiftCalendarDateByDays(day, -leadingDays);
+  return CalendarRange(start, shiftCalendarDateByDays(start, 7));
 }
 
 CalendarRange _dayRangeFor(DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
-  return CalendarRange(start, start.add(const Duration(days: 1)));
+  return CalendarRange(start, shiftCalendarDateByDays(start, 1));
 }
 
 List<CalendarEvent> _filterVisibleEvents(
@@ -8196,9 +8327,31 @@ List<CalendarEvent> _filterVisibleEvents(
 
 List<CalendarEvent> _eventsForDay(List<CalendarEvent> events, DateTime date) {
   final start = DateTime(date.year, date.month, date.day);
-  final end = start.add(const Duration(days: 1));
+  final end = shiftCalendarDateByDays(start, 1);
   return events.where((event) => event.overlaps(start, end)).toList();
 }
+
+// Local calendar-day bounds stay at midnight on DST days (23h/25h days).
+@visibleForTesting
+CalendarRange calendarMonthRangeForTesting(
+  DateTime month,
+  bool weekStartsOnMonday,
+) => _monthRangeFor(month, weekStartsOnMonday);
+
+@visibleForTesting
+CalendarRange calendarWeekRangeForTesting(
+  DateTime date,
+  bool weekStartsOnMonday,
+) => _weekRangeFor(date, weekStartsOnMonday);
+
+@visibleForTesting
+CalendarRange calendarDayRangeForTesting(DateTime date) => _dayRangeFor(date);
+
+@visibleForTesting
+List<CalendarEvent> calendarEventsForDayForTesting(
+  List<CalendarEvent> events,
+  DateTime date,
+) => _eventsForDay(events, date);
 
 List<CalendarEvent> _orderedEventsForDay(
   List<CalendarEvent> events,
