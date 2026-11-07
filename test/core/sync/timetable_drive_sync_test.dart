@@ -1117,6 +1117,61 @@ void main() {
     },
   );
 
+  test(
+    'imogi items sync through their own Drive document with completion and deletion',
+    () async {
+      final drive = _TimetableDrive();
+      final source = await _Device.create(drive);
+      final parcel = await source.settings.imogiStore.add('택배 반품하기');
+      final call = await source.settings.imogiStore.add('교수님께 질문하기');
+      await source.service.syncPendingChangesNow();
+      expect(drive.writes, ['daily-sync-v2-imogi.json']);
+      expect(await source.service.hasPendingChanges(), isFalse);
+
+      final target = await _Device.create(drive);
+      await target.service.restoreNow();
+      final imogi = target.settings.imogiStore;
+      expect(imogi.openCount, 2);
+      expect(imogi.items.map((item) => item.title).toSet(), {
+        '택배 반품하기',
+        '교수님께 질문하기',
+      });
+      await imogi.setCompleted(parcel.id, true);
+      await imogi.remove(call.id);
+      await target.service.syncPendingChangesNow();
+
+      await source.service.checkForRemoteChangesNow();
+      final merged = source.settings.imogiStore;
+      expect(merged.openCount, 0);
+      expect(merged.items.single.id, parcel.id);
+      expect(merged.items.single.completed, isTrue);
+      expect(await target.events.pendingSyncEvents(), isEmpty);
+      expect(target.store.classes, isEmpty);
+    },
+  );
+
+  test(
+    'an offline imogi upload merges instead of dropping remote items',
+    () async {
+      final drive = _TimetableDrive();
+      final first = await _Device.create(drive);
+      await first.settings.imogiStore.add('전화하기');
+      await first.service.syncPendingChangesNow();
+
+      final second = await _Device.create(drive);
+      await second.settings.imogiStore.add('앱 버그 수정하기');
+      await second.service.syncPendingChangesNow();
+
+      final items =
+          (drive.payload('daily-sync-v2-imogi.json')['document']
+                  as Map)['items']
+              as Map;
+      expect(items, hasLength(2));
+      expect(second.settings.imogiStore.openCount, 2);
+      expect(await second.service.hasPendingChanges(), isFalse);
+    },
+  );
+
   test('event templates sync through their own Drive document', () async {
     const file = 'daily-sync-v2-templates.json';
     final drive = _TimetableDrive();

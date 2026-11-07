@@ -2858,13 +2858,15 @@ MockClient _versionedClient(
 ) {
   final bodies = <String, http.Response>{};
   return MockClient((request) async {
-    // These event/settings fixtures predate timetable and template storage.
-    // Model empty namespaces; their transport and bootstrap have dedicated tests.
+    // These event/settings fixtures predate timetable, template and imogi
+    // storage. Model empty namespaces; their transport and bootstrap have
+    // dedicated tests.
     final query = request.url.queryParameters['q'] ?? '';
     if (request.method == 'GET' &&
         request.url.path == '/drive/v3/files' &&
         (query.contains("name = 'daily-sync-v2-timetable.json'") ||
-            query.contains("name = 'daily-sync-v2-templates.json'"))) {
+            query.contains("name = 'daily-sync-v2-templates.json'") ||
+            query.contains("name = 'daily-sync-v2-imogi.json'"))) {
       return _driveFiles([]);
     }
     if (request.url.path.startsWith('/drive/v2/files/')) {
