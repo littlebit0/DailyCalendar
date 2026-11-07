@@ -522,6 +522,86 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
+  for (final (platform, expectsSiriCalls) in [
+    (TargetPlatform.iOS, true),
+    (TargetPlatform.macOS, true),
+    (TargetPlatform.android, false),
+    (TargetPlatform.windows, false),
+    (TargetPlatform.linux, false),
+  ]) {
+    testWidgets(
+      '${platform.name} ${expectsSiriCalls ? 'reads' : 'never calls'} the '
+      'Siri event channel on start and resume',
+      (tester) async {
+        tester.view.devicePixelRatio = 1;
+        tester.view.physicalSize = const Size(1280, 900);
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        debugDefaultTargetPlatformOverride = platform;
+        addTearDown(() => debugDefaultTargetPlatformOverride = null);
+        const siriChannel = MethodChannel('daily/siri_event_changes');
+        final siriCalls = <String>[];
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+            .setMockMethodCallHandler(siriChannel, (call) async {
+              siriCalls.add(call.method);
+              return const <Object?>[];
+            });
+        addTearDown(
+          () => TestDefaultBinaryMessengerBinding
+              .instance
+              .defaultBinaryMessenger
+              .setMockMethodCallHandler(siriChannel, null),
+        );
+        SharedPreferences.setMockInitialValues({'onboardingCompleted': true});
+        final preferences = await SharedPreferences.getInstance();
+        await tester.pumpWidget(
+          ProviderScope(
+            overrides: [
+              universityRegionsProvider.overrideWith(
+                (ref) async => UniversityRegions.fromJson(
+                  jsonDecode(
+                        File(
+                          'assets/academic/university_regions.json',
+                        ).readAsStringSync(),
+                      )
+                      as Map<String, dynamic>,
+                ),
+              ),
+              settingsRepositoryProvider.overrideWithValue(
+                SettingsRepository(preferences: preferences),
+              ),
+              notificationServiceProvider.overrideWithValue(
+                _FakeNotification(),
+              ),
+              syncServiceProvider.overrideWithValue(_FakeSync()),
+              eventRepositoryProvider.overrideWithValue(_FakeEventRepository()),
+              googleDriveAuthServiceProvider.overrideWithValue(
+                _FakeGoogleDriveAuthService(),
+              ),
+            ],
+            child: const DailyApp(),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final callsBeforeResume = siriCalls.length;
+        tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+        tester.binding.handleAppLifecycleStateChanged(
+          AppLifecycleState.resumed,
+        );
+        await tester.pumpAndSettle();
+
+        if (expectsSiriCalls) {
+          expect(siriCalls.length, greaterThan(callsBeforeResume));
+          expect(siriCalls.toSet(), {'pendingChanges'});
+        } else {
+          expect(siriCalls, isEmpty);
+        }
+        debugDefaultTargetPlatformOverride = null;
+        await tester.pumpWidget(const SizedBox.shrink());
+      },
+    );
+  }
+
   testWidgets('a local-only user still reports both startup milestones once', (
     tester,
   ) async {
