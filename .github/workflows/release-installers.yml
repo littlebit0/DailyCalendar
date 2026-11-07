@@ -225,9 +225,15 @@ jobs:
           path: dist
           merge-multiple: true
       - name: Verify complete asset set
+        id: assets
         shell: bash
         run: |
           version="${RELEASE_TAG#v}"
+          if [[ ! -s "docs/RELEASE_NOTES_${version}.md" ]]; then
+            echo "docs/RELEASE_NOTES_${version}.md is missing at tag $RELEASE_TAG" >&2
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
           for name in "daily-ios-${version}-unsigned.ipa" "daily-macos-${version}-unsigned.dmg" "daily-android-${version}.apk" "daily-windows-${version}-setup.exe" "daily-windows-${version}.zip" "daily-linux-${version}-1-amd64.deb" "daily-linux-${version}-1-arm64.deb"; do
             test -s "dist/$name"
           done
@@ -236,7 +242,7 @@ jobs:
         with:
           tag_name: ${{ inputs.tag }}
           name: DailyCalendar ${{ inputs.tag }}
-          body_path: docs/RELEASE_NOTES_4.0.0.md
+          body_path: docs/RELEASE_NOTES_${{ steps.assets.outputs.version }}.md
           draft: true
           files: dist/*
           fail_on_unmatched_files: true
