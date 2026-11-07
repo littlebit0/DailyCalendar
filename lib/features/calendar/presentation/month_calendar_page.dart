@@ -5959,9 +5959,6 @@ class _CalendarHeader extends ConsumerWidget {
 
   Future<void> _showFilterSheet(BuildContext context, WidgetRef ref) {
     final settings = ref.read(appSettingsProvider);
-    final queryController = TextEditingController(
-      text: ref.read(calendarSearchQueryProvider),
-    );
     // What the user chose in this sheet, compared on close for analytics only.
     // The sheet shows the live settings so an external change is never masked
     // or written back from this snapshot (#722).
@@ -5972,6 +5969,7 @@ class _CalendarHeader extends ConsumerWidget {
     final pending = <String, bool>{};
     final pendingTokens = <String, int>{};
     final initialQuery = ref.read(calendarSearchQueryProvider);
+    var query = initialQuery;
     // Taken now: the sheet can outlive this widget's ref.
     final analytics = ref.read(productAnalyticsProvider);
 
@@ -5986,286 +5984,296 @@ class _CalendarHeader extends ConsumerWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         side: DailyUi.popupBorder(context),
       ),
-      builder: (context) => StatefulBuilder(
-        builder: (context, setState) => Consumer(
-          builder: (context, sheetRef, _) {
-            final live = sheetRef.watch(appSettingsProvider);
-            final liveHidden = live.hiddenCategoryIds.toSet();
-            bool shown(String key, bool liveValue) => pending[key] ?? liveValue;
-            Future<void> savePending(
-              String key,
-              bool value,
-              Future<void> Function() save,
-            ) async {
-              final token = (pendingTokens[key] ?? 0) + 1;
-              pendingTokens[key] = token;
-              setState(() => pending[key] = value);
-              try {
-                await save();
-              } finally {
-                // A failed save falls back to the stored value, not this guess.
-                if (pendingTokens[key] == token && context.mounted) {
-                  setState(() => pending.remove(key));
+      // The field's controller lives as long as the sheet's widgets, which
+      // keep rebuilding during the exit animation after the route pops (#775).
+      builder: (context) => _SheetTextController(
+        initialText: initialQuery,
+        builder: (context, queryController) => StatefulBuilder(
+          builder: (context, setState) => Consumer(
+            builder: (context, sheetRef, _) {
+              final live = sheetRef.watch(appSettingsProvider);
+              final liveHidden = live.hiddenCategoryIds.toSet();
+              bool shown(String key, bool liveValue) =>
+                  pending[key] ?? liveValue;
+              Future<void> savePending(
+                String key,
+                bool value,
+                Future<void> Function() save,
+              ) async {
+                final token = (pendingTokens[key] ?? 0) + 1;
+                pendingTokens[key] = token;
+                setState(() => pending[key] = value);
+                try {
+                  await save();
+                } finally {
+                  // A failed save falls back to the stored value, not this guess.
+                  if (pendingTokens[key] == token && context.mounted) {
+                    setState(() => pending.remove(key));
+                  }
                 }
               }
-            }
 
-            final viewInsets = MediaQuery.viewInsetsOf(context);
-            final maxHeight = MediaQuery.sizeOf(context).height * 0.86;
-            return Padding(
-              padding: EdgeInsets.only(bottom: viewInsets.bottom),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxHeight: maxHeight),
-                child: ListView(
-                  padding: EdgeInsets.fromLTRB(
-                    DailyUi.isDesktop ? 24 : 16,
-                    10,
-                    DailyUi.isDesktop ? 24 : 16,
-                    20,
-                  ),
-                  shrinkWrap: true,
-                  children: [
-                    const DailySheetHandle(),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        const DailySettingsIcon(
-                          icon: Icons.filter_alt_outlined,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            context.tr('검색/필터'),
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              letterSpacing: 0,
-                            ),
-                          ),
-                        ),
-                        DailyIconAction(
-                          tooltip: context.tr('닫기'),
-                          onPressed: () {
-                            FocusManager.instance.primaryFocus?.unfocus();
-                            Navigator.of(context).pop();
-                          },
-                          icon: Icons.close_rounded,
-                        ),
-                      ],
+              final viewInsets = MediaQuery.viewInsetsOf(context);
+              final maxHeight = MediaQuery.sizeOf(context).height * 0.86;
+              return Padding(
+                padding: EdgeInsets.only(bottom: viewInsets.bottom),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: maxHeight),
+                  child: ListView(
+                    padding: EdgeInsets.fromLTRB(
+                      DailyUi.isDesktop ? 24 : 16,
+                      10,
+                      DailyUi.isDesktop ? 24 : 16,
+                      20,
                     ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      controller: queryController,
-                      autofocus: true,
-                      decoration: InputDecoration(
-                        hintText: context.tr('현재 보기에서 검색'),
-                        prefixIcon: const Icon(Icons.search_rounded),
-                        fillColor: DailyUi.groupedSurface(context),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide(
-                            color: DailyUi.separator(context),
+                    shrinkWrap: true,
+                    children: [
+                      const DailySheetHandle(),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          const DailySettingsIcon(
+                            icon: Icons.filter_alt_outlined,
                           ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide(
-                            color: DailyUi.separator(context),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(
-                            color: DailyUi.primary,
-                            width: 1.5,
-                          ),
-                        ),
-                      ),
-                      onChanged: (value) =>
-                          ref.read(calendarSearchQueryProvider.notifier).state =
-                              value.trim(),
-                    ),
-                    const SizedBox(height: 4),
-                    DailyGroupedSection(
-                      label: context.tr('표시 옵션'),
-                      children: [
-                        SwitchListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                          ),
-                          secondary: const Icon(Icons.flag_outlined),
-                          value: shown('dday', live.calendarDdayOnly),
-                          title: Text(context.tr('D-day 일정만 보기')),
-                          onChanged: (value) async {
-                            ddayOnly = value;
-                            await savePending('dday', value, () async {
-                              final currentSettings = ref.read(
-                                appSettingsProvider,
-                              );
-                              final updated = currentSettings.copyWith(
-                                calendarDdayOnly: value,
-                              );
-                              final settingsRepository = ref.read(
-                                settingsRepositoryProvider,
-                              );
-                              await settingsRepository.save(
-                                updated,
-                                changedFrom: currentSettings,
-                              );
-                              ref.read(appSettingsProvider.notifier).state =
-                                  settingsRepository.load();
-                            });
-                          },
-                        ),
-                        SwitchListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                          ),
-                          secondary: const Icon(Icons.celebration_outlined),
-                          value: shown('holidays', live.calendarShowHolidays),
-                          title: Text(context.tr('공휴일 표시')),
-                          onChanged: (value) async {
-                            showHolidays = value;
-                            await savePending('holidays', value, () async {
-                              final currentSettings = ref.read(
-                                appSettingsProvider,
-                              );
-                              final updated = currentSettings.copyWith(
-                                calendarShowHolidays: value,
-                              );
-                              final settingsRepository = ref.read(
-                                settingsRepositoryProvider,
-                              );
-                              await settingsRepository.save(
-                                updated,
-                                changedFrom: currentSettings,
-                              );
-                              ref.read(appSettingsProvider.notifier).state =
-                                  settingsRepository.load();
-                            });
-                          },
-                        ),
-                      ],
-                    ),
-                    DailySectionLabel(context.tr('분류 표시')),
-                    Material(
-                      color: DailyUi.groupedSurface(context),
-                      clipBehavior: Clip.antiAlias,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        side: BorderSide(color: DailyUi.separator(context)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(14),
-                        child: Wrap(
-                          spacing: 8,
-                          runSpacing: 8,
-                          children: [
-                            for (final category in live.categories)
-                              FilterChip(
-                                avatar: CircleAvatar(
-                                  radius: _categoryDotRadius,
-                                  backgroundColor: Color(category.colorValue),
-                                ),
-                                avatarBorder: const _CategoryDotAvatarBorder(),
-                                label: Text(
-                                  context.l10n.categoryName(
-                                    id: category.id,
-                                    label: category.label,
-                                  ),
-                                ),
-                                selected: !shown(
-                                  'category:${category.id}',
-                                  liveHidden.contains(category.id),
-                                ),
-                                selectedColor: DailyUi.primary.withValues(
-                                  alpha:
-                                      Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? 0.28
-                                      : 0.13,
-                                ),
-                                checkmarkColor: DailyUi.primary,
-                                shape: const StadiumBorder(),
-                                onSelected: (selected) async {
-                                  selected
-                                      ? hidden.remove(category.id)
-                                      : hidden.add(category.id);
-                                  await savePending(
-                                    'category:${category.id}',
-                                    !selected,
-                                    () async {
-                                      final settingsRepository = ref.read(
-                                        settingsRepositoryProvider,
-                                      );
-                                      // Changes only this id in the latest list,
-                                      // keeping external and concurrent edits.
-                                      await settingsRepository
-                                          .setCategoryHidden(
-                                            category.id,
-                                            !selected,
-                                          );
-                                      ref
-                                          .read(appSettingsProvider.notifier)
-                                          .state = settingsRepository
-                                          .load();
-                                    },
-                                  );
-                                },
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton.icon(
-                            onPressed: () {
-                              queryController.clear();
-                              ref
-                                      .read(
-                                        calendarSearchQueryProvider.notifier,
-                                      )
-                                      .state =
-                                  '';
-                            },
-                            icon: const Icon(Icons.clear_rounded),
-                            label: Text(context.tr('검색어 지우기')),
-                            style: OutlinedButton.styleFrom(
-                              minimumSize: const Size.fromHeight(48),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              context.tr('검색/필터'),
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0,
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: FilledButton(
+                          DailyIconAction(
+                            tooltip: context.tr('닫기'),
                             onPressed: () {
                               FocusManager.instance.primaryFocus?.unfocus();
                               Navigator.of(context).pop();
                             },
-                            style: FilledButton.styleFrom(
-                              backgroundColor: DailyUi.primary,
-                              foregroundColor: Colors.white,
-                              minimumSize: const Size.fromHeight(48),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
-                              ),
+                            icon: Icons.close_rounded,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        controller: queryController,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          hintText: context.tr('현재 보기에서 검색'),
+                          prefixIcon: const Icon(Icons.search_rounded),
+                          fillColor: DailyUi.groupedSurface(context),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide(
+                              color: DailyUi.separator(context),
                             ),
-                            child: Text(context.tr('완료')),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: BorderSide(
+                              color: DailyUi.separator(context),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14),
+                            borderSide: const BorderSide(
+                              color: DailyUi.primary,
+                              width: 1.5,
+                            ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                        onChanged: (value) {
+                          query = value;
+                          ref.read(calendarSearchQueryProvider.notifier).state =
+                              value.trim();
+                        },
+                      ),
+                      const SizedBox(height: 4),
+                      DailyGroupedSection(
+                        label: context.tr('표시 옵션'),
+                        children: [
+                          SwitchListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                            ),
+                            secondary: const Icon(Icons.flag_outlined),
+                            value: shown('dday', live.calendarDdayOnly),
+                            title: Text(context.tr('D-day 일정만 보기')),
+                            onChanged: (value) async {
+                              ddayOnly = value;
+                              await savePending('dday', value, () async {
+                                final currentSettings = ref.read(
+                                  appSettingsProvider,
+                                );
+                                final updated = currentSettings.copyWith(
+                                  calendarDdayOnly: value,
+                                );
+                                final settingsRepository = ref.read(
+                                  settingsRepositoryProvider,
+                                );
+                                await settingsRepository.save(
+                                  updated,
+                                  changedFrom: currentSettings,
+                                );
+                                ref.read(appSettingsProvider.notifier).state =
+                                    settingsRepository.load();
+                              });
+                            },
+                          ),
+                          SwitchListTile(
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                            ),
+                            secondary: const Icon(Icons.celebration_outlined),
+                            value: shown('holidays', live.calendarShowHolidays),
+                            title: Text(context.tr('공휴일 표시')),
+                            onChanged: (value) async {
+                              showHolidays = value;
+                              await savePending('holidays', value, () async {
+                                final currentSettings = ref.read(
+                                  appSettingsProvider,
+                                );
+                                final updated = currentSettings.copyWith(
+                                  calendarShowHolidays: value,
+                                );
+                                final settingsRepository = ref.read(
+                                  settingsRepositoryProvider,
+                                );
+                                await settingsRepository.save(
+                                  updated,
+                                  changedFrom: currentSettings,
+                                );
+                                ref.read(appSettingsProvider.notifier).state =
+                                    settingsRepository.load();
+                              });
+                            },
+                          ),
+                        ],
+                      ),
+                      DailySectionLabel(context.tr('분류 표시')),
+                      Material(
+                        color: DailyUi.groupedSurface(context),
+                        clipBehavior: Clip.antiAlias,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                          side: BorderSide(color: DailyUi.separator(context)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(14),
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              for (final category in live.categories)
+                                FilterChip(
+                                  avatar: CircleAvatar(
+                                    radius: _categoryDotRadius,
+                                    backgroundColor: Color(category.colorValue),
+                                  ),
+                                  avatarBorder:
+                                      const _CategoryDotAvatarBorder(),
+                                  label: Text(
+                                    context.l10n.categoryName(
+                                      id: category.id,
+                                      label: category.label,
+                                    ),
+                                  ),
+                                  selected: !shown(
+                                    'category:${category.id}',
+                                    liveHidden.contains(category.id),
+                                  ),
+                                  selectedColor: DailyUi.primary.withValues(
+                                    alpha:
+                                        Theme.of(context).brightness ==
+                                            Brightness.dark
+                                        ? 0.28
+                                        : 0.13,
+                                  ),
+                                  checkmarkColor: DailyUi.primary,
+                                  shape: const StadiumBorder(),
+                                  onSelected: (selected) async {
+                                    selected
+                                        ? hidden.remove(category.id)
+                                        : hidden.add(category.id);
+                                    await savePending(
+                                      'category:${category.id}',
+                                      !selected,
+                                      () async {
+                                        final settingsRepository = ref.read(
+                                          settingsRepositoryProvider,
+                                        );
+                                        // Changes only this id in the latest list,
+                                        // keeping external and concurrent edits.
+                                        await settingsRepository
+                                            .setCategoryHidden(
+                                              category.id,
+                                              !selected,
+                                            );
+                                        ref
+                                            .read(appSettingsProvider.notifier)
+                                            .state = settingsRepository
+                                            .load();
+                                      },
+                                    );
+                                  },
+                                ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: OutlinedButton.icon(
+                              onPressed: () {
+                                queryController.clear();
+                                query = '';
+                                ref
+                                        .read(
+                                          calendarSearchQueryProvider.notifier,
+                                        )
+                                        .state =
+                                    '';
+                              },
+                              icon: const Icon(Icons.clear_rounded),
+                              label: Text(context.tr('검색어 지우기')),
+                              style: OutlinedButton.styleFrom(
+                                minimumSize: const Size.fromHeight(48),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: FilledButton(
+                              onPressed: () {
+                                FocusManager.instance.primaryFocus?.unfocus();
+                                Navigator.of(context).pop();
+                              },
+                              style: FilledButton.styleFrom(
+                                backgroundColor: DailyUi.primary,
+                                foregroundColor: Colors.white,
+                                minimumSize: const Size.fromHeight(48),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                              ),
+                              child: Text(context.tr('완료')),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     ).whenComplete(() {
@@ -6276,7 +6284,7 @@ class _CalendarHeader extends ConsumerWidget {
       // still queued) save, and a quick dismissal would read the old ones.
       final applied = filterSheetChangedSettings(
         initialQuery: initialQuery,
-        finalQuery: queryController.text,
+        finalQuery: query,
         initialHiddenCategoryIds: settings.hiddenCategoryIds,
         finalHiddenCategoryIds: hidden,
         initialShowHolidays: settings.calendarShowHolidays,
@@ -6296,11 +6304,36 @@ class _CalendarHeader extends ConsumerWidget {
             )
             .catchError((_) {}),
       );
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) => queryController.dispose(),
-      );
     });
   }
+}
+
+/// Owns a [TextEditingController] for exactly the lifetime of its subtree.
+class _SheetTextController extends StatefulWidget {
+  const _SheetTextController({
+    required this.initialText,
+    required this.builder,
+  });
+
+  final String initialText;
+  final Widget Function(BuildContext context, TextEditingController controller)
+  builder;
+
+  @override
+  State<_SheetTextController> createState() => _SheetTextControllerState();
+}
+
+class _SheetTextControllerState extends State<_SheetTextController> {
+  late final _controller = TextEditingController(text: widget.initialText);
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.builder(context, _controller);
 }
 
 /// Whether the filter sheet left any filter different from how it opened.
