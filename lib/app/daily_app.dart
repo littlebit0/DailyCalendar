@@ -756,8 +756,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
         null;
     _startupGateOpen = !_requiresStartupSync;
     WidgetsBinding.instance.addObserver(this);
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
+    if (_siriEventChangesSupported) {
       _siriEventChangesChannel.setMethodCallHandler(_handleSiriEventChange);
     }
     final widgetService = ref.read(calendarWidgetServiceProvider);
@@ -824,8 +823,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     _driveSync?.onSyncFailure = null;
     WidgetsBinding.instance.removeObserver(this);
     _lmsController.setForeground(false);
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
+    if (_siriEventChangesSupported) {
       _siriEventChangesChannel.setMethodCallHandler(null);
     }
     _syncRestoreRetryTimer?.cancel();
@@ -847,7 +845,14 @@ class _AppHomeState extends ConsumerState<_AppHome>
     return null;
   }
 
+  // Only the iOS and macOS runners register daily/siri_event_changes.
+  static bool get _siriEventChangesSupported =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.iOS ||
+          defaultTargetPlatform == TargetPlatform.macOS);
+
   Future<void> _processPendingSiriEventChanges({bool showFailure = false}) {
+    if (!_siriEventChangesSupported) return Future.value();
     _siriShowFailure = _siriShowFailure || showFailure;
     return _siriChangeRunner.request();
   }
