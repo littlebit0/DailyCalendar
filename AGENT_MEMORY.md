@@ -6,7 +6,8 @@
   Privacy toggle, Google login required to send, offline queue 20/7 days,
   6h per fingerprint, 10/day, non-fatal after 3 repeats, debug never sends).
   Hooks: `FlutterError.onError` (non-fatal), `PlatformDispatcher.onError`
-  (fatal), retryable Drive sync failures (non-fatal). LMS-specific failures and
+  (fatal), every failed Drive sync run via `GoogleDriveSyncService.onSyncFailure`
+  except auth/cancel (non-fatal). LMS-specific failures and
   native crashes are not hooked.
 - Receiver: `/v1/error-reports` in `tool/analytics_receiver.py`
   (`ErrorReportStore`). Not published to GitHub (user decision 2026-11-07):

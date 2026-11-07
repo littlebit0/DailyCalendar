@@ -30,6 +30,7 @@ import '../core/sync/startup_sync_gate.dart';
 import '../core/diagnostics/startup_timing.dart';
 import '../core/sync/google_drive_auth_service.dart';
 import '../core/support/error_report_service.dart';
+import '../core/sync/google_drive_sync_service.dart';
 import 'daily_theme.dart';
 
 class DailyApp extends ConsumerWidget {
@@ -715,6 +716,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
 
   late final LmsController _lmsController;
   ErrorReportService? _errorReports;
+  GoogleDriveSyncService? _driveSync;
   var _servicesStarted = false;
   String? _initialRestoreOwner;
   String? _scheduledLmsOwner;
@@ -801,6 +803,16 @@ class _AppHomeState extends ConsumerState<_AppHome>
             .value
             .lastSyncedAt,
       );
+    // Every failed sync run, including uploads after edits and automatic
+    // retries, which swallow their own errors.
+    final driveSync = ref.read(googleDriveSyncServiceProvider);
+    _driveSync = driveSync;
+    driveSync.onSyncFailure = (error, stackTrace) => errorReports.record(
+      error,
+      stackTrace,
+      feature: 'drive_sync',
+      severity: ErrorReportSeverity.nonFatal,
+    );
     unawaited(errorReports.flush());
   }
 
@@ -809,6 +821,7 @@ class _AppHomeState extends ConsumerState<_AppHome>
     _errorReports
       ?..authorizationHeaders = null
       ..integrations = null;
+    _driveSync?.onSyncFailure = null;
     WidgetsBinding.instance.removeObserver(this);
     _lmsController.setForeground(false);
     if (defaultTargetPlatform == TargetPlatform.iOS ||
@@ -1327,19 +1340,8 @@ class _AppHomeState extends ConsumerState<_AppHome>
         });
       }
       return true;
-    } on Object catch (error, stackTrace) {
+    } on Object catch (error) {
       _syncRestoreRetryable = error is! GoogleDriveAuthException;
-      // Expired sign-in is handled by the reconnect prompt, not a bug.
-      if (_syncRestoreRetryable) {
-        ref
-            .read(errorReportServiceProvider)
-            ?.record(
-              error,
-              stackTrace,
-              feature: 'drive_sync',
-              severity: ErrorReportSeverity.nonFatal,
-            );
-      }
       if (startup) rethrow;
       // Google Drive sync is optional; local calendar use stays available.
       return false;
