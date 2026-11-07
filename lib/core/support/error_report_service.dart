@@ -457,7 +457,7 @@ class ErrorReportService {
       try {
         do {
           _flushAgain = false;
-          await _tail;
+          await _enqueue(_pruneStoredQueue);
           await _flushPass();
         } while (_flushAgain && _active);
       } on Object {
@@ -597,6 +597,28 @@ class ErrorReportService {
           .toList();
     } on Object {
       return [];
+    }
+  }
+
+  /// Rewrites the stored queue without expired or unreadable reports, so the
+  /// retention limit holds even when nothing new is recorded or sent.
+  Future<void> _pruneStoredQueue() async {
+    final raw = _preferences.getString(_queueKey);
+    if (raw == null) return;
+    final kept = _loadQueue();
+    final stored = (() {
+      try {
+        final decoded = jsonDecode(raw);
+        return decoded is List ? decoded.length : -1;
+      } on Object {
+        return -1;
+      }
+    })();
+    if (kept.length == stored) return;
+    if (kept.isEmpty) {
+      await _preferences.remove(_queueKey);
+    } else {
+      await _saveQueue(kept);
     }
   }
 

@@ -346,6 +346,16 @@ void main() {
     expect((queued.single as Map)['occurrenceCount'], 2);
   });
 
+  test('expired queued reports are deleted on the next start', () async {
+    final offline = service()..authorizationHeaders = () async => null;
+    await fail(offline);
+    expect(preferences.getString('errorReportQueue.v1'), isNotNull);
+    now = now.add(const Duration(days: 8));
+    await service().flush();
+    expect(preferences.getString('errorReportQueue.v1'), isNull);
+    expect(requests, isEmpty);
+  });
+
   test('reporting is on by default', () {
     expect(service().enabled, isTrue);
   });
