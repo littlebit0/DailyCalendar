@@ -779,7 +779,11 @@ class BugReportStore:
                     row = connection.execute("SELECT report_id FROM requests WHERE key = ?", (key,)).fetchone()
                     if row is not None:
                         connection.execute("COMMIT")
-                        connection.close()
+                        try:
+                            # An earlier attempt may have stored it but failed the copy.
+                            self._export_pending(connection)
+                        finally:
+                            connection.close()
                         return {"reportId": row[0]}
                 self._check_rate(subject_hash)
                 report_id = str(uuid.uuid4())
@@ -808,6 +812,22 @@ class BugReportStore:
             finally:
                 connection.close()
         return {"reportId": report_id}
+
+    def expire(self):
+        """Deletes expired data without waiting for the next report."""
+        with self._lock:
+            self._delete_legacy_files(self._now())
+            connection = self._connect()
+            try:
+                connection.execute("BEGIN IMMEDIATE")
+                self._delete_expired(connection, self._now())
+                connection.execute("COMMIT")
+            except BaseException:
+                if connection.in_transaction:
+                    connection.execute("ROLLBACK")
+                raise
+            finally:
+                connection.close()
 
     def _check_rate(self, subject_hash):
         timestamp = self._now().timestamp()
@@ -1035,6 +1055,21 @@ class ErrorReportStore:
                 return
             connection.execute("DELETE FROM export_pending WHERE day = ?", (day,))
 
+    def expire(self):
+        """Deletes expired data without waiting for the next report."""
+        with self._lock:
+            connection = self._connect()
+            try:
+                connection.execute("BEGIN IMMEDIATE")
+                self._delete_expired(connection, self._now())
+                connection.execute("COMMIT")
+            except BaseException:
+                if connection.in_transaction:
+                    connection.execute("ROLLBACK")
+                raise
+            finally:
+                connection.close()
+
     def _check_rate(self, subject_hash):
         timestamp = self._now().timestamp()
         with self._rate_lock:
@@ -1253,6 +1288,25 @@ class ReceiverHandler(BaseHTTPRequestHandler):
         self.wfile.write(payload)
 
 
+REPORT_EXPIRY_INTERVAL_SECONDS = 6 * 60 * 60
+
+
+def expire_stored_reports():
+    """Retention must hold even when no new report arrives."""
+    for store in (ReceiverHandler.bug_reports, ReceiverHandler.error_reports):
+        try:
+            store.expire()
+        except (OSError, sqlite3.Error):
+            # Retried on the next interval and on every submission.
+            pass
+
+
+def _expire_periodically():
+    stop = threading.Event()
+    while not stop.wait(REPORT_EXPIRY_INTERVAL_SECONDS):
+        expire_stored_reports()
+
+
 def main():
     address = os.environ.get("DAILY_ANALYTICS_BIND", "127.0.0.1")
     port = int(os.environ.get("DAILY_ANALYTICS_PORT", "8787"))
@@ -1260,6 +1314,8 @@ def main():
     ReceiverHandler.aggregator = Aggregator(directory, export_interval=REPORT_EXPORT_INTERVAL_SECONDS)
     ReceiverHandler.bug_reports = BugReportStore(directory)
     ReceiverHandler.error_reports = ErrorReportStore(directory)
+    expire_stored_reports()
+    threading.Thread(target=_expire_periodically, daemon=True).start()
     server = ThreadingHTTPServer((address, port), ReceiverHandler)
     server.daemon_threads = True
 

@@ -140,6 +140,17 @@ class ErrorReportTests(unittest.TestCase):
             thread.join()
         self.assertEqual(self.export()["reports"][0]["occurrences"], 8)
 
+    def test_expire_runs_without_a_new_report(self):
+        import sqlite3
+
+        self.submit(payload())
+        self.now += timedelta(days=91)
+        self.make_store().expire()
+        directory = Path(self.directory.name)
+        self.assertFalse((directory / "error-reports-2026-11-05.json").exists())
+        with sqlite3.connect(directory / "error-reports-state.sqlite") as connection:
+            self.assertEqual(connection.execute("SELECT COUNT(*) FROM reports").fetchone()[0], 0)
+
     def test_files_are_private(self):
         self.submit(payload())
         directory = Path(self.directory.name)

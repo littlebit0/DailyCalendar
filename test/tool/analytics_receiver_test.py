@@ -720,6 +720,32 @@ class BugReportBackendTest(unittest.TestCase):
             self.assertFalse((Path(directory) / "bug-reports-2026-11-07.json").exists())
 
 
+class BugReportExportRecoveryTest(unittest.TestCase):
+    def test_retry_writes_a_copy_that_failed_before(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = _store(directory)
+            original = store._export_pending
+
+            def failing(_connection):
+                raise OSError("disk full")
+
+            store._export_pending = failing
+            with self.assertRaises(OSError):
+                store.submit(_payload(), "Bearer t", REQUEST_A)
+            store._export_pending = original
+            store.submit(_payload(), "Bearer t", REQUEST_A)
+            reports = json.loads((Path(directory) / "bug-reports-2026-11-07.json").read_text())["reports"]
+            self.assertEqual(len(reports), 1)
+
+    def test_expire_runs_without_a_new_report(self):
+        with tempfile.TemporaryDirectory() as directory:
+            clock = [datetime(2026, 11, 7, tzinfo=timezone.utc)]
+            _store(directory, now=lambda: clock[0]).submit(_payload(), "Bearer t")
+            clock[0] += timedelta(days=91)
+            _store(directory, now=lambda: clock[0]).expire()
+            self.assertFalse((Path(directory) / "bug-reports-2026-11-07.json").exists())
+
+
 def _store(directory, subject="google-subject-1", verified=True, now=None):
     return BugReportStore(
         directory,
