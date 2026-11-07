@@ -322,6 +322,7 @@ void main() {
           ],
           _toolbarAction('Siri'),
           _toolbarAction('시간표'),
+          _toolbarAction('잊모기'),
           _toolbarAction('빠른 보기'),
           find.byType(SegmentedButton<CalendarViewMode>),
           _toolbarAction('설정'),

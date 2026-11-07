@@ -2827,16 +2827,16 @@ void main() {
       final track = tester.getRect(switcher);
       expect(
         tester.getCenter(thumb).dx,
-        closeTo(track.left + 5 + (track.width - 10) * (index + 0.5) / 6, 0.5),
+        closeTo(track.left + 5 + (track.width - 10) * (index + 0.5) / 7, 0.5),
       );
     }
 
     expectCenteredNavigation(compactSize);
     expectSelectedSegment(1);
     expect(tester.getSize(thumb).height, 28);
-    // The old separate calendar slider is now part of the six-segment bar.
+    // The old separate calendar slider is now part of the seven-segment bar.
     expect(find.byKey(const ValueKey('calendar-view-button')), findsNothing);
-    for (final label in ['빠른 보기', '주간', '월간', '일간', 'Siri', '시간표']) {
+    for (final label in ['빠른 보기', '주간', '월간', '일간', 'Siri', '시간표', '잊모기']) {
       expect(find.byTooltip(label), findsOneWidget);
     }
     final track = tester.widget<AnimatedContainer>(
@@ -2883,7 +2883,7 @@ void main() {
     final gesture = await tester.startGesture(
       tester.getCenter(find.byTooltip('주간')),
     );
-    await gesture.moveBy(Offset(-expandedSize.width / 6, 0));
+    await gesture.moveBy(Offset(-expandedSize.width / 7, 0));
     await gesture.up();
     await tester.pump(const Duration(milliseconds: 80));
     expect(tester.getRect(toolbar), headerBeforeQuickView);
@@ -2959,7 +2959,7 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
   });
 
-  testWidgets('iOS uses one liquid-style six-segment calendar navigation', (
+  testWidgets('iOS uses one liquid-style seven-segment calendar navigation', (
     tester,
   ) async {
     tester.view.physicalSize = const Size(393, 852);
@@ -3071,12 +3071,13 @@ void main() {
     expect(find.byTooltip('일간'), findsOneWidget);
     expect(find.byTooltip('Siri'), findsOneWidget);
     expect(find.byTooltip('시간표'), findsOneWidget);
+    expect(find.byTooltip('잊모기'), findsOneWidget);
 
     final trackRect = tester.getRect(switcher);
     final thumb = find.byKey(const ValueKey('bottom-mode-thumb-circle'));
     expect(
       tester.getCenter(thumb).dx,
-      closeTo(trackRect.left + trackRect.width * 0.25, 3),
+      closeTo(trackRect.left + trackRect.width * (1.5 / 7), 3),
     );
 
     await tester.tap(find.byTooltip('빠른 보기'));
@@ -3089,7 +3090,12 @@ void main() {
     expect(find.byType(PageView), findsOneWidget);
     expect(
       tester.getCenter(thumb).dx,
-      closeTo(trackRect.left + trackRect.width * (2.5 / 6), 3),
+      closeTo(
+        tester.getRect(switcher).left +
+            4 +
+            (tester.getRect(switcher).width - 8) * (2.5 / 7),
+        1,
+      ),
     );
 
     final thumbSize = tester.getSize(thumb);
