@@ -80,3 +80,15 @@ abstract interface class EventSyncMaintenance {
   Future<void> compactDeletedEvents(DateTime now);
   Future<void> markDeletionSynced(EventDeletion deletion);
 }
+
+/// Device-local copy of Drive event files. An entry is the exact content of
+/// one Drive file revision, identified by its md5, so a matching listed md5
+/// can stand in for a download without changing any merge decision.
+abstract interface class RemoteEventFileCache {
+  Future<String?> cachedRemoteEventFile(String fileId, String md5Checksum);
+  Future<void> cacheRemoteEventFile(
+    String fileId,
+    String md5Checksum,
+    String body,
+  );
+}
