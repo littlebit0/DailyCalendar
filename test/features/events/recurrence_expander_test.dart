@@ -487,6 +487,124 @@ void main() {
       });
     }
   });
+
+  group('주간 반복의 주는 시작일 요일부터 센다 (#802)', () {
+    List<String> dates(RecurrenceRule rule, DateTime start, DateTime end) {
+      final event = _recurringEvent(
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        recurrence: rule,
+      );
+      return [
+        for (final occurrence in RecurrenceExpander().expand(
+          event,
+          start.subtract(const Duration(days: 1)),
+          end,
+        ))
+          occurrence.startAt.toIso8601String().substring(0, 10),
+      ];
+    }
+
+    test('격주 목·월은 각 요일이 첫 날짜부터 정확히 14일 간격이다', () {
+      final start = DateTime(2026, 1, 8, 9);
+      const rule = RecurrenceRule(
+        frequency: RecurrenceFrequency.weekly,
+        interval: 2,
+        count: 6,
+        byDay: ['TH', 'MO'],
+      );
+      final result = dates(rule, start, DateTime(2026, 4, 1));
+      expect(result, [
+        '2026-01-08',
+        '2026-01-12',
+        '2026-01-22',
+        '2026-01-26',
+        '2026-02-05',
+        '2026-02-09',
+      ]);
+      final event = _recurringEvent(
+        startAt: start,
+        endAt: start.add(const Duration(hours: 1)),
+        recurrence: rule,
+      );
+      expect(
+        RecurrenceExpander().lastPlannedEnd(event),
+        DateTime(2026, 2, 9, 10),
+      );
+    });
+
+    test('주 간격 1, 요일 없는 주간·일·월·연 반복 결과는 그대로다', () {
+      final wednesday = DateTime(2026, 10, 7, 9);
+      expect(
+        dates(
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.weekly,
+            count: 4,
+            byDay: ['MO', 'WE'],
+          ),
+          wednesday,
+          DateTime(2027, 1, 1),
+        ),
+        ['2026-10-07', '2026-10-12', '2026-10-14', '2026-10-19'],
+      );
+      expect(
+        dates(
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.weekly,
+            interval: 2,
+            count: 3,
+          ),
+          wednesday,
+          DateTime(2027, 1, 1),
+        ),
+        ['2026-10-07', '2026-10-21', '2026-11-04'],
+      );
+      expect(
+        dates(
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.weekly,
+            interval: 2,
+            count: 3,
+            byDay: ['WE'],
+          ),
+          wednesday,
+          DateTime(2027, 1, 1),
+        ),
+        ['2026-10-07', '2026-10-21', '2026-11-04'],
+      );
+      expect(
+        dates(
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.daily,
+            interval: 2,
+            count: 3,
+          ),
+          wednesday,
+          DateTime(2027, 1, 1),
+        ),
+        ['2026-10-07', '2026-10-09', '2026-10-11'],
+      );
+      expect(
+        dates(
+          const RecurrenceRule(
+            frequency: RecurrenceFrequency.monthly,
+            count: 3,
+          ),
+          wednesday,
+          DateTime(2027, 1, 1),
+        ),
+        ['2026-10-07', '2026-11-07', '2026-12-07'],
+      );
+      expect(
+        dates(
+          const RecurrenceRule(frequency: RecurrenceFrequency.yearly, count: 2),
+          wednesday,
+          DateTime(2028, 1, 1),
+        ),
+        ['2026-10-07', '2027-10-07'],
+      );
+    });
+  });
 }
 
 CalendarEvent _recurringEvent({

@@ -108,6 +108,7 @@ class CalendarImportService {
           reminderMinutesBeforeList: external.reminderMinutesBeforeList,
           recurrence: recurrenceFromRrule(
             external.recurrenceRule,
+            startAt: external.startAt,
           ).copyWith(excludedDates: external.excludedDates),
           createdAt: now,
           updatedAt: now,
@@ -211,7 +212,9 @@ class CalendarImportService {
         '${hex.substring(20)}';
   }
 
-  static RecurrenceRule recurrenceFromRrule(String? raw) {
+  /// [startAt] is the series start; a non-Monday WKST is only representable
+  /// when it matches the start weekday, which is where the app's weeks begin.
+  static RecurrenceRule recurrenceFromRrule(String? raw, {DateTime? startAt}) {
     final value = raw?.trim();
     if (value == null || value.isEmpty) {
       return const RecurrenceRule();
@@ -267,10 +270,11 @@ class CalendarImportService {
         (frequency == RecurrenceFrequency.yearly &&
             days.isNotEmpty &&
             months.isEmpty) ||
-        // A week start other than Monday changes which days share a week.
+        // A week start other than Monday (the default) or the start weekday
+        // changes which days share a week.
         (frequency == RecurrenceFrequency.weekly &&
             interval > 1 &&
-            (fields['WKST']?.toUpperCase() ?? 'MO') != 'MO');
+            !_weekStartSupported(fields['WKST'], startAt));
     if (unsupported) {
       return RecurrenceRule(rawRule: body);
     }
@@ -284,6 +288,13 @@ class CalendarImportService {
       byMonth: months,
       bySetPos: positions,
     );
+  }
+
+  static bool _weekStartSupported(String? wkst, DateTime? startAt) {
+    final code = wkst?.trim().toUpperCase() ?? 'MO';
+    if (code == 'MO') return true;
+    const codes = ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'];
+    return startAt != null && codes[startAt.weekday - 1] == code;
   }
 
   static List<String> _rruleList(String? value) => value == null

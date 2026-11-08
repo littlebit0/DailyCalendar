@@ -1,5 +1,22 @@
 # Daily Agent Memory — current handoff
 
+## #802 요일 지정 주간 반복의 주를 시작일 요일부터 — 2026-11-09
+
+- User decision: weekly rules with BYDAY (any interval, incl. BYSETPOS) group
+  weeks from the DTSTART weekday, not Monday (RFC WKST default). Each weekday
+  repeats exactly 7*interval days after its first date. Display setting
+  `weekStartsOnMonday` is unrelated.
+- Changed: Dart `_detailedStarts` (recurrence_expander.dart) and Swift
+  `detailedOccurrenceStarts` (apple_siri, Siri/wallpaper); shared fixture
+  `test/fixtures/recurrence_detail_cases.json` (weekly BYSETPOS case updated,
+  biweekly/triweekly cases added). No Kotlin/C++ expander exists.
+- Import: `recurrenceFromRrule(raw, startAt:)` accepts interval>1 weekly rules
+  whose WKST is MO/absent or equals the start weekday; other WKST stays raw.
+  Imported MO-week multi-day rules now expand from the start weekday, which can
+  differ from the source calendar (accepted by the user).
+- No export path (ics/EventKit write) exists, so no WKST is written anywhere.
+  Storage format unchanged.
+
 ## #791 자정 넘김 일정의 다음 날 표시를 일정마다 — 2026-11-08
 
 - Format change (user-approved): `CalendarEvent.showOvernightOnFollowingDays`

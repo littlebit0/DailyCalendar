@@ -449,7 +449,7 @@ Iterable<DateTime> _detailedStarts(
       RecurrenceFrequency.weekly => DateTime(
         start.year,
         start.month,
-        start.day - (start.weekday - DateTime.monday) + 7 * interval * period,
+        start.day + 7 * interval * period,
       ),
       RecurrenceFrequency.monthly => DateTime(
         start.year,
@@ -482,10 +482,12 @@ Iterable<DateTime> _detailedStarts(
           candidates.add(at(day.year, day.month, day.day));
         }
       case RecurrenceFrequency.weekly:
+        // A week runs from the start date's weekday (not Monday), so each
+        // weekday repeats exactly 7 * interval days after its first date.
         final weekStart = DateTime(
           start.year,
           start.month,
-          start.day - (start.weekday - DateTime.monday) + 7 * interval * period,
+          start.day + 7 * interval * period,
         );
         final wanted = weekdays.isEmpty ? {start.weekday} : weekdays;
         for (var offset = 0; offset < 7; offset++) {

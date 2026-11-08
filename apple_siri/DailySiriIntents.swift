@@ -3275,8 +3275,8 @@ private enum DailySiriDatabase {
         }
         if monthMatches && weekdayMatches && dayMatches { candidates.append((parts.year!, parts.month!, parts.day!)) }
       case "weekly":
-        let mondayOffset = (calendar.component(.weekday, from: start) + 5) % 7
-        guard let weekStart = calendar.date(byAdding: .day, value: -mondayOffset + 7 * interval * period, to: startDay) else { return result }
+        // A week runs from the start date's weekday, matching the Dart expander.
+        guard let weekStart = calendar.date(byAdding: .day, value: 7 * interval * period, to: startDay) else { return result }
         periodStart = weekStart
         let wanted = wantedWeekdays.isEmpty ? [calendar.component(.weekday, from: start)] : wantedWeekdays
         for offset in 0..<7 {
