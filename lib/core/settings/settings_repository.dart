@@ -1393,7 +1393,7 @@ class SettingsRepository {
   }
 
   /// The removed app-wide "다음 날에도 표시" value (#696), used once to seed
-  /// each existing event when the event database upgrades past schema 13.
+  /// each existing event when the event database upgrades past schema 14.
   bool legacyShowOvernightOnFollowingDays() =>
       _preferences.getBool(_calendarShowOvernightEventsOnFollowingDaysKey) ??
       true;

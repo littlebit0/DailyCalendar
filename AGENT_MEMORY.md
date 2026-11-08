@@ -3,13 +3,13 @@
 ## #791 자정 넘김 일정의 다음 날 표시를 일정마다 — 2026-11-08
 
 - Format change (user-approved): `CalendarEvent.showOvernightOnFollowingDays`
-  (default on) in SQLite column `show_overnight_on_following_days` (schema 14),
+  (default on) in SQLite column `show_overnight_on_following_days` (schema 15),
   Drive v2 event key `showOvernightOnFollowingDays` (always written), template
   key of the same name (written only when off). Release with all platforms.
 - Removed the app-wide setting (#696) from Settings and the settings sync doc.
-  Its local pref is read only to seed existing rows on the upgrade to schema 14
+  Its local pref is read only to seed existing rows on the upgrade to schema 15
   (`AppDatabase.repairEventSchema`, both Drift `onUpgrade` and
-  `TodoDatabaseMigrationService`, whose additive gate is now `<= 14`).
+  `TodoDatabaseMigrationService`, whose additive gate is now `<= 15`).
 - Old files without the key read as on; a newer edit from a 4.1.0 writer keeps
   the local value and re-uploads (`_DownloadedEvent.overnightDisplayKnown`).
 - Rule: `calendarEventListedOnDay` (no parameter). Widgets via

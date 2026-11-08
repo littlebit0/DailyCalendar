@@ -67,7 +67,7 @@ class EventRecords extends Table {
 
 @DriftDatabase(tables: [EventRecords])
 class AppDatabase extends _$AppDatabase {
-  static const currentSchemaVersion = 14;
+  static const currentSchemaVersion = 15;
   static const createDeletionTable = '''
     CREATE TABLE IF NOT EXISTS sync_event_deletions (
       id TEXT PRIMARY KEY NOT NULL,
@@ -76,12 +76,22 @@ class AppDatabase extends _$AppDatabase {
       lms_owner_id TEXT
     )
   ''';
+  // Schema 14: device-local copy of Drive v2 event files, keyed by Drive file
+  // id and the content md5. Never uploaded; a listed md5 that matches lets
+  // sync reuse the body instead of downloading it again.
+  static const createRemoteEventFileTable = '''
+    CREATE TABLE IF NOT EXISTS sync_remote_event_files (
+      file_id TEXT PRIMARY KEY NOT NULL,
+      md5_checksum TEXT NOT NULL,
+      body TEXT NOT NULL
+    )
+  ''';
 
   final _openClock = Stopwatch()..start();
   final bool _recordStartupTiming;
 
   /// [legacyShowOvernightOnFollowingDays] is the removed app-wide setting
-  /// (#696). Upgrading from schema 13 or older copies it into every existing
+  /// (#696). Upgrading from schema 14 or older copies it into every existing
   /// event so their display does not change.
   AppDatabase({this.legacyShowOvernightOnFollowingDays = true})
     : _recordStartupTiming = true,
@@ -117,6 +127,7 @@ class AppDatabase extends _$AppDatabase {
       onCreate: (migrator) async {
         await migrator.createAll();
         await customStatement(createDeletionTable);
+        await customStatement(createRemoteEventFileTable);
       },
       onUpgrade: (migrator, from, to) async {
         // user_version is written only after this callback, so an interrupted
@@ -124,7 +135,7 @@ class AppDatabase extends _$AppDatabase {
         await repairEventSchema(
           migrator,
           rebuild: from < 6,
-          seedOvernightDisplay: from < 14,
+          seedOvernightDisplay: from < 15,
         );
       },
     );
@@ -149,7 +160,7 @@ class AppDatabase extends _$AppDatabase {
         await migrator.addColumn(eventRecords, column);
       }
     }
-    // Schema 14 (#791) moved the app-wide choice onto each event.
+    // Schema 15 (#791) moved the app-wide choice onto each event.
     if (seedOvernightDisplay ||
         !names.contains('show_overnight_on_following_days')) {
       await _seedOvernightDisplay();
@@ -165,6 +176,7 @@ class AppDatabase extends _$AppDatabase {
       await migrator.alterTable(TableMigration(eventRecords));
     }
     await customStatement(createDeletionTable);
+    await customStatement(createRemoteEventFileTable);
     final deletionColumns = await customSelect(
       'PRAGMA table_info(sync_event_deletions)',
     ).get();
