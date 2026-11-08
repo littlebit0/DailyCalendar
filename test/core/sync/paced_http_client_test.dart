@@ -173,6 +173,110 @@ void main() {
       expect(transport.closed, isFalse);
     },
   );
+
+  test('maxConcurrent caps in-flight requests and queues the rest', () async {
+    var active = 0;
+    var peak = 0;
+    final client = PacedHttpClient(
+      client: _Transport((request) async {
+        active++;
+        if (active > peak) peak = active;
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        active--;
+        return http.StreamedResponse(Stream.value([49]), 200);
+      }),
+      maxConcurrent: 3,
+    );
+    addTearDown(client.close);
+    final bodies = await Future.wait([
+      for (var i = 0; i < 10; i++) client.get(uri).then((r) => r.body),
+    ]);
+    expect(bodies, List.filled(10, '1'));
+    expect(peak, 3);
+  });
+
+  for (final (status, body) in [
+    (429, ''),
+    (403, '{"error":{"errors":[{"reason":"rateLimitExceeded"}]}}'),
+    (403, '{"error":{"errors":[{"reason":"userRateLimitExceeded"}]}}'),
+  ]) {
+    test(
+      '$status throttling is retried with backoff and resends the body',
+      () async {
+        final bodies = <String>[];
+        final client = PacedHttpClient(
+          client: _Transport((request) async {
+            bodies.add(await request.finalize().bytesToString());
+            if (bodies.length < 3) {
+              return http.StreamedResponse(
+                Stream.value(body.codeUnits),
+                status,
+              );
+            }
+            return http.StreamedResponse(Stream.value([111, 107]), 200);
+          }),
+          rateLimitRetryDelays: const [
+            Duration(milliseconds: 1),
+            Duration(milliseconds: 2),
+          ],
+        );
+        addTearDown(client.close);
+        final response = await client.post(uri, body: 'payload');
+        expect(response.statusCode, 200);
+        expect(bodies, ['payload', 'payload', 'payload']);
+      },
+    );
+  }
+
+  test('exhausted throttling retries return the last response', () async {
+    var calls = 0;
+    final client = PacedHttpClient(
+      client: _Transport((request) async {
+        calls++;
+        return http.StreamedResponse(const Stream.empty(), 429);
+      }),
+      rateLimitRetryDelays: const [Duration(milliseconds: 1)],
+    );
+    addTearDown(client.close);
+    expect((await client.get(uri)).statusCode, 429);
+    expect(calls, 2);
+  });
+
+  test('permission 403 is not retried', () async {
+    var calls = 0;
+    final client = PacedHttpClient(
+      client: _Transport((request) async {
+        calls++;
+        return http.StreamedResponse(
+          Stream.value('insufficientPermissions'.codeUnits),
+          403,
+        );
+      }),
+      rateLimitRetryDelays: const [Duration(milliseconds: 1)],
+    );
+    addTearDown(client.close);
+    expect((await client.get(uri)).statusCode, 403);
+    expect(calls, 1);
+  });
+
+  test('session change during throttling backoff stops the retry', () async {
+    var valid = true;
+    var calls = 0;
+    final client = PacedHttpClient(
+      client: _Transport((request) async {
+        calls++;
+        valid = false;
+        return http.StreamedResponse(const Stream.empty(), 429);
+      }),
+      rateLimitRetryDelays: const [Duration(milliseconds: 5)],
+      validateRequest: () {
+        if (!valid) throw StateError('account changed');
+      },
+    );
+    addTearDown(client.close);
+    await expectLater(client.get(uri), throwsStateError);
+    expect(calls, 1);
+  });
 }
 
 class _Transport extends http.BaseClient {

@@ -69,6 +69,9 @@ class GoogleDriveSyncService implements SyncService {
     http.Client? httpClient,
     Duration changeSyncDelay = _defaultChangeSyncDelay,
     Duration driveRequestDelay = PacedHttpClient.defaultDelay,
+    int driveConcurrency = defaultDriveConcurrency,
+    List<Duration> driveRateLimitRetryDelays =
+        PacedHttpClient.driveRateLimitRetryDelays,
     List<Duration> automaticRetryDelays = _automaticRetryDelays,
     ProductAnalytics analytics = const NoopProductAnalytics(),
     Future<void> Function()? onEventsChanged,
@@ -80,6 +83,7 @@ class GoogleDriveSyncService implements SyncService {
        _settingsRepository = settingsRepository,
        _changeSyncDelay = changeSyncDelay,
        _retryDelays = automaticRetryDelays,
+       _driveConcurrency = driveConcurrency,
        _analytics = analytics,
        _onEventsChanged = onEventsChanged,
        _now = now ?? DateTime.now {
@@ -88,12 +92,17 @@ class GoogleDriveSyncService implements SyncService {
       ownsClient: httpClient == null,
       delay: driveRequestDelay,
       validateRequest: () => _validateSyncSession?.call(),
+      maxConcurrent: driveConcurrency,
+      rateLimitRetryDelays: driveRateLimitRetryDelays,
     );
     _timetableStore.localRevisionNotifier.addListener(_timetableChanged);
     _imogiStore.localRevisionNotifier.addListener(_imogiChanged);
     _templateStore.localRevisionNotifier.addListener(_templatesChanged);
   }
 
+  /// Event files are independent; a few parallel requests hide most of the
+  /// per-request round trip without approaching Drive's per-user limits.
+  static const defaultDriveConcurrency = 6;
   static const _legacySyncFileName = 'daily-sync-v1.json';
   static const _settingsFileName = 'daily-sync-v2-settings.json';
   static const _timetableFileName = 'daily-sync-v2-timetable.json';
@@ -129,6 +138,7 @@ class GoogleDriveSyncService implements SyncService {
   late final PacedHttpClient _httpClient;
   final Duration _changeSyncDelay;
   final List<Duration> _retryDelays;
+  final int _driveConcurrency;
   final ProductAnalytics _analytics;
   final Future<void> Function()? _onEventsChanged;
   final DateTime Function() _now;
@@ -1884,9 +1894,10 @@ class GoogleDriveSyncService implements SyncService {
     Map<String, String> headers,
     List<_DriveFile> files,
   ) async {
-    final downloaded = await _mapSequentially(
+    final downloaded = await _mapConcurrently(
       files,
       (file) => _downloadEventFile(headers, file.id),
+      concurrency: _driveConcurrency,
       progressMessage: '복원 중',
     );
     final winners = <String, _DownloadedEvent>{};
@@ -1968,7 +1979,10 @@ class GoogleDriveSyncService implements SyncService {
       final id = _eventIdFromFileName(file.name);
       if (id != null) (remoteFilesById[id] ??= []).add(file);
     }
-    final List<int> conflictCounts = await _mapSequentially<String, int>(ids, (
+    // `ids` is a set, so each event's read-compare-upload runs in exactly one
+    // task and never overlaps itself.
+    // `ids` is a set, so one event's read-compare-upload never overlaps itself.
+    final List<int> conflictCounts = await _mapConcurrently<String, int>(ids, (
       eventId,
     ) async {
       var files = List.of(remoteFilesById[eventId] ?? const <_DriveFile>[]);
@@ -2062,9 +2076,29 @@ class GoogleDriveSyncService implements SyncService {
     Iterable<S> items,
     Future<T> Function(S item) mapper, {
     String? progressMessage,
+  }) => _mapConcurrently(
+    items,
+    mapper,
+    concurrency: 1,
+    progressMessage: progressMessage,
+  );
+
+  /// Runs up to [concurrency] mappers at once and returns results in input
+  /// order. After the first failure no new item starts; items already running
+  /// finish (so their local writes are kept) and the first error is rethrown.
+  Future<List<T>> _mapConcurrently<S, T>(
+    Iterable<S> items,
+    Future<T> Function(S item) mapper, {
+    int? concurrency,
+    String? progressMessage,
   }) async {
+    concurrency ??= _driveConcurrency;
     final source = items.toList();
-    final result = <T>[];
+    final result = List<T?>.filled(source.length, null);
+    var completed = 0;
+    var next = 0;
+    Object? firstError;
+    StackTrace? firstStack;
     void progress() {
       if (progressMessage == null ||
           source.isEmpty ||
@@ -2073,18 +2107,33 @@ class GoogleDriveSyncService implements SyncService {
       }
       statusNotifier.value = statusNotifier.value.copyWith(
         message: progressMessage,
-        completedItems: result.length,
+        completedItems: completed,
         totalItems: source.length,
       );
     }
 
-    progress();
-    for (final item in source) {
-      _validateSyncSession?.call();
-      result.add(await mapper(item));
-      progress();
+    Future<void> worker() async {
+      while (firstError == null && next < source.length) {
+        final index = next++;
+        try {
+          _validateSyncSession?.call();
+          result[index] = await mapper(source[index]);
+          completed++;
+          progress();
+        } catch (error, stack) {
+          if (firstError == null) {
+            firstError = error;
+            firstStack = stack;
+          }
+        }
+      }
     }
-    return result;
+
+    progress();
+    final workers = concurrency.clamp(1, source.isEmpty ? 1 : source.length);
+    await Future.wait([for (var i = 0; i < workers; i++) worker()]);
+    if (firstError != null) Error.throwWithStackTrace(firstError!, firstStack!);
+    return result.cast<T>();
   }
 
   Future<List<_DriveFile>> _listEventFilesForIds(
