@@ -70,6 +70,9 @@ class GoogleDriveSyncService implements SyncService {
     Duration backupRestoreDelay = _defaultBackupRestoreDelay,
     Duration changeSyncDelay = _defaultChangeSyncDelay,
     Duration driveRequestDelay = PacedHttpClient.defaultDelay,
+    int driveConcurrency = defaultDriveConcurrency,
+    List<Duration> driveRateLimitRetryDelays =
+        PacedHttpClient.driveRateLimitRetryDelays,
     List<Duration> automaticRetryDelays = _automaticRetryDelays,
     ProductAnalytics analytics = const NoopProductAnalytics(),
     Future<void> Function()? onEventsChanged,
@@ -82,6 +85,7 @@ class GoogleDriveSyncService implements SyncService {
        _backupRestoreDelay = backupRestoreDelay,
        _changeSyncDelay = changeSyncDelay,
        _retryDelays = automaticRetryDelays,
+       _driveConcurrency = driveConcurrency,
        _analytics = analytics,
        _onEventsChanged = onEventsChanged,
        _now = now ?? DateTime.now {
@@ -90,12 +94,17 @@ class GoogleDriveSyncService implements SyncService {
       ownsClient: httpClient == null,
       delay: driveRequestDelay,
       validateRequest: () => _validateSyncSession?.call(),
+      maxConcurrent: driveConcurrency,
+      rateLimitRetryDelays: driveRateLimitRetryDelays,
     );
     _timetableStore.localRevisionNotifier.addListener(_timetableChanged);
     _imogiStore.localRevisionNotifier.addListener(_imogiChanged);
     _templateStore.localRevisionNotifier.addListener(_templatesChanged);
   }
 
+  /// Event files are independent; a few parallel requests hide most of the
+  /// per-request round trip without approaching Drive's per-user limits.
+  static const defaultDriveConcurrency = 6;
   static const _legacySyncFileName = 'daily-sync-v1.json';
   static const _settingsFileName = 'daily-sync-v2-settings.json';
   static const _timetableFileName = 'daily-sync-v2-timetable.json';
@@ -137,6 +146,7 @@ class GoogleDriveSyncService implements SyncService {
   final Duration _backupRestoreDelay;
   final Duration _changeSyncDelay;
   final List<Duration> _retryDelays;
+  final int _driveConcurrency;
   final ProductAnalytics _analytics;
   final Future<void> Function()? _onEventsChanged;
   final DateTime Function() _now;
@@ -1866,9 +1876,10 @@ class GoogleDriveSyncService implements SyncService {
     Map<String, String> headers,
     List<_DriveFile> files,
   ) async {
-    final downloaded = await _mapSequentially(
+    final downloaded = await _mapConcurrently(
       files,
       (file) => _downloadEventFile(headers, file.id),
+      concurrency: _driveConcurrency,
       progressMessage: '복원 중',
     );
     final winners = <String, _DownloadedEvent>{};
@@ -1950,89 +1961,98 @@ class GoogleDriveSyncService implements SyncService {
       final id = _eventIdFromFileName(file.name);
       if (id != null) (remoteFilesById[id] ??= []).add(file);
     }
-    final List<int> conflictCounts = await _mapSequentially<String, int>(ids, (
-      eventId,
-    ) async {
-      var files = List.of(remoteFilesById[eventId] ?? const <_DriveFile>[]);
-      for (var attempt = 0; attempt < 4; attempt++) {
-        _validateSyncSession?.call();
-        final local = await _eventRepository.findById(eventId);
-        final deletion = deletionById[eventId];
-        if (local == null && deletion == null) return 0;
-        if (local != null && !_canSyncEvent(local) ||
-            deletion != null && !_canSyncDeletion(deletion)) {
-          return 0;
-        }
-        var candidate = _DownloadedEvent(
-          event: local,
-          deletion: local == null ? deletion : null,
-          sourceDeviceId: null,
-        );
-        if (deletion != null) {
-          final marker = _DownloadedEvent(
-            deletion: deletion,
+    // `ids` is a set, so each event's read-compare-upload runs in exactly one
+    // task and never overlaps itself.
+    final List<int> conflictCounts = await _mapConcurrently<String, int>(
+      ids,
+      (eventId) async {
+        var files = List.of(remoteFilesById[eventId] ?? const <_DriveFile>[]);
+        for (var attempt = 0; attempt < 4; attempt++) {
+          _validateSyncSession?.call();
+          final local = await _eventRepository.findById(eventId);
+          final deletion = deletionById[eventId];
+          if (local == null && deletion == null) return 0;
+          if (local != null && !_canSyncEvent(local) ||
+              deletion != null && !_canSyncDeletion(deletion)) {
+            return 0;
+          }
+          var candidate = _DownloadedEvent(
+            event: local,
+            deletion: local == null ? deletion : null,
             sourceDeviceId: null,
           );
-          if (marker.compareTo(candidate) > 0) candidate = marker;
-        }
-        final remote = await _mapSequentially(
-          files,
-          (file) =>
-              _downloadEventFile(authHeaders, file.id, requireVersion: true),
-        );
-        for (final item in remote) {
-          if (item.event?.lms != null && !_canSyncEvent(item.event!) ||
-              item.deletion?.lmsOwnerId != null &&
-                  !_canSyncDeletion(item.deletion!)) {
-            throw const GoogleDriveSyncException('LMS 일정의 계정 정보를 확인할 수 없습니다.');
-          }
-          if (item.compareTo(candidate) > 0) {
-            conflicts?.add(eventId);
-            return 1;
-          }
-        }
-        final json = candidate.deletion != null
-            ? _encodeDeletionFile(candidate.deletion!)
-            : _encodeEventFile(
-                candidate.event!,
-                sourceDeviceId: await _settingsRepository.deviceId(),
-              );
-        try {
-          if (files.isEmpty) {
-            await _uploadJsonFile(
-              authHeaders,
-              fileName: _eventFileName(eventId),
-              jsonBody: json,
+          if (deletion != null) {
+            final marker = _DownloadedEvent(
+              deletion: deletion,
+              sourceDeviceId: null,
             );
-          } else {
-            for (final item in remote) {
-              if (item.compareTo(candidate) == 0) continue;
+            if (marker.compareTo(candidate) > 0) candidate = marker;
+          }
+          final remote = await _mapSequentially(
+            files,
+            (file) =>
+                _downloadEventFile(authHeaders, file.id, requireVersion: true),
+          );
+          for (final item in remote) {
+            if (item.event?.lms != null && !_canSyncEvent(item.event!) ||
+                item.deletion?.lmsOwnerId != null &&
+                    !_canSyncDeletion(item.deletion!)) {
+              throw const GoogleDriveSyncException(
+                'LMS 일정의 계정 정보를 확인할 수 없습니다.',
+              );
+            }
+            if (item.compareTo(candidate) > 0) {
+              conflicts?.add(eventId);
+              return 1;
+            }
+          }
+          final json = candidate.deletion != null
+              ? _encodeDeletionFile(candidate.deletion!)
+              : _encodeEventFile(
+                  candidate.event!,
+                  sourceDeviceId: await _settingsRepository.deviceId(),
+                );
+          try {
+            if (files.isEmpty) {
               await _uploadJsonFile(
                 authHeaders,
                 fileName: _eventFileName(eventId),
-                fileId: item.fileId,
-                expectedEtag: item.etag,
                 jsonBody: json,
               );
+            } else {
+              for (final item in remote) {
+                if (item.compareTo(candidate) == 0) continue;
+                await _uploadJsonFile(
+                  authHeaders,
+                  fileName: _eventFileName(eventId),
+                  fileId: item.fileId,
+                  expectedEtag: item.etag,
+                  jsonBody: json,
+                );
+              }
+            }
+          } on _ConcurrentDriveWrite {
+            files = await _listEventFilesForIds(authHeaders, {eventId});
+            continue;
+          }
+          _validateSyncSession?.call();
+          if (candidate.deletion != null) {
+            await _maintenance?.markDeletionSynced(candidate.deletion!);
+          } else {
+            await _saveSyncedEvent(candidate.event!);
+            if (deletion != null) {
+              await _maintenance?.markDeletionSynced(deletion);
             }
           }
-        } on _ConcurrentDriveWrite {
-          files = await _listEventFilesForIds(authHeaders, {eventId});
-          continue;
+          return 0;
         }
-        _validateSyncSession?.call();
-        if (candidate.deletion != null) {
-          await _maintenance?.markDeletionSynced(candidate.deletion!);
-        } else {
-          await _saveSyncedEvent(candidate.event!);
-          if (deletion != null) {
-            await _maintenance?.markDeletionSynced(deletion);
-          }
-        }
-        return 0;
-      }
-      throw const GoogleDriveSyncException('동시에 변경된 일정이 있어 동기화를 다시 시도해야 합니다.');
-    }, progressMessage: '백업 중');
+        throw const GoogleDriveSyncException(
+          '동시에 변경된 일정이 있어 동기화를 다시 시도해야 합니다.',
+        );
+      },
+      concurrency: _driveConcurrency,
+      progressMessage: '백업 중',
+    );
     var conflictCount = 0;
     for (final count in conflictCounts) {
       conflictCount += count;
@@ -2044,9 +2064,28 @@ class GoogleDriveSyncService implements SyncService {
     Iterable<S> items,
     Future<T> Function(S item) mapper, {
     String? progressMessage,
+  }) => _mapConcurrently(
+    items,
+    mapper,
+    concurrency: 1,
+    progressMessage: progressMessage,
+  );
+
+  /// Runs up to [concurrency] mappers at once and returns results in input
+  /// order. After the first failure no new item starts; items already running
+  /// finish (so their local writes are kept) and the first error is rethrown.
+  Future<List<T>> _mapConcurrently<S, T>(
+    Iterable<S> items,
+    Future<T> Function(S item) mapper, {
+    required int concurrency,
+    String? progressMessage,
   }) async {
     final source = items.toList();
-    final result = <T>[];
+    final result = List<T?>.filled(source.length, null);
+    var completed = 0;
+    var next = 0;
+    Object? firstError;
+    StackTrace? firstStack;
     void progress() {
       if (progressMessage == null ||
           source.isEmpty ||
@@ -2055,18 +2094,33 @@ class GoogleDriveSyncService implements SyncService {
       }
       statusNotifier.value = statusNotifier.value.copyWith(
         message: progressMessage,
-        completedItems: result.length,
+        completedItems: completed,
         totalItems: source.length,
       );
     }
 
-    progress();
-    for (final item in source) {
-      _validateSyncSession?.call();
-      result.add(await mapper(item));
-      progress();
+    Future<void> worker() async {
+      while (firstError == null && next < source.length) {
+        final index = next++;
+        try {
+          _validateSyncSession?.call();
+          result[index] = await mapper(source[index]);
+          completed++;
+          progress();
+        } catch (error, stack) {
+          if (firstError == null) {
+            firstError = error;
+            firstStack = stack;
+          }
+        }
+      }
     }
-    return result;
+
+    progress();
+    final workers = concurrency.clamp(1, source.isEmpty ? 1 : source.length);
+    await Future.wait([for (var i = 0; i < workers; i++) worker()]);
+    if (firstError != null) Error.throwWithStackTrace(firstError!, firstStack!);
+    return result.cast<T>();
   }
 
   Future<List<_DriveFile>> _listEventFilesForIds(
