@@ -11,24 +11,41 @@ void main() {
         smallestStage: .4,
       );
 
-  test('short downward drags keep stage snapping', () {
-    expect(target(.96, .8, .5), isNull);
-    expect(target(.68, .5, .5), isNull);
-    expect(target(.96, .6, 0), isNull);
+  test('short slow drags keep stage snapping at every size', () {
+    // Large and medium: under one stage gap, released slowly.
+    expect(target(.96, .8, .3), isNull);
+    expect(target(.96, .62, 0), isNull);
+    expect(target(.68, .5, .3), isNull);
     expect(target(.68, .45, 0), isNull);
+    // Short travel stays a stage step even when fast.
+    expect(target(.96, .93, 3), isNull);
+    expect(target(.68, .65, 3), isNull);
+    // Medium-speed drags need some distance before they close.
+    expect(target(.96, .8, .9), isNull);
+    expect(target(.68, .52, .9), isNull);
   });
 
-  test('long or fast drags from large and medium close', () {
-    expect(target(.96, .55, 0), 0);
-    expect(target(.96, .65, 2.5), 0);
-    expect(target(.68, .27, 0), 0);
+  test('flings close from every size', () {
+    expect(target(.96, .9, 1), 0);
+    expect(target(.68, .62, 1.2), 0);
+    expect(target(.4, .35, 1), 0);
+  });
+
+  test('medium-speed drags of a fifth of the height close', () {
+    expect(target(.96, .75, .5), 0);
+    expect(target(.68, .47, .6), 0);
+  });
+
+  test('slow drags clearly past the next stage close', () {
+    expect(target(.96, .6, 0), 0);
+    expect(target(.68, .32, 0), 0);
   });
 
   test('small stage follows down and closes or returns', () {
-    expect(target(.4, .25, 0), 0);
-    expect(target(.4, .34, 1.5), 0);
-    expect(target(.4, .34, .2), .4);
-    expect(target(.68, .3, 0), .4);
+    expect(target(.4, .32, 0), 0);
+    expect(target(.4, .36, .6), 0);
+    expect(target(.4, .36, .2), .4);
+    expect(target(.68, .36, 0), .4);
   });
 
   test('upward releases are left to the sheet', () {
@@ -95,12 +112,52 @@ void main() {
     expect(closed, isTrue);
   });
 
-  testWidgets('short drag from large steps down to medium', (tester) async {
+  testWidgets('short slow drag from large steps down to medium', (
+    tester,
+  ) async {
     final (sheet, _) = await openSheet(tester, .96);
     final height = tester.getSize(find.byType(Scaffold)).height;
-    await tester.fling(find.byType(ListView), Offset(0, height * .1), 800);
-    await tester.pumpAndSettle();
+    await slowDrag(tester, height * .25);
     expect(sheet.size, closeTo(.68, .01));
+  });
+
+  for (final initialSize in [.96, .68]) {
+    testWidgets('short fling from $initialSize closes the sheet', (
+      tester,
+    ) async {
+      final (_, controller) = await openSheet(tester, initialSize);
+      var closed = false;
+      controller.closed.then((_) => closed = true);
+      final height = tester.getSize(find.byType(Scaffold)).height;
+      await tester.fling(find.byType(ListView), Offset(0, height * .12), 1000);
+      await tester.pumpAndSettle();
+      expect(closed, isTrue);
+    });
+  }
+
+  testWidgets('drag that first scrolls the list closes only from the top', (
+    tester,
+  ) async {
+    final (sheet, controller) = await openSheet(tester, .96);
+    var closed = false;
+    controller.closed.then((_) => closed = true);
+    final height = tester.getSize(find.byType(Scaffold)).height;
+    final list = find.byType(Scrollable).first;
+    final listPosition = tester.state<ScrollableState>(list).position;
+
+    listPosition.jumpTo(height * .3);
+    await tester.pump();
+    // Only a little sheet travel after reaching the top: snaps back.
+    await slowDrag(tester, height * .35);
+    expect(listPosition.pixels, 0);
+    expect(closed, isFalse);
+    expect(sheet.size, closeTo(.96, .01));
+
+    listPosition.jumpTo(height * .1);
+    await tester.pump();
+    // The rest of the drag after the list reaches the top closes it.
+    await slowDrag(tester, height * .6);
+    expect(closed, isTrue);
   });
 
   testWidgets('small drag below small stage returns to small', (tester) async {
