@@ -123,6 +123,7 @@ class EventDetailsPanel extends ConsumerWidget {
         ? [date]
         : const <DateTime>[];
     final dayEvents = liveEventsAsync.maybeWhen(
+      skipLoadingOnReload: true,
       // The live result is unfiltered: apply the calendar's display policy again.
       data: (items) => _eventsForDay(
         withLectureModeChanges(

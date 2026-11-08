@@ -1184,6 +1184,7 @@ class _MonthCalendarPageState extends ConsumerState<MonthCalendarPage> {
               18,
             ),
             child: eventsAsync.when(
+              skipLoadingOnReload: true,
               data: (events) {
                 final visibleEvents = _filterVisibleEvents(
                   events,
@@ -2692,6 +2693,7 @@ class _MonthDetailsPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return eventsAsync.when(
+      skipLoadingOnReload: true,
       data: (events) => _buildPanel(context, ref, events),
       error: (error, stackTrace) => Center(child: Text('$error')),
       loading: () => EventDetailsPanel(
@@ -3081,6 +3083,7 @@ class _CalendarWeekPage extends ConsumerWidget {
     final range = _weekRangeFor(selectedDate, settings.weekStartsOnMonday);
     final eventsAsync = ref.watch(eventsInRangeProvider(range));
     return eventsAsync.when(
+      skipLoadingOnReload: true,
       data: (events) {
         final visibleEvents = _filterVisibleEvents(
           events,
@@ -3467,6 +3470,7 @@ class _CalendarDayPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final eventsAsync = ref.watch(eventsInRangeProvider(_dayRangeFor(date)));
     return eventsAsync.when(
+      skipLoadingOnReload: true,
       data: (events) {
         // The schedule timeline always places the real interval (#696).
         final visibleEvents = _eventsForDay(
@@ -4619,6 +4623,7 @@ class _CalendarMonthPage extends ConsumerWidget {
             ? constraints.maxWidth
             : null;
         return eventsAsync.when(
+          skipLoadingOnReload: true,
           data: (events) {
             final visibleEvents = _filterVisibleEvents(
               events,
