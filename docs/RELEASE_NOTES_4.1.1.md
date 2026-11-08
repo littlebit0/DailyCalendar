@@ -59,6 +59,6 @@ Drive v2 일정·템플릿 파일 형식이 바뀌므로 Windows·Android 산출
 
 ## 검증
 
-- main의 전체 Dart 분석·테스트와 CI(Platform Builds)가 통과했습니다.
+- 4.1.1 코드가 모두 들어간 main `abee53c16`의 CI(Platform Builds) 작업 7개가 모두 통과했습니다: Dart 분석·전체 테스트, 시간표 테스트 3개, Android·Windows Debug 빌드, Apple LMS 세션 테스트. 이후 main에는 이 릴리스 노트만 추가됐습니다.
 - macOS·iPhone 시뮬레이터·Android 에뮬레이터 테스트 앱으로 업데이트 후 데이터 보존, Drive 동기화, 여러 알람(Android 시스템 알람 예약·취소), 일정별 다음 날 표시, 하루 시트 날짜 이동을 확인했습니다.
 - 그 테스트에서 찾은 문제 3건(#803~#805)을 고쳐 이 버전에 포함했습니다. 고친 뒤 실제 기기 동작은 확인하지 않았습니다.
