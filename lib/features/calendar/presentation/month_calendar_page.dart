@@ -8125,32 +8125,43 @@ class _WeekDayPanel extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        key: ValueKey(
-                          'week-list-weekday-${day.year}-${day.month}-${day.day}',
-                        ),
-                        DateFormat.E(
-                          Localizations.localeOf(context).toLanguageTag(),
-                        ).format(day),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: color,
-                          fontWeight: FontWeight.w800,
+                LayoutBuilder(
+                  builder: (context, constraints) => Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          key: ValueKey(
+                            'week-list-weekday-${day.year}-${day.month}-${day.day}',
+                          ),
+                          DateFormat.E(
+                            Localizations.localeOf(context).toLanguageTag(),
+                          ).format(day),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: color,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
-                    ),
-                    Text(
-                      '${day.month}/${day.day}',
-                      style: TextStyle(
-                        color: color,
-                        fontWeight: FontWeight.w800,
+                      // 좁은 창에서는 날짜가 패널 폭을 넘지 않도록 잘라내지 않고 축소한다.
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          maxWidth: constraints.maxWidth,
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            '${day.month}/${day.day}',
+                            style: TextStyle(
+                              color: color,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 10),
                 CalendarWeather(date: day),
